@@ -1,0 +1,315 @@
+{
+  // LaTeX snippets for MIT Finance lecture notes
+  // Usage: type prefix and press Tab
+
+  "note": {
+    "prefix": "note",
+    "body": [
+      "\\note{$1}"
+    ],
+    "description": "Margin comment (doubt, idea, reminder)"
+  },
+  "note-done": {
+    "prefix": "note*",
+    "body": [
+      "\\note*{$1}"
+    ],
+    "description": "Margin comment marked ESEGUITO"
+  },
+  "timestamp-24": {
+    "prefix": "ts24",
+    "body": [
+      "\\ts{24}{$1}{$2}"
+    ],
+    "description": "2024 lecture timestamp: \\ts{24}{lecture}{time}"
+  },
+  "timestamp-13": {
+    "prefix": "ts13",
+    "body": [
+      "\\ts{13}{$1}{$2}"
+    ],
+    "description": "2013 lecture timestamp: \\ts{13}{lecture}{time}"
+  },
+  "intuition": {
+    "prefix": "intuit",
+    "body": [
+      "\\begin{intuition}",
+      "$1",
+      "\\end{intuition}"
+    ],
+    "description": "Intuition box (physicist's reading)"
+  },
+  "finance": {
+    "prefix": "fin",
+    "body": [
+      "\\begin{finance}[$1]",
+      "$2",
+      "\\end{finance}"
+    ],
+    "description": "In finance box (application to practice)"
+  },
+  "casestudy": {
+    "prefix": "case",
+    "body": [
+      "\\begin{casestudy}[$1]",
+      "$2",
+      "\\end{casestudy}"
+    ],
+    "description": "Case study box (R notebook summary)"
+  },
+  "coursenote": {
+    "prefix": "cnote",
+    "body": [
+      "\\begin{coursenote}[$1]",
+      "$2",
+      "\\end{coursenote}"
+    ],
+    "description": "Course note box (errata, differences 2013/2024)"
+  },
+  "definition": {
+    "prefix": "defn",
+    "body": [
+      "\\begin{definition}[$1]",
+      "$2",
+      "\\end{definition}"
+    ],
+    "description": "Definition environment (numbered, colored bar)"
+  },
+  "theorem": {
+    "prefix": "thm",
+    "body": [
+      "\\begin{theorem}[$1]",
+      "$2",
+      "\\end{theorem}"
+    ],
+    "description": "Theorem environment (numbered, colored bar)"
+  },
+  "proposition": {
+    "prefix": "prop",
+    "body": [
+      "\\begin{proposition}[$1]",
+      "$2",
+      "\\end{proposition}"
+    ],
+    "description": "Proposition environment (numbered, colored bar)"
+  },
+  "lemma": {
+    "prefix": "lem",
+    "body": [
+      "\\begin{lemma}[$1]",
+      "$2",
+      "\\end{lemma}"
+    ],
+    "description": "Lemma environment (numbered, colored bar)"
+  },
+  "corollary": {
+    "prefix": "cor",
+    "body": [
+      "\\begin{corollary}[$1]",
+      "$2",
+      "\\end{corollary}"
+    ],
+    "description": "Corollary environment (numbered, colored bar)"
+  },
+  "remark": {
+    "prefix": "rem",
+    "body": [
+      "\\begin{remark}[$1]",
+      "$2",
+      "\\end{remark}"
+    ],
+    "description": "Remark environment (numbered)"
+  },
+  "example": {
+    "prefix": "ex",
+    "body": [
+      "\\begin{example}[$1]",
+      "$2",
+      "\\end{example}"
+    ],
+    "description": "Example environment (numbered)"
+  },
+  "exercise": {
+    "prefix": "exer",
+    "body": [
+      "\\begin{exercise}[$1]",
+      "$2",
+      "\\end{exercise}"
+    ],
+    "description": "Exercise environment (numbered by chapter)"
+  },
+  "keyformulas": {
+    "prefix": "keyform",
+    "body": [
+      "\\begin{keyformulas}",
+      "\\begin{align*}",
+      "$1",
+      "\\end{align*}",
+      "\\end{keyformulas}"
+    ],
+    "description": "Key formulas box at chapter end"
+  },
+  "sources": {
+    "prefix": "src",
+    "body": [
+      "\\begin{sources}",
+      "\\small",
+      "\\begin{tabularx}{\\linewidth}{@{}l l L@{}}",
+      "\\toprule",
+      "\\textbf{Lecture} & \\textbf{Speaker} & \\textbf{Content}\\\\\n\\midrule",
+      "$1",
+      "\\bottomrule",
+      "\\end{tabularx}",
+      "",
+      "\\smallskip",
+      "\\textbf{Files.} $2",
+      "\\textbf{Problem sets.} $3",
+      "\\end{sources}"
+    ],
+    "description": "Sources box at chapter start"
+  },
+  "figure-tikz": {
+    "prefix": "figtikz",
+    "body": [
+      "\\begin{figure}[ht]",
+      "\\centering",
+      "\\begin{tikzpicture}",
+      "$1",
+      "\\end{tikzpicture}",
+      "\\caption{$2}",
+      "\\label{fig:$3}",
+      "\\end{figure}"
+    ],
+    "description": "TikZ figure with caption and label"
+  },
+  "table": {
+    "prefix": "tab",
+    "body": [
+      "\\begin{table}[ht]",
+      "\\centering\\small",
+      "\\caption{$1}",
+      "\\label{tab:$2}",
+      "\\begin{tabularx}{\\linewidth}{@{$3}@{}}",
+      "\\toprule",
+      "$4",
+      "\\midrule",
+      "$5",
+      "\\bottomrule",
+      "\\end{tabularx}",
+      "\\end{table}"
+    ],
+    "description": "Table with booktabs and tabularx"
+  },
+  "align": {
+    "prefix": "al",
+    "body": [
+      "\\begin{align*}",
+      "$1",
+      "\\end{align*}"
+    ],
+    "description": "Align* environment for displayed equations"
+  },
+  "align-num": {
+    "prefix": "aln",
+    "body": [
+      "\\begin{align}",
+      "$1",
+      "\\end{align}"
+    ],
+    "description": "Align environment (numbered equations)"
+  },
+  "file": {
+    "prefix": "file",
+    "body": [
+      "\\file{$1}"
+    ],
+    "description": "File reference command (monospace, small)"
+  },
+  "R": {
+    "prefix": "R",
+    "body": [
+      "\\R"
+    ],
+    "description": "Real numbers symbol (\\mathbb{R})"
+  },
+  "E": {
+    "prefix": "E",
+    "body": [
+      "\\E"
+    ],
+    "description": "Expectation symbol (\\mathbb{E})"
+  },
+  "Prob": {
+    "prefix": "Prob",
+    "body": [
+      "\\Prob"
+    ],
+    "description": "Probability symbol (\\mathbb{P})"
+  },
+  "Q": {
+    "prefix": "Q",
+    "body": [
+      "\\Q"
+    ],
+    "description": "Risk-neutral measure symbol (\\mathbb{Q})"
+  },
+  "transpose": {
+    "prefix": "T",
+    "body": [
+      "\\T"
+    ],
+    "description": "Transpose symbol (^{\\mathsf T})"
+  },
+  "dd": {
+    "prefix": "dd",
+    "body": [
+      "\\dd"
+    ],
+    "description": "Differential d (\\,mathrm{d})"
+  },
+  "indicator": {
+    "prefix": "ind",
+    "body": [
+      "\\ind"
+    ],
+    "description": "Indicator function (\\mathbf{1})"
+  },
+  "eqd": {
+    "prefix": "eqd",
+    "body": [
+      "\\eqd"
+    ],
+    "description": "Equal in distribution (\\stackrel{d}{=})"
+  },
+  "includeonly": {
+    "prefix": "inconly",
+    "body": [
+      "% \\includeonly{$1}"
+    ],
+    "description": "Comment to compile only specific chapter(s)"
+  },
+  "chapter": {
+    "prefix": "ch",
+    "body": [
+      "\\chapter{$1}\\label{ch:$2}",
+      "",
+      "\\begin{sources}",
+      "\\small",
+      "\\begin{tabularx}{\\linewidth}{@{}l l L@{}}",
+      "\\toprule",
+      "\\textbf{Lecture} & \\textbf{Speaker} & \\textbf{Content}\\\\\n\\midrule",
+      "$3",
+      "\\bottomrule",
+      "\\end{tabularx}",
+      "",
+      "\\smallskip",
+      "\\textbf{Files.} $4",
+      "\\textbf{Problem sets.} $5",
+      "\\end{sources}",
+      "",
+      "\\section*{Motivation}",
+      "$6"
+    ],
+    "description": "New chapter template with sources box"
+  }
+}

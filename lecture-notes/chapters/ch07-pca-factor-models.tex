@@ -1,0 +1,1267 @@
+% !TEX root = ../main.tex
+\chapter{Principal Component Analysis and Factor Models}\label{ch:pca}
+
+\begin{sources}
+\small
+\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+\textbf{Lecture} & \textbf{Speaker} & \textbf{Content}\\
+\midrule
+2024 L9 & S.~Andreev (Two Sigma) & PCA as a rotation of coordinates; toy examples, robustness, PCA versus OLS; demeaning and variance normalisation; eigenvalue diagnostics, in- and out-of-sample variance explained; PCA on financial time series; US Treasury curve (level, slope, curvature, regime indicators); PC-neutral curves and flies, leverage.\\
+2013 L15 & P.~Kempthorne & Linear factor models as cross-sectional and time-series regressions; Sharpe's single-index model, macroeconomic and fundamental (BARRA, Fama--French) models; factor-mimicking portfolios; statistical factor models: factor analysis (maximum likelihood, EM, likelihood-ratio test) and PCA; case study on Treasury yields.\\
+\bottomrule
+\end{tabularx}
+
+\smallskip
+\textbf{Files.} Slides \file{mit18_642_f24_lec09.pdf} (the European-indices example, slides 26--34, was
+not covered in class); Jupyter notebook \file{feddataanalysis.ipynb} with the data file
+\file{fedbondyielddata_20230911.csv} (distributed in 2024 week 5); readings
+\file{mit18_642_f24_pset_analysis.pdf} (P.~Kempthorne, \emph{Principal Components Analysis in Finance:
+Modeling the Dynamics of Interest Rates}, 2016) and \file{mit18_642_f24_pset_rcode.pdf} (its R code and a
+5-year PCA of Treasury yields); 2013 slides \file{MIT18_S096F13_lecnote15.pdf} and case study
+\file{MIT18_S096F13_CaseStudy7.pdf}.
+\textbf{Problem sets.} 2024 PS2 Problem~3 and PS3 Problem~4; 2013 PS7 (all problems).
+\end{sources}
+
+\section*{Motivation}
+Financial data come in large and highly redundant blocks: the yields of thirty Treasury maturities,
+the returns of five hundred stocks, a dozen European equity indices. When the 10-year yield rises the
+5- and 30-year yields almost always rise too, so thirty numbers per day carry perhaps three numbers'
+worth of information. This chapter develops two complementary ways of exploiting the redundancy:
+\begin{itemize}
+  \item \textbf{Principal component analysis (PCA)}: a rotation of coordinates such that the first few
+        axes carry most of the variance. It is model-free (unsupervised learning, no dependent
+        variable), pure linear algebra, and fast \ts{24}{9}{3:05}.
+  \item \textbf{Factor models}: the statistical model $\bm x_t=\bm\alpha+B\bm f_t+\bm\epsilon_t$ with a few
+        common factors and uncorrelated asset-specific noise. It reduces the $m(m+1)/2$ entries of a
+        covariance matrix to $O(mK)$ parameters, and is the backbone of risk models and of the
+        CAPM/APT view of returns \ts{13}{15}{0:00}.
+\end{itemize}
+The 2024 lecture is the practitioner's view (a fixed-income quant at Two Sigma: workflow, pitfalls, and
+how PCA turns into tradeable portfolios); the 2013 lecture is the statistician's view (models, estimation,
+tests). Both analyse daily changes of US Treasury yields and find the same three factors: \emph{level},
+\emph{slope} and \emph{curvature}. The mathematics needed is the spectral theorem, the SVD and
+Perron--Frobenius of \cref{ch:linalg} (\cref{thm:spectral,thm:svd,thm:pf}) and least squares
+(\cref{ch:regression}).
+
+\begin{coursenote}[Notation across the sources]
+The 2024 slides use a data matrix $X$ of size $N\times p$ (rows = observations) and loadings $w_k$, $W$;
+the 2013 slides use $m$ assets, $T$ periods, a data matrix of size $m\times T$ (columns = periods) and
+eigenvectors $\gamma_k$, $\Gamma$; the 2016 reading uses a tenors$\times$days matrix $A$. Here:
+$p$ variables and $N$ observations with $X\in\R^{N\times p}$ in the PCA sections, $m$ assets and $T$ periods in
+the factor-model sections, and $\gamma_k$, $\Gamma$ for eigenvectors (loadings) throughout.
+\end{coursenote}
+
+% ------------------------------------------------------------------
+\section{Principal components of a random vector}\label{ch07:sec-pop}
+
+Let $\bm x=(x_1,\dots,x_p)\T$ be a random vector with $\E[\bm x]=\bm\mu$ and $\Cov[\bm x]=\Sigma$. For any
+weight vector $\bm w$, $\Var(\bm w\T\bm x)=\bm w\T\Sigma\bm w\ge0$: $\Sigma$ is symmetric positive semi-definite
+(\cref{sec:symmetric}; 2024 PS2 Problem~3). If $\bm x$ are asset returns and $\bm w$ portfolio weights,
+$\bm w\T\Sigma\bm w$ is the portfolio variance. By the spectral theorem (\cref{thm:spectral})
+\[
+  \Sigma=\Gamma\Lambda\Gamma\T=\sum_{k=1}^p\lambda_k\,\bm\gamma_k\bm\gamma_k\T,\qquad
+  \lambda_1\ge\lambda_2\ge\dots\ge\lambda_p\ge0,\qquad \Gamma\T\Gamma=I_p .
+\]
+
+\subsection{Variance maximisation}
+
+\begin{definition}[Principal components]\label{ch07:def-pca}
+The \emph{first principal direction} is a unit vector $\bm w_1$ maximising $\Var(\bm w\T\bm x)=\bm w\T\Sigma\bm w$
+subject to $\|\bm w\|=1$. The $k$-th principal direction $\bm w_k$ maximises the same variance subject to
+$\|\bm w\|=1$ and $\bm w\perp\bm w_1,\dots,\bm w_{k-1}$ \ts{13}{15}{1:07:08}. The \emph{principal component
+variables} (scores, PC factors) are $p_k=\bm w_k\T(\bm x-\bm\mu)$; the entries of $\bm w_k$ are the
+\emph{loadings} of PC~$k$, and $\lambda_k/\sum_j\lambda_j$ is the \emph{fraction of variance explained}.
+\end{definition}
+
+\begin{theorem}[PCA is the spectral decomposition of $\Sigma$]\label{ch07:thm-pca}
+With the notation above:
+\begin{enumerate}[(i)]
+  \item the $k$-th principal direction can be taken to be the eigenvector $\bm\gamma_k$, and
+        $\Var(p_k)=\lambda_k$ (if the eigenvalues are distinct, $\bm w_k=\pm\bm\gamma_k$);
+  \item $\bm p=\Gamma\T(\bm x-\bm\mu)$ has $\E[\bm p]=\bm 0$ and $\Cov[\bm p]=\Lambda$: the PCs are uncorrelated;
+  \item $\bm x=\bm\mu+\Gamma\bm p=\bm\mu+\sum_{k=1}^p p_k\,\bm\gamma_k$;
+  \item total variance is preserved: $\sum_i\Var(x_i)=\tr\Sigma=\tr\Lambda=\sum_k\lambda_k=\sum_k\Var(p_k)$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(i) Expand $\bm w=\sum_jc_j\bm\gamma_j$; then $\|\bm w\|^2=\sum_jc_j^2=1$ and $\bm w\T\Sigma\bm w=\sum_j\lambda_jc_j^2\le\lambda_1$,
+with equality for $\bm c=\bm e_1$ (and only for $\bm c=\pm\bm e_1$ if $\lambda_1>\lambda_2$). Inductively, if
+$\bm w_j=\bm\gamma_j$ for $j<k$, the constraint $\bm w\perp\bm\gamma_1,\dots,\bm\gamma_{k-1}$ forces $c_1=\dots=c_{k-1}=0$, so
+$\bm w\T\Sigma\bm w=\sum_{j\ge k}\lambda_jc_j^2\le\lambda_k$, attained at $\bm\gamma_k$.
+
+(ii) $\E[\bm p]=\Gamma\T(\E\bm x-\bm\mu)=\bm 0$ and $\Cov[\bm p]=\Gamma\T\Sigma\Gamma=\Gamma\T\Gamma\Lambda\Gamma\T\Gamma=\Lambda$
+\ts{13}{15}{1:01:42}.
+
+(iii) Multiply $\bm p=\Gamma\T(\bm x-\bm\mu)$ by $\Gamma=(\Gamma\T)^{-1}$.
+
+(iv) $\tr(\Gamma\Lambda\Gamma\T)=\tr(\Lambda\Gamma\T\Gamma)=\tr\Lambda$ \ts{13}{15}{1:09:11}.
+\end{proof}
+
+Equivalently, with a Lagrange multiplier, $\nabla_{\bm w}[\bm w\T\Sigma\bm w-\lambda(\bm w\T\bm w-1)]=0$ gives
+$\Sigma\bm w=\lambda\bm w$: the stationary points of the Rayleigh quotient $\bm w\T\Sigma\bm w/\bm w\T\bm w$ are the
+eigenvectors and the stationary values the eigenvalues (\cref{sec:symmetric}).
+
+\begin{intuition}[A rigid rotation of the data cloud]
+$\bm x\mapsto\Gamma\T(\bm x-\bm\mu)$ moves the origin to the centre of mass and rotates the axes; distances are
+unchanged \ts{13}{15}{1:02:46}. Andreev's toy example: a one-dimensional data set embedded in the plane
+along the $x$-axis, the diagonal or the $y$-axis looks two-dimensional, but PCA immediately returns one
+direction with all the variance and a second with none \ts{24}{9}{5:11}; add a little noise in the
+perpendicular direction and $\lambda_2$ becomes small but non-zero \ts{24}{9}{7:22}. PCA returns two things:
+\emph{directions} (eigenvectors) and their \emph{importance} (eigenvalues). For a physicist, $\Sigma$ is the
+second-moment tensor of the cloud of points (unit masses); the inertia tensor $I=\tr(\Sigma)\,\mathbb 1-\Sigma$ has
+the same eigenvectors, so the principal directions are the \emph{principal axes of inertia}, PC1 being the
+axis with the smallest moment of inertia (the direction along which the cloud is most elongated).
+\end{intuition}
+
+\begin{remark}[Uniqueness]\label{ch07:rem-sign}
+If $\bm\gamma_k$ is an eigenvector, so is $-\bm\gamma_k$: the sign of each PC is arbitrary (the 2024 slides:
+``sign does not matter''), and different software may return different signs for the same data. If
+$\lambda_k=\lambda_{k+1}$, any orthonormal basis of the eigenspace is equally valid: the directions are not
+determined at all. This is the mathematical root of the robustness problems of \cref{ch07:sec-robust}.
+\end{remark}
+
+\begin{example}[Two variables with equal variances]\label{ch07:ex-2d}
+For $\Sigma=\sigma^2\bigl(\begin{smallmatrix}1&\rho\\ \rho&1\end{smallmatrix}\bigr)$ with $\rho>0$: $\lambda_{1,2}=\sigma^2(1\pm\rho)$ with
+$\bm\gamma_1=\frac1{\sqrt2}(1,1)\T$ (the sum) and $\bm\gamma_2=\frac1{\sqrt2}(1,-1)\T$ (the difference), whatever $\rho$ is;
+PC1 explains the fraction $(1+\rho)/2$. As $\rho\to0$ the eigenvalues merge: an isotropic ``blob'' has no
+preferred direction and moving a single data point can swing the estimated PC1 by any angle
+\ts{24}{9}{12:44}. (The general bivariate case is 2013 PS7 Problem~1.)
+\end{example}
+
+\subsection{Geometry: best subspace, and PCA versus regression}\label{ch07:sec-geom}
+
+\begin{proposition}[Best $K$-dimensional approximation]\label{ch07:prop-best}
+Let $V\in\R^{p\times K}$ have orthonormal columns, so that $VV\T$ is the orthogonal projection onto their span.
+Then
+\[
+  \E\bigl\|(\bm x-\bm\mu)-VV\T(\bm x-\bm\mu)\bigr\|^2=\tr\Sigma-\tr(V\T\Sigma V)\ \ge\ \sum_{j>K}\lambda_j ,
+\]
+with equality for $V=\Gamma_K=[\bm\gamma_1\cdots\bm\gamma_K]$. The first $K$ PCs span the $K$-dimensional subspace that
+minimises the mean squared \emph{perpendicular} distance of the data from it.
+\end{proposition}
+\begin{proof}
+With $\bm y=\bm x-\bm\mu$, $\|(I-VV\T)\bm y\|^2=\bm y\T(I-VV\T)\bm y$ since $I-VV\T$ is a projection; taking expectations gives
+$\tr\Sigma-\tr(V\T\Sigma V)$. Now $\tr(V\T\Sigma V)=\sum_j\lambda_jc_j$ with $c_j=\|V\T\bm\gamma_j\|^2$. Each
+$c_j\in[0,1]$ (a projection does not increase length) and $\sum_jc_j=\tr(V\T\Gamma\Gamma\T V)=\tr(V\T V)=K$. Hence
+\[
+  \sum_j\lambda_jc_j-\sum_{j\le K}\lambda_j=\sum_{j\le K}\lambda_j(c_j-1)+\sum_{j>K}\lambda_jc_j
+  \le\lambda_K\Bigl(\sum_{j\le K}(c_j-1)+\sum_{j>K}c_j\Bigr)=0,
+\]
+and $V=\Gamma_K$ gives $c_j=1$ for $j\le K$, $0$ otherwise.
+\end{proof}
+For a sample this is the Eckart--Young statement of \cref{sec:svd}: the truncated SVD of the centred data
+matrix is its best rank-$K$ approximation.
+
+\paragraph{PCA is not regression} \ts{24}{9}{8:28}. OLS of $y$ on $x$ minimises \emph{vertical} squared
+distances, OLS of $x$ on $y$ \emph{horizontal} ones, PCA \emph{perpendicular} ones (\cref{ch07:fig-ols}).
+For standardised variables with correlation $\rho$ the three lines through the centre have slopes $\rho$,
+$1/\rho$ and $1$ \ts{24}{9}{9:31}. OLS presupposes a dependent variable (a causal or predictive
+direction); PCA treats all coordinates symmetrically and says nothing about causality. Use regression to
+predict $y$ from $x$, PCA to describe the joint correlation structure \ts{24}{9}{10:34}. Two further
+differences: PCA is equivariant under rotations of the data (rotate the cloud, the PCs rotate with it)
+\ts{24}{9}{11:38}, but \emph{not} under rescaling of individual variables, whereas OLS predictions are
+unaffected by changes of units. Hence the covariance-versus-correlation question of
+\cref{ch07:sec-corr}.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=1.05,>=Stealth]
+  \draw[->,black!50] (-2.9,0) -- (2.9,0) node[right,black]{\small $x$};
+  \draw[->,black!50] (0,-2.9) -- (0,2.9) node[above,black]{\small $y$};
+  \draw[black!30,dashed,rotate=45] (0,0) ellipse ({2*sqrt(1.6)} and {2*sqrt(0.4)});
+  \foreach \p in {(0.24,0.54),(-0.06,-0.74),(-0.26,-0.95),(0.31,1.55),(-0.30,-0.63),(0.78,0.90),(0.36,-0.54),
+    (0.21,0.89),(-1.24,-1.01),(-1.85,-2.14),(-1.79,-1.12),(-1.16,-0.28),(0.41,0.19),(-2.53,-1.83),(0.19,0.34),
+    (-1.44,-1.15),(-0.84,-1.11),(1.41,0.18),(0.21,1.07),(-0.40,-0.21),(0.36,0.39),(-1.11,-0.44),(1.74,-0.32),
+    (1.19,0.92),(1.08,-0.37),(0.32,0.85),(0.03,0.78),(0.17,0.84),(1.83,0.54),(0.46,-0.04),(0.38,-0.76),
+    (-0.40,-0.29),(1.23,1.90),(-1.22,-1.31),(0.95,-1.18),(-0.27,-0.12),(1.63,1.70),(-0.12,-0.29),(-0.03,1.52)}
+    \fill[black!45] \p circle (1.2pt);
+  \draw[thick,thmcol] (-2.8,-1.68) -- (2.8,1.68) node[right,font=\scriptsize]{OLS $y\sim x$ (slope $\rho$)};
+  \draw[thick,defcol] (-1.68,-2.8) -- (1.68,2.8) node[above,font=\scriptsize]{OLS $x\sim y$ (slope $1/\rho$)};
+  \draw[very thick,intcol] (-2.55,-2.55) -- (2.55,2.55) node[right,font=\scriptsize]{PC1 (slope 1)};
+  % residuals of one point
+  \fill[black] (-0.47,1.72) circle (1.8pt) node[above left,font=\scriptsize]{$P$};
+  \draw[thick,thmcol] (-0.47,1.72) -- (-0.47,-0.282);
+  \draw[thick,defcol] (-0.47,1.72) -- (1.032,1.72);
+  \draw[thick,intcol] (-0.47,1.72) -- (0.625,0.625);
+\end{tikzpicture}
+\caption{Forty standardised points with sample correlation $\rho=0.6$ and the $2\sigma$ ellipse. For the point
+$P$ the three segments are the distances minimised by OLS of $y$ on $x$ (vertical), OLS of $x$ on $y$
+(horizontal) and PCA (perpendicular); cf.\ slide 8 of \file{lec09} \ts{24}{9}{9:31}.}\label{ch07:fig-ols}
+\end{figure}
+
+\subsection{Positive correlations and the market factor}\label{ch07:sec-pf}
+If all covariances are positive, $\Sigma_{ij}>0$ (typical for yields of different maturities or for stocks in
+one market), the Perron--Frobenius theorem (\cref{thm:pf}) applies to $\Sigma$: $\lambda_1$ is simple and
+$\bm\gamma_1$ can be chosen with \emph{all entries positive} (2024 PS2 Problem~3). PC1 is then a long-only
+portfolio: the ``market'' or ``level'' factor, and all other PCs, being orthogonal to a positive vector,
+have loadings of both signs: they are long/short spreads.
+
+\begin{example}[Equicorrelated assets (not discussed in class)]\label{ch07:ex-equi}
+For $p$ assets with common variance $\sigma^2$ and common correlation $\rho>0$,
+$\Sigma=\sigma^2[(1-\rho)I+\rho\,\bm 1\bm 1\T]$. Then $\lambda_1=\sigma^2(1+(p-1)\rho)$ with $\bm\gamma_1=\bm1/\sqrt p$ (the
+equal-weighted portfolio), and $\lambda_2=\dots=\lambda_p=\sigma^2(1-\rho)$. PC1 explains
+$(1+(p-1)\rho)/p\to\rho$ as $p\to\infty$: even a modest average correlation produces a dominant first
+component in a large universe, while the remaining $p-1$ eigenvalues are degenerate, so the individual
+higher PCs are not identified (\cref{ch07:rem-sign}).
+\end{example}
+
+% ------------------------------------------------------------------
+\section{Sample PCA, SVD and practical choices}\label{ch07:sec-sample}
+
+\subsection{Data matrix and singular value decomposition}
+Stack $N$ observations (days) of $p$ variables (tenors, assets) in $X\in\R^{N\times p}$, row $i$ being $\bm x_i\T$.
+With $\bar{\bm x}=X\T\bm1/N$, the centred matrix and sample covariance are
+\[
+  X_c=X-\bm 1\bar{\bm x}\T=\bigl(I_N-\tfrac1N\bm1\bm1\T\bigr)X,\qquad S=\frac{1}{N-1}X_c\T X_c
+\]
+(the 2013 slides divide by $N$; it does not matter for the eigenvectors) \ts{13}{15}{41:21}.
+
+\begin{proposition}[PCA via the SVD]\label{ch07:prop-svd}
+Let $X_c=UD\hat\Gamma\T$ be a thin SVD: $U\in\R^{N\times p}$ with $U\T U=I_p$, $D=\diag(d_1\ge\dots\ge d_p\ge0)$,
+$\hat\Gamma\in\R^{p\times p}$ orthogonal. Then:
+\begin{enumerate}[(i)]
+  \item $S=\hat\Gamma\hat\Lambda\hat\Gamma\T$ with $\hat\lambda_k=d_k^2/(N-1)$: the right singular vectors are the loadings;
+  \item the $N\times p$ matrix of PC scores $P=X_c\hat\Gamma=UD$ has zero column means and orthogonal columns;
+        column $k$ (the time series of PC~$k$) has sample variance $\hat\lambda_k$;
+  \item $X_c=P\hat\Gamma\T=\sum_kd_k\bm u_k\hat{\bm\gamma}_k\T$, and truncation after $K$ terms is the best rank-$K$
+        approximation of $X_c$;
+  \item $\rank X_c\le\min(N-1,p)$: with $N\le p$ observations at most $N-1$ eigenvalues are non-zero.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(i) $X_c\T X_c=\hat\Gamma DU\T UD\hat\Gamma\T=\hat\Gamma D^2\hat\Gamma\T$.
+
+(ii) $P=UD\hat\Gamma\T\hat\Gamma=UD$, so
+$P\T P=D^2$; $\bm1\T P=\bm1\T X_c\hat\Gamma=\bm0$ because $\bm1\T X_c=\bm 0$.
+
+(iii) is \cref{thm:svd} and the Eckart--Young
+theorem.
+
+(iv) $\bm1\T X_c=\bm0$ means the $N$ rows of $X_c$ are linearly dependent.
+\end{proof}
+
+Andreev computes the covariance matrix and diagonalises it (``we need the covariance matrix for other
+things anyway''); the SVD gives the same result without forming $S$ \ts{24}{9}{18:02}, \ts{13}{15}{1:06:05}.
+Numerically the SVD is preferable because forming $X_c\T X_c$ squares the condition number; in cost both
+routes are $O(Np^2)$ (plus $O(p^3)$ for the eigen-decomposition).
+
+\begin{coursenote}[Erratum: slides 10--11 of \file{lec09}]
+\begin{itemize}
+  \item ``$\Sigma=X^TX$ is the covariance matrix'' needs the factor $1/N$ (or $1/(N-1)$); without it the SVD
+      relation reads $X\T X=W M\T MW\T$ with $M=\diag(\sqrt{(N-1)\lambda_k})$, not $\diag(\sqrt{\lambda_k})$.
+  \item ``Computation of the covariance matrix is $O(N^2p^2)$'' is wrong: $X\T X$ costs $O(Np^2)$, the same order as
+      the thin SVD; the advantage of the SVD is accuracy, not asymptotic cost.
+  \item ``$W$ is the eigenvectors of
+      $X$'': $W$ holds the right singular vectors of $X$, i.e.\ the eigenvectors of $X\T X$.
+  \item Slide 11 calls
+      $\Sigma=W\Lambda W\T$ the ``SVD decomposition'': it is the spectral decomposition (for a PSD matrix it coincides with the SVD).
+\end{itemize}
+\end{coursenote}
+
+\subsection{A worked example: six days of Treasury yields}\label{ch07:sec-sixdays}
+The 2016 reading (\file{pset_analysis}) runs PCA on the smallest possible data set: FRED constant-maturity
+yields of 9 Treasury securities (3 months to 20 years) on the first six business days of 2001. Daily
+changes in basis points, minus their row means, form the $9\times5$ matrix $A$ of \cref{ch07:tab-sixdays}
+(tenors $\times$ days, the transpose of $X_c$, so the roles of $U$ and $\hat\Gamma$ are swapped: loadings are the
+\emph{left} singular vectors of $A$).
+
+\begin{table}[ht]
+\centering\small
+\caption{Six-day example: centred yield changes $A$ (bp) and the PCA of \file{pset_analysis}. Last rows:
+PC variances $\hat\lambda_k=d_k^2/(n-1)$, $n=5$ days, and fractions of variance.}\label{ch07:tab-sixdays}
+\begin{tabular}{@{}l rrrrr c rrr@{}}
+\toprule
+ & \multicolumn{5}{c}{$A$: centred daily changes (bp)} & & \multicolumn{3}{c}{loadings}\\
+\cmidrule(lr){2-6}\cmidrule(l){8-10}
+Tenor & Jan 03 & Jan 04 & Jan 05 & Jan 08 & Jan 09 & $s_j$ & PC1 & PC2 & PC3\\
+\midrule
+3M  & $-5.4$ & $-19.4$ & $-12.4$ & $19.6$ & $17.6$ & 17.70 & 0.38 & 0.53 & $-0.48$\\
+6M  & $-4.6$ & $-14.6$ & $-12.6$ & $14.4$ & $17.4$ & 15.03 & 0.34 & 0.44 & $-0.05$\\
+1Y  & $1.0$  & $-14.0$ & $-14.0$ & $9.0$  & $18.0$ & 14.12 & 0.36 & 0.26 & 0.23\\
+2Y  & $9.6$  & $-10.4$ & $-16.4$ & $2.6$  & $14.6$ & 13.13 & 0.35 & $-0.03$ & 0.46\\
+3Y  & $13.4$ & $-10.6$ & $-17.6$ & $1.4$  & $13.4$ & 13.99 & 0.37 & $-0.13$ & 0.43\\
+5Y  & $18.6$ & $-11.4$ & $-15.4$ & $-0.4$ & $8.6$  & 14.03 & 0.35 & $-0.29$ & 0.12\\
+7Y  & $20.8$ & $-11.2$ & $-14.2$ & $0.8$  & $3.8$  & 13.92 & 0.32 & $-0.37$ & $-0.23$\\
+10Y & $20.8$ & $-12.2$ & $-11.2$ & $-0.2$ & $2.8$  & 13.37 & 0.30 & $-0.38$ & $-0.35$\\
+20Y & $14.6$ & $-7.4$  & $-7.4$  & $0.6$  & $-0.4$ & 8.99  & 0.18 & $-0.28$ & $-0.36$\\
+\midrule
+\multicolumn{6}{@{}l}{$\hat\lambda_k$ (bp$^2$): 1323.9, 397.2, 34.2, 1.4, 0; total 1756.7} & & 75.4\% & 22.6\% & 1.9\%\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The singular values are $d=(72.77,\,39.86,\,11.70,\,2.39,\,0)$. Observations:
+\begin{itemize}
+  \item The total variance $1756.7$ equals the sum of the nine tenor variances $s_j^2$ (\cref{ch07:thm-pca}(iv)).
+  \item PC5 has zero variance: five centred columns span at most four dimensions
+        (\cref{ch07:prop-svd}(iv)). With real data one uses hundreds of days, yet the reading notes the
+        ``curious fact'' that the loadings look almost the same as in the five-day toy.
+  \item PC1 has positive, roughly equal loadings (a level shift); its standard deviation, 36.4 bp, exceeds
+        that of every single tenor (at most 17.7 bp), because a unit-norm vector with nine positive entries
+        of about $1/3$ adds up nine highly correlated moves.
+  \item PC2 is short-minus-long (a change of slope), PC3 is negative at the two ends and positive in the
+        middle (curvature; the overall sign is arbitrary). The daily scores (in bp) are $d_k\bm v_k$:
+        \begin{align*}
+          \text{PC1}&=(27.2,-37.6,-41.0,17.2,34.2)\ \text{(up, down, down, up, up)},\\
+          \text{PC2}&=(-31.7,-4.5,3.1,18.5,14.6).
+        \end{align*}
+\end{itemize}
+
+\begin{coursenote}[Erratum: dates in Table 1 of \file{pset_analysis}]
+Table~1 of the reading labels the yield columns Jan 03, \dots, Jan 10 and the changes Jan 04, 05, 06, 07, 10;
+but 6--7 January 2001 were a Saturday and a Sunday. The data are those of pages 5--6 of the reading: yields on
+Jan 02, 03, 04, 05, 08, 09 and changes dated Jan 03, 04, 05, 08, 09, as used in \cref{ch07:tab-sixdays}.
+\end{coursenote}
+
+\subsection{Centring and scaling: covariance or correlation?}\label{ch07:sec-corr}
+The typical workflow \ts{24}{9}{21:09}:
+\begin{enumerate}[1.]
+  \item transform the data to be as close as possible to multivariate
+      normal (mean and covariance then describe the whole distribution: PCA only sees second moments);
+  \item subtract the mean of each variable and possibly scale it to unit variance;
+  \item compute the $p\times p$
+      covariance (or correlation) matrix, symmetric and PSD by construction;
+  \item diagonalise, order by decreasing
+      eigenvalue, keep the first $K$ components.
+\end{enumerate}
+
+\paragraph{Centring is not optional.} PCA rotates about the origin \ts{24}{9}{25:28}. Feed it raw prices
+(large positive numbers) and PC1 simply points from the origin to the centre of the cloud, capturing
+nothing about co-movement \ts{24}{9}{26:31}. Slide 13 of \file{lec09} shows the same cloud before and after
+centring. For daily yield changes the mean is tiny (a fraction of a basis point per day), so centring changes
+little, but it remains good practice \ts{24}{9}{44:13}. In time series the \emph{rolling} mean can itself be
+unstable, one more reason to work with changes rather than levels.
+
+\paragraph{Scaling is a modelling choice} \ts{24}{9}{22:10}. Standardising $z_i=(x_i-\mu_i)/\sigma_i$ turns PCA of
+$\Sigma$ into PCA of the correlation matrix $R=D_\sigma^{-1}\Sigma D_\sigma^{-1}$, $D_\sigma=\diag(\sigma_1,\dots,\sigma_p)$. Then
+\begin{itemize}
+  \item the total variance is $\tr R=p$ and every variable enters on the same footing;
+  \item the eigenvectors of $R$ are \emph{not} the rescaled eigenvectors of $\Sigma$ (\cref{ch07:sec-geom}:
+        PCA is not scale-equivariant);
+  \item without scaling, a variable with much larger variance dominates PC1.
+\end{itemize}
+Andreev's toy example: the same data set looks one-dimensional (strongly elongated) in raw units and like
+a structureless blob after normalising both axes \ts{24}{9}{23:12}. Rule of thumb \ts{24}{9}{24:24}: if the
+coordinates have different units (temperature in Seattle versus pressure in Atlanta), standardise; if they
+have the same units and their relative size is meaningful (grades on two quizzes, yield changes in bp),
+covariance PCA keeps useful information about relative volatility. For Treasury yield changes Andreev uses
+covariance PCA \ts{24}{9}{45:18}; how to normalise is ``very much the art'' and sometimes the research
+question itself. For 2001--2005 Treasury changes the two choices give PC1/PC2/PC3 shares of
+84.9/9.2/2.9\% (covariance) and 77.1/15.7/3.5\% (correlation); 2024 PS3 Problem~4 asks why.
+
+For equity indices the slides use log returns $r_t=\ln(p_t/p_{t-1})$, which are closer to normal than price
+changes; in that example covariance and correlation PCA give almost the same loadings because the index
+variances are similar.
+
+\subsection{How many components, and can we trust them?}\label{ch07:sec-robust}
+PCA always returns an answer, even for pure noise \ts{24}{9}{12:44}. Andreev's advice: look at the
+\emph{eigenvalues}, not only at the eigenvectors \ts{24}{9}{13:44}. A component is worth using if its eigenvalue
+is well separated from the next one, ideally by an order of magnitude; with rolling PCA, plot the eigenvalue
+(or variance-explained) time series on a log scale and check that the lines never cross \ts{24}{9}{14:50}. If
+PC1 and PC2 swap places under small changes of the data, there is no stable structure and the PCA output
+``obfuscates rather than clarifies'' \ts{24}{9}{15:54}. The standard display is the \emph{scree plot} of
+$\hat\lambda_k$ against $k$ (\cref{ch07:fig-scree}).
+
+\begin{intuition}[Degenerate perturbation theory (not discussed in class)]
+Why do nearly equal eigenvalues make eigenvectors unstable? Estimation noise perturbs the covariance,
+$\hat\Sigma=\Sigma+\delta\Sigma$ with $\delta\Sigma=O(N^{-1/2})$. First-order perturbation theory, exactly as for a
+Hamiltonian in quantum mechanics, gives
+\[
+  \delta\lambda_k=\bm\gamma_k\T\,\delta\Sigma\,\bm\gamma_k,\qquad
+  \delta\bm\gamma_k=\sum_{j\ne k}\frac{\bm\gamma_j\T\,\delta\Sigma\,\bm\gamma_k}{\lambda_k-\lambda_j}\,\bm\gamma_j .
+\]
+Eigenvalues are robust, but eigenvectors rotate by an amount inversely proportional to the \emph{gap}
+$\lambda_k-\lambda_j$; for a degenerate level the eigenvectors are fixed by the perturbation, not by the data.
+Andreev's ``move one point and watch PC1 swing'' demonstration \ts{24}{9}{11:38} is this formula at work.
+\end{intuition}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.72\linewidth,height=5.6cm,ymode=log,xlabel={component $k$},
+  ylabel={fraction of variance},xmin=0.5,xmax=9.5,ymin=0.001,ymax=1.5,xtick={1,...,9},
+  legend pos=north east,legend style={font=\small},grid=major,grid style={black!10},mark size=1.6pt]
+  \addplot[thick,defcol,mark=*] coordinates {(1,0.8494) (2,0.0919) (3,0.0290) (4,0.0119) (5,0.00588)
+    (6,0.00407) (7,0.00297) (8,0.00263) (9,0.00215)};
+  \addlegendentry{covariance PCA}
+  \addplot[thick,fincol,mark=square*] coordinates {(1,0.7708) (2,0.1571) (3,0.0355) (4,0.0175) (5,0.00806)
+    (6,0.00481) (7,0.00245) (8,0.00207) (9,0.00167)};
+  \addlegendentry{correlation PCA}
+\end{axis}
+\end{tikzpicture}
+\caption{Scree plot (log scale) of the PCA of daily changes of 9 Treasury yields, 2001--2005 (2013 Case
+Study~7; 2024 PS3 Problem~4). The first three eigenvalues are separated by roughly an order of magnitude
+each, the pattern Andreev wants to see \ts{24}{9}{53:42}; standardising moves variance from PC1 to PC2.}\label{ch07:fig-scree}
+\end{figure}
+
+\paragraph{Effective dimension.} Slide 22 of \file{lec09} (after M.~Del Giudice, 2020) summarises a spectrum
+in one number. With $\pi_k=\lambda_k/\sum_j\lambda_j$,
+\[
+  \mathrm{ED}=\frac{\bigl(\sum_k\lambda_k\bigr)^2}{\sum_k\lambda_k^2}=\frac{1}{\sum_k\pi_k^2}\in[1,p],
+\]
+the ``effective number of independent directions'' (the inverse participation ratio, familiar from
+localisation physics): $\mathrm{ED}=1$ for a rank-one matrix such as the $4\times4$ matrix of ones, $2$ for two
+decoupled blocks of perfectly correlated variables, $p$ for the identity. For the 2001--2005 Treasury covariance
+PCA, ED $\approx1.37$.
+
+\paragraph{Out-of-sample variance explained} \ts{24}{9}{20:07}. In finance PCA is calibrated on the past and
+applied to the future. Let $W$ be the loadings estimated on a sample $X$ and let a new sample $Y$ have
+covariance $\Sigma^Y=W^Y\Lambda^Y(W^Y)\T$. The PCs defined by $W$ have, in the new sample, covariance matrix
+\begin{equation}\label{ch07:eq-oos}\begin{gathered}
+  W\T\Sigma^YW=D\T\Lambda^YD,\qquad D=(W^Y)\T W\ \text{(orthogonal)},\\
+  \text{share of PC }k=\frac{(D\T\Lambda^YD)_{kk}}{\tr\Lambda^Y}=\frac{\sum_jD_{jk}^2\lambda^Y_j}{\sum_j\lambda^Y_j}.\end{gathered}
+\end{equation}
+Since $\sum_jD_{jk}^2=1$, the out-of-sample variance of calibrated PC~$k$ is a weighted average of the new
+eigenvalues: if the directions have rotated ($D\neq I$), variance leaks from the top factors to lower ones, and
+by \cref{ch07:prop-best} the first $K$ calibrated PCs can never explain more than the first $K$ PCs of the new
+sample itself. The off-diagonal entries of $D\T\Lambda^YD$ show that calibrated PCs are no longer uncorrelated
+out of sample \ts{24}{9}{53:42}: in the Treasury example the correlations between next-day PC1, PC2, PC3 moves
+are a few percent (slide 19: $7.1\%$ between PC1 and PC2), small enough for the factors to be called stable
+\ts{24}{9}{54:47}.
+
+\begin{coursenote}[A verbal slip]
+At \ts{24}{9}{19:07} the speaker says that the ``product of eigenvalues'' is the variance of the data set; the
+slide (and \cref{ch07:thm-pca}(iv)) has the correct statement: total variance $=\tr\Sigma=$ \emph{sum} of the
+eigenvalues. (The product is $\det\Sigma$, the ``generalised variance''.)
+\end{coursenote}
+
+\subsection{PCA on financial time series}\label{ch07:sec-ts}
+What is special about finance is that the data are \emph{time series} \ts{24}{9}{27:32}: each day is one
+observation and the dimension is the number of variables observed that day. Consequences \ts{24}{9}{28:32}:
+\begin{itemize}
+  \item \textbf{Model changes, not levels} \ts{24}{9}{29:32}: levels (prices, yields) are non-stationary and not
+        centred, while P\&L depends on changes after the bet is placed.
+  \item \textbf{Hyperparameters} \ts{24}{9}{31:40}: the length of the look-back window, the weighting of old
+        versus recent observations (rolling window, exponential weights), the set of variables included.
+        More history or more variables is not always better: the marginal data may be noisier or less
+        representative of where the bets will be placed.
+  \item \textbf{Sampling frequency} \ts{24}{9}{33:46}: daily data are the default (long, clean histories);
+        intraday data add observations but also microstructure noise. Volatility scales like
+        $\sqrt{\text{time}}$, so the sampling interval sets its units: annualise daily numbers with $\sqrt{252}$
+        before comparing \ts{24}{9}{34:51} (\cref{ch:volatility}).
+  \item \textbf{Rolling PCA}: re-estimating every day turns loadings and eigenvalues into time series.
+        Slowly varying loadings are reassuring; long stable periods interrupted by jumps signal regime
+        changes \ts{24}{9}{30:33}.
+\end{itemize}
+
+% ------------------------------------------------------------------
+\section{The Treasury yield curve: level, slope and curvature}\label{ch07:sec-yield}
+
+\paragraph{The market.} The US Treasury funds the debt by regular auctions of bills and of 2, 3, 5, 7, 10,
+(since 2020) 20 and 30-year notes and bonds \ts{24}{9}{38:00}; the most liquid points also trade as CME
+futures (TU $\approx1.5$y, FV $\approx4$y, TY $\approx7$y, UXY $\approx10$y, US $\approx15$y, WN $\approx25$y equivalent maturities). The
+market is the deepest in the world and allows large leverage \ts{24}{9}{35:55}; the Federal Reserve publishes
+free, high-quality fitted curves \ts{24}{9}{36:58}. All these securities are loans to the same borrower, and
+their prices depend on the expected path of the short rate set by the Fed: yield changes of different
+maturities are therefore very highly correlated \ts{24}{9}{39:04}. In the 2024 data (par yields, daily changes)
+the correlation is $98\%$ between 2y and 3y, $81\%$ between 2y and 10y, $68\%$ between 2y and 30y and $92\%$
+between 10y and 30y (slide 17) \ts{24}{9}{40:07}: ``whenever you see a correlation matrix with high
+concentrations of high correlations, it is a prime candidate for PCA''. The 2013 case study finds the
+same pattern for 2001--2005: correlations above $0.9$ near the diagonal, decaying to $0.24$ between 3 months
+and 20 years \ts{13}{15}{1:15:26}. Typical daily volatilities are 4--7 bp \ts{13}{15}{1:14:24}.
+
+\paragraph{The yield curve} (\cref{sec:bonds}, \cref{fig:yieldcurve}) is usually upward sloping but can be
+inverted, as in 2023--2024 \ts{24}{9}{41:11}; the Fed sets its short end (the 50 bp cut of September 2024
+moved the leftmost point), the rest is market expectation \ts{24}{9}{43:12}. A movie of the curve would show
+``strings flopping around'': mostly moving up and down, a little tilting, a little bending \ts{24}{9}{42:12}.
+
+\paragraph{The three factors.} Running PCA on daily yield changes gives, in every period and data set
+(\cref{ch07:fig-loadings}, \cref{ch07:tab-share}):
+\begin{itemize}
+  \item \textbf{PC1 = level}: all loadings of the same sign; yields move up or down together. It explains
+        roughly 85--95\% of the variance \ts{24}{9}{47:24}, \ts{13}{15}{1:19:47}.
+  \item \textbf{PC2 = slope}: loadings negative at the short end and positive at the long end (or vice versa):
+        steepening versus flattening; 5--10\% \ts{24}{9}{48:24}.
+  \item \textbf{PC3 = curvature}: same sign at both ends, opposite sign in the ``belly'': a second difference;
+        1--3\% \ts{13}{15}{1:20:51}.
+\end{itemize}
+The top three factors explain 97--99\% of the daily variance.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.52\linewidth,height=5.4cm,xmode=log,xmin=0.2,xmax=25,ymin=-0.6,ymax=0.6,
+  xtick={0.25,0.5,1,2,5,10,20},xticklabels={3m,6m,1y,2y,5y,10y,20y},
+  xlabel={tenor},ylabel={loading},title={\small (a) CMT yields, 2001--2005},
+  grid=major,grid style={black!10},mark size=1.3pt,tick label style={font=\scriptsize},
+  legend style={font=\scriptsize,at={(0.03,0.03)},anchor=south west}]
+  \addplot[thick,defcol,mark=*] coordinates {(0.25,0.1088) (0.5,0.1581) (1,0.2531) (2,0.3905) (3,0.4197)
+    (5,0.4206) (7,0.4009) (10,0.3697) (20,0.3101)};
+  \addlegendentry{PC1 level}
+  \addplot[thick,thmcol,mark=square*] coordinates {(0.25,-0.5225) (0.5,-0.4817) (1,-0.4107) (2,-0.2071)
+    (3,-0.0873) (5,0.1082) (7,0.2289) (10,0.2837) (20,0.3621)};
+  \addlegendentry{PC2 slope}
+  \addplot[thick,intcol,mark=triangle*] coordinates {(0.25,0.5434) (0.5,0.2508) (1,-0.0514) (2,-0.4750)
+    (3,-0.4022) (5,-0.0311) (7,0.1475) (10,0.2710) (20,0.3944)};
+  \addlegendentry{PC3 curvature}
+  \addplot[black!40,forget plot] coordinates {(0.2,0) (25,0)};
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[width=0.52\linewidth,height=5.4cm,xmin=0,xmax=31,ymin=-0.45,ymax=0.45,
+  xlabel={maturity (years)},title={\small (b) par yields, Sep 2021--Aug 2023},
+  grid=major,grid style={black!10},mark size=0.9pt,tick label style={font=\scriptsize}]
+  \addplot[thick,defcol,mark=*] coordinates {(1,0.127) (2,0.185) (3,0.202) (4,0.208) (5,0.211) (6,0.212)
+    (7,0.211) (8,0.209) (9,0.206) (10,0.203) (11,0.199) (12,0.195) (13,0.192) (14,0.188) (15,0.185) (16,0.181)
+    (17,0.178) (18,0.176) (19,0.173) (20,0.171) (21,0.169) (22,0.167) (23,0.166) (24,0.164) (25,0.163)
+    (26,0.162) (27,0.161) (28,0.160) (29,0.160) (30,0.159)};
+  \addplot[thick,thmcol,mark=square*] coordinates {(1,-0.357) (2,-0.420) (3,-0.373) (4,-0.307) (5,-0.241)
+    (6,-0.181) (7,-0.130) (8,-0.086) (9,-0.049) (10,-0.017) (11,0.010) (12,0.033) (13,0.052) (14,0.069)
+    (15,0.084) (16,0.096) (17,0.107) (18,0.117) (19,0.126) (20,0.133) (21,0.140) (22,0.146) (23,0.151)
+    (24,0.156) (25,0.161) (26,0.165) (27,0.168) (28,0.172) (29,0.175) (30,0.177)};
+  \addplot[thick,intcol,mark=triangle*] coordinates {(1,0.273) (2,0.286) (3,0.260) (4,0.115) (5,-0.050)
+    (6,-0.185) (7,-0.274) (8,-0.317) (9,-0.321) (10,-0.298) (11,-0.257) (12,-0.204) (13,-0.146) (14,-0.088)
+    (15,-0.033) (16,0.017) (17,0.061) (18,0.097) (19,0.125) (20,0.146) (21,0.160) (22,0.166) (23,0.166)
+    (24,0.160) (25,0.149) (26,0.133) (27,0.112) (28,0.087) (29,0.059) (30,0.028)};
+  \addplot[black!40] coordinates {(0,0) (31,0)};
+\end{axis}
+\end{tikzpicture}
+\caption{Loadings of the first three PCs of daily yield changes (covariance PCA). (a) 9 FRED constant-maturity
+yields, 2001--2005, \texttt{princomp} output of 2013 Case Study~7. (b) Fed par yields at maturities 1--30 years,
+504-day window ending 1 September 2023, computed from \file{fedbondyielddata_20230911.csv} as in
+\file{feddataanalysis.ipynb} (signs fixed so that the 20--30y loadings sum to a positive number); PC1--PC3
+explain 89.2\%, 8.3\% and 1.0\%. Compare slide 18 of \file{lec09}.}\label{ch07:fig-loadings}
+\end{figure}
+
+\begin{table}[ht]
+\centering\small
+\caption{Fraction of the variance of daily yield changes explained by the first three PCs.}\label{ch07:tab-share}
+\setlength{\tabcolsep}{3pt}\begin{tabular}{@{}l l rrrr@{}}
+\toprule
+Data & Source & PC1 & PC2 & PC3 & top 3\\
+\midrule
+9 CMT yields, 6 days of 2001 & 2016 reading & 75.4 & 22.6 & 1.9 & 99.9\\
+9 CMT yields, 2001--2005, covariance & Case Study 7 & 84.9 & 9.2 & 2.9 & 97.0\\
+9 CMT yields, 2001--2005, correlation & PS7 (2013), PS3 (2024) & 77.1 & 15.7 & 3.5 & 96.3\\
+9 CMT yields, 2009--2013, covariance & Case Study 7 & 88.6 & 6.8 & 1.6 & 96.9\\
+30 par yields, 2-year window to Sep 2023 & computed from the 2024 data & 89.2 & 8.3 & 1.0 & 98.5\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{intuition}[Modes of a vibrating string]
+Level, slope and curvature are the analogues of the first normal modes of a string: 0, 1 and 2 sign changes
+(nodes). This is partly a mathematical consequence of any smooth, strongly and positively correlated
+curve (not discussed in class): for the correlation kernel $\rho_{ij}=e^{-\kappa|\tau_i-\tau_j|}$ on the same nine
+tenors with $\kappa=0.1$, the first four eigenvectors have exactly 0, 1, 2, 3 sign changes and explain
+66\%, 15\%, 9\%, 4\% (my computation; such kernels are ``oscillation matrices'' in the sense of
+Gantmacher and Krein). The economics lies in the \emph{details}: the precise shapes, the explained
+variances and how they change over time. The same holds for any Karhunen--Lo\`eve expansion of a random
+field with a smooth covariance.
+\end{intuition}
+
+\paragraph{Reading the loadings as regime indicators} \ts{24}{9}{49:29}. The PC1 loading is small at the very
+short end and levels off beyond a few years: short rates are anchored by the Fed, long rates by
+expectations. The maturity at which PC1 ``levels off'' (in the notebook: the first tenor with loading above
+0.15) was 1--3 years until the financial crisis, rose to 5--7 years when the Fed promised to keep rates
+low for long (quantitative easing, forward guidance), fell back, jumped again with the COVID response and
+decreased during the 2022 tightening \ts{24}{9}{50:33}, \ts{24}{9}{1:14:43}. Similarly the 2-year PC1 loading
+collapsed after 2012 (the Fed was not moving) and rebounded when policy became uncertain; the
+\emph{location of the belly} of PC3 (usually near 10y in the US) shifts with regimes \ts{24}{9}{51:34}.
+Andreev's macro reading of curvature \ts{24}{9}{1:17:51}: the front end is driven by the central bank, the
+intermediate part by inflation expectations, the long end by growth expectations; investors also differ by
+segment (speculators and short-term funding at 2y, corporate issuance at 5--10y, pension funds and insurers
+matching long liabilities at the long end) \ts{24}{9}{1:18:57}. In an emerging market such as Mexico the belly
+sits nearer 5 years, reflecting shorter investment horizons. Once the level and slope are hedged out, these
+small but structured features emerge from ``the big noise of rates going up and down'' \ts{24}{9}{1:19:59}.
+
+\paragraph{The last PC is interesting too} \ts{13}{15}{1:21:57}. In the 2013 case study PC9, with the smallest
+variance (0.8 bp/day), is essentially the 7-year yield against a weighted average of the 5- and 10-year: the
+most stable linear combination of yields, i.e.\ the best hedge of the 7-year point with its neighbours.
+Cumulating the scores shows the history of the factors \ts{13}{15}{1:23:00}: over 2001--2005 cumulative PC1
+fell from 0 to about $-8$ and came back (rates fell, then rose), cumulative PC2 rose to about 6 and fell back
+(the curve steepened, then flattened), curvature moved much less \ts{13}{15}{1:24:00}.
+
+\begin{finance}[Nelson--Siegel--Svensson curves (not discussed in class)]
+The Fed file \file{fedbondyielddata_20230911.csv} is the Gurkaynak--Sack--Wright data set: daily zero-coupon
+yields (\texttt{SVENY01}--\texttt{30}, continuously compounded), par yields (\texttt{SVENPY}), instantaneous and
+one-year forward rates (\texttt{SVENF}, \texttt{SVEN1F}) from 1961, and the parameters \texttt{BETA0}--\texttt{BETA3},
+\texttt{TAU1}, \texttt{TAU2} of the fitted Svensson curve
+\[
+  y(n)=\beta_0+\beta_1\frac{1-e^{-n/\tau_1}}{n/\tau_1}
+        +\beta_2\Bigl[\frac{1-e^{-n/\tau_1}}{n/\tau_1}-e^{-n/\tau_1}\Bigr]
+        +\beta_3\Bigl[\frac{1-e^{-n/\tau_2}}{n/\tau_2}-e^{-n/\tau_2}\Bigr]
+\]
+(I checked that this reproduces \texttt{SVENY} to four decimals). The three Nelson--Siegel basis functions
+are a parametric version of level ($\beta_0$), slope ($\beta_1$, which dies out with maturity) and curvature
+($\beta_2$, a hump); $\beta_3$ adds a second hump. Because the published curves are smooth fits, their PCA
+loadings are smoother than those of raw bond yields.
+\end{finance}
+
+\begin{casestudy}[Reading \file{pset_analysis} and its R code \file{pset_rcode}: five years of yields]
+\textbf{Goal.} Reproduce the six-day example and extend it to 2001--2005. \textbf{Data.} FRED
+constant-maturity yields \texttt{DGS3MO}, \dots, \texttt{DGS20} (script \file{fm_freddata.r}), 1247 daily changes.
+\textbf{Method.} \texttt{svd()} of the centred days$\times$tenors matrix, $\hat\lambda_k=d_k^2/(n-1)$, bar plots of
+loadings, daily and cumulative PC1/PC2 series, \texttt{pairs()} and interactive 3D plots of (PC1, PC2, PC3);
+then the built-in \texttt{princomp()} and \texttt{screeplot()}, which give the same result up to the signs of
+the loadings (\cref{ch07:rem-sign}). \textbf{Results.} Total variance 0.0306 (\%$^2$); PC1/PC2/PC3 explain
+84.8/9.3/2.9\%; PC1 loadings 0.11 (3m) rising to 0.42 (3y--5y) and 0.31 (20y); cumulative PC1 falls
+over the first half of the period and recovers, cumulative PC2 (the spread) rises then falls.
+\textbf{Lesson.} Five days already reveal the structure that five years confirm.
+\emph{Two small inconsistencies:} in the five-year section the text says $n$ is ``the number of columns
+(days)'' but the days are now rows ($\hat\lambda_k=d_k^2/(\texttt{NROW(X)}-1)$ in the code); and the text calls PC2
+``shorter minus longer'' although in this SVD its loadings are negative at the short end, i.e.\ long minus
+short. Signs are arbitrary.
+\end{casestudy}
+
+\begin{casestudy}[\file{feddataanalysis.ipynb}: Andreev's notebook on the Fed data]
+\textbf{Data.} Par yields \texttt{SVENPY01}--\texttt{30} from the first day with a 30-year yield (25 Nov 1985) to
+1 Sep 2023, 9430 days, daily differences. \textbf{Method} (Python/pandas): 504-day (2-year) rolling covariance of
+yield changes, \texttt{numpy.linalg.eigh} each day, signs normalised so that the 20--30y loadings sum to a
+positive number; variance explained per factor (area and log plots); PC1 loading stability for 2, 5, 10, 30y;
+``maturity for PC1 leveling'' (first tenor with loading $>0.15$), PC2 pivot and PC3 belly; next-day yield changes
+projected on today's loadings (the out-of-sample check \eqref{ch07:eq-oos}); out-of-sample variance explained with
+loadings two years old; a PC1/PC2-neutral 5s7s10s fly and a mean-reversion strategy on it.
+\textbf{Results.} Correlation matrix of slide 17 (reproduced exactly); out-of-sample correlations between
+next-day PC1, PC2, PC3 moves: $4.0\%$ (PC1/PC2), $-0.2\%$ (PC1/PC3), $-9.0\%$ (PC2/PC3) (the slide shows
+$7.1\%$, $-1.6\%$, $-7.3\%$ from another run); strategy Sharpe ratio $0.10$ (slide: $0.09$).
+\textbf{Lesson.} The last cell repeats the strategy with the signal \emph{not} delayed by one day and gets
+spectacular, unrealistic returns: a textbook demonstration of look-ahead bias. Andreev recommends the
+notebook as a template for a final project \ts{24}{9}{1:11:29}.
+\end{casestudy}
+
+% ------------------------------------------------------------------
+\section{PC portfolios: curves, flies and hedging}\label{ch07:sec-pcport}
+
+\subsection{Loadings as portfolio weights}
+Why care about PC2 and PC3 if PC1 explains 90\% of the variance? Because they are where relative-value
+trading happens \ts{24}{9}{55:49}. The six liquid tenors are so correlated that trading any of them outright
+is essentially a bet on PC1 \ts{24}{9}{56:51}; PCA manufactures from them a handful of \emph{uncorrelated}
+portfolios, i.e.\ more independent bets \ts{24}{9}{57:54}.
+
+Positions in bonds are measured in \emph{dv01}: \$1 dv01 of a bond is the notional whose value changes by
+\$1 for a 1 bp change of its yield (\cref{sec:duration}). Let $h_i$ be the dv01 held in tenor $i$ (positive =
+long the bond, which gains when the yield falls). To first order the daily P\&L in dollars is
+\[
+  \mathrm{PnL}=-\bm h\T\Delta\bm y=-\sum_k(\bm h\T\bm\gamma_k)\,p_k,\qquad \Delta\bm y\ \text{in bp},
+\]
+using $\Delta\bm y=\sum_kp_k\bm\gamma_k$ (\cref{ch07:thm-pca}(iii), centring neglected). The \emph{exposure} of the portfolio to
+PC~$k$ is $e_k=\bm h\T\bm\gamma_k$. Buying ``the PC1 portfolio'' means holding every bond in proportion to its PC1
+loading \ts{24}{9}{58:59}; a portfolio with $e_1=0$ is \emph{PC1-neutral}, one with $e_1=e_2=0$ is PC1/PC2-neutral.
+
+\begin{coursenote}[Erratum: the dv01 box on slide 20 of \file{lec09}]
+The box defines ``buy \$1 dv01 of bond'' as the notional such that the position \emph{earns} \$1 when the yield
+goes \emph{up} 1 bp. A long bond position loses when yields rise; the examples on the same slide (a steepener
+sells the 10-year bond, a belly fly buys the 10-year) use the standard convention adopted here. The notebook
+avoids the issue by computing returns directly in yield space ($+$weights$\cdot\Delta\bm y$), i.e.\ as positions in
+yields rather than in bonds; any sign convention works if used consistently.
+\end{coursenote}
+
+\paragraph{PC-neutral curves} (``PC1 residuals''). Given two tenors $a,b$, the portfolio $\bm h=\bm e_a-\alpha\bm e_b$
+(\$1 dv01 of $a$ against $\alpha$ dv01 of $b$) is PC1-neutral iff
+\begin{equation}\label{ch07:eq-curve}
+  \gamma_{a1}-\alpha\gamma_{b1}=0\iff\alpha=\frac{\gamma_{a1}}{\gamma_{b1}},
+\end{equation}
+where $\gamma_{ik}$ is the loading of tenor $i$ on PC~$k$. Example: the 2s10s \emph{steepener}, short \$1 dv01 of
+10-year, long $\alpha$ dv01 of 2-year: it profits when the curve steepens and is insensitive to parallel (PC1) moves.
+Such curve trades exist in the market as standard products \ts{24}{9}{1:00:00}.
+
+\paragraph{PC-neutral flies} (``PC2 residuals''). Given three tenors, $\bm h=\alpha_a\bm e_a+\alpha_b\bm e_b-\bm e_c$ is neutral
+to PC1 and PC2 iff
+\begin{equation}\label{ch07:eq-fly}
+  \begin{pmatrix}\gamma_{a1}&\gamma_{b1}\\ \gamma_{a2}&\gamma_{b2}\end{pmatrix}
+  \begin{pmatrix}\alpha_a\\ \alpha_b\end{pmatrix}=\begin{pmatrix}\gamma_{c1}\\ \gamma_{c2}\end{pmatrix}.
+\end{equation}
+Example: the 2s10s30s ``belly'' fly buys \$1 dv01 of 10-year and sells $\alpha_2$ of 2-year and $\alpha_{30}$ of
+30-year: a pure bet on curvature.
+
+\begin{coursenote}[Erratum: slide 20 of \file{lec09}]
+The fly system on the slide has $W_{b,0}$ in the lower-right entry; it must be $W_{b,1}$ (the PC2 loading of
+tenor $b$), as in \eqref{ch07:eq-fly}. (The slides index PCs from 0.)
+\end{coursenote}
+
+\begin{example}[Hedge ratios and volatilities from the 2001--2005 PCA]\label{ch07:ex-hedges}
+Rebuild $\Sigma=\Gamma\Lambda\Gamma\T$ from the loadings and standard deviations of 2013 Case Study~7 (this reproduces the
+case-study volatilities and correlations to three digits) and measure risk as the standard deviation of daily P\&L
+per \$1 dv01 of the reference bond:
+\begin{center}\small
+\begin{tabular}{@{}l l c c@{}}
+\toprule
+Trade (PC-neutrality) & Weights (dv01) & vol (\$/day) & outright vol\\
+\midrule
+2s10s curve (PC1) & $-1$ of 10y, $+0.947$ of 2y & 3.5 & 6.3 (10y)\\
+2s5s10s fly (PC1, PC2) & $+1$ of 5y, $-0.423$ of 2y, $-0.690$ of 10y & 1.5 & 6.9 (5y)\\
+5s7s10s fly (PC1, PC2) & $+1$ of 7y, $-0.367$ of 5y, $-0.667$ of 10y & 1.0 & 6.7 (7y)\\
+\bottomrule
+\end{tabular}
+\end{center}
+The 5s7s10s fly is the notebook's trade and is close to PC9 of the case study. To run it at the risk of an
+outright 7-year position one needs about $6.4$ times the dv01 on the belly, plus the offsetting wings.
+\end{example}
+
+\subsection{Leverage, and why higher PCs are the interesting ones}
+A PC2 portfolio moves perhaps a third as much as the PC1 portfolio per unit notional; scaling it up three
+times gives the same daily standard deviation and a return stream uncorrelated with the market direction
+\ts{24}{9}{1:01:03}. Far from being irrelevant, the higher PCs are ``where a lot of the money is made''
+\ts{24}{9}{1:03:07}; beyond PC3, however, the leverage needed becomes too expensive. The strategy requires a
+liquid market and cheap financing (repo); regulators (the CFTC and others) watch the resulting leveraged
+long/short Treasury positions as a possible systemic risk \ts{24}{9}{1:02:05}. In equities PC1 is much less
+dominant, so less leverage is needed; market-neutral long/short equity funds are precisely ``hedging out PC1''
+\ts{24}{9}{1:04:09}.
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}X X@{}}
+\toprule
+\textbf{Pros of PC-residual portfolios} & \textbf{Cons} (slide 21)\\
+\midrule
+Bets unrelated to the main market move (PC1). & Transaction cost per unit of volatility is much higher.\\
+More effectively uncorrelated bets (diversity). & Weights are model-dependent and change over time.\\
+Low volatility per notional: a mispricing may have a better signal-to-noise ratio. &
+Much larger notionals, i.e.\ leverage and balance sheet; financing (overnight repo) can dry up in stress.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\paragraph{Model risk.} The hedge ratios are only as good as the loadings. When COVID hit and the Fed made an
+emergency cut, the curve dynamics changed overnight \ts{24}{9}{1:07:21}; a leveraged PC2 position computed with
+stale loadings is no longer PC1-neutral and its P\&L is dominated by unintended level risk, while there is no
+history yet to recalibrate on \ts{24}{9}{1:08:21}. Possible answers: implied (option) markets, or calibrating
+on past periods of a similar regime (e.g.\ all Fed cutting cycles), with its own pitfalls \ts{24}{9}{1:09:25}.
+Event days also matter for risk: daily yield volatility is typically 5--6 bp, but the market may price twice
+that on the day of a major inflation release \ts{24}{9}{1:06:18}.
+
+\paragraph{Diversity of PC portfolios.} Slide 23 computes the effective dimension of the correlation matrix of
+the returns of PC portfolios: PC1 alone 1, PC1+PC2 1.99, PC1+PC2+PC3 2.97 (almost exactly uncorrelated also
+out of sample), and 5.28 when the residual portfolios left after removing three PCs are added. Higher-order
+residuals also tend to \emph{mean-revert}. The notebook's strategy \ts{24}{9}{1:10:25}: build the PC1/PC2-neutral
+5s7s10s fly every day from the current loadings; signal $s$ = z-score of its cumulative return against an
+exponentially weighted mean (half-life 100 days) and standard deviation (half-life 60 days), delayed by one day;
+position $=-s$. The Sharpe ratio is only about 0.1: the point is the method, not the strategy.
+
+\begin{coursenote}[Differences between slides and speech]
+At \ts{24}{9}{1:10:25} the speaker describes the strategy as ``momentum/mean reversion for PC1''; slide 24 and the
+notebook apply mean reversion to the PC1/PC2-neutral fly.
+\end{coursenote}
+
+\subsection{Hedging a portfolio against PC1}
+For an equity portfolio with weights $\bm V$ on $p$ indices (returns, so $\mathrm{PnL}=\bm V\T\bm r$), the exposure to
+PC~$n$ is $\bm V\T\bm\gamma_n$. Projecting out the first component,
+\[
+  \bm V'=\bm V-(\bm V\T\bm\gamma_1)\,\bm\gamma_1,\qquad \bm V'^{\mathsf T}\bm\gamma_1=0,\qquad
+  \Var(\bm V'^{\mathsf T}\bm r)=\bm V'^{\mathsf T}\Sigma\bm V'=\bm V\T\Sigma\bm V-\lambda_1(\bm V\T\bm\gamma_1)^2,
+\]
+the last identity because $(I-\bm\gamma_1\bm\gamma_1\T)\Sigma(I-\bm\gamma_1\bm\gamma_1\T)=\Sigma-\lambda_1\bm\gamma_1\bm\gamma_1\T$. If the expected return
+(``alpha'') of the strategy is roughly orthogonal to PC1, hedging keeps the alpha and removes most of the
+risk: higher Sharpe ratio.
+
+\begin{coursenote}[Erratum: slide 32 of \file{lec09}]
+``The stdev of the resulting portfolio $=V'^T\Sigma V'$'': that is the variance; the standard deviation is
+$\sqrt{V'^T\Sigma V'}$.
+\end{coursenote}
+
+\begin{casestudy}[European stock indices (slides 26--34; not covered in class \ts{24}{9}{1:12:30})]
+\textbf{Data.} Daily closes of AEX, DAX, FTSE MIB, IBEX, OMX, Euro Stoxx 50 and CAC, 4 Jan 2010 to 16 Sep 2016
+(same time zone and currency), rebased to 100 EUR and converted to demeaned log returns. Correlations 72--98\%.
+\textbf{PCA.} PC1 explains 89\% with nearly equal loadings: a ``Euro stocks'' factor. PC2 (about 5\%, half of the
+rest) separates North (Netherlands, Germany, Sweden: positive) from South (Italy, Spain: negative), France near
+zero. Covariance and correlation PCA agree. Rolling 6-month PCA: top three factors explain 90--98\% throughout,
+PC1 loadings stable, PC2 fairly stable. \textbf{Hedging example} (thesis: German stocks outperform, 2010, target
+100m EUR annualised volatility): buying the DAX (vol 20\%) needs 500m and returned 75m (Sharpe 0.75); the
+PC1-neutral portfolio $\bm e_{\mathrm{DAX}}-0.377\,\bm\gamma_1$ (weights $+0.86$ DAX, about $-0.14$ each other index) has vol
+6.7\%, needs 1{,}500m and returned about 230m (Sharpe 2.3). \textbf{Other uses:} North-versus-South trades;
+Frankfurt opens before Madrid, so a PCA model can price Spain by proxy just before its open.
+\emph{Slide typos:} the rebasing date is 4 Jan 2010 (not ``1/4/2016''), and the legend entry ``Swiss'' on slides 27
+and 31 is the Euro Stoxx 50.
+\end{casestudy}
+
+\begin{finance}[Limitations (slide 35)]
+PCA always gives an answer, so test robustness to the window and to the set of variables; it works best on data
+close to multivariate normal; and it implies no causality. To predict a dependent variable, use regression
+(\cref{ch:regression}). Andreev's closing advice \ts{24}{9}{1:22:03}: data that are hard to get (illiquid markets,
+emerging-market curves) are where fewer competitors look, hence where quantitative modelling may still pay.
+\end{finance}
+
+% ------------------------------------------------------------------
+\section{Linear factor models}\label{ch07:sec-lfm}
+
+\subsection{Definition and covariance structure}
+\begin{definition}[Linear factor model]\label{ch07:def-lfm}
+For $m$ assets observed over $T$ periods \ts{13}{15}{1:06}, \ts{13}{15}{3:13}:
+\begin{equation}\label{ch07:eq-lfm}
+  x_{i,t}=\alpha_i+\beta_{1,i}f_{1,t}+\dots+\beta_{K,i}f_{K,t}+\epsilon_{i,t},\qquad
+  \bm x_t=\bm\alpha+B\bm f_t+\bm\epsilon_t ,
+\end{equation}
+with intercepts $\bm\alpha\in\R^m$, \emph{factor loadings} $B\in\R^{m\times K}$ (row $i$ is $\bm\beta_i\T$), \emph{common factors}
+$\bm f_t\in\R^K$, $K\ll m$, and \emph{specific factors} $\bm\epsilon_t$. Assumptions \ts{13}{15}{5:19}:
+$\{\bm f_t\}$ is covariance stationary with $\E\bm f_t=\bm\mu_f$, $\Cov\bm f_t=\Omega_f$; $\{\bm\epsilon_t\}$ is white noise with
+$\E\bm\epsilon_t=\bm0$, $\Cov\bm\epsilon_t=\Psi=\diag(\sigma_1^2,\dots,\sigma_m^2)$, $\Cov(\bm\epsilon_t,\bm\epsilon_{t'})=0$ for $t\neq t'$; and
+$\Cov(\bm f_t,\bm\epsilon_{t'})=0$ for all $t,t'$.
+\end{definition}
+
+The key assumption is that $\Psi$ is \emph{diagonal}: all co-movement between assets goes through the factors.
+
+\begin{proposition}[Moments of the factor model]\label{ch07:prop-lfm}
+$\E[\bm x_t\mid\bm f_t]=\bm\alpha+B\bm f_t$, $\Cov[\bm x_t\mid\bm f_t]=\Psi$, and unconditionally
+\begin{equation}\label{ch07:eq-lfmcov}
+  \E[\bm x_t]=\bm\alpha+B\bm\mu_f,\qquad \Sigma_x=\Cov[\bm x_t]=B\,\Omega_f\,B\T+\Psi .
+\end{equation}
+\end{proposition}
+\begin{proof}
+By the law of total covariance, $\Cov[\bm x_t]=\E\bigl[\Cov(\bm x_t\mid\bm f_t)\bigr]+\Cov\bigl(\E[\bm x_t\mid\bm f_t]\bigr)=\Psi+B\Omega_fB\T$;
+directly, $\Cov(B\bm f_t+\bm\epsilon_t)=B\Omega_fB\T+\Psi+2\Cov(B\bm f_t,\bm\epsilon_t)$ and the cross term vanishes \ts{13}{15}{7:25}.
+\end{proof}
+
+\paragraph{Parameter count} \ts{13}{15}{8:27}. An unrestricted covariance has $m(m+1)/2$ parameters; the factor
+structure has $mK$ (loadings) $+K(K+1)/2$ ($\Omega_f$) $+m$ ($\Psi$) \ts{13}{15}{10:39}. For $m=500$ stocks and $K=10$
+factors: $125{,}250$ versus $5{,}555$. Moreover each new asset adds only $K+1$ parameters. This is why factor models
+are used for portfolio optimisation, where the (inverse) covariance matrix drives the allocation
+(\cref{ch:portfolio}), and for risk management, where scenarios are naturally expressed as factor moves
+\ts{13}{15}{16:54}.
+
+\paragraph{Three regression views} (\cref{ch:regression}).
+\emph{Cross-sectional}: fix $t$; \eqref{ch07:eq-lfm} is a regression of the $m$ returns on the columns of $B$ with
+``coefficients'' $\bm f_t$ \ts{13}{15}{4:18}. \emph{Time series}: fix asset $i$; $\bm x_i=\bm1_T\alpha_i+F\bm\beta_i+\bm\epsilon_i$
+with $F\in\R^{T\times K}$ the factor history and $\Cov\bm\epsilon_i=\sigma_i^2I_T$: an ordinary regression satisfying the
+Gauss--Markov assumptions \ts{13}{15}{11:41}. \emph{Multivariate}: stacking all assets,
+$X=\bm1_T\bm\alpha\T+FB\T+E$ with $X=[\bm x_1|\cdots|\bm x_m]\in\R^{T\times m}$ \ts{13}{15}{12:45} (the slides write $B$ for the
+$K\times m$ matrix of the time-series form, the transpose of the cross-sectional $B$).
+Whether factors or loadings are observed defines the three families below \ts{13}{15}{0:00}.
+
+\subsection{Identification}\label{ch07:sec-ident}
+When the factors are latent, the model is not identified \ts{13}{15}{42:40}: for any invertible $H\in\R^{K\times K}$,
+$\bm f_t^*=H\bm f_t$ and $B^*=BH^{-1}$ give the same $\bm x_t$, with $\bm\mu_f^*=H\bm\mu_f$ and $\Omega_f^*=H\Omega_fH\T$
+\ts{13}{15}{43:49}. One uses this freedom to normalise \ts{13}{15}{44:50}:
+\begin{itemize}
+  \item \emph{orthonormal factors}: if $\Omega_f=\Gamma_f\Lambda_f\Gamma_f\T$, take $H=\Lambda_f^{-1/2}\Gamma_f\T$, so that
+        \[\Omega_f^*=\Lambda_f^{-1/2}\Gamma_f\T\Gamma_f\Lambda_f\Gamma_f\T\Gamma_f\Lambda_f^{-1/2}=I_K;\]
+  \item \emph{zero-mean factors}: absorb $B\bm\mu_f$ into the intercept, $\bm\alpha^*=\bm\alpha+B\bm\mu_f$.
+\end{itemize}
+Then $\Sigma_x=BB\T+\Psi$ \ts{13}{15}{46:00}. An indeterminacy remains: $B\mapsto BQ$ with $Q$ orthogonal leaves $BB\T$
+unchanged. This rotational freedom is exploited to make factors interpretable (\cref{ch07:sec-fa}).
+
+\begin{coursenote}[Erratum: slide 22 of \file{lecnote15}]
+The slide takes $H=\Gamma\Lambda^{-1/2}$; then $H\Omega_fH\T=\Gamma\Lambda^{-1/2}\Gamma\Lambda\Gamma\T\Lambda^{-1/2}\Gamma\T$, which is not $I_K$ in general.
+The correct choice is $H=\Lambda^{-1/2}\Gamma\T$ (or $Q\Lambda^{-1/2}\Gamma\T$ for any orthogonal $Q$).
+\end{coursenote}
+
+% ------------------------------------------------------------------
+\section{Macroeconomic and fundamental factor models}\label{ch07:sec-macrofund}
+
+\subsection{Observed factors: Sharpe's single-index model}
+The simplest factor model \ts{13}{15}{13:46}: excess returns regressed on the excess return $R_{M,t}$ of the
+market index,
+\[
+  x_{i,t}=\alpha_i+\beta_iR_{M,t}+\epsilon_{i,t},\qquad
+  \Sigma_x=\sigma_M^2\,\bm\beta\bm\beta\T+\Psi,\quad \sigma_M^2=\Var(R_{M,t}) .
+\]
+The covariance between two different assets is $\beta_i\beta_j\sigma_M^2$ \ts{13}{15}{14:48}: a rank-one matrix plus a
+diagonal, trivial to build even for thousands of securities \ts{13}{15}{15:53}. $\beta_i$ measures the systematic
+risk of asset $i$ (the CAPM of \cref{ch:portfolio} adds the equilibrium restriction $\alpha_i=0$).
+
+\paragraph{Estimation} \ts{13}{15}{17:57}. The time-series regression of each asset satisfies Gauss--Markov, so OLS
+gives BLUE estimates $(\hat\alpha_i,\hat\beta_i)$ (and the MLE under normality); unbiased residual variances are
+$\hat\sigma_i^2=\hat{\bm\epsilon}_i\T\hat{\bm\epsilon}_i/(T-2)$; $\hat\sigma_M^2$ is the sample variance of $R_M$; and
+$\hat\Sigma_x=\hat\sigma_M^2\hat{\bm\beta}\hat{\bm\beta}\T+\hat\Psi$.
+
+\begin{intuition}[What PCA sees in a single-index world (not discussed in class)]
+If all specific variances are equal, $\Psi=\psi I$, then $\Sigma_x=\sigma_M^2\bm\beta\bm\beta\T+\psi I$ has top eigenvector
+$\bm\beta/\|\bm\beta\|$ with eigenvalue $\sigma_M^2\|\bm\beta\|^2+\psi$, and all other eigenvalues equal to $\psi$. PCA recovers the
+market factor exactly and finds nothing else (a degenerate remainder, \cref{ch07:rem-sign}). With unequal
+$\sigma_i^2$ the recovery is only approximate: this is the difference between PCA and factor analysis
+(\cref{ch07:sec-pcafa}).
+\end{intuition}
+
+\subsection{Macroeconomic multifactor models}
+Any observable series is a candidate factor, judged by how much it contributes to explaining returns and
+covariances \ts{13}{15}{19:00}: market risk, inflation (CPI, PPI, commodity prices), industrial production, money
+growth, interest rates, housing starts, unemployment. Chen, Roll and Ross (1986) used not the levels but the
+\emph{surprises}: unanticipated changes, computed as innovations of a vector autoregression fitted to the macro
+variables (\cref{ch:timeseries}) \ts{13}{15}{20:03}, \ts{13}{15}{21:07}. Since $F$ is observed, each asset's
+loadings are again time-series OLS estimates, with $\hat\sigma_i^2=\hat{\bm\epsilon}_i\T\hat{\bm\epsilon}_i/(T-K-1)$,
+$\hat\Omega_f$ the sample covariance of the factors and $\hat\Sigma_x=\hat B\hat\Omega_f\hat B\T+\hat\Psi$ \ts{13}{15}{22:10}.
+If residual variances differ or residuals are correlated, generalised least squares is the efficient
+estimator \ts{13}{15}{23:15}.
+
+\begin{coursenote}[Erratum: slide 11 of \file{lecnote15}]
+The estimator of the multifactor covariance is written $\hat\sigma_M^2\hat B\hat\Omega_f\hat B'+\hat\Psi$; the factor
+$\hat\sigma_M^2$ is a leftover of the single-index slide. Correct: $\hat\Sigma_x=\hat B\hat\Omega_f\hat B\T+\hat\Psi$ (the factor
+variances are already inside $\hat\Omega_f$).
+\end{coursenote}
+
+\subsection{Fundamental factor models}
+Here the \emph{loadings} are observed asset attributes (industry, market capitalisation, dividend yield,
+book-to-price, earnings-to-price, \dots) and the factor realisations are estimated. This is the BARRA approach
+of Barr Rosenberg \ts{13}{15}{24:17}, still the standard of commercial risk models.
+
+\paragraph{Industry factor model} \ts{13}{15}{29:35}. Split the $m$ stocks into $K$ industries and let
+$\beta_{i,k}=1$ if stock $i$ is in industry $k$, $0$ otherwise: $B$ is a known, time-invariant matrix of
+indicators \ts{13}{15}{30:37}. Oil stocks move together, utilities (regulated, low volatility) move together
+and differently. For each $t$, estimate $\bm f_t$ by the cross-sectional regression of $\bm x_t$ on $B$
+\ts{13}{15}{31:40}:
+\begin{equation}\label{ch07:eq-fhat}
+  \hat{\bm f}_t=(B\T B)^{-1}B\T\bm x_t,\qquad B\T B=\diag(m_1,\dots,m_K),
+\end{equation}
+where $m_k$ is the number of stocks in industry $k$: $\hat f_{k,t}$ is simply the \emph{average return of industry $k$}
+\ts{13}{15}{32:43}. Then $\hat{\bm\epsilon}_t=\bm x_t-B\hat{\bm f}_t$, $\hat\Omega_f$ and $\hat\Psi$ are sample (co)variances of the
+$\hat{\bm f}_t$ and of the residuals, and $\hat\Sigma=B\hat\Omega_fB\T+\hat\Psi$ \ts{13}{15}{33:48}.
+
+\paragraph{Heteroscedasticity.} Stocks have different specific variances, so OLS in \eqref{ch07:eq-fhat} is
+inefficient; the GLS estimator weights each stock by the inverse of its noise,
+\[
+  \hat{\bm f}_t=(B\T\Psi^{-1}B)^{-1}B\T\Psi^{-1}\bm x_t ,
+\]
+with $\Psi$ estimated in a first pass. Kempthorne stresses the analogy \ts{13}{15}{34:53}: mean-variance
+optimisation weights assets by $\Sigma^{-1}\bm\mu$ (reward penalised by variance), GLS weights observations by the
+inverse noise variance: in both cases noisy inputs must count less.
+
+\begin{coursenote}[Erratum: slide 17 of \file{lecnote15}]
+``$\hat\Sigma=B'\hat\Omega_fB+\hat\Psi$'' has the transposes swapped ($B'\hat\Omega_fB$ is not even defined, $B$ being $m\times K$);
+correct: $\hat\Sigma=B\hat\Omega_fB\T+\hat\Psi$.
+\end{coursenote}
+
+\paragraph{Factor-mimicking portfolios} \ts{13}{15}{35:56}. The estimate $\hat{\bm f}_t=H\bm x_t$ is linear in the returns
+\ts{13}{15}{37:00}, so each row of $H$ is a portfolio of the $m$ assets. Normalising the row weights to sum to one
+(one unit of capital) gives a tradeable portfolio whose return tracks the factor \ts{13}{15}{39:04}.
+
+\begin{proposition}[Mimicking portfolios have unit exposure]\label{ch07:prop-mimic}
+Let $H=(B\T\Psi^{-1}B)^{-1}B\T\Psi^{-1}$ and let $\bm h_k\T$ be its $k$-th row. Then $HB=I_K$, so under \eqref{ch07:eq-lfm}
+with $\bm\alpha=\bm0$ the portfolio $\bm h_k$ has return $f_{k,t}+\bm h_k\T\bm\epsilon_t$: unit exposure to factor $k$ and zero to
+the others. Among all portfolios with these exposures ($B\T\bm h=\bm e_k$) it has the smallest specific variance
+$\bm h\T\Psi\bm h$ (not discussed in class).
+\end{proposition}
+\begin{proof}
+$HB=(B\T\Psi^{-1}B)^{-1}B\T\Psi^{-1}B=I_K$. For the minimum, the Lagrangian $\frac12\bm h\T\Psi\bm h-\bm\ell\T(B\T\bm h-\bm e_k)$ gives
+$\bm h=\Psi^{-1}B\bm\ell$ and $B\T\Psi^{-1}B\bm\ell=\bm e_k$, i.e.\ $\bm h=\Psi^{-1}B(B\T\Psi^{-1}B)^{-1}\bm e_k=\bm h_k$ (Gauss--Markov in
+portfolio language).
+\end{proof}
+In the industry model with OLS, $\bm h_k$ is the equal-weighted portfolio of industry $k$.
+
+\paragraph{Fama--French factors} \ts{13}{15}{25:23}. Fama and French turned attributes into factor
+\emph{returns} by sorting. At each $t$, rank the stocks by an attribute (market cap for \emph{size},
+book-to-market for \emph{value versus growth}) \ts{13}{15}{26:25}, split into quintiles, and define the factor
+as the return of the equal-weighted top quintile minus the bottom quintile (a zero-cost hedge portfolio)
+\ts{13}{15}{27:32}. Then estimate each stock's loadings on these factors by time-series regressions. In the
+published factors the sign is chosen so that the factor has a positive average return, e.g.\ small minus big
+(SMB) and high minus low book-to-market (HML) \ts{13}{15}{28:35}. Value stocks are cheap relative to book
+equity; growth stocks are expensive because the price anticipates future growth.
+
+% ------------------------------------------------------------------
+\section{Statistical factor models}\label{ch07:sec-stat}
+Now neither factors nor loadings are observed: only the returns $\bm x_1,\dots,\bm x_T$ \ts{13}{15}{40:18}. Both
+methods below model the sample covariance matrix.
+
+\subsection{Factor analysis by maximum likelihood}\label{ch07:sec-fa}
+Take the normalised model with Gaussian variables \ts{13}{15}{47:02}:
+$\bm f_t\sim N_K(\bm0,I_K)$, $\bm\epsilon_t\sim N_m(\bm0,\Psi)$, independent over time, so that
+$\bm x_t\sim N_m(\bm\alpha,\Sigma_x)$ i.i.d.\ with $\Sigma_x=BB\T+\Psi$ \ts{13}{15}{48:05}. The log-likelihood is
+\ts{13}{15}{49:05}
+\begin{equation}\label{ch07:eq-loglik}
+  \ell(\bm\alpha,\Sigma_x)=-\frac{Tm}{2}\ln(2\pi)-\frac T2\ln\det\Sigma_x-\frac12\sum_{t=1}^T(\bm x_t-\bm\alpha)\T\Sigma_x^{-1}(\bm x_t-\bm\alpha),
+\end{equation}
+to be maximised over $\bm\alpha,B,\Psi$ subject to $\Sigma_x=BB\T+\Psi$. The maximiser of $\bm\alpha$ is $\bar{\bm x}$, and then
+$\ell=-\frac T2\bigl[m\ln2\pi+\ln\det\Sigma_x+\tr(\Sigma_x^{-1}S)\bigr]$ with $S$ the (divisor-$T$) sample covariance.
+
+\begin{coursenote}[Erratum: slide 24 of \file{lecnote15}]
+The log-likelihood is written with $-\frac{TK}{2}\log(2\pi)-\frac K2\log|\Sigma|$; taking the logarithm of the likelihood on
+slide 23 gives $-\frac{Tm}{2}\ln(2\pi)-\frac T2\ln|\Sigma_x|$, as in \eqref{ch07:eq-loglik}.
+\end{coursenote}
+
+\paragraph{The EM algorithm} \ts{13}{15}{51:06}. The likelihood is complicated because the factors are hidden;
+if they were observed, estimating $B$ and $\Psi$ would be ordinary regression. The EM algorithm (Dempster, Laird
+and Rubin 1977) alternates the two: estimate the hidden variables given the parameters (E-step), re-estimate the
+parameters as if the hidden variables were known (M-step); each iteration increases the likelihood
+\ts{13}{15}{52:10}. For centred data (not discussed in class; I verified numerically that the likelihood increases
+monotonically):
+\begin{align*}
+  \text{E: }\ & \bm\beta=B\T\Sigma_x^{-1},\quad \E[\bm f_t\mid\bm x_t]=\bm\beta\bm x_t,\quad
+     \E[\bm f_t\bm f_t\T\mid\bm x_t]=I-\bm\beta B+\bm\beta\bm x_t\bm x_t\T\bm\beta\T;\\
+  \text{M: }\ & B_{\rm new}=S\bm\beta\T\bigl(I-\bm\beta B+\bm\beta S\bm\beta\T\bigr)^{-1},\quad
+     \Psi_{\rm new}=\diag\bigl(S-B_{\rm new}\bm\beta S\bigr).
+\end{align*}
+Time dependence can be added through the linear state-space framework of the Kalman filter
+(\cref{ch:timeseries}).
+
+\paragraph{Factor scores} \ts{13}{15}{53:16}. With $\hat{\bm\alpha},\hat B,\hat\Psi$ in hand, estimate each $\bm f_t$ by the
+cross-sectional GLS regression of $\bm x_t-\hat{\bm\alpha}$ on $\hat B$:
+$\hat{\bm f}_t=(\hat B\T\hat\Psi^{-1}\hat B)^{-1}\hat B\T\hat\Psi^{-1}(\bm x_t-\hat{\bm\alpha})$. These estimated factor series can feed other
+models, e.g.\ statistical factors of commodity returns used to explain stocks \ts{13}{15}{54:17}, and can be
+rescaled into factor-mimicking portfolios.
+
+\paragraph{Rotations and interpretation} \ts{13}{15}{56:23}. Factor analysis was born in psychometrics:
+Spearman's analysis of intelligence tests, where one looks for the ``dimensions of intelligence''. The
+orthogonal indeterminacy $B\mapsto BQ$ is used to choose rotated loadings that are easier to interpret (e.g.\ the
+varimax criterion, which pushes each loading towards $0$ or $\pm$ large) \ts{13}{15}{57:30}.
+
+\paragraph{How many factors? The likelihood-ratio test} \ts{13}{15}{58:36}. Compare the unrestricted MLE
+($\tilde{\bm\alpha}=\bar{\bm x}$, $\tilde\Sigma=S$) with the $K$-factor MLE:
+\[\begin{gathered}
+  \mathrm{LR}(K)=2\bigl[\ell(\tilde{\bm\alpha},\tilde\Sigma)-\ell(\hat{\bm\alpha},\hat B\hat B\T+\hat\Psi)\bigr]\ \approx\ \chi^2_\nu,\\
+  \nu=\frac{m(m+1)}2-\Bigl[mK+m-\frac{K(K-1)}2\Bigr]=\frac{(m-K)^2-(m+K)}2 ,
+\end{gathered}\]
+where the $K$-factor model has $mK+m$ parameters minus $K(K-1)/2$ for the rotational freedom. $H_0$ ($K$ factors
+suffice) is rejected for large $\mathrm{LR}$. For $m=9$: $\nu=12,6,1$ for $K=3,4,5$, and $\nu<0$ for $K=6$, so at most five
+factors can be fitted (R's \texttt{factanal} also applies Bartlett's small-sample correction). Unlike PCA, the ML
+solution is scale-equivariant: analysing covariances or correlations gives equivalent answers (not discussed in
+class).
+
+\subsection{PCA as an approximate factor model; the principal factor method}\label{ch07:sec-pcafa}
+Partition the PCA of $\Sigma_x$ into the first $K$ and the remaining $m-K$ components \ts{13}{15}{1:03:46}:
+\[
+  \bm x=\bm\alpha+\Gamma_1\bm p_1+\Gamma_2\bm p_2=\bm\alpha+B\bm f+\bm\epsilon,\qquad B=\Gamma_1,\ \bm f=\bm p_1,\ \bm\epsilon=\Gamma_2\bm p_2 .
+\]
+This looks like a factor model (and $B=\Gamma_1\Lambda_1^{1/2}$, $\bm f=\Lambda_1^{-1/2}\bm p_1$ gives orthonormal factors), but
+$\Cov\bm\epsilon=\Gamma_2\Lambda_2\Gamma_2\T$ is in general \emph{not diagonal} \ts{13}{15}{1:04:59}: the ``specific'' parts are
+correlated across assets. PCA is an approximate factor model, ``principal components'', not ``principal
+factors''. The \emph{principal factor method} fixes this by iterating PCA on a reduced covariance:
+\begin{enumerate}[1.]
+  \item PCA of the sample covariance, $\hat\Sigma_x=\hat\Gamma\hat\Lambda\hat\Gamma\T$;
+  \item initial estimates $\tilde B_0=\hat\Gamma_{(K)}\hat\Lambda_{(K)}^{1/2}$ (first $K$ columns and the leading $K\times K$ block),
+        $\tilde\Psi_0=\diag(\hat\Sigma_x)-\diag(\tilde B_0\tilde B_0\T)$;
+  \item eigen-decompose the reduced matrix $\hat\Sigma_x-\tilde\Psi_0$ (which under the model equals $BB\T$, of rank $K$) and
+        repeat step 2 with its eigenvectors and eigenvalues, obtaining $\tilde B_1,\tilde\Psi_1$;
+  \item iterate until $\tilde\Psi_s$ stops changing; use the last estimates.
+\end{enumerate}
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}l X X@{}}
+\toprule
+ & \textbf{PCA} & \textbf{Factor analysis (ML)}\\
+\midrule
+Model & none: exact rotation of the data & $\Sigma_x=BB\T+\Psi$, $\Psi$ diagonal, Gaussian likelihood\\
+Output & ordered orthogonal directions, variances & loadings up to rotation, specific variances\\
+Residuals & correlated across variables & uncorrelated by assumption\\
+Scale & covariance and correlation PCA differ & scale-equivariant\\
+Number of factors & scree plot, variance explained & likelihood-ratio test\\
+Computation & one SVD & iterative (EM)\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{coursenote}[Erratum: slide 32 of \file{lecnote15}]
+For the SVD $X^*=VDU'$ of the $m\times T$ centred matrix, $U$ must be $T\times m$ with orthonormal columns, $U'U=I_m$
+(the slide says ``$U$: $(m\times T)$ row-orthonormal, $UV'=I_m$'', which is dimensionally inconsistent with
+$X^*=VDU'$). With this correction the exercise on the slide (\cref{ch07:ex-lecsvd}) works out.
+\end{coursenote}
+
+\begin{casestudy}[2013 Case Study 7: factor modelling of Treasury yields]
+\textbf{Data.} FRED constant-maturity yields, 9 tenors (3m to 20y), 3 Jan 2000 to 31 May 2013; daily changes (in
+percentage points) over two periods \ts{13}{15}{1:11:14}: 2001--2005 and 2009--May 2013 (the section title says
+``2009--2012'', the code uses 2009--2013).
+\textbf{2001--2005} \ts{13}{15}{1:12:18}: all mean changes negative (rates fell on balance) \ts{13}{15}{1:13:23}; daily
+volatilities 3.8 bp (3m) to 7.0 bp (3y); correlations decreasing away from the diagonal. PCA (\texttt{princomp}):
+84.9\%, 9.2\%, 2.9\% \ts{13}{15}{1:18:43}; PC1 a weighted average peaking at 3--5y, PC2 long minus short, PC3
+curvature, PC9 the 7y-versus-5y/10y hedge; the PC scores are exactly uncorrelated. Factor analysis
+(\texttt{factanal}): 4 factors rejected ($\chi^2=26.8$, 6 df, $p=0.0002$), 5 factors rejected at 5\% ($\chi^2=4.33$, 1 df,
+$p=0.037$), 6 factors cannot be fitted ($\nu<0$): no reduced-dimension model passes the test.
+\textbf{2009--2013}: short rates at zero, so the 3m--1y yields hardly move (3m volatility 1.25 bp versus 6.6 bp at
+7--20y); PCA 88.6\%, 6.8\%, 1.6\%, with PC1 loadings near zero at the short end; PC2 now opposes long and
+\emph{medium} tenors. Factor analysis: 3 factors rejected ($\chi^2=231$, 12 df), 4 factors accepted ($\chi^2=5.2$, 6 df,
+$p=0.52$); the 3m yield has a large specific variance (uniqueness 0.65).
+\textbf{Lesson} \ts{13}{15}{1:25:03}: the structure depends on the period (monetary regime), so the calibration
+window matters, and the fitted factors are only a starting point for modelling their dynamics (as in 2013 PS7
+Problem~4). (Several uniquenesses equal 0.005, the lower bound used by \texttt{factanal}: near-``Heywood'' cases,
+where a variable is almost entirely common factor; not discussed in class.)
+\end{casestudy}
+
+\begin{coursenote}[2013 versus 2024]
+Both years analyse daily changes of US Treasury yields and find level, slope and curvature. 2013 (Kempthorne,
+statistics) uses FRED constant-maturity yields at 9 tenors, fixed 5-year windows, and adds the factor-model and
+factor-analysis machinery; 2024 (Andreev, practice) uses the Fed's fitted par yields at 30 maturities with a
+rolling 2-year window, and focuses on stability, out-of-sample behaviour and PC-neutral trading. The 2024 course
+has no lecture on macroeconomic or fundamental factor models; their portfolio-theory side reappears in
+\cref{ch:portfolio}.
+\end{coursenote}
+
+% ------------------------------------------------------------------
+\begin{keyformulas}
+\begin{align*}
+&\text{PCA:} && \Sigma=\Gamma\Lambda\Gamma\T,\quad
+  \bm p=\Gamma\T(\bm x-\bm\mu),\quad \Cov\bm p=\Lambda,\\
+& && \bm x=\bm\mu+\textstyle\sum_kp_k\bm\gamma_k\\
+&\text{Variational:} && \bm\gamma_1=\arg\max_{\|\bm w\|=1}\bm w\T\Sigma\bm w,\\
+& && \text{share}_k=\lambda_k/\tr\Sigma\\
+&\text{Best subspace:} && \min_V\E\|(I-VV\T)(\bm x-\bm\mu)\|^2\\
+& && =\textstyle\sum_{j>K}\lambda_j\ \ (V=\Gamma_K)\\
+&\text{Sample PCA:} && X_c=UD\hat\Gamma\T,\quad
+  \hat\lambda_k=d_k^2/(N-1),\quad P=X_c\hat\Gamma=UD\\
+&\text{Correlation PCA:} && R=D_\sigma^{-1}\Sigma D_\sigma^{-1},\quad \tr R=p\\
+&\text{Out of sample:} && W\T\Sigma^YW=D\T\Lambda^YD,\\
+& && D=(W^Y)\T W;\quad \mathrm{ED}=(\textstyle\sum\lambda)^2/\textstyle\sum\lambda^2\\
+&\text{PC exposures:} && e_k=\bm h\T\bm\gamma_k;\\
+& && \text{curve } \alpha=\gamma_{a1}/\gamma_{b1};\\
+& && \text{fly: } 2\times2\text{ system \eqref{ch07:eq-fly}}\\
+&\text{PC1 hedge:} && \bm V'=\bm V-(\bm V\T\bm\gamma_1)\bm\gamma_1,\\
+& && \Var=\bm V\T\Sigma\bm V-\lambda_1(\bm V\T\bm\gamma_1)^2\\
+&\text{Factor model:} && \bm x_t=\bm\alpha+B\bm f_t+\bm\epsilon_t,\\
+& && \Sigma_x=B\Omega_fB\T+\Psi\ \ (\Psi\text{ diagonal})\\
+&\text{Single index:} && \Sigma_x=\sigma_M^2\bm\beta\bm\beta\T+\Psi\\
+&\text{Factor estimates:} && \hat{\bm f}_t=(B\T\Psi^{-1}B)^{-1}B\T\Psi^{-1}\bm x_t,\\
+& && HB=I_K\\
+&\text{LR test df:} && \nu=\tfrac12\bigl[(m-K)^2-(m+K)\bigr]
+\end{align*}
+\end{keyformulas}
+
+% ------------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\subsection*{From 2024 Problem Sets 2 and 3}
+
+\begin{exercise}[PS2 (2024), Problem 3: principal components, special case]\label{ch07:ex-ps2}
+A portfolio holds $n$ assets with fixed weights $\bm w=(w_1,\dots,w_n)\T$; over a given horizon the assets have
+rates of return $\bm X=(X_1,\dots,X_n)\T$ with mean $\bm\mu$ and covariance $\Sigma=(\sigma_{ij})$, and the portfolio return
+is $Y=\bm w\T\bm X$.
+\begin{enumerate}[(a)]
+  \item Show that $\E[Y]=\bm w\T\bm\mu$ and $\Var[Y]=\bm w\T\Sigma\bm w$.
+  \item Prove that $\Sigma$ is positive semi-definite, for any random variables $X_1,\dots,X_n$.
+  \item Suppose all entries of $\Sigma$ are positive. Prove that the largest eigenvalue $\lambda_{\max}$ has multiplicity one and
+      an eigenvector $\bm v$ that can be chosen with all components positive.
+  \item Write the first principal component variable $PC1$ in terms of $\bm X$, $\bm\mu$ and $\bm v$. What are its mean and
+      variance?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS3 (2024), Problem 4; also PS7 (2013), Problem 3: PCA of yield changes]\label{ch07:ex-ps3}
+Daily changes of the 9 FRED constant-maturity Treasury yields over 2001--2005 are analysed twice, with the sample
+covariance matrix and with the sample correlation matrix. The standard deviations of the PC variables are
+\begin{center}\small
+\begin{tabular}{@{}l rrrrrrrrr@{}}
+\toprule
+ & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9\\
+\midrule
+covariance & 0.1618 & 0.0532 & 0.0299 & 0.0192 & 0.0135 & 0.0112 & 0.0096 & 0.0090 & 0.0081\\
+correlation & 2.6338 & 1.1892 & 0.5652 & 0.3971 & 0.2694 & 0.2080 & 0.1485 & 0.1366 & 0.1225\\
+\bottomrule
+\end{tabular}
+\end{center}
+(proportions of variance 84.9, 9.2, 2.9\,\% and 77.1, 15.7, 3.5\,\% for the first three) and the first three loading
+vectors are
+\begin{center}\small
+\begin{tabular}{@{}l rrr c rrr@{}}
+\toprule
+ & \multicolumn{3}{c}{covariance PCA} & & \multicolumn{3}{c}{correlation PCA}\\
+\cmidrule(lr){2-4}\cmidrule(l){6-8}
+Tenor & PC1 & PC2 & PC3 & & PC1 & PC2 & PC3\\
+\midrule
+3M  & 0.1088 & 0.5225 & 0.5434 & & $-0.2083$ & 0.6293 & 0.5831\\
+6M  & 0.1581 & 0.4817 & 0.2508 & & $-0.2830$ & 0.5154 & $-0.0654$\\
+1Y  & 0.2531 & 0.4107 & $-0.0514$ & & $-0.3369$ & 0.2698 & $-0.4066$\\
+2Y  & 0.3905 & 0.2071 & $-0.4750$ & & $-0.3625$ & 0.0064 & $-0.4005$\\
+3Y  & 0.4197 & 0.0873 & $-0.4022$ & & $-0.3664$ & $-0.0665$ & $-0.2719$\\
+5Y  & 0.4206 & $-0.1082$ & $-0.0311$ & & $-0.3670$ & $-0.1619$ & 0.0036\\
+7Y  & 0.4009 & $-0.2289$ & 0.1475 & & $-0.3608$ & $-0.2298$ & 0.1435\\
+10Y & 0.3697 & $-0.2837$ & 0.2710 & & $-0.3525$ & $-0.2656$ & 0.2554\\
+20Y & 0.3101 & $-0.3621$ & 0.3944 & & $-0.3290$ & $-0.3338$ & 0.4125\\
+\bottomrule
+\end{tabular}
+\end{center}
+(a) PC1 loadings are all positive in the covariance case and all negative in the correlation case. Is the
+difference in sign meaningful? (Does the eigen-decomposition change if an eigenvector is multiplied by $-1$?)
+(b) The PC1 loadings range more widely in the covariance case; the loading on the least variable change (3M) is
+larger in magnitude in the correlation case, and those on the most variable changes are smaller. Explain why,
+recalling that PC1 is the unit-norm weighted combination with the largest variance and that in the correlation
+case each yield change is scaled to unit variance.
+(c) Interpret the first three PCs of the correlation case and compare with the covariance case.
+(d) If the goal is to model the dynamics of the whole term structure across all tenors, argue why correlation PCA
+might be preferred.
+(e) (2024 only) Compute the total variance of the correlation-case PCs. Is it an integer? Explain.
+\end{exercise}
+
+\begin{coursenote}[On the data of the previous exercise]
+The problem sets say the changes are ``in basis point units''; the numbers are in percentage points (a PC1
+standard deviation of 0.1618 is 16 bp per day, the tenor volatilities of Case Study 7 are 0.04--0.07). The 2013
+version prints correlation-case standard deviations about $0.04\%$ smaller (their squares sum to $8.993$ instead of
+$9$, a factor $(N-1)/N$ with $N\approx1247$ days, presumably a different divisor convention); the loadings coincide up
+to signs.
+\end{coursenote}
+
+\subsection*{From 2013 Problem Set 7 and the 2013 slides}
+
+\begin{exercise}[PS7 (2013), Problem 1: PCA of a bivariate vector]\label{ch07:ex-ps7-1}
+Let $\bm X=(X_1,X_2)\T$ have mean $\bm\alpha=(\alpha_1,\alpha_2)\T$ and covariance
+$\Sigma=\bigl(\begin{smallmatrix}\sigma_1^2&\rho\sigma_1\sigma_2\\ \rho\sigma_1\sigma_2&\sigma_2^2\end{smallmatrix}\bigr)$.
+\begin{enumerate}[(a)]
+  \item Compute the eigenvalues $\lambda_1\ge\lambda_2\ge0$ of $\Sigma$.
+  \item Compute orthonormal eigenvectors $\bm\gamma_1,\bm\gamma_2$.
+  \item Verify $\Sigma=\sum_i\lambda_i\bm\gamma_i\bm\gamma_i\T$.
+  \item For $p_i=\bm\gamma_i\T(\bm X-\bm\alpha)$ prove $\E[p_i]=0$, $\Var(p_i)=\lambda_i$ and $\Cov(p_1,p_2)=0$.
+  \item Are the eigenvectors in (b) unique? If not, how are different solutions related?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS7 (2013), Problem 2: PCA as a distance-preserving affine map]\label{ch07:ex-ps7-2}
+A distance-preserving affine map of the plane can be written $T(\bm X)=\Phi\T(\bm X-\bm\mu)$ with $\Phi=[\bm\phi_1:\bm\phi_2]$
+orthogonal and $\bm\mu\in\R^2$: it moves the origin to $\bm\mu$ and rotates the axes.
+\begin{enumerate}[(a)]
+  \item Find the unit vector $\bm\phi_1$ maximising $\Var(\bm\phi_1\T\bm X)$ and show that the maximum is $\lambda_1$ of the previous
+      exercise.
+  \item Find the unit vector $\bm\phi_2$ minimising $\Var(\bm\phi_2\T\bm X)$ and show that the minimum is $\lambda_2$.
+  \item Give an equivalent definition of PCA in terms of affine transformations of the variables and their
+      variances and expectations.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS7 (2013), Problem 4: dynamics of the PC scores]\label{ch07:ex-ps7-4}
+A VAR(3) with constant (\cref{ch:timeseries}) was fitted to the scores of the first three PCs of the
+correlation-matrix analysis of \cref{ch07:ex-ps3} ($T=1245$ days). Estimates and $t$-values:
+\begin{center}\small
+\begin{tabular}{@{}l rr c rr c rr@{}}
+\toprule
+ & \multicolumn{2}{c}{eq.\ Comp.1} & & \multicolumn{2}{c}{eq.\ Comp.2} & & \multicolumn{2}{c}{eq.\ Comp.3}\\
+\cmidrule(lr){2-3}\cmidrule(lr){5-6}\cmidrule(l){8-9}
+Regressor & est. & $t$ & & est. & $t$ & & est. & $t$\\
+\midrule
+Comp.1, lag 1 & 0.0527 & 1.86 & & $-0.0203$ & $-1.65$ & & $-0.0029$ & $-0.48$\\
+Comp.2, lag 1 & $-0.1340$ & $-2.08$ & & 0.1382 & 4.93 & & $-0.0143$ & $-1.03$\\
+Comp.3, lag 1 & $-0.1322$ & $-1.00$ & & $-0.0833$ & $-1.45$ & & 0.0163 & 0.58\\
+Comp.1, lag 2 & $-0.0530$ & $-1.87$ & & $-0.0072$ & $-0.59$ & & $-0.0135$ & $-2.23$\\
+Comp.2, lag 2 & $-0.0542$ & $-0.84$ & & 0.0370 & 1.32 & & $-0.0037$ & $-0.27$\\
+Comp.3, lag 2 & 0.1825 & 1.39 & & $-0.0195$ & $-0.34$ & & $-0.0523$ & $-1.86$\\
+Comp.1, lag 3 & $-0.0169$ & $-0.60$ & & $-0.0085$ & $-0.69$ & & $-0.0019$ & $-0.32$\\
+Comp.2, lag 3 & 0.0130 & 0.21 & & $-0.0403$ & $-1.46$ & & $-0.0030$ & $-0.22$\\
+Comp.3, lag 3 & 0.0830 & 0.63 & & 0.0148 & 0.26 & & $-0.0712$ & $-2.53$\\
+constant & $-0.0114$ & $-0.15$ & & 0.0121 & 0.38 & & 0.0002 & 0.01\\
+\midrule
+$R^2$; $F$-test $p$-value & 0.013 & 0.054 & & 0.029 & $4\cdot10^{-5}$ & & 0.013 & 0.059\\
+\bottomrule
+\end{tabular}
+\end{center}
+Residual standard errors are 2.60, 1.13, 0.56; residual correlations are below $0.025$ in absolute value; the
+largest root of the characteristic polynomial has modulus 0.438.
+(a)--(c) Interpret the estimated equations for Comp.1, Comp.2 and Comp.3.
+(d) For each equation, is there evidence of mean reversion or of momentum in the PC variable? Explain.
+\end{exercise}
+
+\begin{exercise}[\file{lecnote15}, slide 32: PCA via the SVD]\label{ch07:ex-lecsvd}
+Let $X^*$ be the $m\times T$ row-centred data matrix, $\hat\Sigma_x=\frac1TX^*X^{*\prime}$, and $X^*=VDU'$ its SVD with $V$ ($m\times m$)
+orthogonal, $U$ ($T\times m$) with orthonormal columns and $D=\diag(d_1\ge\dots\ge d_m\ge0)$. Show that
+$\hat\Lambda=\frac1TD^2$, $\hat\Gamma=V$, and that the matrix of sample principal components is $P=\hat\Gamma'X^*=DU'$.
+\end{exercise}
+
+\subsection*{Additional exercises}
+
+\begin{exercise}[not from the course]\label{ch07:ex-equi-proof}
+Prove the claims of \cref{ch07:ex-equi}: for $\Sigma=\sigma^2[(1-\rho)I+\rho\bm1\bm1\T]$ find all eigenvalues and eigenvectors, and
+the fraction of variance explained by PC1. For which $\rho$ is $\Sigma$ positive semi-definite? Relate the result to
+\cref{thm:pf} when $\rho>0$.
+\end{exercise}
+
+\begin{exercise}[not from the course]\label{ch07:ex-oos}
+In \eqref{ch07:eq-oos} show that $\sum_k(D\T\Lambda^YD)_{kk}=\tr\Lambda^Y$ and that, for every $K$,
+$\sum_{k\le K}(W\T\Sigma^YW)_{kk}\le\sum_{k\le K}\lambda^Y_k$. When does equality hold for $K=1$?
+\end{exercise}
+
+\begin{exercise}[not from the course]\label{ch07:ex-fly}
+Using the covariance-PCA loadings of \cref{ch07:ex-ps3}:
+\begin{enumerate}[(a)]
+  \item find the PC1-neutral 2s10s steepener and check
+      that its exposure to PC2 is non-zero;
+  \item find the PC1/PC2-neutral 2s5s10s fly (buy \$1 dv01 of 5y) and compute its
+      exposure to PC3;
+  \item prove the variance formula for the PC1-hedged portfolio $\bm V'=\bm V-(\bm V\T\bm\gamma_1)\bm\gamma_1$ and show
+      that it never exceeds $\Var(\bm V\T\bm r)$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course]\label{ch07:ex-fa}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Count the free parameters of the $K$-factor model $\Sigma_x=BB\T+\Psi$ and derive the degrees of freedom $\nu$ of the
+      likelihood-ratio test.
+  \item Check the values of $\nu$ reported in 2013 Case Study~7 and explain why a 6-factor model
+      cannot be fitted to 9 yields.
+  \item For the single-index model with $\Psi=\psi I$, show that PCA recovers $\bm\beta/\|\bm\beta\|$ as
+      PC1; what happens if the $\sigma_i^2$ differ?
+\end{enumerate}
+\end{exercise}

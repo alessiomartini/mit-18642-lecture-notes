@@ -1,0 +1,764 @@
+% !TEX root = ../main.tex
+\chapter{Regularized Pricing and Risk Models}\label{ch:regularized}
+
+\begin{sources}
+\small
+\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+\textbf{Lecture} & \textbf{Speaker} & \textbf{Content}\\
+\midrule
+2013 L10 (1 h 30) & I.~Masyukov (Morgan Stanley) & Guest lecture. Bonds, yield, duration, convexity; interest-rate swaps and the swap rate as an average of forward rates; building a yield curve with splines; bond spread over the swap curve; the cost of hedging a swap book; PCA hedging and its instabilities; a hedging model regularised by smoothness of the forward curve; the pricing/calibration engine and the HJM model; calibration of a two-dimensional volatility surface as an ill-posed inverse problem; SVD analysis, Tikhonov regularisation, truncated SVD; questions on splines, relative-value trading and bond curves.\\
+\bottomrule
+\end{tabularx}
+
+\smallskip
+\textbf{Files.} Slides \file{MIT18_S096F13_lecnote10.pdf} (51 pages, no incremental builds).
+\textbf{Problem sets.} None. The exercises at the end of the chapter are all ``(not from the course)''.
+\textbf{Not published.} The talk has no 2024 counterpart. The slides give the numerical tables and figures
+of the swap-book example, but no data or code; the toy computations of this chapter (a swap-curve
+Jacobian, a one-dimensional calibration) are my own and are marked as such.
+\end{sources}
+
+\section*{Motivation}
+Most quantities a bank computes every day are the output of an \emph{inverse problem}. A model has
+parameters (a yield curve, a volatility surface); a handful of liquid instruments have observed prices;
+the parameters must be chosen so that the model reproduces the prices, and only then can it be used to value and
+hedge a book of thousands of trades that are \emph{not} among the calibration instruments. The forward map
+``parameters $\mapsto$ prices'' is smooth and easy; its inverse is not. Small errors in the prices, or small
+differences between instruments, are amplified into wild oscillations of the parameters, and the model that
+``fits perfectly'' prices the rest of the book badly. The cure, the subject of this guest lecture, is
+\emph{regularisation}: add to the fit a penalty that says what a sensible solution looks like, and give up an exact
+fit in exchange for stability.
+
+The chapter follows the lecture. \Cref{ch20:sec-bonds} recalls bonds, swaps and the yield curve. \Cref{ch20:sec-curve}
+shows on a toy how calibrating a curve exactly already amplifies a 1~bp change into a ripple of several
+basis points. \Cref{ch20:sec-hedge} treats the risk side: hedging with a few liquid swaps by PCA and by a smoothness-regularised
+alternative. \Cref{ch20:sec-inverse} develops the mathematics behind both, singular values, Tikhonov regularisation and
+truncated SVD, which is the natural continuation of the shrinkage methods of \cref{ch05:sec-shrink}; \cref{ch20:sec-lambda}
+discusses how to choose the regularisation parameter (not covered in class). \Cref{ch20:sec-vol} applies everything
+to the calibration of a volatility surface for the Heath--Jarrow--Morton model (\cref{ch:hjm}). The linear algebra needed is
+the SVD of \cref{sec:svd}.
+
+% ==================================================================
+\section{Bonds, swaps and the yield curve}\label{ch20:sec-bonds}
+
+\subsection{Bond price, yield, duration and convexity}\label{ch20:sec-yield}
+A fixed-rate bond pays cash flows $C_1,\dots,C_N$ (coupons, plus the face value in $C_N$) at times $t_1<\dots<t_N$
+\ts{13}{10}{2:11}. Cash paid later is worth less, so each cash flow is multiplied by a \emph{discount factor}
+$\Lambda_i\in(0,1]$ that decreases with $t_i$ \ts{13}{10}{5:16}, and the fair value is
+$P=\sum_{i=1}^N\Lambda_iC_i$ \ts{13}{10}{6:20}. For a bond the price $P$ is not something to be computed: it is the
+result of a liquid market and is known \ts{13}{10}{7:20}. What is needed is a \emph{model for discounting}. The simplest one uses a single
+parameter, the \emph{yield to maturity} $y$ (continuous compounding, one rate for all dates)
+\ts{13}{10}{8:27}:
+\begin{equation}\label{ch20:eq-yield}
+  \Lambda_i=e^{-yt_i},\qquad P(y)=\sum_{i=1}^Ne^{-yt_i}C_i .
+\end{equation}
+With $C_i>0$ the map $y\mapsto P(y)$ is strictly decreasing, so price and yield determine each other one-to-one
+\ts{13}{10}{9:31}. The yield is therefore not a traded quantity but a \emph{convention} to summarise price and
+cash flows \ts{13}{10}{10:34}. Differentiating,
+\[
+  \frac{\dd P}{\dd y}=-\sum_it_ie^{-yt_i}C_i,\qquad
+  D=-\frac1P\frac{\dd P}{\dd y}=\sum_{i=1}^Nt_i\,\pi_i,\quad \pi_i=\frac{e^{-yt_i}C_i}{P},\ \ \sum_i\pi_i=1,
+\]
+\[
+  \mathcal C=\frac1P\frac{\dd^2P}{\dd y^2}=\sum_it_i^2\pi_i>0 .
+\]
+The \emph{duration} $D$ is the present-value-weighted average time of the cash flows (``weighted time'')
+\ts{13}{10}{11:40}\ts{13}{10}{12:41}; normalising by $P$ makes it independent of how many bonds are held. A zero-coupon
+bond has one weight, so $D=T$; a coupon bond has $D<t_N$, because every $t_i\le t_N$ and at least one is strictly smaller
+\ts{13}{10}{13:47}. Convexity is a weighted mean of $t_i^2$, hence positive. These are the definitions of
+\cref{sec:duration} in the continuous-compounding convention (\cref{prop:duration}), and \cref{eq:durconv} is the Taylor expansion
+$\Delta P/P\approx-D\Delta y+\frac12\mathcal C(\Delta y)^2$.
+
+\begin{coursenote}[Sign and letters in the slides]
+Slide~8 defines ``duration'' as $d=\frac1P\frac{\partial P}{\partial y}$, which is \emph{negative} (the speaker says so:
+the duration is always negative); here, as in \cref{sec:duration}, $D=-d>0$. Slide~9 names the second derivative $c=\partial^2P/\partial y^2$
+and then writes its explicit form as ``$d=\sum t_i^2e^{-yt_i}C_i$'': the letter should be $c$, and this is the
+\emph{unnormalised} second derivative, $\mathcal C=c/P$ in the notation used here.
+\end{coursenote}
+
+\begin{example}[Duration explains most of the P\&L, convexity the rest (my numbers)]\label{ch20:ex-bond}
+Take $N=5$ annual payments $C=(4,4,4,4,104)$ and $y=4\%$. Then $P=99.640$, $D=4.629$ years, $\mathcal C=22.42$. If $y$ rises by $50$~bp the exact
+price change is $-2.2868\%$; the duration term alone gives $-2.3146\%$ and adding convexity $-2.2865\%$. For $+200$~bp the figures are
+$-8.824\%$ exactly, $-9.258\%$ with duration only and $-8.810\%$ with convexity. The trader who
+explains the day's loss with first derivatives only \ts{13}{10}{15:56} is left with an ``unexplained'' term
+of order $\frac12\mathcal C(\Delta y)^2$.
+\end{example}
+
+All of this assumes one $y$ for all dates, hence that the curve moves in \emph{parallel}. That was an acceptable
+approximation before the crisis, but with a steep curve, where short rates sit near zero and long rates are expected to
+rise, it is not \ts{13}{10}{14:55}. \Cref{ch20:sec-bondspread} replaces $y$ by a full curve.
+
+\subsection{Interest-rate swaps}\label{ch20:sec-swaps}
+In a swap one party pays a fixed rate $C$ and receives a floating rate (three-month LIBOR in the lecture, fixed on the
+day and known in advance for the accrual period) \ts{13}{10}{17:02}. With payment dates $T_1<\dots<T_n$, accrual
+fractions $\delta_i$ (day-count), discount factors $\Lambda_i$ and forward rates $r_i$ for the period ending at $T_i$,
+\[
+  PV_{\rm fixed}=\sum_iC\delta_i\Lambda_i=C\sum_iw_i,\qquad PV_{\rm float}=\sum_ir_i\delta_i\Lambda_i=\sum_ir_iw_i,\qquad w_i=\delta_i\Lambda_i,
+\]
+\ts{13}{10}{18:14}. A swap costs nothing to enter, so the fixed rate is set so that the two legs have the same value
+\ts{13}{10}{19:21}:
+\begin{equation}\label{ch20:eq-swaprate}
+  C=\frac{\sum_ir_iw_i}{\sum_iw_i}\qquad(\text{same payment frequency on both legs}),
+\end{equation}
+the \emph{swap rate}, a weighted average of forward rates, which is what traders quote \ts{13}{10}{20:27}. If the forward
+rates are defined by $\Lambda_{i-1}=(1+r_i\delta_i)\Lambda_i$ (the single-curve convention of \cref{sec:forward}, $\Lambda_0=1$), the floating leg telescopes,
+$PV_{\rm float}=\sum_i(\Lambda_{i-1}-\Lambda_i)=1-\Lambda_n$, and $C=(1-\Lambda_n)/\sum_i\delta_i\Lambda_i$ (my remark, not on the slides). The fixed leg is a bond coupon stream, which is why a swap can be
+hedged with a bond \ts{13}{10}{20:27}, and why swap risk is measured in \emph{buckets} of par rates: the trader wants to know
+the P\&L if the 5-year swap rate moves by 1~bp.
+
+\subsection{Building a curve}\label{ch20:sec-build}
+A liquid market gives swap rates for a few maturities, whereas a book of hundreds of thousands of swaps needs a discount factor for every day up to 30--40 years
+\ts{13}{10}{22:35}. Constructing the curve means \ts{13}{10}{23:39}:
+\begin{enumerate}[1.]
+  \item choose the input instruments;
+  \item choose
+      which quantity is interpolated (daily forward rates, zero rates, discount factors) and the interpolation family
+      (piecewise-constant, linear, tension spline, cubic spline) with its \emph{knots};
+  \item \emph{calibrate}: solve for the
+      spline parameters so that every input instrument is repriced at par (PV of the swap equal to zero)
+      \ts{13}{10}{24:42}\ts{13}{10}{28:58}. The lecture's example uses 15 swaps from 1 to 30 years with quotes from $0.33\%$ to $2.67\%$
+      (the market of a year earlier; \cref{ch20:tab-risk}); the resulting curve of three-month forwards is far from flat, steep in the first five years
+      and with a hump in the 20-year region \ts{13}{10}{30:01}.
+\end{enumerate}
+
+\paragraph{Splines and B-splines.}
+A \emph{cubic spline} is a function that is a cubic polynomial on each interval between knots and has two continuous derivatives at every knot \ts{13}{10}{25:48}.
+The knots in the lecture's picture are $1,10,20,40,80,160,240$ (quarters), denser where instruments are dense
+\ts{13}{10}{1:22:09}. All splines with given knots form a vector space, which has a convenient basis of bell-shaped,
+locally supported functions \ts{13}{10}{26:49}\ts{13}{10}{27:51}.
+
+\begin{definition}[B-splines, Cox--de Boor recursion]\label{ch20:def-bspline}
+For a non-decreasing knot sequence $\tau_0\le\tau_1\le\cdots$ let $B_{i,0}(t)=1$ if $\tau_i\le t<\tau_{i+1}$ and $0$ otherwise, and
+\[
+  B_{i,k}(t)=\frac{t-\tau_i}{\tau_{i+k}-\tau_i}B_{i,k-1}(t)+\frac{\tau_{i+k+1}-t}{\tau_{i+k+1}-\tau_{i+1}}B_{i+1,k-1}(t)
+\]
+(a term with zero denominator is dropped) \ts{13}{10}{1:08:13}. Degree $k=3$ gives cubic B-splines.
+\end{definition}
+
+\begin{proposition}[Properties of B-splines]\label{ch20:prop-bspline}
+$B_{i,k}\ge0$; it vanishes outside $[\tau_i,\tau_{i+k+1}]$; $\sum_iB_{i,k}(t)=1$ on the interior of the knot range; for simple knots
+$B_{i,k}\in C^{k-1}$. Hence every $f=\sum_ic_iB_{i,k}$ is a spline of degree $k$ and its values lie between the smallest and the largest $c_i$.
+\end{proposition}
+\begin{proof}
+Non-negativity and support follow by induction from the recursion, whose coefficients are non-negative on the supports involved. For the partition of unity
+shift the index in the second term of $\sum_iB_{i,k}$:
+\[
+  \sum_iB_{i,k}=\sum_iB_{i,k-1}\Bigl[\frac{t-\tau_i}{\tau_{i+k}-\tau_i}+\frac{\tau_{i+k}-t}{\tau_{i+k}-\tau_i}\Bigr]=\sum_iB_{i,k-1},
+\]
+and the case $k=0$ is $1$. Smoothness: at a simple knot each recursion step raises the differentiability by one, starting from a jump. (Checked numerically: the maximal deviation from $1$ is $4\times10^{-16}$.)
+\end{proof}
+Local support makes the calibration matrix banded and the response to a change of one parameter local; the convex-combination
+property makes the parameters interpretable as ``values of the curve''. This is why the same basis is used for the surface, in two dimensions,
+in \cref{ch20:sec-vol}.
+
+\subsection{Bond spread over the curve}\label{ch20:sec-bondspread}
+Once a swap curve $\Lambda_i$ exists, a bond can be priced off it with one extra parameter, the \emph{bond spread} $s$,
+determined so that the model reproduces the (liquid, known) bond price \ts{13}{10}{31:01}:
+\begin{equation}\label{ch20:eq-spread}
+  P=\sum_{i=1}^Ne^{-st_i}\Lambda_iC_i .
+\end{equation}
+Compared with $y$ the correction is small: a curve level of $3\%$ and a spread of a few basis points, about a hundred times smaller
+\ts{13}{10}{32:10}. The gain is consistency: sensitivities of the swap book to the curve inputs are inherited by the bond, and one is no longer bound to
+the single ``parallel'' mode of duration. The spread contains credit or liquidity components of the bond, and even a
+swap-versus-Treasury spread is traded; for a 10-year maturity the most liquid instrument is the bond, then, surprisingly, the spread, and only then the swap
+itself, so the curve is built from bond yield plus spread rather than from the raw 10-year swap quote
+\ts{13}{10}{33:10}\ts{13}{10}{34:11}\ts{13}{10}{35:12}.
+
+\begin{finance}[Why the curve is built on swaps and not on bonds]
+Asked why one does not invert the bond curve instead, the speaker gave two reasons \ts{13}{10}{1:27:24}\ts{13}{10}{1:28:29}. A swap
+starting today always exists, and tomorrow's swap starts tomorrow, whereas bonds have a fixed maturity: the newest issue (\emph{on-the-run}) is by far the most liquid
+and older ones (\emph{off-the-run}) trade at different levels, so there is no continuous family of maturities and a bond curve can only be a least-squares fit, not an exact one.
+The switch of liquidity from one issue to the next creates ``roll effects'' that make the curve unstable. So the swap desk builds the swap curve and \emph{projects} bonds onto it, by the spread
+\eqref{ch20:eq-spread}, since bonds are its preferred hedging instruments.
+\end{finance}
+
+% ==================================================================
+\section{Calibrating a curve exactly is already ill-conditioned}\label{ch20:sec-curve}
+
+The lecture shifts one input of the calibrated curve, the 9-year swap rate, by $1$~bp, keeping all the other 14 quotes fixed, and plots the response of the
+three-month forward rates: it is a ripple, zero before about 5 years and after about 20 years, with a swing of about $\pm14$~bp around the 9-year point
+\ts{13}{10}{36:16}\ts{13}{10}{37:22}. The curve is exact at every input, so it \emph{must} move in the neighbourhood of the shifted input (the 8- and 10-year par
+rates are pinned), and it does so by an oscillation much larger than the shift. The speaker's comment: this is an ill-posed problem, where a
+small change of the input causes a large change of the output.
+
+\paragraph{A toy where everything is explicit (not in class).}\label{ch20:par-toy}
+Let the instantaneous forward rate be constant on each interval $(T_{i-1},T_i]$, $T_0=0$, between consecutive input maturities, with value $f_i$, and let the par rate of the swap
+maturing at $T_i$ be (ignoring discounting) the average forward rate, $S_i=\frac1{T_i}\sum_{k\le i}(T_k-T_{k-1})f_k$, i.e. $S=Mf$ with $M$ lower triangular
+and invertible. Inverting,
+\[
+  f_i=\frac{T_iS_i-T_{i-1}S_{i-1}}{T_i-T_{i-1}},\qquad\text{so}\qquad J=M^{-1}:\quad \Delta f_i=\frac{T_i\,\Delta S_i-T_{i-1}\,\Delta S_{i-1}}{T_i-T_{i-1}} .
+\]
+A shift $\Delta S_j=1$~bp moves $f_j$ by $+T_j/(T_j-T_{j-1})$ and $f_{j+1}$ by $-T_j/(T_{j+1}-T_j)$: for the 9-year input, $+9$~bp on $(8,9]$ and $-9$~bp on
+$(9,10]$; for 10 years $+10$ and $-5$; for 25 years $+5$ and $-5$. Each maturity acts as a lever with arm $T_j$ divided by the spacing
+of the instruments, and no amount of care in the method removes it, because the data (an average up to $T_j$) constrain only a
+difference of averages. For the 15 maturities of the lecture the condition number of $M$ is $23.4$ (my computation). \Cref{ch20:fig-ripple}
+draws the two responses.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=12cm,height=4.6cm,xlabel={forward time $t$ (years)},ylabel={$\Delta f(t)$ (bp)},xmin=0,xmax=30,ymin=-10.5,ymax=10.5,
+  axis lines=left,grid=major,grid style={black!12},legend style={at={(0.5,-0.42)},anchor=north,legend columns=2,draw=none},tick label style={font=\small}]
+\addplot[thick,thmcol] coordinates {(0,0)(8,0)(8,9)(9,9)(9,-9)(10,-9)(10,0)(30,0)};
+\addlegendentry{$+1$~bp on the 9Y par rate}
+\addplot[thick,defcol,dashed] coordinates {(0,0)(20,0)(20,5)(25,5)(25,-5)(30,-5)};
+\addlegendentry{$+1$~bp on the 25Y par rate}
+\end{axis}
+\end{tikzpicture}
+\caption{Forward-rate response to a $1$~bp shift of one par rate in the piecewise-constant toy (my computation): the curve calibrated exactly answers with a
+ripple whose amplitude is the maturity divided by the spacing of instruments. The lecture's spline curve gives a similar but smoother ripple (\ts{13}{10}{36:16}).}\label{ch20:fig-ripple}
+\end{figure}
+
+\begin{remark}[Smoother is not automatically better (my computation)]
+Replacing the piecewise-constant forwards by a cubic B-spline with 15 coefficients (interior knots by the averaging rule of de Boor) and again calibrating exactly
+gives a condition number of about $6\times10^3$ for the calibration matrix, and the response to the same $1$~bp shift of the 9-year rate has amplitude of
+between $10$ and $30$~bp at $9$--$10$~years, about $70$~bp at $12$, $150$~bp at $16$ and $200$~bp at $20$ years. The exact calibration of a few averaged quantities to a flexible smooth
+curve is genuinely unstable in the sparse long end; the lecture's curve (ripple confined to $\pm14$~bp) shows that the design of the interpolation matters.
+\end{remark}
+
+% ==================================================================
+\section{Hedging a swap book: PCA and the smoothness-regularised model}\label{ch20:sec-hedge}
+
+\subsection{The cost of hedging bucket by bucket}\label{ch20:sec-cost}
+The \emph{risk} of a book is the vector $\bm r\in\R^n$ of P\&L per basis point for a shift of each of the $n$ input rates (here $n=15$ swap maturities);
+to first order the P\&L for a shift $\bm u$ of the inputs is $\bm r\T\bm u$. \Cref{ch20:tab-risk} shows the lecture's example \ts{13}{10}{37:22}. The
+net risk is tiny ($2{,}266$ in total), but the risk in each bucket is large and of both signs. To be insensitive to \emph{every} bucket the trader must trade
+$\pm r_i$ swaps in each of them, paying half the bid--offer of each instrument; the liquid maturities (yellow in the slide: 1, 2, 5, 10, 30 years) cost $0.10$~bp, the
+others $0.25$~bp. The charge of a bucket is $|r_i|\times$ bid--offer, and the total is $\sum_i|r_i|b_i=3{,}617{,}629$
+\ts{13}{10}{38:25}\ts{13}{10}{39:27}. The gross exposure, not the net one, is what costs money, so traders never hedge every bucket: they hedge a seven-year risk
+with the cheaper liquid points around it \ts{13}{10}{40:30}. The question is how to do this systematically.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{lrrrr}
+\toprule
+Swap & quote (\%) & raw risk & bid--offer (bp) & charge\\
+\midrule
+1Y & 0.33 & $-200{,}000$ & 0.10 & 20,000\\
+2Y & 0.39 & 1,330,000 & 0.10 & 133,000\\
+3Y & 0.49 & $-200{,}000$ & 0.25 & 50,000\\
+4Y & 0.64 & 1,200,000 & 0.25 & 300,000\\
+5Y & 0.86 & $-722{,}450$ & 0.10 & 72,245\\
+6Y & 1.09 & $-35{,}255$ & 0.25 & 8,814\\
+7Y & 1.29 & $-537{,}430$ & 0.25 & 134,358\\
+8Y & 1.48 & $-3{,}850{,}000$ & 0.25 & 962,500\\
+9Y & 1.64 & 1,580,000 & 0.25 & 395,000\\
+10Y & 1.79 & 288,751 & 0.10 & 28,875\\
+12Y & 2.04 & $-401{,}350$ & 0.25 & 100,338\\
+15Y & 2.29 & 50,000 & 0.25 & 12,500\\
+20Y & 2.50 & 4,000,000 & 0.25 & 1,000,000\\
+25Y & 2.60 & $-1{,}000{,}000$ & 0.25 & 250,000\\
+30Y & 2.67 & $-1{,}500{,}000$ & 0.10 & 150,000\\
+\midrule
+total & & 2,266 & & 3,617,629\\
+\bottomrule
+\end{tabular}
+\caption{The swap book of the lecture (slide~15; the unit of the raw risk is dollars per basis point, presumably). The charge is $|\text{risk}|\times\text{bid--offer}$;
+I checked that the column sums to $3{,}617{,}629$.}\label{ch20:tab-risk}
+\end{table}
+
+\subsection{Hedging with a few liquid swaps: the general formulation}\label{ch20:sec-hedgeform}
+Let $H\in\R^{n\times k}$ have as columns the risk vectors (in the $n$ buckets) of $k$ liquid hedging instruments; if the same instruments calibrate the curve, a hedge instrument
+is sensitive only to its own input, and $H$ is made of columns $\bm e_{i(j)}$ of the identity (slide~19). Take $k=5$: the 1, 2, 5, 10 and 30 year swaps. Let $F\in\R^{n\times m}$ collect market
+\emph{scenarios} (moves of the inputs) \ts{13}{10}{41:37}. Holding a hedge position that transfers risk $H\bm x$, the residual risk is $\bm r-H\bm x$ and its P\&L in scenario $\bm f$ is $\bm f\T(\bm r-H\bm x)$, so one
+chooses
+\begin{equation}\label{ch20:eq-hedgeopt}
+  \bm x=\arg\min_{\bm x}\ \bigl\|F\T(\bm r-H\bm x)\bigr\|^2 .
+\end{equation}
+The vector $\bm x$ (the ``translated risk''; the hedge trades are $-\bm x$) is the equivalent risk of the book in the $k$ liquid swaps.
+
+\begin{coursenote}[Sign convention on slides 16 and 19]
+Slide~16 writes the objective as $\|F\T(\bm r+H\bm x)\|^2$ and slides 19--23 use $\bm r-H\bm x$ (and $\bm x=R\T\bm r$). I use the latter throughout; the two differ by $\bm x\to-\bm x$.
+\end{coursenote}
+
+\subsection{PCA hedging}\label{ch20:sec-pcahedge}
+Take for $F$ the first principal components of historical daily changes of the inputs. If $D=USP\T$ is the SVD of the data matrix of changes (rows are days),
+$P$ has as columns the principal components, which are eigenvectors of $D\T D$ (\cref{ch:pca}, \cref{thm:svd}) \ts{13}{10}{42:50}; keeping $k$ of them, one for each hedging instrument, is a low-rank
+approximation of the market. In the lecture's data the first component is the ``rates do not move now but move in the future'' mode (steep up to 10 years,
+flat afterwards, because the Fed is holding), the second is a tilt, the third more complex \ts{13}{10}{43:57}\ts{13}{10}{45:02}.
+
+With $F=P\in\R^{n\times k}$ the objective \eqref{ch20:eq-hedgeopt} can be made \emph{exactly} zero, since $P\T H\in\R^{k\times k}$ is (generically) invertible \ts{13}{10}{45:02}:
+\begin{equation}\label{ch20:eq-pcarisk}
+  P\T(\bm r-H\bm x)=\bm 0\ \Longrightarrow\ \bm x=(P\T H)^{-1}P\T\bm r=R\T\bm r,\qquad R=P(H\T P)^{-1}\in\R^{n\times k}.
+\end{equation}
+The matrix $R$ deserves an interpretation (slide~22, \ts{13}{10}{47:12}): it is the unique combination $R=PY$ of the components with $H\T R=I_k$. Its $j$-th column is the
+\emph{scenario} (a shift of all 15 inputs, as a combination of principal components) in which the $j$-th hedging swap moves by $1$~bp and the other four do not move at all; and $x_j=\bm r\T R_{\cdot j}$ is the P\&L of the book in that scenario.
+Rows of $R$ are the weights with which the risk of each bucket is assigned to the liquid swaps. This is the matrix of slide~20, whose rows have the unit vectors at the hedging tenors (a swap hedges itself)
+and, for example, assigns the 4-year risk mainly to the 2-year and 5-year swaps, with weights $0.60$ and $0.70$. The translated risks and their charges are in \cref{ch20:tab-hedge}
+(first block): total charge $442{,}036$ against $3{,}617{,}629$, a reduction of a factor $8.2$.
+
+\begin{coursenote}[``Orders of magnitude'']
+The speaker says that the charge becomes ``orders of magnitude smaller'', ``something like $400$'' instead of $3.6$ million \ts{13}{10}{47:12}. The slide gives $442{,}036$ for the PCA model
+(and $446{,}717$ for the regularised one below), i.e. about $12\%$ of the raw charge: a very large saving, but one order of magnitude, not several.
+\end{coursenote}
+
+\paragraph{Weaknesses of PCA hedging} \ts{13}{10}{48:14}\ts{13}{10}{49:19}.
+\begin{itemize}
+  \item The components are tuned to a historical window, and the coefficients of $R$ are not
+      stable, in particular for a short window that reflects the current regime; when they change the hedge must be rebalanced, which costs money.
+  \item The instability comes from the noisy components attached to
+      small singular values, exactly the mechanism of \cref{ch20:sec-inverse}.
+  \item PCA is a least-squares approximation and reacts strongly to outliers: a single day on which rates spiked and reverted has an unwarranted influence.
+  \item It overfits history: a model that would have worked for the last three months need not work for the next three.
+  \item It makes \emph{no assumption on the shape of the yield curve}: if
+      the maturity labels of the swaps were scrambled, the computation would produce the same numbers, unscrambled, although 2 years is close to 1 year and lies between 1 and 5 years. Statistical structure
+      without economic structure is the recurrent theme of \cref{ch05:sec-shrink} as well.
+\end{itemize}
+
+\subsection{A hedging model regularised by smoothness of the forward curve}\label{ch20:sec-reghedge}
+The alternative \ts{13}{10}{50:21}: forget history and impose an \emph{economic assumption}. If nothing is known about what happens in ten years, there is no reason for the forward rate to have a spike at that date, so scenarios should be
+smooth in forward-rate space \ts{13}{10}{51:25}. Let $J\in\R^{q\times n}$ be the Jacobian that translates a shift of the $n$ curve inputs into a shift of $q$ forward rates on a fine grid (for the toy above, $q=n$ and $J=M^{-1}$), and $L$ a
+smoothness matrix acting on the forward grid, for instance the first-difference matrix, whose rows are $(\dots,1,-1,\dots)$. We look for the smoothest scenarios consistent with the hedging instruments: for each hedge $j$,
+\begin{equation}\label{ch20:eq-regR}
+  \min_{\bm\rho}\ \|LJ\bm\rho\|^2\quad\text{subject to}\quad H\T\bm\rho=\bm e_j ,
+\end{equation}
+where $\bm\rho=R_{\cdot j}$ is the input scenario ($1$~bp on hedge $j$, $0$ on the other hedges) and $\|LJ\bm\rho\|^2$ is the roughness of the forward curve it induces. With a soft constraint, penalising
+$\|H\T\bm\rho-\bm e_j\|^2+\lambda^2\|LJ\bm\rho\|^2$ and setting the gradient to zero gives, for all columns at once,
+\begin{equation}\label{ch20:eq-regRsol}
+  R=\bigl(HH\T+\lambda^2\,\mathsf M\bigr)^{-1}H,\qquad \mathsf M=(LJ)\T(LJ),
+\end{equation}
+with translated risk $\bm x=R\T\bm r$ as before \ts{13}{10}{52:25}.
+
+\begin{proposition}[Soft and hard constraint]\label{ch20:prop-reghedge}
+Let $\mathsf M=(LJ)\T LJ$ be invertible. Then $H\T\mathsf M^{-1}H$ is invertible for $H$ of full column rank, the solution of \eqref{ch20:eq-regR} is
+$R^\ast=\mathsf M^{-1}H(H\T\mathsf M^{-1}H)^{-1}$, and $(HH\T+\lambda^2\mathsf M)^{-1}H\to R^\ast$ as $\lambda\to0$. If $\mathsf M$ is singular the same limit holds, by the usual penalty-method argument, as long as $\ker\mathsf M\cap\ker H\T=\{0\}$ (as in the toy, where the kernel is the parallel shift).
+\end{proposition}
+\begin{proof}
+Lagrange: $2\mathsf M\bm\rho=H\bm\mu$, so $\bm\rho=\mathsf M^{-1}H\bm\mu/2$ and $H\T\bm\rho=\bm e_j$ fixes $\bm\mu/2=(H\T\mathsf M^{-1}H)^{-1}\bm e_j$. For the limit use the push-through identity
+$(\lambda^2\mathsf M+HH\T)^{-1}H=\mathsf M^{-1}H\,(\lambda^2I+H\T\mathsf M^{-1}H)^{-1}$ (multiply both sides by $\lambda^2\mathsf M+HH\T$ and simplify) and let $\lambda\to0$. When $\mathsf M$ is singular the matrix
+$HH\T+\lambda^2\mathsf M$ is still invertible under the stated condition, and the minimiser of \eqref{ch20:eq-regR} is unique on the affine set $H\T\bm\rho=\bm e_j$; I do not prove the convergence in that case.
+\end{proof}
+
+\begin{coursenote}[Slide 23 leaves out a factor]
+Slide~23 shows ``$R\sim(HH\T+\lambda^2(LJ)\T LJ)^{-1}$''. As written the matrix is $n\times n$, not $n\times k$, and does not satisfy $H\T R\approx I$: the correct expression, obtained from the two conditions on the same slide, is \eqref{ch20:eq-regRsol}, with $H$ on the right.
+I read ``$\sim$'' as ``is approximately'', the exact constraint being reached for $\lambda\to0$.
+\end{coursenote}
+
+With $H\T R\approx I$ up to the size of $\lambda$ (the lecture's matrix has $1.00$ and $0.00$ on the hedging rows, the smoothness being what fills the other rows) the regularised model produces the columns of slide~24 \ts{13}{10}{52:25}. They are
+\emph{hat-shaped} (peaked at the hedging tenor and decaying smoothly), whereas the PCA columns follow the historical modes; the results are in the second block of \cref{ch20:tab-hedge}.
+
+\begin{table}[ht]
+\centering\footnotesize
+\begin{tabular}{lrrrrrr}
+\toprule
+translated risk on & 1Y & 2Y & 5Y & 10Y & 30Y & total charge\\
+\midrule
+PCA (slide 20) & $-426{,}757$ & 1,892,770 & $-1{,}538{,}808$ & $-268{,}764$ & 293,261 & 442,036\\
+regularised (slide 24) & $-487{,}769$ & 2,082,997 & $-1{,}752{,}958$ & 78,962 & 64,483 & 446,717\\
+toy of this chapter & $-331{,}027$ & 1,956,764 & $-1{,}873{,}952$ & $-92{,}944$ & 343,425 & 459,811\\
+\bottomrule
+\end{tabular}
+\caption{Translated risk $\bm x=R\T\bm r$ of the book of \cref{ch20:tab-risk} on the five liquid swaps, and the charge at $0.1$~bp per instrument (the slides print the charge of the PCA
+row and I computed the others; the toy, my computation, uses $J=M^{-1}$ of \cref{ch20:par-toy}, first differences for $L$ and $\lambda^2=10^{-4}$). Multiplying the printed two-decimal matrices by the raw risk reproduces the slide values up to the rounding of the entries (differences up to about $25{,}000$ per entry, since raw risks reach $4$ million).}\label{ch20:tab-hedge}
+\end{table}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=12cm,height=5.6cm,xlabel={maturity of the input bucket (years)},ylabel={column of $R$ for the 5Y hedge},xmin=0,xmax=31,ymin=-0.35,ymax=1.1,
+  axis lines=left,grid=major,grid style={black!12},legend style={at={(0.5,-0.32)},anchor=north,legend columns=3,draw=none,font=\small},tick label style={font=\small}]
+\addplot[thick,thmcol,mark=*,mark size=1.3pt] coordinates {(1,0.00) (2,0.00) (3,0.29) (4,0.70) (5,1.00) (6,0.80) (7,0.54) (8,0.33) (9,0.15) (10,0.00) (12,-0.08) (15,-0.04) (20,-0.08) (25,-0.04) (30,0.00)};
+\addlegendentry{PCA (slide 20)}
+\addplot[thick,defcol,mark=square*,mark size=1.3pt] coordinates {(1,0.00) (2,0.00) (3,0.44) (4,0.92) (5,1.00) (6,0.81) (7,0.58) (8,0.35) (9,0.15) (10,0.00) (12,-0.17) (15,-0.24) (20,-0.19) (25,-0.09) (30,0.00)};
+\addlegendentry{regularised (slide 24)}
+\addplot[thick,intcol,dashed,mark=triangle*,mark size=1.5pt] coordinates {(1,-0.00) (2,0.00) (3,0.49) (4,0.86) (5,1.00) (6,0.87) (7,0.63) (8,0.38) (9,0.16) (10,0.00) (12,-0.15) (15,-0.20) (20,-0.16) (25,-0.08) (30,-0.00)};
+\addlegendentry{toy (mine)}
+\end{axis}
+\end{tikzpicture}
+\caption{The scenario in which the 5-year hedge moves by $1$~bp and the other four hedges do not: $j=5$Y column of $R$. Both models are equal to $1$ at $5$Y and vanish at the other hedging tenors; the
+regularised column is a smooth hat whose negative lobe (rates at 12--25 years move opposite to keep forwards smooth) is more pronounced than PCA's; the toy reproduces the shape. Points are the entries of the
+matrices of slides 20 and 24 (two decimals).}\label{ch20:fig-hedge}
+\end{figure}
+
+\begin{finance}[Model risk in hedging and relative value]
+Two hedges with different assumptions cost the same here (about $445$k) but distribute the risk differently, e.g.\ $10$Y risk of $-268{,}764$ (PCA) versus $+78{,}962$ (regularised). Traders have their own view of the dynamics of the
+market, but always \emph{some} model \ts{13}{10}{47:12}. The lecture's argument for the regularised model is that it rests on a \emph{fundamental} assumption (smoothness of forwards) rather than on a window of data
+\ts{13}{10}{1:26:24}. The two ideas can also be combined (a PCA regulariser inside the smoothness model).
+\end{finance}
+
+% ==================================================================
+\section{Linear inverse problems, the SVD and Tikhonov regularisation}\label{ch20:sec-inverse}
+
+The lecture analyses the calibration problem with the tools of linear algebra \ts{13}{10}{1:11:29}. This section develops that analysis in full.
+
+\subsection{The problem and its singular value decomposition}\label{ch20:sec-svdprob}
+Let $A\in\R^{M\times N}$ be the linearised pricing map (model parameters $\bm x\in\R^N$ to $M$ market observables), and
+\begin{equation}\label{ch20:eq-inv}
+  \bm y=A\bm x+\bm\varepsilon
+\end{equation}
+the market data, with an error $\bm\varepsilon$ (bid--offer, stale quotes, model error) \ts{13}{10}{1:11:29}. Take the thin SVD (\cref{thm:svd}, \cref{eq:svdsum})
+$A=\sum_{i=1}^rs_i\bm u_i\bm v_i\T$ with $s_1\ge\dots\ge s_r>0$, $r=\rank A$, orthonormal $\bm u_i\in\R^M$ and $\bm v_i\in\R^N$. In the picture of the slide, $A$ is a rotation, a scaling by $s_i$ and a rotation, and the
+inverse is the rotation, the scaling by $1/s_i$, the rotation \ts{13}{10}{1:11:29}.
+
+\begin{proposition}[Minimum-norm least squares]\label{ch20:prop-pinv}
+The vectors minimising $\|A\bm x-\bm y\|$ are $\bm x=\sum_{i\le r}\frac{\bm u_i\T\bm y}{s_i}\bm v_i+\bm z$ with $\bm z\in\ker A$; the one of smallest norm is
+\begin{equation}\label{ch20:eq-pinv}
+  \bm x^\dagger=A^\dagger\bm y=\sum_{i=1}^r\frac{\bm u_i\T\bm y}{s_i}\,\bm v_i=VS^{-1}U\T\bm y .
+\end{equation}
+It equals $(A\T A)^{-1}A\T\bm y$ if $r=N$ (more data than parameters), and $A\T(AA\T)^{-1}\bm y$, which fits the data exactly, if $r=M<N$.
+\end{proposition}
+\begin{proof}
+Write $\bm x=\sum_j\xi_j\bm v_j+\bm z$ (with $\bm z\perp\bm v_j$). Then $\|A\bm x-\bm y\|^2=\sum_{i\le r}(s_i\xi_i-b_i)^2+\|\bm y\|^2-\sum_{i\le r}b_i^2$, $b_i=\bm u_i\T\bm y$, minimised for $\xi_i=b_i/s_i$; the component $\bm z\in\ker A$ does not enter and the norm is smallest for $\bm z=\bm 0$.
+The two closed forms follow by substituting the SVD.
+\end{proof}
+The slide's formula $\bm x=(A\T A)^{-1}A\T\bm y$ is thus valid only when the columns of $A$ are independent; for the surface calibration, where there are fewer instruments than parameters,
+one needs \eqref{ch20:eq-pinv} (the SVD form on the same slide is general).
+
+\subsection{Noise amplification and the condition number}\label{ch20:sec-noise}
+Insert \eqref{ch20:eq-inv} into \eqref{ch20:eq-pinv}: $\bm x^\dagger=A^\dagger A\bm x+\sum_i\frac{\bm u_i\T\bm\varepsilon}{s_i}\bm v_i$, the second term being the \emph{propagated error}
+\ts{13}{10}{1:12:32}:
+\[
+  \|\delta\bm x\|^2=\sum_{i=1}^r\frac{(\bm u_i\T\bm\varepsilon)^2}{s_i^2},\qquad
+  \E\|\delta\bm x\|^2=\sigma^2\sum_{i=1}^r\frac1{s_i^2}\quad\text{if }\Cov\bm\varepsilon=\sigma^2I .
+\]
+Each mode $i$ of the noise is divided by $s_i$: a small singular value turns an innocent perturbation of the data into a large variation of the parameters. A scale-free measure is the
+\emph{condition number} $\kappa=s_1/s_r$ \ts{13}{10}{1:12:32}: for $\bm x$ in the row space of $A$,
+\[
+  \frac{\|\delta\bm x\|}{\|\bm x\|}\le\kappa\,\frac{\|\bm\varepsilon\|}{\|A\bm x\|},
+\]
+because $\|\delta\bm x\|\le\|\bm\varepsilon\|/s_r$ and $\|A\bm x\|\le s_1\|\bm x\|$; the bound is attained for $\bm\varepsilon\parallel\bm u_r$, $\bm x\parallel\bm v_1$. A problem is \emph{well posed}
+(Hadamard) if a solution exists, is unique and depends continuously on the data; it is \emph{ill-posed} if one of the three fails, and \emph{ill-conditioned} if the discretised problem has a large $\kappa$. The
+lecture's calibration problems are underdetermined (uniqueness fails: fewer instruments than parameters, hence $\ker A\ne\{0\}$) \emph{and} unstable (small $s_i$)
+\ts{13}{10}{59:53}\ts{13}{10}{1:00:55}.
+
+\begin{intuition}[A physicist's reading: the deconvolution analogue]
+The typical forward map averages (the price of a swaption is an integral of the volatility surface over a region), and averaging damps the fine details of the parameters: their contribution to $\bm y$ is $s_i\xi_i$ with $s_i$ small. Inverting means amplifying
+back what the data barely contain; when the data have a noise floor $\sigma$, all modes with $s_i|\xi_i|\lesssim\sigma$ are lost, and dividing by their $s_i$ turns them into noise.
+This is the same as the inversion of a heat-kernel smoothing, or an image deconvolution, and the standard fix is the same.
+\end{intuition}
+
+\paragraph{The discrete Picard picture.} For noiseless data $\bm y=A\bm x$ one has $\bm u_i\T\bm y=s_i\,\bm v_i\T\bm x$: the coefficients $|\bm u_i\T\bm y|$ decay at least as fast as $s_i$ if $\bm x$ is reasonable. With noise, the coefficients level off at the noise floor
+$\sigma$ and the ratios $|\bm u_i\T\bm y|/s_i$ that enter \eqref{ch20:eq-pinv} grow. \Cref{ch20:fig-spectral}(b) shows this for the toy calibration of \cref{ch20:sec-lambda}.
+
+\begin{coursenote}[The ``noiseless'' slide]\label{ch20:cn-noiseless}
+Slide~46 argues that in the noiseless case ``$A(A\T A)^{-1}A\T\bm y=\bm y$'' so that ``the model appears accurate'', but ``pricing of the actual portfolio with the model $B$ may be unstable''. The point is right; the printed identity is not: slide~46
+writes ``$A\T(A\T A)^{-1}A=I$'', which is not even conformable. The correct statement is that $AA^\dagger=\sum_{i\le r}\bm u_i\bm u_i\T$ is the orthogonal projector onto the range of $A$, which is the identity on $\R^M$ exactly when $r=M$, i.e. when
+the instruments are independent, for any $N\ge M$. Then \emph{every} data vector, noise included, is repriced exactly: exact repricing certifies nothing, because it is achieved by fitting the noise. What matters is the price $\bm p=B\bm x$ of the
+instruments \emph{not} used in the calibration, and $B\bm x^\dagger$ inherits the amplified error $B\,\delta\bm x$. Slide~47 has the same misprint for the regularised repricing matrix, see \eqref{ch20:eq-influence}.
+\end{coursenote}
+
+\subsection{Truncated SVD and Tikhonov regularisation}\label{ch20:sec-tikh}
+Both methods multiply each term of \eqref{ch20:eq-pinv} by a \emph{filter factor} $w_i\in[0,1]$:
+\begin{equation}\label{ch20:eq-filter}
+  \bm x_w=\sum_{i=1}^rw_i\,\frac{\bm u_i\T\bm y}{s_i}\,\bm v_i .
+\end{equation}
+\begin{itemize}
+  \item \emph{Truncated SVD} (TSVD): $w_i=1$ for $i\le k$ and $0$ for $i>k$ \ts{13}{10}{1:16:49}. One keeps the well-determined modes and discards the rest, which are the part of
+        the parameter space that the calibration cannot see (the ``null space'' of the model, in the speaker's words). It is the same idea as the PCA risk model of \cref{ch20:sec-pcahedge} and is principal-components regression in the language of \cref{ch05:sec-shrink}.
+        The danger: if the discarded modes do affect the price of the portfolio, the truncation is a bias one pays for.
+  \item \emph{Tikhonov regularisation} \ts{13}{10}{1:14:44}:
+        \begin{equation}\label{ch20:eq-tikh}
+          \bm x_\lambda=\arg\min_{\bm x}\Bigl\{\|A\bm x-\bm y\|^2+\lambda^2\|\bm x\|^2\Bigr\}=(A\T A+\lambda^2I)^{-1}A\T\bm y=\sum_{i=1}^r\underbrace{\frac{s_i^2}{s_i^2+\lambda^2}}_{w_i}\frac{\bm u_i\T\bm y}{s_i}\bm v_i .
+        \end{equation}
+\end{itemize}
+The gradient of the objective is $2A\T(A\bm x-\bm y)+2\lambda^2\bm x$; setting it to zero gives the normal equations $(A\T A+\lambda^2I)\bm x=A\T\bm y$, uniquely solvable for every $\lambda>0$ even if $A$ is rank-deficient (the matrix is
+positive definite), and $A\T=V S U\T$ gives the filter form, since $(A\T A+\lambda^2I)^{-1}A\T=V\,\diag\!\bigl(\tfrac{s_i}{s_i^2+\lambda^2}\bigr)U\T$. Hence Tikhonov is a \emph{smooth} filter: $w_i\approx1$ for $s_i\gg\lambda$ and $w_i\approx s_i^2/\lambda^2$ for $s_i\ll\lambda$
+(\cref{ch20:fig-spectral}(a)). The essential point is stated by the speaker: one no longer divides by a small number \ts{13}{10}{1:14:44}. Quantitatively, the gain applied to a mode of noise is
+$\frac{w_i}{s_i}=\frac{s_i}{s_i^2+\lambda^2}\le\frac1{2\lambda}$ (maximum at $s_i=\lambda$), instead of $1/s_r$ for the exact inverse, and $1/s_k$ for TSVD.
+
+\begin{intuition}[Ridge regression in another language]
+This is the ridge regression of \cref{ch05:sec-shrink} with $d_j\to s_i$ and ridge parameter $\lambda_{\rm ridge}=\lambda^2$ (the lecture writes the penalty as $\|\lambda\bm x\|^2$). The smooth filter $s^2/(s^2+\lambda^2)$ is the same shrinkage factor,
+and \cref{ch05:prop-ridgebayes} gives its Bayesian reading: a Gaussian prior $\bm x\sim N(\bm 0,\tau^2I)$ with $\lambda^2=\sigma^2/\tau^2$. Early stopping of gradient descent acts as another filter of the same family (\cref{ch16:sec-gd}).
+\end{intuition}
+
+The price of stability is that the calibration is no longer exact. The fit and the ``re-pricing'' operator are, by \eqref{ch20:eq-tikh},
+\begin{equation}\label{ch20:eq-influence}
+  A\bm x_\lambda=H_\lambda\bm y,\qquad H_\lambda=A(A\T A+\lambda^2I)^{-1}A\T=\sum_iw_i\,\bm u_i\bm u_i\T\ne I,
+\end{equation}
+the corrected form of the ``$A\T(A\T A+\lambda^2I)^{-1}A\neq I$'' of slide~47 \ts{13}{10}{1:15:49}; the residual is $(I-H_\lambda)\bm y$. Its trace $\operatorname{tr}H_\lambda=\sum_iw_i$ is the \emph{effective number of parameters} used by the fit.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[name=a,width=6.2cm,height=5cm,xlabel={$\log_{10}(s/\lambda)$},ylabel={filter $w$},xmin=-2,xmax=2,ymin=-0.05,ymax=1.1,
+  axis lines=left,grid=major,grid style={black!12},tick label style={font=\small},legend style={at={(0.5,-0.32)},anchor=north,draw=none,legend columns=2,font=\small}]
+\addplot[thick,thmcol,domain=-2:2,samples=80] {10^(2*x)/(10^(2*x)+1)};
+\addlegendentry{Tikhonov}
+\addplot[thick,defcol,dashed] coordinates {(-2,0)(0,0)(0,1)(2,1)};
+\addlegendentry{TSVD}
+\node[anchor=north west] at (axis cs:-1.95,1.08) {\small(a)};
+\end{axis}
+\begin{axis}[at={(a.east)},anchor=west,xshift=1.7cm,width=6.2cm,height=5cm,xlabel={mode $i$},ymode=log,ymin=5e-4,ymax=1,xmin=0.5,xmax=10.5,
+  axis lines=left,grid=major,grid style={black!12},tick label style={font=\small},legend style={at={(0.5,-0.32)},anchor=north,draw=none,legend columns=3,font=\small}]
+\addplot[thick,thmcol,mark=*,mark size=1.3pt] coordinates {(1,0.35564) (2,0.30201) (3,0.27821) (4,0.21286) (5,0.15147) (6,0.10928) (7,0.07985) (8,0.04535) (9,0.02417) (10,0.00281)};
+\addlegendentry{$s_i$}
+\addplot[thick,defcol,mark=square*,mark size=1.3pt] coordinates {(1,0.45418) (2,0.49752) (3,0.12507) (4,0.00788) (5,0.00641) (6,0.00865) (7,0.00814) (8,0.00214) (9,0.00357) (10,0.00174)};
+\addlegendentry{$|\bm u_i\T\bm y|$}
+\addplot[thick,intcol,dashed] coordinates {(0.5,0.00189)(10.5,0.00189)};
+\addlegendentry{noise}
+\node[anchor=south west] at (axis cs:0.8,6e-4) {\small(b)};
+\end{axis}
+\end{tikzpicture}
+\caption{(a) Filter factors of Tikhonov ($w=s^2/(s^2+\lambda^2)$) and of TSVD (cut at $s=\lambda$). (b) Singular values $s_i$ of the toy calibration matrix of \cref{ch20:sec-lambda} (ten instruments, 100 parameters, $\kappa=126$) and the coefficients $|\bm u_i\T\bm y|$ of noisy data
+(1\% price noise; my computation). From mode 4 on the coefficients stop tracking $s_i$ and stay within one to four times the noise floor $\|\bm\varepsilon\|/\sqrt M$ (dashed), whereas $s_i$ keeps falling: the terms $\bm u_i\T\bm y/s_i$ of \eqref{ch20:eq-pinv} are then dominated by noise.}\label{ch20:fig-spectral}
+\end{figure}
+
+\subsection{General form: weights, smoothness matrices and several penalties}\label{ch20:sec-general}
+Penalising the amplitude $\|\bm x\|$ is rarely what one wants. The general problem, with a diagonal weight matrix $W$ and a penalty matrix $L$, is
+\begin{equation}\label{ch20:eq-gen}
+  \bm x_\lambda=\arg\min_{\bm x}\Bigl\{\|W(A\bm x-\bm y)\|^2+\lambda^2\|L\bm x\|^2\Bigr\}=(A\T W^2A+\lambda^2L\T L)^{-1}A\T W^2\bm y .
+\end{equation}
+The solution is unique iff $\ker(WA)\cap\ker L=\{0\}$. It is an ordinary least-squares problem for the \emph{augmented system}
+$\begin{psmallmatrix}WA\\ \lambda L\end{psmallmatrix}\bm x\approx\begin{psmallmatrix}W\bm y\\ \bm 0\end{psmallmatrix}$, which is how it is solved stably in practice (QR, \cref{ch05:sec-qr}). Three remarks.
+\begin{itemize}
+  \item \emph{Weights.} $W=\diag(1/\sigma_i)$, with $\sigma_i$ the tolerance of instrument $i$ (its bid--offer): the data term is then a $\chi^2$ and a residual of one tolerance costs one unit. Instruments that are
+        important or liquid get a small tolerance and are fitted more tightly \ts{13}{10}{1:07:09}.
+  \item \emph{Smoothness instead of amplitude.} With $L=I$ the penalty pulls $\bm x$ towards $\bm 0$, which for a volatility surface means a volatility of zero. The speaker's point \ts{13}{10}{1:19:00}: ask first what one does \emph{not} like. A perfectly flat
+        surface is acceptable, so the penalty should vanish on it, i.e. $L$ should have the constants in its kernel: the first-difference matrix with rows $(\dots,1,-1,\dots)$ of slide~41 penalises $\sum_i(x_i-x_{i+1})^2$, a discrete $\int|\nabla x|^2$ (in two dimensions the differences of neighbouring nodes along both axes).
+  \item \emph{No bias on the kernel of $L$.} If $A\bm x=\bm y$ exactly and $L\bm x=\bm 0$, then $\bm x_\lambda=\bm x$: indeed $\bm x_\lambda=(A\T W^2A+\lambda^2L\T L)^{-1}A\T W^2A\bm x=\bm x-\lambda^2(A\T W^2A+\lambda^2L\T L)^{-1}L\T L\bm x=\bm x$.
+        Regularisation biases the solution only in the directions it penalises, so the bias is small when the penalty encodes true prior knowledge \ts{13}{10}{1:17:52}\ts{13}{10}{1:19:00}.
+\end{itemize}
+Slide~42 combines two penalties, one on the \emph{change} of the surface with respect to a prior $\bm v_0$ (matrix $L_1$ acting on $\bm v-\bm v_0=B\bm x$) and one of Tikhonov type on the coefficients (matrix $L_2$), with parameters $\lambda_1,\lambda_2$ (\cref{ch20:sec-volsolve}); this is \eqref{ch20:eq-gen} with
+$\lambda^2L\T L\to\lambda_1^2(L_1B)\T L_1B+\lambda_2^2L_2\T L_2$. The Bayesian reading is the same as for ridge: a Gaussian prior with precision $(\lambda^2/\sigma^2)L\T L$, a random-walk prior for a difference penalty.
+
+\begin{coursenote}[Notation of the slides]
+On slide~42 the inverse matrix is called $A$, which is also the model matrix of slides 44--48 (here $K=(J\T W^2J+\dots)^{-1}$ in \cref{ch20:sec-volsolve}); and the penalty matrix $L_2$ is applied to the volatility vector $\bm v$ on slide~40 but to the coefficients $\bm x$ on slide~42.
+\end{coursenote}
+
+\subsection{Bias, variance and the meaning of $\lambda$}\label{ch20:sec-biasvar}
+For Tikhonov with $L=I$ the error can be computed exactly. Let $\bm y=A\bm x+\bm\varepsilon$, $\E\bm\varepsilon=\bm 0$, $\Cov\bm\varepsilon=\sigma^2I$, and $\xi_i=\bm v_i\T\bm x$. From \eqref{ch20:eq-filter}, $\bm x_\lambda=\sum_iw_i(\xi_i+\bm u_i\T\bm\varepsilon/s_i)\bm v_i$, hence
+\begin{equation}\label{ch20:eq-mse}
+  \E\|\bm x_\lambda-\bm x\|^2=\sum_{i=1}^r\Bigl[\underbrace{(1-w_i)^2\xi_i^2}_{\text{bias}^2}+\underbrace{\sigma^2\frac{w_i^2}{s_i^2}}_{\text{variance}}\Bigr]+\sum_{i>r}\xi_i^2 ,\qquad 1-w_i=\frac{\lambda^2}{s_i^2+\lambda^2},\quad\frac{w_i^2}{s_i^2}=\frac{s_i^2}{(s_i^2+\lambda^2)^2}.
+\end{equation}
+(I checked \eqref{ch20:eq-mse} by Monte Carlo on a random $8\times6$ matrix: $0.7747$ against $0.7750$ from $4\times10^4$ samples.) The last sum is the part of $\bm x$ in the kernel of $A$, which no method can recover.
+Bias grows and variance falls with $\lambda$; at $\lambda=0$ the variance $\sigma^2\sum s_i^{-2}$ is the amplification of \cref{ch20:sec-noise}. Minimising each term over $w_i$: $-2(1-w)\xi^2+2w\sigma^2/s^2=0$ gives
+\begin{equation}\label{ch20:eq-wiener}
+  w_i^\ast=\frac{s_i^2\xi_i^2}{s_i^2\xi_i^2+\sigma^2}=\frac{s_i^2}{s_i^2+\sigma^2/\xi_i^2},
+\end{equation}
+a Wiener filter, i.e.\ Tikhonov with a mode-dependent $\lambda_i^2=\sigma^2/\xi_i^2$: a mode is kept if the signal it contributes to the data, $s_i|\xi_i|$, exceeds the noise $\sigma$, and suppressed otherwise. TSVD is the $0/1$ version of this filter and a single $\lambda^2=\sigma^2/\tau^2$
+(with $\tau^2$ a typical size of $\xi_i^2$) is the ridge--Bayes value of \cref{ch05:prop-ridgebayes}. The optimum cannot be used as it stands, since $\xi_i$ is unknown, but it says what $\lambda$ \emph{is}: a noise-to-signal ratio for the parameters.
+
+% ==================================================================
+\section{Choosing the regularisation parameter (not covered in class)}\label{ch20:sec-lambda}
+The lecture calls $\lambda$ a ``small regularisation parameter'' and says nothing on how to fix it \ts{13}{10}{52:25}. Three standard criteria, then a numerical test. Let $\rho(\lambda)=\|W(A\bm x_\lambda-\bm y)\|$ be the residual.
+For $L=I$ and $b_i=\bm u_i\T\bm y$, $\rho^2=\sum_{i\le r}(1-w_i)^2b_i^2+\text{const}$ increases with $\lambda$ and $\|\bm x_\lambda\|^2=\sum_iw_i^2b_i^2/s_i^2$ decreases (each $w_i$ decreases with $\lambda$), so the trade-off is monotone.
+
+\begin{itemize}
+  \item \emph{Discrepancy principle} (Morozov): choose $\lambda$ with $\rho(\lambda)=\delta$, the size of the data error, $\delta\approx\sigma\sqrt M$ (with $W=\diag(1/\sigma_i)$: $\rho^2\approx M$). Rationale: fitting closer than the noise fits the noise. This is the lecture's remark that every input has a
+        tolerance and calibrating exactly is pointless \ts{13}{10}{1:06:08}; it needs the noise level, here the bid--offer.
+  \item \emph{Generalised cross-validation.} Leave-one-out cross-validation predicts each datum from the others. For a linear smoother $\hat{\bm y}=H_\lambda\bm y$ one has $y_i-\hat y_i^{(-i)}=(y_i-\hat y_i)/(1-(H_\lambda)_{ii})$ (\emph{proof}: the fit computed without datum $i$ is also the minimiser when
+        $y_i$ is replaced by its own prediction $\hat y_i^{(-i)}$, since that term is then zero; so $\hat y_i^{(-i)}=\sum_{j\ne i}H_{ij}y_j+H_{ii}\hat y_i^{(-i)}$). Replacing $(H_\lambda)_{ii}$ by the average $\operatorname{tr}H_\lambda/M$ gives
+        \[
+          \mathrm{GCV}(\lambda)=\frac{M\,\rho(\lambda)^2}{\bigl(M-\operatorname{tr}H_\lambda\bigr)^2},
+        \]
+        which needs no noise level; it is the counterpart of the cross-validation used for ridge in \cref{ch05:sec-shrink}.
+  \item \emph{L-curve.} Plot $\log\rho(\lambda)$ against $\log\|L\bm x_\lambda\|$; the corner of the ``L'' separates the regime dominated by noise (small $\lambda$, large seminorm) from the regime dominated by bias.
+\end{itemize}
+
+\begin{casestudy}[A toy calibration with regularisation (my computation; not in class)]\label{ch20:cs-toy}
+\textbf{Goal.} Mimic the calibration of a volatility slice. \textbf{Set-up.} A smooth ``true'' volatility $v(s)$ on a grid of $N=100$ points, $s\in[0,10]$ (level $0.19$--$0.25$); $M=10$ instruments, each an average of $v$ with a Gaussian window (centres $0.5$--$9.7$, widths growing from $0.46$ to $1.56$, overlapping); prices $y_i=(A\bm v)_i(1+0.01z_i)$ with $z_i$ standard normal, so $\delta=\|\bm\varepsilon\|=0.0060$;
+$\kappa(A)=126$ on the ten modes.
+\textbf{Methods.}
+\begin{enumerate}[(a)]
+  \item The lecture's ``formal'' solution: ten piecewise-constant basis functions, square Jacobian, exact inversion.
+  \item Tikhonov \eqref{ch20:eq-gen} with the first-difference matrix $L$ of slide~41, $W=I$, on the fine grid.
+\end{enumerate}
+\textbf{Results} (\cref{ch20:fig-toy}).
+\begin{enumerate}[(a)]
+  \item Reprices the ten inputs to $5\times10^{-17}$ but the surface swings between $0.002$ and $0.40$ (root-mean-square error $0.106$, roughness $\|L\bm v\|=0.64$), and a $1\%$ change in one input moves it by $16\%$ of its level in the worst place: the skyline of the
+      lecture \ts{13}{10}{1:04:01}.
+  \item With $\lambda$ from GCV ($0.44$, effective number of parameters $\operatorname{tr}H_\lambda=6.2$): error $0.0031$, roughness $0.0144$ (truth $0.0147$), the same $1\%$ perturbation moves it by $1.3\%$ of its level. The discrepancy principle
+      gives $\lambda=0.96$ and error $0.0032$; the best possible value (knowing the truth) is $0.0031$ at $\lambda=0.65$. GCV picks a residual of $0.46\,\delta$, a mild over-fit, typical of GCV.
+\end{enumerate}
+\textbf{Which penalty?} With the same tuning, the best error is $0.0167$ for $L=I$ (amplitude), $0.0039$ for the second difference and $0.0031$ for the first difference. TSVD of $A$ (minimum-norm solution) reaches at best $0.018$ (with $k=8$ modes) and
+$0.063$ with all ten: an unsuitable penalty (here: the minimum norm, which pulls the surface towards zero) gives errors five to six times larger than the suitable one, whereas $\lambda$ can be changed by a factor two with hardly any effect on the error.
+\textbf{Lesson.} Regularisation is a matter of choosing \emph{what} to penalise (prior knowledge of the solution) first, and how much second.
+\end{casestudy}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[name=a,width=6.4cm,height=5.4cm,xlabel={forward time $s$},ylabel={volatility},xmin=0,xmax=10,ymin=-0.02,ymax=0.42,
+  axis lines=left,grid=major,grid style={black!12},tick label style={font=\small},legend style={at={(0.5,-0.3)},anchor=north,draw=none,legend columns=1,font=\small}]
+\addplot[thick,black,dashed] coordinates {(0.000,0.2309) (0.303,0.2305) (0.606,0.2305) (0.909,0.2312) (1.212,0.2333) (1.515,0.2368) (1.818,0.2416) (2.121,0.2467) (2.424,0.2509) (2.727,0.2528) (3.030,0.2511) (3.333,0.2457) (3.636,0.2371) (3.939,0.2267) (4.242,0.2159) (4.545,0.2063) (4.848,0.1986) (5.152,0.1931) (5.455,0.1895) (5.758,0.1876) (6.061,0.1868) (6.364,0.1868) (6.667,0.1873) (6.970,0.1882) (7.273,0.1894) (7.576,0.1907) (7.879,0.1922) (8.182,0.1937) (8.485,0.1953) (8.788,0.1969) (9.091,0.1984) (9.394,0.1999) (9.697,0.2012) (10.000,0.2024)};
+\addlegendentry{truth}
+\addplot[thick,thmcol,const plot] coordinates {(0.000,0.2275) (0.101,0.2275) (0.202,0.2275) (0.303,0.2275) (0.404,0.2275) (0.505,0.2275) (0.606,0.2275) (0.707,0.2275) (0.808,0.2275) (0.909,0.2275) (1.010,0.2431) (1.111,0.2431) (1.212,0.2431) (1.313,0.2431) (1.414,0.2431) (1.515,0.2431) (1.616,0.2431) (1.717,0.2431) (1.818,0.2431) (1.919,0.2431) (2.020,0.2528) (2.121,0.2528) (2.222,0.2528) (2.323,0.2528) (2.424,0.2528) (2.525,0.2528) (2.626,0.2528) (2.727,0.2528) (2.828,0.2528) (2.929,0.2528) (3.030,0.2457) (3.131,0.2457) (3.232,0.2457) (3.333,0.2457) (3.434,0.2457) (3.535,0.2457) (3.636,0.2457) (3.737,0.2457) (3.838,0.2457) (3.939,0.2457) (4.040,0.1940) (4.141,0.1940) (4.242,0.1940) (4.343,0.1940) (4.444,0.1940) (4.545,0.1940) (4.646,0.1940) (4.747,0.1940) (4.848,0.1940) (4.949,0.1940) (5.051,0.2413) (5.152,0.2413) (5.253,0.2413) (5.354,0.2413) (5.455,0.2413) (5.556,0.2413) (5.657,0.2413) (5.758,0.2413) (5.859,0.2413) (5.960,0.2413) (6.061,0.0444) (6.162,0.0444) (6.263,0.0444) (6.364,0.0444) (6.465,0.0444) (6.566,0.0444) (6.667,0.0444) (6.768,0.0444) (6.869,0.0444) (6.970,0.0444) (7.071,0.3991) (7.172,0.3991) (7.273,0.3991) (7.374,0.3991) (7.475,0.3991) (7.576,0.3991) (7.677,0.3991) (7.778,0.3991) (7.879,0.3991) (7.980,0.3991) (8.081,0.0020) (8.182,0.0020) (8.283,0.0020) (8.384,0.0020) (8.485,0.0020) (8.586,0.0020) (8.687,0.0020) (8.788,0.0020) (8.889,0.0020) (8.990,0.0020) (9.091,0.2893) (9.192,0.2893) (9.293,0.2893) (9.394,0.2893) (9.495,0.2893) (9.596,0.2893) (9.697,0.2893) (9.798,0.2893) (9.899,0.2893) (10.000,0.2893)};
+\addlegendentry{formal (exact repricing)}
+\addplot[thick,defcol] coordinates {(0.000,0.2265) (0.303,0.2273) (0.606,0.2297) (0.909,0.2338) (1.212,0.2387) (1.515,0.2436) (1.818,0.2478) (2.121,0.2507) (2.424,0.2520) (2.727,0.2512) (3.030,0.2483) (3.333,0.2431) (3.636,0.2359) (3.939,0.2274) (4.242,0.2183) (4.545,0.2093) (4.848,0.2013) (5.152,0.1946) (5.455,0.1896) (5.758,0.1862) (6.061,0.1842) (6.364,0.1834) (6.667,0.1835) (6.970,0.1842) (7.273,0.1854) (7.576,0.1870) (7.879,0.1891) (8.182,0.1916) (8.485,0.1944) (8.788,0.1973) (9.091,0.2001) (9.394,0.2025) (9.697,0.2043) (10.000,0.2050)};
+\addlegendentry{Tikhonov, $\lambda=0.44$}
+\node[anchor=north] at (axis cs:8,0.4) {\small(a)};
+\end{axis}
+\begin{axis}[at={(a.east)},anchor=west,xshift=1.7cm,width=6.4cm,height=5.4cm,xlabel={$\log_{10}\lambda$},xmin=-2,xmax=1,ymode=log,ymin=0.1,ymax=100,
+  axis lines=left,grid=major,grid style={black!12},tick label style={font=\small},legend style={at={(0.5,-0.3)},anchor=north,draw=none,legend columns=1,font=\small}]
+\addplot[thick,thmcol] coordinates {(-4.000,20.0356) (-3.831,20.0356) (-3.661,20.0324) (-3.492,20.0227) (-3.322,20.0000) (-3.153,19.9547) (-2.983,19.8576) (-2.814,19.6505) (-2.644,19.2071) (-2.475,18.3139) (-2.305,16.6343) (-2.136,13.8900) (-1.966,10.3042) (-1.797,6.8123) (-1.627,4.3398) (-1.458,3.0388) (-1.288,2.4207) (-1.119,2.0097) (-0.949,1.6214) (-0.780,1.2945) (-0.610,1.1003) (-0.441,1.0259) (-0.271,1.0000) (-0.102,1.0032) (0.068,1.1586) (0.237,1.6570) (0.407,2.4207) (0.576,3.1812) (0.746,3.8576) (0.915,4.5955)};
+\addlegendentry{error / best error}
+\addplot[thick,defcol,dashed] coordinates {(-4.000,5.1023) (-3.831,5.1023) (-3.661,5.1023) (-3.492,5.1023) (-3.322,5.1023) (-3.153,5.1023) (-2.983,5.1023) (-2.814,5.1004) (-2.644,5.0967) (-2.475,5.0911) (-2.305,5.0763) (-2.136,5.0428) (-1.966,4.9740) (-1.797,4.8326) (-1.627,4.5536) (-1.458,4.0644) (-1.288,3.3538) (-1.119,2.5800) (-0.949,1.9438) (-0.780,1.4953) (-0.610,1.1830) (-0.441,1.0000) (-0.271,1.0327) (-0.102,1.5727) (0.068,3.3036) (0.237,7.1168) (0.407,12.9092) (0.576,19.3080) (0.746,26.6555) (0.915,38.3557)};
+\addlegendentry{GCV / minimum}
+\addplot[thick,intcol] coordinates {(-4.000,0.0000) (-3.831,0.0167) (-3.661,0.0167) (-3.492,0.0500) (-3.322,0.0833) (-3.153,0.2000) (-2.983,0.4333) (-2.814,0.9333) (-2.644,1.9833) (-2.475,4.1333) (-2.305,8.1500) (-2.136,14.7500) (-1.966,23.4500) (-1.797,32.1333) (-1.627,38.7167) (-1.458,42.8667) (-1.288,45.5333) (-1.119,48.2167) (-0.949,52.2000) (-0.780,57.6333) (-0.610,63.7833) (-0.441,71.3500) (-0.271,85.9667) (-0.102,122.8000) (0.068,201.8500) (0.237,330.2000) (0.407,487.9833) (0.576,645.5000) (0.746,809.7833) (0.915,1024.7500)};
+\addlegendentry{residual $\rho/\delta$}
+\addplot[gray,dotted] coordinates {(-2,1)(1,1)};
+\node[anchor=north west] at (axis cs:-1.95,90) {\small(b)};
+\end{axis}
+\end{tikzpicture}
+\caption{The toy calibration of \cref{ch20:cs-toy} (my computation). (a) The formal exact solution is the ``skyline''; the smoothness-regularised one follows the truth to $0.003$. (b) Error, GCV and residual against $\lambda$ (each normalised as indicated; dotted line: $\rho=\delta$, the discrepancy principle). The minima of the error and of GCV are broad and lie within a factor two of each other.}\label{ch20:fig-toy}
+\end{figure}
+
+% ==================================================================
+\section{Calibrating a volatility surface}\label{ch20:sec-vol}
+
+\subsection{The pricing engine and the HJM model}\label{ch20:sec-hjmvol}
+The lecture now steps back \ts{13}{10}{53:26}. A \emph{pricing engine} takes the trader's portfolio and the model parameters (curves, volatility surface, \dots) and returns values and risks. To make
+the parameters consistent with the market, a \emph{calibration engine} compares the model prices of a set of benchmark instruments with their market prices and adjusts the parameters until they agree
+(slide~25); only then is the portfolio priced. The example is the Heath--Jarrow--Morton model (\cref{ch:hjm}), used to price volatility products by Monte Carlo \ts{13}{10}{54:35}:
+\begin{equation}\label{ch20:eq-hjm}
+  \dd f_{t,s}=\mu_{t,s}\dd t+f_{t,s}^{\beta}\,V(t,s)\,\rho(t,s)\cdot\dd B^{\Q}_t ,
+\end{equation}
+for the forward rate $f_{t,s}$ observed at calendar time $t$ for forward time $s$: $\mu$ is the drift (fixed by absence of arbitrage, \cref{ch:hjm}), $\beta$ the ``skew factor'' ($\beta=1$ lognormal, $\beta=0$ normal model), $\rho$ the correlation and factor structure, $B^\Q$ a
+Brownian motion, and $V(t,s)$ the \emph{volatility surface} that is the subject of the lecture \ts{13}{10}{55:41}. The Monte Carlo advances the whole forward curve from one quarter to the next, and every step needs the value of $V$ on
+the corresponding cell of the triangular grid of (calendar time, forward time) \ts{13}{10}{56:47}; the instruments that pin it down, caps and swaptions, are sensitive to \emph{regions} of this triangle (\ts{13}{10}{57:48}; a swaption
+depends on the forward rates that will be observed at the option expiry and on their volatility until then), and the regions of different instruments overlap heavily \ts{13}{10}{58:50}.
+
+\subsection{Why the problem is hard}\label{ch20:sec-volhard}
+The surface has a value for each of the cells of a triangle with 240 quarters (60 years) on a side, that is $240\cdot241/2=28{,}920$ unknowns \ts{13}{10}{59:53} (the slide says ``$\sim$28k''), whereas only $20$--$50$ swaptions and caps are quoted. The problem is underdetermined
+(the kernel of the forward map has dimension at least $28{,}870$), ill-posed because of the overlapping sensitivities, and its unregularised solution is unstable and noisy \ts{13}{10}{1:00:55}. A full $28{,}920\times28{,}920$ matrix of doubles takes $6.7$~GB (my count),
+which the speaker rules out as ``no memory''. And the result must be \emph{smooth}: two similar swaptions in the portfolio should get similar prices, and a spike of volatility in some region of the future is either explained by an economic event or is an artefact
+\ts{13}{10}{1:00:55}.
+
+\begin{coursenote}[Counting the elements of the triangle]
+In the transcript \ts{13}{10}{59:53} the number of triangle elements is first said to be ``200K'' and then a matrix of $28$K$\times28$K is discussed; slide~29 gives ``$\sim$28k'', which is the right count: half of $240^2=57{,}600$ plus the diagonal is $28{,}920$.
+\end{coursenote}
+
+\subsection{The ``formal'' solution and why it fails}\label{ch20:sec-volformal}
+Represent the surface, flattened to a vector $\bm v$ with one entry per cell, as a prior value plus a combination of basis functions \ts{13}{10}{1:01:56}:
+\begin{equation}\label{ch20:eq-vbasis}
+  \bm v=\bm v_0+B\bm x,
+\end{equation}
+where the columns of $B$ are the basis functions (values on the grid) and $\bm x$ the weights. The pricing model gives the sensitivities of the prices of the calibration instruments to a perturbation of the surface along each basis function \ts{13}{10}{1:02:59}; working with
+log-prices, $q_i=\ln(q_i^{\rm mdl}/q_i^{0})$, $q_i^{\rm in}=\ln(q_i^{\rm mkt}/q_i^{0})$,
+\begin{equation}\label{ch20:eq-jac}
+  J_{ij}=\frac{\partial q_i}{\partial x_j},\qquad \bm q\approx J\bm x .
+\end{equation}
+The \emph{formal} approach takes as many basis functions as instruments ($N=M$), piecewise constant on the region of sensitivity of each instrument, so that $J$ is square and (``if the basis functions are reasonable'') invertible, and solves $\bm x=J^{-1}\bm q^{\rm in}$ iteratively \ts{13}{10}{1:02:59}.
+The iteration converges quickly because for at-the-money instruments the price is nearly proportional to the volatility: for the Black--Scholes forward price (\cref{ch:bs}), $C=F\,[2N(\sigma\sqrt T/2)-1]=F\,\sigma\sqrt{T}/\sqrt{2\pi}\,(1-\sigma^2T/24+\dots)$, so $\ln C\approx\ln\sigma+\text{const}$ and $q$ is nearly linear in the volatility
+increments (my derivation of the speaker's remark; the calibrated instruments are swaptions in an HJM Monte Carlo, for which the proportionality is heuristic).
+
+The outcome is an exact fit and a meaningless surface: ``Manhattan skyline, with the Hudson river'' \ts{13}{10}{1:04:01} (slide~33, ``Exact, but \dots\ meaningless''). Smoothing the piecewise-constant basis functions gives a better-looking surface but not a good one, and the instability
+remains: a $1\%$ change in the price of the $5\text{y}\times10\text{y}$ swaption changes the adjustment of the surface by $4\%$ (slide~35: one tall isolated ``building with an antenna'') \ts{13}{10}{1:05:04}\ts{13}{10}{1:06:08}. This is what \cref{ch20:sec-noise} predicts: $J$ is square, so
+$J^\dagger=J^{-1}$ and errors are amplified by up to $\kappa(J)$; the toy of \cref{ch20:cs-toy} shows the same phenomenon (1\% of noise, a factor $16$ on the surface).
+
+\subsection{The regularised design}\label{ch20:sec-volsolve}
+The lecture turns ill-posedness to advantage with four changes \ts{13}{10}{1:06:08}\ts{13}{10}{1:07:09} (slide~36).
+\begin{itemize}
+  \item \emph{Tolerance.} Each input has a bid--offer, so there is no point in calibrating exactly. The fit becomes a weighted least-squares term $\|W(\bm q-\bm q^{\rm in})\|^2$, $W$ diagonal with small weights on instruments of large bid--offer and large ones on important instruments. A
+        small loss of accuracy buys a large gain of smoothness.
+  \item \emph{Smooth basis functions.} Cubic B-splines (\cref{ch20:def-bspline}) in each direction, and their tensor products $B_a(t)B_b(s)$ as two-dimensional basis functions \ts{13}{10}{1:08:13}. Since B-splines are non-negative and sum to one (\cref{ch20:prop-bspline}), every combination is a
+        reasonable surface, and its regularity is inherited from the basis (``every basis function makes sense, so any linear combination will be good enough'').
+  \item \emph{More basis functions than instruments} ($N>M$): it is not known in advance which shapes are needed, and the number of unknowns is still tiny compared with the $28{,}920$ cells (with $24$ basis functions per direction, $576$ coefficients, so the matrix of the normal equations is $576\times576$, about $2.7$~MB) \ts{13}{10}{1:07:09}.
+        The knots are denser at short forward times, where instruments are dense \ts{13}{10}{1:22:09}.
+  \item \emph{Penalties.} The problem becomes \ts{13}{10}{1:09:19}
+        \begin{equation}\label{ch20:eq-volpen}
+          \|W(\bm q-\bm q^{\rm in})\|^2\to\min,\qquad \|L_1(\bm v-\bm v_0)\|^2\to\min,\qquad \|L_2\bm v\|^2\to\min ,
+        \end{equation}
+        with a penalty $L_1$ on the \emph{change} of the surface with respect to a prior and a penalty $L_2$ on the surface itself (slide~40). The gradient penalty is a matrix with rows $(\dots,1,-1,\dots)$ for every pair of neighbouring cells (slide~41, \ts{13}{10}{1:10:20}); on a rectangular
+        grid of $n_t\times n_s$ nodes it is $L_1=\begin{psmallmatrix}D_t\otimes I\\ I\otimes D_s\end{psmallmatrix}$ with $D$ the one-dimensional first-difference matrices (on the triangle only the pairs of cells that both lie inside are kept).
+\end{itemize}
+
+Combining the three terms with weights $\lambda_1,\lambda_2$ gives (slide~42, \ts{13}{10}{1:10:20})
+\begin{equation}\label{ch20:eq-volsol}
+\begin{gathered}
+  \bm x=\arg\min\Bigl\{\|W(J\bm x-\bm q^{\rm in})\|^2+\|\lambda_1L_1B\bm x\|^2+\|\lambda_2L_2\bm x\|^2\Bigr\}=K\,J\T W^2\bm q^{\rm in},\\
+  K=\bigl(J\T W^2J+\lambda_1^2(L_1B)\T L_1B+\lambda_2^2L_2\T L_2\bigr)^{-1},
+\end{gathered}
+\end{equation}
+which is \eqref{ch20:eq-gen} with the two penalty terms of \cref{ch20:sec-general} (setting the gradient of the objective to zero gives the normal equations; here $L_1B\bm x=\bm v-\bm v_0$ so the first penalty acts on the change of surface, and $L_2$ acts on the coefficients).
+$K$ is invertible when the penalties together have no kernel in common with $WJ$; $\lambda_2>0$ with $L_2=I$ guarantees it. Two computational remarks from the Q\&A \ts{13}{10}{1:24:19}: only $J\T W^2\bm q^{\rm in}$ changes when market quotes tick, whereas the penalty matrices (and, if $J$ is
+approximately constant, $J\T W^2J$) can be precomputed, so the calibration runs in real time on live data; and the linear algebra is done in the space of $N\ll28{,}920$ coefficients, never on the full surface. When the pricing map $\bm q(\bm x)$ is not linear, each Newton step solves a regularised problem of this form; the resulting damped iteration is a
+Levenberg--Marquardt method (not discussed in class).
+
+\begin{intuition}[Where in the chapter the pieces fit]
+Formula \eqref{ch20:eq-volsol} is one object seen three ways. As \emph{statistics}: ridge regression (\cref{ch05:sec-shrink}) with a design matrix $WJ$, observation weights, and a prior that surfaces are smooth and close to $\bm v_0$. As \emph{linear algebra}: the SVD filter \eqref{ch20:eq-filter} on
+the singular values of $WJ$ in the metric of the penalty. As \emph{engineering}: what a trader looks at is the residual: the surface is a smooth fit through the market, and what is left over is information.
+\end{intuition}
+
+Slide~43 shows the calibrated surface: smooth, with a few gentle peaks and a sharper one at short forward times. Asked about a peak, the speaker explains \ts{13}{10}{1:22:09}\ts{13}{10}{1:23:16} that the grid is uniform in quarters whereas the instruments are at
+3~months, 6~months, 1, 2, 5, 10 years, so on a logarithmic axis the feature would not look sharp; the surface has more detail where there are more instruments, and no sharper features can be supported elsewhere.
+
+\begin{finance}[Relative value: the calibrated surface as a benchmark]
+Traders watch the surface as it moves with the live quotes \ts{13}{10}{1:24:19}. If an instrument trades away from the smooth surface implied by the others (something that ``is not typical'', a judgement that ``comes with years of experience'') it is a candidate mispricing: a spike is likely
+to disappear soon, and one trades (a swaption, or a more exotic product with the appropriate exposure) against it. This is \emph{relative value analysis} and, in the speaker's words, how the desk makes money \ts{13}{10}{1:25:20}. It works only if the model is robust: a regulariser based on a fundamental
+principle (smoothness) is more likely to be stable in the future than one estimated from a past window such as PCA \ts{13}{10}{1:26:24}. The same remarks apply to the swap curve.
+\end{finance}
+
+\begin{finance}[Interpolation, splines and their limits]
+To a question on other fitting techniques the speaker answers that ``spline'' and ``interpolation'' are the same thing for him: one has limited inputs and wants the curve in between \ts{13}{10}{1:20:07}\ts{13}{10}{1:21:07}. The regularised fit goes beyond interpolation: it
+does not pass through the data, which is the essential difference between \cref{ch20:sec-build} and \cref{ch20:sec-volsolve}.
+\end{finance}
+
+\paragraph{What regularisation buys, and costs} \ts{13}{10}{1:17:52}. It gives stability (indispensable for ill-conditioned problems) and a more realistic solution, at the expense of not fitting the data exactly and possibly of a \emph{biased} solution (for example a smoothness constraint makes the result smoother than reality). The bias
+is controlled by \emph{what} is penalised, in the sense of the ``no bias on the kernel of $L$'' remark in \cref{ch20:sec-general}: open the textbook and one finds ``Tikhonov'' and penalises the amplitude, which would push the volatility towards zero; a flat surface is acceptable, so one penalises derivatives instead \ts{13}{10}{1:19:00}. The
+slides' references are the Wikipedia pages on the HJM model, the yield curve, inverse problems, Tikhonov regularisation, the SVD, PCA and B-splines.
+
+% ==================================================================
+\begin{keyformulas}
+\begin{itemize}
+  \item Bond: $P=\sum_i\Lambda_iC_i$; yield $\Lambda_i=e^{-yt_i}$; duration $D=\sum_it_i\pi_i$, convexity $\mathcal C=\sum_it_i^2\pi_i$ \eqref{ch20:eq-yield}; bond spread $P=\sum_ie^{-st_i}\Lambda_iC_i$ \eqref{ch20:eq-spread}.
+  \item Swap rate $C=\sum_ir_iw_i/\sum_iw_i$, $w_i=\delta_i\Lambda_i$ \eqref{ch20:eq-swaprate}.
+  \item Cox--de Boor: $B_{i,k}=\frac{t-\tau_i}{\tau_{i+k}-\tau_i}B_{i,k-1}+\frac{\tau_{i+k+1}-t}{\tau_{i+k+1}-\tau_{i+1}}B_{i+1,k-1}$, $\sum_iB_{i,k}=1$.
+  \item PCA hedge: $\bm x=R\T\bm r$, $R=P(H\T P)^{-1}$, $H\T R=I$ \eqref{ch20:eq-pcarisk}; smooth hedge: $R=(HH\T+\lambda^2(LJ)\T LJ)^{-1}H$ \eqref{ch20:eq-regRsol}.
+  \item Inverse problem $\bm y=A\bm x+\bm\varepsilon$: $\bm x^\dagger=\sum_i\frac{\bm u_i\T\bm y}{s_i}\bm v_i$, error $\sum_i\frac{\bm u_i\T\bm\varepsilon}{s_i}\bm v_i$, $\kappa=s_1/s_r$ \eqref{ch20:eq-pinv}.
+  \item Filters $\bm x_w=\sum_iw_i\frac{\bm u_i\T\bm y}{s_i}\bm v_i$: Tikhonov $w_i=\frac{s_i^2}{s_i^2+\lambda^2}$, $\bm x_\lambda=(A\T A+\lambda^2I)^{-1}A\T\bm y$; TSVD $w_i=\ind_{i\le k}$ \eqref{ch20:eq-tikh}; gain $\le1/(2\lambda)$; repricing $H_\lambda=\sum_iw_i\bm u_i\bm u_i\T\ne I$.
+  \item General form $\min\|W(A\bm x-\bm y)\|^2+\lambda^2\|L\bm x\|^2$: $\bm x=(A\T W^2A+\lambda^2L\T L)^{-1}A\T W^2\bm y$; no bias on $\ker L$ \eqref{ch20:eq-gen}.
+  \item MSE $=\sum_i[(1-w_i)^2\xi_i^2+\sigma^2w_i^2/s_i^2]+\sum_{i>r}\xi_i^2$; optimal $\lambda_i^2=\sigma^2/\xi_i^2$ \eqref{ch20:eq-mse}--\eqref{ch20:eq-wiener}.
+  \item Choosing $\lambda$: discrepancy $\rho(\lambda)=\delta$; $\mathrm{GCV}=M\rho^2/(M-\operatorname{tr}H_\lambda)^2$.
+  \item Surface calibration: $\bm v=\bm v_0+B\bm x$, $J=\partial\bm q/\partial\bm x$, $\bm x=KJ\T W^2\bm q^{\rm in}$ \eqref{ch20:eq-volsol}.
+\end{itemize}
+\end{keyformulas}
+
+% ==================================================================
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[(not from the course)]
+Consider $A=\begin{psmallmatrix}1&1\\1&1.01\end{psmallmatrix}$.
+\begin{enumerate}[(a)]
+  \item Solve $A\bm x=\bm y$ for $\bm y=(2,2.01)\T$ and for $\bm y'=(2,2.02)\T$; by what fraction do data and solution change?
+  \item Compute the singular values and $\kappa(A)$ (about $4\times10^2$) and
+      check that the change of (a) is compatible with the bound of \cref{ch20:sec-noise}.
+  \item Compute the Tikhonov solutions \eqref{ch20:eq-tikh} for $\lambda=0.1$ for both $\bm y$ and $\bm y'$ and compare.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[(not from the course)]
+Prove the following for Tikhonov regularisation with $L=I$:
+\begin{enumerate}[(a)]
+  \item $\rho(\lambda)=\|A\bm x_\lambda-\bm y\|$ is non-decreasing and $\|\bm x_\lambda\|$ non-increasing in $\lambda$;
+  \item as $\lambda\to0$, $\bm x_\lambda\to A^\dagger\bm y$ (\cref{ch20:prop-pinv}), also when $A$ is rank-deficient;
+  \item as $\lambda\to\infty$, $\bm x_\lambda\approx A\T\bm y/\lambda^2$;
+  \item $0\le\operatorname{tr}H_\lambda\le r$ and it decreases from $r$ to $0$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[(not from the course)]
+Take $N=M=1$: $y=ax+\varepsilon$, $\varepsilon\sim N(0,\sigma^2)$. Find the Tikhonov estimator, its bias and variance, and the $\lambda$ that minimises the mean-square error as a function of $x$; compare with \eqref{ch20:eq-wiener}. What happens if one substitutes the ridge--Bayes value $\lambda^2=\sigma^2/\tau^2$ and the true $|x|$ is much larger or much smaller than $\tau$?
+\end{exercise}
+
+\begin{exercise}[(not from the course)]
+Let $J=I_4$, $L$ the first-difference matrix ($3\times4$) and $H=(\bm e_1,\bm e_4)$ (hedges in buckets 1 and 4) in \eqref{ch20:eq-regR}. Show that the smoothest scenarios are the linear interpolations $R_{\cdot1}=(1,\tfrac23,\tfrac13,0)\T$ and $R_{\cdot2}=(0,\tfrac13,\tfrac23,1)\T$, compute the translated risk $\bm x=R\T\bm r$ for $\bm r=(0,1,1,0)\T$, and check that $\mathsf M=(LJ)\T LJ$ is singular with kernel spanned by $(1,1,1,1)\T$ (and that \cref{ch20:prop-reghedge} still applies). What would the second-difference matrix give?
+\end{exercise}
+
+\begin{exercise}[(not from the course)]
+Prove the push-through identity $(\lambda^2\mathsf M+HH\T)^{-1}H=\mathsf M^{-1}H(\lambda^2I+H\T\mathsf M^{-1}H)^{-1}$ used in \cref{ch20:prop-reghedge}, and use it to show that $H\T R_\lambda\to I$ with $R_\lambda=(HH\T+\lambda^2\mathsf M)^{-1}H$ and that $H\T R_\lambda=H\T\mathsf M^{-1}H(\lambda^2I+H\T\mathsf M^{-1}H)^{-1}$ (so the deviation from $I$ is of order $\lambda^2$).
+\end{exercise}
+
+\begin{exercise}[(not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item For a swap with equally spaced payment dates show $C=(1-\Lambda_n)/\sum_i\delta_i\Lambda_i$ and that $C$ lies between the smallest and the largest forward rate.
+  \item In the piecewise-constant toy of \cref{ch20:sec-curve} derive $\Delta f_i$ for a shift of the $j$-th par rate and show that its entries are $T_j/(T_j-T_{j-1})$ and $-T_j/(T_{j+1}-T_j)$; what is the largest absolute value over all $j$ for the 15 maturities of the lecture?
+  \item The matrix $M$ is lower triangular: compute its determinant.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[(not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Show that the total number of cells of a triangular grid with $n$ quarters on a side is $n(n+1)/2$ and compute the memory (in GB, doubles) of the square matrix of the full problem for $n=240$.
+  \item With a tensor-product cubic B-spline basis of $m$ functions per direction, how many coefficients, and what is the size of the matrix $K$ in \eqref{ch20:eq-volsol}?
+  \item Explain why $J\T W^2J$ has rank at most the number of instruments, and why $K$ nevertheless exists.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[(not from the course)]
+Reproduce the toy of \cref{ch20:cs-toy} (any language): choose your own smooth $v$ on $[0,10]$, ten Gaussian-window instruments, $1\%$ noise; compute the formal solution, the Tikhonov solution for a grid of $\lambda$, the discrepancy and GCV parameters. Vary the penalty ($L=I$, first difference, second difference) and the noise level, and report which choice is most sensitive to $\lambda$.
+\end{exercise}

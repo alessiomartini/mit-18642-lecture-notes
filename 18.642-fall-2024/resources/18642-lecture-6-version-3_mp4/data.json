@@ -1,0 +1,35 @@
+{
+  "body": "",
+  "content": "<p>The lecture discusses martingales and their powerful applications in solving problems in stochastic processes, including random walks, stopping times, and gambler’s ruin probabilities, highlighting how martingale properties simplify complex analyses. It then introduces Markov processes and chains, explaining their memoryless property and applications in finance such as credit rating transitions and stock price modeling, before transitioning to regression analysis, focusing on multiple linear regression, model assumptions, and estimation techniques.</p>\n",
+  "content_type": "resource",
+  "draft": false,
+  "file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/18642-lecture-6-version-3_360p_16_9.mp4",
+  "file_size": 121689758,
+  "file_type": "video/mp4",
+  "image_metadata": {
+    "caption": "",
+    "credit": "",
+    "image-alt": ""
+  },
+  "iscjklanguage": false,
+  "learning_resource_types": [
+    "Lecture Videos"
+  ],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "resourcetype": "Video",
+  "title": "Lecture 6: Stochastic Processes I (cont.); Regression Analysis",
+  "uid": "43bd39d9-aebe-4f64-8cc0-90601c0aa867",
+  "video_files": {
+    "archive_url": "",
+    "video_captions_file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/1DW-7jLSmD-k7r0Wduiw_Rx-dpE318ZLF_transcript.webvtt",
+    "video_thumbnail_file": "https://img.youtube.com/vi/yIn8Y_CSwPk/default.jpg",
+    "video_transcript_file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/1DW-7jLSmD-k7r0Wduiw_Rx-dpE318ZLF_transcript.pdf"
+  },
+  "video_metadata": {
+    "source": "",
+    "video_speakers": "",
+    "video_tags": "18-642-topics-in-mathematics-with-applications-in-finance-fall-2024, credit ratings, gambler’s ruin, least squares estimation, markov chain, markov process, martingales, moment generating function, multiple linear regression, random walk, stochastic processes, stopping time, transition probabilities",
+    "youtube_description": "MIT 18.642 Topics in Mathematics with Applications in Finance, Fall 2024\nInstructor: Peter Kempthorne\nView the complete course: https://ocw.mit.edu/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024\nYouTube Playlist: https://www.youtube.com/playlist?list=PLUl4u3cNGP601Q2jo-J_3raNCMMs6Jves\n\nThe lecture discusses martingales and their powerful applications in solving problems in stochastic processes, including random walks, stopping times, and gambler’s ruin probabilities, highlighting how martingale properties simplify complex analyses. It then introduces Markov processes and chains, explaining their memoryless property and applications in finance such as credit rating transitions and stock price modeling, before transitioning to regression analysis, focusing on multiple linear regression, model assumptions, and estimation techniques.\n\nLicense: Creative Commons BY-NC-SA\nMore information at https://ocw.mit.edu/terms\nMore courses at https://ocw.mit.edu\nSupport OCW at http://ow.ly/a1If50zVRlQ\n\nWe encourage constructive comments and discussion on OCW’s YouTube and other social media channels. Personal attacks, hate speech, trolling, and inappropriate comments are not allowed and may be removed. More details at https://ocw.mit.edu/comments.",
+    "youtube_id": "yIn8Y_CSwPk"
+  }
+}

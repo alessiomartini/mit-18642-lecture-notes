@@ -1,0 +1,24 @@
+{
+  "content": "<p>Pricing Model Diagram. Image courtesy of Ivan Masyukov.</p>\n",
+  "content_type": "resource",
+  "description": "Pricing Model Diagram. Image courtesy of Ivan Masyukov.",
+  "draft": false,
+  "file": "/courses/18-s096-topics-in-mathematics-with-applications-in-finance-fall-2013/bb7de7f57ac6a5938118fc237a68d2b7_18-s096f13.jpg",
+  "file_size": 13291,
+  "file_type": "image/jpeg",
+  "image_metadata": {
+    "caption": "Pricing Model Diagram. (Image courtesy of Ivan Masyukov.)",
+    "credit": "Image courtesy of Ivan Masyukov.",
+    "image-alt": "A flow diagram of a pricing model."
+  },
+  "iscjklanguage": false,
+  "learning_resource_types": [],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "ocw_type": "OCWImage",
+  "resourcetype": "Image",
+  "title": "18-s096f13.jpg",
+  "uid": "bb7de7f5-7ac6-a593-8118-fc237a68d2b7",
+  "video_metadata": {
+    "youtube_id": null
+  }
+}

@@ -1,0 +1,117 @@
+% !TEX root = ../main.tex
+\chapter{Map of the Course Materials}\label{app:materials}
+
+Every file downloaded from the two OCW sites, with the chapter where it is used. Paths are relative to
+the course folder; \file{static_resources/} is abbreviated \file{sr/}. Status: \textbf{done} = already
+integrated in a written chapter, \emph{partly} = some of the problems or chapters that use it are written, \emph{planned} = assigned to a chapter still in preparation.
+
+\newcommand{\done}{\textbf{done}}
+\newcommand{\planned}{\emph{planned}}
+\newcommand{\partly}{\emph{partly}}
+
+\section*{18.642, Fall 2024 (\file{18.642-fall-2024/})}
+\begin{center}\footnotesize\renewcommand{\file}[1]{\texttt{\detokenize{#1}}}
+\begin{longtable}{@{}p{0.6\linewidth} p{0.27\linewidth} l@{}}
+\toprule
+\textbf{File} & \textbf{Used in} & \textbf{Status}\\
+\midrule\endhead
+\file{sr/mit18_642_f24_lec01_1.pdf} & \cref{ch:markets} & \done\\
+\file{sr/mit18_642_f24_lec01_2.pdf} & \cref{ch:markets}, \cref{app:rsetup} & \done\\
+\file{sr/mit18_642_f24_lec02_1.pdf} & \cref{ch:linalg} & \done\\
+\file{sr/mit18_642_f24_lec02_2.pdf} & \cref{ch:linalg} & \done\\
+\file{sr/mit18_642_f24_lec02_3.pdf} & \cref{ch:linalg}, \cref{app:rsetup} & \done\\
+\file{sr/mit18_642_f24_lec04_1.pdf}, \file{lec04_2.pdf} & \cref{ch:probability} & \done\\
+\file{sr/mit18_642_f24_lec05.pdf} & \cref{ch:sp1} & \done\\
+\file{sr/mit18_642_f24_lec06_1.pdf} -- \file{lec06_4.pdf} & \cref{ch:regression} & \done\\
+\file{sr/mit18_642_f24_lec07.pdf} & \cref{ch:rates} & \done\\
+\file{sr/mit18_642_f24_lec08.pdf} & \cref{ch:regression} & \done\\
+\file{sr/mit18_642_f24_lec09.pdf} & \cref{ch:pca} & \done\\
+\file{sr/mit18_642_f24_lec10.pdf} & \cref{ch:counterparty} & \done\\
+\file{sr/mit18_642_f24_lec11-12.pdf} & \cref{ch:timeseries} & \done\\
+\file{sr/mit18_642_f24_lec13.pdf} & \cref{ch:portfolio} & \done\\
+\file{sr/mit18_642_f24_lec14_1.pdf} -- \file{lec14_9.pdf} & \cref{ch:sp2} & \done\\
+\file{sr/mit18_642_f24_lec17_1.pdf}, \file{lec17_2.pdf} & \cref{ch:volatility} (2024 L19) & \done\\
+\file{sr/mit18_642_f24_lec19_1.pdf}, \file{lec19_2.pdf} & \cref{ch:stochcalc} (2024 L24) & \done\\
+\file{sr/mit18_642_f24_lec21.pdf} & \cref{ch:bs} & \done\\
+\file{sr/mit18_642_f24_lec23.pdf} & \cref{ch:ml} & \done\\
+\file{sr/mit18_642_f24_lec24.pdf} & \cref{ch:sde} (2024 L25) & \done\\
+\midrule
+\file{sr/mit18_642_f24_pset1.pdf} & \cref{ch:linalg} (all problems) & \done\\
+\file{sr/mit18_642_f24_pset2.pdf} & \cref{ch:probability,ch:sp1} (P1--2), \cref{ch:pca} (P3), \cref{app:logistics} (P4) & \done\\
+\file{sr/mit18_642_f24_pset3.pdf} & \cref{ch:probability} (Stein's lemma), \cref{ch:portfolio}, \cref{ch:pca} & \done\\
+\file{sr/mit18_642_f24_pset4.pdf} & \cref{ch:sp2} (Brownian motion), \cref{ch:timeseries} (AR, ARMA) & \done\\
+\file{sr/mit18_642_f24_pset5.pdf} & \cref{ch:sp1,ch:stochcalc}, \cref{ch:volatility} & \done\\
+\file{sr/mit18_642_f24_pset_analysis.pdf}, \file{pset_rcode.pdf} & \cref{ch:pca} (PCA of Treasury yields) & \done\\
+\midrule
+\file{sr/mit18_642_f24_rstudio.zip} (\file{FM_Intro1.Rmd}) & \cref{ch:markets} & \done\\
+\file{sr/mit18_642_f24_equal_weighted_portfolios.zip} & \cref{ch:linalg} & \done\\
+\file{sr/mit18_642_f24_etf_casestudy.zip} & \cref{ch:regression} & \done\\
+\file{sr/mit18_642_f24_rstudio_pset5.zip} & \cref{ch:volatility} & \done\\
+\file{sr/fedbondyielddata_20230911.csv}, \file{sr/feddataanalysis.ipynb} & \cref{ch:rates}, \cref{ch:pca} & \done\\
+\midrule
+\file{sr/*_transcript.pdf} (23 files) & PDF copies of the \file{.txt} transcripts; the \file{.txt} files are used instead & --\\
+\file{sr/21m383-s23-lecture-28-apr-28-v3_transcript.pdf} & to be identified & \planned\\
+\file{pages/syllabus}, \file{calendar}, \file{assignments}, \file{problem-sets} & \cref{app:logistics} & \done\\
+\file{pages/investment-game} & \cref{ch:markets} (\cref{ex:game}), \cref{app:logistics} & \done\\
+\file{pages/group-project}, \file{pages/final-paper} & \cref{app:logistics} & \done\\
+\file{pages/week-1} -- \file{week-15} & mapping lectures $\leftrightarrow$ files (this appendix) & \done\\
+\file{static_shared/}, \file{*.html}, \file{*.js}, \file{*.css}, fonts, images & website infrastructure, no content & --\\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\section*{18.S096, Fall 2013 (\file{18.s096-fall-2013/})}
+File names in \file{sr/} start with a hash, omitted here.
+\begin{center}\footnotesize\renewcommand{\file}[1]{\texttt{\detokenize{#1}}}
+\begin{longtable}{@{}p{0.6\linewidth} p{0.27\linewidth} l@{}}
+\toprule
+\textbf{File} & \textbf{Used in} & \textbf{Status}\\
+\midrule\endhead
+\file{MIT18_S096F13_lecnote1.pdf} & \cref{ch:markets} & \done\\
+\file{lecnote2.pdf} & \cref{ch:linalg} & \done\\
+\file{lecnote3.pdf} & \cref{ch:probability} & \done\\
+\file{lecnote5.pdf} & \cref{ch:sp1} & \done\\
+\file{lecnote6.pdf} & \cref{ch:regression} & \done\\
+\file{lecnote7.pdf} & \cref{ch:var} & \done\\
+\file{lecnote8.pdf}, \file{lecnote11.pdf}, \file{lecnote12.pdf} & \cref{ch:timeseries} & \done\\
+\file{lecnote9.pdf} & \cref{ch:volatility} & \done\\
+\file{lecnote10.pdf} & \cref{ch:regularized} & \done\\
+\file{lecnote13.pdf} & \cref{ch:commodities} & \done\\
+\file{lecnote14.pdf}, \file{lecnote16.pdf} & \cref{ch:portfolio} & \done\\
+\file{lecnote15.pdf} & \cref{ch:pca} & \done\\
+\file{lecnote17.pdf} & \cref{ch:sp2} & \done\\
+\file{lecnote18.pdf} & \cref{ch:stochcalc} & \done\\
+\file{lecnote19.pdf} & \cref{ch:bs} & \done\\
+\file{lecnote21.pdf} & \cref{ch:sde} & \done\\
+\file{lecnote23.pdf} & \cref{ch:quanto} & \done\\
+\file{lecnote24.pdf} & \cref{ch:hjm} & \done\\
+\file{lecnote25.pdf} & \cref{ch:ross} & \done\\
+\file{lecnote26.pdf} & \cref{ch:counterparty} & \done\\
+\midrule
+\file{CaseStudy1.pdf}, \file{CaseStudy2.pdf}, \file{fm_casestudy_1_rcode.r}, \file{fm_casestudy_1_0.r}, \file{fm_casestudy_2_rcode.r}, \file{fm_casestudy_fx_1.r} & \cref{ch:regression} & \done\\
+\file{CaseStudy3.pdf}, \file{CaseStudy5.pdf} & \cref{ch:timeseries} & \done\\
+\file{CaseStudy4.pdf} & \cref{ch:volatility} & \done\\
+\file{CaseStudy6.pdf}, \file{Smltn_TwoAst.pdf}, \file{ETF_pridA_15/30.pdf}, \file{ETF_pridB_15/30.pdf} & \cref{ch:portfolio} & \done\\
+\file{CaseStudy7.pdf} & \cref{ch:pca} & \done\\
+\file{fm_casestudy_0_InstallOrLoadLibraries*.r}, \file{R_Rstudio_Instructions_CaseStudy1/2.txt} & \cref{app:rsetup} & \done\\
+\midrule
+\file{pset1.pdf} & \cref{ch:linalg} & \done\\
+\file{pset2.pdf} & \cref{ch:probability,ch:sp1} & \done\\
+\file{pset3.pdf} & \cref{ch:regression} & \done\\
+\file{pset4.pdf} & \cref{ch:timeseries} & \done\\
+\file{pset5.pdf} & \cref{ch:volatility} & \done\\
+\file{pset6.pdf} & \cref{ch:timeseries} (VAR), \cref{ch:portfolio} & \done\\
+\file{pset7.pdf} & \cref{ch:pca} & \done\\
+\file{pset8.pdf} & \cref{ch:stochcalc} & \done\\
+\file{pset9.pdf} & \cref{ch:sde} & \done\\
+\midrule
+\file{<youtube-id>.pdf} (24 files) & PDF copies of the \file{.txt} transcripts & --\\
+\file{pages/syllabus}, \file{calendar}, \file{lecture-notes}, \file{case-studies}, \file{instructor-insights}, \file{projects}, \file{related-resources} & \cref{app:logistics} & \done\\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\section*{Transcripts}
+\file{Lectures 2024 transcript/} (22 files) and \file{Lectures 2013 transcript/} (24 files): used in every
+chapter for explanations given orally and for the video timestamps \ts{24}{1}{m:ss}. Lectures with no
+recording: 2024 L3, L15--L17 (student presentations), L22, L26 (presentations); 2013 L4, L22.

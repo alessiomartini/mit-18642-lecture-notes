@@ -1,0 +1,1240 @@
+0:00
+[SQUEAKING] [RUSTLING] [CLICKING]
+0:16
+PROFESSOR: But yeah, we are very glad to have John Hull with us here. So John, please.
+0:22
+JOHN HULL: Well, thanks very much. It's a real pleasure to be here. Let me just say a little bit by way of introduction.
+0:30
+I probably got a similar background to many of you. Math was always my best subject at high school.
+0:38
+That was in the UK. I, not surprisingly, ended up doing a math undergraduate
+0:48
+at Cambridge. And after graduating, I decided that I wanted
+0:57
+to apply my math in business. So I did a master's in operational research, which
+1:04
+was a fairly new thing in those days. And then an amusing little factoid,
+1:16
+I worked for two years after graduating with my master's-- I worked for two years for a shoe retailer.
+1:22
+Everybody bursts out laughing when they hear this. Actually, it was a large shoe retailer in the UK.
+1:30
+It had 2,000 outlets. And actually, it was a pretty interesting job. I mean, it was all about deciding
+1:37
+which outlets should stock which shoes in which sizes and so on,
+1:43
+and then which outlets should be closed and where we should look for new outlets and that sort of thing.
+1:49
+So there's lots of interesting stuff. But after two years with this company,
+1:57
+I moved back into the academic world.
+2:05
+I won't bore you with all the details. But I wound up I got my PhD and ended up
+2:13
+teaching here at University of Toronto in what we call the Joseph L. Rotman School of Management.
+2:19
+And I've been at University of Toronto for about 30 years now.
+2:25
+Probably I'm best known for my work
+2:32
+on derivatives, which I understand you guys have had
+2:38
+quite a bit of instruction in. And most of my 30 years has been spent doing research
+2:45
+in derivatives, but I guess it was about seven, eight years ago, I began to see that machine learning
+2:57
+and AI were becoming really important to our students. And so I switched my focus.
+3:07
+And in fact, all of my teaching is now in the machine learning area.
+3:12
+And pretty much every-- just let me advance slides.
+3:20
+Pretty much every course that we offer at Rotman
+3:26
+actually has either a compulsory course or an elective in machine learning.
+3:33
+So it's not just me that teaches machine learning. I've now got quite a few colleagues who do so as well.
+3:41
+I wrote a book, which is now in its third edition,
+3:49
+Machine Learning in Business-- An Introduction to the World of Data Science. And you can find out more information
+3:56
+on the book from my website. But I'm not saying you should buy the book now.
+4:02
+In fact, the reverse is true because the fourth edition
+4:09
+will be coming out in probably about two months. The fourth edition is going to be with three co-authors who
+4:16
+are actually the other people who teach machine learning here at Rotman.
+4:22
+So the fourth edition is going to deal with--
+4:29
+I mean, third edition came out in I think it was 2021. And since then, of course, we've had a lot of things
+4:38
+happen in natural language processing, large language
+4:43
+models, that sort of thing. So I wanted to bring the book up to date.
+4:50
+And my colleagues have helped me do that. Really, today's presentation is in three parts.
+4:58
+I'm going to talk about the nature of machine learning.
+5:03
+Then I'm going to move on to talk about applications of neural networks, and finally, what
+5:08
+I've been working on quite a lot over the last little while, applications of reinforcement learning.
+5:13
+OK. I don't know whether there's any easy way you can interrupt me to ask questions, but I'm happy to be
+5:21
+interrupted with any questions you have as we go along. Is it possible for them to interrupt me with questions?
+5:29
+PROFESSOR: If they speak up with a question, you'll hear them speak up. JOHN HULL: I will hear them?
+5:35
+PROFESSOR: Yes, I think you will. JOHN HULL: Good, good. OK. No, I don't mind being interrupted at all. OK.
+5:42
+So next slide, please.
+5:49
+So what is machine learning? It's a branch of AI. And the idea underlying machine learning
+5:55
+is that we give a computer access to lots of data and just let it learn, learn about the relationships
+6:04
+between variables and make predictions. Some of the techniques of machine learning
+6:11
+date back to quite a long way. The key thing that's different today
+6:17
+is that computers are really fast. So we had all these techniques for doing what we call machine
+6:23
+learning quite some time ago. But really computers weren't fast enough to make them a practical tool.
+6:30
+We're now reaching the stage where all of these ideas suddenly become practical tools because
+6:37
+of the speed of the machines. OK. I think it's important to distinguish
+6:45
+between machine learning and all the automation that's gone on before it.
+6:51
+I mean, computers have been used for many years to automate many business decisions--
+6:56
+payroll, sending out invoices, and so on. This is what we could call the third Industrial Revolution.
+7:04
+OK. And machine learning is central to the fourth Industrial Revolution.
+7:11
+If you want a bit of background here, the first Industrial Revolution was steam and water power,
+7:17
+which was about 1760 to 1840.
+7:22
+The second Industrial Revolution was electricity and mass production.
+7:31
+This is not me. This is what's generally considered to be the case. And this was 1840 to 1920.
+7:39
+Then basically, computers and digitization
+7:45
+were the third Industrial Revolution. And we've really had it. We now know how to use computers to automate things
+7:52
+that human beings do. And let's say we can call that computers and digitization.
+8:01
+We could say that went from maybe 1950 to the year 2000.
+8:08
+And then we're now living through the fourth Industrial
+8:14
+Revolution. And we'll be living through it for quite some time, which is really AI, machine learning and everything we're going
+8:24
+to be talking about today. OK. Next slide, please.
+8:33
+So if you want to go back to slide 6,
+8:39
+if you want to distinguish between the third
+8:45
+and the fourth Industrial Revolution, one example I use is with loan applications.
+8:54
+I mean, let's suppose we've got loan officers in a company. And there are certain rules they use
+8:59
+to decide whether a loan should be accepted or not. And those rules have been worked out.
+9:10
+Then we could automate their activities. And that would just be the third Industrial Revolution. If we didn't know the rules, we could actually
+9:18
+use machine learning to determine the rules. We'd collect lots and lots of data
+9:24
+on loans that came before the loan officers and the decisions that were made.
+9:30
+And it would be an application of machine learning. We could go one step further, though,
+9:36
+and we could also say, well, let's try and improve on the rules. So then we could collect lots of data on decisions
+9:45
+that were made by the loan officers and how those decisions worked out,
+9:50
+and try and improve the rules for accepting or rejecting
+9:56
+loans. So the first bullet point here is the third Industrial
+10:02
+Revolution, digitization, fairly straightforward, and then the last two would be applications
+10:07
+of machine learning. OK. Next slide.
+10:13
+So I'm sure you've all been trained in statistics. And we all know that what we're supposed to do in statistics
+10:22
+is sit down, comfortable chair, not look at any data,
+10:29
+and develop a hypothesis. Then we collect data and test the hypothesis.
+10:35
+That's the standard way of doing things in statistics.
+10:40
+Machine learning is different. What we do, we don't develop any hypotheses in machine learning.
+10:46
+We go out and we collect the data. And we try and explain the data. We try different models.
+10:53
+And we find patterns in the data or try and develop predictive tool or something like that.
+11:00
+But the key difference between machine learning and the traditional Statistical approach
+11:10
+is that, in machine learning, we collect the data first
+11:16
+where, in statistics, you're not supposed to collect the data first. You're supposed to develop the hypothesis before you've even
+11:22
+looked at the data. OK.
+11:28
+Next slide. So there's various types of machine learning algorithms.
+11:39
+Unsupervised learning, which is basically just looking for patterns in the data or clusters in the data.
+11:48
+Supervised learning, which is where we're trying to predict something or classify the data in some way.
+11:54
+And then reinforcement learning, which is multi-stage decision making, which we'll be
+12:00
+talking a bit about later on. And there's other ways of subdividing the algorithms.
+12:08
+But this is one quick classification, if you like.
+12:18
+Machine learning has its own terminology. And actually, when I first got into machine learning, as I say,
+12:25
+it was something like seven or eight years ago, I was pretty confused because the terminology is
+12:30
+different from statistics.
+12:37
+In statistics, for example, we talk about dependent variables, independent variables, and so on,
+12:44
+whereas, in machine learning, we talk about features and targets.
+12:52
+Targets, as the name implies, is the thing you're trying to predict, perhaps. And features are the independent variables
+12:59
+you're trying to predict from, things like labels, activation functions, and so on.
+13:06
+In fact, when I wrote my book, which I showed you earlier, I
+13:11
+have a whole section, I think it's about 10 pages long, showing all the terminology which machine learning uses,
+13:25
+some of which is quite different from the terminology that statistics uses and other branches.
+13:31
+13:36
+It's one of the things that just takes a bit of getting used to.
+13:42
+And this terminology, unsupervised learning,
+13:47
+supervised learning, for example. I mean where does that come from? Unsupervised learning, well, with unsupervised learning,
+13:57
+you're just looking for patterns in the data. So you could say don't really need to--
+14:04
+you don't really need any supervision because all you're doing is just looking for patterns.
+14:11
+And so you just-- all you need to do is to throw the data
+14:16
+at the software and the software will find patterns for you, whereas supervised learning, you've got to do a bit
+14:24
+of supervision because you've got to tell-- you've got to tell the computer what you want it to do with the data.
+14:30
+You want it to predict something, classify data in some way, and so on.
+14:36
+So OK. Sorry. Next slide.
+14:43
+So just one slide on unsupervised learning then. So in a typical application, what you're asking,
+14:53
+you give the software data and you ask it to divide the data into clusters.
+15:01
+So the observations in the cluster have similar feature values.
+15:06
+OK. And so a typical application would be a company wants to understand its customers better.
+15:13
+So it collects attributes of its customers, maybe 10 different attributes that it collects,
+15:23
+like how much the customer spends every year, how many different products the customer buys,
+15:30
+where the customer is located, and so on and so on.
+15:35
+And basically, you give the software
+15:43
+a list of your customers with those attributes. And it will classify them or cluster them.
+15:52
+So you say, oh yeah, we've got customers that look like this. We've got customers that look like this,
+15:58
+we've got customers, and so on. And I'm told that this is actually quite a powerful tool
+16:06
+because sometimes you get to find clusters of customers
+16:11
+that you never really thought of as being a cluster of your customers before but this tool has
+16:18
+actually enabled you to find the clusters.
+16:25
+OK. Next slide. So supervised learning is where you're not just
+16:32
+trying to understand the data and create clusters from your data. You're actually trying to predict something, typically.
+16:41
+And what you do is you divide your data into three
+16:47
+sets, training set, a validation set, and a test set because, remember, what we're doing here
+16:54
+is not-- we haven't got a hypothesis. We've just got a lot of data. And so, typically, you put about 60% of your data
+17:03
+into the training set, 20% into the validation set, and 20% into the test set.
+17:09
+And hopefully, you've got quite a lot of data.
+17:16
+So you develop different models using the training set.
+17:22
+So you try out different models. And we'll see some examples of this in a moment.
+17:27
+And you compare those models using validation set.
+17:36
+Say, well, this model seems to do better than this other model when tested on--
+17:43
+the parameters of the model are determined using the training set.
+17:50
+And then you can see how well the models work on the validation set and decide which
+17:59
+seems to be the best model for explaining the data.
+18:06
+Typically, you can find a really complex model, sometimes anyway,
+18:13
+that will explain the data in the training set but then it does not do well on the validation set.
+18:22
+So the model can be too complex. So we'll see. So you want to, typically, you want
+18:30
+to-- a rule of thumb is you want to increase model complexity until the model starts to perform worse
+18:37
+on the validation set. So once you've chosen a particular model, you can increase its complexity and the parameters, and so on.
+18:44
+But as soon as it starts to perform worse on the validation set, you know you've overfitted the training set.
+18:53
+And then the test set is kept to one side. And it's not being involved in the selection of the model
+19:02
+or anything like that. And so it provides a good final out-of-sample indication
+19:09
+as to how well the chosen model works.
+19:14
+Yeah. Next slide, please. Thanks.
+19:19
+So this is an example that I use in the book. It's a pretty trivial example in a way,
+19:27
+but it's for predicting salaries for people in a certain profession in a certain area
+19:33
+as a function of age. And we try out different models.
+19:40
+Didn't have a huge amount of data for this particular one. We try out different models which
+19:45
+are just polynomials, polynomials of the person's age.
+19:52
+So the first, the extreme left model, is a fifth order polynomial.
+19:58
+It fits the data pretty well. But actually, what it's fitting is the first 60% of data
+20:19
+that you use to compare your models. OK. It doesn't fit the validation set well.
+20:29
+So it's overfitting you find. The linear model is underfitting.
+20:34
+And the best model actually for the data that I used was a quadratic model.
+20:42
+So salary increases and then slightly tails off as you get older.
+20:51
+So it's an example of-- it depends how much data you've got, of course,
+20:57
+for comparing your models. But it quite often happens that you wind up overfitting a model.
+21:09
+And maybe we can just go back a slide or two to--
+21:21
+yeah. So training-- sorry. So you use the training set.
+21:27
+But you find that you have actually fitted the training set really well but the model doesn't extend well to the validation set.
+21:37
+So you then say you've overfitted the training set. So that's an example of what I'm talking about.
+21:45
+Increase model complexity until the model starts to perform worse on the validation set.
+21:51
+Thanks, Peter. Let's move on. Neural networks. Well, maybe I'll just stop there.
+21:57
+Are there any questions that anybody really wants to ask or points Anybody wants to make before we move on?
+22:04
+22:12
+OK. If not, OK, let's move on to the next slide and the next slide.
+22:21
+So we're now going to talk about neural networks.
+22:26
+And here's a picture of an artificial neural network.
+22:31
+It's abbreviated ANN. So basically, what we're trying to do is to, in this example,
+22:40
+predict something from certain variables. So the input layer would be the variables that we know.
+22:49
+And the output layer are the one or more things
+22:56
+we're trying to predict. Now I know I've got multiple variables in the output layer here.
+23:01
+Typically though, in many applications, there's only one thing you're trying to predict.
+23:08
+So let's think in terms-- I mean, if there's multiple things you're trying to predict, then obviously you've got to--
+23:14
+in terms of your objective, you've got to weight how important is it to predict this one, how important is it
+23:19
+to predict that one and so on. So let's just, for the moment, assume there's only one variable in the output layer.
+23:27
+The models that you're most familiar with are models that predict the output from the input in one
+23:39
+go as it were. Linear regression would be a classic example.
+23:45
+But any more complicated model is also
+23:54
+likely to predict the output directly from the input.
+24:00
+The key thing that we're doing with an artificial neural network is we're not doing it all in one
+24:07
+go. We're using the input layer, the variables that we know,
+24:15
+to predict these variables in the first hidden layer, V1,1,
+24:21
+V1,2, V1,3, and so on. And then we use those variables in the first hidden layer
+24:26
+to predict variables in the second hidden layer, V2,2, V2,2, V2,3 and so on, and then the third hidden layer.
+24:34
+So the key thing is about a neural network
+24:40
+is that you're going through a number of stages in predicting the output from the input.
+24:47
+It's not all done in one go. So we're not writing down a nice, neat equation
+24:53
+for the relationship between the output and the input and predicting the parameters of that equation.
+24:59
+We're saying there's a number of stages. We go through in getting from the input to the output.
+25:08
+And that makes the model, of course, a lot more flexible.
+25:16
+Next slide.
+25:22
+So what's the relationship between the values in one layer
+25:31
+and the values in a previous layer? Well, what we're doing is we're relating the values
+25:41
+at one neuron to a linear combination of values in the previous layer.
+25:48
+And we're using these things called activation functions to do it.
+25:54
+Maybe we go back a slide now, Peter, if we could. And so if we look here, V1,1 is related to the variables
+26:05
+in the input layer, the variables we know, V0,1, V0,2, V0,3. And what we do-- what we do is we apply weights
+26:14
+to those variables. So we have a weight times V0,1 plus a weight times V02,
+26:22
+plus a weight times V0,3 and so on.
+26:28
+And then once we got this weighted average of the V01,
+26:33
+V0,2, V0,3, we apply a function to it to get V1,1.
+26:39
+And then we do the same thing for V1,2. We take a weighted average of V0,1, V0,2,
+26:48
+V0,3 and so on, different weighted average, and apply a function to it to get V1,2 and so on.
+26:58
+And then to go from the V1,1's V1,2's, V1,3's to V2,1, V2,2,
+27:05
+V2,3, we do the same thing. So V2,1, for example, we take a weighted average of V1,1, V1,2,
+27:16
+V1,3, V1,4 and so on, and apply a function to it,
+27:25
+this activation function to get V2,1. And then so what are the things--
+27:30
+what are the parameters of this model? The parameters are the weights.
+27:36
+What weights do we apply to the V's in going from one layer
+27:43
+to the next layer? OK. And there's a lot of weights in this example that you got
+27:51
+in front of you there because when we're determining V1,1, we've got a weight associated with V0,1, V0,2, V0,3,
+28:00
+and so on. But even if there are only three inputs, that's three weights.
+28:08
+And then V1,2 is another three weights. V1,3 is another three weights and so on.
+28:13
+So you can wind up with a lot of weights. But those are the variables that-- those weights are the variables you're trying to determine.
+28:24
+And then the activation function is something you apply after you've applied the weights.
+28:31
+OK. So can we move on to the next slide now? So you see a number of different activation functions
+28:41
+that you could use. fy equals y means that you've just applied weights
+28:48
+to the variables in the previous layer. And then you've just haven't done anything else to them. You've just said that that's going to give you
+28:54
+a value in the new layer. Now if, throughout the whole neural network,
+29:04
+you just use the identity, if you think about it, you just have a linear model.
+29:11
+OK. So if the variables in the first layer
+29:17
+were a linear function of the input layer, the variables in the second layer
+29:23
+were linear functions of the variables in the first layer and so on, and you went all the way through,
+29:29
+then it would just be a linear model. And that wouldn't be very interesting because if we want to have a linear model,
+29:34
+we don't have to go through all this. However, as we'll see, you often use the identity
+29:41
+just for the final layer. You see sigmoid is a popular activation function.
+29:50
+So once you've determined the weighted average
+30:01
+of the variables in the previous layer, you take 1 minus 1 plus e to the minus
+30:08
+that to get the value of the new node and so on.
+30:14
+Hyperbolic tangent, ReLU and so on. Lots of different activation functions.
+30:20
+So you get the idea. You're really saying that the relationship between the outputs
+30:29
+and the input is a kind of a convolution
+30:34
+of a lot of these activation functions applied
+30:41
+to weighted averages. OK. Next.
+30:49
+So how do we actually solve the model?
+30:58
+Well, basically, you've got, typically, in models,
+31:08
+you've got lots of parameter values, all the different weights that you're applying.
+31:14
+And you say, well, you start off by assuming some values
+31:21
+for the weights, probably not very good values, but you assume some values. And then you calculate gradients.
+31:27
+You say, well, perhaps we're trying to minimize some value
+31:34
+or minimize a function. So we're trying to determine the input values that
+31:40
+will minimize some function. So we calculate gradients to determine the direction in which
+31:46
+the parameter values should be changed to improve things to actually make the function smaller.
+31:55
+And then you take a step and then do the whole thing again, calculate the gradients, and move the parameter values
+32:07
+again in a certain direction and so on. So it's a case of--
+32:16
+somebody's trying to call me.
+32:23
+So basically, what you need is you're trying
+32:29
+to minimize some function. What you need is the partial derivative of that function with respect to all these parameters, all
+32:37
+these weights that define your model. Now that seems a pretty tricky task.
+32:43
+But actually, there was--
+32:50
+I mean, clever maybe, you could say almost obvious way of doing this is to say, what we're really
+32:58
+talking about with this model is the final thing that we're
+33:04
+interested in being a function of a function of a function. In other words, if we're a function of the final weights
+33:16
+and those final weights are a function of the weights that come immediately
+33:23
+before the final weights and then those final weights. So each weight-- and of course, in calculus,
+33:33
+we know how to calculate the gradient of a function of a function of a function.
+33:39
+So there are some clever shortcuts
+33:45
+for calculating these gradients that you need to move the parameters in the right direction.
+33:54
+They're not starting from scratch in terms of calculating each gradient.
+34:03
+Next slide, please.
+34:09
+So this is a very simple example but it illustrates the nature of what you're doing. I mean let's suppose you wanted to calculate the value of x that
+34:17
+minimizes this function, y equals 6x squared minus 8x plus
+34:24
+20. Of course, we could all do this with calculus very quickly. And x equals 4 is the answer.
+34:30
+But suppose we were doing it in the way that I've just described.
+34:38
+Then we'd start with some estimate of x. It might be x equals 1, not a very good estimate.
+34:45
+And then we'd look at the gradient
+34:53
+of this, when x equals 1. And what is it? It's 2x minus 8.
+35:00
+So it's the gradient is minus 6.
+35:09
+We move the value that we're looking at in the direction, which minimizes
+35:20
+y, which the gradient was minus 6 so we take the negative of the gradient
+35:26
+because we're trying to minimize something and move it
+35:32
+in the direction indicated by the gradient by a certain amount.
+35:37
+And we see that we're then at a little bit more than 2. Then we calculate the gradient again, move it again, calculate gradient again.
+35:45
+So you can see how this method would work in this very simple example where there's only one thing
+35:56
+that we're having to estimate. OK. And obviously, when there's many things we want to estimate,
+36:06
+it's the same basic principle except we're working in many dimensions. OK.
+36:13
+Next slide, please. So we continue training the model
+36:19
+until the results of the validation set diverge from those of the training set. We don't want to overtrain.
+36:26
+Choosing the learning rate is important. The learning rate is how far we move. Once we've estimated the gradient,
+36:37
+we have to decide how far we want to move in the direction indicated by the gradient.
+36:44
+And well, there are some clever ways of determining the learning
+36:55
+rate as it's called. But clearly, if we could just go back to the previous slide a moment, I think you can see here,
+37:04
+if you choose a really small learning rate,
+37:09
+then the gradient at 1 would be the same but you'd move only a very short amount,
+37:15
+and then you calculate the gradient again, and move a very short amount, and so on. You'd never actually reach the bottom of the--
+37:22
+you'd never in a reasonable time reach the bottom of the curve if you made the learning rate too small because the learning
+37:28
+rate is determining how far you move once you've determined the gradient.
+37:33
+On the other hand, if the learning rate is too big, you could oscillate and move from above the minimum
+37:39
+to below the minimum to above the minimum to below the minimum, and so on.
+37:44
+So determining the learning rate is important. You can do it by trial and error.
+37:51
+As I say, there's some clever ways of doing it as well.
+37:58
+OK. Next slide, please. It's also turns out to be best to scale the variables
+38:08
+when you're doing all of this. And backpropagation is used to calculate the partial derivatives. That's what I mentioned before, which is really just saying
+38:16
+the partial derivatives. You're talking about taking the partial derivative of something, which is a function of a function.
+38:22
+We've known how to do that in calculus for quite a long time. OK. Next slide, please.
+38:30
+So here's one application that we've used it for.
+38:36
+May seem a little artificial, but actually it's not, as I'll explain in a minute. But basically, I generated 10,000 call option prices using
+38:47
+the Black-Scholes-Merton model, and added a normally distributed error.
+38:53
+So I generated a lot of data. I said that the asset prices, the strike price K, the risk
+39:03
+free rate, the volatility sigma and the time to maturity.
+39:11
+You can see in the second bullet point there what I chose as the ranges there.
+39:19
+So we sampled parameters randomly and then added a normally distributed error term
+39:28
+to the Black-Scholes-Merton model and then said, let's see how well the model can actually
+39:36
+determine what the function is and actually
+39:43
+used three hidden layers, 20 neurons per layer and sigmoid activation function except the final layer.
+39:55
+And this is a point. If I use the sigmoid activation function everywhere, it wouldn't have worked because sigmoid activation
+40:04
+function gives you a value between 0 and 1. And of course, the Black-Scholes-Merton price
+40:11
+is not between 0 and 1. So I used the.
+40:19
+identity activation function for the final layer. And that's not uncommon to use the identity activation
+40:27
+function for the final layer because the activation functions you're using for earlier layers may be constraining
+40:34
+the answer you get. And divided the observation between the training set,
+40:41
+and validation set, and the test set in the way that we were discussing earlier, 6,000 for the training set,
+40:48
+2,000 for the validation set, 2,000 for the test set.
+40:55
+We have the next slide, please, Peter. So you can see what happens.
+41:05
+The epochs of the training set is increased, which just basically means we continue
+41:10
+to try and match the training set data as closely as possible.
+41:16
+It improves things for the validation set up
+41:23
+to a certain point and then starts to get worse. See what's going on better.
+41:31
+Next slide. We can take a moving average.
+41:38
+And this is-- so you can see what's going on here. We keep trying to improve the model.
+41:44
+But we stop after 2,575 epochs. Just think about the epoch as a trial.
+41:51
+So you can see that things improve for the validation set
+42:02
+up to a certain point. And then they seem to get worse so it's best to stop.
+42:08
+So the model that we actually wound up with was the model after 2,575 epochs.
+42:20
+Next slide, please. So we only had 10,000 observations.
+42:26
+But we found that the neural network actually imitated the Black-Scholes-Merton model
+42:32
+very well. In other words, the random noise that we added to the Black-Scholes-Merton prices didn't-- it managed
+42:41
+to overcome that random noise pretty well.
+42:46
+OK. There's more details about that in my book.
+42:51
+So the next slide. Now you may say, well, that's a pretty artificial example.
+42:58
+We don't need a model to-- we don't need to use neural networks
+43:04
+to determine the Black-Scholes model because we have a formula. But it turns out that, actually, derivatives companies
+43:13
+are using neural networks to value exotic derivatives.
+43:19
+There are some derivatives which can only be valued using Monte Carlo simulation. And the Monte Carlo simulation is slow.
+43:26
+It can take three or four minutes to come up with a price.
+43:32
+If you've got a client on the end of the line, that may not be very good. So basically, instead of doing this
+43:42
+for the Black-Scholes-Merton model, you could do it for some exotic derivatives model.
+43:49
+I mean, you run your Monte Carlo simulation many, many times to create data, which relates the price to the inputs.
+44:01
+And then you create a neural network to replicate the prices as closely as possible.
+44:07
+And then after you've done that, you have a really fast way-- I mean, obviously you don't--
+44:13
+if you're doing this in the way that I'm describing, you wouldn't actually add an error term to it.
+44:20
+You just want to create the prices as accurately as possible. And once you've got a neural network that will actually
+44:30
+create these exotic option prices, you can then very, very quickly calculate any new price
+44:37
+you want to because all you're doing to work to calculate a new price is working forward
+44:45
+through the neural network. So instead of being three or four minutes,
+44:53
+it's almost instantaneous because, as I say,
+45:01
+you work forward through the neural network to obtain the price. And this can also be useful for scenario analysis
+45:09
+because scenario analysis can be very slow if you're having to calculate this exotic option over and over again using
+45:17
+Monte Carlo simulation. But if you've constructed a neural network
+45:26
+to produce a price, then it's much faster
+45:32
+and scenario analysis is perfectly feasible.
+45:38
+Can we have the next slide, please?
+45:45
+Another thing we've looked at as part of our research is we've looked at the relationship
+45:53
+between volatilities and how volatilities change as the return on the asset changes.
+46:00
+The standard way of doing hedging, of course, is to say,
+46:11
+well, I mean, let's talk about delta hedging, but it applies to other hedging as well.
+46:17
+With delta hedging, you say, well, how does the price of the option change
+46:27
+when the price of the underlying asset changes? And we'll assume that the implied volatility remains the same.
+46:34
+That's the standard assumption. Implied volatility remains the same. And you just calculate delta as the rate
+46:43
+of change of the option price with respect to the asset price.
+46:49
+But perhaps there's a tendency for the volatility
+46:57
+to change as the asset price changes.
+47:03
+In other words, if there's a positive return on the asset so the asset price goes up, there's less overall--
+47:14
+the company is less highly levered. At least in the market value sense,
+47:21
+the company is less highly levered and so maybe the implied volatility goes down
+47:26
+whereas, if the return on the asset goes down,
+47:32
+the company becomes more highly levered and therefore this tendency for the volatility to goes up.
+47:37
+So maybe we should take this into account when calculating delta.
+47:45
+So can we have the next slide, please, Peter? So we calculated a neural network to investigate this
+48:01
+and to see what's the relationship between the daily asset price return and the change
+48:07
+in the implied volatility. And so input layer had moneyness, time to maturity,
+48:17
+daily asset price return. And the output layer had change in implied volatility.
+48:23
+Next slide, please. These were all the details.
+48:33
+In the interest of time, let's move on. Next slide, please. And we can see that we actually, in this particular case,
+48:50
+found that validation sets started to get worse after 5,826
+48:57
+epochs. You kind of see that a little bit in this diagram so we
+49:02
+stopped the training after 5,826 epochs. Next slide.
+49:08
+49:15
+At first, we were pretty disappointed with the result of this research because the test set, which is final result,
+49:25
+it actually only gave an 11% improvement over a simpler analytic model that my colleague Alan White
+49:32
+and I had worked on in 2017. So it didn't give a hugely better relationship
+49:42
+between the return on the asset and the volatility. However, we played around with it a bit.
+49:49
+And when the VIX index was used as a feature,
+49:54
+there's a further improvement of 60% And what we found was that the behavior of the volatility surface
+50:01
+was different in high and low volatility environments. In other words, if you want to predict what's
+50:07
+going to happen to the volatility surface so you know how to change the implied volatility when you
+50:13
+change the underlying asset price, you really want to know whether you're
+50:19
+in a high volatility environment or low volatility environment. So this actually gave kind of an interesting result,
+50:28
+which you'd be unlikely to get just playing around with the data.
+50:36
+Next slide, please. We've got 20 minutes left.
+50:42
+So let's use the last 20 minutes to talk about reinforcement learning, which has been a subject of quite
+50:50
+a lot of my work over the last little while. Next slide, please.
+50:55
+So what is reinforcement learning? It's concerned with finding a strategy for taking a series of decisions, rather than just one.
+51:05
+So you're in some sort of an environment. It's changing in an unpredictable way.
+51:11
+And you have to decide-- well, you have to decide what decision you're
+51:17
+going to take today, but you know you're going to have to take another decision tomorrow and another the next day.
+51:23
+You know you're going to be taking a series of decisions, not a single one.
+51:29
+And this has actually been a hugely successful--
+51:34
+it's kind of like a trial and error kind of approach to this, but it's been hugely successful.
+51:40
+I'm sure many of you have heard of the success
+51:46
+that software has had in playing games like chess and go.
+51:52
+It's actually we developed software that can beat the best human players of chess and go.
+51:59
+I used to play a lot of chess when I was younger. And in a way, it's disappointing. But computers can now do this so much better than human beings.
+52:09
+Next slide, please. So the general model is you have actions, states, and rewards.
+52:21
+So you take an action.
+52:26
+You start with a certain state, which I call S0. You take a certain action at time 0.
+52:33
+And that moves you to a new state and maybe you get a reward.
+52:39
+Then you take another action, which will move you to yet another state,
+52:45
+perhaps give you a reward, and so on. So you've got to look ahead and think of all the actions you're
+52:55
+going to have to take, not just at time 0, but at future times.
+53:01
+And the states at future times are somewhat uncertain.
+53:07
+Next slide, please. So one of the fundamental--
+53:13
+I mean, this is really a trial and error process. But if you-- and obviously, you don't know anything
+53:22
+when you start. So you're going to be choosing some of a random strategy.
+53:28
+And then slowly, over time, you learn that doing this in this situation
+53:34
+works out well, whereas doing something else in that situation works out badly.
+53:40
+And this is where exploration versus exploitation comes in. At any given time, there's a certain probability
+53:48
+that you'll randomly choose a decision.
+53:54
+OK. That's referred to as exploration. And there's a certain probability that you'll choose the decisions that actually works out best so
+54:03
+far, which is called exploitation.
+54:08
+So initially, the probability of exploration is 1 because you don't know it.
+54:14
+So you're going to randomly choose a decision. And then over time, you'll slowly
+54:20
+reduce the probability of exploration
+54:25
+and increase the probability of exploitation. And after a sufficient number of trials,
+54:32
+you'll probably decide that, actually, the probability of exploitation should be one.
+54:38
+In other words, you've pretty much decided that you know what the best decision is
+54:46
+in all different situations.
+54:51
+Next slide, please. So I don't know whether any of you have come across this game Nim.
+54:58
+OK. But it's a very simple game, but it's
+55:05
+a good game for illustrating how reinforcement learning works.
+55:10
+So suppose we've got two players.
+55:16
+So I'm playing against you. And there's a pile of matches on the table.
+55:23
+And we take turns. Each of us can pick up one, two, or three matches.
+55:31
+And you lose the game if you have to pick up the last match.
+55:38
+OK. So pile of matches. Take turns picking up one, two, or three matches.
+55:44
+And the person who has to pick up the last match loses.
+55:49
+Well, if you are being good mathematicians, you'd work out how to play this game very quickly.
+55:57
+Basically, I mean, let's suppose there are only five matches
+56:07
+on the table and it's your go. There are five matches on the table and it's your go.
+56:12
+I'm going to win because if you pick up one match, I'll pick up three matches.
+56:18
+And you have to pick up the last match. If you pick up two matches, I'll pick up two matches
+56:26
+and you have to pick up the last match and so on. So if I can leave you with five matches on the table, I win.
+56:34
+Then we can go one stage beyond that. Let's suppose I can leave you with 9 matches on the table.
+56:42
+Then I can make sure I leave you with five matches next time, because, again, there
+56:48
+are matches on the table, you pick up one, I pick up three.
+56:53
+You're then left with five matches on the table.
+57:00
+You pick up two, I pick up two, you're left with five matches. And very quickly you decide that, actually,
+57:07
+the way to win this game is to always leave your opponent,
+57:13
+if you can, with 4n plus 1 matches.
+57:19
+So I mean, you know, suppose n is 5.
+57:25
+4n plus 1 is 21. So if I can leave you with 21 matches,
+57:31
+I will win because I'll leave you with 21 matches. Then whatever you do next time round,
+57:39
+I'll leave you with 17 matches. And then the next time round around,
+57:44
+I'll leave you with 13 matches and so on.
+57:49
+OK. However, let's see how well the machine does at working out
+57:57
+this best strategy. And I'm going to assume there's only eight matches initially
+58:03
+on the table although you'll find on my website, you can find some software for seeing how well the machine does
+58:12
+in a lot of other situations. But we'll assume that the reward is plus 1 from winning
+58:20
+and minus 1 from losing. And your opponent behaves randomly.
+58:26
+I can change things so the opponent learns as well if I want to.
+58:32
+So basically, we start with this state action table.
+58:40
+OK. State is the number of matches that are left, 1 to 8.
+58:45
+And the action is the number I picked up. Next slide, please.
+58:53
+So basically, as I said, it's trial and error.
+58:58
+So let's suppose-- I mean you don't know anything. So randomly, you choose to pick up one match.
+59:04
+Randomly, your opponent picks up three matches. Randomly, you choose to pick up one match.
+59:09
+Randomly, your opponent picks up three matches. You win. OK.
+59:15
+So we can update Q8,1, 8 being the number of matches
+59:22
+on the table and the 1 being the number picked up. So the first argument is the number of matches on the table.
+59:29
+Second is the number picked up. So we know from that that we have a trial where we win.
+59:38
+Q8,1 leads to a win and Q4,1 leads to a win.
+59:45
+So we update Q8,1 and Q4,1.
+59:53
+OK. And we have to have an updating parameter of the formula.
+59:58
+Formula for updating is there. And we say, well, OK, we don't want to update too much.
+1:00:07
+We'll give it 5% weight. So we have the old Q SA plus 5% of the gain minus the old Q SA.
+1:00:21
+And can we have the next slide, please?
+1:00:29
+On each trial, we observe certain states take action in those states.
+1:00:34
+And the gain used in updating the Qs can be either the final reward, referred to as the Monte Carlo
+1:00:45
+method, or it can be the value of the next state, assuming the best decision is taken.
+1:00:52
+So if I pick up one match, and you pick up
+1:00:59
+one match, then the value-- and there are six matches on the table,
+1:01:04
+and in terms of updating, instead of waiting to see whether I win or lose, I could just say,
+1:01:10
+how good is it for me if there are just six matches left on the table? And that would be the way we would do the updating.
+1:01:18
+So we start with the Qs all 0, and then we update them in the way that I was describing.
+1:01:24
+Next slide, please.
+1:01:29
+And with the Monte Carlo method, which is where we wait and see whether we win or not, you can see--
+1:01:36
+I mean, we all know that with eight matches on the table, if it's our go, we pick up three and leave our opponent
+1:01:44
+with five matches on the table. That's the best decision. After 1,000 trials, it hasn't really found the best decision.
+1:01:52
+It still looks as though picking up one match is marginally better. The Q value is 0.562 as opposed to 0.522.
+1:02:03
+After 5,000 trials, it's definitely beginning to look that it's best to pick up three matches and after 10,000 trials
+1:02:10
+for sure. So you see what's happening here. We're just doing more and more trials.
+1:02:16
+And what we did here was we had this epsilon parameter which
+1:02:24
+determines whether you behave randomly or you use the best decision that seems
+1:02:33
+to have worked out so far. We have epsilon starting at 1 and having this decay factor of 0.9995.
+1:02:43
+So it does appear that reinforcement learning finds the best decision.
+1:02:49
+Next slide, please. And in fact, it finds it even more quickly
+1:02:54
+with temporal difference learning. This is where you look to see how much does it turn out
+1:03:03
+to be worth to be in the next situation that you're in after you've taken the first decision?
+1:03:08
+And it turns out that, as often is the case, temporal difference learning works better than the raw Monte
+1:03:16
+Carlo simulation. But it's definitely worked out that it's best
+1:03:27
+to pick up three matches. It doesn't look so bad to pick up two matches or one match
+1:03:34
+because, remember, your opponent's behaving randomly.
+1:03:40
+And when you've learnt a lot, you can behave much better than your opponent.
+1:03:45
+I've done other tests where the opponent is learning as well, in which case picking up two matches or one match
+1:03:55
+is going to allow your opponent to win. And so you have negative numbers opposite the 2 and the 1.
+1:04:04
+Next slide, please.
+1:04:10
+1:04:17
+This Nim game illustrates, admittedly
+1:04:23
+in a fairly simple situation, how reinforcement learning works.
+1:04:28
+Very often you've got a much more complex state action table
+1:04:36
+to be filled in.
+1:04:43
+You have to combine reinforcement learning
+1:04:49
+with artificial neural networks because you've got this state action table. You're able to fill in some of the numbers in the state action
+1:05:00
+table but not all of them. But you know there's some general non-linear function
+1:05:06
+which is describing the whole table. And you have to do the best you can with the numbers
+1:05:12
+that you do have on the table. Next slide, please.
+1:05:19
+OK. So five minutes left. What I've been spending a lot of my time
+1:05:27
+in the last little while on is saying, can we use reinforcement learning
+1:05:34
+for hedging derivatives? The traditional approach to hedging
+1:05:40
+is, of course, Greek letters where you calculate delta, gamma, vega and so on.
+1:05:46
+And you're really looking at a very short period of time ahead because you're saying what's
+1:05:55
+the partial derivative of the value of my portfolio with respect to whatever it is, the underlying asset
+1:06:05
+price, volatility, or whatever.
+1:06:10
+Reinforcement learning has a different approach. It says let's look several periods ahead and try and take
+1:06:19
+a decision which will work well over our time horizon.
+1:06:28
+So what have we found? Next slide.
+1:06:37
+This is my last slide. So what we found is we found that, in some situations,
+1:06:44
+using reinforcement learning for hedging-- in other words, looking several periods ahead and seeing which strategies will
+1:06:50
+work out best-- can be useful. For vanilla options, it does about the--
+1:07:03
+overall, it does about the same as the Greek letter hedging.
+1:07:09
+But it does save transaction costs and actually saves significant amounts of transaction costs
+1:07:15
+because you can think about it this way. You're hedging a vanilla option. I mean let's just talk in terms of delta.
+1:07:23
+I mean, let's suppose delta is 0.5 right now.
+1:07:28
+And delta goes up to 0.7.
+1:07:34
+But maybe there's a 50% chance that your next hedging date, delta will go back down to 0.5.
+1:07:42
+So the question is, should you change?
+1:07:47
+Should you do your hedging to reflect
+1:07:53
+delta going from 0.5 to 0.7 even though you know there's a 50% chance it'll go back down to 0.5
+1:07:59
+or is it better to wait and see what happens over perhaps two time periods?
+1:08:06
+And the answer is if there's a lot of transaction costs,
+1:08:13
+it's better to wait. So we find reinforcement learning can save quite a lot of transaction costs even
+1:08:22
+though, when you don't take account of transaction costs, there's not a huge saving for vanilla options, typically.
+1:08:30
+And of course, transaction costs are really important when it comes to vega and gamma hedging
+1:08:36
+as well. But some exciting options such as barrier options
+1:08:42
+we find reinforcement learning produces superior results, even when there are no transaction costs.
+1:08:49
+And one of the nice things about using reinforcement learning
+1:08:55
+is that you can choose your objective function whereas, of course, you can't do that with Greek letter hedging.
+1:09:04
+So we've experimented with looking
+1:09:13
+at the tail of the distribution. And VaR95 is a shorthand for you want the 95th percentile point
+1:09:21
+of the loss distribution to be as high as possible.
+1:09:27
+Or CVaR95 is where you want the conditional value at risk, which is the average beyond the 95th percentile of the loss
+1:09:39
+distribution to be as low as possible. So you can have an objective function
+1:09:45
+that focuses on the things you're most concerned about,
+1:09:54
+which is that perhaps the tail of the distribution. We find it's robust, gives good results during stress periods.
+1:10:01
+And it's interesting. JP Morgan is our main competitor in terms of doing
+1:10:07
+this research is JP Morgan. JP Morgan's been doing a lot of work looking at reinforcement
+1:10:14
+learning for hedging. Of course, the disadvantage of reinforcement learning
+1:10:21
+is that it's much more computationally demanding than traditional approaches.
+1:10:27
+You've got to run these trial and error programs, which can take a few minutes,
+1:10:36
+but they're getting faster. So whereas it takes no time at all to calculate a Greek letter,
+1:10:42
+it will take you a little while to calculate the best strategy for doing reinforcement learning hedging.
+1:10:50
+But I think, to come back to my earlier point that computers are now sufficiently fast that it's
+1:11:02
+becoming a feasible tool. So brings me to my last slide.
+1:11:11
+We're one minute over 4:00 mark. But if anybody wants to ask any questions, I'd be happy to answer them.
+1:11:20
+PROFESSOR: Well, I have a question for you, John, about the choice of activation functions.
+1:11:28
+Have you found, as you did in this case, that I guess it was the sigmoid function
+1:11:34
+was applied in your example or was it the ReLU?
+1:11:42
+JOHN HULL: PROFESSOR: Yeah. We've had a lot of success with the sigmoid function.
+1:11:49
+That may be just chance events or maybe there's something special about the sigmoid function.
+1:11:59
+I mean, of course, there's nothing to stop you trying several different activation functions
+1:12:05
+and seeing which works out best in a particular situation.
+1:12:11
+And we did that in our implied volatility research.
+1:12:20
+And we concluded that sigmoid function works worked out best as a matter of fact. But we tried several different activation functions.
+1:12:27
+1:12:34
+But I think, if I remember correctly, all the activation functions we tried
+1:12:41
+were pretty close to each other in terms of how well they worked out.
+1:12:46
+So I think choosing the activation function may not be,
+1:12:54
+in many situations anyway, may not be a big deal.
+1:12:59
+What you also have to think is how big do you
+1:13:05
+want the models to be, how many neurons per step,
+1:13:10
+how many steps in total, and that sort of thing. I think that's very typically what happens.
+1:13:20
+PROFESSOR: Is there a way to benefit from building the neural network with, say, two layers
+1:13:27
+and then use the results of that to add a third layer, or is the three layer neural network just built
+1:13:36
+independently? JOHN HULL: That's a good question. As far as I know, you've got to start from scratch
+1:13:42
+when you go from, say, two layers to three layers.
+1:13:48
+You can't use what you've done with two layers as a shortcut
+1:13:54
+to doing three layers. I may be wrong there, but I don't think there's any way.
+1:14:00
+PROFESSOR: Right. Actually, for the class's benefit, I checked your references.
+1:14:09
+And on your Toronto website, you actually
+1:14:14
+have material like the Python code for various examples in your book.
+1:14:20
+So I think students might find that very accessible and useful.
+1:14:25
+JOHN HULL: Yeah. Yeah. I should have mentioned this. Yeah. There's a lot on my website.
+1:14:30
+I think lots of different things we've done at different times on machine learning research.
+1:14:43
+So if you want to read more about it, certainly my website would be a good place to go.
+1:14:52
+PROFESSOR: How do you choose the objective functions in your examples?
+1:14:59
+Was there some issues involved with choosing those
+1:15:04
+specifically? STUDENT: And what was the difference between them?
+1:15:10
+JOHN HULL: Yeah. I think every situation is different
+1:15:18
+as far as that's concerned.
+1:15:24
+You've got to think what objective function fits in with what I'm trying to do in the particular situation
+1:15:37
+that you're working on. OK. I mean, if you've got some exotic option
+1:15:44
+and you're trying to match the price as closely as possible, then, obviously, it's the difference
+1:15:51
+between the price you're trying to match and the price given by the neural network
+1:16:00
+is going to be most-- there's going to be an objective that you're trying to minimize.
+1:16:07

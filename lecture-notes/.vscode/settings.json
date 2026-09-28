@@ -1,0 +1,237 @@
+{
+  // ============================================================
+  // LaTeX Workshop configuration for MIT Finance lecture notes
+  // ============================================================
+
+  // --- Build: .vscode/build.py (fast = chapter just saved, full = latexmk on the whole book) ---
+  "latex-workshop.latex.tools": [
+    {
+      "name": "fast",
+      "command": "python",
+      "args": ["%DIR%/.vscode/build.py"],
+      "env": {}
+    },
+    {
+      "name": "full",
+      "command": "python",
+      "args": ["%DIR%/.vscode/build.py", "full"],
+      "env": {}
+    }
+  ],
+
+  // Default recipe (first): only the chapter just saved, ~7 s (see .vscode/build.py).
+  // "Whole book" = full latexmk build (~2-4 min), run it from the TeX sidebar when needed.
+  "latex-workshop.latex.recipe.default": "first",
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "Chapter just saved (fast)",
+      "tools": ["fast"]
+    },
+    {
+      "name": "Whole book (latexmk)",
+      "tools": ["full"]
+    }
+  ],
+
+  // Auto-build on save. Save on focus change (e.g. switching to the PDF tab):
+  // the global afterDelay auto-save restarted the 500-page build on every pause.
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "files.autoSave": "onFocusChange",
+  // Keep aux files: the fast build reads other chapters' refs and page numbers from them
+  "latex-workshop.latex.autoClean.run": "never",
+  // build.py repairs corrupt aux files itself; LW's `latexmk -c` retry did not
+  "latex-workshop.latex.autoBuild.cleanAndRetry.enabled": false,
+
+  // --- Viewer: side-by-side PDF with SyncTeX ---
+  "latex-workshop.latex.outDir": "%DIR%/build",
+  "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.view.pdf.zoom": "page-width",
+  "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click",
+  "latex-workshop.view.pdf.internal.synctex.fallbackScrollIntoView": true,
+  "latex-workshop.synctex.afterBuild.enabled": true,
+  // "auto" inverts the PDF colours under a dark VS Code theme: the box colours would come out wrong
+  "latex-workshop.view.pdf.invertMode.enabled": "never",
+
+  // --- IntelliSense / completion ---
+  "latex-workshop.intellisense.cite.enabled": true,
+  "latex-workshop.intellisense.ref.enabled": true,
+  "latex-workshop.intellisense.includegraphics.enabled": true,
+
+  // --- Linting / diagnostics ---
+  "latex-workshop.chktex.enabled": true,
+  "latex-workshop.chktex.run": "onType",
+  "latex-workshop.diagnostics.enabled": true,
+  "latex-workshop.diagnostics.types": [
+    "error",
+    "warning",
+    "info"
+  ],
+
+  // --- Root file: every chapter/appendix starts with `% !TEX root = ../main.tex` ---
+
+  // --- Spell checking (English + Italian for your notes) ---
+  "cSpell.enabled": true,
+  "cSpell.language": "en,it",
+  "cSpell.words": [
+    "Kempthorne",
+    "Strela",
+    "Xia",
+    "Choongbum",
+    "Lee",
+    "Jensen",
+    "Sharpe",
+    "Black–Scholes",
+    "Macaulay",
+    "Arrow–Debreu",
+    "Cox–Ross–Rubinstein",
+    "HJM",
+    "Itô",
+    "Girsanov",
+    "Feynman–Kac",
+    "Perron–Frobenius",
+    "Eckart–Young",
+    "Breeden–Litzenberger",
+    "Ross",
+    "Kalshi",
+    "VaR",
+    "CVaR",
+    "S&P",
+    "ETF",
+    "OTC",
+    "ECN",
+    "IBD",
+    "LP",
+    "GP",
+    "FRA",
+    "PCA",
+    "SVD",
+    "MGF",
+    "CDF",
+    "PDF",
+    "IID",
+    "LLN",
+    "CLT",
+    "MCMC",
+    "RStudio",
+    "tidyquant",
+    "tidyverse",
+    "quantmod",
+    "rugarch",
+    "fxregime",
+    "Posit",
+    "Overleaf",
+    "SyncTeX",
+    "latexmk",
+    "chktex",
+    "bibtex",
+    "biber",
+    "MikTeX",
+    "TeXLive",
+    "Synctex"
+  ],
+  "cSpell.ignorePaths": [
+    "build/**",
+    "*.aux",
+    "*.bbl",
+    "*.blg",
+    "*.log",
+    "*.out",
+    "*.toc",
+    "*.fls",
+    "*.fdb_latexmk",
+    "*.synctex.gz",
+    "*.dbt"
+  ],
+
+  // --- File associations ---
+  "files.associations": {
+    "*.tex": "latex"
+  },
+
+  // --- Editor experience ---
+  "editor.wordWrap": "on",
+  "editor.renderWhitespace": "boundary",
+  "editor.tabSize": 2,
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "never"
+  },
+
+  // --- Explorer: hide build artifacts ---
+  "files.exclude": {
+    "**/build": true,
+    "**/.history": true,
+    "**/*.aux": true,
+    "**/*.bbl": true,
+    "**/*.blg": true,
+    "**/*.log": true,
+    "**/*.out": true,
+    "**/*.toc": true,
+    "**/*.fls": true,
+    "**/*.fdb_latexmk": true,
+    "**/*.synctex.gz": true,
+    "**/*.dbt": true,
+    "**/*.dvi": true,
+    "**/*.ps": true
+  },
+
+  // --- Search: exclude build folder ---
+  "search.exclude": {
+    "**/build": true,
+    "**/*.aux": true,
+    "**/*.log": true,
+    "**/*.fls": true,
+    "**/*.fdb_latexmk": true
+  },
+
+  // --- Terminal: use Git Bash on Windows ---
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "terminal.integrated.profiles.windows": {
+    "Git Bash": {
+      "path": "C:\\Program Files\\Git\\bin\\bash.exe",
+      "args": ["--login"]
+    },
+    "PowerShell": {
+      "path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+    },
+    "Command Prompt": {
+      "path": "C:\\Windows\\System32\\cmd.exe"
+    }
+  },
+
+  // --- Git ---
+  "git.enableSmartCommit": true,
+  "git.autofetch": true,
+  "git.confirmSync": false,
+
+  // --- Todo Tree (optional, install extension) ---
+  "todo-tree.ripgrep.ripgrep": "C:\\Users\\alema_ftmzm4t\\AppData\\Local\\Microsoft\\WinGet\\Links\\rg.exe",
+  "todo-tree.general.tags": [
+    "TODO",
+    "FIXME",
+    "NOTE",
+    "DOUBT",
+    "IDEA",
+    "QUESTION"
+  ],
+  "todo-tree.highlights.customHighlight": {
+    "DOUBT": {
+      "icon": "?",
+      "type": "text",
+      "foreground": "#C62828",
+      "background": "#FFEBEE"
+    },
+    "IDEA": {
+      "icon": "💡",
+      "type": "text",
+      "foreground": "#1565C0",
+      "background": "#E3F2FD"
+    },
+    "QUESTION": {
+      "icon": "❓",
+      "type": "text",
+      "foreground": "#5E35B1",
+      "background": "#F3E5F5"
+    }
+  }
+}

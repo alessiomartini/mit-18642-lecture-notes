@@ -1,0 +1,485 @@
+% !TEX root = ../main.tex
+\chapter{Option Prices and Probability Duality}\label{ch:duality}
+
+\begin{sources}
+\small
+\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+\textbf{Lecture} & \textbf{Speaker} & \textbf{Content}\\
+\midrule
+2013 L20 & S.~Blythe (Harvard Management Company) & Guest lecture, transcript only (no slides, no notes on OCW). Three payoffs (call, zero-coupon bond, digital); the call spread as a discrete first strike-derivative and its limit, the digital; FTAP and the risk-neutral density as the second strike-derivative of the call price; the call butterfly as a traded proxy for the density; the ``other direction'' (density $\to$ price via FTAP/LOTUS); calls as a spanning set for European payoffs, first by piecewise-linear replication and then by an exact second-order Taylor identity; a remark that the terminal distribution for every maturity does not pin down the stock's stochastic process (Dupire--Derman), with the practical consequence for exotic-option pricing.\\
+\bottomrule
+\end{tabularx}
+\smallskip
+\textbf{Files.} None: OCW lists no slides or lecture notes for L20, only the video transcript.
+\begin{coursenote}[2013 L22 has no material at all]
+The following lecture, 2013 L22, ``Calculus of Variations and its Application in FX Execution''
+(E.~Pan, Morgan Stanley), has neither a transcript nor slides on OCW and is not covered anywhere in
+these notes.
+\end{coursenote}
+\textbf{Problem sets.} None. The exercises at the end of the chapter are all ``(not from the course)''.
+\textbf{Reconstruction.} Blythe states the Breeden--Litzenberger relation and the spanning formula but
+proves neither in full generality (the spanning proof is done only for piecewise-linear $g$, by
+inspection). \cref{ch22:sec-bl-recap} is a two-line recap of the proof already given in
+\cref{ch03:cor-bl}. \cref{ch22:sec-butterfly} adds the triangle/rectangle area argument only sketched
+in class. \cref{ch22:sec-spanning} gives the exact Taylor-with-remainder computation in full (the
+lecture writes it down and calls it ``exact'', without proof, and skips the discretisation
+$g\to$ piecewise-linear step). All numerics (\cref{ch22:tab-butterfly,ch22:fig-density,ch22:ex-x2})
+are computed for these notes, with the Black--Scholes parameters of \cref{ch15:ex-atm}
+($S_0=K=80$, $T=2$, $r=5\%$, $\sigma=20\%$) so that the digital and call-spread numbers reproduce
+\cref{ch15:eq-digital-limit}--\eqref{ch15:eq-digital}.
+\end{sources}
+
+\section*{Motivation}
+Chapter~\ref{ch:bs} already used one instance of a strike derivative: the digital option is
+$-\partial C/\partial K$ (\cref{ch15:sec-digital}), and \cref{ch03:cor-bl} proved that a call price
+viewed as a function of strike encodes the whole distribution of the underlying, $C''(K)=f(K)$. This
+chapter is about what that fact \emph{means}. Blythe's title for it, ``option-probability duality'',
+is the claim that a call option is not a separate, exotic object requiring a pricing model: it
+\emph{is} a piece of probability information, tradeable and observable, and the map between ``the set
+of all call prices'' and ``the risk-neutral distribution of the underlying'' goes both ways. Read one
+way, market call prices reveal the market's implied probabilities (this is genuinely done by trading
+desks, via the \emph{call butterfly} of \cref{ch22:sec-butterfly}). Read the other way, the Fundamental
+Theorem of Asset Pricing (\cref{thm:ftap}, generalised here to a continuum of states in
+\cref{ch22:sec-ftap}) turns any candidate distribution into a full price system for every European
+payoff. The two directions meet in the \emph{spanning} result of \cref{ch22:sec-spanning}: knowing the
+call price at every strike is exactly as much information as knowing the whole payoff-to-price map,
+because every payoff is a specific, explicit portfolio of zero-coupon bond, stock and calls. The
+chapter closes in \cref{ch22:sec-process} with what this does \emph{not} give: the terminal
+distribution at every maturity is not enough to pin down the process the stock follows in between,
+which is why option markets alone cannot price every exotic derivative and a model (\cref{ch:sde}) is
+still needed for path-dependent payoffs.
+
+% ==================================================================
+\section{Three payoffs and one assumption}\label{ch22:sec-ftap}
+
+Fix a maturity $T$ and let $S_T$ be the price of the underlying at $T$. Following the lecture
+\ts{13}{20}{13:00}, consider three contracts, all defined purely by their payout at $T$:
+\begin{itemize}
+  \item a \emph{call} with strike $K$: payout $(S_T-K)^+$;
+  \item a \emph{zero-coupon bond}: payout $1$;
+  \item a \emph{digital} with strike $K$: payout $\ind\{S_T>K\}$.
+\end{itemize}
+Write $C_K(t,T)$, $Z(t,T)$, $D_K(t,T)$ for their prices at $t\le T$; $Z(T,T)=1$. As in
+\cref{def:onepmodel}, a payoff that is a deterministic function of $S_T$ alone is called a
+\emph{European} claim, written $g(S_T)$ for a payout function $g$: $g(x)=(x-K)^+$ for the call,
+$g\equiv1$ for the bond, $g(x)=\ind\{x>K\}$ for the digital \ts{13}{20}{14:46}.
+
+\begin{finance}[Why call it $C_K(t,T)$]
+Blythe is explicit that the notation separates the two roles of time: $K$ and $T$ are contract terms
+fixed once and for all, while $t$ is the calendar date at which the price is observed
+\ts{13}{20}{15:44}. Determining $C_K(t,T)$ for $t<T$ from a model is exactly the Black--Scholes problem
+of \cref{ch:bs}; this chapter instead asks what can be said \emph{without} a model, from the family
+$\{C_K(t,T)\}_{K}$ taken as given market data.
+\end{finance}
+
+The one assumption of the chapter is the Fundamental Theorem of Asset Pricing, already proved for a
+finite state space in \cref{thm:ftap} (positive state prices $\Leftrightarrow$ no arbitrage, price
+$=\bm\psi\T\bm C_T=\beta\,\E_\Q[\bm C_T]$). Its continuum version is:
+
+\begin{theorem}[FTAP, continuum of states; not proved here]\label{ch22:thm-ftap}
+Let $D(t,T)$ be the price at $t$ of a European claim with payout $g(S_T)$ at $T$. Under no arbitrage
+(and suitable regularity, e.g.\ a complete diffusion market) there is a probability measure $\Q$, the
+\emph{risk-neutral measure}, such that $D(t,T)/Z(t,T)$ is a $\Q$-martingale with respect to the
+filtration generated by $S$; in particular, conditionally on $S_t$,
+\begin{equation}\label{ch22:eq-ftap}
+  D(t,T) = Z(t,T)\,\E_\Q\bigl[g(S_T)\mid S_t\bigr].
+\end{equation}
+\end{theorem}
+\begin{proof}[Proof]
+Not given here. \cref{thm:ftap} is the exact finite-dimensional statement and its complete proof
+(Stiemke's lemma plus a separating hyperplane); the continuum, continuous-time version is due to
+Harrison and Kreps (1979) and, as Blythe remarks, ``however many times you look at it, you're only
+probably going to get through two or three pages before thinking, OK, that's hard''
+\ts{13}{20}{51:57}. \cref{ch15:sec-onestep,ch15:sec-tree} prove it in the one-step and binomial-tree
+cases, which already contain the essential idea: replicate the claim, then no-arbitrage forces its
+price to equal the replicating portfolio's price, \cref{thm:ftap}(iii).
+\end{proof}
+
+\eqref{ch22:eq-ftap} is exactly \cref{thm:ftap}(iii), $C_0=\bm\psi\T\bm C_T=\beta\E_\Q[\bm C_T]$, with
+the finite sum $\sum_i\psi_i(\cdot)$ replaced by the integral $\int(\cdot)\dd\Q$ and the state-price
+vector $\bm\psi$ replaced by its continuum analogue: the density $\psi(x)=Z(t,T)f_\Q(x)$, where
+$f_\Q$ is the $\Q$-density of $S_T$ given $S_t$, plays the role of the \emph{Arrow--Debreu price} of
+state $x$ (\cref{sec:oneperiod} discusses the discrete Arrow--Debreu security $\bm e_i$ paying
+\$1 in state $i$; here the ``state'' is a point $x\in\R_+$ and the security paying \$1 in a
+neighbourhood $\dd x$ of $x$ costs $\psi(x)\dd x$). Applying \eqref{ch22:eq-ftap} to the digital
+recovers the intuitive statement Blythe leads with: the price of \$1-if-the-coin-is-heads is the
+probability of heads, discounted \ts{13}{20}{23:11}--\ts{13}{20}{24:48},
+\begin{equation}\label{ch22:eq-digital-ftap}
+  D_K(t,T) = Z(t,T)\,\Q(S_T>K\mid S_t).
+\end{equation}
+
+% ==================================================================
+\section{From call prices to the density}\label{ch22:sec-bl-recap}
+
+\subsection{The digital, twice}\label{ch22:sec-digital-twice}
+The digital is priced two different ways: by \eqref{ch22:eq-digital-ftap} above, and as the limit of a
+\emph{call spread}, exactly the computation of \cref{ch15:sec-digital}. Long $\lambda$ calls struck at
+$K$ and short $\lambda$ calls struck at $K+1/\lambda$ has payout $0$ below $K$, slope $\lambda$ on
+$[K,K+1/\lambda]$, and $1$ above $K+1/\lambda$ \ts{13}{20}{17:07}--\ts{13}{20}{19:19}; letting
+$\lambda\to\infty$ this payout tends pointwise to $\ind\{S_T>K\}$, and its price tends to
+\begin{equation}\label{ch22:eq-cs-limit}
+  \lim_{\lambda\to\infty}\lambda\bigl[C_K(t,T)-C_{K+1/\lambda}(t,T)\bigr] = -\frac{\partial C_K}{\partial K}(t,T).
+\end{equation}
+This is \eqref{ch15:eq-digital-limit} with $\varepsilon=1/(2\lambda)$ and a one-sided spread instead of
+a centred one; the limit is the same. Equating \eqref{ch22:eq-cs-limit} with
+\eqref{ch22:eq-digital-ftap} gives
+\begin{equation}\label{ch22:eq-cdf}
+  \Q(S_T>K\mid S_t) = -\frac{1}{Z(t,T)}\frac{\partial C_K}{\partial K}(t,T),
+  \qquad
+  F_\Q(K):=\Q(S_T\le K\mid S_t) = 1+\frac{1}{Z(t,T)}\frac{\partial C_K}{\partial K}(t,T),
+\end{equation}
+and one more strike derivative gives the density, restating \cref{ch03:cor-bl} with the discount factor
+made explicit:
+\begin{equation}\label{ch22:eq-bl}
+  f_\Q(K) = \frac{1}{Z(t,T)}\frac{\partial^2 C_K}{\partial K^2}(t,T).
+\end{equation}
+\eqref{ch22:eq-bl} is the \emph{Breeden--Litzenberger relation}, already proved in
+\cref{ch03:cor-bl} (there for $Z\equiv1$, i.e.\ undiscounted expectations) and used in
+\cref{ch15:sec-digital} for the digital alone; nothing here is new mathematics, only the
+observation, which is the point of the lecture, that \emph{iterating the same one-strike-derivative
+trick that gives the digital, one more time, gives the entire density, not just one tail probability}.
+
+\begin{intuition}[One relation, no model]
+Nothing about $\Q$ or $S$ entered the derivation beyond FTAP itself: \eqref{ch22:eq-bl} holds for
+\emph{whatever process} generates the risk-neutral distribution, log-normal (Black--Scholes) or not
+\ts{13}{20}{39:03}--\ts{13}{20}{39:31}. Plugging the Black--Scholes formula \eqref{ch15:eq-call} into
+$\partial^2_KC$ recovers the log-normal density of \cref{ch15:eq-gbm}, but \eqref{ch22:eq-bl} is
+agnostic to that choice: it converts \emph{observed} call prices into a distribution without ever
+positing a model for $S$.
+\end{intuition}
+
+\subsection{The call butterfly: trading the density}\label{ch22:sec-butterfly}
+A single strike derivative (the call spread) has an obvious trading analogue; Blythe's second
+construction shows that the \emph{second} strike derivative does too \ts{13}{20}{30:56}. Consider the
+portfolio, long $\lambda$ calls at $K-1/\lambda$, short $2\lambda$ calls at $K$, long $\lambda$ calls at
+$K+1/\lambda$ (a \emph{call butterfly}, traded in practice, unlike the idealised limit of
+\cref{ch22:sec-digital-twice} \ts{13}{20}{32:22}--\ts{13}{20}{32:37}). Its price is
+\begin{equation}\label{ch22:eq-butterfly-price}
+  B_K(\lambda;t,T) := \lambda\Bigl[C_{K-1/\lambda}(t,T) - 2C_K(t,T) + C_{K+1/\lambda}(t,T)\Bigr],
+\end{equation}
+a centred second difference of the call price, scaled by $\lambda$ (one more power of $\lambda$ than
+the call spread, matching the second derivative being approximated by
+$C(K-\varepsilon)-2C(K)+C(K+\varepsilon)\approx\varepsilon^2C''(K)$ with $\varepsilon=1/\lambda$):
+\begin{equation}\label{ch22:eq-butterfly-limit}
+  \lim_{\lambda\to\infty}\lambda\,B_K(\lambda;t,T) = \frac{\partial^2 C_K}{\partial K^2}(t,T) = Z(t,T)f_\Q(K).
+\end{equation}
+
+\begin{proposition}[The butterfly payoff is a triangle]\label{ch22:prop-triangle}
+The payout of the portfolio in \eqref{ch22:eq-butterfly-price} at maturity is the triangular tent
+function of base $[K-1/\lambda,K+1/\lambda]$ and height $1$ at $K$,
+\[
+  h_\lambda(x) = \lambda\Bigl[(x-K+\tfrac1\lambda)^+ - 2(x-K)^+ + (x-K-\tfrac1\lambda)^+\Bigr]
+  = \bigl(1-\lambda|x-K|\bigr)^+ .
+\]
+\end{proposition}
+\begin{proof}
+Direct case check on the three pieces of the piecewise-linear function; each summand is a hockey stick
+with a kink at $K\mp1/\lambda$ or $K$, and the three slopes ($\lambda$, $-2\lambda$, $\lambda$) sum to
+$0$ outside $[K-1/\lambda,K+1/\lambda]$ (so the payout is $0$ there) and change by $\mp\lambda$ at each
+kink, giving slope $+\lambda$ on $[K-1/\lambda,K]$ and $-\lambda$ on $[K,K+1/\lambda]$, height
+$1=\lambda\cdot\frac1\lambda$ at $K$. This is exactly the sketch in class
+\ts{13}{20}{36:17}--\ts{13}{20}{36:41}, made explicit.
+\end{proof}
+
+This makes \eqref{ch22:eq-butterfly-limit} the exact analogue of the elementary fact
+$\Q(K-\delta<S_T<K+\delta)\approx2\delta f_\Q(K)$ for small $\delta$: the triangle of
+\cref{ch22:prop-triangle} has base $2/\lambda$ and height $1$, hence area $1/\lambda$, and by FTAP its
+discounted expected payout is
+\begin{equation}\label{ch22:eq-triangle-area}
+  B_K(\lambda;t,T) = Z(t,T)\,\E_\Q[h_\lambda(S_T)\mid S_t] \approx Z(t,T)\cdot\frac1\lambda\, f_\Q(K)
+  \quad\text{for large }\lambda,
+\end{equation}
+which is \eqref{ch22:eq-butterfly-limit} divided by $\lambda$ on both sides
+\ts{13}{20}{35:39}--\ts{13}{20}{38:16}. Unlike the call spread, the butterfly is genuinely traded
+(interest-rate desks quote butterflies $10$--$20$ basis points wide, as noted in class
+\ts{13}{20}{33:24}--\ts{13}{20}{33:37}), so \eqref{ch22:eq-triangle-area} is not a theoretical limit
+alone: a market maker who believes $\Q(S_T\approx K)$ is larger than the price of the corresponding
+butterfly implies will buy it \ts{13}{20}{38:23}--\ts{13}{20}{38:48}.
+
+\begin{table}[ht]
+\centering
+\caption{Butterfly price $\lambda\,B_K(\lambda;0,T)$ converging to $C''(K)=e^{-rT}f_\Q(K)$, at $K=80$,
+Black--Scholes with $S_0=80$, $r=5\%$, $\sigma=20\%$, $T=2$ (parameters of \cref{ch15:ex-atm}).
+Computed for these notes.}\label{ch22:tab-butterfly}
+\begin{tabular}{@{}rrr@{}}
+\toprule
+$\lambda$ & $\varepsilon=1/\lambda$ & $\lambda\,B_{80}(\lambda)$\\
+\midrule
+$0.05$ & $20$   & $0.014656$\\
+$0.1$  & $10$   & $0.015354$\\
+$0.2$  & $5$    & $0.015536$\\
+$0.5$  & $2$    & $0.015588$\\
+$1$    & $1$    & $0.015596$\\
+$2$    & $0.5$  & $0.015598$\\
+$5$    & $0.2$  & $0.015598$\\
+\midrule
+\multicolumn{2}{r}{exact $e^{-rT}f_\Q(80)$} & $0.015598$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.92\linewidth,height=6cm,axis lines=left,xmin=35,xmax=145,ymin=0,ymax=0.017,
+  xlabel={$K$},ylabel={discounted density},tick label style={font=\footnotesize},
+  label style={font=\small},
+  legend style={at={(0.97,0.97)},anchor=north east,font=\scriptsize,draw=none,fill=none}]
+  \addplot[thick,black!45,mark=none] coordinates {
+   (40.0,0.00092) (44.0,0.00194) (48.0,0.00347) (52.0,0.00545) (56.0,0.00770) (60.0,0.00999)
+   (64.0,0.01208) (68.0,0.01377) (72.0,0.01494) (76.0,0.01554) (80.0,0.01560) (84.0,0.01518)
+   (88.0,0.01439) (92.0,0.01333) (96.0,0.01211) (100.0,0.01081) (104.0,0.00950) (108.0,0.00824)
+   (112.0,0.00707) (116.0,0.00600) (120.0,0.00504) (124.0,0.00421) (128.0,0.00349) (132.0,0.00287)
+   (136.0,0.00235) (140.0,0.00192)};
+  \addplot[only marks,mark=o,mark size=1.4pt,defcol] coordinates {
+   (40.0,0.00092) (44.0,0.00194) (48.0,0.00347) (52.0,0.00545) (56.0,0.00770) (60.0,0.00999)
+   (64.0,0.01208) (68.0,0.01377) (72.0,0.01494) (76.0,0.01554) (80.0,0.01560) (84.0,0.01518)
+   (88.0,0.01439) (92.0,0.01333) (96.0,0.01211) (100.0,0.01081) (104.0,0.00950) (108.0,0.00824)
+   (112.0,0.00707) (116.0,0.00600) (120.0,0.00504) (124.0,0.00421) (128.0,0.00349) (132.0,0.00287)
+   (136.0,0.00235) (140.0,0.00192)};
+  \legend{$e^{-rT}f_\Q$ (exact),{$\lambda B_K(\lambda)$, $\lambda=8$}}
+\end{axis}
+\end{tikzpicture}
+\caption{Discounted risk-neutral density recovered from the call-butterfly price
+\eqref{ch22:eq-butterfly-price} at $\lambda=8$ (width $2/\lambda=0.25$), against the exact
+Black--Scholes log-normal density (same parameters as \cref{ch22:tab-butterfly}); markers overlap the
+line to plotting accuracy. Computed for these notes.}\label{ch22:fig-density}
+\end{figure}
+
+% ==================================================================
+\section{From the density to any price: FTAP the other way}\label{ch22:sec-density-to-price}
+
+\cref{ch22:sec-bl-recap} went from call prices to a distribution. The Fundamental Theorem
+\eqref{ch22:eq-ftap} already goes the other way, and the resulting statement is worth writing out
+explicitly \ts{13}{20}{49:41}--\ts{13}{20}{54:09}: if $f_\Q(\cdot\mid S_t)$ is known, the price of
+\emph{any} European claim with payout $g$ is
+\begin{equation}\label{ch22:eq-lotus}
+  D(t,T) = Z(t,T)\int_0^\infty g(x)\,f_\Q(x\mid S_t)\,\dd x,
+\end{equation}
+an application of the law of the unconscious statistician (LOTUS): $\E_\Q[g(S_T)]$ is computed by
+integrating $g$ against the density of $S_T$, without first working out the (generally intractable)
+density of the transformed variable $g(S_T)$ itself. Taking $g(x)=(x-K)^+$ in \eqref{ch22:eq-lotus}
+recovers \cref{ch03:thm-call} (there stated for a general random variable $X$ under the physical
+measure; here $X=S_T$ under $\Q$, with the discount factor $Z(t,T)$ attached). So the two directions
+of the duality are: call prices $\to$ density via two strike derivatives
+(\cref{ch22:sec-bl-recap}), density $\to$ any European price via one integral
+(\eqref{ch22:eq-lotus}), and both use nothing beyond FTAP.
+
+% ==================================================================
+\section{Calls span every European payoff}\label{ch22:sec-spanning}
+
+The two directions combine into a genuinely new statement, not reducible to
+Breeden--Litzenberger alone: knowing $C_K(t,T)$ for every $K$ determines the price of \emph{every}
+European claim, and moreover gives an \emph{explicit static replicating portfolio} built only from
+the zero-coupon bond, the stock, and calls \ts{13}{20}{55:44}--\ts{13}{20}{56:09}.
+
+\subsection{Piecewise-linear payouts}\label{ch22:sec-pwl}
+If $g$ is piecewise linear with kinks at $K_1<K_2<\dots<K_n$, its graph is matched exactly, for
+$x\ge K_1$ say, by a portfolio holding $\theta_i$ calls of strike $K_i$, where $\theta_i$ is the
+change in slope of $g$ at $K_i$ (a call of strike $K_i$ contributes slope $1$ for $x>K_i$ and $0$
+below, so a linear combination reproduces any sequence of slope changes)
+\ts{13}{20}{56:47}--\ts{13}{20}{58:13}. Since $g$ and this call portfolio have \emph{identical} payoff
+at $T$ for every value of $S_T$, no-arbitrage (\cref{thm:ftap}(iii): a replicable claim has a unique
+price, the price of any replicating portfolio) forces their prices to agree at every $t\le T$,
+\begin{equation}\label{ch22:eq-pwl-repl}
+  D(t,T) = \sum_i \theta_i\, C_{K_i}(t,T), \qquad \theta_i=\Delta g'(K_i).
+\end{equation}
+A continuous $g$ is a uniform limit of piecewise-linear functions, so \eqref{ch22:eq-pwl-repl} suggests
+(but does not by itself prove, because of the limit) that \emph{every} continuous payout is spanned by
+calls. \cref{ch22:sec-taylor} makes this precise and quantitative for $g\in C^2$, which is the
+practically relevant case and the one the lecture treats.
+
+\begin{coursenote}[A digression worth keeping]
+A student asks whether replication at $T$ really forces equality of prices at $t<T$ for maturities
+decades away, given that no one can actually hold the position without funding or margin risk in the
+meantime \ts{13}{20}{59:44}--\ts{13}{20}{1:02:13}. Blythe's answer: mathematically yes, under
+no-arbitrage; empirically, for very long maturities the two prices \emph{have} been observed to drift
+apart, because ``no arbitrage'' assumes unlimited risk capital willing to hold the position for the
+full horizon, which breaks down since 2008. This is a caveat on the economic content of
+\cref{thm:ftap}(iii), not on its mathematics, and it is not pursued further here.
+\end{coursenote}
+
+\subsection{The exact Carr--Madan identity}\label{ch22:sec-taylor}
+\begin{proposition}[Static replication of a smooth payoff]\label{ch22:prop-carrmadan}
+Let $g:\R_+\to\R$ be twice continuously differentiable. For every $x\ge0$,
+\begin{equation}\label{ch22:eq-taylor-exact}
+  g(x) = g(0) + g'(0)\,x + \int_0^\infty g''(K)\,(x-K)^+\,\dd K.
+\end{equation}
+\end{proposition}
+\begin{proof}
+This is the lecture's ``exact Taylor series to second order'' \ts{13}{20}{1:03:33}--\ts{13}{20}{1:04:20},
+here proved rather than only asserted. Start from the fundamental theorem of calculus twice,
+\[
+  g(x) = g(0) + \int_0^x g'(K)\,\dd K, \qquad g'(K) = g'(0) + \int_0^K g''(c)\,\dd c,
+\]
+substitute and swap the order of integration in the double integral
+$\int_0^x\!\int_0^K g''(c)\,\dd c\,\dd K$ over the triangle $0\le c\le K\le x$:
+\[
+  \begin{gathered}
+  \int_0^x\int_0^K g''(c)\,\dd c\,\dd K = \int_0^x g''(c)\int_c^x \dd K\,\dd c = \int_0^x g''(c)(x-c)\,\dd c \\
+  = \int_0^\infty g''(c)\,(x-c)^+\,\dd c,
+  \end{gathered}
+\]
+where the last equality extends the integral to $(x,\infty)$ for free because $(x-c)^+=0$ there. Renaming
+the dummy variable $c\to K$ gives \eqref{ch22:eq-taylor-exact}. (Equivalently, integrate the right-hand
+side of \eqref{ch22:eq-taylor-exact} by parts twice, as the lecture suggests
+\ts{13}{20}{1:04:20}--\ts{13}{20}{1:04:31}, which reverses this computation.)
+\end{proof}
+
+\begin{remark}
+The identity holds pointwise, for \emph{every} $x\ge0$, with no approximation and no limit: this is the
+sense in which it is ``exact''. It is the content of \cref{ch22:sec-pwl} made rigorous:
+$g''(K)\dd K$ replaces the discrete slope changes $\theta_i=\Delta g'(K_i)$ of a piecewise-linear
+function by a continuum of infinitesimal slope changes, each priced by $(x-K)^+$, the call payoff.
+Where the lecture stops after the piecewise-linear case and asserts the smooth case by continuity
+\ts{13}{20}{1:02:52}--\ts{13}{20}{1:03:03}, \cref{ch22:prop-carrmadan} needs no limiting argument at
+all: it is an identity between functions, true for every fixed $x$, and the piecewise-linear intuition
+of \cref{ch22:sec-pwl} is recovered by taking $g''$ to be a sum of Dirac masses (formally, outside the
+$C^2$ hypothesis, but the calls-with-strikes-at-the-kinks picture is exactly this limit).
+\end{remark}
+
+Set $x=S_T$ in \eqref{ch22:eq-taylor-exact} (a pointwise identity between random variables, valid on
+every sample path) and apply the discounted-expectation operator $Z(t,T)\,\E_\Q[\cdot\mid S_t]$ to both
+sides. The left side becomes $D(t,T)$, the price of the claim with payout $g$. On the right,
+linearity of expectation gives three terms: $g(0)$ times the price of $g(0)$ zero-coupon bonds is
+$Z(t,T)g(0)$; the term $g'(0)\,\E_\Q[S_T\mid S_t]$, discounted, is $g'(0)$ times the price of \emph{one
+unit of stock} (the stock, viewed as its own European claim with payout $S_T$ and replicating portfolio
+``hold the stock'', so $Z(t,T)\E_\Q[S_T\mid S_t]=S_t$ by \cref{ch22:thm-ftap} applied to $g(x)=x$
+\ts{13}{20}{1:07:25}--\ts{13}{20}{1:07:45}); and the integral term becomes, exchanging expectation and
+the $K$-integral (justified when $g''\ge0$ by Tonelli, or under an integrability bound on $g''$ in
+general),
+\[
+  \begin{gathered}
+  Z(t,T)\,\E_\Q\Bigl[\int_0^\infty g''(K)(S_T-K)^+\dd K\ \Big|\ S_t\Bigr]
+  = \int_0^\infty g''(K)\,Z(t,T)\,\E_\Q\bigl[(S_T-K)^+\mid S_t\bigr]\dd K \\
+  = \int_0^\infty g''(K)\,C_K(t,T)\,\dd K.
+  \end{gathered}
+\]
+Collecting the three terms:
+
+\begin{theorem}[Calls span all European payoffs; Carr--Madan]\label{ch22:thm-spanning}
+For $g\in C^2(\R_+)$ with the payoff at maturity $g(S_T)$,
+\begin{equation}\label{ch22:eq-spanning}
+  D(t,T) = g(0)\,Z(t,T) + g'(0)\,S_t + \int_0^\infty g''(K)\,C_K(t,T)\,\dd K.
+\end{equation}
+Equivalently, the claim is statically replicated at $t$ by $g(0)$ zero-coupon bonds, $g'(0)$ units of
+stock, and $g''(K)\dd K$ calls of strike $K$ for every $K>0$.
+\end{theorem}
+
+\begin{keyformulas}
+\textbf{Call prices $\to$ distribution:} $\displaystyle \Q(S_T>K\mid S_t)=-\frac1{Z}\partial_KC_K$,
+\quad $\displaystyle f_\Q(K)=\frac1{Z}\partial^2_KC_K$ \eqref{ch22:eq-cdf}--\eqref{ch22:eq-bl}
+(Breeden--Litzenberger, \cref{ch03:cor-bl}). \\
+\textbf{Distribution $\to$ any price:} $\displaystyle D(t,T)=Z(t,T)\int g(x)f_\Q(x\mid S_t)\dd x$
+\eqref{ch22:eq-lotus} (FTAP/LOTUS). \\
+\textbf{Static replication (Carr--Madan):}
+$\displaystyle D(t,T)=g(0)Z(t,T)+g'(0)S_t+\int_0^\infty g''(K)C_K(t,T)\dd K$ \eqref{ch22:eq-spanning}.\\
+\textbf{Traded proxy for the density:} call butterfly $\lambda B_K(\lambda)\to Z(t,T)f_\Q(K)$
+\eqref{ch22:eq-butterfly-limit}.
+\end{keyformulas}
+
+\begin{example}[Checking the identity on $g(x)=x^2$]\label{ch22:ex-x2}
+Take $g(x)=x^2$, so $g(0)=0$, $g'(0)=0$, $g''(K)=2$ for all $K$. \eqref{ch22:eq-taylor-exact} claims
+$x^2=\int_0^\infty 2(x-K)^+\dd K$, and indeed $\int_0^x 2(x-K)\dd K=2\bigl[xK-K^2/2\bigr]_0^x=x^2$: a
+direct check of \cref{ch22:prop-carrmadan} with an elementary integral. Numerically (trapezoidal rule,
+grid $[0,800]$, $4\times10^5$ points, computed for these notes) the same integral gives $6400.0000$
+against the exact $80^2=6400$. A second check with a bounded, non-polynomial $g(x)=e^{-0.01x}$
+($g''(K)=10^{-4}e^{-0.01K}$) gives, at $x=80$, exact $g(80)=0.449329$ against the numerical
+reconstruction $0.449329$: \eqref{ch22:eq-taylor-exact} is confirmed to $6$ digits both for a payoff
+whose second derivative is constant and for one that decays.
+\end{example}
+
+% ==================================================================
+\section{What the terminal distribution does not determine}\label{ch22:sec-process}
+
+Everything above concerns a single fixed maturity $T$: knowing all call prices $C_K(t,T)$ for that one
+$T$ determines the distribution of $S_T$ given $S_t$, and hence the price of every payoff that depends
+on $S_T$ alone. The natural next question is whether knowing this for \emph{every} maturity $T$ (a full
+implied-volatility surface, in market language) determines the entire stochastic process $(S_u)_{u\ge
+t}$ \ts{13}{20}{1:12:11}--\ts{13}{20}{1:13:07}.
+
+\begin{proposition}[Marginals do not determine the process; not proved here]\label{ch22:prop-dupire}
+Knowledge of the marginal (risk-neutral) distribution of $S_T$ given $S_t$, for every $T\ge t$, does
+not determine the law of the process $(S_u)_{u\in[t,T]}$. If in addition $S$ is assumed to be a
+one-dimensional diffusion driven by Brownian motion, $\dd S_u=\mu(u,S_u)\dd u+\sigma(u,S_u)\dd W_u$,
+then the marginals \emph{do} determine the process, via the local volatility function
+$\sigma_{\mathrm{loc}}(u,x)$ (Dupire, Derman--Kani, early 1990s).
+\end{proposition}
+\begin{proof}[Discussion, not a proof]
+Blythe gives only the intuition, not the construction, and none is attempted here (it belongs to
+stochastic calculus proper, beyond \cref{ch:sde}): take a denser and denser grid of maturities with
+prescribed, say symmetric, marginals that spread out smoothly in $T$; the stock can still be made to
+jump discontinuously between two adjacent grid times while landing in a distribution consistent with
+the (denser and denser) marginals at both ends, because \emph{nothing in the one-maturity-at-a-time
+data constrains the joint law across maturities} \ts{13}{20}{1:13:34}--\ts{13}{20}{1:14:07}. Ruling
+out such jumps, by assuming a diffusion, is what lets Dupire's formula reconstruct a unique
+local-volatility function from the full surface of \eqref{ch22:eq-bl}-derived marginals.
+\end{proof}
+
+\begin{finance}[Why this matters for a trading desk]
+A desk that has priced, and can perfectly hedge with the observed vanilla surface, every European
+payoff via \eqref{ch22:eq-spanning}, still cannot claim the same for a path-dependent exotic (a
+barrier, an Asian option, or, as Blythe's example, a derivative paying on the number of times $S$
+crosses a level in a small interval \ts{13}{20}{1:19:05}--\ts{13}{20}{1:19:10}): its price is not
+pinned down by the vanilla surface alone, precisely because \cref{ch22:prop-dupire} says the surface
+does not pin down the process. A student's question makes the link to market completeness explicit
+\ts{13}{20}{1:16:44}--\ts{13}{20}{1:18:52}: a jump/flip process for which the marginals do not
+determine the law corresponds to an \emph{incomplete} market (\cref{def:onepmodel}) with respect to
+the vanilla calls, exactly as more states than independent assets leave state prices non-unique in the
+one-period model of \cref{sec:oneperiod}. The risk-neutral density $f_\Q(\cdot\mid S_t)$ at each
+fixed $T$ is still uniquely pinned down by the calls (Blythe is emphatic on this point when pressed
+\ts{13}{20}{1:19:17}--\ts{13}{20}{1:19:48}); what is not determined is the joint law across different
+$T$'s, i.e.\ the path.
+\end{finance}
+
+\begin{remark}[An alternative spanning set: Arrow--Debreu securities]
+A question from the audience asks whether calls are the \emph{only} convenient spanning set
+\ts{13}{20}{1:16:16}--\ts{13}{20}{1:17:41}. They are not: knowing all digitals gives the CDF directly
+(one derivative instead of two), and knowing the price of every Arrow--Debreu security $\ind\{S_T\in
+\dd x\}$ gives the density directly, with no derivative at all. Blythe's preference for calls is that
+the identity \eqref{ch22:eq-spanning} is unusually clean, expressing an arbitrary smooth payoff through
+an explicit, liquidly-traded static hedge, whereas Arrow--Debreu securities of infinitesimal width are
+not traded and digitals are less liquid than calls (\cref{ch15:sec-digital}). This is also exactly the
+representation \cref{ch:ross} will use (state prices as a discrete matrix, recovered via
+Perron--Frobenius, \cref{sec:pf}) in a setting where the underlying state space is finite rather than
+a continuum of strikes.
+\end{remark}
+
+% ==================================================================
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+All exercises below are (not from the course).
+
+\begin{exercise}[Butterfly width and bias]\label{ch22:ex-width}
+For the Black--Scholes parameters of \cref{ch22:tab-butterfly} ($S_0=80$, $r=5\%$, $\sigma=20\%$,
+$T=2$), let $\lambda=4$ (butterfly of half-width $1/\lambda=0.25$ around each wing, full base
+$0.5$). Compute $B_{80}(4)$ from the closed-form Black--Scholes call price \eqref{ch15:eq-call} and
+compare $\lambda B_{80}(4)$ to the exact value in \cref{ch22:tab-butterfly}. Express the leading-order
+error as a function of $\lambda$ using a fourth-order Taylor expansion of $C$ around $K=80$, and check
+it is consistent with the pattern in the table.
+\end{exercise}
+
+\begin{exercise}[Straddle via Carr--Madan]\label{ch22:ex-straddle}
+A straddle pays $g(S_T)=|S_T-K_0|$ for a fixed $K_0>0$. This $g$ is not $C^2$ at $K_0$ (it has a
+kink), so \eqref{ch22:eq-taylor-exact} must be applied with $g''$ interpreted as a Dirac mass
+$2\delta_{K_0}$ (the jump in $g'$ at $K_0$ is $2$). Using \eqref{ch22:eq-pwl-repl} directly instead
+(the straddle is piecewise linear with one kink), find the static replicating portfolio of zero-coupon
+bonds, stock and calls of a single strike, and check it agrees with formally substituting $g''=2\delta_{K_0}$
+into \eqref{ch22:eq-spanning}.
+\end{exercise}
+
+\begin{exercise}[Digital from a butterfly, not a call spread]\label{ch22:ex-digital-butterfly}
+Show that a digital option cannot be replicated as a \emph{limit of call butterflies} the way it was
+replicated as a limit of call spreads in \cref{ch22:sec-digital-twice}: compute
+$\lim_{\lambda\to\infty}B_K(\lambda;t,T)$ (not $\lambda B_K(\lambda;t,T)$) and interpret the result in
+terms of the payoff triangle of \cref{ch22:prop-triangle} shrinking to a point.
+\end{exercise}
+
+\begin{exercise}[Two maturities, same terminal law, different paths]\label{ch22:ex-two-paths}
+Let $W$ be a Brownian motion and $Z\sim N(0,1)$. Show that $S_t=1+W_t$ and $\tilde S_t=1+\sqrt t\,Z$
+have the same marginal law $N(1,t)$ at every $t\in[0,2]$, but different laws as processes: compute
+$\Cov(S_1,S_2)$ and $\Cov(\tilde S_1,\tilde S_2)$. Which of the two is a martingale? This illustrates
+\cref{ch22:prop-dupire} concretely: a claim paying $(S_2-S_1)^2$ has different prices under the two
+processes although all the terminal laws, hence all the call prices, agree.
+\end{exercise}

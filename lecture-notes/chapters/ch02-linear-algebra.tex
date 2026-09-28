@@ -1,0 +1,733 @@
+% !TEX root = ../main.tex
+\chapter{Linear Algebra and One-Period Financial Models}\label{ch:linalg}
+
+\begin{sources}
+\small
+\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+\textbf{Lecture} & \textbf{Speaker} & \textbf{Content}\\
+\midrule
+2024 L2 & P.~Kempthorne & Vectors as portfolios, P\&L, arbitrage; matrices; stochastic matrices and Markov chains; single-period market model, completeness, pricing measure; linear systems; eigenvalues and diagonalisation.\\
+2024 L4 (first 28 min) & P.~Kempthorne & Diagonalisation and state equations, symmetric matrices, SVD, Perron--Frobenius; equal-weighted portfolio case study and rebalancing.\\
+2013 L2 & C.~Lee & Eigenvalues, symmetric matrices (proofs), SVD with a worked example, Perron--Frobenius and its link to the Ross recovery theorem.\\
+\bottomrule
+\end{tabularx}
+
+\smallskip
+\textbf{Files.} Slides \file{mit18_642_f24_lec02_1.pdf}; lecture note \emph{One-Period Financial Models}
+\file{mit18_642_f24_lec02_2.pdf}; \file{mit18_642_f24_lec02_3.pdf} with
+\file{mit18_642_f24_equal_weighted_portfolios.zip} (\file{Script_SP500.Rmd},
+\file{Equal_Weighted_Portfolios.Rmd}, \file{SP500_data_subset.RData}); 2013 notes
+\file{MIT18_S096F13_lecnote2.pdf}.
+\textbf{Problem sets.} 2024 PS1 (all problems); 2013 PS1 (all problems).
+\textbf{Not recorded.} 2024 L3 and 2013 L4, see \cref{sec:la-missing}.
+\end{sources}
+
+\section*{Motivation}
+Linear algebra is the language in which portfolios, scenarios and covariance structures are
+written. Three ideas of this chapter recur for the rest of the course:
+\begin{itemize}
+  \item a portfolio is a vector and its value is a dot product, so P\&L is linear in holdings;
+  \item in a market with finitely many scenarios, \emph{no arbitrage} is equivalent to the
+        existence of positive \emph{state prices}, and derivative prices are discounted expectations
+        under a ``risk-neutral'' measure (\cref{sec:oneperiod}): this is the discrete skeleton of
+        Black--Scholes;
+  \item spectral decompositions (eigen-decomposition, SVD, Perron--Frobenius) describe long-run
+        behaviour of Markov chains and the dominant directions of co-movement in data (PCA,
+        \cref{ch:pca}).
+\end{itemize}
+The basic material (vector spaces, rank, determinants) is only recalled; a physicist can skim
+\cref{sec:la-matrices} and focus on \cref{sec:la-portfolios,sec:markov,sec:oneperiod,sec:pf}.
+
+% ------------------------------------------------------------------
+\section{Vectors as portfolios}\label{sec:la-portfolios}
+
+Let $\bm p(t)\in\R^{501}_{+}$ collect the closing prices on day $t$ of the 500 stocks of the S\&P~500
+plus \emph{cash} as asset $0$ with $p_0(t)\equiv 1$ \ts{24}{2}{3:21}. A portfolio is a vector of holdings
+$\bm q(t)$ (shares, and dollars of cash), and its value is the dot product
+\[
+  V_t = \bm q\T\bm p(t) = \sum_{j=0}^{500} q_j\,p_j(t).
+\]
+
+\paragraph{Timing and rebalancing.} The holdings $\bm q(t+1)$ carried through day $t+1$ are chosen at
+the end of day $t$, using only information available then \ts{24}{2}{8:43}. Rebalancing by trading
+$\delta_j(t)$ shares, $q_j(t+1) = q_j(t)+\delta_j(t)$, is \emph{self-financing} (no money added or
+withdrawn) if $\sum_j \delta_j(t)\,p_j(t) = 0$ \ts{24}{2}{4:26}. Then $V_t = \bm q(t+1)\T\bm p(t)$ and
+the daily P\&L is
+\begin{equation}\label{eq:pnl}
+  \mathrm{PnL}(t+1) = V_{t+1} - V_t = \bm q(t+1)\T\bigl[\bm p(t+1)-\bm p(t)\bigr],
+\end{equation}
+where the cash term drops out because $p_0$ does not change.
+
+\begin{intuition}[Left-point sums]
+Summing \eqref{eq:pnl} over days, the total gain is $\sum_t \bm q(t+1)\T\Delta\bm p(t)$: holdings decided
+\emph{before} the price move multiply the price increment. This ``evaluate the integrand at the left end
+point'' rule is exactly the discrete version of the Itô integral $\int \theta_t\,\dd S_t$ of
+\cref{ch:stochcalc}; using $\bm q$ at the right end point would mean trading on tomorrow's prices.
+\end{intuition}
+
+\paragraph{Long/short and zero-cost portfolios.} Holdings may be negative. To \emph{sell short}
+means to borrow shares through the broker (who must ``locate'' them), sell them now and buy
+them back later \ts{24}{2}{11:44}; the sale proceeds are credited to the (margin) account, which allows long positions
+worth more than 100\% of one's capital. For two portfolios $\bm q,\bm w$ the difference $\bm d=\bm q-\bm w$
+is a long/short portfolio with $\mathrm{PnL}(\bm d)=\mathrm{PnL}(\bm q)-\mathrm{PnL}(\bm w)$.
+A \emph{zero-cost} portfolio has $\bm d\T\bm p(t-1)=0$; an \emph{arbitrage} would be a zero-cost
+portfolio whose P\&L is positive \ts{24}{2}{13:45}. The catch: at the time of the decision
+$\bm p(t)$ is random, so the P\&L is random. A pure arbitrage requires a model of what $\bm p(t)$ can
+be (\cref{sec:oneperiod}); strategies whose random P\&L merely tends to be positive are called
+\emph{statistical arbitrage} \ts{24}{2}{16:49}.
+
+\paragraph{Geometry.} $\|\bm v\| = \sqrt{\bm v\T\bm v}$, $\bm v\T\bm w = \|\bm v\|\|\bm w\|\cos\theta$;
+$\bm v\T\bm w/\|\bm w\|$ is the length of the projection of $\bm v$ on the direction of $\bm w$
+\ts{24}{2}{17:50}. Orthogonal projections are the geometry of least squares (\cref{ch:regression}).
+
+% ------------------------------------------------------------------
+\section{Matrices: a quick recap}\label{sec:la-matrices}
+For $A=[\bm a_1\cdots\bm a_n]\in\R^{m\times n}$ the two readings of $A\bm v$ are
+\begin{align*}
+  A\bm v &= \textstyle\sum_{j=1}^n v_j\,\bm a_j && \text{(combination of columns)},\\
+  (A\bm v)_i &= \operatorname{row}_i(A)\,\bm v && \text{(dot products with rows)};
+\end{align*}
+the first is the more useful one \ts{24}{2}{23:03}. Similarly $AB=[A\bm b_1\cdots A\bm b_p]$.
+Remember $(AB)\T=B\T A\T$ and $AB\neq BA$ in general. Notation used later: $I_n=[\bm e_1\cdots\bm e_n]$,
+$\bm 1$ the vector of ones, $J=\bm 1\bm 1\T$ the matrix of ones, $\diag(d_1,\dots,d_n)$.
+
+\paragraph{Linear systems} \ts{24}{2}{1:14:25}. For $A\bm x=\bm b$ with $A\in\R^{m\times n}$: if
+$m=n=\rank A$ then $\det A\ne0$ and $\bm x=A^{-1}\bm b$; otherwise the system is under-determined
+($m<n$), over-determined ($m>n$, solved in the least-squares sense in \cref{ch:regression}) or
+rank-deficient. Solvability: $\bm b\in\operatorname{col}(A)$; uniqueness: $\ker A=\{0\}$. These two
+facts are exactly what decides \emph{replicability} of derivatives in \cref{sec:oneperiod}.
+
+% ------------------------------------------------------------------
+\section{Stochastic matrices and Markov chains}\label{sec:markov}
+
+\begin{definition}[Stochastic matrix, Markov chain]
+A square matrix $A$ with $a_{ij}\ge0$ whose \emph{columns} sum to $1$ is (column-)stochastic
+\ts{24}{2}{29:29}. A Markov chain on states $\{1,\dots,m\}$ with stationary transition probabilities
+$a_{ij}=\Prob(S_{t+1}=i\mid S_t=j)$ propagates the distribution
+$\bm\pi(t)=(\Prob(S_t=1),\dots,\Prob(S_t=m))\T$ as
+\[
+  \bm\pi(t+1) = A\,\bm\pi(t),\qquad \bm\pi(t) = A^t\bm\pi(0).
+\]
+A \emph{stationary distribution} is a probability vector with $\bm\pi^*=A\bm\pi^*$, i.e.\ an
+eigenvector of eigenvalue $1$ \ts{24}{2}{35:53}.
+\end{definition}
+
+\begin{coursenote}[Conventions]
+The course uses column-stochastic matrices acting on column vectors. Many probability texts use the
+transpose (row-stochastic $P$, row vectors, $\bm\pi\T(t+1)=\bm\pi\T(t)P$). Nothing changes except
+transposes.
+\end{coursenote}
+
+\begin{proposition}\label{prop:stochastic}
+If $A$ is column-stochastic then $1$ is an eigenvalue and every eigenvalue satisfies $|\lambda|\le1$.
+\end{proposition}
+\begin{proof}
+$\bm 1\T A=\bm 1\T$, so $1$ is an eigenvalue of $A\T$, hence of $A$ (same characteristic polynomial).
+If $A\bm v=\lambda\bm v$ then $|\lambda|\sum_i|v_i| = \sum_i|\sum_j a_{ij}v_j|\le\sum_j|v_j|\sum_i a_{ij}
+= \sum_j|v_j|$.
+\end{proof}
+
+A stationary distribution need not be the limit of $\bm\pi(t)$: for $A=\bigl(\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\bigr)$
+the chain alternates deterministically and $\bm\pi(t)$ oscillates (a periodic chain, eigenvalue $-1$)
+\ts{24}{2}{36:53}. If some power $A^k$ has all entries positive, the chain ``mixes'': by the
+Perron--Frobenius theorem (\cref{sec:pf}) all other eigenvalues have $|\lambda|<1$ and
+$\bm\pi(t)\to\bm\pi^*$ from any start \ts{24}{2}{37:54}.
+
+\begin{example}[Two-state chain]\label{ex:twostate}
+Let $p=\Prob(1\to2)$, $q=\Prob(2\to1)$, $0<p,q<1$:
+$A=\bigl(\begin{smallmatrix}1-p & q\\ p & 1-q\end{smallmatrix}\bigr)$. From $\tr A=2-p-q$ and
+$\det A=1-p-q$ the eigenvalues are $1$ and $\lambda_2=1-p-q$, with eigenvectors
+$\bm\pi^*=\frac{1}{p+q}(q,p)\T$ and $(1,-1)\T$. Since $\bm\pi(0)-\bm\pi^*$ has zero sum it is a multiple of
+$(1,-1)\T$, hence
+\[
+  \bm\pi(t) = \bm\pi^* + (1-p-q)^t\,\bigl(\bm\pi(0)-\bm\pi^*\bigr).
+\]
+Convergence is geometric with relaxation time $\tau=-1/\ln|1-p-q|$: the spectral gap $1-|\lambda_2|$
+controls how fast the chain forgets its initial state.
+\end{example}
+
+\begin{finance}[Order-flow as a Markov chain]
+In PS1 (2024) the side (buy/sell) of successive market orders is modelled as a two-state chain:
+buys tend to follow buys and sells follow sells. The stationary distribution gives the long-run
+fraction of buy orders; $\lambda_2$ measures the persistence of order flow \ts{24}{2}{38:56}.
+\end{finance}
+
+% ------------------------------------------------------------------
+\section{The one-period market model}\label{sec:oneperiod}
+This section follows the lecture note \emph{One-Period Financial Models} (\file{lec02_2}) and
+\ts{24}{2}{41:03}--\ts{24}{2}{1:13:22}. It is the most important part of the chapter.
+
+\subsection{Two assets, two states}\label{sec:binomial}
+One period $[0,T]$ and two assets \ts{24}{2}{43:17}:
+\begin{itemize}
+  \item a \emph{bond} (risk-free asset) with $B_T = B_0(1+r_fT)$ known in advance;
+  \item a \emph{stock} with known $S_0$ and random $S_T\in\{S_T^d, S_T^u\}$, $S_T^d<S_T^u$, depending on
+        the state $\omega\in\{d,u\}$ of the economy at $T$.
+\end{itemize}
+No probabilities of $u$ and $d$ are specified: they will turn out to be irrelevant for pricing.
+A portfolio $\bm\theta=(\theta_B,\theta_S)\T$ costs $V_0=\theta_BB_0+\theta_SS_0$ and pays
+$V_T(\omega)=\theta_BB_T+\theta_SS_T(\omega)$.
+
+A \emph{contingent claim} $C$ pays $C_T^u$ or $C_T^d$ at $T$. A portfolio \emph{replicates} $C$ if
+\begin{equation}\label{eq:replic2}
+  \begin{pmatrix} B_T & S_T^d\\ B_T & S_T^u\end{pmatrix}
+  \begin{pmatrix}\theta_B\\ \theta_S\end{pmatrix}
+  = \begin{pmatrix}C_T^d\\ C_T^u\end{pmatrix}.
+\end{equation}
+The determinant is $B_T(S_T^u-S_T^d)\neq0$, so every claim is replicable, uniquely:
+\begin{equation}\label{eq:delta}
+  \theta_S = \frac{C_T^u-C_T^d}{S_T^u-S_T^d},\qquad
+  \theta_B = \frac{C_T^dS_T^u-C_T^uS_T^d}{B_T\,(S_T^u-S_T^d)} .
+\end{equation}
+$\theta_S$ is a finite-difference \emph{delta}, the hedge ratio of \cref{sec:tradertypes}. If the claim
+trades at a price different from the cost of its replicating portfolio, buying the cheap one and
+selling the expensive one is an arbitrage; so $C_0 = \theta_BB_0+\theta_SS_0$. Substituting
+\eqref{eq:delta} and rearranging:
+\begin{equation}\label{eq:rnbinomial}
+  C_0 = \frac{1}{1+r_fT}\bigl[q_u\,C_T^u + q_d\,C_T^d\bigr],\qquad
+  q_u = \frac{(1+r_fT)S_0-S_T^d}{S_T^u-S_T^d},\quad q_d = 1-q_u .
+\end{equation}
+
+\begin{proposition}[No arbitrage in the binomial model]\label{prop:binomial-na}
+The two-asset model is arbitrage-free iff $S_T^d < S_0(1+r_fT) < S_T^u$, i.e.\ iff $0<q_u<1$.
+\end{proposition}
+The ``only if'' part is PS1 Problem~5 (\cref{ex:ps1-5}); both directions follow from the general
+theorem below.
+
+\begin{example}[Pricing a call]\label{ex:call}
+Take the numbers of the lecture note: $B_0=100$, $B_T=103$ ($r_fT=3\%$), $S_0=100$, $S_T^u=130$,
+$S_T^d=90$, and a call with strike $K=100$: $C_T^u=30$, $C_T^d=0$. Then
+$\theta_S = 30/40 = 0.75$ shares, $\theta_B = -0.75\cdot 90/103 = -0.6553$ bonds, and
+$C_0 = -65.53+75 = 9.466$. Equivalently $q_u = (103-90)/40 = 0.325$ and
+$C_0 = 0.325\cdot 30/1.03 = 9.466$. Note that $q_u$ has nothing to do with how likely the up move
+really is.
+\end{example}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=0.036,>=Stealth]
+  \draw[->,black!50] (-80,0) -- (150,0) node[right,black]{\small payoff if $d$};
+  \draw[->,black!50] (0,-80) -- (0,150) node[above,black]{\small payoff if $u$};
+  \draw[->,very thick,defcol] (0,0) -- (103,103) node[above right]{\small bond $(103,103)$};
+  \draw[->,very thick,intcol] (0,0) -- (90,130) node[above]{\small stock $(90,130)$};
+  \draw[->,thick,intcol,dashed] (0,0) -- (67.5,97.5) node[left,font=\scriptsize]{$0.75\cdot$stock\ };
+  \draw[->,thick,defcol,dashed] (67.5,97.5) -- (0,30);
+  \node[font=\scriptsize,defcol,anchor=east] at (30,68) {$-0.655\cdot$bond};
+  \draw[->,very thick,thmcol] (0,0) -- (0,30) node[left]{\small call $(0,30)$};
+  \draw[black!30] (-75,-75) -- (140,140);
+  \node[font=\scriptsize,black!50,rotate=45] at (-45,-38) {riskless payoffs};
+\end{tikzpicture}
+\caption{The two-state model as a plane of payoff vectors (x: state $d$, y: state $u$), as in
+Figure~1 of \file{lec02_2}. Bond and stock span $\R^2$, so every claim, e.g.\ the call of
+\cref{ex:call}, is a combination of them \ts{24}{2}{55:18}.}\label{fig:payoffplane}
+\end{figure}
+
+\begin{intuition}[Why ``risk-neutral'']
+From \eqref{eq:rnbinomial} applied to the stock itself,
+$q_uS_T^u+q_dS_T^d=(1+r_fT)S_0$: under $Q=(q_u,q_d)$ \emph{every} asset earns the risk-free rate on
+average, as it would in a world of risk-neutral investors. The real-world probabilities and
+investors' risk preferences are already encoded in the \emph{current price} $S_0$; given $S_0$,
+replication makes them irrelevant for the claim. This is why option prices do not depend on the
+stock's expected return, a fact that will reappear as the absence of the drift $\mu$ from the
+Black--Scholes formula.
+\end{intuition}
+
+\subsection{\texorpdfstring{$n$}{n} assets, \texorpdfstring{$m$}{m} states}
+Generalise to $n$ assets and $m$ possible states $\omega_1,\dots,\omega_m$ at time $T$
+\ts{24}{2}{1:06:57}:
+\begin{itemize}
+  \item $A_0=(P_0^1,\dots,P_0^n)\in\R^{1\times n}$: known prices at $t=0$;
+  \item $A\in\R^{m\times n}$ with $A_{ij}=P_T^j(\omega_i)$: price of asset $j$ in state $i$. Column $j$ is the
+        payoff vector of asset $j$, row $i$ the prices in scenario $i$;
+  \item a portfolio $\bm\theta\in\R^n$ costs $V_0=A_0\bm\theta$ and pays $\bm V_T=A\bm\theta\in\R^m$.
+\end{itemize}
+Implicit assumptions: prices do not depend on quantities traded (unlimited liquidity), holdings
+can be fractional, short selling is unrestricted, no transaction costs \ts{24}{2}{1:05:55}.
+
+\begin{coursenote}[Notation]
+The lecture note writes the portfolio as $\vec\pi$; here it is $\bm\theta$, to keep $\pi$ for
+probability vectors.
+\end{coursenote}
+
+\begin{definition}[Replication, completeness, arbitrage, state prices]\label{def:onepmodel}
+In the model $(A_0,A)$:
+\begin{itemize}
+  \item A claim with payoff $\bm C_T\in\R^m$ is \emph{replicable} if $A\bm\theta=\bm C_T$ for some $\bm\theta$.
+        The market is \emph{complete} if every claim is replicable.
+  \item An \emph{arbitrage} is a portfolio with $V_0\le 0$, $\bm V_T\ge0$ (componentwise) and
+        $(V_0,\bm V_T)\neq(0,\bm 0)$: it never loses and either costs nothing and may gain, or pays you
+        today and never costs anything later \ts{24}{2}{1:09:06}.
+  \item A vector $\bm\psi\in\R^m$ with all $\psi_i>0$ is a vector of \emph{state prices} if
+        $A_0=\bm\psi\T A$, i.e.\ $P_0^j=\sum_i\psi_iP_T^j(\omega_i)$ for every asset. Writing
+        $\beta=\sum_i\psi_i$ and $q_i=\psi_i/\beta$, this reads
+        \[
+          P_0^j = \beta\,\E_Q\bigl[P_T^j\bigr],\qquad j=1,\dots,n,
+        \]
+        and $Q=(q_1,\dots,q_m)$ is a \emph{pricing measure} with discount factor $\beta$ \ts{24}{2}{1:11:16}.
+\end{itemize}
+\end{definition}
+
+\begin{coursenote}[Definition of arbitrage]
+The lecture note requires $V_0\le0$ and $\bm V_T\ge0$ with $V_T(\omega_i)>0$ for at least one state,
+which omits the case ``negative cost, zero payoff''. When a riskless asset exists the two definitions
+are equivalent (invest the negative cost in the bond); the version above makes the theorem below
+true without that assumption.
+\end{coursenote}
+
+$\psi_i$ is the price of the \emph{Arrow--Debreu security} $\bm e_i$ paying \$1 in state $i$ and nothing
+otherwise (when it is replicable). If a riskless bond exists, $B_0=\bm\psi\T\bm 1\,B_T$ gives
+$\beta=1/(1+r_fT)$, the ordinary discount factor.
+
+\begin{lemma}[Stiemke]\label{lem:stiemke}
+Let $L\subset\R^k$ be a linear subspace. Then $L\cap\R^k_{+}=\{\bm 0\}$ iff there exists $\bm y\in\R^k$ with
+all $y_i>0$ and $\bm y\perp L$.
+\end{lemma}
+\begin{proof}
+($\Leftarrow$) If $\bm x\in L$, $\bm x\ge0$, $\bm x\ne0$, then $\bm y\T\bm x>0$, contradicting $\bm y\perp L$.
+($\Rightarrow$) The simplex $\Delta=\{\bm x\ge0:\sum_ix_i=1\}$ is compact, convex and disjoint from the closed
+convex set $L$. By the separating hyperplane theorem there are $\bm y$ and $c$ with $\bm y\T\bm l<c<\bm y\T\bm x$
+for all $\bm l\in L$, $\bm x\in\Delta$. Since $L$ is a subspace, $\bm y\T\bm l$ bounded above on $L$ forces
+$\bm y\T\bm l=0$; then $c>0$ and $y_i=\bm y\T\bm e_i>0$ for every $i$.
+\end{proof}
+
+\begin{theorem}[Fundamental theorem of asset pricing, one period]\label{thm:ftap}
+In the one-period model $(A_0,A)$:
+\begin{enumerate}[(i)]
+  \item (Part 1) The model is arbitrage-free iff a state-price vector $\bm\psi>0$ exists.
+  \item (Part 2) An arbitrage-free model is complete iff the state-price vector is unique.
+  \item If $\bm C_T$ is replicable, its only arbitrage-free price is
+        $C_0=\bm\psi\T\bm C_T=\beta\,\E_Q[\bm C_T]$, for any state-price vector $\bm\psi$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(i) Let $L=\{(-A_0\bm\theta,\,A\bm\theta):\bm\theta\in\R^n\}\subset\R^{1+m}$. By definition an arbitrage is a
+non-zero element of $L\cap\R^{1+m}_+$. By \cref{lem:stiemke}, no arbitrage iff there is
+$\bm y=(y_0,y_1,\dots,y_m)>0$ with $-y_0A_0\bm\theta+\sum_{i\ge1}y_i(A\bm\theta)_i=0$ for all $\bm\theta$, i.e.\
+$A_0=\bm\psi\T A$ with $\psi_i=y_i/y_0>0$.
+
+(ii) State prices solve $A\T\bm\psi=A_0\T$. The solution is unique iff $\ker A\T=\{0\}$ iff
+$\rank A=m$ iff $\operatorname{col}(A)=\R^m$, i.e.\ iff the market is complete.
+
+(iii) If $A\bm\theta=\bm C_T$ then $C_0$ must equal the cost of $\bm\theta$ (otherwise buy the cheaper, sell the
+dearer), and $A_0\bm\theta=\bm\psi\T A\bm\theta=\bm\psi\T\bm C_T$.
+\end{proof}
+
+\begin{remark}
+In the binomial model $A=\bigl(\begin{smallmatrix}B_T & S_T^d\\ B_T & S_T^u\end{smallmatrix}\bigr)$ is invertible:
+$\bm\psi\T=A_0A^{-1}$ is unique and positive exactly under the condition of \cref{prop:binomial-na},
+and \eqref{eq:rnbinomial} is (iii). With more states than independent assets ($\rank A<m$) the market
+is incomplete: state prices are not unique and a non-replicable claim has an \emph{interval} of
+arbitrage-free prices $\bigl(\inf_{\bm\psi}\bm\psi\T\bm C_T,\ \sup_{\bm\psi}\bm\psi\T\bm C_T\bigr)$.
+\end{remark}
+
+\paragraph{Finding an arbitrage.} In a complete market, solve $A_0=\bm\psi\T A$. If some
+$\psi_i\le0$, the portfolio replicating the Arrow--Debreu security $\bm e_i$ ($A\bm\theta=\bm e_i$) costs
+$A_0\bm\theta=\bm\psi\T\bm e_i=\psi_i\le0$ and pays \$1 in state $i$: an arbitrage (lecture note,
+section 2.4).
+
+\begin{intuition}[Pricing is a positive linear functional]
+Replication makes the price a \emph{linear} function of the payoff vector, and no arbitrage makes it
+\emph{positive} (non-negative payoffs have non-negative prices). A positive linear functional on $\R^m$
+is represented by a positive vector, $\bm\psi$, which normalised becomes a probability measure. This is
+the finite-dimensional Riesz representation theorem; in continuous time it becomes ``price =
+discounted expectation under the risk-neutral measure'' (\cref{ch:bs}).
+\end{intuition}
+
+\begin{casestudy}[Visualising portfolios (\file{lec02_2}, section 3)]
+For the binomial example of \cref{ex:call}, the R code (\texttt{ggplot2}) plots the payoff vectors
+$(V_T^d,V_T^u)$ of many portfolios \ts{24}{2}{1:01:39}:
+\begin{itemize}
+  \item long-only portfolios with weights summing
+      to 1 lie on the segment between the bond and the stock;
+  \item weights in $[0,1]^2$ fill a parallelogram,
+      coloured by the cost $V_0$;
+  \item allowing shorting (weights in $[-2,2]^2$) fills a large parallelogram
+      around the origin. In the last plot the zero-cost portfolios (white) lie on a line through the origin
+      that avoids the positive quadrant: no zero-cost portfolio pays off in both states, i.e.\ no arbitrage
+      \ts{24}{2}{1:04:48}.
+\end{itemize}
+\end{casestudy}
+
+\begin{finance}[From the binomial tree to Black--Scholes]
+The binomial model iterated over many periods is the Cox--Ross--Rubinstein tree; letting the step go
+to zero gives Black--Scholes (\cref{ch:bs}). Part~2 of the theorem explains why stochastic-volatility
+or jump models, which have more sources of randomness than traded assets, are incomplete: prices there
+depend on a choice of pricing measure calibrated to market option prices.
+\end{finance}
+
+% ------------------------------------------------------------------
+\section{Eigenvalues and diagonalisation}\label{sec:eigen}
+$\lambda\in\mathbb C$ is an eigenvalue of $A\in\R^{n\times n}$ with eigenvector $\bm v\neq0$ if
+$A\bm v=\lambda\bm v$, i.e.\ iff $\det(A-\lambda I)=0$, a polynomial equation of degree $n$: there is
+always at least one (complex) eigenvalue \ts{13}{2}{6:17}. Eigenvectors are the directions in which $A$
+acts as a pure rescaling.
+
+If $A$ has $n$ linearly independent eigenvectors, $S=[\bm v_1\cdots\bm v_n]$ is invertible and
+\[
+  AS=S\Lambda,\qquad A=S\Lambda S^{-1},\qquad A^k=S\Lambda^kS^{-1},\qquad \Lambda=\diag(\lambda_1,\dots,\lambda_n).
+\]
+\paragraph{State equations} \ts{24}{4}{4:14}. For the linear dynamics $\bm u_t=A\bm u_{t-1}$ (the state
+equation of a Kalman filter, \cref{ch:timeseries}), expand the initial state in the eigenbasis,
+$\bm u_0=\sum_ic_i\bm v_i$ with $\bm c=S^{-1}\bm u_0$; then
+\[
+  \bm u_t = A^t\bm u_0 = \sum_{i=1}^n c_i\,\lambda_i^t\,\bm v_i .
+\]
+Modes with $|\lambda_i|<1$ die out, those with $|\lambda_i|>1$ explode, and if the largest eigenvalue is
+$1$ and simple, $\bm u_t$ converges to a multiple of its eigenvector \ts{24}{4}{6:21}. (For a physicist:
+normal-mode decomposition of a linear discrete-time system.)
+
+\begin{coursenote}[Erratum in the slides]
+Slide ``Eigenvalues and Eigenvectors'' of \file{lec02_1} states
+$\max_{\|\bm v\|=1}\|A\bm v\|=\max|\lambda(A)|$ for every square $A$ (and it is repeated in class
+\ts{24}{2}{1:17:34}). This holds for \emph{symmetric} (more generally normal) matrices, as in the 2013 notes
+(Theorem~4 of \file{lecnote2}). In general $\max_{\|\bm v\|=1}\|A\bm v\|=\sigma_1(A)$, the largest singular value
+(\cref{sec:svd}), and $\sigma_1\ge\max|\lambda|$: for $A=\bigl(\begin{smallmatrix}0&1\\0&0\end{smallmatrix}\bigr)$
+all eigenvalues are $0$ but $\|A\bm e_2\|=1$.
+\end{coursenote}
+
+% ------------------------------------------------------------------
+\section{Symmetric matrices}\label{sec:symmetric}
+Most matrices in this course (covariance and correlation matrices, $A\T A$, Hessians) are symmetric,
+and for them everything works \ts{13}{2}{17:01}.
+
+\begin{theorem}[Spectral theorem]\label{thm:spectral}
+Let $A=A\T\in\R^{n\times n}$. Then
+\begin{enumerate}[(i)]
+  \item all eigenvalues are real;
+  \item eigenvectors of distinct eigenvalues
+      are orthogonal;
+  \item $A=U\Lambda U\T$ with $U$ orthogonal ($U\T U=I$) and $\Lambda$ real diagonal.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(i) If $A\bm v=\lambda\bm v$, then $\bar{\bm v}\T A\bm v=\lambda\|\bm v\|^2$; conjugating and using $A=\bar A=A\T$,
+the same quantity equals $\bar\lambda\|\bm v\|^2$, so $\lambda=\bar\lambda$ \ts{13}{2}{19:12}.
+
+(ii) $\lambda_1\bm v_2\T\bm v_1=\bm v_2\T A\bm v_1=(A\bm v_2)\T\bm v_1=\lambda_2\bm v_2\T\bm v_1$, so
+$\bm v_2\T\bm v_1=0$ if $\lambda_1\ne\lambda_2$.
+
+(iii) Induction: take a unit eigenvector $\bm v_1$; its orthogonal complement $W$ is invariant, because
+$\bm w\perp\bm v_1\Rightarrow (A\bm w)\T\bm v_1=\bm w\T A\bm v_1=\lambda_1\bm w\T\bm v_1=0$; restrict $A$ to $W$ (still
+symmetric) and repeat (2013 notes, Proposition~3).
+\end{proof}
+
+Consequences used later:
+\begin{itemize}
+  \item \emph{Rayleigh quotient}: the top eigenvector attains
+        \[ \max_{\|\bm v\|=1}\bm v\T A\bm v=\lambda_{\max},\qquad\text{and}\qquad \max_{\|\bm v\|=1}\|A\bm v\|=\max_i|\lambda_i|. \]
+        This variational characterisation is the basis of PCA.
+  \item $A$ is \emph{positive semi-definite} ($\bm v\T A\bm v\ge0$ for all $\bm v$) iff all $\lambda_i\ge0$ (2013 PS1 B-3).
+        Every covariance matrix $\Sigma$ is PSD, because $\bm w\T\Sigma\bm w=\Var(\bm w\T\bm X)\ge0$ is the variance of
+        the portfolio with weights $\bm w$ (2024 PS2 Problem~3, \cref{ch:pca}).
+\end{itemize}
+
+% ------------------------------------------------------------------
+\section{Singular value decomposition}\label{sec:svd}
+
+\begin{theorem}[SVD]\label{thm:svd}
+Every $A\in\R^{m\times n}$ of rank $r$ can be written as $A=U\Sigma V\T$ with $U\in\R^{m\times m}$ and
+$V\in\R^{n\times n}$ orthogonal and $\Sigma\in\R^{m\times n}$ diagonal with entries
+$\sigma_1\ge\dots\ge\sigma_r>0=\sigma_{r+1}=\cdots$. Equivalently
+\begin{equation}\label{eq:svdsum}
+  A=\sum_{k=1}^r\sigma_k\,\bm u_k\bm v_k\T,
+\end{equation}
+a sum of $r$ rank-one matrices. The $\sigma_k$ (singular values) are the square roots of the non-zero
+eigenvalues of $A\T A$ (equivalently of $AA\T$).
+\end{theorem}
+\begin{proof}[Construction]
+$A\T A$ is symmetric PSD with rank $r$: by \cref{thm:spectral} it has orthonormal eigenvectors
+$\bm v_1,\dots,\bm v_n$ with eigenvalues $\sigma_1^2\ge\dots\ge\sigma_r^2>0=\cdots$. Put
+$\bm u_k=A\bm v_k/\sigma_k$ for $k\le r$. These are orthonormal:
+$\bm u_j\T\bm u_k=\bm v_j\T A\T A\bm v_k/(\sigma_j\sigma_k)=\sigma_k^2\bm v_j\T\bm v_k/(\sigma_j\sigma_k)=\delta_{jk}$.
+Complete $\{\bm u_k\}$ and $\{\bm v_k\}$ to orthonormal bases; then $U\T AV=\Sigma$ because $A\bm v_k=\sigma_k\bm u_k$
+($k\le r$) and $A\bm v_k=0$ ($k>r$) \ts{13}{2}{33:05}.
+\end{proof}
+
+\begin{intuition}[Rotate, stretch, rotate]
+Read $A\bm x=U\Sigma V\T\bm x$ from the right: $V\T$ rotates the input frame onto the axes
+$\bm v_1,\dots,\bm v_n$, $\Sigma$ stretches axis $k$ by $\sigma_k$ (and kills the axes with $\sigma_k=0$), $U$
+rotates onto the output frame $\bm u_1,\dots,\bm u_m$. An eigen-decomposition uses \emph{one} frame in which
+$A$ scales; the SVD uses \emph{two} frames, $A\bm v_k=\sigma_k\bm u_k$, but exists for every matrix, even
+rectangular \ts{13}{2}{27:52}.
+\end{intuition}
+
+\begin{example}[SVD by hand {\ts{13}{2}{47:05}}]
+$A=\bigl(\begin{smallmatrix}3&2&2\\2&3&-2\end{smallmatrix}\bigr)$. Then $AA\T=\bigl(\begin{smallmatrix}17&8\\8&17\end{smallmatrix}\bigr)$
+has eigenvalues $25$ and $9$, so $\sigma_1=5$, $\sigma_2=3$ ($A\T A$ is $3\times3$ with eigenvalues
+$25,9,0$). Eigenvectors of $A\T A$: $\bm v_1=\frac1{\sqrt2}(1,1,0)\T$, $\bm v_2=\frac1{\sqrt{18}}(1,-1,4)\T$;
+then $\bm u_1=A\bm v_1/5=\frac1{\sqrt2}(1,1)\T$, $\bm u_2=A\bm v_2/3=\frac1{\sqrt2}(1,-1)\T$, and
+\[
+  A=\begin{pmatrix}\tfrac1{\sqrt2}&\tfrac1{\sqrt2}\\[2pt] \tfrac1{\sqrt2}&-\tfrac1{\sqrt2}\end{pmatrix}
+    \begin{pmatrix}5&0\\0&3\end{pmatrix}
+    \begin{pmatrix}\tfrac1{\sqrt2}&\tfrac1{\sqrt2}&0\\[2pt] \tfrac1{\sqrt{18}}&-\tfrac1{\sqrt{18}}&\tfrac4{\sqrt{18}}\end{pmatrix}.
+\]
+The eigenvector of eigenvalue $0$ is not needed: this is the \emph{reduced} SVD, keeping only the $r$
+non-zero singular values \ts{13}{2}{54:33}.
+\end{example}
+
+\paragraph{Why it matters for data.} Let $A$ be a data matrix with one row per company and one column per
+date (e.g.\ $5\times365$). The reduced SVD stores $5\times5$, $5\times5$ and $5\times365$ matrices instead of a
+$365\times365$ one, and if the data effectively live in a low-dimensional subspace, a few singular values
+dominate \ts{13}{2}{56:35}. $AA\T$ (indexed by companies) measures how the companies' series move together,
+so the leading singular vectors describe groups of co-moving stocks \ts{13}{2}{58:47}; with centred data
+this is exactly principal component analysis (\cref{ch:pca}). The best rank-$k$ approximation of $A$ in the
+Frobenius or operator norm is the truncation of \eqref{eq:svdsum} to its first $k$ terms (Eckart--Young
+theorem, not proved in the course).
+
+% ------------------------------------------------------------------
+\section{The Perron--Frobenius theorem}\label{sec:pf}
+
+\begin{theorem}[Perron--Frobenius]\label{thm:pf}
+Let $A\in\R^{n\times n}$ have all entries $a_{ij}>0$. Then:
+\begin{enumerate}[(i)]
+  \item there is a real eigenvalue $\lambda_0>0$ with $|\lambda|<\lambda_0$ for every other eigenvalue $\lambda$;
+  \item $\lambda_0$ has an eigenvector with all entries positive;
+  \item $\lambda_0$ is simple: its eigenvectors form a one-dimensional space.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Write $\bm x\ge0$ (resp.\ $>0$) for componentwise inequalities. Following the slides, let
+$T=\{t\ge0:\ A\bm x\ge t\bm x\text{ for some }\bm x\ge0,\ \bm x\ne0\}$ and $\lambda_0=\sup T$.
+$T$ contains $\min_ia_{ii}>0$ and is bounded (if $A\bm x\ge t\bm x$ with $\sum x_i=1$, look at the largest
+component $x_k\ge1/n$: $t\le(A\bm x)_k/x_k\le n\max a_{ij}$); by compactness of the simplex the sup is attained
+at some $\bm x^*$.
+
+\emph{Step 1: $\lambda_0$ is an eigenvalue with a positive eigenvector.} Suppose $\bm y=A\bm x^*-\lambda_0\bm x^*\ge0$ were
+non-zero. Since all $a_{ij}>0$, $A\bm y>0$, i.e.\ $A\bm z>\lambda_0\bm z$ for $\bm z=A\bm x^*>0$, and then
+$A\bm z\ge(\lambda_0+\varepsilon)\bm z$ for small $\varepsilon>0$, contradicting the maximality of $\lambda_0$. So
+$A\bm x^*=\lambda_0\bm x^*$, and $\bm x^*=A\bm x^*/\lambda_0>0$. The same argument shows: \emph{any} $\bm x\ge0$, $\bm x\neq0$ with
+$A\bm x\ge\lambda_0\bm x$ is an eigenvector of $\lambda_0$.
+
+\emph{Step 2: $|\lambda|\le\lambda_0$.} If $A\bm z=\lambda\bm z$ ($\bm z$ possibly complex), then
+$|\lambda|\,|\bm z|=|A\bm z|\le A|\bm z|$ componentwise, where $|\bm z|=(|z_1|,\dots,|z_n|)$; hence $|\lambda|\in T$.
+
+\emph{Step 3: strict inequality.} If $|\lambda|=\lambda_0$, Step 2 gives $A|\bm z|\ge\lambda_0|\bm z|$, so by Step 1
+$A|\bm z|=\lambda_0|\bm z|$ and $|\bm z|>0$. Then $|\sum_ja_{ij}z_j|=\sum_ja_{ij}|z_j|$ for each $i$: equality in the
+triangle inequality with positive weights forces all $z_j$ to have the same phase, $\bm z=e^{i\phi}|\bm z|$.
+Substituting, $\lambda|\bm z|=A|\bm z|=\lambda_0|\bm z|$, so $\lambda=\lambda_0$.
+
+\emph{Step 4: simplicity.} By Step 3 every eigenvector of $\lambda_0$ is a multiple of a positive vector. If
+$\bm z>0$ were an eigenvector not proportional to $\bm x^*$, let $c=\min_ix^*_i/z_i$; then $\bm w=\bm x^*-c\bm z\ge0$ has a zero
+component and $\bm w\ne0$, yet $\bm w=A\bm w/\lambda_0>0$: contradiction.
+\end{proof}
+
+\begin{coursenote}[On the proofs in the course material]
+The slides prove Steps 1--2 as above and argue simplicity from ``$\bm x-\bm y$ has entries of both
+signs''; this needs the fact, proved in Step~3, that every eigenvector of $\lambda_0$ has entries of one
+sign. The 2013 notes only sketch the symmetric case. The theorem also holds (with
+$|\lambda|\le\lambda_0$) for non-negative \emph{irreducible} matrices, the form needed for Markov chains
+\ts{13}{2}{1:10:23}. The eigenvalue is in fact algebraically simple as well (not shown here).
+\end{coursenote}
+
+\paragraph{Applications in this course.}
+\begin{itemize}
+  \item \textbf{Markov chains}: a column-stochastic $A$ with some $A^k>0$ has $\lambda_0=1$ (\cref{prop:stochastic}),
+        a unique positive stationary distribution, and $\bm\pi(t)\to\bm\pi^*$ geometrically (2024 PS1 Problem~4).
+  \item \textbf{Covariance matrices} with all positive entries: the first principal component has all weights
+        positive, a ``market factor'' (2024 PS2 Problem~3, \cref{ch:pca}).
+  \item \textbf{Ross recovery theorem}: recovering real-world probabilities from option prices relies on
+        Perron--Frobenius applied to a matrix of state prices \ts{13}{2}{1:01:54} (\cref{ch:ross}).
+\end{itemize}
+
+% ------------------------------------------------------------------
+\section{Case study: equal-weighted portfolios}\label{sec:ewport}
+
+\begin{casestudy}[\file{Script_SP500.Rmd} and \file{Equal_Weighted_Portfolios.Rmd}]
+\textbf{Data.} \file{Script_SP500.Rmd} downloads (\texttt{tidyquant}) daily prices of the stocks
+currently in the S\&P~500 from 2019-01-01 to 2024-08-31 and keeps those with no missing data:
+$1426$ days $\times$ $488$ stocks, saved in \file{SP500_data_subset.RData}.
+
+\textbf{Portfolio as a matrix--vector product.} Invest \$1000 equally at the first date:
+$q_j=(1000/n)/p_j(0)$ shares, then \emph{never rebalance} (buy and hold). With $P$ the
+$1426\times n$ matrix of prices, the value path is simply $\bm V=P\bm q$ \ts{24}{4}{23:31}. The same is done for
+four ``hot'' stocks (AMZN, AAPL, NFLX, GOOG), \$250 each.
+
+\textbf{Results} (from the knitted output). The \$1000 in the four stocks grows to \$3541.76 by
+2024-08-30; the four \$250 stakes end at AAPL \$1516.55, GOOG \$790.26, NFLX \$655.08, AMZN \$579.87.
+The concentrated portfolio beats the equal-weighted S\&P~500 portfolio but has much deeper drawdowns
+\ts{24}{4}{24:33}.
+\end{casestudy}
+
+\paragraph{Weight drift and rebalancing.} Without rebalancing, the weight of asset $j$ at time $t$ is
+\[
+  w_j(t) = \frac{q_jp_j(t)}{\sum_kq_kp_k(t)} = \frac{w_j(0)\,G_j(t)}{\sum_kw_k(0)\,G_k(t)},\qquad G_j(t)=\frac{p_j(t)}{p_j(0)},
+\]
+so winners take over: Apple's weight goes from 25\% to $1516.55/3541.76\approx43\%$, and the portfolio
+becomes less diversified and riskier \ts{24}{4}{25:37}. Rebalancing every day back to equal weights is
+not obviously better: it systematically sells winners and buys losers, which hurts when there are
+trends \ts{24}{4}{26:40}. One principled alternative is to rebalance so as to keep the \emph{risk} of the
+portfolio at a target level (\cref{ch:portfolio}).
+
+\begin{finance}[Survivorship bias (not discussed in class)]
+The script uses the stocks that are in the S\&P~500 \emph{today} and have complete histories since 2019.
+Companies that were in the index in 2019 but later dropped out (often because they performed badly) are
+excluded, so the back-test of the equal-weighted portfolio is biased upward. Any historical study built on
+current index membership has this problem.
+\end{finance}
+
+% ------------------------------------------------------------------
+\section{Lectures without material}\label{sec:la-missing}
+\begin{coursenote}[2024 L3 and 2013 L4]
+\textbf{2024 L3}, \emph{Quantitative Equity Investing} (Jeff Shen, BlackRock): not recorded and no slides
+published (the guest lecturer did not grant IP permission). \textbf{2013 L4}, \emph{Matrix Primer} (Morgan
+Stanley Matrix team): no notes and no video; OCW only points to the Morgan Stanley Matrix microsite
+(the bank's electronic trading and research platform for clients).
+\end{coursenote}
+
+% ------------------------------------------------------------------
+\begin{keyformulas}
+\begin{align*}
+&\text{Portfolio value, P\&L:} && V_t=\bm q\T\bm p(t),\quad \mathrm{PnL}(t+1)=\bm q(t+1)\T\Delta\bm p(t)\\
+&\text{Markov chain:} && \bm\pi(t)=A^t\bm\pi(0),\quad \bm\pi^*=A\bm\pi^*\\
+&\text{Two-state chain:} && \lambda_2=1-p-q,\quad \bm\pi^*=(q,p)/(p+q)\\
+&\text{Binomial replication:} && \theta_S=\tfrac{C^u-C^d}{S^u-S^d},\\
+  &&& C_0=\tfrac{q_uC^u+q_dC^d}{1+r_fT},\\
+  &&& q_u=\tfrac{(1+r_fT)S_0-S^d}{S^u-S^d}\\
+&\text{State prices:} && A_0=\bm\psi\T A,\ \bm\psi>0 \iff \text{no arbitrage};\\
+  &&& C_0=\bm\psi\T\bm C_T=\beta\,\E_Q[C_T]\\
+&\text{Completeness:} && \rank A=m\iff \bm\psi\text{ unique}\\
+&\text{Diagonalisation:} && A=S\Lambda S^{-1},\quad A^t\bm u_0=\textstyle\sum_ic_i\lambda_i^t\bm v_i\\
+&\text{Spectral theorem:} && A=A\T\Rightarrow A=U\Lambda U\T,\ U\T U=I\\
+&\text{SVD:} && A=U\Sigma V\T=\textstyle\sum_{k\le r}\sigma_k\bm u_k\bm v_k\T,\\
+  &&& \sigma_k^2=\lambda_k(A\T A)
+\end{align*}
+\end{keyformulas}
+
+% ------------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\subsection*{From 2024 Problem Set 1}
+
+\begin{exercise}[PS1 (2024), Problem 1: Fibonacci matrix]
+Let $A=\bigl(\begin{smallmatrix}1&1\\1&0\end{smallmatrix}\bigr)$, $F_0=0$, $F_1=1$, $F_{k+2}=F_{k+1}+F_k$ and
+$\bm u_k=(F_{k+1},F_k)\T$.
+\begin{enumerate}[(a)]
+  \item Show $\bm u_{k+1}=A\bm u_k$ and $\bm u_k=A^k\bm u_0$.
+  \item Find the eigenvalues $\lambda_1,\lambda_2$ of $A$ and show that $\bm s=(\lambda,1)\T$ is an eigenvector for $\lambda$.
+  \item With $S=[\bm s_1\ \bm s_2]$ compute $S^{-1}$, verify $A=S\Lambda S^{-1}$, and show $\bm c=S^{-1}\bm u_0=a(1,-1)\T$; find $a$.
+  \item Deduce $F_k=(\lambda_1^k-\lambda_2^k)/\sqrt5$ and the limit of $F_{k+1}/F_k$ (the golden ratio, also used in
+      ``technical analysis'' of prices, e.g.\ Fibonacci retracements).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS1 (2024), Problem 2]
+Let $A=S\Lambda S^{-1}$ be diagonalisable. Under which conditions on the eigenvalues does $\lim_kA^k$
+\begin{enumerate}[(a)]
+  \item not exist,
+  \item exist and equal the zero matrix,
+  \item exist and be non-zero?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS1 (2024), Problem 3: order-side Markov chain]
+The side of successive market orders is a two-state chain (1 = buy, 2 = sell) with
+$A=\bigl(\begin{smallmatrix}0.8&0.3\\0.2&0.7\end{smallmatrix}\bigr)$, $a_{ij}=\Prob(X_t=i\mid X_{t-1}=j)$.
+\begin{enumerate}[(a)]
+  \item Prove $\bm u_t=A\bm u_{t-1}$ and $\bm u_t=A^t\bm u_0$ for the distribution $\bm u_t$ of $X_t$.
+  \item Starting from $X_0=1$, compute $\bm u_1,\dots,\bm u_5$ in R (\texttt{A \%*\% ut} in a loop) and increase $t$
+      until convergence; repeat from $X_0=2$. Is the limit the same?
+  \item What is the stationary distribution of the order side? Relate it to the eigenvector of eigenvalue 1
+      returned by \texttt{eigen(A)} (which is normalised to unit Euclidean length, not to sum 1).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS1 (2024), Problem 4]
+For the matrix of the previous exercise:
+\begin{enumerate}[(a)]
+  \item find its eigenvalues explicitly;
+  \item explain which case of
+      Problem~2 applies;
+  \item explain the link between the stationary distribution and the Perron--Frobenius
+      theorem.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS1 (2024), Problem 5; lecture note \file{lec02_2}, Exercise 1]\label{ex:ps1-5}
+In the two-asset one-period model prove that no arbitrage requires
+$S_T^d<S_0(1+r_fT)<S_T^u$. \emph{Hint:} if an inequality fails, build an explicit portfolio whose cost is
+lower than its payoff in every state.
+\end{exercise}
+
+\subsection*{From the lecture note \emph{One-Period Financial Models}}
+
+\begin{exercise}[\file{lec02_2}, Exercise 2]
+With $B_0=100$, $B_T=103$, $S_0=100$, $S_T^u=130$, $S_T^d=90$, consider the put with strike $K=100$,
+payoff $\max(0,K-S_T)$.
+\begin{enumerate}[(a)]
+  \item Find its replicating portfolio.
+  \item Find its cost at $t=0$.
+  \item Is this price
+      arbitrage-free? Check put--call parity against \cref{ex:call}.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[\file{lec02_2}, Exercise 3]
+Starting from $C_0=\theta_BB_0+\theta_SS_0$, derive \eqref{eq:rnbinomial} and interpret
+$(1+r_fT)^{-1}S_T^{u}$, $(1+r_fT)^{-1}S_T^{d}$ and $S_0(1+r_fT)$ (the forward value of the bond position
+obtained by shorting one share). Show that $q_u+q_d=1$ and that $q_u,q_d>0$ under no arbitrage.
+\end{exercise}
+
+\subsection*{From 2013 Problem Set 1}
+
+\begin{exercise}[PS1 (2013), A-1]
+True or false:
+\begin{enumerate}[(a)]
+  \item row rank equals column rank;
+  \item $\rank(AB)\le\rank(A)$;
+  \item there are matrices with
+      $BA=I$, $AC=I$ and $B\neq C$;
+  \item full rank iff invertible;
+  \item symmetric matrices are invertible;
+  \item distinct eigenvalues imply invertible;
+  \item diagonalisable iff invertible.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS1 (2013), A-2 to A-4]
+(A-2) Row and column rank of
+$\left(\begin{smallmatrix}1&0&1&0&1\\1&1&1&0&0\\0&0&1&1&1\end{smallmatrix}\right)$ and
+$\left(\begin{smallmatrix}1&1&0&0&0&0\\1&1&0&3&0&0\\0&0&2&1&-1&0\\0&0&4&0&-2&0\end{smallmatrix}\right)$.
+(A-3) Determinant and inverse of $\left(\begin{smallmatrix}1&2\\4&-1\end{smallmatrix}\right)$ and
+$\left(\begin{smallmatrix}-1&-2&3\\1&2&0\\4&6&3\end{smallmatrix}\right)$.
+(A-4) Characteristic polynomial, eigenvalues and eigenvectors of
+$\left(\begin{smallmatrix}-3&3&2\\1&-1&-2\\-1&-3&0\end{smallmatrix}\right)$.
+\end{exercise}
+
+\begin{exercise}[PS1 (2013), A-5 and A-6]
+(A-5) Gram--Schmidt on $\bm v_1=(1,0,1,0,1)$, $\bm v_2=(1,1,1,0,0)$, $\bm v_3=(0,0,1,1,1)$; complete to an orthonormal basis of
+$\R^5$ and find the matrix $U$ mapping it to the standard basis.
+(A-6) SVD of $\left(\begin{smallmatrix}3&1&1\\-1&3&1\end{smallmatrix}\right)$, $\left(\begin{smallmatrix}1&1\\2&2\end{smallmatrix}\right)$ and
+$\left(\begin{smallmatrix}1&0&1\\0&1&0\\1&0&1\end{smallmatrix}\right)$.
+\end{exercise}
+
+\begin{exercise}[PS1 (2013), B-1 and B-2]
+(B-1) For an SVD $A=U\Sigma V\T$, true or false with explanation:
+\begin{enumerate}[(a)]
+  \item the number of non-zero diagonal entries of
+      $\Sigma$ equals $\rank A$;
+  \item $\Sigma$ is unique up to permutations;
+  \item for square $A$ one can choose $U=V$;
+  \item for symmetric $A$ one can choose $U=V$.
+\end{enumerate}
+(B-2) Prove that $AA\T$ and $A\T A$ have the same non-zero eigenvalues.
+\end{exercise}
+
+\begin{exercise}[PS1 (2013), B-3]
+Prove that a symmetric PSD matrix can be written $D=U\T AU$ with $U$ orthogonal and $D$ diagonal with
+non-negative entries.
+\end{exercise}
+
+\begin{exercise}[PS1 (2013), B-4: least squares via SVD]
+Minimise $L=\|A\bm x-\bm w\|$ for $A\in\R^{m\times n}$.
+\begin{enumerate}[(a)]
+  \item Solve it when $A$ is diagonal.
+  \item Using
+      $A\bm x-\bm w=U(\Sigma V\T\bm x-U\T\bm w)$, reduce the general case to (a).
+  \item Show that fitting a line $y=ax+b$ to
+      points $(x_i,y_i)$ by least squares is a special case;
+  \item same for a parabola $y=ax^2+bx+c$.
+      (Continued in \cref{ch:regression}.)
+\end{enumerate}
+\end{exercise}

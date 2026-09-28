@@ -1,0 +1,3818 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.968 align:middle line:90%
+[SQUEAKING]
+
+00:00:01.968 --> 00:00:04.428 align:middle line:90%
+[RUSTLING]
+
+00:00:04.428 --> 00:00:05.904 align:middle line:90%
+[CLICKING]
+
+00:00:05.904 --> 00:00:12.573 align:middle line:90%
+
+
+00:00:12.573 --> 00:00:13.740 align:middle line:90%
+PETER KEMPTHORNE: All right.
+
+00:00:13.740 --> 00:00:16.030 align:middle line:90%
+I guess we'll get started.
+
+00:00:16.030 --> 00:00:16.530 align:middle line:90%
+Let's see.
+
+00:00:16.530 --> 00:00:20.510 align:middle line:84%
+I wanted to just finish up
+some discussion of topics
+
+00:00:20.510 --> 00:00:24.080 align:middle line:84%
+from linear algebra
+that we didn't
+
+00:00:24.080 --> 00:00:27.120 align:middle line:90%
+get to the last math lecture.
+
+00:00:27.120 --> 00:00:30.950 align:middle line:84%
+And to begin with,
+I think we did
+
+00:00:30.950 --> 00:00:35.750 align:middle line:84%
+cover this topic of
+eigenvalues and eigenvectors.
+
+00:00:35.750 --> 00:00:39.740 align:middle line:84%
+These linear algebra
+concepts turn out
+
+00:00:39.740 --> 00:00:42.140 align:middle line:84%
+to be very, very
+useful in a number
+
+00:00:42.140 --> 00:00:45.360 align:middle line:90%
+of different applications.
+
+00:00:45.360 --> 00:00:53.660 align:middle line:84%
+But when we have an eigenvalue
+and eigenvector pair, then,
+
+00:00:53.660 --> 00:00:58.960 align:middle line:84%
+for a matrix A that
+has an eigenvector V,
+
+00:00:58.960 --> 00:01:05.770 align:middle line:84%
+then the matrix-vector
+product is simply a rescaling
+
+00:01:05.770 --> 00:01:07.100 align:middle line:90%
+of that same vector.
+
+00:01:07.100 --> 00:01:12.040 align:middle line:84%
+So matrix multiplication,
+when we use eigen--
+
+00:01:12.040 --> 00:01:14.980 align:middle line:84%
+or matrix-vector multiplication
+when we use eigenvectors
+
+00:01:14.980 --> 00:01:16.190 align:middle line:90%
+is very simple.
+
+00:01:16.190 --> 00:01:18.910 align:middle line:90%
+We're just rescaling the input.
+
+00:01:18.910 --> 00:01:25.360 align:middle line:84%
+And in order to solve for
+eigenvalues and eigenvectors,
+
+00:01:25.360 --> 00:01:31.750 align:middle line:84%
+one can solve this equation
+where the two are equal.
+
+00:01:31.750 --> 00:01:39.040 align:middle line:84%
+And when we solve
+this equation, we
+
+00:01:39.040 --> 00:01:46.780 align:middle line:84%
+want the roots of the
+determinant equation to equal 0.
+
+00:01:46.780 --> 00:01:52.030 align:middle line:84%
+This means that these
+are the eigenvalues which
+
+00:01:52.030 --> 00:01:59.190 align:middle line:84%
+make this matrix factor, A
+minus I lambda, non-invertible.
+
+00:01:59.190 --> 00:02:06.120 align:middle line:84%
+So with a matrix, if that matrix
+has a determinant that is--
+
+00:02:06.120 --> 00:02:11.520 align:middle line:84%
+or if that matrix is
+invertible, then the determinant
+
+00:02:11.520 --> 00:02:14.760 align:middle line:84%
+of the matrix is
+nonzero, and the inverse
+
+00:02:14.760 --> 00:02:19.200 align:middle line:84%
+is actually functions of
+different determinant cofactors.
+
+00:02:19.200 --> 00:02:23.850 align:middle line:84%
+So in order for v
+to not be 0, which
+
+00:02:23.850 --> 00:02:27.600 align:middle line:84%
+would be the case if this
+matrix were invertible,
+
+00:02:27.600 --> 00:02:31.090 align:middle line:84%
+we must have the lambda
+satisfying this equation.
+
+00:02:31.090 --> 00:02:38.740 align:middle line:84%
+And this system of equations
+is a polynomial in lambda,
+
+00:02:38.740 --> 00:02:42.600 align:middle line:84%
+or at least, the determinant
+equaling 0 corresponds
+
+00:02:42.600 --> 00:02:46.060 align:middle line:84%
+to a polynomial in
+lambda equaling 0.
+
+00:02:46.060 --> 00:02:51.300 align:middle line:84%
+So these things can be
+solved very directly.
+
+00:02:51.300 --> 00:02:54.540 align:middle line:84%
+Actually, in R, you can
+actually compute the roots
+
+00:02:54.540 --> 00:02:56.640 align:middle line:90%
+of any polynomial very easily.
+
+00:02:56.640 --> 00:03:01.170 align:middle line:84%
+And then, once we've
+solved for our root lambda,
+
+00:03:01.170 --> 00:03:03.920 align:middle line:84%
+then we can solve the
+equations for what the v
+
+00:03:03.920 --> 00:03:06.240 align:middle line:90%
+vector is that satisfies that.
+
+00:03:06.240 --> 00:03:10.285 align:middle line:90%
+Now, let me put this in here.
+
+00:03:10.285 --> 00:03:15.335 align:middle line:90%
+
+
+00:03:15.335 --> 00:03:24.410 align:middle line:84%
+It turns out that if we have
+independent eigenvectors, then
+
+00:03:24.410 --> 00:03:25.940 align:middle line:90%
+we can--
+
+00:03:25.940 --> 00:03:29.210 align:middle line:84%
+linearly independent
+eigenvectors--
+
+00:03:29.210 --> 00:03:36.200 align:middle line:84%
+then we can comprise those
+as columns of a matrix S.
+
+00:03:36.200 --> 00:03:41.810 align:middle line:84%
+And the matrix A
+multiplied by this S matrix
+
+00:03:41.810 --> 00:03:47.010 align:middle line:84%
+will simply be the matrix of
+multiples of the eigenvectors,
+
+00:03:47.010 --> 00:03:48.240 align:middle line:90%
+so S lambda.
+
+00:03:48.240 --> 00:03:50.450 align:middle line:90%
+Lambda is a diagonal matrix.
+
+00:03:50.450 --> 00:03:57.050 align:middle line:84%
+And the inverse
+matrix of S will exist
+
+00:03:57.050 --> 00:04:01.060 align:middle line:84%
+so long as we have
+independent eigenvectors.
+
+00:04:01.060 --> 00:04:06.400 align:middle line:84%
+And so this equation
+here can be used
+
+00:04:06.400 --> 00:04:10.480 align:middle line:84%
+to obtain A is S
+lambda S inverse.
+
+00:04:10.480 --> 00:04:14.840 align:middle line:84%
+Alternatively, S inverse
+A S is equal to lambda.
+
+00:04:14.840 --> 00:04:21.430 align:middle line:84%
+So these eigenvectors,
+when comprising a matrix,
+
+00:04:21.430 --> 00:04:28.960 align:middle line:84%
+allow us to
+diagonalize a matrix A.
+
+00:04:28.960 --> 00:04:33.340 align:middle line:90%
+Now, let's see.
+
+00:04:33.340 --> 00:04:36.610 align:middle line:84%
+All right, so
+eigenvalues, eigenvectors,
+
+00:04:36.610 --> 00:04:41.980 align:middle line:84%
+can come into play when we have
+equations for Kalman filters.
+
+00:04:41.980 --> 00:04:48.700 align:middle line:84%
+If our matrix A is transforming
+states at time t minus 1
+
+00:04:48.700 --> 00:04:53.740 align:middle line:84%
+into states at time t, and
+the dynamics of this process
+
+00:04:53.740 --> 00:04:58.370 align:middle line:84%
+proceed regularly over
+time increments given by t,
+
+00:04:58.370 --> 00:05:03.820 align:middle line:84%
+then we simply have, the
+t-th transition from state 0
+
+00:05:03.820 --> 00:05:08.260 align:middle line:90%
+is given by the t-th power of A.
+
+00:05:08.260 --> 00:05:12.730 align:middle line:84%
+And we can actually get
+explicit solutions, then,
+
+00:05:12.730 --> 00:05:17.860 align:middle line:90%
+which end up giving us--
+
+00:05:17.860 --> 00:05:18.970 align:middle line:90%
+let's see.
+
+00:05:18.970 --> 00:05:23.200 align:middle line:84%
+At least, if our
+eigenvectors, v1 through vn,
+
+00:05:23.200 --> 00:05:30.370 align:middle line:84%
+are linearly independent, then,
+if we have an initial condition,
+
+00:05:30.370 --> 00:05:34.000 align:middle line:84%
+u0, we can express
+that initial condition
+
+00:05:34.000 --> 00:05:37.960 align:middle line:84%
+as a linear combination
+of the eigenvectors.
+
+00:05:37.960 --> 00:05:43.750 align:middle line:84%
+And then we can represent
+the transition over t periods
+
+00:05:43.750 --> 00:05:45.890 align:middle line:90%
+to have this form.
+
+00:05:45.890 --> 00:05:49.240 align:middle line:84%
+And it ends up just
+being a sum of multiples
+
+00:05:49.240 --> 00:05:54.420 align:middle line:84%
+of the eigenvectors, with
+the coefficients being
+
+00:05:54.420 --> 00:05:57.160 align:middle line:90%
+powers of the eigenvalues.
+
+00:05:57.160 --> 00:06:00.700 align:middle line:84%
+So in looking at
+this mathematically,
+
+00:06:00.700 --> 00:06:07.230 align:middle line:84%
+one can see that if the
+eigenvalues, lambda 1 to lambda
+
+00:06:07.230 --> 00:06:13.860 align:middle line:84%
+n, are smaller than
+1 in magnitude, then
+
+00:06:13.860 --> 00:06:21.720 align:middle line:84%
+this limiting state transition
+goes to a zero vector.
+
+00:06:21.720 --> 00:06:30.180 align:middle line:84%
+If one of the eigenvalues
+is equal to 1,
+
+00:06:30.180 --> 00:06:35.200 align:middle line:84%
+then this term here won't
+change with each transition,
+
+00:06:35.200 --> 00:06:37.530 align:middle line:84%
+and so we'll have
+a limiting value
+
+00:06:37.530 --> 00:06:39.990 align:middle line:84%
+of the state that
+corresponds to a multiple
+
+00:06:39.990 --> 00:06:41.740 align:middle line:90%
+of the first eigenvector.
+
+00:06:41.740 --> 00:06:45.780 align:middle line:84%
+And so what's
+interesting to anticipate
+
+00:06:45.780 --> 00:06:48.540 align:middle line:84%
+is that there will be
+different kinds of problems
+
+00:06:48.540 --> 00:06:56.040 align:middle line:84%
+we work with where the
+eigenvalues may actually be such
+
+00:06:56.040 --> 00:06:59.370 align:middle line:84%
+that the largest
+eigenvalue is equal to 1,
+
+00:06:59.370 --> 00:07:04.090 align:middle line:84%
+and the other eigenvalues are
+smaller than 1 in magnitude.
+
+00:07:04.090 --> 00:07:08.670 align:middle line:84%
+And so we can get nice
+analytic representations
+
+00:07:08.670 --> 00:07:11.070 align:middle line:84%
+for the transition
+of the states.
+
+00:07:11.070 --> 00:07:11.800 align:middle line:90%
+All right.
+
+00:07:11.800 --> 00:07:16.320 align:middle line:84%
+Well, from linear
+algebra courses,
+
+00:07:16.320 --> 00:07:22.870 align:middle line:84%
+you probably remember that if we
+have a symmetric real matrix--
+
+00:07:22.870 --> 00:07:30.600 align:middle line:84%
+so if this matrix here is
+n by n, and it's symmetric,
+
+00:07:30.600 --> 00:07:37.440 align:middle line:84%
+and it's real, then all of
+the eigenvalues of this matrix
+
+00:07:37.440 --> 00:07:40.320 align:middle line:90%
+are real as well.
+
+00:07:40.320 --> 00:07:47.200 align:middle line:84%
+And if we have two
+distinct eigenvalues,
+
+00:07:47.200 --> 00:07:51.070 align:middle line:84%
+then the eigenvectors
+corresponding
+
+00:07:51.070 --> 00:07:57.290 align:middle line:84%
+to those two eigenvalues are
+orthogonal to each other.
+
+00:07:57.290 --> 00:08:04.180 align:middle line:84%
+So if we have A v1
+equals lambda 1 v1,
+
+00:08:04.180 --> 00:08:10.510 align:middle line:84%
+and A v2 is equal
+to lambda 2 v2,
+
+00:08:10.510 --> 00:08:19.210 align:middle line:84%
+then it turns out that
+v1 dot v2 is equal to 0.
+
+00:08:19.210 --> 00:08:26.440 align:middle line:90%
+And this is useful.
+
+00:08:26.440 --> 00:08:27.700 align:middle line:90%
+At least, if we're--
+
+00:08:27.700 --> 00:08:30.640 align:middle line:84%
+with linear algebra,
+we often want
+
+00:08:30.640 --> 00:08:39.220 align:middle line:84%
+to represent multidimensional
+vectors in terms of some basis.
+
+00:08:39.220 --> 00:08:48.960 align:middle line:84%
+And so, if we think of our
+matrix A equaling a vector a1,
+
+00:08:48.960 --> 00:08:59.940 align:middle line:84%
+a2, up to a n, if the
+matrix A has full rank,
+
+00:08:59.940 --> 00:09:06.750 align:middle line:84%
+then these columns of A
+are linearly independent.
+
+00:09:06.750 --> 00:09:11.850 align:middle line:84%
+And we could use
+these column vectors
+
+00:09:11.850 --> 00:09:15.640 align:middle line:84%
+as a basis for the
+n-dimensional space.
+
+00:09:15.640 --> 00:09:23.140 align:middle line:84%
+So if the rank of
+A is equal to n,
+
+00:09:23.140 --> 00:09:30.483 align:middle line:84%
+then the collection of aj's, j
+equaling 1 to n, forms a basis.
+
+00:09:30.483 --> 00:09:33.360 align:middle line:90%
+
+
+00:09:33.360 --> 00:09:42.770 align:middle line:84%
+And if we have a matrix A
+that maybe is symmetric,
+
+00:09:42.770 --> 00:09:47.070 align:middle line:84%
+but has eigenvalues
+that are all distinct,
+
+00:09:47.070 --> 00:09:50.730 align:middle line:90%
+then we actually could have--
+
+00:09:50.730 --> 00:10:02.960 align:middle line:84%
+so if A is symmetric, and all
+the eigenvalues are distinct,
+
+00:10:02.960 --> 00:10:09.575 align:middle line:84%
+then the collection
+of eigenvectors, vj,
+
+00:10:09.575 --> 00:10:14.210 align:middle line:84%
+j equaling 1 to n,
+this would correspond
+
+00:10:14.210 --> 00:10:18.350 align:middle line:90%
+to an orthogonal basis.
+
+00:10:18.350 --> 00:10:23.060 align:middle line:84%
+And so, when
+representing n vectors,
+
+00:10:23.060 --> 00:10:29.210 align:middle line:84%
+it's convenient to represent
+them in a coordinate system that
+
+00:10:29.210 --> 00:10:33.500 align:middle line:90%
+has orthogonal axes in it.
+
+00:10:33.500 --> 00:10:43.330 align:middle line:84%
+Now, what's interesting is that
+when A is symmetric and real,
+
+00:10:43.330 --> 00:10:45.560 align:middle line:90%
+all the eigenvalues are real.
+
+00:10:45.560 --> 00:10:52.270 align:middle line:84%
+It turns out that there
+exists an orthogonal set
+
+00:10:52.270 --> 00:10:57.910 align:middle line:84%
+of eigenvectors in
+that general case.
+
+00:10:57.910 --> 00:11:01.690 align:middle line:90%
+So that can be very useful.
+
+00:11:01.690 --> 00:11:03.130 align:middle line:90%
+All right.
+
+00:11:03.130 --> 00:11:09.760 align:middle line:84%
+Well, a very important
+linear algebra result
+
+00:11:09.760 --> 00:11:13.160 align:middle line:84%
+is the singular
+value decomposition.
+
+00:11:13.160 --> 00:11:17.020 align:middle line:84%
+And let me just ask, how
+many people here have covered
+
+00:11:17.020 --> 00:11:19.160 align:middle line:90%
+singular value decompositions?
+
+00:11:19.160 --> 00:11:20.985 align:middle line:90%
+Just about everybody, OK.
+
+00:11:20.985 --> 00:11:24.790 align:middle line:84%
+So who would like to
+explain to me what--
+
+00:11:24.790 --> 00:11:28.560 align:middle line:84%
+or explain to the class what a
+singular value decomposition is?
+
+00:11:28.560 --> 00:11:34.690 align:middle line:90%
+
+
+00:11:34.690 --> 00:11:40.560 align:middle line:84%
+So let me write this,
+maybe, as the singular value
+
+00:11:40.560 --> 00:11:43.560 align:middle line:90%
+decomposition in my notation.
+
+00:11:43.560 --> 00:11:48.810 align:middle line:84%
+So who would like to
+explain what this is?
+
+00:11:48.810 --> 00:11:49.570 align:middle line:90%
+Anybody?
+
+00:11:49.570 --> 00:11:52.320 align:middle line:90%
+
+
+00:11:52.320 --> 00:11:53.350 align:middle line:90%
+Yes?
+
+00:11:53.350 --> 00:11:55.140 align:middle line:84%
+AUDIENCE: Expresses
+the matrix A as a sum
+
+00:11:55.140 --> 00:11:58.680 align:middle line:84%
+of orthogonal
+[INAUDIBLE] matrices.
+
+00:11:58.680 --> 00:12:04.590 align:middle line:84%
+PETER KEMPTHORNE: So u
+is such that u transpose
+
+00:12:04.590 --> 00:12:11.820 align:middle line:84%
+u is equal to, say, the identity
+that has orthogonal columns.
+
+00:12:11.820 --> 00:12:15.780 align:middle line:90%
+V is the same thing.
+
+00:12:15.780 --> 00:12:17.253 align:middle line:90%
+And D is a diagonal.
+
+00:12:17.253 --> 00:12:21.150 align:middle line:90%
+
+
+00:12:21.150 --> 00:12:28.920 align:middle line:84%
+And so what's important
+is that any matrix
+
+00:12:28.920 --> 00:12:37.110 align:middle line:84%
+can be expressed as a
+factor of a V transpose,
+
+00:12:37.110 --> 00:12:42.170 align:middle line:84%
+which is an orthogonal matrix,
+that will transform coordinate
+
+00:12:42.170 --> 00:12:46.860 align:middle line:84%
+axes to new axes that are
+orthogonal in the same space.
+
+00:12:46.860 --> 00:12:53.540 align:middle line:84%
+And then D is a diagonal
+matrix down to d--
+
+00:12:53.540 --> 00:12:55.910 align:middle line:90%
+well, I'll write dr--
+
+00:12:55.910 --> 00:13:02.160 align:middle line:84%
+where we basically are
+stretching and squeezing axes.
+
+00:13:02.160 --> 00:13:06.350 align:middle line:84%
+And then u simply
+has columns that
+
+00:13:06.350 --> 00:13:10.500 align:middle line:84%
+define a new basis or
+a new vector space.
+
+00:13:10.500 --> 00:13:12.330 align:middle line:90%
+And we're taking sums of those.
+
+00:13:12.330 --> 00:13:18.230 align:middle line:84%
+So it's interesting to
+represent any matrix
+
+00:13:18.230 --> 00:13:26.720 align:middle line:84%
+as this operator, which will
+do an orthogonal transformation
+
+00:13:26.720 --> 00:13:30.290 align:middle line:84%
+of axes, stretch and squeeze
+in that transformed space,
+
+00:13:30.290 --> 00:13:37.280 align:middle line:84%
+and then use those to multiply
+new coordinate vectors, u.
+
+00:13:37.280 --> 00:13:44.210 align:middle line:90%
+Now, if we take any--
+
+00:13:44.210 --> 00:13:48.023 align:middle line:84%
+let's say, here, an
+m by n matrix, A--
+
+00:13:48.023 --> 00:13:53.570 align:middle line:90%
+
+
+00:13:53.570 --> 00:13:58.610 align:middle line:84%
+and it's often the case
+that we have maybe m cases
+
+00:13:58.610 --> 00:14:02.660 align:middle line:90%
+in a data set and n variables.
+
+00:14:02.660 --> 00:14:06.110 align:middle line:84%
+And so this corresponds
+to a data matrix
+
+00:14:06.110 --> 00:14:11.450 align:middle line:90%
+for an analysis of some data.
+
+00:14:11.450 --> 00:14:17.293 align:middle line:84%
+If we take A transpose A, then
+this is a symmetric real matrix.
+
+00:14:17.293 --> 00:14:21.830 align:middle line:90%
+
+
+00:14:21.830 --> 00:14:31.990 align:middle line:84%
+And so this actually can be
+diagonalized to V D squared V
+
+00:14:31.990 --> 00:14:37.120 align:middle line:84%
+transpose, where
+I'm representing
+
+00:14:37.120 --> 00:14:43.870 align:middle line:84%
+the eigenvalues as
+the squared D values
+
+00:14:43.870 --> 00:14:49.090 align:middle line:84%
+and the eigenvectors
+as columns of V.
+
+00:14:49.090 --> 00:14:54.100 align:middle line:84%
+And so one can
+construct this, do
+
+00:14:54.100 --> 00:14:57.680 align:middle line:84%
+the eigenvalue-eigenvector
+decomposition here.
+
+00:14:57.680 --> 00:15:04.189 align:middle line:84%
+And then we can take the matrix
+A, premultiplied by V, and--
+
+00:15:04.189 --> 00:15:08.101 align:middle line:90%
+
+
+00:15:08.101 --> 00:15:10.840 align:middle line:84%
+or not premultiply--
+postmultiply it by V,
+
+00:15:10.840 --> 00:15:13.810 align:middle line:84%
+and postmultiply
+it by D inverse.
+
+00:15:13.810 --> 00:15:18.290 align:middle line:84%
+And this will basically
+be our U matrix.
+
+00:15:18.290 --> 00:15:22.563 align:middle line:84%
+Now, all of this is a bit
+casual with my notation.
+
+00:15:22.563 --> 00:15:25.090 align:middle line:90%
+
+
+00:15:25.090 --> 00:15:30.670 align:middle line:84%
+The number of nonzero
+diagonal entries
+
+00:15:30.670 --> 00:15:39.130 align:middle line:84%
+here can be limited to the
+rank count of the matrix A.
+
+00:15:39.130 --> 00:15:45.310 align:middle line:84%
+And so that's the
+way it can play out.
+
+00:15:45.310 --> 00:15:50.190 align:middle line:84%
+So we basically have
+nonzero eigenvalues
+
+00:15:50.190 --> 00:15:53.620 align:middle line:84%
+of A transpose A.
+There will be r,
+
+00:15:53.620 --> 00:15:57.570 align:middle line:90%
+the rank, nonzero eigenvalues.
+
+00:15:57.570 --> 00:16:02.640 align:middle line:84%
+We can define the orthogonal,
+orthonormal eigenvectors
+
+00:16:02.640 --> 00:16:04.120 align:middle line:90%
+corresponding to those.
+
+00:16:04.120 --> 00:16:11.370 align:middle line:84%
+And then, if we want to
+expand the orthonormal basis
+
+00:16:11.370 --> 00:16:18.600 align:middle line:84%
+of the first r eigenvectors
+to be an n-dimensional basis,
+
+00:16:18.600 --> 00:16:22.140 align:middle line:84%
+although they
+essentially aren't used,
+
+00:16:22.140 --> 00:16:29.120 align:middle line:84%
+and so that gives us our
+singular value decomposition.
+
+00:16:29.120 --> 00:16:39.410 align:middle line:84%
+And it turns out that in
+dealing with data in a matrix,
+
+00:16:39.410 --> 00:16:42.080 align:middle line:84%
+the singular value
+decomposition allows
+
+00:16:42.080 --> 00:16:45.360 align:middle line:90%
+us to reduce dimensionality.
+
+00:16:45.360 --> 00:16:49.670 align:middle line:84%
+Perhaps there's variation
+in the data values
+
+00:16:49.670 --> 00:16:56.720 align:middle line:84%
+that is limited to a
+subspace of rank 2 or 3.
+
+00:16:56.720 --> 00:17:02.330 align:middle line:84%
+And so we can identify
+and specify that subspace
+
+00:17:02.330 --> 00:17:06.140 align:middle line:84%
+easily with the singular
+value decompositions.
+
+00:17:06.140 --> 00:17:08.720 align:middle line:90%
+All right.
+
+00:17:08.720 --> 00:17:11.929 align:middle line:90%
+Let's see.
+
+00:17:11.929 --> 00:17:16.760 align:middle line:84%
+So in these notes, I
+refer to reduced SVD.
+
+00:17:16.760 --> 00:17:22.069 align:middle line:84%
+What's rather interesting as a
+decomposition of the matrix A
+
+00:17:22.069 --> 00:17:26.480 align:middle line:84%
+is that it's a sum
+of r terms, where
+
+00:17:26.480 --> 00:17:29.090 align:middle line:90%
+r is the rank of the matrix.
+
+00:17:29.090 --> 00:17:33.070 align:middle line:84%
+And those r terms
+are the products
+
+00:17:33.070 --> 00:17:40.870 align:middle line:84%
+of the column vectors of u times
+the column vector transpose
+
+00:17:40.870 --> 00:17:46.120 align:middle line:84%
+of v, respectively,
+with the singular value,
+
+00:17:46.120 --> 00:17:48.110 align:middle line:90%
+sigma 1 through sigma r.
+
+00:17:48.110 --> 00:17:55.940 align:middle line:84%
+So it provides a nice way
+of thinking of a matrix.
+
+00:17:55.940 --> 00:18:02.560 align:middle line:84%
+It's simply a sum
+of rank 1 terms.
+
+00:18:02.560 --> 00:18:04.510 align:middle line:90%
+OK.
+
+00:18:04.510 --> 00:18:05.140 align:middle line:90%
+Let's see.
+
+00:18:05.140 --> 00:18:07.660 align:middle line:84%
+These lecture notes on
+linear algebra finishes
+
+00:18:07.660 --> 00:18:11.620 align:middle line:84%
+with the
+Perron-Frobenius theorem.
+
+00:18:11.620 --> 00:18:16.540 align:middle line:84%
+And this theorem
+relates to matrices
+
+00:18:16.540 --> 00:18:22.870 align:middle line:84%
+that are square with
+strictly positive elements.
+
+00:18:22.870 --> 00:18:28.470 align:middle line:84%
+And so, with such
+matrices, the theorem
+
+00:18:28.470 --> 00:18:33.960 align:middle line:84%
+states that there is an
+eigenvalue, a real eigenvalue,
+
+00:18:33.960 --> 00:18:37.890 align:middle line:84%
+lambda 0, that is
+bigger in magnitude
+
+00:18:37.890 --> 00:18:41.700 align:middle line:90%
+than any other eigenvalues.
+
+00:18:41.700 --> 00:18:47.670 align:middle line:84%
+And corresponding to this
+eigenvalue, lambda 0,
+
+00:18:47.670 --> 00:18:54.990 align:middle line:84%
+we can define an eigenvector
+v, which has elements
+
+00:18:54.990 --> 00:18:57.780 align:middle line:90%
+that are all positive as well.
+
+00:18:57.780 --> 00:19:04.500 align:middle line:84%
+And this lambda 0
+eigenvalue, the largest one,
+
+00:19:04.500 --> 00:19:10.260 align:middle line:84%
+is alone in terms of,
+all other eigenvalues
+
+00:19:10.260 --> 00:19:13.180 align:middle line:90%
+are smaller in magnitude.
+
+00:19:13.180 --> 00:19:19.140 align:middle line:84%
+And this result turns out
+to be very useful in working
+
+00:19:19.140 --> 00:19:21.480 align:middle line:90%
+with positive matrices.
+
+00:19:21.480 --> 00:19:24.920 align:middle line:84%
+The notes here go through
+the proof of that.
+
+00:19:24.920 --> 00:19:27.320 align:middle line:84%
+I guess they're
+included here, if we
+
+00:19:27.320 --> 00:19:33.140 align:middle line:84%
+wanted to get into technical
+proofs of linear algebra.
+
+00:19:33.140 --> 00:19:35.300 align:middle line:90%
+And I don't want to do that.
+
+00:19:35.300 --> 00:19:36.060 align:middle line:90%
+Let's see.
+
+00:19:36.060 --> 00:19:40.850 align:middle line:84%
+I finished these notes with just
+some mention of different news
+
+00:19:40.850 --> 00:19:48.455 align:middle line:84%
+sources that you should
+consider exploring in finance.
+
+00:19:48.455 --> 00:19:51.210 align:middle line:90%
+
+
+00:19:51.210 --> 00:19:52.880 align:middle line:84%
+Well, there's Yahoo
+Finance, which
+
+00:19:52.880 --> 00:19:57.350 align:middle line:84%
+is where we can easily
+collect price data.
+
+00:19:57.350 --> 00:20:03.470 align:middle line:84%
+But you should know that
+the Wall Street Journal is--
+
+00:20:03.470 --> 00:20:05.780 align:middle line:84%
+you can get a free
+subscription with that
+
+00:20:05.780 --> 00:20:11.010 align:middle line:84%
+through your Kerberos
+password-- or ID, rather.
+
+00:20:11.010 --> 00:20:12.930 align:middle line:90%
+So that's very useful.
+
+00:20:12.930 --> 00:20:14.810 align:middle line:84%
+And then there are a
+number of other sites
+
+00:20:14.810 --> 00:20:17.700 align:middle line:90%
+that you may find useful.
+
+00:20:17.700 --> 00:20:19.580 align:middle line:90%
+Now, let's see.
+
+00:20:19.580 --> 00:20:23.020 align:middle line:90%
+
+
+00:20:23.020 --> 00:20:30.100 align:middle line:84%
+In our very first
+lecture, I indicated
+
+00:20:30.100 --> 00:20:34.030 align:middle line:84%
+how we could use
+RStudio to collect
+
+00:20:34.030 --> 00:20:37.180 align:middle line:84%
+data, plot time series
+of different stocks
+
+00:20:37.180 --> 00:20:38.540 align:middle line:90%
+or other assets.
+
+00:20:38.540 --> 00:20:44.890 align:middle line:84%
+And in this lecture 2, I
+distributed this workspace,
+
+00:20:44.890 --> 00:20:55.660 align:middle line:84%
+which has R scripts and output
+for looking at portfolios
+
+00:20:55.660 --> 00:20:59.950 align:middle line:84%
+of stocks and considering
+equal-weighted portfolios
+
+00:20:59.950 --> 00:21:03.680 align:middle line:84%
+with different components
+in the equal weights.
+
+00:21:03.680 --> 00:21:21.480 align:middle line:84%
+And so if you go to the
+Rstudio Cloud project--
+
+00:21:21.480 --> 00:21:34.260 align:middle line:84%
+so with RStudio Cloud, or
+maybe it's Cloud Rstudio,
+
+00:21:34.260 --> 00:21:44.200 align:middle line:84%
+one can upload different R
+programs in this project.
+
+00:21:44.200 --> 00:21:47.730 align:middle line:84%
+And so has anyone
+in the class yet
+
+00:21:47.730 --> 00:21:54.490 align:middle line:84%
+used RStudio Cloud for
+any of the examples?
+
+00:21:54.490 --> 00:21:57.880 align:middle line:84%
+I'd like everyone to at least
+be capable of doing that.
+
+00:21:57.880 --> 00:22:01.170 align:middle line:84%
+And I'd like proof
+that it actually
+
+00:22:01.170 --> 00:22:03.100 align:middle line:90%
+works with students doing it.
+
+00:22:03.100 --> 00:22:07.590 align:middle line:84%
+So it would be great for
+some of you to consider that.
+
+00:22:07.590 --> 00:22:12.330 align:middle line:84%
+What's nice about
+this environment
+
+00:22:12.330 --> 00:22:15.520 align:middle line:84%
+is that I can give
+you an R program.
+
+00:22:15.520 --> 00:22:19.110 align:middle line:84%
+And it should run
+just by saying Run.
+
+00:22:19.110 --> 00:22:21.150 align:middle line:84%
+You don't have to
+install anything.
+
+00:22:21.150 --> 00:22:32.780 align:middle line:84%
+And with this output, there was
+one program called Script_SP500.
+
+00:22:32.780 --> 00:22:38.090 align:middle line:84%
+And there's a table of contents
+for this R script, which
+
+00:22:38.090 --> 00:22:41.420 align:middle line:84%
+says it loads libraries,
+then collects stock prices,
+
+00:22:41.420 --> 00:22:43.820 align:middle line:90%
+and then saves the workspace.
+
+00:22:43.820 --> 00:22:47.710 align:middle line:84%
+So the commands are all
+very simple in here.
+
+00:22:47.710 --> 00:22:50.720 align:middle line:90%
+
+
+00:22:50.720 --> 00:22:57.510 align:middle line:84%
+And then, with the Equal
+Weighted Portfolios script,
+
+00:22:57.510 --> 00:23:01.070 align:middle line:84%
+it actually loads
+libraries and loads
+
+00:23:01.070 --> 00:23:06.510 align:middle line:84%
+the data set of stock prices
+that was just downloaded
+
+00:23:06.510 --> 00:23:08.570 align:middle line:90%
+in the other program.
+
+00:23:08.570 --> 00:23:12.830 align:middle line:90%
+And it loads the data in.
+
+00:23:12.830 --> 00:23:20.970 align:middle line:84%
+Then, in processing
+the data, I--
+
+00:23:20.970 --> 00:23:31.040 align:middle line:84%
+consider investing a portfolio
+by equally weighting allocations
+
+00:23:31.040 --> 00:23:34.460 align:middle line:84%
+to different stocks
+in the S&P 500 index.
+
+00:23:34.460 --> 00:23:40.460 align:middle line:84%
+And so, if one does this,
+these simple R commands create
+
+00:23:40.460 --> 00:23:47.210 align:middle line:84%
+the value of such a
+portfolio, where, in fact,
+
+00:23:47.210 --> 00:23:52.220 align:middle line:84%
+as indicated here,
+it's investing $1,000
+
+00:23:52.220 --> 00:23:56.180 align:middle line:90%
+at the beginning of 2019.
+
+00:23:56.180 --> 00:24:01.580 align:middle line:84%
+And as an alternative to just
+equally weighting across the S&P
+
+00:24:01.580 --> 00:24:08.990 align:middle line:84%
+500 stocks, I looked at
+the Amazon, Apple, NVIDIA--
+
+00:24:08.990 --> 00:24:10.680 align:middle line:90%
+or no, Netflix and Google.
+
+00:24:10.680 --> 00:24:12.530 align:middle line:84%
+These were actually
+the really hot stocks
+
+00:24:12.530 --> 00:24:14.440 align:middle line:90%
+about four or five years ago.
+
+00:24:14.440 --> 00:24:19.300 align:middle line:84%
+And basically, look at equal
+weighting of all these.
+
+00:24:19.300 --> 00:24:24.580 align:middle line:84%
+And so here's how
+the investment, equal
+
+00:24:24.580 --> 00:24:26.800 align:middle line:84%
+weighted at the
+beginning of the period,
+
+00:24:26.800 --> 00:24:28.790 align:middle line:90%
+resulted towards the end.
+
+00:24:28.790 --> 00:24:33.160 align:middle line:84%
+So there are some interesting
+features one can see.
+
+00:24:33.160 --> 00:24:39.230 align:middle line:84%
+If one happened to be good at
+identifying stocks to invest in,
+
+00:24:39.230 --> 00:24:45.010 align:middle line:84%
+you can do much better
+than the average S&P 500.
+
+00:24:45.010 --> 00:24:49.210 align:middle line:84%
+There can be greater
+risk by investing
+
+00:24:49.210 --> 00:24:52.060 align:middle line:84%
+in a smaller number of
+stocks because you're not
+
+00:24:52.060 --> 00:24:54.040 align:middle line:90%
+so diversified.
+
+00:24:54.040 --> 00:25:03.070 align:middle line:84%
+And so you can see how
+the red graph of values
+
+00:25:03.070 --> 00:25:08.630 align:middle line:84%
+decreases rather dramatically at
+some points in the time period.
+
+00:25:08.630 --> 00:25:15.840 align:middle line:84%
+And if one looks at what
+happened to the $250 invested
+
+00:25:15.840 --> 00:25:18.960 align:middle line:84%
+in each of those
+four stocks, this
+
+00:25:18.960 --> 00:25:21.832 align:middle line:84%
+is what happened
+over this, whatever
+
+00:25:21.832 --> 00:25:25.390 align:middle line:84%
+it is, five-year period,
+or almost five-year period.
+
+00:25:25.390 --> 00:25:29.650 align:middle line:84%
+And this raises some
+interesting issues for us,
+
+00:25:29.650 --> 00:25:37.590 align:middle line:84%
+which is, when considering
+portfolio construction, maybe
+
+00:25:37.590 --> 00:25:40.890 align:middle line:84%
+equally weighting allocations
+across some assets
+
+00:25:40.890 --> 00:25:42.700 align:middle line:90%
+is a good thing to start with.
+
+00:25:42.700 --> 00:25:48.600 align:middle line:90%
+But what happens over time?
+
+00:25:48.600 --> 00:25:55.380 align:middle line:84%
+Well, in this case, Apple
+outgrew the other allocations
+
+00:25:55.380 --> 00:25:56.560 align:middle line:90%
+substantially.
+
+00:25:56.560 --> 00:26:01.260 align:middle line:84%
+And so the degree of
+diversification in the portfolio
+
+00:26:01.260 --> 00:26:04.590 align:middle line:84%
+is getting lower because we
+have a greater concentration
+
+00:26:04.590 --> 00:26:05.980 align:middle line:90%
+in that one stock.
+
+00:26:05.980 --> 00:26:09.630 align:middle line:84%
+So what we'd like
+to do, perhaps,
+
+00:26:09.630 --> 00:26:15.590 align:middle line:90%
+is to rebalance the portfolio.
+
+00:26:15.590 --> 00:26:21.590 align:middle line:84%
+And different approaches
+to rebalancing portfolios
+
+00:26:21.590 --> 00:26:23.790 align:middle line:90%
+can be considered.
+
+00:26:23.790 --> 00:26:31.430 align:middle line:84%
+Now, if we were to
+consider rebalancing
+
+00:26:31.430 --> 00:26:40.610 align:middle line:84%
+every day the investments in
+these four stocks, then would
+
+00:26:40.610 --> 00:26:45.360 align:middle line:84%
+you think that's a really good
+way to rebalance, to do it very,
+
+00:26:45.360 --> 00:26:46.760 align:middle line:90%
+very frequently?
+
+00:26:46.760 --> 00:26:48.355 align:middle line:90%
+And why or why not?
+
+00:26:48.355 --> 00:26:51.290 align:middle line:90%
+
+
+00:26:51.290 --> 00:26:51.830 align:middle line:90%
+Yes?
+
+00:26:51.830 --> 00:26:53.663 align:middle line:84%
+AUDIENCE: Well, if you
+do it too frequently,
+
+00:26:53.663 --> 00:26:57.590 align:middle line:84%
+then variances like
+2022 can affect it.
+
+00:26:57.590 --> 00:27:01.280 align:middle line:84%
+It won't be very good
+for the big picture.
+
+00:27:01.280 --> 00:27:02.540 align:middle line:90%
+PETER KEMPTHORNE: Yeah.
+
+00:27:02.540 --> 00:27:06.080 align:middle line:84%
+If you rebalance too
+quickly, then you're
+
+00:27:06.080 --> 00:27:12.790 align:middle line:84%
+taking funds away from winners
+and giving those to losers.
+
+00:27:12.790 --> 00:27:17.230 align:middle line:84%
+And so you're
+equalizing allocations
+
+00:27:17.230 --> 00:27:22.540 align:middle line:84%
+in a way that doesn't benefit
+from short-term trends
+
+00:27:22.540 --> 00:27:25.370 align:middle line:84%
+or strengths in
+different assets.
+
+00:27:25.370 --> 00:27:33.520 align:middle line:84%
+So that extreme is probably
+not something you want to do.
+
+00:27:33.520 --> 00:27:35.920 align:middle line:84%
+One thing that's
+rather interesting
+
+00:27:35.920 --> 00:27:40.940 align:middle line:84%
+is just how, if you do
+not do any rebalancing,
+
+00:27:40.940 --> 00:27:47.900 align:middle line:84%
+then the portfolios become
+rather undiversified.
+
+00:27:47.900 --> 00:27:52.960 align:middle line:84%
+And so the risk level is
+actually probably increasing
+
+00:27:52.960 --> 00:27:54.260 align:middle line:90%
+over time here.
+
+00:27:54.260 --> 00:27:57.850 align:middle line:84%
+So one way of
+rebalancing portfolios
+
+00:27:57.850 --> 00:28:01.490 align:middle line:84%
+is trying to maintain a certain
+risk level for the portfolio.
+
+00:28:01.490 --> 00:28:08.490 align:middle line:84%
+And such an objective would
+require periodic rebalancing.
+
+00:28:08.490 --> 00:28:10.830 align:middle line:90%
+OK.
+
+00:28:10.830 --> 00:28:26.530 align:middle line:84%
+Well, let's move on, then, to
+the topic of probability theory.
+
+00:28:26.530 --> 00:28:31.770 align:middle line:84%
+And so what I want to do in
+this note is to just give you
+
+00:28:31.770 --> 00:28:35.040 align:middle line:90%
+a quick overview--
+
+00:28:35.040 --> 00:28:38.160 align:middle line:84%
+basically, a review
+of probability
+
+00:28:38.160 --> 00:28:41.550 align:middle line:84%
+concepts that you probably
+are very familiar with.
+
+00:28:41.550 --> 00:28:47.610 align:middle line:84%
+And so, with
+probability theory, it's
+
+00:28:47.610 --> 00:28:54.810 align:middle line:84%
+customary to distinguish between
+discrete-valued random variables
+
+00:28:54.810 --> 00:28:57.070 align:middle line:90%
+and continuous ones.
+
+00:28:57.070 --> 00:29:00.720 align:middle line:84%
+And so, with discrete-valued
+random variables,
+
+00:29:00.720 --> 00:29:04.080 align:middle line:84%
+those can be just
+events occurring or not,
+
+00:29:04.080 --> 00:29:08.960 align:middle line:84%
+like a default of a
+counterparty, or maybe
+
+00:29:08.960 --> 00:29:11.120 align:middle line:84%
+the Federal Open
+Market Committee
+
+00:29:11.120 --> 00:29:14.003 align:middle line:90%
+deciding on a Fed funds rate.
+
+00:29:14.003 --> 00:29:18.410 align:middle line:90%
+
+
+00:29:18.410 --> 00:29:25.350 align:middle line:84%
+In thinking of individual stocks
+and their dynamics intraday,
+
+00:29:25.350 --> 00:29:28.940 align:middle line:84%
+one can think of different
+orders for a stock
+
+00:29:28.940 --> 00:29:33.860 align:middle line:84%
+to buy or sell
+coming in at random
+
+00:29:33.860 --> 00:29:36.540 align:middle line:84%
+and wondering what side
+those would be on--
+
+00:29:36.540 --> 00:29:42.050 align:middle line:84%
+also, perhaps, the sheer size
+of the next market order.
+
+00:29:42.050 --> 00:29:44.630 align:middle line:90%
+
+
+00:29:44.630 --> 00:29:49.820 align:middle line:84%
+Now, it used to be that these
+were always discrete outcomes.
+
+00:29:49.820 --> 00:29:51.950 align:middle line:84%
+Like, share size, it
+turns out you can actually
+
+00:29:51.950 --> 00:29:55.860 align:middle line:84%
+now invest fractional
+shares in different stocks.
+
+00:29:55.860 --> 00:30:02.150 align:middle line:84%
+So the market's become
+more rich in that way.
+
+00:30:02.150 --> 00:30:05.500 align:middle line:84%
+But, importantly, we
+do want to distinguish
+
+00:30:05.500 --> 00:30:10.390 align:middle line:84%
+between discrete outcomes
+that have probabilities
+
+00:30:10.390 --> 00:30:14.930 align:middle line:84%
+with respective outcomes, versus
+continuous random variables,
+
+00:30:14.930 --> 00:30:19.210 align:middle line:84%
+where we're thinking
+of values that
+
+00:30:19.210 --> 00:30:23.570 align:middle line:84%
+could take on any value
+in some interval or range.
+
+00:30:23.570 --> 00:30:28.870 align:middle line:84%
+And so, in thinking about
+the values of assets,
+
+00:30:28.870 --> 00:30:33.620 align:middle line:84%
+we can think of the value
+being in a continuous range.
+
+00:30:33.620 --> 00:30:41.560 align:middle line:84%
+Also, timing of events is
+an important random variable
+
+00:30:41.560 --> 00:30:44.480 align:middle line:90%
+that is continuous as well.
+
+00:30:44.480 --> 00:30:48.880 align:middle line:84%
+So one might consider,
+what is the waiting
+
+00:30:48.880 --> 00:30:55.810 align:middle line:84%
+time to the next market
+order for Apple stock?
+
+00:30:55.810 --> 00:30:59.800 align:middle line:84%
+Mixed variables
+can arise where we
+
+00:30:59.800 --> 00:31:05.400 align:middle line:84%
+think of a stock having some
+value, where it's generally
+
+00:31:05.400 --> 00:31:09.960 align:middle line:84%
+a positive value, but it could
+go bankrupt, in which case
+
+00:31:09.960 --> 00:31:12.870 align:middle line:84%
+there would perhaps be
+some discrete probability
+
+00:31:12.870 --> 00:31:16.560 align:middle line:90%
+of bankruptcy for a stock.
+
+00:31:16.560 --> 00:31:23.670 align:middle line:84%
+Now, with probability models, we
+use probability mass functions
+
+00:31:23.670 --> 00:31:28.380 align:middle line:84%
+for discrete variables
+and probability densities
+
+00:31:28.380 --> 00:31:29.830 align:middle line:90%
+for continuous.
+
+00:31:29.830 --> 00:31:32.640 align:middle line:84%
+And so we use
+calculus to calculate
+
+00:31:32.640 --> 00:31:37.590 align:middle line:84%
+continuous probabilities
+in different intervals.
+
+00:31:37.590 --> 00:31:42.990 align:middle line:84%
+And, importantly, the
+cumulative distribution function
+
+00:31:42.990 --> 00:31:48.870 align:middle line:90%
+is a very important tool.
+
+00:31:48.870 --> 00:31:52.260 align:middle line:90%
+So if we write F sub x of--
+
+00:31:52.260 --> 00:31:53.580 align:middle line:90%
+let me write c--
+
+00:31:53.580 --> 00:31:56.640 align:middle line:84%
+is equal to the probability
+that the random variable x
+
+00:31:56.640 --> 00:32:01.380 align:middle line:84%
+is less than or equal to
+c, as a function of c,
+
+00:32:01.380 --> 00:32:13.170 align:middle line:84%
+this value is going to be no
+smaller than 0 and no larger
+
+00:32:13.170 --> 00:32:14.530 align:middle line:90%
+than 1.
+
+00:32:14.530 --> 00:32:21.180 align:middle line:84%
+And it will be monotone
+increasing in c.
+
+00:32:21.180 --> 00:32:25.200 align:middle line:84%
+And distributions
+will be uniquely
+
+00:32:25.200 --> 00:32:29.490 align:middle line:84%
+specified by specifying
+their cumulative distribution
+
+00:32:29.490 --> 00:32:30.520 align:middle line:90%
+function.
+
+00:32:30.520 --> 00:32:34.817 align:middle line:84%
+So these are very
+simple concepts.
+
+00:32:34.817 --> 00:32:38.050 align:middle line:90%
+
+
+00:32:38.050 --> 00:32:39.770 align:middle line:84%
+There are expectations
+in moments.
+
+00:32:39.770 --> 00:32:43.470 align:middle line:90%
+
+
+00:32:43.470 --> 00:32:47.966 align:middle line:84%
+One just-- I'll just
+call this an anecdote--
+
+00:32:47.966 --> 00:32:50.820 align:middle line:90%
+
+
+00:32:50.820 --> 00:32:57.800 align:middle line:84%
+if x is continuous
+random variable,
+
+00:32:57.800 --> 00:33:06.620 align:middle line:84%
+and we define y equal to f of x,
+so we consider the probability
+
+00:33:06.620 --> 00:33:13.220 align:middle line:84%
+integral transform of
+the random variable x,
+
+00:33:13.220 --> 00:33:15.413 align:middle line:90%
+what is the distribution of y?
+
+00:33:15.413 --> 00:33:36.050 align:middle line:90%
+
+
+00:33:36.050 --> 00:33:36.900 align:middle line:90%
+OK.
+
+00:33:36.900 --> 00:33:37.650 align:middle line:90%
+AUDIENCE: Uniform.
+
+00:33:37.650 --> 00:33:40.032 align:middle line:84%
+PETER KEMPTHORNE:
+Yeah, it's uniform.
+
+00:33:40.032 --> 00:33:41.570 align:middle line:90%
+AUDIENCE: On 0.
+
+00:33:41.570 --> 00:33:43.760 align:middle line:90%
+It's uniform on 0.
+
+00:33:43.760 --> 00:33:45.650 align:middle line:84%
+PETER KEMPTHORNE:
+So what's really
+
+00:33:45.650 --> 00:33:51.530 align:middle line:84%
+neat is that a
+monotone transform
+
+00:33:51.530 --> 00:33:53.690 align:middle line:84%
+of the random
+variable x, whatever
+
+00:33:53.690 --> 00:33:57.190 align:middle line:84%
+x is, so long as we know
+what the distribution is,
+
+00:33:57.190 --> 00:33:59.720 align:middle line:90%
+transforms that to a uniform.
+
+00:33:59.720 --> 00:34:04.330 align:middle line:84%
+And so this is true
+regardless of what F
+
+00:34:04.330 --> 00:34:07.150 align:middle line:90%
+is, so long as F is continuous.
+
+00:34:07.150 --> 00:34:12.683 align:middle line:84%
+And that property can turn
+out to be very, very useful.
+
+00:34:12.683 --> 00:34:15.340 align:middle line:90%
+
+
+00:34:15.340 --> 00:34:20.320 align:middle line:84%
+One issue could be, oh, suppose
+you have a random sample of data
+
+00:34:20.320 --> 00:34:22.600 align:middle line:84%
+from some distribution,
+or you think
+
+00:34:22.600 --> 00:34:24.550 align:middle line:90%
+it's from some distribution.
+
+00:34:24.550 --> 00:34:28.580 align:middle line:84%
+Is the sample consistent with
+that distribution or not?
+
+00:34:28.580 --> 00:34:32.080 align:middle line:84%
+Well, if you did this
+probability integral transform,
+
+00:34:32.080 --> 00:34:37.360 align:middle line:84%
+it should lead to a uniform
+distribution, which may or may
+
+00:34:37.360 --> 00:34:39.409 align:middle line:90%
+not be realized.
+
+00:34:39.409 --> 00:34:43.969 align:middle line:84%
+So anyway, that turns
+out to be quite useful.
+
+00:34:43.969 --> 00:34:51.040 align:middle line:84%
+Now, we have expectations and
+moments of random variables.
+
+00:34:51.040 --> 00:34:54.280 align:middle line:84%
+Basically, the mean
+of random variables,
+
+00:34:54.280 --> 00:34:56.530 align:middle line:84%
+the probability-weighted
+outcome,
+
+00:34:56.530 --> 00:35:00.610 align:middle line:84%
+we can generalize the
+mean to looking at,
+
+00:35:00.610 --> 00:35:03.660 align:middle line:84%
+which is the first
+moment, to consider
+
+00:35:03.660 --> 00:35:08.250 align:middle line:84%
+the probability-weighted
+average of the k-th power, where
+
+00:35:08.250 --> 00:35:09.820 align:middle line:90%
+k is an integer.
+
+00:35:09.820 --> 00:35:14.190 align:middle line:84%
+And the variance
+of random variables
+
+00:35:14.190 --> 00:35:17.160 align:middle line:84%
+is a useful measure
+of uncertainty
+
+00:35:17.160 --> 00:35:19.720 align:middle line:90%
+about the mean value.
+
+00:35:19.720 --> 00:35:25.410 align:middle line:84%
+And there's a nice formula
+for the variance, which
+
+00:35:25.410 --> 00:35:30.240 align:middle line:84%
+is the squared distance
+from the mean in terms
+
+00:35:30.240 --> 00:35:34.510 align:middle line:84%
+of the average squared minus
+the square of the average.
+
+00:35:34.510 --> 00:35:39.210 align:middle line:84%
+So these are useful
+formulas that
+
+00:35:39.210 --> 00:35:42.580 align:middle line:90%
+may be useful at certain times.
+
+00:35:42.580 --> 00:35:46.020 align:middle line:84%
+Now in terms of
+measuring uncertainty
+
+00:35:46.020 --> 00:35:51.980 align:middle line:84%
+about outcomes, instead
+of the variance,
+
+00:35:51.980 --> 00:35:53.870 align:middle line:84%
+taking the square
+root of the variance
+
+00:35:53.870 --> 00:36:01.080 align:middle line:84%
+is useful because its scale is
+the same as the original units.
+
+00:36:01.080 --> 00:36:05.060 align:middle line:84%
+Most people don't think
+in terms of squared units
+
+00:36:05.060 --> 00:36:07.670 align:middle line:90%
+with any problem.
+
+00:36:07.670 --> 00:36:12.060 align:middle line:84%
+And so, instead of dealing
+with the variance directly,
+
+00:36:12.060 --> 00:36:15.080 align:middle line:84%
+we'll commonly take
+the square root
+
+00:36:15.080 --> 00:36:20.010 align:middle line:84%
+of that to have the same units
+as our original variable, x.
+
+00:36:20.010 --> 00:36:26.420 align:middle line:84%
+Now, with the
+skewness and kurtosis,
+
+00:36:26.420 --> 00:36:33.410 align:middle line:84%
+we're looking at measures of
+the shape of the distribution.
+
+00:36:33.410 --> 00:36:38.000 align:middle line:84%
+And with skewness, as
+you might anticipate,
+
+00:36:38.000 --> 00:36:42.870 align:middle line:84%
+that detects asymmetry
+in a distribution.
+
+00:36:42.870 --> 00:36:47.330 align:middle line:84%
+And so, something that's
+nice to think about
+
+00:36:47.330 --> 00:36:55.180 align:middle line:84%
+is, if we have a random variable
+x, where the expected value of x
+
+00:36:55.180 --> 00:37:04.510 align:middle line:84%
+is equal to mu, and the square
+root of the variance is sigma,
+
+00:37:04.510 --> 00:37:12.680 align:middle line:84%
+if we take z equal to
+x minus mu over sigma,
+
+00:37:12.680 --> 00:37:18.640 align:middle line:84%
+this is a standardization
+of the random variable.
+
+00:37:18.640 --> 00:37:23.090 align:middle line:84%
+The expected value
+of z will equal 0.
+
+00:37:23.090 --> 00:37:29.530 align:middle line:84%
+And the variance
+of z will equal 1,
+
+00:37:29.530 --> 00:37:32.180 align:middle line:84%
+as will the square
+root of the variance.
+
+00:37:32.180 --> 00:37:36.980 align:middle line:84%
+And for the skewness,
+which I use--
+
+00:37:36.980 --> 00:37:38.680 align:middle line:90%
+I guess it's a gamma--
+
+00:37:38.680 --> 00:37:43.430 align:middle line:84%
+gamma is equal to the
+expected value of z cubed.
+
+00:37:43.430 --> 00:37:51.090 align:middle line:84%
+And the kurtosis is equal to the
+expected value of z to the 4th.
+
+00:37:51.090 --> 00:37:59.580 align:middle line:84%
+So the skewness and kurtosis
+parameters of a distribution
+
+00:37:59.580 --> 00:38:01.480 align:middle line:90%
+can measure asymmetry.
+
+00:38:01.480 --> 00:38:05.130 align:middle line:84%
+At least, if the cubed
+value has more weight
+
+00:38:05.130 --> 00:38:08.760 align:middle line:84%
+on the positive end
+than the negative end,
+
+00:38:08.760 --> 00:38:11.740 align:middle line:90%
+it'll be skewed to the right.
+
+00:38:11.740 --> 00:38:18.520 align:middle line:84%
+And with the kappa, we're
+looking at z to the 4th.
+
+00:38:18.520 --> 00:38:23.140 align:middle line:84%
+So we're looking at, basically,
+how heavy are the tails?
+
+00:38:23.140 --> 00:38:32.040 align:middle line:84%
+And for a Gaussian
+distribution, kappa
+
+00:38:32.040 --> 00:38:39.630 align:middle line:84%
+is equal to 3 for a normal,
+0, 1, or any normal.
+
+00:38:39.630 --> 00:38:44.500 align:middle line:90%
+And gamma is equal to 0.
+
+00:38:44.500 --> 00:38:47.330 align:middle line:84%
+So anyway, so these
+other parameters
+
+00:38:47.330 --> 00:38:51.020 align:middle line:84%
+are useful for
+characterizing distributions
+
+00:38:51.020 --> 00:38:53.930 align:middle line:90%
+that are not Gaussian--
+
+00:38:53.930 --> 00:38:55.640 align:middle line:84%
+non-Gaussian in
+terms of, perhaps,
+
+00:38:55.640 --> 00:38:57.940 align:middle line:90%
+skewness or heavier tails.
+
+00:38:57.940 --> 00:39:01.220 align:middle line:90%
+
+
+00:39:01.220 --> 00:39:01.830 align:middle line:90%
+All right.
+
+00:39:01.830 --> 00:39:08.020 align:middle line:84%
+Well, let's just review
+Gaussian distributions.
+
+00:39:08.020 --> 00:39:10.790 align:middle line:90%
+
+
+00:39:10.790 --> 00:39:14.840 align:middle line:84%
+I hope this formula for
+the density of a Gaussian
+
+00:39:14.840 --> 00:39:18.080 align:middle line:84%
+is very familiar
+to everyone here.
+
+00:39:18.080 --> 00:39:29.510 align:middle line:84%
+We basically have, the density
+function is equal to 1 over root
+
+00:39:29.510 --> 00:39:38.660 align:middle line:84%
+2 pi sigma e to the minus 1/2
+x minus mu over sigma squared.
+
+00:39:38.660 --> 00:39:43.620 align:middle line:90%
+And so the mean is mu.
+
+00:39:43.620 --> 00:39:45.760 align:middle line:90%
+The variance is sigma squared.
+
+00:39:45.760 --> 00:39:49.540 align:middle line:84%
+And the density
+function is symmetrical,
+
+00:39:49.540 --> 00:39:52.880 align:middle line:90%
+with a maximum at the mean, mu.
+
+00:39:52.880 --> 00:39:57.880 align:middle line:84%
+And the points of
+inflection are actually
+
+00:39:57.880 --> 00:39:59.750 align:middle line:90%
+at plus and minus sigma.
+
+00:39:59.750 --> 00:40:09.370 align:middle line:84%
+So if we think of just trying to
+draw a normal density function,
+
+00:40:09.370 --> 00:40:13.430 align:middle line:90%
+then the peak is at the mean.
+
+00:40:13.430 --> 00:40:19.780 align:middle line:84%
+And the point of inflection
+where the second derivative is
+
+00:40:19.780 --> 00:40:24.070 align:middle line:84%
+0, it goes from negative
+second derivative
+
+00:40:24.070 --> 00:40:26.330 align:middle line:90%
+to a positive second derivative.
+
+00:40:26.330 --> 00:40:31.396 align:middle line:84%
+That distance is
+sigma, symmetrically.
+
+00:40:31.396 --> 00:40:35.260 align:middle line:90%
+
+
+00:40:35.260 --> 00:40:36.700 align:middle line:90%
+All right.
+
+00:40:36.700 --> 00:40:41.980 align:middle line:84%
+So let's take a look at
+the normal bell curve.
+
+00:40:41.980 --> 00:40:46.190 align:middle line:84%
+68% lies within 1
+standard deviation.
+
+00:40:46.190 --> 00:40:49.450 align:middle line:90%
+So this is whatever--
+
+00:40:49.450 --> 00:40:52.990 align:middle line:84%
+AP Statistics, you
+learn these facts.
+
+00:40:52.990 --> 00:40:55.550 align:middle line:84%
+If we go to 2 standard
+deviations from the mean,
+
+00:40:55.550 --> 00:40:57.380 align:middle line:90%
+that's 95%.
+
+00:40:57.380 --> 00:41:01.340 align:middle line:84%
+And 3 standard
+deviations is 99.7%.
+
+00:41:01.340 --> 00:41:05.560 align:middle line:90%
+So these models are--
+
+00:41:05.560 --> 00:41:08.500 align:middle line:84%
+normal models have
+these properties
+
+00:41:08.500 --> 00:41:12.070 align:middle line:84%
+of how likely different
+variations are
+
+00:41:12.070 --> 00:41:16.150 align:middle line:90%
+in standard deviation units.
+
+00:41:16.150 --> 00:41:22.300 align:middle line:84%
+Well, in finance, we'd
+like to exploit, perhaps,
+
+00:41:22.300 --> 00:41:26.290 align:middle line:84%
+Gaussian distributions
+for modeling prices.
+
+00:41:26.290 --> 00:41:34.090 align:middle line:84%
+And with a normal density
+curve, it actually
+
+00:41:34.090 --> 00:41:38.020 align:middle line:84%
+applies to x values
+that can be arbitrarily
+
+00:41:38.020 --> 00:41:40.580 align:middle line:90%
+large, negative or positive.
+
+00:41:40.580 --> 00:41:46.150 align:middle line:84%
+It's an unbounded distribution
+in terms of potential outcomes.
+
+00:41:46.150 --> 00:41:51.330 align:middle line:84%
+And so one way of dealing
+with that with, say, prices
+
+00:41:51.330 --> 00:41:57.390 align:middle line:84%
+is to consider taking
+the log of prices
+
+00:41:57.390 --> 00:42:01.080 align:middle line:84%
+and thinking of that being
+a normal distribution.
+
+00:42:01.080 --> 00:42:05.820 align:middle line:84%
+And so that
+construction corresponds
+
+00:42:05.820 --> 00:42:09.040 align:middle line:90%
+to a lognormal distribution.
+
+00:42:09.040 --> 00:42:14.580 align:middle line:84%
+And so if we have a random
+variable x that's normal,
+
+00:42:14.580 --> 00:42:18.880 align:middle line:84%
+and then we take the
+exponential of that normal,
+
+00:42:18.880 --> 00:42:23.850 align:middle line:84%
+then we say that the y
+variable is lognormal,
+
+00:42:23.850 --> 00:42:27.180 align:middle line:84%
+with the parameters mu and
+sigma squared corresponding
+
+00:42:27.180 --> 00:42:28.920 align:middle line:90%
+to the log scale.
+
+00:42:28.920 --> 00:42:35.940 align:middle line:84%
+Now, what will be
+very interesting
+
+00:42:35.940 --> 00:42:38.310 align:middle line:84%
+in subsequent
+lectures is when we
+
+00:42:38.310 --> 00:42:45.350 align:middle line:84%
+talk about stochastic
+processes that can be
+
+00:42:45.350 --> 00:42:48.690 align:middle line:90%
+applied in financial markets.
+
+00:42:48.690 --> 00:42:51.980 align:middle line:84%
+There's an important
+stochastic process
+
+00:42:51.980 --> 00:42:57.020 align:middle line:84%
+called Brownian motion,
+which many of you
+
+00:42:57.020 --> 00:42:59.810 align:middle line:84%
+probably have some
+familiarity with.
+
+00:42:59.810 --> 00:43:03.720 align:middle line:84%
+And with a Brownian
+motion process,
+
+00:43:03.720 --> 00:43:11.000 align:middle line:84%
+the increments of the
+process over time periods
+
+00:43:11.000 --> 00:43:16.590 align:middle line:84%
+has a distribution that's
+normally distributed.
+
+00:43:16.590 --> 00:43:22.370 align:middle line:84%
+And as the length of the
+increment of time increases,
+
+00:43:22.370 --> 00:43:28.560 align:middle line:84%
+both the mean and variance
+of the outcome changes.
+
+00:43:28.560 --> 00:43:31.340 align:middle line:84%
+And so this Brownian
+motion process
+
+00:43:31.340 --> 00:43:35.000 align:middle line:84%
+is a very, very
+interesting process
+
+00:43:35.000 --> 00:43:40.100 align:middle line:84%
+that is intimately related
+to Gaussian distribution.
+
+00:43:40.100 --> 00:43:44.210 align:middle line:84%
+So we'll get there
+in a few lectures.
+
+00:43:44.210 --> 00:43:51.250 align:middle line:84%
+Now, one of the useful tools
+we have in probability theory
+
+00:43:51.250 --> 00:43:58.390 align:middle line:84%
+is being able to derive the
+distributions of transformations
+
+00:43:58.390 --> 00:44:00.200 align:middle line:90%
+of random variables.
+
+00:44:00.200 --> 00:44:04.210 align:middle line:84%
+So with the lognormal, we
+have a normal distribution.
+
+00:44:04.210 --> 00:44:08.330 align:middle line:84%
+We maybe take the exponential
+of that normal outcome.
+
+00:44:08.330 --> 00:44:10.630 align:middle line:84%
+And we'd like to be
+able to write down
+
+00:44:10.630 --> 00:44:15.590 align:middle line:84%
+the density of that distribution
+and compute different features.
+
+00:44:15.590 --> 00:44:23.680 align:middle line:84%
+Well, we can think of, say,
+a random variable x being
+
+00:44:23.680 --> 00:44:27.370 align:middle line:84%
+transformed to y
+with a function g.
+
+00:44:27.370 --> 00:44:33.490 align:middle line:84%
+And then we can consider
+a function h, which
+
+00:44:33.490 --> 00:44:36.840 align:middle line:90%
+is the inverse function of g.
+
+00:44:36.840 --> 00:44:43.090 align:middle line:84%
+And as examples,
+if g is e to the x,
+
+00:44:43.090 --> 00:44:47.160 align:middle line:90%
+then h is the log function.
+
+00:44:47.160 --> 00:44:55.950 align:middle line:84%
+And with change of variables,
+if we have the CDF of x, then
+
+00:44:55.950 --> 00:45:02.310 align:middle line:84%
+the CDF of y is
+equal to the CDF of x
+
+00:45:02.310 --> 00:45:07.000 align:middle line:84%
+evaluated at the inverse
+of y on the x scale.
+
+00:45:07.000 --> 00:45:13.330 align:middle line:84%
+So this equation here is
+a simple logical statement
+
+00:45:13.330 --> 00:45:17.920 align:middle line:84%
+that everyone here, I
+think, would agree is valid.
+
+00:45:17.920 --> 00:45:23.250 align:middle line:84%
+And so, if this function
+relating the distribution
+
+00:45:23.250 --> 00:45:30.810 align:middle line:84%
+functions is true, if we take
+the derivative of the CDF
+
+00:45:30.810 --> 00:45:36.380 align:middle line:84%
+function of y, we
+get the density.
+
+00:45:36.380 --> 00:45:39.560 align:middle line:84%
+And then we just have
+to apply the chain rule
+
+00:45:39.560 --> 00:45:45.080 align:middle line:84%
+on the right-hand
+side, the density of x
+
+00:45:45.080 --> 00:45:47.430 align:middle line:90%
+evaluated at h of y.
+
+00:45:47.430 --> 00:45:52.530 align:middle line:84%
+But then we also need to have
+the chain rule for h in there.
+
+00:45:52.530 --> 00:46:04.530 align:middle line:84%
+So with this formula,
+it's all familiar.
+
+00:46:04.530 --> 00:46:11.810 align:middle line:84%
+But if we have f of x is
+equal to the integral minus
+
+00:46:11.810 --> 00:46:21.620 align:middle line:84%
+infinity to x of f of t
+dt, then the derivative
+
+00:46:21.620 --> 00:46:27.380 align:middle line:84%
+of f evaluated at x turns
+out to be equal to f
+
+00:46:27.380 --> 00:46:30.685 align:middle line:90%
+of t evaluated at t equal to x.
+
+00:46:30.685 --> 00:46:33.190 align:middle line:90%
+
+
+00:46:33.190 --> 00:46:37.240 align:middle line:84%
+So the cumulative
+integral has a derivative
+
+00:46:37.240 --> 00:46:39.470 align:middle line:84%
+equal to the argument
+of the integral.
+
+00:46:39.470 --> 00:46:41.750 align:middle line:90%
+So this is easy.
+
+00:46:41.750 --> 00:46:44.920 align:middle line:84%
+And we can use this to
+get the density function
+
+00:46:44.920 --> 00:46:48.580 align:middle line:90%
+for a lognormal distribution.
+
+00:46:48.580 --> 00:46:56.180 align:middle line:84%
+And here's the density of
+the lognormal distribution.
+
+00:46:56.180 --> 00:47:00.380 align:middle line:84%
+It has the same form as
+the Gaussian density,
+
+00:47:00.380 --> 00:47:05.110 align:middle line:90%
+plugging in log y for x.
+
+00:47:05.110 --> 00:47:11.050 align:middle line:84%
+But then we need to multiply
+that by the chain rules,
+
+00:47:11.050 --> 00:47:18.175 align:middle line:84%
+or the derivative of h, with
+respect to y, which is 1 over y.
+
+00:47:18.175 --> 00:47:21.460 align:middle line:84%
+So here's the
+lognormal distribution.
+
+00:47:21.460 --> 00:47:28.090 align:middle line:84%
+And as an example, I chose
+a mean log value of 0.2
+
+00:47:28.090 --> 00:47:33.540 align:middle line:84%
+and a SD on the
+log scale of 0.4.
+
+00:47:33.540 --> 00:47:38.943 align:middle line:84%
+And as you work with different
+distributions, you may have--
+
+00:47:38.943 --> 00:47:43.320 align:middle line:90%
+
+
+00:47:43.320 --> 00:47:45.150 align:middle line:84%
+not suggestions,
+but you may find
+
+00:47:45.150 --> 00:47:49.840 align:middle line:84%
+it useful to consider
+specific parameter values.
+
+00:47:49.840 --> 00:47:56.880 align:middle line:84%
+Here, I'm thinking
+that if one has a--
+
+00:47:56.880 --> 00:48:02.130 align:middle line:84%
+if we think of, say,
+x of 0 equaling 1
+
+00:48:02.130 --> 00:48:09.360 align:middle line:84%
+and x of 1 being
+distributed as a lognormal,
+
+00:48:09.360 --> 00:48:14.350 align:middle line:84%
+with mu equal to 0.2
+and sigma equal to 0.4,
+
+00:48:14.350 --> 00:48:20.910 align:middle line:84%
+then this lognormal
+distribution can
+
+00:48:20.910 --> 00:48:28.740 align:middle line:84%
+correspond to a one-year
+period where, on the log scale,
+
+00:48:28.740 --> 00:48:35.840 align:middle line:84%
+we expect a mean change on
+the log scale to be 0.2,
+
+00:48:35.840 --> 00:48:40.350 align:middle line:84%
+and with standard
+deviation of 0.4.
+
+00:48:40.350 --> 00:48:47.000 align:middle line:84%
+So this would potentially
+be relevant for an asset
+
+00:48:47.000 --> 00:48:49.550 align:middle line:84%
+and looking at its
+percentage change
+
+00:48:49.550 --> 00:48:53.780 align:middle line:84%
+on the log scale over 1
+year, with an annualized
+
+00:48:53.780 --> 00:48:56.930 align:middle line:84%
+return of about
+20% and annualized
+
+00:48:56.930 --> 00:48:58.910 align:middle line:90%
+standard deviation of 0.4.
+
+00:48:58.910 --> 00:49:04.040 align:middle line:84%
+Well, if we draw vertical
+lines in this distribution
+
+00:49:04.040 --> 00:49:08.390 align:middle line:84%
+space, or sample space,
+of the lognormal--
+
+00:49:08.390 --> 00:49:12.380 align:middle line:84%
+here, I've just drawn
+symmetrical percentiles--
+
+00:49:12.380 --> 00:49:18.020 align:middle line:84%
+25th and 75th percentiles,
+and then the 5th and 95th
+
+00:49:18.020 --> 00:49:19.770 align:middle line:90%
+percentiles in red.
+
+00:49:19.770 --> 00:49:24.170 align:middle line:84%
+And it's obvious that
+it's asymmetrical.
+
+00:49:24.170 --> 00:49:34.720 align:middle line:84%
+And what's useful, actually,
+with different distributions
+
+00:49:34.720 --> 00:49:38.710 align:middle line:84%
+is being able to calculate
+quantities of interest
+
+00:49:38.710 --> 00:49:39.680 align:middle line:90%
+in finance.
+
+00:49:39.680 --> 00:49:48.130 align:middle line:84%
+And so here's a nice example of
+a financial computation, where
+
+00:49:48.130 --> 00:49:54.880 align:middle line:84%
+we consider a call option to buy
+an asset at some terminal time,
+
+00:49:54.880 --> 00:50:01.580 align:middle line:84%
+capital T. And the strike price
+is going to be at price K.
+
+00:50:01.580 --> 00:50:09.940 align:middle line:84%
+And so if we think of X being
+the random variable of what
+
+00:50:09.940 --> 00:50:14.410 align:middle line:84%
+the time T price
+is, then the payoff
+
+00:50:14.410 --> 00:50:22.360 align:middle line:84%
+is going to be equal to X minus
+K, the value minus the strike
+
+00:50:22.360 --> 00:50:28.490 align:middle line:84%
+price, if that's positive, or
+it won't be worth anything.
+
+00:50:28.490 --> 00:50:33.713 align:middle line:90%
+So if we have, at time T--
+
+00:50:33.713 --> 00:50:36.460 align:middle line:90%
+
+
+00:50:36.460 --> 00:50:40.600 align:middle line:84%
+if we were to draw here
+as a function, P sub T--
+
+00:50:40.600 --> 00:50:43.630 align:middle line:90%
+or sorry, X, I guess--
+
+00:50:43.630 --> 00:50:47.530 align:middle line:84%
+and there's a strike
+price here, then
+
+00:50:47.530 --> 00:50:50.230 align:middle line:84%
+we would have the
+0 value up to K.
+
+00:50:50.230 --> 00:50:58.400 align:middle line:84%
+And then we'd have X minus K
+be giving this option payoff.
+
+00:50:58.400 --> 00:51:05.050 align:middle line:84%
+Now, you'll hear Vasiliy and
+Jake talk about the hockey stick
+
+00:51:05.050 --> 00:51:08.150 align:middle line:90%
+payoff function of options.
+
+00:51:08.150 --> 00:51:11.480 align:middle line:84%
+And so this is what
+that comes from.
+
+00:51:11.480 --> 00:51:18.520 align:middle line:84%
+Now, what's interesting to
+know is this theorem here
+
+00:51:18.520 --> 00:51:24.360 align:middle line:84%
+says that if we have a
+density function little f,
+
+00:51:24.360 --> 00:51:30.960 align:middle line:84%
+with CDF capital F, for the
+outcome at time capital T,
+
+00:51:30.960 --> 00:51:37.350 align:middle line:84%
+then the expected
+value of this payoff
+
+00:51:37.350 --> 00:51:41.820 align:middle line:84%
+is equal to this
+integral from the strike
+
+00:51:41.820 --> 00:51:45.990 align:middle line:90%
+to infinity of 1 minus F of x.
+
+00:51:45.990 --> 00:51:55.050 align:middle line:84%
+And the proof of this
+is done by considering
+
+00:51:55.050 --> 00:52:02.940 align:middle line:84%
+a finite upper limit, M, capital
+M, and then integrating by parts
+
+00:52:02.940 --> 00:52:05.080 align:middle line:90%
+and getting a formula here.
+
+00:52:05.080 --> 00:52:11.040 align:middle line:84%
+So it's an interesting
+result that if we
+
+00:52:11.040 --> 00:52:22.260 align:middle line:84%
+know the terminal time T
+random price of an asset,
+
+00:52:22.260 --> 00:52:28.220 align:middle line:84%
+then a call option on
+that terminal value
+
+00:52:28.220 --> 00:52:32.000 align:middle line:90%
+will have this expected value.
+
+00:52:32.000 --> 00:52:39.470 align:middle line:84%
+So those of you who actually
+have some advanced probability
+
+00:52:39.470 --> 00:52:52.160 align:middle line:84%
+coursework may notice that when
+you are looking at the expected
+
+00:52:52.160 --> 00:52:55.190 align:middle line:84%
+value of a positive
+random variable,
+
+00:52:55.190 --> 00:52:58.550 align:middle line:84%
+you can sometimes express
+that as an integral
+
+00:52:58.550 --> 00:53:06.600 align:middle line:84%
+of the complementary probability
+of exceeding that value.
+
+00:53:06.600 --> 00:53:11.240 align:middle line:84%
+And so that result ends
+up being applicable
+
+00:53:11.240 --> 00:53:14.090 align:middle line:90%
+here in a very nice way.
+
+00:53:14.090 --> 00:53:17.990 align:middle line:84%
+Now, with a normal
+distribution for X,
+
+00:53:17.990 --> 00:53:22.190 align:middle line:84%
+we get this formula coming
+out for that call option.
+
+00:53:22.190 --> 00:53:27.410 align:middle line:84%
+And if we have a
+lognormal, we get
+
+00:53:27.410 --> 00:53:31.810 align:middle line:84%
+this different result. So
+knowing the distribution
+
+00:53:31.810 --> 00:53:36.910 align:middle line:84%
+affects what the
+option price is.
+
+00:53:36.910 --> 00:53:42.370 align:middle line:84%
+Now, in probability
+theory, we make
+
+00:53:42.370 --> 00:53:45.400 align:middle line:84%
+use of moment-generating
+functions, which,
+
+00:53:45.400 --> 00:53:48.610 align:middle line:84%
+I guess, when I first learned
+of these, I thought, well,
+
+00:53:48.610 --> 00:53:53.000 align:middle line:84%
+nice tool, but I
+don't really care.
+
+00:53:53.000 --> 00:53:56.390 align:middle line:84%
+At least, it's a highly
+technical tool to use.
+
+00:53:56.390 --> 00:54:01.510 align:middle line:84%
+However, it turns out these
+are incredibly useful,
+
+00:54:01.510 --> 00:54:03.410 align:middle line:90%
+moment-generating functions.
+
+00:54:03.410 --> 00:54:07.570 align:middle line:84%
+And the definition of the
+moment-generating function
+
+00:54:07.570 --> 00:54:18.600 align:middle line:84%
+is given by looking at just the
+expected value of e to the tx.
+
+00:54:18.600 --> 00:54:21.330 align:middle line:90%
+
+
+00:54:21.330 --> 00:54:31.080 align:middle line:84%
+And we can expand this argument
+in a Taylor series, which
+
+00:54:31.080 --> 00:54:37.840 align:middle line:84%
+is done on the first line there,
+and just take the expectation.
+
+00:54:37.840 --> 00:54:46.350 align:middle line:84%
+Now, something that we should
+be questioning, perhaps,
+
+00:54:46.350 --> 00:54:52.020 align:middle line:84%
+is, do moment-generating
+functions always exist?
+
+00:54:52.020 --> 00:54:59.550 align:middle line:84%
+And by that, I mean, do we get a
+finite-valued function, mx of t,
+
+00:54:59.550 --> 00:55:01.886 align:middle line:90%
+for all random variables?
+
+00:55:01.886 --> 00:55:16.560 align:middle line:90%
+
+
+00:55:16.560 --> 00:55:17.060 align:middle line:90%
+OK.
+
+00:55:17.060 --> 00:55:19.580 align:middle line:90%
+
+
+00:55:19.580 --> 00:55:21.710 align:middle line:90%
+AUDIENCE: No?
+
+00:55:21.710 --> 00:55:22.880 align:middle line:90%
+Sorry.
+
+00:55:22.880 --> 00:55:24.120 align:middle line:90%
+AUDIENCE: No, that's fine.
+
+00:55:24.120 --> 00:55:24.900 align:middle line:90%
+No, that's fine.
+
+00:55:24.900 --> 00:55:26.335 align:middle line:90%
+That's fine.
+
+00:55:26.335 --> 00:55:26.960 align:middle line:90%
+AUDIENCE: Yeah.
+
+00:55:26.960 --> 00:55:28.850 align:middle line:90%
+No, no, no, that's--
+
+00:55:28.850 --> 00:55:29.600 align:middle line:90%
+yeah.
+
+00:55:29.600 --> 00:55:31.600 align:middle line:84%
+PETER KEMPTHORNE: The
+moment-generating function
+
+00:55:31.600 --> 00:55:34.220 align:middle line:90%
+doesn't have to exist.
+
+00:55:34.220 --> 00:55:36.080 align:middle line:84%
+And the moment-generating
+function
+
+00:55:36.080 --> 00:55:42.060 align:middle line:84%
+won't exist if this exponential
+function has too much weight.
+
+00:55:42.060 --> 00:55:44.750 align:middle line:90%
+So that integral is infinite.
+
+00:55:44.750 --> 00:55:47.870 align:middle line:84%
+And an example
+where it is infinite
+
+00:55:47.870 --> 00:55:52.160 align:middle line:90%
+is a Cauchy distribution.
+
+00:55:52.160 --> 00:55:57.440 align:middle line:84%
+A Cauchy distribution doesn't
+have finite mean or variance.
+
+00:55:57.440 --> 00:56:01.520 align:middle line:90%
+But what's interesting is that--
+
+00:56:01.520 --> 00:56:05.000 align:middle line:84%
+this is called the
+moment-generating function.
+
+00:56:05.000 --> 00:56:13.400 align:middle line:84%
+There's a characteristic
+function--
+
+00:56:13.400 --> 00:56:19.010 align:middle line:84%
+characteristic
+function-- that turns out
+
+00:56:19.010 --> 00:56:28.250 align:middle line:84%
+to be equal to e to the
+itx, where i here is
+
+00:56:28.250 --> 00:56:32.090 align:middle line:90%
+the square root of negative 1.
+
+00:56:32.090 --> 00:56:37.910 align:middle line:84%
+And if you know a little
+bit about complex numbers,
+
+00:56:37.910 --> 00:56:42.020 align:middle line:84%
+this turns out to be
+equal to the cosine of tx
+
+00:56:42.020 --> 00:56:46.580 align:middle line:90%
+plus i times the sine of tx.
+
+00:56:46.580 --> 00:56:49.640 align:middle line:84%
+And it turns out that these
+characteristic functions
+
+00:56:49.640 --> 00:56:55.290 align:middle line:84%
+always exist and can be
+used almost the same way
+
+00:56:55.290 --> 00:56:59.190 align:middle line:84%
+a moment-generating function
+can be used when it exists.
+
+00:56:59.190 --> 00:57:02.070 align:middle line:84%
+So the fact that it
+doesn't always exist
+
+00:57:02.070 --> 00:57:04.730 align:middle line:84%
+shouldn't worry us
+because we can generalize
+
+00:57:04.730 --> 00:57:06.990 align:middle line:90%
+to characteristic functions.
+
+00:57:06.990 --> 00:57:14.550 align:middle line:84%
+But what's important is that
+if we have two random variables
+
+00:57:14.550 --> 00:57:19.050 align:middle line:84%
+that have identical
+moment-generating functions,
+
+00:57:19.050 --> 00:57:25.200 align:middle line:84%
+then those distributions
+are equal for the two
+
+00:57:25.200 --> 00:57:26.380 align:middle line:90%
+random variables.
+
+00:57:26.380 --> 00:57:28.290 align:middle line:84%
+So we have identical
+distributions
+
+00:57:28.290 --> 00:57:31.120 align:middle line:84%
+if their moment-generating
+functions are equal.
+
+00:57:31.120 --> 00:57:37.590 align:middle line:84%
+And if we consider a
+sequence of random variables,
+
+00:57:37.590 --> 00:57:43.290 align:middle line:84%
+and the moment-generating
+functions that
+
+00:57:43.290 --> 00:57:48.480 align:middle line:84%
+can be thought of as a sequence
+converges to a function that's
+
+00:57:48.480 --> 00:57:51.220 align:middle line:84%
+a moment-generating function
+of some distribution,
+
+00:57:51.220 --> 00:57:56.970 align:middle line:84%
+then we have that the sequence
+of random variables, Xs,
+
+00:57:56.970 --> 00:57:59.970 align:middle line:84%
+converges to that
+distribution as well.
+
+00:57:59.970 --> 00:58:03.990 align:middle line:84%
+So these are nice
+properties that
+
+00:58:03.990 --> 00:58:10.190 align:middle line:84%
+allow us to understand
+limits of random variables
+
+00:58:10.190 --> 00:58:14.510 align:middle line:84%
+and what the distributions
+are of limits.
+
+00:58:14.510 --> 00:58:21.020 align:middle line:84%
+Now, with moment-generating
+functions,
+
+00:58:21.020 --> 00:58:25.730 align:middle line:90%
+this slide here discusses--
+
+00:58:25.730 --> 00:58:28.820 align:middle line:84%
+well, it introduces you to
+the moment-generating function
+
+00:58:28.820 --> 00:58:32.720 align:middle line:84%
+for the normal distribution
+with mean mu and variance
+
+00:58:32.720 --> 00:58:34.130 align:middle line:90%
+sigma squared.
+
+00:58:34.130 --> 00:58:43.180 align:middle line:84%
+And with the special case of mu
+equals 0 and sigma equaling 1--
+
+00:58:43.180 --> 00:58:46.980 align:middle line:90%
+
+
+00:58:46.980 --> 00:58:53.030 align:middle line:84%
+for a normal, 0, 1, if we look
+at the expected value of e
+
+00:58:53.030 --> 00:59:02.090 align:middle line:84%
+to the tx, it's equal to the
+integral of e to the tx times e
+
+00:59:02.090 --> 00:59:10.550 align:middle line:84%
+to the minus 1/2 x
+squared over root 2 pi dx.
+
+00:59:10.550 --> 00:59:21.200 align:middle line:84%
+So this is simply the formula
+for e to the tz, I guess.
+
+00:59:21.200 --> 00:59:26.640 align:middle line:84%
+Well, if we look at
+this exponential here,
+
+00:59:26.640 --> 00:59:32.113 align:middle line:84%
+we can write this as e to
+the minus 1/2 x minus--
+
+00:59:32.113 --> 00:59:40.130 align:middle line:90%
+
+
+00:59:40.130 --> 00:59:49.580 align:middle line:84%
+let's see-- x minus
+t over 2 squared.
+
+00:59:49.580 --> 00:59:52.953 align:middle line:90%
+That gives us x squared minus--
+
+00:59:52.953 --> 00:59:57.560 align:middle line:90%
+
+
+00:59:57.560 --> 00:59:59.935 align:middle line:90%
+oh, no, just x minus t squared.
+
+00:59:59.935 --> 01:00:05.080 align:middle line:90%
+
+
+01:00:05.080 --> 01:00:06.160 align:middle line:90%
+Is this right?
+
+01:00:06.160 --> 01:00:09.220 align:middle line:90%
+
+
+01:00:09.220 --> 01:00:23.470 align:middle line:84%
+I basically want to take 1/2 x
+squared plus tx and write this
+
+01:00:23.470 --> 01:00:40.000 align:middle line:84%
+as minus 1/2 of x minus t
+squared minus t squared over 2.
+
+01:00:40.000 --> 01:00:42.040 align:middle line:90%
+Is that right?
+
+01:00:42.040 --> 01:00:46.060 align:middle line:90%
+I want a plus right there.
+
+01:00:46.060 --> 01:00:51.850 align:middle line:84%
+So this exponent
+of the exponential
+
+01:00:51.850 --> 01:00:56.600 align:middle line:84%
+here can be rewritten as
+this exponent times that.
+
+01:00:56.600 --> 01:01:05.100 align:middle line:90%
+
+
+01:01:05.100 --> 01:01:09.250 align:middle line:84%
+So this is equal to the integral
+from minus infinity to infinity,
+
+01:01:09.250 --> 01:01:16.920 align:middle line:84%
+1 over root 2 pi, e to the
+minus 1/2, x minus t squared,
+
+01:01:16.920 --> 01:01:23.250 align:middle line:84%
+and then plus t
+squared over 2 dx.
+
+01:01:23.250 --> 01:01:34.930 align:middle line:84%
+And so this exponential factor
+with t squared can be taken out.
+
+01:01:34.930 --> 01:01:39.180 align:middle line:84%
+And this integral here is
+simply going to equal 1.
+
+01:01:39.180 --> 01:01:42.390 align:middle line:84%
+So we are able to find the
+moment-generating function
+
+01:01:42.390 --> 01:01:47.040 align:middle line:84%
+for the standard
+normal very easily.
+
+01:01:47.040 --> 01:01:49.840 align:middle line:84%
+It's equal to e to
+the 1/2 t squared.
+
+01:01:49.840 --> 01:01:55.140 align:middle line:84%
+Now, if we think about
+transforming a random variable,
+
+01:01:55.140 --> 01:02:01.220 align:middle line:84%
+such as X, with a linear
+function-- basically,
+
+01:02:01.220 --> 01:02:05.570 align:middle line:84%
+rescale X by sigma
+and add a mu--
+
+01:02:05.570 --> 01:02:07.820 align:middle line:84%
+then the
+moment-generating function
+
+01:02:07.820 --> 01:02:14.040 align:middle line:84%
+of that transformation of
+X to Y can be written out.
+
+01:02:14.040 --> 01:02:16.040 align:middle line:84%
+And it's equal to
+the exponential
+
+01:02:16.040 --> 01:02:19.970 align:middle line:84%
+of t mu times the
+moment-generating function of X
+
+01:02:19.970 --> 01:02:22.850 align:middle line:90%
+evaluated at t sigma instead.
+
+01:02:22.850 --> 01:02:29.070 align:middle line:84%
+So knowing what the X
+moment-generating function is,
+
+01:02:29.070 --> 01:02:31.040 align:middle line:84%
+we basically get this
+function coming out
+
+01:02:31.040 --> 01:02:36.510 align:middle line:84%
+for the moment-generating
+function of a normal.
+
+01:02:36.510 --> 01:02:42.380 align:middle line:84%
+Now, this
+moment-generating function
+
+01:02:42.380 --> 01:02:51.273 align:middle line:84%
+is, in fact, the expected value
+of a lognormal random variable.
+
+01:02:51.273 --> 01:02:53.900 align:middle line:90%
+
+
+01:02:53.900 --> 01:02:56.400 align:middle line:84%
+At least, if we
+set t equal to 1,
+
+01:02:56.400 --> 01:03:01.210 align:middle line:84%
+it's the expected
+value of a lognormal.
+
+01:03:01.210 --> 01:03:04.390 align:middle line:84%
+And if we take t
+equal to 2, it's
+
+01:03:04.390 --> 01:03:09.170 align:middle line:84%
+equal to the square of a
+lognormal distribution.
+
+01:03:09.170 --> 01:03:12.580 align:middle line:84%
+So we can use the
+moment-generating function
+
+01:03:12.580 --> 01:03:14.380 align:middle line:84%
+for the normal to
+calculate moments
+
+01:03:14.380 --> 01:03:16.010 align:middle line:90%
+of a lognormal distribution.
+
+01:03:16.010 --> 01:03:19.650 align:middle line:84%
+And that'll be an exercise
+in the next homework.
+
+01:03:19.650 --> 01:03:22.390 align:middle line:90%
+
+
+01:03:22.390 --> 01:03:22.890 align:middle line:90%
+OK.
+
+01:03:22.890 --> 01:03:25.480 align:middle line:90%
+
+
+01:03:25.480 --> 01:03:27.970 align:middle line:84%
+All right, so linear
+transformations--
+
+01:03:27.970 --> 01:03:31.630 align:middle line:90%
+
+
+01:03:31.630 --> 01:03:34.900 align:middle line:84%
+basically, linear
+transformations
+
+01:03:34.900 --> 01:03:40.480 align:middle line:84%
+don't change the skewness
+of distributions.
+
+01:03:40.480 --> 01:03:45.340 align:middle line:90%
+And the kurtosis can--
+
+01:03:45.340 --> 01:03:47.540 align:middle line:84%
+well, it might
+affect the kurtosis.
+
+01:03:47.540 --> 01:03:48.100 align:middle line:90%
+All right.
+
+01:03:48.100 --> 01:03:51.700 align:middle line:84%
+Well, let's move on
+to considerations
+
+01:03:51.700 --> 01:03:55.420 align:middle line:84%
+of more than one random
+variable and the concept of two
+
+01:03:55.420 --> 01:03:59.370 align:middle line:84%
+random variables
+being independent.
+
+01:03:59.370 --> 01:04:02.820 align:middle line:84%
+In probability theory, we
+say two random variables
+
+01:04:02.820 --> 01:04:07.050 align:middle line:84%
+are independent if
+the joint probability
+
+01:04:07.050 --> 01:04:16.150 align:middle line:84%
+of the random variables,
+X lying in a set A
+
+01:04:16.150 --> 01:04:21.270 align:middle line:84%
+and Y lying in a set B,
+if that joint probability
+
+01:04:21.270 --> 01:04:25.620 align:middle line:84%
+of both occurring is equal
+to just the product of each
+
+01:04:25.620 --> 01:04:27.810 align:middle line:90%
+occurring alone.
+
+01:04:27.810 --> 01:04:36.490 align:middle line:84%
+And so we have, for densities
+or probability mass functions,
+
+01:04:36.490 --> 01:04:41.160 align:middle line:84%
+we have this property of the
+joint density function factoring
+
+01:04:41.160 --> 01:04:44.970 align:middle line:84%
+into the product of the
+marginal densities of each
+
+01:04:44.970 --> 01:04:47.100 align:middle line:90%
+of the random variables.
+
+01:04:47.100 --> 01:04:52.890 align:middle line:84%
+And it works for a continuous or
+discrete distributions as well.
+
+01:04:52.890 --> 01:04:59.600 align:middle line:84%
+So independence means that,
+basically, knowing one variable
+
+01:04:59.600 --> 01:05:03.830 align:middle line:84%
+doesn't give us any insight on
+the value of the other variable.
+
+01:05:03.830 --> 01:05:11.960 align:middle line:84%
+Now, we can compute covariances
+between two random variables
+
+01:05:11.960 --> 01:05:14.670 align:middle line:90%
+and correlations.
+
+01:05:14.670 --> 01:05:27.710 align:middle line:84%
+And so, with a covariance
+between two random variables,
+
+01:05:27.710 --> 01:05:32.910 align:middle line:84%
+this is a generalization of
+the variance for one variable.
+
+01:05:32.910 --> 01:05:35.900 align:middle line:84%
+But this is the
+probability-weighted average
+
+01:05:35.900 --> 01:05:38.030 align:middle line:90%
+of x minus--
+
+01:05:38.030 --> 01:05:43.720 align:middle line:84%
+I'll write here mu x
+times y minus mu y.
+
+01:05:43.720 --> 01:05:46.400 align:middle line:90%
+
+
+01:05:46.400 --> 01:05:53.770 align:middle line:84%
+And the correlation
+statistic corresponds
+
+01:05:53.770 --> 01:06:05.230 align:middle line:84%
+to dividing this
+covariance by the product
+
+01:06:05.230 --> 01:06:11.950 align:middle line:84%
+of sigma x and sigma y, the
+square root of the variances.
+
+01:06:11.950 --> 01:06:16.780 align:middle line:84%
+And it turns out
+that this also can
+
+01:06:16.780 --> 01:06:26.140 align:middle line:84%
+be written as x minus mu x
+over sigma x times y minus mu y
+
+01:06:26.140 --> 01:06:29.110 align:middle line:90%
+over sigma y.
+
+01:06:29.110 --> 01:06:33.070 align:middle line:84%
+And so the standardization
+of the random variables
+
+01:06:33.070 --> 01:06:40.670 align:middle line:84%
+to have mean 0 and standard
+deviation 1 can be made.
+
+01:06:40.670 --> 01:06:44.710 align:middle line:84%
+And then the expected product
+of those standardized values
+
+01:06:44.710 --> 01:06:48.936 align:middle line:84%
+is the correlation statistic,
+or the correlation parameter.
+
+01:06:48.936 --> 01:06:51.510 align:middle line:90%
+
+
+01:06:51.510 --> 01:06:58.440 align:middle line:84%
+Importantly, zero correlation
+doesn't imply independence.
+
+01:06:58.440 --> 01:07:07.920 align:middle line:84%
+But zero correlation does
+mean that the dependence--
+
+01:07:07.920 --> 01:07:11.010 align:middle line:84%
+does suggest that there's
+no linear dependence
+
+01:07:11.010 --> 01:07:13.060 align:middle line:90%
+between the two variables.
+
+01:07:13.060 --> 01:07:15.990 align:middle line:84%
+Now, when we
+consider generalizing
+
+01:07:15.990 --> 01:07:18.880 align:middle line:84%
+from two random
+variables to many,
+
+01:07:18.880 --> 01:07:23.250 align:middle line:84%
+then we can think of
+working with random vectors.
+
+01:07:23.250 --> 01:07:29.100 align:middle line:84%
+And with, say, little
+n being the count
+
+01:07:29.100 --> 01:07:36.330 align:middle line:84%
+of different random variables,
+we can have notation of mu j
+
+01:07:36.330 --> 01:07:39.330 align:middle line:84%
+for the means or
+expectations of each,
+
+01:07:39.330 --> 01:07:46.020 align:middle line:84%
+and sigma i, j corresponding to
+the covariance between Xi and Xj
+
+01:07:46.020 --> 01:07:48.330 align:middle line:90%
+for sigma i, j.
+
+01:07:48.330 --> 01:07:51.480 align:middle line:90%
+And we can then represent--
+
+01:07:51.480 --> 01:07:59.410 align:middle line:84%
+the expected vector of x
+values is equal to a mu vector.
+
+01:07:59.410 --> 01:08:03.720 align:middle line:84%
+And we can represent the
+covariances between the elements
+
+01:08:03.720 --> 01:08:09.000 align:middle line:84%
+in terms of an
+n-by-n matrix, sigma.
+
+01:08:09.000 --> 01:08:13.860 align:middle line:84%
+And so what's important
+to realize here
+
+01:08:13.860 --> 01:08:25.930 align:middle line:84%
+is that if we have an x
+vector and a mu vector,
+
+01:08:25.930 --> 01:08:31.979 align:middle line:84%
+so x is equal to x1
+down to xn, and mu
+
+01:08:31.979 --> 01:08:39.750 align:middle line:84%
+is equal to mu 1
+down to mu n, then
+
+01:08:39.750 --> 01:08:44.670 align:middle line:84%
+we define the
+covariance matrix of x
+
+01:08:44.670 --> 01:08:53.029 align:middle line:84%
+to be the expected value of
+x minus the mu vector times x
+
+01:08:53.029 --> 01:08:56.760 align:middle line:90%
+minus the mu vector transpose.
+
+01:08:56.760 --> 01:08:58.950 align:middle line:90%
+And so this is an n-by-1.
+
+01:08:58.950 --> 01:09:02.640 align:middle line:90%
+This is a 1-by-n transpose.
+
+01:09:02.640 --> 01:09:07.250 align:middle line:84%
+And so we get an
+n-by-n matrix, where
+
+01:09:07.250 --> 01:09:10.794 align:middle line:84%
+we take expectations element
+by element in that array.
+
+01:09:10.794 --> 01:09:13.490 align:middle line:90%
+
+
+01:09:13.490 --> 01:09:17.300 align:middle line:84%
+So this is a nice
+way of representing
+
+01:09:17.300 --> 01:09:19.200 align:middle line:90%
+the covariance matrix.
+
+01:09:19.200 --> 01:09:24.620 align:middle line:84%
+And what's useful in
+particular is, well,
+
+01:09:24.620 --> 01:09:28.490 align:middle line:84%
+if we think of Xs maybe
+representing returns
+
+01:09:28.490 --> 01:09:32.899 align:middle line:84%
+on different assets,
+with means mu,
+
+01:09:32.899 --> 01:09:38.000 align:middle line:84%
+and the covariance matrix tells
+us how much variability there is
+
+01:09:38.000 --> 01:09:43.010 align:middle line:84%
+in each of the Xi's, but also
+the correlation structure across
+
+01:09:43.010 --> 01:09:50.750 align:middle line:84%
+the n Xs, then if
+we consider, say,
+
+01:09:50.750 --> 01:09:55.570 align:middle line:84%
+a linear combination of
+the Xs given by a vector
+
+01:09:55.570 --> 01:10:02.260 align:middle line:84%
+A of constants, then this
+linear combination of the Xs can
+
+01:10:02.260 --> 01:10:10.150 align:middle line:84%
+actually represent maybe a
+portfolio of holdings across
+
+01:10:10.150 --> 01:10:12.740 align:middle line:84%
+different assets
+given by the Xi's.
+
+01:10:12.740 --> 01:10:14.890 align:middle line:84%
+And what we'd like
+to be able to do
+
+01:10:14.890 --> 01:10:21.140 align:middle line:84%
+is model the mean value
+of Y and its variance.
+
+01:10:21.140 --> 01:10:26.530 align:middle line:84%
+The mean value is very
+simply the linear combination
+
+01:10:26.530 --> 01:10:30.710 align:middle line:84%
+of the component means
+times the a coefficients.
+
+01:10:30.710 --> 01:10:35.230 align:middle line:84%
+And when we go to calculate
+the variance of Y,
+
+01:10:35.230 --> 01:10:37.480 align:middle line:84%
+if you go through
+each step here,
+
+01:10:37.480 --> 01:10:43.060 align:middle line:84%
+each equation here is doing
+something slightly important.
+
+01:10:43.060 --> 01:10:46.800 align:middle line:84%
+We're basically substituting
+in A transpose X for Y
+
+01:10:46.800 --> 01:10:50.260 align:middle line:84%
+at the beginning and a transpose
+mu for the expected value.
+
+01:10:50.260 --> 01:10:58.830 align:middle line:84%
+Then we are able to pull out the
+constant vector, a transpose,
+
+01:10:58.830 --> 01:11:02.040 align:middle line:84%
+in the front of the
+expectation, and actually
+
+01:11:02.040 --> 01:11:04.510 align:middle line:90%
+in the back of the expectation.
+
+01:11:04.510 --> 01:11:08.460 align:middle line:84%
+So these coefficient
+vectors are constants
+
+01:11:08.460 --> 01:11:13.150 align:middle line:84%
+and can be pulled out of the
+expectation computations.
+
+01:11:13.150 --> 01:11:16.770 align:middle line:84%
+And then this middle term here
+is simply the covariance matrix
+
+01:11:16.770 --> 01:11:22.050 align:middle line:84%
+of X. So we have that
+the variance of Y
+
+01:11:22.050 --> 01:11:27.960 align:middle line:84%
+is simply the sum, double sum,
+over all pairs of coefficients,
+
+01:11:27.960 --> 01:11:33.480 align:middle line:84%
+ai, aj, multiplied by the
+covariance terms between i
+
+01:11:33.480 --> 01:11:34.560 align:middle line:90%
+and j.
+
+01:11:34.560 --> 01:11:46.920 align:middle line:84%
+So this is the formula
+for the variance of Y.
+
+01:11:46.920 --> 01:11:49.170 align:middle line:84%
+I'm not sure if we go into
+this in the next slide.
+
+01:11:49.170 --> 01:11:57.510 align:middle line:84%
+But if the covariance of
+Xi and Xj is equal to 0--
+
+01:11:57.510 --> 01:12:03.380 align:middle line:84%
+so if this is equal to 0
+for all i not equal to j,
+
+01:12:03.380 --> 01:12:09.290 align:middle line:84%
+then this variance
+expression simplifies a lot.
+
+01:12:09.290 --> 01:12:14.060 align:middle line:90%
+And if, say, aij--
+
+01:12:14.060 --> 01:12:24.890 align:middle line:84%
+sorry, ai is equal to
+aj is equal to 1 over n,
+
+01:12:24.890 --> 01:12:35.150 align:middle line:84%
+then the sum of the
+ai's is equal to 1.
+
+01:12:35.150 --> 01:12:45.240 align:middle line:84%
+And the sum of the ai
+squareds is equal to what?
+
+01:12:45.240 --> 01:12:50.200 align:middle line:90%
+
+
+01:12:50.200 --> 01:12:50.895 align:middle line:90%
+AUDIENCE: 1?
+
+01:12:50.895 --> 01:12:51.770 align:middle line:90%
+PETER KEMPTHORNE: No.
+
+01:12:51.770 --> 01:12:54.702 align:middle line:90%
+No, this is not equal to 1.
+
+01:12:54.702 --> 01:12:55.910 align:middle line:90%
+It's going to be less than 1.
+
+01:12:55.910 --> 01:13:01.839 align:middle line:90%
+
+
+01:13:01.839 --> 01:13:02.780 align:middle line:90%
+AUDIENCE: 1 over n.
+
+01:13:02.780 --> 01:13:04.197 align:middle line:84%
+PETER KEMPTHORNE:
+1 over n, right.
+
+01:13:04.197 --> 01:13:09.370 align:middle line:90%
+It's n, n times 1 over n.
+
+01:13:09.370 --> 01:13:12.820 align:middle line:84%
+So it's-- sorry, n
+times 1 over n squared.
+
+01:13:12.820 --> 01:13:21.430 align:middle line:84%
+So the variance of an equal
+weighted average of the Xs
+
+01:13:21.430 --> 01:13:25.900 align:middle line:84%
+will have variance
+that's 1 over n times
+
+01:13:25.900 --> 01:13:27.740 align:middle line:90%
+the variance of each of the Xs.
+
+01:13:27.740 --> 01:13:31.300 align:middle line:84%
+So this is where
+diversification can
+
+01:13:31.300 --> 01:13:36.310 align:middle line:84%
+be useful in terms of
+reducing variability.
+
+01:13:36.310 --> 01:13:40.440 align:middle line:84%
+And in the very
+special case where
+
+01:13:40.440 --> 01:13:49.050 align:middle line:84%
+we have, say, zero correlated
+assets and, I guess,
+
+01:13:49.050 --> 01:13:54.330 align:middle line:84%
+equal weighted
+variances of the Xs,
+
+01:13:54.330 --> 01:14:01.830 align:middle line:84%
+then we can reduce the
+variability by the factor n,
+
+01:14:01.830 --> 01:14:04.440 align:middle line:84%
+or multiplying by
+the factor 1 over n.
+
+01:14:04.440 --> 01:14:07.530 align:middle line:90%
+
+
+01:14:07.530 --> 01:14:12.630 align:middle line:84%
+Well, this leads us
+to introducing you
+
+01:14:12.630 --> 01:14:16.440 align:middle line:84%
+to principal
+components analysis.
+
+01:14:16.440 --> 01:14:27.540 align:middle line:84%
+And with principal
+components analysis,
+
+01:14:27.540 --> 01:14:34.013 align:middle line:84%
+we consider an
+m-variate vector x--
+
+01:14:34.013 --> 01:14:40.820 align:middle line:90%
+
+
+01:14:40.820 --> 01:14:43.220 align:middle line:84%
+so we consider an
+x vector that's
+
+01:14:43.220 --> 01:14:56.000 align:middle line:84%
+m by 1, which has an expected
+value equal to an alpha vector,
+
+01:14:56.000 --> 01:15:03.500 align:middle line:84%
+and a covariance
+matrix, which is m by m,
+
+01:15:03.500 --> 01:15:08.120 align:middle line:90%
+equal to sigma matrix.
+
+01:15:08.120 --> 01:15:18.140 align:middle line:84%
+And this covariance matrix is a
+real matrix that is symmetric.
+
+01:15:18.140 --> 01:15:23.300 align:middle line:84%
+Therefore, it's going to
+have real eigenvalues.
+
+01:15:23.300 --> 01:15:32.780 align:middle line:84%
+And it's also going to have
+nonnegative eigenvalues
+
+01:15:32.780 --> 01:15:41.080 align:middle line:84%
+because the covariance matrix
+is positive semidefinite.
+
+01:15:41.080 --> 01:15:52.060 align:middle line:84%
+And so sigma is
+positive semidefinite.
+
+01:15:52.060 --> 01:15:54.700 align:middle line:84%
+The definition of
+positive semidefinite
+
+01:15:54.700 --> 01:16:02.920 align:middle line:84%
+is that for all a
+vectors, a transpose sigma
+
+01:16:02.920 --> 01:16:05.963 align:middle line:90%
+a is greater than or equal to 0.
+
+01:16:05.963 --> 01:16:09.040 align:middle line:90%
+
+
+01:16:09.040 --> 01:16:14.920 align:middle line:84%
+And this is actually
+the variance
+
+01:16:14.920 --> 01:16:27.940 align:middle line:84%
+of a transpose x, this product
+of the covariance matrix
+
+01:16:27.940 --> 01:16:30.290 align:middle line:84%
+times the transpose of
+an a vector and that.
+
+01:16:30.290 --> 01:16:35.730 align:middle line:84%
+So the fact that the variance
+of the linear combination
+
+01:16:35.730 --> 01:16:41.670 align:middle line:84%
+of the x's is
+strictly nonnegative
+
+01:16:41.670 --> 01:16:47.430 align:middle line:84%
+gives us this result here, which
+means that the sigma matrix is
+
+01:16:47.430 --> 01:16:49.860 align:middle line:90%
+positive semidefinite.
+
+01:16:49.860 --> 01:16:59.490 align:middle line:84%
+And we can basically list the
+eigenvalues to be lambda 1
+
+01:16:59.490 --> 01:17:00.850 align:middle line:90%
+through lambda m.
+
+01:17:00.850 --> 01:17:04.860 align:middle line:90%
+Those could be all different.
+
+01:17:04.860 --> 01:17:10.410 align:middle line:84%
+Some of them will be nonzero,
+so long as there's no--
+
+01:17:10.410 --> 01:17:19.060 align:middle line:84%
+so long as the covariance
+matrix has some positive rank.
+
+01:17:19.060 --> 01:17:21.900 align:middle line:84%
+And so, with this
+framework, where
+
+01:17:21.900 --> 01:17:29.580 align:middle line:84%
+we have the covariance matrix,
+sigma, having eigenvalues,
+
+01:17:29.580 --> 01:17:39.390 align:middle line:84%
+lambda i, and corresponding
+eigenvectors, gamma sub i,
+
+01:17:39.390 --> 01:17:42.780 align:middle line:84%
+we can normalize the
+eigenvectors, gamma i,
+
+01:17:42.780 --> 01:17:47.850 align:middle line:90%
+to be of unit length.
+
+01:17:47.850 --> 01:17:51.790 align:middle line:84%
+So gamma i transpose
+gamma i is equal to 1.
+
+01:17:51.790 --> 01:17:54.570 align:middle line:84%
+And we can also
+define the gammas
+
+01:17:54.570 --> 01:17:58.440 align:middle line:90%
+to be orthogonal to each other.
+
+01:17:58.440 --> 01:18:08.580 align:middle line:84%
+Then principal components
+defines new variables by saying,
+
+01:18:08.580 --> 01:18:11.790 align:middle line:90%
+we take our vector x.
+
+01:18:11.790 --> 01:18:17.010 align:middle line:84%
+We transpose it
+to x minus alpha.
+
+01:18:17.010 --> 01:18:21.570 align:middle line:84%
+So we're looking at deviations
+from the mean values, component
+
+01:18:21.570 --> 01:18:23.020 align:middle line:90%
+by component.
+
+01:18:23.020 --> 01:18:34.730 align:middle line:84%
+And then we take each of
+those, and we multiply them,
+
+01:18:34.730 --> 01:18:39.923 align:middle line:84%
+or look at the dot product
+of gamma i dot x minus alpha.
+
+01:18:39.923 --> 01:18:42.920 align:middle line:90%
+
+
+01:18:42.920 --> 01:18:51.470 align:middle line:84%
+And we call this the coefficient
+of the i-th principal component
+
+01:18:51.470 --> 01:18:53.720 align:middle line:90%
+variables.
+
+01:18:53.720 --> 01:18:57.320 align:middle line:84%
+And these principal
+component variables
+
+01:18:57.320 --> 01:19:06.050 align:middle line:84%
+are very neat because
+their average or mean
+
+01:19:06.050 --> 01:19:09.053 align:middle line:90%
+value is equal to 0.
+
+01:19:09.053 --> 01:19:12.140 align:middle line:90%
+
+
+01:19:12.140 --> 01:19:17.826 align:middle line:84%
+But the covariance matrix
+between the p's is--
+
+01:19:17.826 --> 01:19:20.030 align:middle line:90%
+[ALARM RINGING]
+
+01:19:20.030 --> 01:19:22.165 align:middle line:84%
+It's time to finish
+the lecture here.
+
+01:19:22.165 --> 01:19:25.130 align:middle line:90%
+
+
+01:19:25.130 --> 01:19:31.370 align:middle line:84%
+The covariance matrix is
+the diagonal matrix lambda.
+
+01:19:31.370 --> 01:19:38.860 align:middle line:84%
+So we basically have transformed
+our original x vector
+
+01:19:38.860 --> 01:19:46.600 align:middle line:84%
+into new coordinates,
+which have mean 0,
+
+01:19:46.600 --> 01:19:49.430 align:middle line:84%
+are uncorrelated
+with each other,
+
+01:19:49.430 --> 01:19:53.680 align:middle line:84%
+and have variability that
+decreases, basically,
+
+01:19:53.680 --> 01:20:00.760 align:middle line:84%
+with i, if we rank the principal
+components, eigenvectors, lambda
+
+01:20:00.760 --> 01:20:02.770 align:middle line:90%
+1, to be bigger than--
+
+01:20:02.770 --> 01:20:07.160 align:middle line:84%
+or basically, to be ordered
+from lambda 1 to lambda m.
+
+01:20:07.160 --> 01:20:11.890 align:middle line:84%
+So we have an orthogonal basis
+for our data in this case.
+
+01:20:11.890 --> 01:20:17.930 align:middle line:84%
+And I guess we'll
+finish there for today.
+
+01:20:17.930 --> 01:20:21.050 align:middle line:84%
+But on Thursday, we'll
+finish these notes up.
+
+01:20:21.050 --> 01:20:25.470 align:middle line:84%
+And what you'll
+be able to see is
+
+01:20:25.470 --> 01:20:34.870 align:middle line:84%
+how we can try to represent
+an x vector as a sum of terms.
+
+01:20:34.870 --> 01:20:37.860 align:middle line:84%
+And maybe the sum
+of terms corresponds
+
+01:20:37.860 --> 01:20:42.060 align:middle line:84%
+to using just a small number
+of the principal component
+
+01:20:42.060 --> 01:20:43.000 align:middle line:90%
+variables.
+
+01:20:43.000 --> 01:20:47.100 align:middle line:84%
+So when we have
+multidimensional vectors that
+
+01:20:47.100 --> 01:20:52.320 align:middle line:84%
+have variability that
+is limited to a smaller
+
+01:20:52.320 --> 01:20:56.400 align:middle line:84%
+number of dimensions, we can
+characterize those smaller
+
+01:20:56.400 --> 01:21:00.060 align:middle line:84%
+number of dimensions nicely
+with principal components
+
+01:21:00.060 --> 01:21:03.760 align:middle line:90%
+and obtain useful models.
+
+01:21:03.760 --> 01:21:08.490 align:middle line:84%
+And these kinds of models
+underlie multifactor models
+
+01:21:08.490 --> 01:21:14.020 align:middle line:84%
+often in modeling asset
+returns and financial markets.
+
+01:21:14.020 --> 01:21:19.610 align:middle line:84%
+So we'll finish there
+for today, and thank you.
+
+01:21:19.610 --> 01:21:25.000 align:middle line:90%

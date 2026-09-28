@@ -1,0 +1,48 @@
+{
+  "audience": [],
+  "body": "",
+  "content": "<p>The lecture by Professor Andrew Lo highlights how innovative financial engineering can address major societal challenges like rare diseases and energy transition by creating diversified investment portfolios that reduce risk and attract capital. Using examples from gene therapy breakthroughs and fusion energy development, he emphasizes the critical role of new financing models in turning high-risk, long-term scientific projects into viable ventures that can generate significant social and economic returns.</p>\n",
+  "content_type": "resource",
+  "draft": false,
+  "file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/18642-lecture-18-version-5_360p_16_9.mp4",
+  "file_size": 156419943,
+  "file_type": "video/mp4",
+  "gdrive_url": "",
+  "image_metadata": {
+    "caption": "",
+    "credit": "",
+    "image-alt": ""
+  },
+  "iscjklanguage": false,
+  "learning_resource_types": [
+    "Lecture Videos"
+  ],
+  "level": [],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "resourcetype": "Video",
+  "title": "Lecture 18: Applying Data Science and Artificial Intelligence to Managing Biomedical Portfolios",
+  "uid": "bcec7529-49a4-4705-a8b1-24fedfa83cd2",
+  "video_files": {
+    "archive_url": "",
+    "video_captions_resources": [
+      {
+        "file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/18642-lecture-18-version-5_captions.vtt",
+        "language": "en"
+      }
+    ],
+    "video_thumbnail_file": "https://img.youtube.com/vi/_e2nDnV7FQs/default.jpg",
+    "video_transcript_resources": [
+      {
+        "file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/18642-lecture-18-version-5_transcript.pdf",
+        "language": "en"
+      }
+    ]
+  },
+  "video_metadata": {
+    "source": "",
+    "video_speakers": "",
+    "video_tags": "18-642-topics-in-mathematics-with-applications-in-finance-fall-2024, biotechnology, climate change, financial engineering, fusion energy, gene therapy, healthcare financing, innovation funding, investment risk, mit sloan, portfolio diversification, rare diseases, valley of death",
+    "youtube_description": "MIT 18.642 Topics in Mathematics with Applications in Finance, Fall 2024\nInstructor: Andrew Lo\nView the complete course: https://ocw.mit.edu/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024\nYouTube Playlist: https://www.youtube.com/playlist?list=PLUl4u3cNGP601Q2jo-J_3raNCMMs6Jves\n\nThe lecture by Professor Andrew Lo highlights how innovative financial engineering can address major societal challenges like rare diseases and energy transition by creating diversified investment portfolios that reduce risk and attract capital. Using examples from gene therapy breakthroughs and fusion energy development, he emphasizes the critical role of new financing models in turning high-risk, long-term scientific projects into viable ventures that can generate significant social and economic returns.\n\nLicense: Creative Commons BY-NC-SA\nMore information at https://ocw.mit.edu/terms\nMore courses at https://ocw.mit.edu\nSupport OCW at http://ow.ly/a1If50zVRlQ\n\nWe encourage constructive comments and discussion on OCW’s YouTube and other social media channels. Personal attacks, hate speech, trolling, and inappropriate comments are not allowed and may be removed. More details at https://ocw.mit.edu/comments.",
+    "youtube_id": "_e2nDnV7FQs"
+  }
+}

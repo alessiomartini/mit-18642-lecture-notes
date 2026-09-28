@@ -1,0 +1,79 @@
+Instructions for replicating fm_casestudy1 in R/Rstudio
+
+
+
+1.	Install R and RStudio on your computer from the following links:
+		http://www.r-project.org/
+		http://www.rstudio.com/ide/download/desktop
+
+
+2. 	Copy/download/transfer the following r script files from the OCW website:
+		fm_casestudy_0_InstallOrLoadLibraries.r
+		fm_casestudy_1_0.r
+		fm_casestudy_1_rcode.r
+	to a directory named "fm_casestudy1" on your computer
+
+
+3.	Open the R-Studio application, and from the top bar of commands 
+		a) select Project, then Create Project, then
+			Create Project from Existing Directory
+		b) with the browser that appears, navigate to select the directory
+			"fm_casestudy1"
+		   
+
+4.	The R-Studio application opens with a 4-panel display.
+		The lower left panel is a console for typing R commands directly or viewing
+		output from executed R commands
+
+		The lower right panel has tabs [Files|Plots|Packages|Help]. 
+		
+		In the lower right panel, select the Files tab and open the 3 files			
+		from 4, by clicking on the file names, successively
+
+		The files will open in separate tabs in the top left panel.
+
+5.	Go to the first file in the top left panel:
+		fm_casestudy_0_InstallOrLoadLibraries.r
+	Execute the script file by either
+			pressing the 'Source' button at the top tool bar of the file
+			highlighting commands in the file and typing Control-Enter
+	NOTE: the beginning of the script file has the variable
+		ind.install0<-FALSE
+	If this is the first time R-studio is using the specific packages in these scripts,
+	you will need to change this to ind.install0<-TRUE. 
+
+	Go to the second file in the top left panel:
+		fm_casestudy_1_0.r
+	Execute this script file in the same manner.
+
+	These files are self documenting explaining
+		installing/loading R packages
+		basic R commands
+		downloading financial data from the internet
+		graphing the financial data
+		saving an R workspace with data objects
+
+6.	Test exiting R-Studio by typing either
+		q() 
+		# at the console, or 
+	
+		selecting File/Quit R from the Tool Bar at the top of R-Studio. 
+
+		(It asks you to type 'n' or 'y' to not-save or save the workspace '.RData'
+		 You can type 'n' since the scripts are designed to load relevant
+		 R workspaces explicitly.)
+
+7.	Restart R-Studio. 
+	The application should open automatically with the same panel of open files
+
+
+8.	Repeat step 5 (with ind.install0<-FALSE).
+	Go to the third file in the top left panel:
+		fm_casestudy_1_rcode.r
+	Execute this script file in the same manner as the previous two files.
+	This code replicates the r commands in the pdf file
+		RegressionAnalysis_fm_casestudy_1.pdf
+
+
+
+	

@@ -1,0 +1,806 @@
+0:00
+The following content is provided under a Creative Commons license. Your support will help MIT OpenCourseWare
+0:06
+continue to offer high quality educational resources for free. To make a donation or view additional materials
+0:13
+from hundreds of MIT courses, visit MIT OpenCourseWare at ocw.mit.edu.
+0:21
+PROFESSOR: So far we had a function, and then we differentiated to get an equation of this type.
+0:27
+But now, we're given this equation. And we have to go backwards, want to find the stochastic process that satisfies this equation.
+0:35
+So goal is to find a stochastic process
+0:45
+X(t) satisfying this equation.
+0:55
+In other words, we want X of t to be the integral of mu dS
+1:06
+plus sigma...
+1:17
+The goal is clear. We want that.
+1:22
+And so these type of equations are called differential equations, I hope you already know that.
+1:30
+Also for PDE, partial differential equations, so even when it's not stochastic, these are not easy problems.
+1:38
+At least not easy in the sense that, if you're given an equation, typically you don't expect to have a closed form solution.
+1:45
+So even if you find this X, most of the time, it's not in a very good form.
+1:50
+Still, a very important result that you should first note before trying to solve any of the differential equation
+1:58
+is that, as long as mu and sigma are reasonable functions, there does exist a solution.
+2:05
+And it's unique. So we have the same correspondence with this PDE. You're given a PDE, or given a differential equation, not
+2:13
+a stochastic differential equation, you know that, if you're given a reasonable differential equation, then a solution exists.
+2:21
+And it's unique. So the same principle holds in stochastic world. Now, let me state it formally.
+2:28
+This stochastic equation star has a solution that is unique,
+2:47
+of course with boundary condition-- has a solution. And given the initial points-- so
+3:18
+if you're given the initial point of a stochastic process, then a solution is unique.
+3:23
+3:30
+Just check, yes-- as long as mu and sigma are reasonable.
+3:43
+3:51
+One way it can be reasonable, if it satisfies this conditions.
+4:27
+These are very technical conditions. But at least let me parse to you what they are. They say, if you fix a time coordinate and you change x,
+4:36
+you look at the difference between the values of mu when you change the second variable and the sigma.
+4:44
+Then the change in your function is bounded by the distance
+4:51
+between the two points by some constant K.
+4:56
+So mu and sigma cannot change too much when you change your space variable a little bit.
+5:04
+It can only change up to the distance of how much you change the coordinate. So that's the first condition.
+5:09
+Second condition says, when you grow your x,
+5:16
+very similar condition. Essentially it says it cannot blow up too fast, the whole thing. This one is something about the difference between two values.
+5:25
+This one is about how it expands as your space variable grows.
+5:31
+These are technical conditions. And many cases, they will hold.
+5:37
+So don't worry too much about the technical conditions. Important thing here is that, given a differential equation,
+5:45
+you don't expect to have a good closed form. But you do expect to have a solution of some form.
+5:52
+OK, let's work out some examples.
+6:01
+Here is one of the few stochastic differential
+6:08
+equations that can be solved.
+6:21
+This one can be solved. And you already know what X is.
+6:26
+But let's pretend you don't know what X is. And let's try to solve it.
+6:34
+I will show you an approach, which can solve some differential equations, some SDEs.
+6:40
+But this really won't happen that much. Still, it's like a starting point.
+6:48
+There's that. And assume X(0) [INAUDIBLE].
+6:55
+And mu, sigma are constants.
+7:05
+Just like when solving differential equations, first thing you'll do is just guess, suppose, guess.
+7:10
+7:23
+If you want this to happen, then d of X of t is-- OK.
+7:45
+x is just the second variable.
+7:51
+And then these two have to match. That has to be equal to that. That has to be equal to that. So we know that del f over del t, mu of X of t
+8:10
+is equal to mu of f.
+8:20
+So we assumed that this is a solution then differentiated that. And then, if that's a solution, these all have to match.
+8:28
+You get this equation. If you look at that, that tells you that f is an exponential function in the x variable.
+8:36
+So it's e to the sigma times x. And then we have a constant term, plus some a times
+8:44
+a function of t.
+8:50
+The only way it can happen is if it's in this form. So it's exponential function in x.
+8:57
+And in the time variable, it's just some constant.
+9:02
+When you fix a t, it's a constant. And when you fix a t and change x, it has to look like an exponential function.
+9:08
+It has to be in this form, just by the second equation.
+9:13
+Now, go back to this equation. What you get is partial f over partial t is now a times g
+9:25
+prime of t, f...
+9:43
+AUDIENCE: Excuse me. PROFESSOR: Mm-hm. AUDIENCE: That one in second to last line, yeah.
+9:49
+So why is it minus mu there at the end? PROFESSOR: It's equal.
+9:55
+AUDIENCE: Oh, all right. PROFESSOR: Yeah.
+10:03
+OK, and then let's plug it in. So we have a of g prime t, f, plus 1/2 of sigma
+10:13
+square f equals mu of f. In other words, a of g prime of t is mu minus...
+10:25
+square. g(t) is mu times some constant c_1 plus c_2.
+10:36
+10:44
+OK, and then what we got is original function f of t of x is e to the sigma*x plus mu minus 1 over 2 sigma square t
+10:54
+plus some constant. And that constant can be chosen because we
+11:01
+have the initial condition, x of 0 equals 0.
+11:09
+That means if t is equal to 0, f(0, 0) is equal to e to the c. That has to be x_0.
+11:16
+In different words, this is just x_0 times e to the sigma*x plus
+11:21
+mu minus 1 over 2 sigma square of t. Just as we expected, we got this.
+11:27
+11:33
+So some stochastic differential equations can be solved by analyzing it.
+11:39
+But I'm not necessarily saying that this is a better way to do it than just guessing.
+11:45
+Just looking at it, and, you know, OK, it has to be exponential function.
+11:50
+You know what? I'll just figure out what these are. And I'll come up with this formula
+11:56
+without going through all those analysis. I'm not saying that's a worse way than actually going
+12:01
+through the analysis. Because, in fact, what we did is we kind of already knew the answer and are fitting into that answer.
+12:08
+Still, it can be one approach where
+12:14
+you don't have a reasonable guess of what the X_t has to be, maybe try to break it down into pieces like this
+12:21
+and backtrack to figure out the function. Let me give you one more example where we do have an explicit solution.
+12:28
+And then I'll move on and show you how to do when there is no explicit solution or when you don't know how to find an explicit solution.
+12:35
+Maybe let's keep that there.
+12:52
+Second equation is called this.
+13:16
+What's the difference? The only difference is that you don't have an X here.
+13:22
+So previously, our main drift term also was proportional to the current value.
+13:30
+And the error was also dependent on the current value or is proportional to the current value.
+13:36
+But here now the drift term is something like an exponential-- minus exponential.
+13:42
+But still, it's proportional to the current value. But the error term is just some noise.
+13:49
+Irrelevant of what the value is, this has the same variance as the error. So it's a slightly different-- oh, what is it?
+13:58
+It's a slightly different process. And it's known as Ornstein-Uhlenbeck process.
+14:09
+14:18
+And this is used to model a mean-reverting stochastic process.
+14:24
+For alpha greater than 0, notice that if X deviates from 0,
+14:30
+this gives a force that drives the stochastic process back to 0, that's negatively proportional
+14:36
+to your current value. So yeah, this is used to model some mean-reverting stochastic
+14:44
+processes. And they first used it to study the behavior of gases.
+14:50
+14:57
+I don't exactly see why. But that's what they say. Anyway, so this is another thing that
+15:03
+can be solved by doing similar analysis.
+15:10
+But if you try the same method, it will fail. So as a test function, your guess, initial guess, will be--
+15:34
+or a(0) is equal to 1.
+15:40
+Now, honestly, I don't know how to come up with this guess.
+15:49
+Probably, if you're really experienced with stochastic differential equations, you'll see some form, like you'll
+15:56
+have some feeling on how this process will look like. And then try this, try that, and eventually something
+16:03
+might succeed. That's the best explanation I can give. I can't really give you intuition why that's the right guess.
+16:10
+Given some stochastic differential equation, I don't know how to say that you should start with this kind of function,
+16:16
+this kind of function. And it was the same when, if you remember how we solved ordinary differential equations
+16:22
+or partial differential equations, most of the time there is no good guess. It's only when your given formula has some specific form
+16:31
+such a thing happens. So let's see what happens here.
+16:37
+That was given. Now, let's do exactly the same as before.
+16:42
+Differentiate it, and let me go slow. So we have a prime of t.
+16:49
+By chain rule, a prime of t and that value,
+16:54
+that part will be equal to X(t) over a(t). This is chain rule.
+17:00
+So I differentiate that to get a prime t. That stays just as it was.
+17:05
+But that can be rewritten as X(t) divided by a(t). And then plus a(t) times the differential of that one.
+17:15
+And that is just b(t)*dB(t).
+17:29
+You don't have to differentiate that once more, even though it's stochastic calculus, because that's
+17:34
+a very subtle point. And there's also one exercise about it in your homework. But when you have a given stochastic process written
+17:42
+already in this integral form, if we remember the definition of an integral, at least how I defined it,
+17:49
+is that it was an inverse operation of a differential. So when you differentiate this, you just get that term.
+17:55
+What I'm trying to say is, there is no term, no term where you have to differentiate this one more.
+18:02
+Prime dt, something like that, we don't have this term.
+18:11
+This can be confusing. But think about it.
+18:17
+18:22
+Now, we laid it out and just compare. So minus alpha of X of t is equal to a prime t
+18:32
+over a(t) X(t). And your second term, sigma*dB(t) is equal to a(t)
+18:42
+times b(t). But these two cancel.
+18:48
+And we see that a(t) has to be e to the minus alpha t.
+18:57
+19:06
+This says that is an exponential. Now, plug it in here. You get b(t).
+19:17
+And that's it. So plug it back in. X of t is e to the minus alpha*t of x of 0 plus 0 to t sigma e
+19:32
+to the alpha*s.
+19:56
+So this is a variance, expectation is 0,
+20:02
+because that's a Brownian motion. This term, as we expected, as time passes,
+20:08
+goes to 0, exponential decay. And that is kind of hinted by this fact, the mean reversion.
+20:18
+So if you start from some value, at least the drift term will go to 0 quite quickly.
+20:25
+And then the important term will be the noise term or the variance term.
+20:35
+Any questions?
+20:45
+And I'm really emphasizing a lot of times today, but really you can forget about what
+20:51
+I did in the past two boards, this board and the previous board. Because most of the times, it will be useless.
+20:56
+And so now I will describe what you'll
+21:01
+do if you're given a stochastic differential equation, and you have a computer in front of you.
+21:06
+21:15
+What if such method fails?
+21:30
+And it will fail most of the time.
+21:36
+That's when we use these techniques called finite difference method, Monte Carlo simulation, or tree
+21:53
+method.
+22:04
+The finite difference method, you probably already saw it, if you took a differential equation course.
+22:09
+But let me review it.
+22:19
+This is for PDEs or ODEs, for ODE, PDE, not stochastic differential equations.
+22:26
+But it can be adapted to work for stochastic differential equations. So I'll work with an example.
+22:32
+Let u of t be u prime of t plus-- u prime of t
+22:46
+be u(t) plus 2, u_0 is equal to 0.
+22:53
+Now, this has an exact solution. But let's pretend that there is no exact solution. And if you want to do it numerically,
+23:00
+you want to find the value of u equals-- u(1) numerically.
+23:07
+And here's what you're going to do. You're going to chop up the interval from 0 to 1 into very fine pieces.
+23:12
+So from 0 to 1, chop it down into tiny pieces.
+23:20
+And since I'm in front of a blackboard, my tiniest piece will be 1 over 2 and 1. I'll just take two steps.
+23:27
+But you should think of it as really repeating this a lot of times.
+23:33
+I'll call my step to be h. So in my case, I'm increasing my steps by 1 over 2 at each time.
+23:40
+So what is u of 1 over 2? Approximately, by Taylor's formula,
+23:47
+it's u(0) plus 1/2 times u prime of 0.
+23:53
+That's Taylor approximation. OK, u(0) we already know.
+23:59
+It's given to be equal to 0. u prime of 0, on the other hand, is given by this differential
+24:05
+equation. So it's 1 over 2 times 5 times u(0) plus 2.
+24:12
+u(0) is 0. So we get equal to 1.
+24:17
+Like we have this value equal to 1, approximately. I don't know what happens. But it will be close to 1.
+24:24
+And then for the next thing, u1. This one is, again by Taylor approximation, is u of 1 over 2
+24:32
+plus 1 over 2 u prime of 1 over 2.
+24:37
+And now you know the value of u of 1 over 2, approximate value, by this. So plug it in. You have 1 plus 1 over 2 and, again, 5 times u(1/2) plus 2.
+24:48
+If you want to do the computation, it should give 9 over 2.
+24:55
+It's really simple. The key idea here is just u prime
+25:01
+is given by an equation, this equation. So you can compute it once you know the value of u
+25:09
+at that point. And basically, the method is saying take h to be very small,
+25:16
+like 1 over 100. Then you just repeat it 1 over 100 times. So the equation is the i plus 1 step value
+25:23
+can be approximated from the i-th value plus h times
+25:30
+u prime of h. Now repeat it and repeat it. And you reach u of 1.
+25:36
+And there is a theorem saying, again, if the differential equation is reasonable, then
+25:42
+that will approach the true value as you take h to be smaller and smaller.
+25:48
+That's called the finite difference method for differential equations. And you can do the exact same thing for two variables,
+25:55
+let's say.
+26:07
+And what we showed was for one variable, finite difference method, we want to find the value of u, function u of t.
+26:18
+We took values at 0, h, 2h, 3h. Using that, we did some approximation, like that,
+26:26
+and found the value. Now, suppose we want to find, similarly,
+26:33
+a two-variable function, let's say v of t and x.
+26:38
+And we want to find the value of v of 1, 1. Now the boundary conditions are these.
+26:44
+We already know these boundaries.
+26:49
+I won't really show you by example. But what we're going to do now is compute this value
+26:55
+based on these two variables. So it's just the same. Taylor expansion for two variables
+27:01
+will allow you to compute this value from these two values. Then compute this from these two, this from these two,
+27:09
+and just fill out the whole grid like that, just fill out layer by layer.
+27:14
+At some point, you're going to reach this. And then you'll have an approximate value of that.
+27:20
+So you chop up your domain into fine pieces and then take the limit.
+27:25
+And most cases, it will work.
+27:31
+Why does it not work for stochastic differential equations?
+27:38
+Kind of works, but the only problem is we don't know which value we're looking at,
+27:44
+we're interested in. So let me phrase it a little bit differently.
+27:51
+You're given a differential equation of the form dX
+27:58
+equals mu dt plus t dB of t and time variable and space
+28:12
+variable. Now, if you want to compute your value at time 2h based on value
+28:21
+h, in this picture, I told you that this point
+28:29
+came from these two points. But when it's stochastic, it could depend on everything.
+28:38
+You don't know where it came from. This point could have come from here. It could have came from here. It could have came from here, came from here.
+28:44
+You don't really know. But what you know is you have a probability distribution.
+28:50
+So what I'm trying to say is now,
+28:57
+if you want to adapt this method, what you're going to do is take a sample Brownian motion path.
+29:04
+29:11
+That means just, according to the distribution of the Brownian motion, take one path and use that path.
+29:21
+Once we fix a path, once a path is fixed,
+29:29
+we can exactly know where each value comes from. We know how to backtrack.
+29:35
+29:42
+That means, instead of all these possibilities, we have one fixed possibility, like that.
+29:49
+So just use that finite difference method
+29:54
+with that fixed path. That will be the idea.
+30:01
+Let me do it a little bit more formally.
+30:10
+And here is how it works.
+30:16
+If we have a fixed sample path for Brownian motion of B(t),
+30:30
+then X at time i plus 1 of h is approximately equal to X
+30:41
+at time a of h plus h times dx at that time i of h,
+30:54
+just by the exact same Taylor expansion. And then d of X we know to be-- that is equal to mu
+31:08
+of dt plus-- oh, mu of dt is h.
+31:18
+So let me write it like that, sigma times d of X-- dB.
+31:27
+And these mu depend on [? their paths, ?] x at i of h
+31:37
+dt, sigma...
+31:56
+With that, here to here is Taylor expansion. Here to here I'm going to use the differential equation d of X is equal to mu dt plus sigma dB(t).
+32:05
+Yes? AUDIENCE: Do we need that h for [INAUDIBLE]? PROFESSOR: No, we don't actually.
+32:10
+Oh, yeah, I was-- thank you very much. That was what confused me.
+32:17
+Yes, thank you very much. And now we can compute everything.
+32:22
+This one, we're assuming that we know the value. That one can be computed from these two coordinates.
+32:30
+Because we now have a fixed path X, we know what X of i*h is.
+32:36
+dt, we took it to be h, approximated as h, or time difference.
+32:42
+Again, sigma can be computed. dB now can be computed from B_t.
+32:47
+Because we have a fixed path, again, we know that it's equal to B of i plus 1 of h minus B of i of h,
+32:58
+with this fixed path. They're basically exactly the same, if you have a fixed path B. The problem is
+33:06
+we don't have a fixed path B. That's where Monte Carlo simulation comes in.
+33:15
+So Monte Carlo simulation is just a way to draw, from some probability distribution, a lot of samples.
+33:22
+So now, if you know how to draw samples from the Brownian motions, then what you're going to do is draw a lot of samples.
+33:30
+For each sample, do this to compute the value of X(0), can compute X of 1.
+33:37
+So, according to a different B, you will get a different value.
+33:43
+And in the end, you'll obtain a probability distribution. So by repeating the experiment, that means just
+33:57
+redraw the path again and again, you'll get different values of X of 1. That means you get a distribution of X of 1,
+34:04
+obtain distribution of X of 1.
+34:10
+And that's it. And that will approach the real distribution of X of 1.
+34:18
+So that's how you numerically solve a stochastic differential equation.
+34:23
+Again, there's this finite difference method that can be used to solve differential equations.
+34:29
+But the reason it doesn't apply to stochastic differential equations is because there's underlying uncertainty coming
+34:36
+from Brownian motion. However, once you fix a Brownian motion,
+34:42
+then you can use that finite difference method to compute X of 1. So based on that idea, you just draw
+34:48
+a lot of samples of the Brownian path, compute a lot of values of X of 1,
+34:53
+and obtain a probability distribution of X of 1. That's the underlying principle.
+35:00
+And, of course, you can't do it by hand.
+35:06
+You need a computer. Then, what is tree method?
+35:13
+That's cool. Tree method is based on this idea.
+35:20
+Remember, Brownian motion is a limit of simple random walk.
+35:34
+35:44
+This gives you a kind of approximate way to draw a sample from Brownian motions.
+35:50
+How would you do that?
+35:58
+At time 0, you have 0. At time really tiny h, you'll have plus 1 or minus 1
+36:06
+with same probability. And it goes up or down again, up or down again, and so on.
+36:16
+And you know exactly the probability distribution.
+36:22
+So the problem is that it ends up here as 1/2, ends up here as 1/2, 1/4, 1/2, 1/4, and so on.
+36:30
+So instead of drawing from this sample path, what you're going to do is just compute the value of our function
+36:36
+at these points.
+36:41
+But then the probability distribution, because we know the probability distribution that the path will end up at these points,
+36:49
+suppose that you computed all these values here.
+36:54
+I draw too many, 1, 2, 3, 4, 5.
+37:00
+This 1 or 32 probability here. 5 choose 1, 5 over 32, 5 choose 2 is 10 over 32.
+37:10
+Suppose that some stochastic process, after following this,
+37:17
+has value 1 here, 2 here, 3 here, 4, 5, and 6 here.
+37:23
+Then, approximately, if you take a Brownian motion, it will have 1 with probability 1
+37:28
+over 32, 2 with probability 5 over 32, and so on.
+37:34
+Maybe I didn't explain it that well. But basically, tree method just says, you can discretize the outcome of the Brownian motion,
+37:42
+based on the fact that it's a limit of simple random walk. So just do the exact same method for simple random walk instead
+37:52
+of Brownian motion. And then take it to the limit. That's the principle.
+37:57
+Yeah.
+38:04
+Yeah, I don't know what's being used in practice. But it seems like these two are the more important ones.
+38:10
+This is more like if you want to do it by hand. Because you can't really do every single possibility.
+38:15
+That makes you only a finite possibility.
+38:22
+Any questions? Yeah. AUDIENCE: So here you said, by repeating
+38:28
+the experiment we get [INAUDIBLE] distribution for X(1). I was wondering if we could also get the distribution for not
+38:36
+just X(1) but also for X(i*h). PROFESSOR: All the intermediate values? AUDIENCE: Yeah. PROFESSOR: Yeah, but the problem is
+38:41
+we're taking different values of h. So h will be smaller and smaller. But for those values that we took,
+38:47
+yeah, we will get some distribution. AUDIENCE: Right, so we might have distributions for X of d for many different points, right?
+38:56
+PROFESSOR: Yeah. AUDIENCE: Yeah. So maybe we could uh-- right, OK.
+39:02
+PROFESSOR: But one thing you have to be careful is let's suppose you take h equal 1 over 100.
+39:08
+Then, this will give you a pretty fairly good approximation for X of 1. But it won't give you a good approximation
+39:14
+for X of 1 over 50. So probably you can also get distribution for X of 1 over 3,
+39:21
+1 over 4. But at some point, the approximation will be very bad.
+39:28
+So the key is to choose a right h. Because if you pick h to be too small, you will have a very good approximation
+39:35
+to your distribution. But at the same time, it will take too much time to compute it.
+39:45
+Any remarks from a more practical side?
+39:51
+OK, so that's actually all I wanted to say about stochastic differential equations.
+39:56
+Really the basic principle is there is such thing called stochastic differential equation.
+40:02
+It can be solved. But most of the time, it won't have a closed form formula.
+40:08
+And if you want to do it numerically, here are some possibilities. But I won't go any deeper inside.
+40:18
+So the last math lecture I will conclude with heat equation.
+40:26
+Yeah. AUDIENCE: The mean computations of [INAUDIBLE],
+40:33
+some of the derivatives are sort of path-independent, or have path-independent solutions,
+40:39
+so that you basically are looking at say the distribution at the terminal value
+40:44
+and that determines the price of the derivative. There are other derivatives where things really
+40:51
+are path-dependent, like with options where you have
+40:57
+early exercise possibilities. When do you exercise, early or not? Then the tree methods are really good because at each element
+41:06
+of the tree you can condition on whatever the path was. So keep that in mind, that when there's
+41:13
+path dependence in the problem, you'll probably want to use one of these methods. PROFESSOR: Thanks. AUDIENCE: I know that if you're trying to break it down
+41:21
+into simple random walks you can only use [INAUDIBLE].
+41:26
+But I've heard of people trying to use, instead of a binomial, a trinomial tree. PROFESSOR: Yes, so this statement actually
+41:35
+is quite a universal statement. Brownian motion is a limit of many things, not just
+41:42
+simple random walk. For example, if you take plus 1, 0, or minus 1 and take it to the limit, that will also
+41:49
+converge to the Brownian motion. That will be the trinomial and so on.
+41:54
+And as Peter said, if you're going to use tree method to compute something, that will increase accuracy, if you take more possibilities
+42:03
+at each step. Now, there is two ways to increase the accuracy is take more possibilities at each step
+42:14
+or take smaller time scales.
+42:20
+OK, so let's move on to the final topic, heat equation.
+42:27
+Heat equation is not a stochastic differential equation, first of all.
+42:32
+It's a PDE.
+42:47
+That equation is known as a heat equation where t is like the time variable, x is like the space variable.
+42:54
+And the reason we're interested in this heat equation in this course is, if you came to the previous lecture, maybe from Vasily last week,
+43:09
+Black-Scholes equation, after change of variables, can be reduced to heat equation.
+43:17
+That's one reason we're interested in it. And this is a really, really famous equation
+43:22
+also in physics. So it was known before Black-Scholes equation. Particularly, this can be a model for-- equations
+43:32
+that model this situation. So you have an infinite bar, very long and thin.
+43:42
+It's perfectly insulated.
+43:48
+So heat can only travel along the x-axis. And then at time 0, you have some heat distribution.
+43:58
+At time 0, you know the heat distribution.
+44:07
+44:13
+Then this equation tells you the behavior of how the heat will be distributed at time t.
+44:20
+So u of t of x, for fixed t, will be the distribution
+44:25
+of the heat over the x-axis. That's why it's called the heat equation. That's where the name comes from.
+44:31
+And this equation is very well understood.
+44:37
+It does have a closed-form solution. And that's what I want to talk about.
+44:44
+OK, so few observations before actually solving it.
+44:51
+44:58
+Remark one, if u_1 and u_2 satisfies heat equation,
+45:13
+then u_1 plus u_2 also satisfies, also does.
+45:18
+That's called linearity.
+45:24
+Just plug it in. And you can figure it out. More generally that means, if you
+45:31
+integrate a family of functions ds, where u_s all satisfy star,
+45:46
+then this also satisfies star, as long
+46:00
+as you use reasonable function. I'll just assume that we can switch the order of integration and differentiation.
+46:06
+So it's the same thing. Instead of summation, I'm taking integration of lot of solutions.
+46:14
+And why is that helpful? This is helpful because now it suffices
+46:28
+to solve for-- what is it?
+46:36
+Initial condition, u of t of x equals delta, delta function,
+46:44
+of 0.
+46:52
+That one is a little bit subtle. The Dirac delta function is just like an infinite ass
+46:58
+at x equals 0. It's 0 everywhere else. And basically, in this example, what you're saying is,
+47:05
+at time 0, you're putting like a massive amount of heat at a single point.
+47:11
+And you're observing what's going to happen afterwards, how this heat will spread out.
+47:17
+If you understand that, you can understand all initial conditions. Why is that?
+47:23
+Because if u sub s t, x-- u_0-- is such solution,
+47:38
+then integration of-- let me get it right--
+47:45
+u of t of s minus x ds is a solution with initial condition
+48:10
+x(0, x).
+48:16
+What is it?
+48:37
+Sorry about that. So this is really the key. If you have a solution to the Dirac delta initial condition,
+48:46
+then you can superimpose a lot of those solutions to obtain a solution for arbitrary initial condition.
+48:51
+So this is based on that principle, because each of them
+48:58
+is now a solution. If you superpose this, then that is a solution.
+49:04
+And then if you plug it in, you figure out that actually it has satisfied this initial condition.
+49:14
+That was my first observation. Second observation, second remark,
+49:27
+is for the initial value u(0, x) equals a Dirac delta function,
+49:44
+u of-- is a solution.
+49:59
+50:05
+So we know the solution for the Dirac delta part. First part, we figured out that if we know the solution
+50:10
+for the Dirac delta function, then we can solve it for every single initial value. And for the initial value Dirac delta,
+50:17
+that is the solution that solves the differential equation.
+50:23
+So let me say a few words about this equation, actually one word.
+50:29
+Have you seen this equation before?
+50:35
+It's the p.d.f. of normal distribution. So what does it mean? It means, in this example, if you have a heat traveling
+50:41
+along the x-axis, perfectly insulated, if you put a massive heat at this 0, at one point,
+50:49
+at time 0, then at time t your heat will be distributed according to the normal distribution.
+50:55
+In other words, assume that you have a bunch of particle. Heat is just like a bunch of particles, say millions of particles at a single point.
+51:04
+And then you grab it. And then time t equals 0 you release it.
+51:09
+Now the particle at time t will be distributed according
+51:16
+to a normal distribution. In other words, each particle is like a Brownian motion.
+51:24
+So for particle by particle, the location of its particle at time t will be kind of distributed
+51:31
+like a Brownian motion. So if you have a massive amount of particles, altogether their distribution will look
+51:38
+like a normal distribution. That's like its content. So that's also one way you see the appearance of a Brownian
+51:45
+motion inside of this equation. It's like a bunch of Brownian motions happening together
+51:52
+at the exact same time.
+52:01
+And now we can just write down the solution.
+52:06
+Let me be a little bit more precise.
+52:18
+OK, for the heat equation delta u over delta t,
+52:32
+with initial value u of 0, x equals some initial value,
+52:44
+let's say v of x, and t greater than equal to 0.
+52:50
+53:00
+The solution is given by integration.
+53:09
+u at t of x is equal to e to the minus-- let me get it right.
+53:46
+54:08
+Basically, I'm just combining this solution to there. Plugging in that here, you get that.
+54:18
+So you have a explicit solution, no matter what the initial conditions are, initial conditions
+54:24
+are given as, you can find an explicit solution at time t for all x.
+54:32
+That means, once you change the Black-Scholes equation into the heat equation, you now have a closed-form solution
+54:41
+for it. In that case, it's like a backward heat equation.
+54:51
+And what will happen is the initial condition you should think of as a final payout function.
+54:56
+The final payout function you integrate according to this distribution. And then you get the value at time t equals 0.
+55:03
+The detail, one of the final project
+55:09
+is to actually carry out all the details. So I will stop here. Anyway, we didn't see how the Black-Scholes equation actually
+55:17
+changed into heat equation.
+55:22
+If you want to do that project, it will be good to have this in mind. It will help.
+55:29
+Any questions?
+55:34
+OK, so I think that's all I have. I think I'll end a little bit early today.
+55:41
+So that will be the last math lecture for the semester. From now on you'll only have application lectures.
+55:48
+There are great lectures coming up, I hope, and I know.
+55:55
+So you should come and really enjoy now. You went through all this hard work.
+56:02
+Now it's time to enjoy.

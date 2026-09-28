@@ -1,0 +1,1034 @@
+0:00
+The following content is provided under a Creative Commons license. Your support will help MIT OpenCourseWare
+0:06
+continue to offer high-quality educational resources for free. To make a donation or view additional materials
+0:13
+from hundreds of MIT courses, visit MIT OpenCourseWare at ocw.mit.edu.
+0:21
+JAKE XIA: This is the second time we are having this class. We had it last year in a smaller version.
+0:27
+That was for six units of a credit, and we had it once a week. And mostly practitioners from the industry,
+0:36
+from Morgan Stanley, talking about examples how math is applied in modern finance.
+0:41
+0:48
+And so we got some good response last year. So, with the support of the math department,
+0:53
+we decided to expand this class to be 12 units of credit
+0:58
+and have twice a week. So, we have every Tuesday and Thursday afternoon from 2:30 to 4:00, as you know, in this classroom.
+1:05
+So last year, Dr. Vasily Strela and I-- by the way,
+1:13
+I'm Jake Xia and that's Dr. Vasily, and we were the main instructors last year.
+1:18
+Now we doubled it up to four main instructors. That's Dr. Peter Kempthorne and Dr. Choongbum Lee.
+1:26
+The reason we doubled up the main instructors is we have newly added math lectures, mostly focusing
+1:35
+from linear algebra, probability to statistics, and some stochastic calculus to give you the foundation
+1:42
+to understand the math will be used in those examples in the lecture taught by the practitioners
+1:52
+from the industry. And the purpose of this course is really to give you a sampling menu to see how mathematics is applied
+2:02
+in modern finance and help you to decide if this is a field that you would be-- RECORDED VOICE: Thank you, for using WebEx.
+2:08
+Please visit our website at www.webex.com.
+2:14
+JAKE XIA: OK, you heard that. And so hopefully, this will give you enough information
+2:21
+to decide this is a field you would like to pursue in your future career. In fact, last year when we finished the class,
+2:29
+we had a few students coming to work in the industry. Some work at Morgan Stanley, some work at elsewhere.
+2:35
+So that's really the goal. And at the same time, obviously, you
+2:43
+will further solidify your math knowledge and learn new content.
+2:51
+And we put the prerequisite about the math part a bit later.
+2:56
+So I will use today's first lecture's time to give you an introduction, really,
+3:02
+to prepare you some basic background knowledge about the financial markets.
+3:08
+Some terminologies will be used, which you may not have heard before.
+3:13
+So before I get into the introduction, I always like to know who are actually in the classroom,
+3:19
+so let me ask you a few questions. You just need to raise your hands so I know roughly what kind of background and where you are.
+3:28
+So how many undergraduate students are here?
+3:33
+So I would say 80% percent.
+3:38
+How many graduate students are here, just to verify? Yep, that's about right, 20%.
+3:44
+And how many students are in finance and business major?
+3:51
+Just one. And how many of you are a math major?
+3:56
+Most of you. How many of you are engineering majors?
+4:02
+A few. How many of you actually are from other universities?
+4:08
+Great, because last year we had quite a few, so I want to specifically tell you that you're very welcome to attend the classes here.
+4:17
+So it's open door. And last year I remember we had a couple of students
+4:22
+from Harvard. That's where I actually work right now.
+4:29
+I forgot to mention that, but I'm affiliated with both the math department and the Sloan school
+4:35
+here. So anyway, thanks for that. We will be doing a bit more polling along the way,
+4:41
+mainly to get feedback of how you feel about the class. Last year we had it online, so if you
+4:48
+feel the class is going too fast, or the math part is going too slow, or the finance part is a bit confusing,
+4:55
+the easiest way is really just to send us emails, which you will find from the class website.
+5:02
+So anyway, today-- VASILY STRELA: And all of us got MIT emails. JAKE XIA: Yes. We all have MIT emails, which are listed on the website.
+5:10
+VASILY STRELA: [INAUDIBLE]. JAKE XIA: And obviously, we have offices here.
+5:17
+You can easily stop by Peter and Choongbum's offices. And Vasily and I probably will be less often on campus,
+5:26
+but we'll be here quite often and definitely love to be more. So anyway, I will start today's lecture with a story,
+5:35
+and a quiz at the end. Don't worry, it's not a real quiz. Just going to ask you some questions
+5:40
+you can raise your hand and give your answer. But let me start with my story.
+5:46
+This is actually my personal story. I want to tell you why I tell the story later.
+5:52
+But the story actually was in the mid '90s. I just left Salomon Brothers -- that was my first financial
+6:01
+industry job -- to go to Morgan Stanley in New York to join
+6:06
+the options trading desk. So the first day, I sat down, I opened the trading book,
+6:15
+I found something was missing. So, I turned around, I asked my desk quant.
+6:22
+I said, where is the vega report? So, let me show you.
+6:27
+So that's the story.
+6:33
+So I'm obviously not going to tell you the story of Pi
+6:39
+or "Life of Pi." That's not a financial story. The rest of the story, alpha, beta, delta, gamma,
+6:45
+theta, which you will learn from Peter and Choongbum and Vasily's classes.
+6:50
+So I'm going to talk about vega. So by the way, before I tell you the story, what's unique about vega on this list?
+6:57
+AUDIENCE: It's not a Greek letter. JAKE XIA: It's not a Greek letter. That's right. So I turned around and asked my desk quant, I said,
+7:04
+where's the vega report? But how many of you actually know what a vega is?
+7:09
+OK, lot of people know. So anyway, I'm not going to-- just for the people who haven't heard about it before, it's
+7:16
+a measurement about a book or portfolio or position's sensitivity to volatility.
+7:22
+So, what is volatility? Which again, you will learn more in rigorous terms
+7:29
+how it's defined in mathematics. But the meaning of it is really a measurement or indication
+7:36
+of how volatile, or what's the standard deviation of a price can change over time.
+7:43
+That's all you need to know right now. I'm not going to ask you questions later. So my desk quant look at me, said--
+7:52
+this is supposed to be options trading desk, so he look at me puzzled.
+7:58
+So instead of answering my question, he handed over me a training manual for new employees and new analysts.
+8:06
+So I opened the training manual and looked it through. I actually found my answer.
+8:12
+So actually, at Morgan Stanley this is not called vega, it's called kappa.
+8:17
+So now, I remember to call it kappa. Kappa is actually a Greek letter. So further, I look on the same page
+8:25
+there was actually a footnote, which I copied down. So the footnote about why it's called kappa at Morgan Stanley.
+8:39
+Kappa is also called vega by some uneducated traders at the Salomon Brothers.
+8:45
+That's where I came from. I just joined. They have mistaken vega as a Greek letter
+8:50
+after gambling at Vegas. So anyway, so that was my first day.
+8:58
+So obviously, I learned how to call kappa very quickly, because I came from Salomon Brothers.
+9:05
+And I called it kappa in the last 17 years, but you will hear people calling it vega.
+9:12
+Obviously, I have probably more people calling it the vega. But anyway, so that's my first day at Morgan Stanley.
+9:19
+But why did I tell you the story? What point I try to make?
+9:24
+So this story is actually-- when you think about it, mathematical or quantitative finance is a rather new field.
+9:33
+A lot of these terms were newly introduced. And the pricing model of options, as you know,
+9:42
+was introduced in the Black-Scholes in the '70s, or some of the ground work may be done a bit earlier.
+9:49
+But it's not like finance was a quantitative profession
+9:55
+to start with. So what we witness in the last 30 years was really a transformation of the trading profession coming
+10:04
+from mostly under-educated traders. Some of them typically joined the firms in the mail room
+10:13
+and became trader later on. That's typical career path. And to nowadays, if you walk on the trading floor,
+10:20
+you talk to the traders, most of them have advanced degrees and quite a few of them have very high training
+10:29
+in mathematics and computer science. So what has changed over the last 20 or 30 years?
+10:36
+I myself, personally, was probably one of the data point experiencing this change.
+10:44
+And I certainly didn't expect I would be doing this when I was at MIT, but I
+10:51
+did that in the last 20 years. So the point I'm trying to tell you
+10:59
+is, before you dive into any details of mathematics
+11:04
+or any concept in finance in this class, just bear in mind,
+11:11
+this is a field developed in the last mostly 30 years, or even
+11:16
+shorter. And what you really need to ask questions is-- it's not really is it right or wrong in mathematics,
+11:26
+is it right or wrong in physics? So, how the concepts are established
+11:31
+and defined and verified. Because this is a field-- the transformation
+11:37
+about the participants, products, models, methodology,
+11:42
+everything are changing very rapidly. Even nowadays, they're still changing. So with that, I will give you some background
+11:51
+on how the financial markets actually started,
+11:57
+and that's really the history part of this industry.
+12:03
+So, when we talk about markets, we know in early days people need to exchange goods.
+12:10
+You have something I don't have, I have something you don't have, so there's exchanges.
+12:15
+Then it becomes centralized. There are stock exchanges, futures exchanges all over the world where these products will
+12:22
+be listed as securities on these exchanges. That's one way of trading, which is centralized.
+12:30
+Obviously, in the last 10, 15 years, now we have ECNs, electronic platforms.
+12:37
+Trade over-- you know, even larger volume of those trades. So, financial products is really just one form of trading.
+12:47
+There are many other ways of trading aside from exchanges. One of them, which is called OTC,
+12:55
+is over-the-counter, meaning two counterparties agree to do a trade without really subject to the exchange rules,
+13:05
+or the underlying trading agreement does not have to be a securitized product, or standardized,
+13:13
+or whatever ways you define it. And the different regions have different exchanges
+13:18
+and markets, as well. And they typically specialize in local products, local company
+13:25
+stocks, local bonds, and local currencies.
+13:31
+So, there are many different forms. So again, what's in common?
+13:37
+That's the question you need to ask. Also, you don't know the specifics. And the currencies, money itself, are also traded.
+13:47
+And that's where different currencies issued by different countries.
+13:52
+So, when we talk about trading stocks-- there are also people trade baskets of stocks,
+13:57
+trade groups of stocks together, and that's stock index or indices.
+14:03
+So, there are different products. How the stock get listed on the stock exchange?
+14:09
+It goes through IPO-- Initial Public Offering process. So, when a company changes from private to public,
+14:17
+it goes through this IPO process. It's called primary market, primary listing.
+14:23
+And once the stock is listed on the exchange
+14:28
+and it becomes traded in the market, we call it secondary trading. So, that's after the primary market.
+14:36
+And equity or stock is one form of trading or one form of financial products.
+14:43
+What are other forms? Loans. Actually, debt products are more generic than equity products.
+14:52
+When you started thinking about it, what is really finance is about?
+14:57
+It's really about someone has money, someone doesn't. Someone has money to lend out, someone needs to borrow money.
+15:05
+So, that's loan. Loan is really a private agreement between two counterparties or multiple counterparties.
+15:13
+When you securitize them, they become bonds. And when you look at bonds, every government
+15:20
+will issue large sovereign debt. So, US government has large outstanding US Treasury debt--
+15:27
+bonds, notes, bills. And corporates have issued a lot of debt product, as well.
+15:34
+They borrow money when they need to build a new factory or expand. Universities borrow money.
+15:41
+When MIT needs to build a new building, some of the money will come from the endowment support,
+15:47
+some will come from some other form of research budget, or some will come from debt financing.
+15:55
+Just borrow from the public-- local governments, states, counties, even.
+16:01
+So, they have various forms. So, that's debt product. Commodities, actually, you know.
+16:10
+Metal, energy, agriculture products are traded, mostly in the futures
+16:15
+format and some in physical format, meaning you take deliveries. When you actually buying and sell,
+16:21
+you build a warehouse to take them. You ship a tank to store above the ocean.
+16:29
+And the real estate, you're buying and sell houses. 2008 financial crisis, if you read about it,
+16:36
+this has a lot to do with the real estate market, the mortgages, and asset-backed securities.
+16:44
+So, I'm not trying to give you all the definition, dumping the information on you. But I like you at least hearing it once today,
+16:52
+and then you have more interest, you can read on the side. So asset-backed securities is when you have an asset,
+17:00
+you basically issue a debt with the asset backing it.
+17:06
+And how do you rate the asset's risk level and what's the income stream, cash flow?
+17:14
+And before 2008 financial crisis, as you heard, large amount of CMBS-- basically,
+17:25
+it's a commercial real estate backed securities, mortgage securities, and the residential, as well.
+17:33
+And further of all of these, you heard probably a lot about the derivative products.
+17:39
+So, that started with swaps, options. And the structure of the products, it
+17:44
+become more tailor-made for either investors or borrowers
+17:51
+to structure the products in a way to suit their needs. And some of the complexity of those structured products
+17:59
+become quite high, and the mathematics involved in pricing them and the risk management
+18:05
+become rather challenging.
+18:14
+So coming back to the players in the market,
+18:23
+one large type of player is really bank.
+18:29
+Essentially, after 1933 Glass-Steagall legislation,
+18:34
+there were two main types of banks. One is called commercial bank, the other is investment bank.
+18:40
+Commercial bank is supposedly, you're taking deposits and lend out the money,
+18:46
+and doing more commercial services. Investment bank supposed to focus on the capital markets,
+18:55
+raising capital, trading, and asset management.
+19:00
+But obviously, after 1999, the Glass-Steagall was repealed.
+19:08
+There's no longer that. Some people blame that, and probably for a very good reason, for the cause of 2008 financial crisis.
+19:18
+But I want to tell you how currently investment banks are organized.
+19:23
+Vasily just mentioned he works in the fixed income.
+19:31
+So banks typically organized by institutional business and asset management.
+19:37
+So, within the institutional client business, it has typically three main parts.
+19:43
+Fixed income, which trade the debt and the derivative products.
+19:48
+Equity, trade stocks and the derivative products. And IBD, stands for Investment Banking Division,
+19:57
+which really covers corporate finance, raising capital, listing a stock, IPO, and merger
+20:05
+and acquisition, and advisory. So that's how banks are organized.
+20:11
+Outside banks, other players, basically, the asset managers, are obviously a very big force in the financial markets.
+20:19
+So the question a lot of people ask is, is this a zero sum game?
+20:27
+I'm sure you've heard this many times. So, in the financial markets, some people win,
+20:32
+some people lose. A lot of times, it depends on the specific products you
+20:38
+trade, the market you're in. It is, lot of times, pretty net zero.
+20:44
+But why do we need financial markets? This comes back to what I described before.
+20:53
+Because something existed-- actually, there's a need for it. It's really the need to bridge between the lenders
+21:02
+and the borrowers. That's really coming down to the essential relationship.
+21:07
+So, investors who have money need to have better yield or better return, better interest.
+21:14
+In the current environment, when you have a savings account, you don't really earn much at all.
+21:21
+And so you would have to take more risk to generate more
+21:26
+return, or you have longer horizon CDs, other type of products, or trade the stocks.
+21:34
+So, when somebody has money, when you trade stocks, you're essentially-- you're buying a stock,
+21:41
+you give the money somewhere. Supposedly, it will go to the company. Company use the money to generate a better return.
+21:50
+And for the borrowers, whoever needs money, they need to have access to the capital.
+21:58
+So obviously, different borrowers have different risks. Some people borrow money, never return.
+22:04
+So, never generate any returns, or never even return the principal. And so the trade between lenders and the borrowers,
+22:12
+is again, essentially the main driver of the financial markets.
+22:20
+So, a few more words about the market participants. So, banks and so-called dealers play the role of market making.
+22:30
+What is market making? So, when you or some end user go to the market,
+22:36
+wants to buy or sell, typically, if there's no market, you don't really find the match.
+22:43
+And some of the products you want to buy or sell may not necessarily be liquid.
+22:48
+So, the dealers step in the middle, make you a price. Say, OK, you want to buy or sell.
+22:55
+I can tell you-- this stock, I make you price.
+23:00
+$0.99, and that's my bid. $0.95, that's my offer.
+23:08
+So, that's the price I'm willing to buy or sell. But what the result of the trade-- the dealer
+23:15
+actually takes the other side of your trade. So, they take principal risk, in this case.
+23:21
+So, that's the difference between dealers and the brokers. So, brokers don't really take principal risks.
+23:28
+If you want to buy something or sell something, if I'm a broker, I don't make you a price.
+23:34
+I go to the market makers. I actually put two people together,
+23:40
+matchmaking, make that trade happen. So, I earn the commission. So, that's a broker's role.
+23:47
+So obviously, there are individual investors, retail investors, same meaning.
+23:52
+Mutual funds, who actually manage public investors' money,
+23:57
+typically in the long-only format. Long means you buy something.
+24:04
+So, you don't really short sell a particular security.
+24:09
+Insurance companies has large asset. They need to generate a return, generate cash flow to meet their liability needs.
+24:17
+So, they need to invest. And the pension funds, same thing. As inflation goes higher, they need
+24:22
+to pay out more to the retirees, so where do you get the return? Sovereign wealth fund, similarly, endowment
+24:29
+funds-- they all have this same situation, have capital and needs to deploy and to make better return.
+24:36
+So this other type of players, hedge funds. So, how many of you have heard hedge funds?
+24:45
+OK, good. Almost everyone. And Peter mentioned that he used to work at a hedge fund.
+24:51
+And so, there are different types of strategies, which I will dive into a bit more,
+24:58
+but hedge fund play the role in the market-- they basically find opportunities to profit from inefficient market
+25:08
+positioning or pricing, so they have different strategies. And the private equity is different type of funds.
+25:16
+They basically look to invest in companies
+25:22
+and either take them private or invest in a private equity form
+25:29
+to hopefully improve the company's profitability, and then catch up.
+25:35
+And governments obviously have a huge impact on the market. So, we know in the financial crisis, government intervened.
+25:45
+And not only that, at the normal market condition, government always have a very large impact on the market,
+25:52
+because they are the policymakers. They decide the interest rate and interest rate curve.
+25:57
+And the different policies they push out, obviously, will generate different outlook for the future markets,
+26:05
+therefore, profitability. Then the corporate hedges and the liabilities. When corporates borrow money, they create some risk,
+26:13
+so they need to be sensitive to the market, it changes.
+26:20
+So, to summarize the types of trading. The first type is really just hedging.
+26:28
+That means you're not proactively adding risk to what you have. You already have some exposure.
+26:34
+Just give you an example. Let's say you borrow money, you bought a house,
+26:41
+so you have mortgage. So, let's say it's a floating rate mortgage payments.
+26:51
+And you're worried about interest rates going higher, so you can lock that rate in into the fixed rate format.
+26:59
+Or you can find ways to hedge your exposure. Or your corporate has a large income coming from Europe.
+27:09
+So, you have euros coming in, but you're not sure if euro would trade stronger to the US dollar in the future,
+27:17
+or trade weaker. If you think it will be stronger, you just leave it. But if you think it will trade weaker,
+27:25
+so you may want to hedge it, meaning you want to sell euro and buy US dollars.
+27:30
+And so that's the hedging type. The second type, as I mentioned, is a market maker. So, market maker also takes principal risk,
+27:38
+but the main source of profit is really to earn the bid offer.
+27:44
+I gave you the example $0.90 bid, $0.95 offer. So, that's what the market maker is trying to profit from.
+27:53
+But obviously, they have residual risks sitting on the book. Not every trade is matched.
+27:59
+So, how to optimize those group of trades, that's what market maker is doing.
+28:06
+Most of the bank's dealers are market makers. In the new regulation, obviously, proprietary trading
+28:14
+is banned, right? And so the third type is really the proprietary trader,
+28:21
+the risk taker. So, these are the hedge funds or some portfolio managers.
+28:27
+They need to focus on generating return and control the risk.
+28:33
+So, that's where the beta and alpha, the concept comes in. So, if you're a portfolio manager, some people say,
+28:41
+don't worry. Don't go pick any stocks. Just buy S&P 500 index fund. Very cheap.
+28:47
+You can pay very little cost to do it. That's true. But if you want to beat the S&P 500
+28:55
+index-- let's assume we call S&P 500 index fund is asset b.
+29:03
+So, the return of that, R(b). That's a return of that index. Now, you have a portfolio a.
+29:11
+Your time series of return of your asset a, obviously, you can do linear regression.
+29:18
+A lot of you are math major here, and you can find a correlation between those two time series.
+29:26
+So, how the two returns are related in a simplified form. So you can say, this actually-- somehow it came out.
+29:35
+It's supposed to be alpha and beta, but it turned out to be the letters.
+29:41
+So, in a short description, beta is really-- just think as correlated move with the other asset.
+29:50
+Alpha is really the difference in the return.
+29:56
+It's a format. You want to beat S&P 500, so you want to basically have certain tracking of this index,
+30:02
+but you want to return more on top of that.
+30:10
+So let me just go in bit of details of how each type of trade actually occurs.
+30:18
+So, when we talk about hedging, I mentioned the currency example. Let me give you another example.
+30:23
+There are a lot of people issue bonds, or issue debt. So this example I'm going to give you is,
+30:29
+let's think about Australian corporate. Because interest rate in Australia
+30:36
+is higher than in Japan, so typically, people like to borrow money in Japan, because you
+30:44
+pay smaller interest. And they invest it in Australia. You earn higher interest rate.
+30:54
+So let me ask you a question. Who can tell me, why don't people just do that all day long, just borrow from Japan
+31:02
+and invest it in Australia? Then that interest rate, I'm giving you
+31:08
+example of a difference is about 3.5% for the roughly 10 year
+31:15
+swap rates. Yeah, go ahead. AUDIENCE: [INAUDIBLE]. JAKE XIA: Right.
+31:21
+Because you invest in the Australia Ozzie, Australian dollar. The Australian dollar may become weaker to the yen.
+31:27
+You may lose all your profit, or even more. And further, if everybody plays the same game, then
+31:35
+when you try to exit, you have the adverse impact of your trade.
+31:41
+So, let's say you think that's the right time to do it, but then at one time, you wake up,
+31:47
+you said, huh, I think too many people are doing this. I want to hedge myself. So, what do you do? AUDIENCE: [INAUDIBLE]?
+31:52
+JAKE XIA: Yep. So, you try to lock in, right? So basically, you sell the Australian dollars,
+32:00
+buy the Japanese yen. Or on the interest rate terms, you say you'll basically pay the Australian dollar in the swap
+32:09
+leg, and receive yen. This involves foreign exchange trade, interest rate swap,
+32:19
+and the cross-currency swap. So, your answer about currency forward is roughly right,
+32:26
+but obviously involves a bit more in actual execution.
+32:31
+So that's just to give you example. Even if you are not a finance guy, you work in a corporate, you just do you import, export,
+32:39
+or building a factory, you have to know, actually, what the exposure is.
+32:44
+So, risk management, nowadays, becomes pretty widespread responsibility.
+32:50
+It's not just the corporate treasury's responsibility.
+32:55
+So, that's on the hedging side. Obviously, if you are Intel, for example,
+33:01
+you sell a lot of chips overseas. And your income-- actually, Intel does
+33:07
+have lot of overseas income sitting outside the States. So, the exposure to them is if the exchange rate fluctuates,
+33:16
+dollar becomes a lot stronger, they actually lose money. So, they need to think about how to hedge the revenue produced
+33:24
+overseas. And obviously, for import-exporters,
+33:30
+that's even more apparent. And if you're entering in a merger deal,
+33:36
+and one company is buying another, you need to hedge your potential currency
+33:41
+exposure and your interest rate exposure. And whatever is on the assets, or the liability,
+33:48
+or the balance sheet, you need to hedge your exposure.
+33:56
+So we talked about hedging activity. Let's talk about market making.
+34:01
+So if it's a simple transparent product, everybody pretty much knows where the price is.
+34:07
+So, if you buy Apple stock, I think a lot of people know pretty much where it is. You may even have it on your cellphone,
+34:15
+know where that stock is. But if it's not transparent, so what do you do?
+34:21
+So, if instead of asking you where Apple is, probably you're going to tell me $495 today. AUDIENCE: I don't really know.
+34:27
+JAKE XIA: OK. But if I asked you instead, what is the call option on Apple stock in two month's time?
+34:37
+I'll give you a strike, let's say, 500. So you're probably less transparent. So that market maker comes in to provide that liquidity,
+34:46
+and then takes the risk. They manage the book by balancing those Greeks, which
+34:52
+I mentioned earlier. Delta, which describes the [INAUDIBLE] relationship
+34:59
+of this whole book to the underlying stock, or underlying whatever currency. That's called delta.
+35:05
+Gamma is really the change of the portfolio.
+35:11
+Take the derivative to the delta, or to the underlying spot.
+35:16
+So, that's second-order derivative. Delta is the first order. So gamma, now you have curvature or convexity coming in.
+35:27
+And theta is really-- nothing changes in the market. Nothing changes in your position.
+35:34
+How your trading book is carrying or bleeding away
+35:39
+money. And we talk about the volatility exposure was vega. And on top of that, what are the tail risks?
+35:47
+What are the events can actually get you into big trouble? So people use value at risk.
+35:54
+So you will hear this "VaR" concept in some of the lectures, which is also, obviously,
+35:59
+a very important concept. I think Peter will-- or Choongbum will-- probably Peter will teach.
+36:06
+Then capital. How much capital are you using? It becomes a very important issue nowadays.
+36:13
+And balance sheet. Again, you have asset, you have liability. How do you leverage?
+36:19
+How much leverage you have? Before the crisis, for example, lot of the banks leverage up 40 times, meaning when you have $1, you had $40 exposure.
+36:29
+So when the market moves little, you get wiped out. That's really what amplified in the 2008 financial crisis.
+36:36
+And how do you measure the asset in balance sheet when you have derivatives rather than a straightforward
+36:43
+notional?
+36:50
+So lot of quantitative type of people like to focus a bit more on the risk taking side,
+36:56
+because people heard stories about successful cases of some hedge funds using high math.
+37:03
+They generated very impressive returns and they seem to have an edge.
+37:09
+So now, people focus on trading strategies. So that falls into the category of proprietary trading or risk
+37:17
+taking. So that you can just simply doing directional trading strategies. Just go long or short the stock.
+37:24
+That's very simple. Those so-called the gut traders, gut feeling.
+37:29
+Go with your gut. You don't even think. You say, I'm eating curry today, so I go long.
+37:38
+I'm eating rice tomorrow, so I go short. So, this arbitrage.
+37:44
+Arbitrage is really to find the relationships between prices,
+37:50
+and try to profit from those relationship mispricing.
+37:56
+This is actually very interesting. Not many people focus on arbitrage,
+38:01
+because lot of people are gut traders. You essentially just watch your own market. You don't really care what's going on.
+38:07
+If you trade gold in the States, the gold price
+38:13
+happen in Asia and in Europe matters, right, because you're trading the same thing.
+38:18
+If they are not priced the same way, you can profit from the difference. And that's just a simple example.
+38:25
+But a spot price versus forward price, that's a deterministic relationship.
+38:31
+It's a mathematical relationship. If that relationship breaks down, you can also profit. So there are many examples mathematical relationship
+38:40
+which gives you the arbitrage opportunity. The other type is called a value trader, or relative
+38:47
+value strategies. Think there's a deterministic, temporary mathematical
+38:55
+relationship. You look at the longer term in horizon, trying to determine what is really the underlying
+39:01
+value of a particular instrument, then trade on the relative value.
+39:06
+Obviously, there are successful value investors out there. And the systematic trader builds computer models.
+39:15
+One example is trend following, so just follow the price trend. That used to be an effective strategy for some time,
+39:25
+but when lot of people doing the same thing, that becomes much less effective.
+39:31
+Or momentum, same thing. Stat arb, finding statistical relationship
+39:38
+among large number of stocks, then trade at the higher frequency.
+39:46
+And fundamental analysis, you're really trying to understand what's going on in the world. What is the trade balance?
+39:54
+What is the earning potential of a company? What's the trade balance of a country?
+40:00
+What is a policy change? What does it mean when Federal Reserve announce they're going to taper the quantitative easing?
+40:08
+Why the stock market is sold off in the last couple months, especially why stocks in India, Brazil, Indonesia,
+40:17
+sold out more. Why is that? So it goes through those fundamental analysis.
+40:22
+And there are special situations. Some companies are going through particular difficulties,
+40:31
+assets are priced very cheaply. So, there are firms out there -- you probably heard Bain Capital
+40:39
+and many others -- where they focus on these private equity and special situation opportunities.
+40:45
+So what have all of these to do with mathematics?
+40:55
+Where does math come in? How do you use math? So, I want to give you some aspects of that.
+41:02
+So from my personal experience, I joined the market, really start to working on pricing models.
+41:09
+So, that's the first area. So, math is very effective, because when you, your bank, your corporate, you
+41:19
+want to buy some financial instruments, you have to know where is the price.
+41:25
+It's easy to observe a stock in the market, but when it comes to more complex products,
+41:31
+they just take one step forward on the complexity, which is the option.
+41:36
+You have to know how to price an option. So, that's where the math comes in. You actually have to be able to solve differential equations
+41:43
+to get a model price, then you obviously adjust to your assumptions to fit into the market.
+41:51
+So, pricing model, which Vasily and many of his colleagues
+41:57
+can tell you more-- which is very much a very interesting and challenging area.
+42:03
+How do you price all these instruments? And when I say pricing, it's not in the narrow definition
+42:09
+of just coming up with the price. When you build a pricing model, you also generate the risk parameters of these instruments,
+42:18
+and how do you risk manage them. So, that comes to the second part. So math is very useful in risk management,
+42:26
+which I will give you some -- not quiz -- questions after this slide.
+42:31
+You can see that risk management itself is very challenging. It's not a purely mathematical question,
+42:37
+but yet, math plays a very important role to quantify how much exposure you have.
+42:44
+Then, the third is trading strategies. Again, I think a lot of people with math background,
+42:50
+or in general, people are looking for the so-called holy grail trading strategies.
+42:57
+It's almost like perpetual motion machines people looking for 100 years ago. You just turn it on.
+43:03
+It makes money by itself. You go to sleep, you go on vacation, you come back, you'll have more in your bank account.
+43:10
+Obviously, that's not going to happen. The robotrader, a robotic trader, is a dream.
+43:20
+It has its place or its use, but it's a fast evolving market.
+43:26
+You have to constantly either upgrade your research
+43:31
+and adjust your strategies. There's no such thing you can build and leave it alone,
+43:38
+it runs for itself forever. But I just want to mention that because maybe
+43:45
+towards the end of the term you will feel, hmm, I came up with this brilliant trading strategy.
+43:50
+I think it's going to make money forever. Please let me know first.
+43:55
+AUDIENCE: And me second. PROFESSOR: So, I want to leave some time to Vasily.
+44:04
+Actually, he can give you some examples of projects of last year's students
+44:10
+who actually came to this class and did some real application
+44:16
+at Morgan Stanley. But before I hand it over to Vasily, let me ask you some questions.
+44:22
+I just want to-- not really to quiz you, just give you the sense how math and intuition and judgment
+44:30
+can come into the same place. So, let me first give you an example I call risk aversion.
+44:35
+So, you are facing two choices, choice A and a choice B. Choice
+44:41
+A being you have 80 chance to lose $500. You have 20% chance to win $500.
+44:50
+That's pretty clear, right? That's choice A. Or choice B, you basically
+44:56
+just lock in you have 100% chance to lose $280.
+45:01
+Let me ask you, for whoever likes to choose choice A,
+45:08
+please raise your hand.
+45:15
+One, two, three, four. About six out of say, let's call it 50.
+45:22
+So, can I ask you why you think choice A makes sense? AUDIENCE: So, I know it's a lower expected value,
+45:27
+but I enjoy gambling and I would rather take the chance of--
+45:35
+JAKE XIA: Right, because you don't want to lock in that $280 loss, right? That, or you still have 20% chance to win.
+45:41
+For the ones raised their hand for choice A, are there any other reasons?
+45:48
+Same reason. AUDIENCE: [INAUDIBLE]
+45:56
+JAKE XIA: I assume the rest of you would choose choice B, unless you-- Neither? How many of you choose choice B?
+46:02
+Choice B. And are there anybody think neither is right?
+46:10
+You have to choose. No, you have to choose.
+46:16
+So, either choice A or choice B. So, let me just talk a little bit about this.
+46:22
+Again, I'm not trying to tell you which one is right, but I just share my thoughts how we look at these.
+46:27
+Why it called risk aversion? So, this is very common human behavior.
+46:33
+When you go to the market, you buy a stock. When the stock goes up, makes bit of money,
+46:40
+the natural tendency -- for especially someone is new to the market -- is to let's take profit.
+46:47
+Let's sell. Oh, I made $1000. I made $500. Let's go have a nice meal or whatever.
+46:54
+Buy an iPad. But when the stock loses money, what's the natural tendency?
+47:02
+AUDIENCE: [INAUDIBLE] JAKE XIA: That's-- AUDIENCE: [INAUDIBLE] JAKE XIA: I think natural tendency, lot of people
+47:08
+will keep it. I think if you have the discipline to get out, that's great.
+47:14
+Trading is really all about how do you risk manage, have the discipline, and how to manage your losses.
+47:22
+The natural tendency of a lot of people is, well, I think there's a 20% chance to come back, and I'm going to make $500 more.
+47:29
+Why do I want to lock in to stop myself out at 280? So even though the expected value-- I think lot of people
+47:38
+said, you lose expected value, which is $300 in choice A,
+47:44
+but you would still not to choose choice B,
+47:49
+because you don't want to lock in the $280 loss. Again, I'm not trying to inject the idea to you of which one
+47:57
+is right or wrong, but think about it. So, that's really the common behavior, which mathematically
+48:05
+may not make sense, but lot of people still would like to do. And also, really, when you think about it,
+48:14
+depends on your situation. And let's say, you think the market--
+48:23
+I'm giving you the stock example again. If you're not purely following the discipline of stop loss,
+48:29
+but you just think the fundamental picture has changed. You really don't think the stock should go up anymore.
+48:36
+Obviously, at whatever level you should get out, regardless how much loss you lock in.
+48:41
+But if you think the fundamental story is still very sound,
+48:47
+you should think about as if you don't have a position, what you want to do next.
+48:52
+But anyway, mathematically, I just want to see-- I guess this is MIT,
+48:59
+so many people think mathematically where you would actually choose choice B, because that's
+49:07
+low expectation, which makes sense. But I think if you ask a larger audience,
+49:12
+I think a lot of people don't really want to choose choice B, because they don't want to lock in the loss.
+49:17
+Now, let me change the question a little bit.
+49:24
+So, choice A becomes instead of the 80% chance to lose, now you have 80% chance to win $500 and 20% chance
+49:34
+to lose $500. Choice B, you have 100% chance to win $280.
+49:43
+Who would choose choice A? Again, minority of this audience.
+49:50
+Let's say less than 10%. Who would choose choice B? The rest of you.
+49:56
+All right. Can someone choose choice A give me an argument why would you?
+50:04
+AUDIENCE: [INAUDIBLE]
+50:15
+JAKE XIA: Yep. Anyone want to give me a reason for choice B? AUDIENCE: Higher Sharpe.
+50:20
+JAKE XIA: Higher Sharpe? Mm-hm. Yup. Well, let me just leave it here.
+50:28
+Again, I think we can talk a bit more along in the class. I mean, the last day of the class,
+50:34
+hopefully we'll have much deeper discussion on this. It's not unique.
+50:39
+The answer, I think it can go you either way, as you said. If your bank account balance is-- let's
+50:47
+say you are a freshman student. Your bank account is $800.
+50:54
+Your choice will be very different from someone has $100,000 in his bank account.
+51:01
+And also, your risk tolerance, how much you can tolerate.
+51:11
+I'm not going to give you say, this is right or wrong. But with that, let me move on and give you some homework.
+51:17
+51:23
+So, before I give you the homework, I want to make a few more comments. Do people always learn from their experiences?
+51:30
+In science, we collect evidence, we build models. We first understand the physics.
+51:36
+We build mathematical models, then we verify in physics, doing experiments.
+51:41
+But is that the same investigation process in finance?
+51:48
+Market cycles are typically very long, but people tend to have short memories.
+51:53
+So, how do people really learn from their experiences? A very interesting question. And very natural tendency is to extrapolate
+52:01
+historical experience. What happened in 2008? People still remember. What happened in 1970s?
+52:09
+Maybe some people still remember. What happened 100 years ago? So, people tend to extrapolate, drawing conclusions
+52:17
+from very recent experience. And deterministic relationship versus statistical relationship
+52:24
+is very interesting, as well. When you try to trade on those, how do you really build models?
+52:31
+Is the market really efficient? What part is efficient?
+52:37
+How do you really apply those theories in your day-to-day risk management or trading
+52:43
+activities? And sometimes, people tend to oversimplify.
+52:49
+Just say, oh, I can model this. This is one important parameter. I just take that.
+52:55
+So I just give you all the warnings that the-- again, very young, new field
+53:02
+and largely, often, this is art, than science.
+53:07
+So keep that in mind, even though we're talking about mathematics in finance. Math is very powerful and useful in finance.
+53:15
+So learn the math, learn the finance first, but keep those questions along the way
+53:21
+when you are learning during this class.
+53:27
+So suggested homework, optional.
+53:32
+I mentioned a lot of terminologies today. Go to the course website, read what we have put up
+53:39
+for the financial glossary. So if you still have things you don't understand,
+53:45
+compile your own list of financial concepts, which you can search on the web or even ask us.
+53:53
+But I encourage you to do that. It will prepare you well. So, that's really-- and read other materials
+53:59
+on the course work. So we got maybe-- how about this? We still got about 15 minutes or 12 minutes left,
+54:08
+so I'll pass it to Vasily, then maybe we can leave five minutes for some questions. VASILY STRELA: Yeah.
+54:13
+JAKE XIA: Yeah, OK. VASILY STRELA: [INAUDIBLE] mentioned that, Apple trades, that now it's $494.4 Yeah, just a couple
+54:30
+of [INAUDIBLE]. Well, first of all, no offense to people who were [INAUDIBLE],
+54:42
+but I just wanted to give an example of [INAUDIBLE].
+54:47
+AUDIENCE: [INAUDIBLE].
+55:01
+VASILY STRELA: --because he was working in our group, and it just will give you a little bit of an idea what
+55:11
+we will be talking about and what actually we do in the daily life, or what an intern or somebody who
+55:18
+comes to work in this industry could do. And one project is [INAUDIBLE] worked
+55:26
+was on estimating the noisy derivative. Derivative is called delta.
+55:33
+Delta is usually the first derivative to a function. And as we will see in the class, quite often, to obtain a price,
+55:42
+you do it through Monte Carlo, meaning running a lot of paths and then averaging along them.
+55:48
+So, it's a statistical method. So obviously, there is a noise to your answer every time.
+55:56
+So, if you want to differentiate this functions
+56:01
+and get a derivative, then this derivative will be quite noisy.
+56:06
+And so, instead of getting the true derivative, you might obtain something quite different from true derivative
+56:14
+just because there is a confidence interval around any point.
+56:19
+And obviously, there is a trade off here, as well, because you can run more paths, throw more computational power,
+56:28
+which will reduce your confidence interval. You will know better where you are, more precise.
+56:37
+Or the other solution could be, if you know that your function is not too concave and reasonably
+56:45
+flat, you might do the numerical differentiation
+56:52
+on wider interval. Basically, reducing the significance of the error, and you will hope to arrive to a better approximation.
+57:00
+So obviously, there is somewhere balance, and the question was,
+57:05
+is there an optimal shift size to get the derivative?
+57:13
+And that's what-- uh oh, the slide got corrupted.
+57:20
+So, there was quite a bit of mathematics involved and minimization and optimization.
+57:26
+There was an answer. And that's actually what we finally arrived at.
+57:35
+And that's some toy example, but still, it shows you that if you use constant size
+57:41
+and not optimal size, that would be your numerical derivative of this blue function.
+57:49
+While if you use an optimal shift size, which [INAUDIBLE] computed, it would be much smoother and much better.
+57:57
+So, that's one of example, and that's what he did. And we actually are implementing it in our systems and plan
+58:05
+to use it in practice. Another project was actually quite different.
+58:14
+And it was about electronic trading and basically how to better predict prices of currencies
+58:27
+and exchange rate. And funny enough, it was on ruble/US dollar,
+58:32
+because it was actually aimed for our Moscow office.
+58:38
+And basically, what we had, we had the noisy observation of broker data and it was coming out
+58:46
+at different non-uniform times. Basically, at random times.
+58:52
+So, we decided to use Kalman filter
+58:57
+and to study how it can predict. And that's one of the nice graphs [INAUDIBLE]
+59:07
+produced, which again, we will use this strategy
+59:13
+and the Kalman filters which he constructed in our e-trading platform in Moscow.
+59:23
+So, that's just a couple of examples, which I wanted to give you as a preview of what we
+59:30
+will be talking in the class. Just to remind, the website is fully functional.
+59:38
+We put syllabus there, a short list of literature.
+59:44
+We will be posting a lot of materials there. Probably most lectures will be published there.
+59:51
+Jake's slides are there already. So, any questions?
+59:56
+JAKE XIA: Please hand back the sign up sheets.
+1:00:03
+We like to get your emails so we can put you on the website for further announcements,
+1:00:10
+but you can also add yourselves. [INAUDIBLE]. But it's probably easier if you put your email
+1:00:16
+on the sign up sheet, so we can [INAUDIBLE]. VASILY STRELA: Yeah, but please visit and sign up here, because there will
+1:00:23
+be announcements to the class. Thank you very much.

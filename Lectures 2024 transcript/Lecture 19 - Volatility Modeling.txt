@@ -1,0 +1,1255 @@
+0:00
+[SQUEAKING] [RUSTLING] [CLICKING]
+0:05
+PETER KEMPTHORNE: Well, today we're
+0:12
+going to talk about volatility modeling. And this topic in finance is one that has really
+0:19
+interested me for decades. And there are a lot of subtle details involved
+0:25
+with understanding volatility, how to measure it, how to forecast it.
+0:31
+And we've had some talks already with the group projects
+0:38
+about dealing with volatility estimation and measuring volatility, in particular implied volatility.
+0:47
+Today we'll focus more on realized volatility and modeling
+0:52
+that. And so to begin, here's just an overview of different ways
+1:00
+one might define volatility. And its basic definition is the annualized standard deviation
+1:08
+of the change in price or value of a financial security. And of course, this concept is really
+1:15
+important for measuring risk and evaluating the value of options
+1:23
+on underlying assets. Yep? AUDIENCE: What do you mean by annualized? PETER KEMPTHORNE: What that means, OK,
+1:29
+suppose we have a sigma day that's equal to, say, 0.01%.
+1:43
+So 1% variability per day. If we wanted to measure volatility on an annualized
+1:52
+scale, then we could consider possibly the square root
+2:00
+of 252 times sigma day. So it's a matter of scaling the volatility up
+2:07
+to an annual horizon. And the value of that rescaling is
+2:15
+that we can talk about volatilities over different maturities.
+2:20
+And they're measured on the same scale.
+2:25
+And with different estimation approaches, there's historical sample volatility measures
+2:34
+which don't require really any probability models with them.
+2:39
+Then we have geometric Brownian motion. That's a very familiar model to everyone here.
+2:46
+And we can consider extensions of that to the Poisson jump diffusion model.
+2:52
+A group delivered a nice lecture note on the Poisson jump diffusions.
+2:59
+And then following these cases are cases where volatility might have some time dynamics in them.
+3:09
+With these geometric Brownian motion and Poisson jump diffusion models, we think of volatility
+3:18
+being some constant, which is the same from one period to the next.
+3:24
+But it turns out that there can be time dependence in volatility.
+3:30
+And so there are ARCH and GARCH models, which stand for Autoregressive Conditional Heteroskedastic
+3:38
+Models. And then the GARCH are generalized versions of those.
+3:44
+And then there are stochastic volatility models as well. I know, let's see, the Heston option pricing model
+3:54
+uses a stochastic volatility term in its formulation.
+4:01
+So we have those kinds of extensions. And then finally, there's implied volatility
+4:06
+from options and derivatives. So let's just look at computing volatility
+4:13
+from an historical series of actual prices.
+4:19
+If we have prices PT, then we can define the log returns
+4:26
+by looking at the ratio of prices from one day
+4:31
+to the next, or one period to the next, and taking the logarithm of that.
+4:38
+This is a useful way of measuring returns as an alternative to simply the percentage change in value using
+4:47
+the log scale or the log return, if we look at the cumulative change over successive periods.
+4:57
+With log returns, they just add. Whereas if we were using percentage returns,
+5:03
+we'd have to basically multiply factors together representing that.
+5:08
+Now, in modeling volatility, we consider
+5:16
+models that correspond to stationary processes
+5:22
+for our returns. So the log returns of price series
+5:29
+are often consistent via tests with a stationary distribution
+5:36
+of returns. And under the assumption of covariance stationarity,
+5:41
+we can define sigma to be the variance of
+5:48
+or the standard deviation of those returns. Now, in this notation here, this sigma for the volatility
+5:57
+would be corresponding to a frequency of observation that's daily or weekly or monthly.
+6:04
+And we'd have sample estimates given by the square root of the sample variance where we traditionally
+6:15
+use the estimator for variance, which is an unbiased estimate of the variance.
+6:23
+So that factor divisor t minus 1 is included there.
+6:28
+And then if we want to annualize these values, it's common practice just to treat these returns
+6:38
+as independent or uncorrelated over time,
+6:44
+so that the variance of a sum is the sum of the variances.
+6:49
+So there are roughly 252 days in a year. So we multiply by the square root of 252 for daily returns.
+7:02
+For weekly returns, we'd do the root 52 times sigma hat and route 12 for monthly.
+7:10
+Now, when measuring historical volatility,
+7:20
+we can think of a simple historical average since the beginning of our time series.
+7:28
+So this historical average would use all available data. It's reasonable to think that volatility isn't necessarily
+7:37
+stable over the entire time range of a price series.
+7:42
+And so we could consider just using the last m values.
+7:48
+So take a rolling average of the last m values of this sigma hat squared t minus j.
+7:58
+Now, if we define sigma hat squared t
+8:06
+to just be a single day's volatility,
+8:11
+that could be like the square of the daily return on a given day.
+8:18
+Now, using equal weighted values over a window of length m
+8:27
+might be improved upon by using an exponential moving average.
+8:33
+And so exponential moving averages are averages where we take a weighted average
+8:41
+of the previous estimate of volatility
+8:47
+and the current estimate of volatility using the time t value.
+8:55
+So this 1 minus beta beta weight allows us to weight the past versus the present in an exponential way.
+9:06
+And with this formula, it's recursive over t. And so it can actually apply across an entire range
+9:15
+of historical data. An alternative to just the regular exponential moving
+9:22
+averages and exponential weighted moving average where we only go back maybe m periods,
+9:29
+but we decrease the weights on past volatility estimates
+9:36
+according to the power of beta j. So beta j or beta is a decay factor
+9:47
+in estimating volatilities.
+9:54
+Additionally, one could consider regression models with these volatility sigma hats indexed by t.
+10:06
+And depending on the relationship
+10:12
+of volatility to the past, we might use more data
+10:18
+to increase precision of estimators, but use data closer to time t when
+10:24
+we believe that the volatility may be changing over time. And what's neat about these estimation
+10:32
+methods is that we can evaluate, say, the exponential moving
+10:39
+average estimates of volatility over different assets
+10:45
+and different asset classes. And this approach was applied in RiskMetrics.
+10:56
+Here there's a web link to the RiskMetrics technical document.
+11:03
+I think I have it listed here.
+11:08
+So actually this RiskMetrics was created by JP Morgan back
+11:17
+in the 1990s. Coincidentally, when I was at the Sloan School teaching
+11:24
+statistics and financial modeling, I was part of the Financial Services Research Center
+11:30
+that was sponsored by JP Morgan and other groups
+11:35
+when this risk metrics document was created.
+11:41
+And if we look at, let's see, there's a section here of risk metrics decay factors for volatility.
+11:53
+Basically, for different countries, one can use the exponential moving average of asset returns
+12:04
+for foreign exchange 10 year 0 prices equity indices and other assets.
+12:11
+And what's interesting to see is that the decay factor is generally well above 0.9.
+12:19
+It's more like 0.95, which suggests that volatility is changing slowly over time.
+12:27
+And the way they chose these decay factors was to look at how predictive they were with mean squared error
+12:38
+of volatility. So these are reasonable estimates of volatility.
+12:44
+And an important aspect of these measures
+12:49
+is having benchmark values that people can agree upon.
+12:55
+So we're not arguing that these are the best estimators, but they're a simple objective estimator that can be applied.
+13:05
+And when we communicate about these other people, understand what we're measuring.
+13:10
+So those are important. Now, let's see.
+13:17
+With geometric Brownian motion, turning now to having a stochastic process model for the prices.
+13:28
+If we have this stochastic differential equation, the geometric Brownian motion one, we see that,
+13:37
+and it's totally obvious, but if we divide both sides by s of t,
+13:42
+we get mu dt plus sigma ds of t or sigma dw of t, where w of t
+13:55
+is a standard Brownian motion. So by looking at essentially the percentage
+14:03
+change on an infinitesimal level, we basically have a linear trend that's deterministic
+14:13
+and then a random walk with Brownian motion steps on that scale.
+14:20
+And with this geometric Brownian motion, we have basically independent increments with normally
+14:32
+distributed increments on this log scale for the Brownian
+14:38
+motion. And with our homework exercise this past week, we actually
+14:47
+dealt with estimating the drift parameter and the volatility
+14:54
+parameter in geometric Brownian motion. And so if our increments of time are unit increments,
+15:05
+then we can estimate a drift term mu star
+15:11
+with the average log return. And we can estimate the period volatility or period variance
+15:22
+with the sample variance using n instead of n minus 1.
+15:28
+Now, these essentially correspond to maximum likelihood
+15:33
+estimates of these parameters. And what's important to note here
+15:41
+is that the drift term mu star per period
+15:51
+is actually equal to the mu of the geometric Brownian motion minus the square of the volatility term divided by 2.
+16:02
+And so what's important is that when we apply this stochastic differential equation,
+16:13
+there basically comes an extra term
+16:18
+in the drift that's due to the squared variation in the process.
+16:24
+So in working with these the stochastic differential equations, it's important not to just look at first order terms,
+16:34
+but to look at second order terms in your Taylor series approximation. And that's how that mu star gets in there
+16:41
+to be different from mu. Now, an interesting exercise, which hopefully was of interest
+16:50
+to people who worked on that last week, if we vary the increments delta j over which we observe
+16:59
+this price process, then we can talk about how accurate
+17:10
+or how precise are our estimates of mu star and sigma squared.
+17:18
+And it turns out that if the delta j, the increments
+17:25
+between observations varies, then our estimate of mu star
+17:34
+is always the same. It corresponds to just the cumulative return
+17:39
+over the entire period divided by the length of the period. So it's the average rate of return per period.
+17:47
+Interestingly, if we increase the number of increments,
+17:53
+then our precision on the variance gets more and more precise, and the variability of that
+18:03
+actually goes down with a factor of n. So that was a homework exercise that I think
+18:11
+is an important one to realize.
+18:16
+Now, a really interesting extension
+18:22
+of maximum likelihood estimation with normally distributed increments coming from the Brownian motion process
+18:32
+is looking at the problem of using more information than just
+18:39
+the close to close prices. And so what we want to do is introduce you
+18:47
+to the Garman-Klass estimator. And let me just turn to the Garman-Klass paper.
+18:59
+These papers are distributed in Canvas in the volatility notes section.
+19:05
+But if we think of a period of time with one day,
+19:12
+going from yesterday's close to today's open to today's close,
+19:19
+then in thinking about measuring volatility
+19:27
+using the difference between today's close and yesterday's close, that can be very useful,
+19:35
+but it's missing out on other information that we may have access to, such as what's
+19:42
+the opening price today?
+19:47
+What's the low value today? What's the high value today? And how can we use that extra information
+19:55
+to have more precise estimates of volatility?
+20:00
+Anecdotally, when I was studying for a doctorate in statistics
+20:06
+at Berkeley, I was a research assistant to Michael Klass.
+20:13
+And I was getting interested in non-statistics topics like finance, and so I took a course from Mark Garman, who
+20:22
+co-wrote this paper. So it's rather interesting to have had that exposure.
+20:29
+Actually, it was a very inspiring set of classes that I took, which motivated my, I guess, lifelong interest
+20:38
+in financial modeling. So let's take a look at some notation.
+20:45
+Very simply, we'll think of just a single period, like one day,
+20:54
+and refer to the closing price on day j,
+20:59
+opening price on day j, the high and low on day j as well.
+21:06
+Importantly, the notation here includes this--
+21:12
+well, includes the time points, but it also includes the parameter f, which is the length of time
+21:23
+that the market is closed on a given day. So the time between the close and open of the next day.
+21:32
+So we have this notation. And if we consider just focusing on single periods,
+21:41
+and in this case, the first one, if we look at the change in closing values,
+21:48
+now, perhaps it makes sense to think of these on the log scale of the prices.
+21:55
+The close to close squared return
+22:02
+basically will have mean sigma squared
+22:07
+and variance equal to 2 sigma to the fourth. Now, this corresponds to the theory
+22:16
+of normal random variables for returns, which
+22:21
+comes from the Brownian motion. And the expected squared value is--
+22:31
+well, actually, we can think of maybe the mean return being 0 or being subtracted from all the returns.
+22:41
+But the variance of this sigma 0 hat squared is the variance of a chi squared random variable
+22:49
+with 1 degree of freedom. And so in probability classes, we learn that a chi squared random variable has expectation
+22:58
+equal to the degrees of freedom. And if it's a scaled chi squared, it's the scale factor sigma squared times that.
+23:06
+And the variance of a chi squared is equal to twice the degrees of freedom. So that's where that formula comes from.
+23:14
+Now, if we look at the close to open squared return,
+23:20
+the same arguments lead to this sigma 1 hat squared. Looking at the squared return from closed to open,
+23:30
+normalized by the length of the period between the close
+23:37
+and open, this will also have expectation equal to sigma squared.
+23:44
+And its variance will also be 2 sigma to the fourth. So if the model applies throughout the time
+23:56
+periods of the market being open as well as the market being closed, then these formulas apply.
+24:04
+Now, we could also do the open to close squared return
+24:10
+and, again, if we normalize the squared change in price or log
+24:18
+price, if we normalize that by the length of the period 1 minus f, then we get the same properties
+24:28
+of the moments for these estimates of sigma squared. So all of these have expectation equal to sigma
+24:36
+squared, and all of them have the same degree of variation.
+24:41
+Well, this second or the index one and two cases
+24:50
+are estimates that use different time periods, different increments, disjoint increments
+24:58
+of the process. And so these have to be independent if our Brownian
+25:05
+motion model applies. And so if we simply take the weighted average of these
+25:15
+or the simple average, then the expectation is unchanged
+25:23
+and the variance is equal to basically 1/2 squared times
+25:29
+the sum of the variances. And that equals actually sigma to the fourth. So we're able to get a more precise estimate
+25:38
+of the volatility using these two increments separately.
+25:45
+And so it's common in statistical theory of estimators
+25:52
+to talk about the efficiency of one estimator versus another.
+25:58
+And so if we compare this sigma star,
+26:06
+we can divide its variance into the variance of sigma 0 squared and get a factor of 2.
+26:13
+So we basically have--
+26:18
+let's see. Have I got that correct? Right.
+26:24
+We basically have twice the efficiency in this case. So we're thinking of inverse relationships of the variance.
+26:34
+Now, let's see. Parkinson came up with considering
+26:43
+the high and low values over a period and showed that this estimate sigma hat 3 squared
+26:55
+is an unbiased estimate of sigma squared when f is equal to 0
+27:04
+and has efficiency equal to 5.2.
+27:09
+So this high and low data really has a lot of information in it
+27:17
+compared with just the close to close returns.
+27:22
+Our precision with estimating sigma squared basically can increase by a factor of 5 with using
+27:30
+the high and low values instead of the close to close.
+27:36
+And let's see. I just posted today the problem set due next week
+27:42
+where there's an article by Parkinson discussing issues
+27:48
+of high and low or extreme value estimates of the variance, which
+27:57
+I think will be interesting to read. I think it's somewhat fun to read the classic papers in these areas,
+28:04
+especially because the older they are, the easier they are to read, I think, although sometimes that's not totally true.
+28:11
+Anyway, what Garman and Klass did was
+28:17
+they considered alternatives, which included the high-low volatility estimate.
+28:28
+And a simple average, or weighted by a and 1 minus
+28:34
+of this high-low estimate of Parkinson and the sigma 1,
+28:42
+which is the-- let's see. Let's go back.
+28:47
+And the sigma 1, which is the open to close value.
+28:54
+This has an even higher efficiency of 6.2
+28:59
+and a rather striking result of their paper,
+29:04
+as they were able to derive the best analytic scale
+29:10
+invariant estimator. So, depending on whether you like mathematics or not,
+29:15
+you may like this paper or not. But it's really interesting to see
+29:21
+how a property of finding a scale invariant
+29:27
+estimator that is best among the class of such estimators, that's
+29:36
+actually derived by Garman and Klass. So let me just highlight how this section five in their paper
+29:48
+talks about best analytic scale invariant estimators. And you may be able to see from the derivation here
+29:57
+that their arguments just are dealing with some quadratic forms and solving
+30:03
+for properties, minimizing these quadratic forms. And so it's rather neat that they're
+30:10
+able to achieve this result. Yeah? AUDIENCE: Why is it necessary [INAUDIBLE]?
+30:16
+Because that's just commenting about the prepared bearings, right? PETER KEMPTHORNE: Well, with a higher efficient estimator,
+30:28
+you can have as precise an estimator with a smaller
+30:34
+or shorter time series. So instead of using, say, 20 days close to close,
+30:42
+you could use a week of data and have estimators that are comparably precise.
+30:49
+AUDIENCE: [INAUDIBLE] PETER KEMPTHORNE: Yeah, yeah.
+30:55
+That's right. And so there are all these extra assumptions that complicate things. And in many of these developments,
+31:02
+they're simplifying assumptions like the mean is 0. But if you were trying to model time varying volatility, then
+31:13
+rather than looking at, say, close to close volatility and how that changes over time, if you
+31:19
+use these other estimators, the Garman-Klass, for example,
+31:26
+you could maybe use a much shorter time period and be able to track or model changes in volatility over time
+31:33
+with that.
+31:39
+Well, let's see.
+31:46
+So then finally, there's this composite estimator, which has efficiency 8.4.
+31:53
+And finally, there are a number of extensions of the Garman-Klass that are listed here.
+32:02
+And the one that is actually recommended these days
+32:07
+is actually this Yang Zhang model, which has a drift independent volatility estimation based
+32:16
+on the high-low close. So the fact that it's drift independent deals
+32:22
+with that assumption that was just mentioned. Now, let's see.
+32:29
+There's a case study of using R to calculate
+32:35
+these different volatility estimates. And let's see here.
+32:44
+So here's the case study, which goes
+32:52
+through calculating different measures of volatility,
+32:58
+using close to close Parkinson's all the way down to Yang and Zhang in section 1.6 and then comparing
+33:05
+those for the S&P 500 Index. And we'll go through these in a moment.
+33:15
+But following just looking at these individually, we consider time series modeling of these different volatility
+33:25
+statistics. And so in terms of understanding realized volatility,
+33:33
+a useful analysis is to be able to predict how our realized volatility is going to change into the future.
+33:42
+So there may be some predictability there. And what we'll see is that in the time series
+33:49
+analysis of these volatilities, time series models
+33:55
+such as autoregressive integrated moving average models can be applied and can be very useful.
+34:03
+And in particular, there's a role to be played with seasonal ARIMA models.
+34:12
+So let's take a look at that.
+34:18
+And just as a preview, let's see, one of the problems in the next problem set
+34:26
+is to look at this same set of analysis for the S&P 500,
+34:34
+look at the same analysis for the stock ARKK, which
+34:40
+is Cathie Wood's ETF, and just see how different the results are.
+34:48
+And what's nice is that the R markdown files
+34:55
+that create this case study can be applied to any other stocks you want to analyze, if you so choose.
+35:03
+For the problem set, I posted the two versions of this study
+35:09
+for S&P 500 and ARKK. So you don't need to do R at all.
+35:15
+But if you set up a Posit Cloud account with RStudio Cloud,
+35:23
+you should be able to just upload the file, the R markdown file, and rerun the programs and do so with another stock,
+35:31
+if you so choose. So in this note, the first section
+35:36
+just goes through and looks at the S&P 500 index.
+35:43
+It actually is going through a couple of days ago.
+35:49
+It's a good time to have an equity exposure.
+35:55
+And if we look at close to close volatility,
+36:00
+this is a graph of the 21 day variance scaled up
+36:06
+to an annualized basis by multiplying by root 252.
+36:13
+And what's important is to see that volatility generally
+36:20
+is well below 25%. Often it's around 12% to 15% when it's low,
+36:32
+but it does have spikes. And during COVID, there was the huge spike up.
+36:38
+And more recently, there was some elevated volatility
+36:46
+that suggests that volatility is not constant.
+36:52
+So anyway, this is the close to close volatility. If we look at the high-low volatility of Parkinson,
+37:01
+then we just are averaging the log of the ratio of the high to low and scaling it up.
+37:10
+And so we get this plot, which is very, very similar.
+37:15
+In principle, this estimator is more precise,
+37:20
+at least if our underlying Brownian motion model or geometric Brownian motion model is true,
+37:29
+but it gives us different values. And then the Garman-Klass model is here.
+37:36
+So what's useful just in this case study is partly just seeing what the formulas are for the volatility
+37:43
+estimates and then being able to compare those. And then finally, this Yang-Zhang model
+37:53
+is an extension of Garman-Klass. And as it says here, this is currently the preferred version
+38:01
+of volatility estimates. Now, in looking at these different volatility estimates,
+38:09
+we can create a panel series of all the volatility measures.
+38:16
+This shows, not surprisingly, there's peaks at the same times with all of these.
+38:24
+What's more interesting is to look how they move simultaneously.
+38:30
+And if you look at too much data, it's hard to see exactly what's going on.
+38:35
+So there's a graph here of looking at just the last year, almost two years of data,
+38:43
+and seeing how these different volatility estimates vary. So what this highlights is how a choice of volatility measure
+38:54
+matters. There can be significant differences between them. And what would you anticipate is a good property of a volatility
+39:09
+estimator? That's a very general question, but intuitively,
+39:19
+what would make one estimator better than another?
+39:30
+And there's no right or wrong answer to this, but I think it's useful to think about what you would like
+39:40
+to have in an estimator, and whether these estimators might
+39:47
+be consistent with that or not.
+39:56
+Any thoughts?
+40:03
+Well, one of the problems, I guess I'll call it a problem, with the close to close estimator,
+40:12
+is that if you have a rolling window of close to close variance estimates, then if you have a spike in returns,
+40:22
+positive or negative, that spike is going to remain in that window until it falls off.
+40:29
+And so there can be elevated volatilities due in the close
+40:36
+to close series, volatility series. That may not be as persistent with the other estimators.
+40:47
+So when there are spikes in volatility, often those spikes occur when there's
+40:53
+some great uncertainty in the market that gets resolved.
+41:00
+And the volatility often drops a fair amount after that.
+41:06
+And so I would think that those volatility estimates
+41:11
+that basically drop faster following the spikes
+41:17
+could be better. And certainly if we're trying to use these volatility
+41:24
+estimates to predict future realized volatility,
+41:30
+that property could be useful. Now, what's interesting in section two of this case study
+41:40
+is to just consider some really, really basic time series modeling of the different volatility measures.
+41:49
+So what we are modeling is different volatility measures over a 21 day period that's rolling through our time series.
+41:58
+And so one of the most basic forecasting models
+42:05
+there is is a model called the naive model. And with a naive model, we have a time series yt.
+42:19
+And we basically have that y hat t is equal to yt minus 1.
+42:30
+And if we think of yt is equal to y hat t plus an error term,
+42:38
+then our errors are equal to yt minus y hat t, which is
+42:46
+equal to yt minus yt minus 1. And this specification corresponds to a random walk
+42:55
+model. So there's basically a random walk model for yt.
+43:00
+43:07
+And the random walk model is consistent with efficient markets where our best
+43:14
+estimate of what's going to happen is where things are now.
+43:19
+So this naive model basically has an autocorrelation function,
+43:28
+which has a very high-- or our data has a high first order autocorrelation.
+43:36
+And if we calculate first differences, which are the residuals from this model,
+43:43
+then we get this residual diagnostic information, the time
+43:51
+series of residuals, the autocorrelation function of the residuals, and the histogram of residuals.
+44:02
+Now, would you say that these residuals are consistent with white noise that may be Gaussian or normal?
+44:13
+44:18
+I see some going mm-hmm and others going hmm.
+44:24
+Well, one thing that's important is that the autocorrelation function of residuals, if the residuals are
+44:34
+consistent with white noise, there should be no significant autocorrelation at any lag.
+44:40
+And so there are some spikes of autocorrelation that break beyond the critical levels.
+44:46
+And so those are suggesting that this is not white noise.
+44:51
+And if we look at the distribution of the residuals,
+44:56
+they're unimodal, but they certainly aren't well described by a normal distribution.
+45:02
+So let's see.
+45:11
+So we can plot forecasts of this naive method.
+45:17
+And then let's see. We can also fit an ARIMA model to this close
+45:27
+to close volatility series. And with the ARIMA model, actually there's
+45:35
+this package in R called FPP2.
+45:40
+And this was created by the authors of a book, Forecasting
+45:51
+Principles In Practice, that's in the references to this. They have an automated ARIMA modeling function,
+46:01
+which will take an input, a time series, as output, what is judged to be a decent autoregressive
+46:11
+integrated moving average model. And so this ARIMA 310 corresponds to ARIMA p equals 3,
+46:28
+d equals 1, and q equals 0, where
+46:34
+p is the order of the autoregression. d is the order of differencing. Yes? AUDIENCE: How does it [INAUDIBLE]?
+46:43
+PETER KEMPTHORNE: Yes, it uses a criterion that's called the corrected Akaike Information Criterion.
+46:52
+And so there's this AICC, which is equal to the corrected AIC.
+47:01
+And the corrected AIC is due to the fact that with shorter series, there's a bias in the AIC
+47:12
+that is systematic. And so this correct for that bias.
+47:18
+Now, when we do this with any fitted model, what's
+47:24
+really important to check is how our estimated coefficients
+47:29
+compare with their standard errors. When the signal estimate to noise standard error ratio
+47:38
+is bigger than 2, we have some confidence that that's an important factor in the model.
+47:44
+And in this case, the AR3 has a signal to noise ratio of almost
+47:52
+3, and the AR2 has a ratio that's 1 and 1/2.
+47:58
+Now, if we go through, let's see,
+48:06
+the second section does the same analysis of the Yang-Zhang volatility estimate.
+48:14
+And I guess importantly here, we have an ARIMA model now
+48:28
+for this Yang-Zhang model, which is an ARIMA 111.
+48:37
+And the coefficient estimates are many multiples
+48:44
+of the standard error. So these are highly significant. And this is our residual analysis check,
+48:53
+which suggests that, for the most part, the residuals are consistent with white noise.
+48:58
+The autocorrelations tend to be close to 0. However, there's this large spike at 21.
+49:05
+And here the residuals. Now, why do you think there's a large spike at 21?
+49:15
+Well, we're computing rolling statistics. And so the window is of length 21.
+49:25
+So this corresponds to cases entering and exiting
+49:30
+the windows. And so interestingly, we can accommodate that
+49:36
+by fitting a seasonal ARIMA model. And so with the seasonal ARIMA model
+49:43
+I'll jump to the conclusion here at the very end,
+49:49
+which is for the Yang-Zhang volatility estimator.
+49:58
+This is its simple autocorrelation function before the model.
+50:05
+And then when we fit the seasonal ARIMA model
+50:11
+automatically, it gives us a 213 and a 201.
+50:17
+And let's see. When we introduced you to time series models before, let's see,
+50:29
+if we have an ARIMA model, which is p, d, q,
+50:42
+we basically have 1 minus phi 1 b minus phi 2 b squared minus
+50:51
+phi p b to the p power times yt turns out to be equal to 1 minus
+51:02
+theta 1b minus theta 2b squared minus theta, or sorry,
+51:12
+1 plus here, plus theta qb to the q power times our error
+51:23
+term. So we have this kind of mathematical equation
+51:28
+for an ARIMA model, where we assume that the epsilon t
+51:37
+series is white noise, which means that its expectation is
+51:44
+always 0 and the variances are constant,
+51:53
+and the correlation between any different epsilons is equal to 0
+51:59
+if t is not equal to t prime. The power of autoregressive integrated moving average models
+52:08
+is that these autoregressive terms, as well as moving average
+52:14
+terms, can account for all of the correlations, autocorrelations in the original series.
+52:22
+And our residuals, which are estimates of this error sequence, should be consistent with white noise.
+52:30
+Now, what ends up happening with--
+52:39
+actually, I should maybe put here yt prime, where y prime is maybe equal to 1 minus b to the power d yt.
+52:49
+So if we have an ordered d model,
+52:54
+we take the d-th order difference and put that into an ARMA model.
+53:00
+And if we have a seasonal ARIMA model,
+53:07
+we actually add a capital P, capital D, capital Q.
+53:15
+And here we have the frequency of the data. And in this example, I considered a 21 period frequency
+53:26
+just to correspond to the window size. And what this model does is it has another polynomial of--
+53:42
+53:55
+so this is b to the 2 times 21. So we basically end up having backshift operator polynomials
+54:07
+that work with the seasonal frequencies of the time series.
+54:15
+54:23
+So this is a polynomial of order q of order p in B to the 12th--
+54:32
+sorry, B to the 21. And then we would also multiply this on this side,
+54:40
+perhaps, by a 1 minus capital theta 1 B to the 21,
+54:48
+or plus, plus theta 2 B to the 21 squared.
+54:55
+So times 2. And so this kind of notation leads us
+55:04
+to these coefficient estimates. So there's the simple order autoregressive
+55:11
+terms and moving average terms. Order two, autoregressive, order three, moving average.
+55:20
+But then for the seasonal autoregressive terms, we have these terms here.
+55:27
+And for the seasonal moving average, we have the last term here. And what's generally important in fitting models is
+55:37
+when you consider the last terms to enter into a model, such as in this case, the seasonal moving average term,
+55:48
+its estimate is many multiples of its standard error. So that's a very important factor in the model.
+55:55
+56:05
+As an anecdote, let me just say--
+56:12
+let's see. If we take a series yt and we look at a seasonal difference
+56:23
+operator and a first order difference operator,
+56:30
+this turns out to be equal to the first difference operator multiplying the seasonal difference operator.
+56:40
+And it equals basically 1 minus B plus B to the 21.
+56:47
+Sorry, minus B to the 21 plus B to the 22 times yt.
+56:55
+And so with seasonal differences in autoregressive moving
+57:02
+averages, whether we take first differences non-seasonally and then seasonal differences
+57:11
+subsequently, or reverse the order, we end up getting the same transformation of the data.
+57:19
+Well, actually with economic time series, where we have a seasonal frequency of, say, months, then
+57:28
+basically the seasonal differences correspond to year over year changes, whereas the simple differences
+57:37
+are just period by period differences. Anyway, with this final example here, this
+57:45
+is how the residual analysis looks.
+57:51
+And it actually does yield residuals that do look a lot like white noise,
+57:58
+although there is still this persistent spike just
+58:03
+beyond the window width for the computation. But the distribution of the residuals
+58:10
+looks more Gaussian, perhaps, than, well, much more than the cases before.
+58:17
+So with that, in analyzing different time series models,
+58:27
+there are these accuracy statistics that can be computed for any forecasting model.
+58:35
+And so you're probably familiar with root mean squared error or mean squared error.
+58:42
+But we also have the MAPE, which is the Mean Absolute Percentage
+58:47
+Error. And I actually find that pretty useful for judging
+58:53
+how effective the models are. And what's really nice about the FPP2 package
+59:01
+is that one can just ask it to plot the time series and the forecast, and it generates a point forecast
+59:10
+in a solid blue line and prediction intervals about that forecast, which assume
+59:16
+Gaussian or normal distributions for the error terms. But one can see how those evolve into the future.
+59:25
+And it's really consistent for prediction intervals to get wider the further out we forecast.
+59:32
+And that's happening here. What's rather interesting about this forecast
+59:38
+using the Yang-Zhang measure and forecasting that into the future
+59:44
+is that it actually, after being at a lower level, is predicting that it might go back to more
+59:51
+of a mean level of volatility. So that's an interesting property.
+1:00:00
+Well, let's go back to the notes here. And let's see.
+1:00:08
+There are extensions of geometric Brownian motion
+1:00:14
+that we have seen before. One of them is a Poisson jump diffusion model,
+1:00:23
+where the stochastic differential equation has the Brownian motion part as the first two terms,
+1:00:31
+but then has a jump process as a last term
+1:00:36
+where the jump process can be modeled as a Poisson process.
+1:00:43
+So a jump occurs at some rate that
+1:00:50
+defines the Poisson process. And the rate is lambda.
+1:00:56
+And if an event in the Poisson process occurs, then there's a jump in the stock, which
+1:01:07
+is given by this factor here. So one can actually model data with this Poisson jump diffusion
+1:01:19
+model. I ended up working with David Pickard and Arshad Zakaria
+1:01:29
+on fitting this Poisson jump diffusion model. And it was an interesting application in statistics
+1:01:39
+of using the EM algorithm. Basically, the jumps are treated as latent or hidden
+1:01:49
+values in our data. And those hidden values occur according
+1:01:56
+to Poisson probabilities, like the probability of one jump or two jumps, can be computed
+1:02:03
+using the Poisson parameter. And one can apply this EM algorithm
+1:02:09
+to obtain maximum likelihood estimates of all the parameters.
+1:02:14
+And in applying this, an interesting property that occurred was that there were quite frequent--
+1:02:28
+or the rate of Poisson events was quite high,
+1:02:33
+like every couple of days. And what the model was doing was capturing
+1:02:42
+heavier tailed distributions than a normal distribution. So instead of a single normal model for the return,
+1:02:51
+one has a mixture of a normal with no jumps, a normal with one jump, two jumps, weighted according to Poisson rates.
+1:03:00
+And so the implication of the model fitting was that one didn't have rare events necessarily
+1:03:08
+that occurred, but there was evidence suggesting a jump
+1:03:17
+process that related to trying to capture the excess variability of the stock price returns.
+1:03:26
+Now, that leads to another model extending Brownian motion.
+1:03:32
+And this is the Laplace distribution, where if instead
+1:03:39
+of observing a time series over equal increments, so between 0,
+1:03:51
+and one can think of just equal increments of time. So t1, t2, and so forth up to tn, say, from time 0
+1:04:02
+to capital T. It may be that we observe the Brownian motion
+1:04:09
+process at random times t1, and then here's t2,
+1:04:17
+here's t3, where the increments of time
+1:04:23
+themselves are also random. And it turns out that if the times at which we observe
+1:04:32
+have a time increment that's exponentially distributed,
+1:04:41
+then the increments of the Brownian motion follow a Laplace distribution.
+1:04:48
+So heavier tailed distributions than normal, and this
+1:04:54
+is the density of a Laplace distribution,
+1:05:01
+it depends on the exponential of minus the magnitude
+1:05:08
+of the deviation of x from mu as opposed to the square of that deviation.
+1:05:15
+A Gaussian or normal distribution would have a power 2 there with the Laplace distribution
+1:05:22
+as the absolute. And with this distribution, we have
+1:05:28
+a mean mu, which is at the center of the distribution.
+1:05:34
+The variance turns out to depend on this scale factor B, which is twice B squared.
+1:05:43
+So let's just take a look at what Laplace models look like.
+1:05:51
+They basically are bilateral exponential distributions. And if we consider fitting the daily returns on the S&P 500,
+1:06:03
+this is data for a four year period.
+1:06:08
+This peaked distribution with exponentially decaying density
+1:06:15
+is fitting the data really quite well. And more importantly, much better really than a Gaussian
+1:06:24
+curve does. So here, we have the fit of the Gaussian bell curve in red,
+1:06:31
+comparing it to the Laplace curve in blue.
+1:06:37
+And an interesting question is, how do we
+1:06:42
+judge whether one model or another is a good model?
+1:06:48
+And a useful tool is to construct a q-q plot, which
+1:06:58
+is a quantile-quantile plot. So we consider points where the vertical value corresponds
+1:07:08
+to the magnitude of our data, and the horizontal coordinate
+1:07:16
+corresponds to the theoretical value for the smallest
+1:07:23
+from a sample of Laplace, the second smallest from a given Laplace distribution.
+1:07:29
+And so we basically plot observed
+1:07:35
+quantiles versus theoretical quantiles for the fitted model. So this fits quite close to a line, although it's not perfect.
+1:07:45
+At least if it were perfect, it would even snake around the straight line where the sample quantiles equal
+1:07:54
+the theoretical quantiles. If we do the same q-q plot for a Gaussian or normal model,
+1:08:03
+this is what our q-q plot looks like. And so one can see that this second q-q plot is not fitting
+1:08:11
+the data very well at all. So this would favor using the Laplace instead of the Gaussian
+1:08:24
+as a model for independent daily returns. Now, the independence of our period by period returns
+1:08:34
+is one that may not be satisfied by the data. And Robert Engle proposed looking
+1:08:44
+at time series of returns and considering the possibility
+1:08:52
+that the variability of these returns given by the variability of the epsilon t terms,
+1:09:00
+that these, in fact, have time varying volatility sigma t,
+1:09:08
+where the sigma t squared evolves according to a moving
+1:09:17
+average of past squared errors. So an autoregressive conditionally heteroskedastic
+1:09:27
+model is what he proposed. And in looking at this model, it's
+1:09:37
+interesting to note that if one can re-express the ARCH
+1:09:47
+model in terms of this squared error term
+1:09:55
+and have this model in the second equation being
+1:10:01
+consistent with the first, and this second model corresponds to there being an autoregressive model
+1:10:11
+consistent with the squared returns. And so this Lagrange multiplier test
+1:10:19
+can fit the autoregressive model to these epsilon hat squareds and test whether there is autoregressive structure or not.
+1:10:28
+And if we look at the autocorrelations of the S&P 500 returns squared, you can see that the first almost 10
+1:10:41
+autocorrelations are significantly different from 0 in magnitude.
+1:10:47
+So there is strong time dependence in the log returns.
+1:10:52
+And so how does one fit this model? Well, the go to typically in statistical modeling
+1:11:03
+is to consider a likelihood approach where we consider a density for our data specified by the model.
+1:11:15
+So if the error is epsilon t are independent Gaussian
+1:11:23
+distributions with different variances, then this likelihood function defines the joint density
+1:11:33
+of our data given underlying parameters. And what becomes tricky with this likelihood specification
+1:11:44
+is that there, in fact, are constraints on our parameters.
+1:11:49
+So with the ARCH model, we can't have a negative alpha,
+1:11:55
+because with the Gaussian squared epsilon, that could be arbitrarily large negative, or epsilon could be--
+1:12:05
+sorry. If the alphas were negative, then the epsilon squared could be arbitrarily large positive
+1:12:11
+and we'd get a negative variance. So we can't have that. Also we have this property of the sum of the autoregressive
+1:12:19
+parameters is less than 1. And this corresponds to the process not being explosive in its movements.
+1:12:29
+And then let's see. An extension of the ARCH models was done by Bollerslev.
+1:12:40
+And this basically adds to our ARCH model terms,
+1:12:46
+like an order p ARCH model. It adds an order q set of terms on lags of the volatility.
+1:12:57
+And if we consider the special case of the GARCH 1, 1 model,
+1:13:03
+this is its form, which is very simple and parsimonious.
+1:13:09
+What's rather surprising is that the empirical specification
+1:13:14
+of these models is such that the GARCH 1, 1 model is often chosen or identified
+1:13:22
+as the best GARCH order case. So we end up having a very simple model
+1:13:29
+with just a few parameters to characterize the volatility.
+1:13:39
+These notes talk about how the GARCH model induces an ARMA model. So this is some time series results
+1:13:46
+that are gone through here. And there's a long run variance of the GARCH model
+1:13:54
+that is given here. And with a GARCH 1, 1 model, there basically
+1:14:02
+is a long run volatility sigma star, which
+1:14:13
+has this particular formula.
+1:14:24
+So one can find the long run variance of a GARCH model with this formula.
+1:14:30
+This formula also leads to updates of volatility being a multiple of the long run variance,
+1:14:38
+plus a deviation from that long run variance.
+1:14:48
+So we have a maximum likelihood estimation for these models. Now, I wanted to share with you a case
+1:14:57
+study using ARCH and GARCH models with foreign exchange returns.
+1:15:03
+And so this note uses data collected from the Federal Reserve on foreign exchange values.
+1:15:15
+Section 1.2 actually fits Brownian motion using different time scales.
+1:15:21
+So not assuming time dependence. It actually is interesting to think about different time
+1:15:29
+scales. But if we go to section 1.3 and look
+1:15:39
+at time dependence in squared returns, this is the dollar pound returns.
+1:15:48
+This shows the autocorrelation and partial autocorrelation
+1:15:54
+of the returns. So there's strong partial autocorrelations
+1:16:02
+of the actual series. And if we look at the squared returns,
+1:16:07
+the actual series has high autocorrelations over time.
+1:16:12
+But the partial autocorrelations have very high spikes at low lags.
+1:16:18
+So this suggests an autoregressive model in the squared returns. And the note fits an ARCH 1 and ARCH 2.
+1:16:29
+So one lag, or sorry, one autoregressive term, two autoregressive terms or 10,
+1:16:37
+and then fits the GARCH 1, 1. And the results are highlighted here,
+1:16:44
+just showing you the different coefficient estimates for these different models. They're all statistically significant
+1:16:51
+in terms of the parameters. What's of interest, though, is just to look at the time series plot of the fitted volatilities using
+1:17:01
+ARCH of different orders. So here's the ARCH 1 model.
+1:17:06
+Here's the ARCH 2 model. A property of these ARCH models is that it never goes below 0.
+1:17:15
+There's a lower bound. Here's the ARCH 10 model, which looks like it's maybe tracking
+1:17:21
+time varying volatility well. And then finally, we can compare that with the GARCH 1, 1 model.
+1:17:30
+So instead of having 10 autoregressive parameters in ARCH, the generalized ARCH model
+1:17:38
+is capturing time varying volatility in an appealing way, whether that's really valid or not is of interest.
+1:17:47
+But it certainly is an alternative to these arch models that is quite powerful.
+1:17:56
+Well, here's just a graph of all three together. This note actually does a final section
+1:18:05
+of looking at what happens if our error distribution is not
+1:18:11
+Gaussian, but is a t distribution.
+1:18:18
+There are packages, rugarch, which allow us to specify parameters and fits using t models,
+1:18:27
+t distribution models for the errors. And what's very curious is in judging
+1:18:37
+the histogram of standardized residuals,
+1:18:47
+the t distribution seems to do a decent job. And so here's with Gaussian residuals, I guess.
+1:18:59
+And then here's the Gaussian residuals and q-q
+1:19:06
+plot associated with the standardized Gaussian assumption.
+1:19:11
+Then finally, there's the q-q plot of standardized residuals
+1:19:18
+with a t distribution assumed. So what's significant is just how the quantile-quantile plot
+1:19:25
+suggests that this model is really fitting the data much, much better in terms of characterizing the variation.
+1:19:31
+And the choice of which order model to use for the degrees of freedom,
+1:19:45
+there's this negative log likelihood function
+1:19:52
+of models for different t distributions as we vary the degrees of freedom for the t.
+1:19:59
+And the t distribution has a heavier tail than a Gaussian distribution.
+1:20:05
+At least if the degrees of freedom is really high, it's virtually equivalent to a Gaussian.
+1:20:10
+But this is suggesting that there's possibly a 9 degrees of freedom for that.
+1:20:18
+So that's a very interesting finding. And it actually arises with some mathematical analysis
+1:20:25
+that t distributions are appropriate if we think
+1:20:34
+of spherical symmetry in the number of dimensions
+1:20:39
+equal to the degree of freedom. And so if you imagine a joint distribution that
+1:20:48
+is spherically symmetric in really high dimensions, when you project that down onto coordinate axes,
+1:20:55
+you end up getting a Gaussian distribution. But if their symmetry is just of, say, 9 dimensions, then
+1:21:07
+you end up having a t distribution for what those projections are. So this suggests that in terms of time periods
+1:21:18
+over which the distribution of volatility is stable,
+1:21:25
+could be close to 9 dimensions.
+1:21:31
+So perhaps corresponding to 9 periods of data, I believe. All right.
+1:21:36
+Well, we'll finish there. There's a lot of interesting material for you to check out, if you like.
+1:21:42
+And I hope you can enjoy reading some of the articles of people
+1:21:48
+who've studied volatility and see what their work has contributed.
+1:21:53
+And it's a really interesting area for final papers, modeling volatility,
+1:22:01
+predicting volatility. This is really scratching the surface of the topic. So there's a lot of interesting problems you could study.
+1:22:09
+All right. Thanks a lot.

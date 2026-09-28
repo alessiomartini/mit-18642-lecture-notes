@@ -1,0 +1,45 @@
+{
+  "content": "<p><strong>Description:</strong> This lecture describes portfolio theory, including topics of Markowitz mean-variance optimization, von Neumann-Morganstern utility theory, portfolio optimization constraints, and risk measures.</p>\n<p><strong>Instructor:</strong> Dr. Peter Kempthorne</p>\n",
+  "content_type": "resource",
+  "description": "",
+  "draft": false,
+  "end_time": "",
+  "file": null,
+  "file_size": "196422965",
+  "iscjklanguage": false,
+  "learning_resource_types": [
+    "Lecture Videos"
+  ],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "ocw_type": "",
+  "optional_tab_title": "",
+  "optional_text": "",
+  "parent_title": "Video Lectures",
+  "parent_type": "CourseSection",
+  "related_resources_text": "",
+  "resource_index_text": "",
+  "resourcetype": "Video",
+  "start_time": "",
+  "title": "Lecture 14: Portfolio Theory",
+  "uid": "0f6ae00c-71a8-f8a7-3d85-2d821a2d473d",
+  "video_files": {
+    "archive_url": "http://www.archive.org/download/MIT18.S096F13/MIT18_S096F13_lec14_300k.mp4",
+    "video_captions_resources": [
+      {
+        "file": "/courses/18-s096-topics-in-mathematics-with-applications-in-finance-fall-2013/eeef4a43eb0d588ebbb3508b0b09cd2b_ywl3pq6yc54.vtt",
+        "language": "en"
+      }
+    ],
+    "video_thumbnail_file": "https://img.youtube.com/vi/ywl3pq6yc54/default.jpg",
+    "video_transcript_resources": [
+      {
+        "file": "/courses/18-s096-topics-in-mathematics-with-applications-in-finance-fall-2013/1d785287f238bbd6ef61d14ad727085b_ywl3pq6yc54.pdf",
+        "language": "en"
+      }
+    ]
+  },
+  "video_metadata": {
+    "video_tags": "18-s096-topics-in-mathematics-with-applications-in-finance-fall-2013, markowitz mean-variance optimization, portfolio optimization, risk measure, risk-free asset, von neumann-morganstern utility theory",
+    "youtube_id": "ywl3pq6yc54"
+  }
+}

@@ -1,0 +1,197 @@
+% ============================================================
+%  Preamble -- Topics in Mathematics with Applications in Finance
+% ============================================================
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amsthm,mathtools}
+\usepackage{newpxtext,newpxmath} % provides the AMS symbols: do not load amssymb
+\usepackage{bm}
+\usepackage{microtype}
+\usepackage[a4paper,top=2.6cm,bottom=2.6cm,inner=2.4cm,outer=3.6cm,marginparwidth=3.0cm,marginparsep=0.3cm,headheight=23pt]{geometry}
+\usepackage{booktabs,array,tabularx,longtable}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[shortlabels,inline]{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,decorations.pathreplacing,calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage[most]{tcolorbox}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=NavyBlue,citecolor=NavyBlue]{hyperref}
+\usepackage[nameinlink]{cleveref}
+
+\setlist{itemsep=2pt,topsep=4pt}
+\setlength{\parskip}{3pt}
+\setlength{\emergencystretch}{2em}
+\hfuzz=5pt
+
+% ---------- headers ----------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\thepage\quad\leftmark}
+\fancyhead[RO]{\small\rightmark\quad\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\small\thepage}\renewcommand{\headrulewidth}{0pt}}
+
+% ---------- colours (bright on purpose: yellow notes, blue definitions, red theorems, green examples) ----------
+\definecolor{defcol}{HTML}{1565C0}  % blue: definitions
+\definecolor{thmcol}{HTML}{D32F2F}  % red: theorems, propositions, lemmas, corollaries
+\definecolor{intcol}{HTML}{2E7D32}  % green: examples (also the green of the figures)
+\definecolor{notecol}{HTML}{FBC02D} % yellow: margin notes and their answers
+\definecolor{intucol}{HTML}{8E24AA} % purple: intuition
+\definecolor{fincol}{HTML}{EF6C00}  % orange: finance
+\definecolor{cscol}{HTML}{00897B}   % teal: case studies
+\definecolor{keycol}{HTML}{C2185B}  % magenta: key formulas
+\definecolor{exercol}{HTML}{3949AB} % indigo: exercises
+\definecolor{srccol}{HTML}{546E7A}  % grey-blue: sources, course notes, remarks
+\definecolor{histcol}{HTML}{B8860B} % bronze: history boxes (classical columns)
+\definecolor{doubtcol}{HTML}{C62828}
+\definecolor{ideacol}{HTML}{1565C0}
+\definecolor{okcol}{HTML}{388E3C}
+\colorlet{anscol}{notecol!85!black}
+
+% ---------- table rows: a little air between lines in every table ----------
+\AddToHook{env/tabular/begin}{\renewcommand{\arraystretch}{1.35}}
+\AddToHook{env/tabularx/begin}{\renewcommand{\arraystretch}{1.35}}
+\AddToHook{env/longtable/begin}{\renewcommand{\arraystretch}{1.35}}
+
+% ---------- theorem-like environments (numbered by chapter), coloured headings ----------
+\newtheoremstyle{coldef}{}{}{\normalfont}{}{\bfseries\color{defcol}}{.}{ }{}
+\newtheoremstyle{colex}{}{}{\normalfont}{}{\bfseries\color{intcol}}{.}{ }{}
+\newtheoremstyle{colexer}{}{}{\normalfont}{}{\bfseries\color{exercol}}{.}{ }{}
+\newtheoremstyle{colthm}{}{}{\itshape}{}{\bfseries\color{thmcol}}{.}{ }{}
+\newtheoremstyle{colrem}{}{}{\normalfont}{}{\itshape\color{srccol}}{.}{ }{}
+\theoremstyle{coldef}
+\newtheorem{definition}{Definition}[chapter]
+\theoremstyle{colex}
+\newtheorem{example}[definition]{Example}
+\theoremstyle{colexer}
+\newtheorem{exercise}{Exercise}[chapter]
+\theoremstyle{colthm}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{corollary}[definition]{Corollary}
+\theoremstyle{colrem}
+\newtheorem{remark}[definition]{Remark}
+\crefname{exercise}{Exercise}{Exercises}
+
+% A \marginpar cannot live inside a box: a \note written in a box is queued and
+% printed in the margin right after the box (see \note below)
+\makeatletter
+\newif\ifnote@inbox
+\def\note@queue{}
+\newcommand{\note@flush}{\note@queue\gdef\note@queue{}}
+\tcbset{note queue/.code={\appto\kvtcb@afterbox{\note@flush}}}
+\makeatother
+\tcbset{thmbox/.style={enhanced,breakable,colback=#1!7,colframe=#1!7,borderline west={3pt}{0pt}{#1},
+  sharp corners,left=6pt,right=4pt,top=2pt,bottom=2pt,before skip=8pt,after skip=8pt,
+  before upper={\csname note@inboxtrue\endcsname},note queue}}
+\tcolorboxenvironment{definition}{thmbox=defcol}
+\tcolorboxenvironment{theorem}{thmbox=thmcol}
+\tcolorboxenvironment{proposition}{thmbox=thmcol}
+\tcolorboxenvironment{lemma}{thmbox=thmcol}
+\tcolorboxenvironment{corollary}{thmbox=thmcol}
+\tcolorboxenvironment{example}{thmbox=intcol}
+\tcolorboxenvironment{exercise}{thmbox=exercol}
+\tcolorboxenvironment{remark}{thmbox=srccol}
+
+% ---------- content boxes ----------
+\tcbset{notebox/.style={enhanced,breakable,colback=#1!7,colframe=#1,
+  fonttitle=\bfseries,coltitle=white,colbacktitle=#1,boxrule=0.6pt,arc=2pt,
+  left=6pt,right=6pt,top=4pt,bottom=4pt,before skip=10pt,after skip=10pt,
+  before upper={\csname note@inboxtrue\endcsname},note queue}}
+% Box title: the box type in capitals, then the topic
+\newcommand{\boxtitle}[2]{\MakeUppercase{#1}\ifx&#2&\else: #2\fi}
+% Intuition: the "physicist's reading" of a result
+\newtcolorbox{intuition}[1][]{notebox=intucol,title={\boxtitle{Intuition}{#1}}}
+% Finance: where the maths meets the market
+\newtcolorbox{finance}[1][]{notebox=fincol,title={\boxtitle{In finance}{#1}}}
+% Case study: summary of an R case study / notebook
+\newtcolorbox{casestudy}[1][]{notebox=cscol,title={\boxtitle{Case study}{#1}}}
+% Summary / key formulas
+\newtcolorbox{keyformulas}{notebox=keycol,title={\boxtitle{Key formulas}{}}}
+% Sources: which lectures, videos and files a chapter is built on
+\newtcolorbox{sources}{notebox=srccol,title={\boxtitle{Sources for this chapter}{}},before upper=\raggedright}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+% Note on course material (errata, missing lectures, differences 2013/2024)
+\newtcolorbox{coursenote}[1][]{notebox=srccol,title={\boxtitle{Course note}{#1}}}
+% History: a fact from the history of finance/mathematics, framed like a classical
+% temple front: a dentilled entablature (the title) on two Ionic columns (not breakable)
+\newcommand{\histcolumn}[2]{% #1 = foot of the column, #2 = top of the capital (coordinate names)
+  \fill[histcol] ([xshift=-6pt]#1) rectangle ([xshift=6pt,yshift=2.5pt]#1);
+  \fill[histcol] ([xshift=-4.5pt,yshift=2.5pt]#1) rectangle ([xshift=4.5pt,yshift=4pt]#1);
+  \fill[histcol!15] ([xshift=-3.5pt,yshift=4pt]#1) rectangle ([xshift=3.5pt,yshift=-5pt]#2);
+  \foreach \dx in {-3.5,-1.2,1.2,3.5}
+    \draw[histcol,line width=0.4pt] ([xshift=\dx pt,yshift=4pt]#1) -- ([xshift=\dx pt,yshift=-5pt]#2);
+  \fill[histcol] ([xshift=-4.5pt,yshift=-5pt]#2) rectangle ([xshift=4.5pt,yshift=-2.5pt]#2);
+  \foreach \dx in {-4.5,4.5} {
+    \draw[histcol,line width=0.8pt,fill=white] ([xshift=\dx pt,yshift=-4.5pt]#2) circle (1.9pt);
+    \fill[histcol] ([xshift=\dx pt,yshift=-4.5pt]#2) circle (0.6pt);}
+  \fill[histcol] ([xshift=-6.5pt,yshift=-2.5pt]#2) rectangle ([xshift=6.5pt]#2);}
+\newtcolorbox{history}[1][]{enhanced,colback=histcol!6,colframe=histcol,boxrule=0.8pt,sharp corners,
+  fonttitle=\bfseries,coltitle=white,colbacktitle=histcol,title={\boxtitle{History}{#1}},
+  left=20pt,right=20pt,top=8pt,bottom=4pt,before skip=10pt,after skip=10pt,
+  before upper={\csname note@inboxtrue\endcsname},note queue,
+  overlay={
+    \draw[histcol,line width=2.5pt,dash pattern=on 2.5pt off 2pt]
+      ([yshift=-1.25pt]title.south west) -- ([yshift=-1.25pt]title.south east);
+    \coordinate (hfL) at ([xshift=9pt]frame.south west);
+    \coordinate (htL) at ([xshift=9pt,yshift=-2.5pt]title.south west);
+    \coordinate (hfR) at ([xshift=-9pt]frame.south east);
+    \coordinate (htR) at ([xshift=-9pt,yshift=-2.5pt]title.south east);
+    \histcolumn{hfL}{htL}\histcolumn{hfR}{htR}}}
+% Answer to a reader's \note, placed right below the paragraph carrying the note
+\newtcolorbox{answer}[1][]{notebox=notecol,colback=notecol!12,coltitle=black,
+  fontupper=\small,title={\boxtitle{Answer}{#1}}}
+
+% ============================================================
+%  Annotation macro (for the reader)
+% ============================================================
+%  \note{...}   a comment (doubt, idea, reminder) printed in the margin
+%               next to the text where it is written
+%  \note*{...}  the same, marked DONE (request or reminder carried out)
+%  Inside a coloured box the note appears in the margin just below the box.
+\makeatletter
+\NewDocumentCommand{\note}{s +m}{%
+  \ifnote@inbox\gappto\note@queue{\note@put{#1}{#2}}\else\note@put{#1}{#2}\fi}
+\newcommand{\note@put}[2]{%
+  \marginpar{\begin{tcolorbox}[colback=notecol!25,colframe=notecol,boxrule=0.5pt,arc=1pt,
+    left=3pt,right=3pt,top=2pt,bottom=2pt,before skip=0pt,after skip=0pt,
+    fontupper=\scriptsize\sffamily\raggedright]%
+    \IfBooleanT{#1}{\colorbox{okcol}{\textcolor{white}{\bfseries\scriptsize DONE}}\par}#2\end{tcolorbox}}}
+\makeatother
+
+
+% ---------- video timestamps ----------
+%  \ts{24}{12}{23:10}  -> lecture 12 of the 2024 course, at 23:10
+%  \ts{13}{18}{5:02}   -> lecture 18 of the 2013 course
+\makeatletter % consecutive tags may break between them, but never before punctuation
+\DeclareRobustCommand{\ts}[3]{\mbox{\footnotesize\sffamily\color{srccol}[$\blacktriangleright$\,20#1\,L#2\,@\,#3]}\@ifnextchar\ts{\allowbreak}{}}
+\makeatother
+
+% ---------- listings (short R snippets) ----------
+\lstset{language=R,basicstyle=\ttfamily\footnotesize,keywordstyle=\color{defcol}\bfseries,
+  commentstyle=\color{intcol}\itshape,stringstyle=\color{thmcol},frame=single,rulecolor=\color{black!20},
+  breaklines=true,columns=fullflexible,showstringspaces=false}
+
+% ---------- maths shortcuts ----------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\Q}{\mathbb{Q}}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Corr}{Corr}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\diag}{diag}
+\newcommand{\T}{^{\mathsf T}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\ind}{\mathbf{1}}
+\newcommand{\eqd}{\stackrel{d}{=}}
+
+% ---------- file references ----------
+\DeclareRobustCommand{\file}[1]{\texttt{\small\detokenize{#1}}}

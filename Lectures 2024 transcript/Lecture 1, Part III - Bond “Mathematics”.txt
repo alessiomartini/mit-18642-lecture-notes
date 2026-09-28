@@ -1,0 +1,639 @@
+0:00
+[SQUEAKING]
+0:01
+[RUSTLING]
+0:04
+[CLICKING]
+0:07
+0:18
+VASILY STRELA: The rest of the class, let's talk a little bit
+0:20
+about interest rates and a little bit about bonds,
+0:26
+because that's very important and central for many--
+0:33
+will be definitely part of many classes
+0:36
+and is generally central for finance, and for life,
+0:43
+in my opinion.
+0:44
+So what is interest?
+0:48
+Well, let's start with now.
+0:51
+0:55
+And suppose we have $1 which we invested--
+1:00
+well, put it in the bank.
+1:02
+So what happens in one year?
+1:04
+1:08
+Well, you expect to get your dollar back with some interest.
+1:12
+And what does it mean?
+1:13
+So you get 1 plus something.
+1:16
+I don't know--
+1:18
+5% nowadays.
+1:19
+And this r is called interest rate.
+1:22
+So what happens if you reinvest it.
+1:25
+What will you get?
+1:27
+The whole thing.
+1:29
+So in two years you would expect to get 1 plus r times 1 plus r.
+1:36
+So 1 plus r squared.
+1:38
+So in n years, you will expect to get 1 plus r to the power n.
+1:55
+Well, let's make it small and small not to confuse ourselves.
+2:01
+So now let's make life a little bit more complicated.
+2:06
+What happens if you decide to take your money in half a year?
+2:13
+You had one here.
+2:15
+So what happens in half a year?
+2:17
+Well, you get half of the interest.
+2:21
+So it will be 1 plus r over 2.
+2:23
+And in one year, it will be 1 plus r over 2 squared
+2:31
+because you reinvest it.
+2:34
+So suppose you keep it in the bank.
+2:36
+And in n years, it will be 1 plus r over 2 but twice n.
+2:44
+Because there are twice as many periods
+2:47
+Let's subdivide further.
+2:50
+Let's make m period.
+2:53
+So in the first period, you get 1 over--
+2:58
+1 plus r over m.
+3:02
+In one year, it will be 1 plus r over m to the power m.
+3:10
+And here, you'll get 1 plus r over m--
+3:19
+m times m.
+3:20
+3:23
+What if we take the limit.
+3:26
+If we are able to reinvest every second, every millisecond,
+3:30
+what happens then?
+3:32
+So we'll send this m to the infinity.
+3:40
+3:48
+So what is-- who knows what is that?
+3:54
+AUDIENCE: e.
+3:54
+VASILY STRELA: Well, it is e, but--
+3:58
+AUDIENCE: r.
+4:00
+VASILY STRELA: r.
+4:01
+AUDIENCE: Oh, sorry. r.
+4:02
+VASILY STRELA: Right.
+4:03
+r has to be there, and this n will stay there.
+4:08
+Well, yeah.
+4:09
+Yeah, if we keep m here.
+4:12
+So in fact, interesting historical fact, that's how e
+4:16
+was discovered and defined.
+4:19
+It was Bernoulli in his seminal paper in 1683,
+4:28
+where he described this computation.
+4:32
+And it was about interest rates, about how
+4:36
+interest is compounding.
+4:38
+So maybe this was the first mathematical finance
+4:42
+paper in the history.
+4:46
+Now, let's change the game a little bit-- not the game--
+4:52
+change the question a little bit.
+4:54
+So suppose we know that we will receive $1 in one year.
+5:03
+5:08
+How much should we pay for this right to receive $1 in one year?
+5:15
+How much should we pay now to receive $1 in one year?
+5:20
+And let's compute it.
+5:21
+So suppose we don't know.
+5:23
+Let's assume that now it is x dollars.
+5:29
+And let's consider the following strategy.
+5:33
+Let's borrow $1-- let's borrow x, this amount now,
+5:46
+and let's see what happens at the end.
+5:50
+So at the end, in one year, I mean, we'll receive $1 for sure.
+5:55
+And we'll have to repay our debt but with interest.
+6:01
+So we'll have repay 1 plus x times r.
+6:08
+6:12
+Sorry-- x times 1 plus.
+6:15
+6:19
+Now, what should this be?
+6:24
+Can it be greater than zero, this difference?
+6:28
+Well, if it's greater than zero, why wouldn't we borrow--
+6:33
+why wouldn't we buy a right to receive a billion dollars,
+6:37
+then we'll have a lot of profit?
+6:42
+Can it be less than zero?
+6:44
+Well, then we would be stupid to enter
+6:46
+this contract because we'll lose money for sure.
+6:49
+We know that this will happen in one year.
+6:52
+So for no arbitrage--
+6:55
+and we don't assume that our counterparty is stupid.
+6:58
+We don't think that we are stupid.
+7:00
+So it has to be zero.
+7:04
+And this x is equal to 1 plus--
+7:09
+divided by 1 plus r.
+7:12
+And this is called discounting, meaning
+7:17
+that if we know that we'll receive a certain amount
+7:21
+in the future, and we know the interest rates, prevailing
+7:25
+interest rates, then we have to discount the future value
+7:32
+to today using a discount factor.
+7:36
+And this is the discount factor assuming annualized compounding.
+7:41
+If we assume annualized compounding
+7:47
+and receive n dollars in the future,
+7:52
+in the future n years, the value of n dollars in the future,
+8:00
+it is the value of our n dollars, which
+8:03
+we are receiving in the future n years,
+8:05
+but it has to be discounted by n years.
+8:08
+So it should be--
+8:09
+8:14
+And here, it is discounting.
+8:16
+If we assume a continuous discounting, something
+8:20
+like this, then it will be--
+8:23
+our price will be n times e to the minus rn.
+8:33
+This will be our discount factor,
+8:36
+assuming continuous compounding.
+8:39
+And we already hitting the problem--
+8:43
+or not the problem.
+8:44
+But we are already hitting a situation
+8:46
+where some model is needed, which brings us
+8:57
+to the world of financial instruments-- interest rate
+9:02
+related financial instruments.
+9:06
+And the simplest financial instrument
+9:09
+is a zero-coupon bond.
+9:11
+That's exactly the right to receive
+9:14
+certain amount of notional.
+9:17
+Or notional-- or quite often 1 or 100 in certain amount
+9:22
+of time.
+9:24
+And that's the value of our zero-coupon bond.
+9:28
+More common financial instruments are coupon bonds.
+9:33
+Because most people would like to receive periodic interest
+9:38
+for lending money.
+9:41
+And that's effectively lending money.
+9:44
+And this is typical bonds.
+9:47
+For example, if you buy government bonds
+9:49
+that's what will happen.
+9:51
+You'll give the government your $100, and government
+9:57
+will be repaying you coupons periodically,
+9:59
+usually semiannually, here in the US--
+10:03
+in Europe, it's quite often quarterly-- and the notional,
+10:07
+all your $100, at the end.
+10:10
+So what the price of such a coupon bond should be?
+10:17
+Well, we'll need to take all the cash flows and discount them.
+10:25
+And if we assume a constant interest rate,
+10:29
+we'll have to discount it with our constant discount factors.
+10:35
+And that's how much--
+10:37
+and this assumes-- well, say annual coupons and annual rate.
+10:44
+So that will be your sequence with a notional
+10:48
+at the end, the whole big notional at the end.
+10:52
+And can we sum this up?
+10:55
+Well, sure.
+10:57
+That's geometric sequence.
+11:00
+Everybody can sum up geometric sequence.
+11:03
+And that's the value.
+11:06
+That's what you get.
+11:07
+11:10
+And that's the value of the bond.
+11:13
+Now, the bonds are traded on the markets.
+11:20
+There are prices of the bonds.
+11:22
+And if you start investing into bonds, and not in just
+11:28
+in one bond, you should be able to compare to bonds.
+11:32
+And comparing the price is not really convenient
+11:36
+because bonds have different maturities.
+11:40
+Even with the same interest, would have different prices
+11:44
+because there will be different number of cash flows.
+11:47
+Bonds of different coupons will have different prices.
+11:51
+So what turns out to be more convenient measure
+11:56
+to compare bonds and various fixed income securities
+12:00
+is yield.
+12:01
+And yield is such a constant interest
+12:07
+rate, which by this discounting gives you market price.
+12:14
+So you buy something at the market price.
+12:15
+You know the market price.
+12:17
+So all the cash flows.
+12:20
+So you back out one flat interest rate,
+12:23
+which will give you the price of the bond.
+12:28
+That's called yield of the bond.
+12:31
+Obviously, there is one-to-one relationship
+12:34
+between price and yield.
+12:35
+So for our zero-coupon bond, yield is pretty simple.
+12:44
+You just invert this formula.
+12:48
+And this is here on the slide.
+12:50
+For coupon bonds, yield computation
+12:55
+is more complex because inverting
+12:57
+this formula is more involved.
+13:01
+And in fact, it has to be numerical.
+13:03
+But that's how yields are computed.
+13:06
+13:09
+Here, I'll I give you an example of a few--
+13:17
+of price yield relationship for a 10-year bond with different
+13:22
+coupons.
+13:23
+So what's important to know here is that the higher the coupon--
+13:27
+and that's natural-- the higher the yield
+13:32
+is for the same bond of the same maturity.
+13:35
+But what is important to know is the yield and price
+13:39
+are in inverse relationship.
+13:40
+The high yield, the lower the price because it's
+13:45
+all about discounting.
+13:47
+It's in the denominator.
+13:49
+The higher the price, the lower the yield.
+13:52
+13:56
+So that's what it is.
+14:01
+But real life is more complicated than that.
+14:07
+In real world, as if we wanted everything
+14:11
+to be the same simple interest rate,
+14:14
+and all bonds have to be discounted the same,
+14:19
+real life is slightly different.
+14:21
+So if you take markets--
+14:24
+securities, market bonds and start breaking up their yields,
+14:28
+they will not be constant, particularly with maturity.
+14:34
+And this is called the yield curve.
+14:37
+And I gave you--
+14:38
+here, I plotted a yield curve for a 10-year--
+14:45
+term structure of 10-year yields, US government yields,
+14:51
+for a variety of times.
+14:53
+And I want to talk just a little bit about it
+14:55
+because it's quite topical.
+14:57
+So that's the thickest line is this.
+14:59
+That's the yield curve for September 3, so two days ago.
+15:09
+So quite different.
+15:10
+And yields here for a very short-dated securities
+15:15
+are quite higher than for long-dated securities.
+15:18
+This is still quite atypical.
+15:21
+For example, in '92, around the same September time,
+15:26
+yield curve looked like this--
+15:30
+considered to be more or less classical curve.
+15:33
+And generally speaking, we expect upward-sloping curves
+15:38
+because generally speaking, people
+15:40
+would like to receive more yield for a longer term investments.
+15:46
+And that's what was the case in--
+15:53
+this is what-- this is '21.
+16:00
+This is '14.
+16:04
+Yeah, nice looking curves.
+16:07
+The only difference here is that now they are--
+16:10
+in '92, they were grounded at 3% and went all the way up to 7%,
+16:16
+those were grounded at zero and went only to 2%, 3%.
+16:24
+Now, interesting observation here is--
+16:29
+let's look at this inverted curves.
+16:32
+A year ago it was inverted.
+16:35
+Now it is inverted.
+16:37
+It was inverted in 2007.
+16:41
+No, this is 2019, and this is 2007.
+16:47
+So what the-- do we have anything in your mind
+16:54
+what's common between 2021 and 2007?
+17:04
+So--
+17:05
+AUDIENCE: The year before the recession.
+17:07
+VASILY STRELA: Yes, exactly.
+17:09
+Well, 2007, the recession was "the recession."
+17:13
+2021-- there was a recession in 2020.
+17:17
+Even this yield curve is before COVID.
+17:21
+So nothing was--
+17:23
+And if you look at the shape of the yield curves and recession
+17:28
+times, well, it is common analogy--
+17:32
+and there are papers on that--
+17:35
+how predictive is inverted yield curve for the recessions?
+17:41
+Generally, it is assumed to be predictive.
+17:46
+So here we go.
+17:47
+We have an inverted yield curve.
+17:49
+What does it tell us about the future?
+17:52
+Well, that's all Fed's job to keep it--
+17:55
+17:58
+to make it a soft landing and for a recession not to happen.
+18:04
+And we'll see.
+18:05
+Maybe it will be, or maybe not.
+18:07
+But what I want to emphasize that there
+18:10
+is a lot of information in yield curves.
+18:13
+One of the lectures in the future, Andrew Gunstensen,
+18:15
+he will be talking mostly about yield curves
+18:17
+and yield curve constructions and the instruments around that.
+18:21
+So it's very important piece of knowledge.
+18:29
+And yeah, I'll promise you, when I come back later on
+18:32
+to talk about Black-Scholes, I'll bring this slide back,
+18:36
+and we'll see what happens with the yield curve.
+18:39
+Because what-- and I can guarantee you
+18:41
+it will look different because the Fed
+18:44
+is happening-- the Fed meeting is happening in September.
+18:47
+Everybody expects the yields to be cut, which immediately
+18:53
+will bring the short end down.
+18:56
+What happens with the long end?
+18:57
+I wish I knew.
+18:58
+19:01
+Anyway, that's about yield curves.
+19:05
+But another important thing to emphasize that no
+19:09
+matter what, bond prices are sensitive to yields, obviously.
+19:18
+And they are sensitive to yields in nonlinear fashion.
+19:22
+What does it mean?
+19:23
+Well, it means that if you hold bonds on your hands and yields
+19:29
+change, and they do change, your investment will change.
+19:34
+So it's quite important to understand
+19:36
+the sensitivity of your investment
+19:38
+to interest rates and yields.
+19:41
+19:44
+And what are sensitivities?
+19:45
+Those are derivatives.
+19:48
+Or in finance and fixed income world,
+19:51
+they're called durations because they're usually scaled by price.
+19:56
+So very important measures are duration
+19:59
+of the bond, which is derivative with respect to yield.
+20:06
+And for each different bond and each different security,
+20:11
+they will be slightly different.
+20:12
+And not only the first derivative is important,
+20:17
+the second derivative or convexity is also important.
+20:22
+So yeah.
+20:24
+And that's what we'll be talking about in various classes.
+20:31
+We will be talking about more interesting interest rate
+20:37
+objects in the future, in particular, forward rates
+20:40
+and swaps.
+20:41
+But I'll leave it to Stefan and Andrew to talk more about that.
+20:49
+That's probably all for today.
+20:54
+And any questions to any of us?
+20:57
+21:03
+AUDIENCE: Have you done this-- have you done that game before?
+21:07
+SPEAKER: Not specifically in this format.
+21:09
+So we tried-- before it was more open-ended.
+21:13
+I was thinking-- so I think by fixing the dates,
+21:17
+you don't have to make the market timing decision.
+21:21
+We already made it for you.
+21:22
+Yeah
+21:24

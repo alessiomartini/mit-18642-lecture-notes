@@ -1,0 +1,1353 @@
+0:00
+The following content is provided under a Creative Commons license. Your support will help MIT OpenCourseWare
+0:06
+continue to offer high quality educational resources for free. To make a donation or view additional materials
+0:13
+from hundreds of MIT courses, visit MIT OpenCourseWare at ocw.mit.edu.
+0:27
+PROFESSOR: Our last class Yi is running from his home in New Jersey due to snow.
+0:33
+So he couldn't fly in. But actually, now I'm learning a lot.
+0:39
+It's a good way to run the classes going forward.
+0:44
+I think. We may employ it next year. So Yi will present CV modeling for about an hour.
+0:55
+And then Jake, Peter and myself, we will do concluding remarks.
+1:02
+We will be happy to answer any questions on the projects or any questions whatsoever.
+1:09
+All Right? So Yi, please. Thank you. YI TANG: OK.
+1:15
+I'm here. Hi everyone. Sorry I couldn't make it in person because of the snow.
+1:23
+And I'm happy to have this opportunity to discuss with you guys counterparty credit
+1:32
+risks as a part of our enterprise-level derivatives
+1:37
+modeling. I run a Cross Asset Modeling Group at Morgan Stanley.
+1:42
+And hopefully you will see why it's called Cross Asset Modeling.
+Overview of Counterparty Credit Risk
+1:50
+OK, counterparty credit risk exists mainly in OTC derivatives.
+1:57
+We have an OTC derivative trade. Sometimes you owe your counterparty money.
+2:04
+Sometimes your counterparty owes you money. If your counterparty owes you money, on the payment date,
+2:14
+your counterparty may actually default, and therefore, either will not pay you
+2:20
+the full amount it owes you. The default event includes bankruptcy, failure to pay
+2:28
+and a few other events. So obviously, we have a default risk.
+2:34
+If our counterparty defaults, we would lose part of our receivable.
+2:42
+However, the question is before the counterparty defaults, do have any other risks?
+2:48
+Imagine you have a case where your counterparty will pay you in 10 years.
+2:55
+So he doesn't need to pay you anything. Then the question is are you concerned
+3:01
+about counterparty risks or not? Well, the question is yes, as many of you probably know,
+3:10
+it's the mark-to-market risk due to the likelihood of a counterparty future default.
+3:19
+It is like the counterparty spike widens, even though you do not need a payment from you counterparty.
+3:25
+If you were to sell, a derivative trade
+3:32
+to someone, then someone may actually worry about that. So therefore the mark-to-market will
+3:39
+become lower if the counterparty is spread wider.
+3:47
+This is similar to a corporate bond in terms of economics.
+3:53
+You own a bond on the coupon payments date, or on the principal date, the counterparty can default.
+4:00
+Of course, they can default in between also. But in terms of terminology, this is not called counterparty risk.
+4:08
+This is called issue risk.
+4:13
+So here comes the important concept credit valuation adjustment.
+4:20
+As we know the counterparty is a risk. Whenever there's a risk, we could put a price on that risk.
+4:31
+Credit valuation adjustment, CVA, essentially is the price of a counterparty credit risk.
+4:38
+Mainly mark-to-market risks, of course, include default risk too.
+4:43
+It is an adjustment to the price of mark-to-market
+4:49
+from a counterparty-default-free model, the broker quote.
+4:54
+So people know, there's a broker quote.
+5:01
+The broker doesn't know the counterparty risk. A lot of our trade models do not know the counterparty risk
+5:11
+either, mainly because of we're holding it back,
+5:17
+which I will talk about in a minute. Therefore, there is a need to actually
+5:24
+have a separate price of CVA to be added to the price for mark-to-market
+5:33
+from counterparty default free model to get a true economic price.
+5:40
+In contrast, in terms of a bond, typically there's no need for CVA because it is priced in the market already.
+5:49
+And CVA not only has important mark-to-market implications,
+5:58
+it is also a part of our Basel III capital.
+6:03
+Not only change your valuation, but could impact your return on capital.
+6:09
+Because of a CVA risk, the capital requirements typically is higher.
+6:15
+So you may have a bigger denominator in this return RE,
+6:22
+return on capital or return on equity. CVA risk, as you may know, has been a very important risk,
+6:32
+especially since the crisis in 2008. During the crisis, a significant financial loss actually
+6:40
+is coming from CVA loss, meaning mark-to-market loss
+6:46
+due to counterparties' future default. And this loss turned out to be actually
+6:51
+higher than the actual default loss than the actual counterparty default.
+7:01
+Again, coming back to our question, how do we think in terms of pricing a derivatives
+7:07
+and price the CVA together with the derivatives.
+7:14
+First of all, it adds some portfolio effect the counterparty can trade multiple trades.
+7:20
+And the default loss or default risk can be different depending on the portfolio. And when people use a trade-level derivatives model,
+7:29
+which is by default what people would call a derivatives model, typically you price each trade, price one trade at time.
+7:38
+And then you aggregate the mark-to-market together to get a portfolio valuation.
+7:44
+So when you price one trade, you do not need to know there may be another trade facing
+7:50
+the same counterparty. But for CVA or counterparty risk, this is not true.
+7:56
+We'll go over some examples soon.
+8:02
+This is the one application of what I call enterprise-level derivatives,
+8:07
+essentially focusing on modeling the non-linear effects, non-linear risks in a derivatives portfolio.
+8:15
+Here's a couple of examples. Hopefully, it will help you guys to gain some intuition
+Examples and Questions
+8:24
+on the counterparty risks and CVA. Suppose you have an OTC derivatives trade, for instance
+8:32
+like an IR swap. It could be a portfolio of trades.
+8:38
+Let's make it simple. Let's assume the trade PV was 0 on day one.
+8:45
+Of course, we assume we don't know anything about the counterparty credit risk.
+8:51
+We don't know anything about CVA. This is just to show how CVA is recognized by people.
+9:00
+So to start with again, the trade PV was 0 on day one, which is true for a lot of co-op trades.
+9:10
+And then the trade PV became $100 million dollars later on.
+9:18
+And then your counterparty defaults with 50% recovery.
+9:25
+And you'll get paid $50 million of cash.
+9:30
+OK, so $100 million times 50% recovery.
+9:37
+If the counterparty doesn't default, you eventually would get $100 million. Now he defaults, you get half of it, $50 million.
+9:47
+The question is have you made $50 million dollars
+9:53
+or have you lost $50 million over the life of the trade.
+9:59
+Anyone have any ideas?
+10:05
+Can people raise your hand if you think you have made $50 million?
+10:13
+Can I see the people in the class? I couldn't see anyone.
+10:19
+PROFESSOR: How do I raise this? YI TANG: OK, no one thinks you made the $50 million.
+10:25
+So I guess then, did you all think you have lost $50 million?
+10:32
+Can people raise their hand if you think you have lost $50 million?
+10:38
+OK, I see people. Some people did not raise your hand. That means you are thinking you are flat?
+10:44
+Or maybe you want to save your opinion later?
+10:51
+OK, so this is a common question I normally
+10:56
+ask in my presentation. And I typically get two answers. Some people think they've made $50 million.
+11:05
+Some people think they've lost $50 million. And there was one case, someone said OK, you know they're flat.
+11:15
+Now, this would look like a new interesting situation
+11:20
+where no one thinks you made $50 million. I mean, come on, you have $50 million of cash in the door.
+11:30
+And they don't think you have made $50 million. You have a $0 from day one.
+11:36
+Now, you have $50 million. OK?
+11:43
+All right, anyway so for those of you who think you have lost money-- I don't know if it's a good idea [? Ronny-- ?] can someone tell us why do
+11:53
+you think you lost $50 million? You went from 0 to positive $50 million.
+11:58
+Why do you think you lost $50 million?
+12:06
+Are we equipped to allow people to answer questions?
+12:12
+PROFESSOR: Yeah, I think if someone presses a button in front of them.
+12:19
+YI TANG: OK, so people choose not to voice your opinion?
+12:25
+AUDIENCE: It is because you have to pay to swap and you have to pay $100 million to someone on the other side of trade?
+12:32
+YI TANG: OK, very good. So essentially, you are saying hedging. That was what you are trying to get to?
+12:39
+So you have a swap as 0 and you have an offsetting swap as a hedge.
+12:45
+Is that what you are trying to say? AUDIENCE: No. I'm saying that if you're the intermediary for a swap,
+12:50
+then you have to pay $100 million on the other end. So if you're receiving 50 and paying 100, you have a loss.
+12:56
+YI TANG: That's good. Right, so intermediary is right. And that's similar to a hedge situation also.
+13:03
+So that's correct. That's the basically the reason for a dealer.
+13:09
+Essentially, we are required to hedge. We're very tight on the limit. We actually would lose $50 million
+13:15
+maybe on the hedge fund. When our trade went from 0 to a positive $100 million,
+13:24
+our hedge would have gone from to 0 to negative $100 million.
+13:30
+In fact, we receive only half of what we need to receive.
+13:38
+And yet, we have to pay the full amount that we need to pay on the hedge side.
+13:44
+Essentially, we lost $50 million. But that's where the CVA and CV trading, CV risk
+13:53
+management would come in. Again, CVA is the price of a counterparty credit risk.
+14:00
+And you know, if you hedge, the underlying trader or whoever trades swap, if you hedge with the CV desk.
+14:08
+Theoretically, you will be made whole on a counterparty default. So you would receive $50 million
+14:18
+from counterparty, and theoretically you receive $50 million from the CV's desk
+14:24
+if you hedge with CV desk.
+14:29
+Now, the second part is how do we quantify CVA. How much is the CVA?
+14:37
+CV on the receivable, which we typically charge to the counterparty, essentially
+14:42
+is given by this formula. MPE means mean positive exposure,
+14:49
+meaning only our receivable sides when the counterparty owes us money, and times the counterparty CDS par
+14:55
+spread, times duration. The wider the spread the more likely
+15:02
+the counterparty will default, the more we need to charge on the CVA.
+15:09
+And the same thing is true for the duration. The longer the duration of trade is, there's more time for the counterparty
+15:16
+to default so we charge more. Very importantly, there's a negative sign.
+15:21
+Because CVA on the receivable side, is our liability.
+15:26
+It's what we charge our counterparty. And there are some theoretical articles,
+15:33
+they don't include the sign, that's OK for theoretical purposes. But practically, if you miss the sign
+15:40
+things will get very confusing. Now, here is more accurate formula for CVA.
+15:49
+You know how the MPE side, on the asset side. So we can see to start with, there's an indicator
+15:57
+function where this capital T is the final maturity of the trade or counterparty portfolio.
+16:04
+This tau is the counterparty's default time, first default
+16:11
+time. And if the tau is greater than this capital T,
+CVA (Credit Valuation Adjustment)
+16:21
+essentially that means a default happens after the counterparty portfolio matures.
+16:26
+And therefore, we don't have counterparty risk. So that's what this indicator is about.
+16:32
+If the counterparty defaults before the maturity, that's when we will have counterparty credit risk.
+16:41
+And there's a future evaluation of the counterparty portfolio
+16:48
+right before the counterparty default. And this is how much collateral we hold against this portfolio.
+16:55
+So the net receivable, the net amount,
+17:01
+where the future value is greater than the collateral, is our sort of exposure, how much
+17:10
+the counterparty would owe us. And this 1 minus R essentially is the discount rate.
+17:17
+So 1 minus R times the exposure essentially is the future loss given default.
+17:25
+And beta essentially is a normal mock money market account for defaulting, and this is the expectation
+17:33
+in the risk-neutral measure. It looks simple.
+17:38
+But if you get to the details, it's actually very complex
+17:44
+maybe because the portfolio effect and this option-like payoff.
+17:50
+If you recognize this positive sign here, essentially you recognize this is like options.
+17:55
+And so again, here is about some details of non-linear portfolio
+18:05
+effects. First of all, we talk about offsetting trades. In the previous example, you have one trade
+18:15
+and went from 0 to $100 million. Counterparty defaults, you get paid $50 million, essentially,
+18:20
+you lost $50 million. But what if you have another trade facing the same counterparty?
+18:26
+Well, that's offsetting. When the first trade went from 0 to $100 million,
+18:32
+the offsetting trade can go from 0 to negative $100 million.
+18:37
+And therefore if the counterparty were to default, you're going to have a 0 default loss.
+18:44
+That's just one example of portfolio effects because I'm offsetting trades. So therefore, in order to price CVA,
+18:52
+you've got to know all the trades you have facing the same counterparty.
+18:58
+This is very different from a trade-level model where you only need to know one trade at a time.
+19:04
+There's also asymmetry of handling
+19:10
+of the receivable, meaning assets versus the payable,
+19:16
+meaning liabilities. And that's where the option-like payoff comes about.
+19:27
+Typically, roughly speaking, if we have a receivable from our counterparty,
+19:34
+if the counterparty were to default we're going to receive a fraction of it.
+19:39
+So we would incur default loss. However, if we have a payable to our counterparty,
+19:48
+if the counterparty were to default, we more or less need to pay the full amount.
+19:56
+We don't have a default gain, per se. So this asymmetry is the reason for this option-like payoff
+20:04
+we just saw previously. And as you know, a counterparty can
+20:11
+trade many derivative instruments across many assets, such as interest rate, FX, credit,
+20:19
+equities, a lot of time also commodities and sometimes also mortgage.
+20:27
+And then my group is responsible for the modeling of the underlying exposure for CVA
+20:34
+for capital as well as for liquidity, because multiple assets are involved
+20:40
+and we need to model cross assets. So therefore, we named our group Cross Asset Modeling.
+20:49
+Furthermore, it is not only we have option-like payoff, which is non-linear, we have an option essentially
+20:57
+on a basket of a cross asset derivative trades. And the modeling becomes even more difficult.
+21:08
+So that's when the enterprise-level will come in.
+21:23
+And the enterprise-level model, which we'll touch upon even more later on,
+21:29
+will need to leverage trade-level derivative models,
+21:34
+and therefore, will need to do a lot of martingale-related stuff, martingale testing,
+21:40
+resampling, interpolation. So here's a little bit more information on the CVA.
+21:48
+We have talked about assets or MPE CVA, essentially for our assets or receivable.
+21:56
+In this formula, we have discussed already the first one.
+22:03
+There is also, theoretically, a liability CVA.
+22:10
+Essentially, it is the CV on the payable side, when
+22:17
+the bank or when us having a likelihood of default.
+22:27
+And this is a benefit for us, all right. So the formula is fairly symmetric, as you
+22:35
+can recognize, except the default time or default event is not for the counterparty but for us.
+22:45
+OK? And then the positive sign here became negative sign,
+22:52
+essential to indicate this is a payable negative liability to us.
+22:57
+This is an interesting discussion first to default.
+23:06
+We talked about how if the counterparty were to default,
+23:12
+we more or less pay the counterparty full amount.
+23:19
+So argument can be used on the receivable side. So if we have a receivable, and if we were to default first,
+23:30
+roughly speaking the counterparty would pay us close to the full amount.
+23:37
+And there, some people start to think about OK, when we price CVA, we've got to know, among counterparty
+23:44
+and ourselves, which one is first to default.
+23:49
+But my argument is that we do not need to consider that.
+23:55
+And I have some reference for you guys to take a look if you are interested in this topic,
+24:03
+but I'm not going to spend much time because we have lots to go over.
+24:10
+Now, here's another example. You have a trade, same as the previous trade.
+24:19
+The trade PV was 0 on day one, and the trade PV becomes $100 million later on.
+24:28
+This time of course the counterparty risk are properly hedged.
+24:34
+Then the question is do you have any other risks.
+24:40
+24:45
+Does anyone want to try to tell us do you see any other risks?
+25:03
+There are actually several categories of risk we will have.
+25:08
+I wonder if anyone would like to try to share with us your opinion.
+25:14
+Sorry, I couldn't hear you. Yes?
+25:20
+AUDIENCE: Some form of interest rate risk. YI TANG: Interest rate risk, OK, fine. OK fine, this is a market risk.
+25:26
+Yes, you're right there is interest rate risk, but I did mention here that the market risks are properly
+25:33
+hedged. So that means this interest rate risk of the trade will be handled by the hedge.
+25:40
+What other risks? AUDIENCE: Is there a key man risks? So if the trader that made the trade leaves and doesn't
+25:45
+know about the-- YI TANG: Ah, OK AUDIENCE: --portfolio? YI TANG: That's a good point. Yeah, there is a risk like that.
+25:52
+Yeah. Any other risks?
+25:59
+OK. Let's go over this then.
+26:07
+I claim there is a cash flow liquidity funding risk.
+26:14
+OK? Our trade is not collateralized.
+26:22
+And then I claim we need funding for uncollateralized derivative
+26:29
+receivables, meaning we are about to receive $100 million
+26:35
+in the future. We don't have it now. And I claim we actually need to come up with cash for it
+26:47
+in many cases, in most cases, not every trade.
+26:56
+Anyone have any idea of why when you are about to receive money, you actually need to come up with money?
+27:01
+27:08
+This comes back to the hedge argument similar to CVA.
+27:13
+Essentially, if you were to hedge your trade with futures or with another dealer
+27:20
+which are typically collateralized. That means when you are about to receive $100 million,
+27:27
+essentially you are about to pay $30 million on your hedge.
+27:32
+In fact, you had to be futures that maybe mark to market, that means you need to actually really come up
+27:39
+with $100 million cash. The same is true for collateralized trades.
+27:46
+And there that's where the risk is. Because when you need to come up with this money
+27:51
+and you don't have it, what are you going to do? You may end up like Lehman.
+27:58
+And there's also a contingent on the liquidity
+28:04
+risk, meaning how much liquidity risk is dependent on the market
+28:09
+conditions, how much interest rates changed, how much other market risk factor changes like that.
+28:16
+And depending on the market condition,
+28:22
+the liquidity may be quite different and you may not know beforehand. So that's the another challenge.
+28:29
+[INAUDIBLE] If you turn the argument around,
+28:34
+applying the argument to the payable and if you have uncollateralized payable,
+28:41
+essentially you would have a funding or liquidity benefit. So one interesting thing to manage this liquidity risk
+28:48
+essentially is to use uncollateralized payable
+28:54
+funding benefits to partially hedge the funding risk in uncollateralized derivatives
+29:01
+receivables. There are a lot of other risks, for instance, tail risk
+29:07
+and equity capital risks.
+29:15
+Now here is one more example I'd like to go over with you guys
+29:20
+on the application of CVA. This is about studying put options or put spreads.
+29:29
+If you trade stocks yourself, you may have thought about this problem.
+29:34
+I mean, either you can buy the stock outright or you sell put possibly with a strike lower
+29:44
+than the current price. With that, you more or less have a similar payout.
+29:54
+Some people may argue OK, if you see put, if your stock comes down, you're going to lose money.
+30:00
+But you're going to lose money if you were to hold the stock outright also.
+30:06
+One of these strategies that if you sell put, if the stock is not put to you, and you're not participating the up side when the stock
+30:15
+price increases significantly then you are not going to capture that price.
+30:21
+But of course, one thing people can do is [? you continue to ?] sell put so they become like an income trade.
+30:29
+So it's an interesting strategy. Some people say that selling put is like name your own price
+30:37
+and get paid for trying it. And that's why we have this famous trade, Warren Buffett,
+30:55
+Berkshire, sold long dated puts on four leading stock indices, in US, UK, Europe, and Japan, collected
+31:03
+about four billion premium without posting collateral.
+31:09
+Without posting collateral, that was very important.
+31:14
+This is something I actually was very involved in one of my previous jobs.
+31:20
+This happened about, I think, around 2005, 2006.
+31:25
+It's one of the biggest trades. And I was told when I was involved with this,
+31:35
+this was one of the biggest cash outflow in the derivatives
+31:43
+trades at that time, because Warren Buffett
+31:48
+collected the premium without posting collateral. If he had agreed to post collateral
+31:56
+during the crisis of 2008, he's going to post many billions of dollars of collateral.
+32:04
+And one reason he had more cash than other people was he's very careful [INAUDIBLE] and I
+32:12
+think I put a reference if you are interested and then you can essentially see the [INAUDIBLE] link
+32:18
+[INAUDIBLE].
+32:26
+And what's interesting is that, there were quite a few dealers who are interested in this trade,
+32:33
+but they know the size. And in a long-dated equity option,
+32:39
+it is not easy to handle, but I think a lot of people were able to handle.
+32:46
+To me, some people were not able to trade or enter this trade,
+32:54
+not because they could not handle the equity risk. It's they could not handle the CVA compounded.
+33:02
+First of all, we know there's a CVA. Essentially, we bought this option from Warren Buffett.
+33:10
+Eventually, he may need to pay and at that time, he may default. So that's a regular CVA risk.
+33:17
+But this is also a wrong-way risk, meaning a more severe risk.
+33:22
+You can imagine when the market sells off,
+33:32
+Warren Buffet would actually owe us more money.
+33:38
+Do you think in that scenario he will be more likely to default or less likely to default?
+33:46
+He'll be more likely to default. That's where the term wrong-way risk comes in.
+33:51
+When your counterparty owes you more and more money, that's when he's more likely to default.
+33:59
+And that's even harder to model. And there's a liquidity funding risk
+34:06
+which can also be wrong-way, because as a dealer you may need to come up with a billion or two cash
+34:14
+to pay Berkshire. Where do you get the money from? Typically, people need to issue a debt
+34:22
+to fund in a [? sine ?] secure way and essentially, you'll pay for quite a spread on your debt.
+34:30
+That is essentially the cost of your liquidity of funding.
+34:37
+So what we did was, essentially, we charged Warren Buffett CVA and wrong-way CVA,
+34:46
+charge of the funding costs, some wrong-way funding costs. Another challenge, of course, is that some dealers, I suspect,
+34:54
+they could've priced CVA, but they do not have a good CV trading desk risk management
+35:02
+to deliver risk management of CVA and funding. Once you have this position at hand,
+35:11
+you have counterparty risks. But how do you hedge it?
+35:17
+You charge Warren Buffet x million dollars for the CVA.
+35:23
+If you don't do anything, when their spread widens,
+35:29
+you're going to have a lot more CVA loss. So you need to risk manage that.
+35:34
+Of course, you can do that with any hedge.
+35:40
+But at any hedge, if we drill down to details,
+35:47
+you suffer a fair amount of gap risk. It's not like a bond. If you own a bond, you can buy a CDS protection
+35:56
+on the same bond. More or less, you are hedged for a while in a static way.
+36:01
+But for a CVA, it's not. The reason for that is the exposure can change over time.
+36:08
+One thing we tried at the time, essentially we sort of structured like a credit-linked note
+36:17
+type of trade. Essentially, you go to people who own or would
+36:22
+like to buy Berkshire's bond. Essentially, you should tell them OK, we have a credit asset similar to Berkshire's bond.
+36:31
+If you feel comfortable with owning Berkshire's bond, you may consider our asset which pays more coupon.
+36:42
+And the reason we were able to pay more coupon is we were able to charge Berkshire a lot of money.
+36:47
+And there's also a tranched portfolio protection
+36:53
+thing that's involved, but I'm going to skip that for the sake of time.
+36:59
+So then the question is the we charged a lot of the money from Berkshire.
+37:04
+Why would he want to do this trade? What would they think? So here's my guess.
+37:11
+As you know, they have an insurance business. Then they wanted to explore other ways to sell insurance.
+37:18
+So selling puts essentially is spreading insurance on the equity market.
+37:26
+They sold like 10, 15 year maturity
+37:34
+puts at below their spots. So then people can think, OK, what's
+37:40
+the likelihood of a stock price coming down
+37:47
+to below the current stock in 10, 15 years. Well, it happens, but it's not very likely.
+37:53
+And they do have a day one cash inflow. So essentially, I think one way Berkshire was thinking
+38:01
+is that they thought low funding costs. If you read Warren Buffett's paper,
+38:06
+essentially he's saying it's like 1% interest rate on a 10 year cash, or something like that.
+38:15
+And it's very important to manage your liquidity well. They do not have any cash flow until the trade matures.
+38:25
+So that's how they avoided the cash flow drain during 2008,
+38:31
+even though they did suffer unrealized mark-to-market loss.
+38:39
+But what's interesting is that during 2008, 2009, Berkshire did explore the feasibility
+38:44
+of posting collateral. This started with no collateral posting.
+38:52
+But then they wanted to post collateral. They actually approached some of the dealers saying oh, I want to post some collateral.
+39:00
+Why is that? There's no free lunch.
+39:05
+So what happened was they were smart not to post collateral, but during the crisis their spread widened.
+39:13
+Everyone's spread widened. So Berkshire's spread widened. Then Warren Buffett owed more money.
+39:21
+So guess what? The CVA hedging would require the dealer to buy more and more protection on Berkshire.
+39:30
+When you buy more and more protection on someone, that will actually drive that person's,
+39:37
+that entity's, credit spread even wider.
+39:42
+So Berkshire essentially saw their credit spread widening a lot more than they had hoped for, than they had anticipated.
+39:52
+And later on, they found out it was due to CVA hedging, CVA risk management.
+39:59
+That actually affected their bond issuance. When you have a high credit spread from CDS market,
+40:07
+essentially the cash market may actually question may actually follow.
+40:12
+And whoever would like to buy Berkshire's bond would think twice. OK, if I have to buy this bond, if I ever
+40:19
+have to buy credit protection, it's going to cost me a lot more money because of the spread
+40:25
+widening. So therefore, I'm going to demand higher coupon on Berkshire's bond, and that drives their funding cost high.
+40:33
+So they explored in different to post collateral. Another thing of course is a very interesting thing to ask.
+40:42
+Berkshire thinks they're making money and the dealer thinks they're making money, which is probably true.
+40:49
+But then the question is, who is losing money
+40:55
+or who will lose money. Anyone has any ideas?
+41:01
+41:12
+I think there's probably a lot of answers to this. My view is that essentially whoever needs to hedge,
+41:18
+whoever need to buy put. If the market doesn't decline as much as much as you hoped for,
+41:31
+essentially you'll pay for put premium and do not get the benefits.
+41:41
+Here's an interesting CV conundrum. Now, hopefully by this time, you guys
+41:46
+fully appreciate the CVA risks and the impact of CVA.
+41:56
+In terms of risk itself, in terms of magnitude, as I mentioned earlier being the crisis,
+42:02
+2008 crisis, which [? killed ?] among easily billions of dollars loss for some of the firms due to CVA,
+42:10
+and that's more than the actual default loss.
+42:15
+Now given you know the CVA, so if you trade with counterparty A, naturally you'll say
+42:22
+you want to think OK, I want buy protection to hedge my CVA risk, to buy credit protection on A,
+42:31
+from counterparty B. If you trade with counterparty B,
+42:37
+you would have CVA against counterparty B.
+42:43
+You would have a credit risk against counterparty B. So what are you going to do?
+42:49
+If you just follow the simple thinking,
+42:57
+essentially you may think oh OK, maybe I should buy credit protection on B from counterparty C.
+43:07
+But if you were to do that, then you have to continue on that.
+43:12
+It becomes an infinite series.
+CVA Conundrum
+43:18
+Infinite series are OK I'll say theoretically, but in practice I feel it's going to be
+43:24
+very challenging to handle. So what would be a simple strategy
+43:32
+to actually terminate this infinite series quickly?
+43:37
+43:52
+Yeah this also has theoretical implications for CVA pricing.
+43:57
+Sometimes we say, OK, arbitrage pricing is really replication, use hedge instruments.
+44:03
+Now, you have to use an infinite number of hedge instruments. That's going to impact your [? replication ?] modeling.
+44:11
+So the way we would do it practically
+44:16
+is to buy credit protection on A from counterparty B fully collateralized, typically from a dealer.
+44:25
+So however much money you owe from counterparty B right away,
+44:30
+they're going to post collateral. In a way, it's more or less similar to a futures context
+44:36
+settling. That minimized the counterparty risk [INAUDIBLE].
+44:41
+So you can cut off this infinite series easily.
+44:53
+Here, I'd like to touch upon what I call enterprise-level derivatives modeling.
+44:59
+We mentioned trade-level derivatives models.
+45:05
+That is essentially, is just a regular model. When people talk about derivatives model,
+45:11
+usually people talk about trade-level models. Essentially, you model each trade independently.
+45:18
+Your model is price, mark-to-market or its Greeks sensitivity.
+45:25
+Then when you have a portfolio of these trades, essentially you can just aggregate their PV, their Greeks, through linear aggregation.
+45:35
+Then essentially you get the PV of the portfolio.
+45:43
+But as we have seen already, that doesn't capture the complete picture.
+45:50
+There are additional risks that require further modeling.
+45:57
+One is non-linear portfolio risks.
+46:02
+So essentially, these risks cannot be like a linear
+46:08
+aggregation of the risks of each of the component trades
+46:13
+in the portfolio. The example we have gone through is CVA, funding is of similar nature, capital liquidity
+46:22
+are also examples. The key to handle this situation is
+46:30
+to be able to model all the trades in the market and the market risk factors of a portfolio
+46:37
+consistently so that you can handle the offsetting trades properly.
+46:45
+Of course, we need to leverage the trade-level model essentially to price each individual trade as of today,
+46:54
+as of a future date. What's interesting is that there's also feedback
+47:02
+to the trade-level models. For instance, when we price a cancellable
+47:09
+swap of a very public trade. Now this cancellable swap we trade with a counterparty,
+47:16
+let's say assumed uncollateralized, we trade with a counterparty that's close to default.
+47:25
+You know the trade-level model doesn't know about this counterparty, about default.
+47:31
+The trade-level will give you independent, the exercise
+47:36
+boundaries, when do you need to cancel the swap, independent of the counterparty credit quality.
+47:44
+That invites a question, when the counterparty is close to default, even if your model says OK, you should not
+47:53
+exercise based on the market conditions,
+47:59
+but shouldn't we consider the counterparty condition, credit condition.
+48:05
+If the counterparty were close to default, if you cancel the swap sooner essentially you'll
+48:11
+eliminate or reduce the counterparty risk.
+48:17
+This is actually interesting application and feedback
+Overview of Enterprise-Level Derivatives Modeling
+48:22
+between a trade-level model and the enterprise-level models.
+48:28
+So what we did was, in some of my previous jobs, what we did was actually figure out the counterparty risk
+48:37
+in these trades, the major trades. Then essentially, we just tell the underlying trader,
+48:43
+if you were to cancel this trade, we have a benefit because we're going to reduce
+48:51
+the CVA or even zero out CVA. So the CV trader would be able to pay the underlying trader.
+48:57
+So therefore, the underlying model actually can take this as input rather than
+49:04
+as part of the exercise condition modeling,
+49:11
+knowing if you cancel earlier you potentially can get additional benefits.
+49:16
+This model may eventually be able to tell you to handle the risks more properly, market risks together
+49:26
+with counterparty risks. This is roughly the scope and the application
+49:34
+of the enterprise-level model.
+49:41
+This is actually a fairly significant modelling effort as well as significant infrastructure and data effort.
+49:51
+Essentially, it requires a fair amount of martingale testing, martingale resampling,
+49:57
+martingale interpolation and the martingale modeling. The reason for that is you have a trade model,
+50:07
+and each trade model can model a particular trade accurately,
+50:14
+and there's certain market modeling, simulations
+50:20
+of the underlying market or great PDE.
+50:25
+But when you put a portfolio of trades together,
+50:30
+now the methodology you use for modeling one trade accurately may not necessarily be the methodology you need to model
+50:40
+all the trades accurately. Some of these require PDE and some require simulations,
+50:46
+but you need to put them together. Typically, we use simulation. And that introduced numerical inaccuracies.
+50:53
+And the martingale testing will tell us are we introducing a lot of errors, martingale resampling essentially
+51:00
+would allow us to correct the errors. As you know, the martingale is a foundation
+51:07
+of the arbitrage pricing. Essentially, martingale resampling
+51:13
+will actually be able to enforce the martingale conditions
+51:18
+in the numerical procedure, not only theoretically. Martingale interpolation modeling
+51:24
+are other important interesting aspects if we have time we can
+51:29
+[INAUDIBLE] There are different approaches
+51:39
+for how to do it in a systematic way and still remain additional ways.
+51:47
+I'd like to quickly go over some of the examples of martingale and martingale measures.
+51:54
+I may need to go through this quite quickly due to the time
+52:00
+limitations. But hopefully, you guys have learned all these already.
+52:06
+This will hopefully be more like a review for you guys. So essentially, we are talking about a few examples.
+52:12
+What's the martingale measure for forward price, forward LIBOR, forward price, forward FX rate,
+52:18
+forward CDS par coupon. I would hope you guys would know the first few already.
+52:26
+The for CDS par coupon in my view is actually fairly challenging. For simplicity, I'm not considering the collateral
+52:35
+discounting explicitly. That adds additional challenges but still we can address that.
+52:46
+So under the risk neutral measure,
+52:52
+essentially for this Y of t being
+53:00
+the price of a traded asset with no intermediate cash flow. Essentially, that is y_T over beta(t) is a martingale.
+53:13
+This is essentially the Harrison-Pliska martingale no-arbitrage theorem. It says for two traded assets with no intermediate cash
+53:23
+flows, satisfying technical conditions, the ratio is a martingale.
+53:29
+There's a probability measure corresponding to the numeraire asset.
+53:36
+Therefore, naturally we have this composite.
+53:42
+The forward arbitrage-free measure essentially corresponding to a numeraire of zero-coupon bonds.
+53:48
+Naturally, we can find this Y_t and P(t,
+53:54
+T) ratio is a martingale. Again, it's just a ratio of two traded assets
+54:01
+with no intermediate cash flow. From the definition of the forward price,
+54:09
+essentially the forward price is a martingale under the forward measure.
+54:15
+Forward LIBOR-- this is the forward LIBOR-- essentially,
+54:22
+it's a ratio of two zero-coupon bonds. So naturally, we know it's a martingale under
+54:27
+of the numeraire asset. So essentially it's a forward measure up to the payment
+54:33
+on the forward LIBOR. So this is the martingale condition.
+54:39
+Similarly, we can do this argument of the forward swap rate.
+Examples of Martingales and Martingale Measures
+54:46
+Essentially, a forward swap rate is,
+54:53
+we can start with, like an annuity numeraire.
+55:00
+And since the forward swap rate, you essentially know, is the difference of two zero-coupon bonds
+55:07
+divided by annuity. And therefore we can conclude based
+55:12
+on Harrison-Pliska theorem the forward swap rate essentially is the martingale under the annuity measure,
+55:21
+with this annuity as the numeraire.
+55:28
+The same argument goes for the forward FX rate.
+55:33
+Mainly the idea is or the pattern you probably have seen is, for any quantity you see if you can find two assets
+55:42
+and then use these two asset ratio to represent
+55:47
+this in a quantity. So the forward FX essentially is a ratio like this.
+55:56
+This is nothing more than the interest rate parity. From the spot you grow both [INAUDIBLE].
+56:10
+You start with spot, you grow the domestic currency and then you grow the foreign currency.
+56:16
+You get FX forwards. And FX forward is a martingale measure
+56:22
+under the domestic forward measure.
+Change of Probability Measure
+56:29
+This is a simple technique to do change of probability measure.
+56:40
+It's roughly how I remember change of probability measure
+56:46
+and Radon-Nikodym derivatives. You essentially start with, again, martingale,
+56:54
+assuming this is martingale under a particular measure
+57:04
+corresponding to the numeraire asset. And then this quantity is also a martingale
+57:11
+under a different measure corresponding to a different numeraire asset.
+57:19
+One key point is when you change probability measure essentially
+57:24
+you change the numeraire corresponding to the probability measure. And therefore essentially the important thing
+57:32
+is we know the PV or the mark-to-market, of a traded
+57:42
+security is measure-independent. It doesn't matter what mathematics
+57:49
+you use if the traded security is going to match the market price.
+57:55
+And therefore, you can price this security
+58:01
+under one measure or one numeraire. And then you can price again with another measure,
+58:09
+another numeraire. They've got to be the same. Then naturally, you see this simple equation
+58:17
+as the starting point to do the change of measure. If you just simply change the variables, then essentially
+58:25
+you get your change of measure as well as Radon-Nikodym derivative.
+58:31
+And if you worked on the BGM model, you'll probably recognize this change of measure
+58:38
+which is used for the BGM model under the old measure.
+Martingales and Martingale Measures for Credit Derivatives
+58:45
+Now here's the subtlety, credit derivatives. Naturally, people would think OK, since the forward swap
+58:55
+rate is a martingale under the annuity measure, naturally people would think OK, then forward CDS par
+59:06
+rate, it's like a forward swap rate. It's got to be a martingale under the risky annuity
+59:18
+measure. So that's quite intuitive except there's one problem.
+59:25
+If the reference credit entity has
+59:31
+zero recovery upon default. Then, this risky annuity could have a 0.
+59:40
+And now we're talking about we want to use something that could be 0 as our numeraire.
+59:48
+How do we resolve the technical mathematical problem.
+59:54
+So that actually very interesting.
+1:00:02
+Schönbucher was the first person who published a paper on this model.
+1:00:07
+I was just trying to do some work myself when I was working on BGM model. I thought oh, it would've been nice to expand the BGM model
+1:00:17
+to the credit derivatives. But then immediately I stumbled with this difficulty
+1:00:25
+where when the recovery is 0, you're going to have a 0 in your numeraire,
+1:00:30
+in your risky annuity.
+1:00:36
+So Schönbucher, essentially, his idea was let's focus
+1:00:45
+on survival measures, meaning we have a difficulty if a default
+1:00:51
+happens and the recovery is 0. Now his idea is let's forget about that state.
+1:00:58
+Let's not worry about that.
+1:01:09
+One immediate question people will ask, if that's the case, the probability
+1:01:17
+measure, physical probability measure or risk-neutral probability measure,
+1:01:23
+and this survival probability measure are not equivalent
+1:01:28
+because the survival probability measure knows nothing about the default event.
+1:01:35
+So they are not equivalent. That's, essentially, you actually
+1:01:43
+transform one mathematical difficulty to another one. Luckily, the second one turns out
+1:01:49
+to be actually easier to solve. So the starting point is again using Harrison-Pliska theorem.
+1:01:58
+Essentially, you just need to identify like a numeraire asset, and the denominator assets.
+1:02:07
+You identify two assets. You make a ratio and then those are a martingale.
+1:02:17
+So essentially this is forward swap rate and forward annuity.
+1:02:27
+If we have this indicator of the default time of j-th credit
+1:02:37
+name, greater than this t, essentially this is like the premium leg of CDS.
+1:02:45
+That's a traded asset.
+1:02:50
+So therefore, we have a martingale [INAUDIBLE] like this. The subtlety as you probably can envision
+1:02:57
+is going to come in when we do the change of probability measures.
+1:03:08
+OK, so we have talked about how are we going to find the martingale measure of a CDS par coupon
+1:03:20
+or forward CDS par rate. This is a starting point of martingale model.
+1:03:27
+Essentially, for any quantity you want to model you try to find its martingale measure.
+1:03:36
+Once you find this martingale measure, you can do a martingale representation.
+1:03:41
+And then often times you need to a change of a probability measure. So that all the term structure functions,
+1:03:48
+a consequence of a variables are modeled in a consistent probability measure.
+1:03:55
+So finding the martingale measure is the first point.
+1:04:02
+Survival probability measure, essentially, he just defined this with.
+1:04:09
+You can define this Radon-Nikodym derivative.
+1:04:14
+Once you define that essentially--
+1:04:19
+if you remember the previous formula--
+1:04:25
+you will have a martingale condition like this. [INAUDIBLE] The probability measures
+1:04:41
+are not equivalent anymore, but yet they can still do change of probability measure.
+1:04:52
+You need to separately model what going to happen when the default happens
+1:04:58
+if you want to use this model.
+1:05:03
+Now, I'd like to move onto the second part, martingale,
+1:05:09
+martingale testing and martingale resampling and interpolation. Martingale testing essentially given the previously model
+1:05:15
+formula's conditions. Those are, by the way, just examples. There are a lot more.
+1:05:21
+Essentially, you know that's what it should be theoretically you just test in your numerical implementation
+1:05:28
+and see if those conditions are satisfied. That's the martingale test.
+1:05:34
+Martingale resampling is we know most likely if you were to test, we're going to fail.
+1:05:40
+This is not necessarily for enterprise-level models but even for trade-level derivatives models.
+1:05:47
+A lot of times, I think the martingale conditions are not exactly satisfied.
+1:05:52
+So one way to do that, is to correct that, correct
+1:05:59
+this error. The rationale is essentially because
+1:06:04
+of a numerical approximations. Whatever quantity we model essentially
+1:06:10
+is not a true quantity. The true quantity we model essentially is some function of what we have in our model.
+1:06:21
+So therefore, you expect a certain function. Sometimes you can have a linear, log-linear function.
+1:06:30
+This X_0 is what we have in our model, and then X is what we need to satisfy
+1:06:40
+the martingale condition. Essentially, in this [? Purdue ?] case
+1:06:46
+is very simple. You first of all, use the mean and then you would adjust the deviation. So therefore, given any quantity X_0, you can have,
+1:06:56
+you can force it to be any given mean. This mean, in our case, will be determined
+1:07:01
+by the martingale condition.
+1:07:08
+The next interesting thing is martingale interpolation.
+1:07:13
+Oh, I have a typo here.
+1:07:20
+Sometimes you have an interest rate model, for instance, you model LIBOR. Your LIBOR, you can have different tenors.
+1:07:28
+When you have a yield curve, you know, at any given time,
+1:07:35
+there's a term structure. In the model, a lot of times we can
+1:07:41
+model a few selected points. But what if your model requires a term structure,
+1:07:48
+a term that not in your model. So what people normally do is you do martingale,
+1:07:55
+you do interpolation. So you have a 1-year LIBOR and you have a 5-year liable.
+1:08:02
+And then you need a 3-years.
+1:08:08
+What do you do? You interpolate, for instance. But interpolation doesn't automatically
+1:08:14
+guarantee martingale relationships. The martingale interpolation has a goal
+1:08:23
+of automatically satisfying the martingale relationships,
+1:08:28
+so we're particular with our interpolating. Actually, it turns out to be a [INAUDIBLE]
+1:08:40
+The starting point is the martingale condition that I wrote out on the slide.
+1:08:48
+Essentially, this s and t are the calendar time. And this capital T is really like a term structure.
+1:08:56
+You have a 1-year rate, 2-year rate, 5-year interest rate, those term structures.
+1:09:04
+How do we interpolate such that after interpolation the corresponding martingale relationships are satisfied.
+1:09:14
+So here's what we do. We start with, let's say, capital T_1.
+1:09:21
+Capital T_1, that's a point we model.
+1:09:29
+We assume that one is properly martingale resampled and satisfies the martingale condition.
+1:09:34
+This is a martingale for T capital 2.
+1:09:44
+That also satisfies the corresponding martingale conditions.
+1:09:50
+Our goal is to figure out T_3. How do you do interpolation for the term T_3
+1:09:59
+such that this T_3 will satisfy its own corresponding
+1:10:06
+martingale condition. If you do simple linear interpolation using T as independent variable, essentially, you
+1:10:19
+are not going to achieve that. So the key is we need the choose the proper independent variable
+1:10:28
+for the interpolation. Essentially, it's the previous time or time 0 quantity.
+1:10:36
+So time s is before time t.
+1:10:42
+Imagine time s will be 0. So using the corresponding quantities
+1:10:49
+at time 0 as the independent variable, essentially, you can achieve that.
+1:10:55
+It's still linear interpolation, it's just to use a different independent variable.
+1:11:01
+Essentially, you can show that very easily. This is just simple algebra. If you take the expectation, this one being martingale,
+1:11:10
+this little t will become s. Then if you do expectation here, the little t
+1:11:17
+will become little s. And therefore if you combine these two, a lot of terms
+1:11:24
+will actually cancel. Essentially, you will be left with this martingale
+1:11:34
+at time s and T_3, meaning this is the martingale target
+1:11:44
+of this particular term. And that turns out to be the expectation of this quantity.
+1:11:51
+So it's a very simple linear-- simple algebra. You guys can figure it out if you want to.
+1:11:59
+So this one essentially guarantees the interpolated quantity automatically
+1:12:07
+satisfies all the conditions of the martingale target. Of course, you need to know the martingale target.
+1:12:13
+If you don't know, that's a different story. Then you need to do something else. Specifically, time 0, for instance,
+1:12:20
+is what the market tells us. Often time we do a big time assumption.
+1:12:27
+So whatever assumption on time 0 you make, in you dynamic model,
+1:12:33
+you automatically satisfy the needed martingale condition.
+1:12:46
+This is just a brief introduction of how we do the martingale modeling.
+1:12:52
+This LIBOR market model, as you guys probably
+1:13:00
+have learned already, there's different forms of BGM as the initial form.
+1:13:05
+And then Jamshidian came with another form.
+1:13:11
+And in terms of a general martingale model, what we'll do typically is
+1:13:17
+we start to find the martingale quantity.
+1:13:23
+And we know a forward LIBOR is a martingale in its own forward measure.
+1:13:32
+Then we know we can use martingale representation.
+1:13:37
+Under certain technical conditions, the diffusion process can be represented by Brownian motion.
+1:13:47
+Then we can assume log-normal just for example. We don't have to, we can use CEV, we can use [INAUDIBLE] stochastic volatility.
+1:13:56
+The starting point is martingale, identifying the martingale measure
+1:14:02
+and then perform martingale representation. Essentially, you get this stochastic differential
+1:14:08
+equation. They need to change measure or change numeraire.
+1:14:15
+Because this one essentially says for particular LIBOR, you have a Brownian motion and a different measure.
+1:14:23
+So that has limited usage. A lot of the derivative trade, IR trade
+1:14:29
+essentially, it's [INAUDIBLE] the entire yield curve. So you need to make sure you model the entire yield
+1:14:35
+curve consistently. So therefore you have to change the probability measure
+1:14:41
+so that everything is specified in the same common measure.
+1:14:49
+Of course, you can have a choice which one you
+1:14:55
+want to use as common measure. Through a simple change of numeraire,
+1:15:03
+essentially, we can get a stochastic equation like this.
+1:15:21
+We have a Brownian motion.
+1:15:33
+Right, we have a Brownian motion with a correlation like this.
+1:15:39
+1:15:47
+So this is essentially a market model in a general form,
+1:15:54
+with full dimensionality meaning one Brownian motion
+1:16:00
+per term of a LIBOR. So that's the full dimensionality. PROFESSOR: Yi? YI TANG: And then you need to do-- Yeah, hi.
+1:16:09
+PROFESSOR: Can you wrap up because we need a bit of time for questions.
+1:16:15
+YI TANG: Oh you need me to end. It's all right I can actually wrap up now.
+1:16:21
+If you want to. PROFESSOR: Sure. OK, any conclusions?
+1:16:28
+YI TANG: Well, OK. The conclusion is the following thing.
+1:16:34
+There is a need for enterprise-level models to handle non-linear portfolio effects
+1:16:40
+and we need to leverage our trade-level models. By doing so we do employ martingale testing,
+1:16:47
+martingale resampling, interpolation. And not only we need that for CVA,
+1:16:54
+but we also need that for funding liquidity capital risks which are very critical risks.
+1:17:00
+And people have started paying more and more attention to these risks, especially since after the crisis.
+1:17:09
+Because of time limits, I'm not going to be able to finish another example. But if you like, you can take a look on page 22 of the slides.
+1:17:18
+Hopefully, Vasily can still get it to you guys. Thank you guys. PROFESSOR: Thank you Yi.
+1:17:26
+We will publish the slides probably later tonight so please take a look.
+1:17:32
+So to wrap up, let me see. I want to bring up,
+1:17:37
+PROFESSOR 2: That's OK. Probably if it's the course website, that's fine.
+1:17:44
+PROFESSOR: I did add a few topics which were used last year for final paper for interest
+1:17:50
+in the document which is on the website. So take a look.
+1:17:56
+Basically, the themes there were mostly Black-Scholes or more
+1:18:05
+advanced models or manipulation of Black-Scholes equation. There was a very interesting work on statistical analysis
+1:18:12
+of commodity data. So if somebody's up for it, that would be very interesting.
+1:18:20
+And there were a few numerical and Monte Carlo projects.
+1:18:29
+So any questions? PROFESSOR 2: Yeah, so actually we
+1:18:34
+were planning to give you a bit more time to ask your questions. But since we have five minutes, I
+1:18:41
+think maybe I'd like to ask you to just think about what we learned this term.
+1:18:47
+So Peter can add on what we think in on the mathematics and also those applications,
+1:18:54
+and in conjunction while you're doing the final paper, just focusing on the new things you think that you learned
+1:19:02
+and what did you like to explore in the next stage
+1:19:07
+of your research. So I think probably we don't have a lot of time
+1:19:12
+for lots of questions. But if you have any questions, this will be a good opportunity to ask about the paper or the course.
+1:19:19
+Peter you want to make some comments? PETER: Sure. I'd just like say that I think this course was
+1:19:24
+a very challenging course for most of you and that was, I guess, our intention. And I really respect all the hard work and effort
+1:19:32
+everyone put into the class. And in terms of the final paper, we
+1:19:37
+will be looking at your background and look for insights that demonstrate what
+1:19:45
+you've learned in the course. And I've already reviewed several papers.
+1:19:51
+I'm very pleased with the results. So I think everyone's done a great job. This course, I think, is intended
+1:19:59
+to provide you with the foundations of the math for the financial applications as well as an excellent introduction and exposure to those applications.
+1:20:09
+I think you'll find this course valuable over the course of your careers, and look forward
+1:20:17
+to contributing insights with questions
+1:20:22
+you might have following the course. I'm sure the other faculty feel the same way. We want to be a good resource for you now and afterwards.
+1:20:30
+PROFESSOR: Very, very well put. So please feel free to contact us. And please stay in touch.
+1:20:38
+All the contact details are on the website. We plan to have a repeat of this class next year.
+1:20:45
+So please, tell your friend or stop by next year, which will be the next fall.
+1:20:51
+It will not be exactly the same. We will try to make it slightly different,
+1:20:57
+but it will be close. PROFESSOR 2: If you have any suggested topics, you feel you haven't been exposed to
+1:21:02
+and would like to know more, send us email if you can. I think one of the values of this class
+1:21:08
+is we can bring in pretty much everyone from the frontier in this industry
+1:21:14
+to give you some insights of what's going on. PROFESSOR: Please take a review on the website,
+1:21:22
+this is important. And that's all.
+1:21:27
+PROFESSOR 2: OK. Thank you for your participation this semester. [APPLAUSE] PROFESSOR: And thank Yi for the pleasure.

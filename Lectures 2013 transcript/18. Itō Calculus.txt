@@ -1,0 +1,1106 @@
+0:00
+The following content is provided under a Creative Commons license. Your support will help MIT OpenCourseWare
+0:06
+continue to offer high quality educational resources for free. To make a donation or view additional materials
+0:13
+from hundreds of MIT courses, visit MIT OpenCourseWare at ocw.mit.edu.
+0:21
+PROFESSOR: Let's begin.
+0:26
+Today we're going to continue the discussion on Ito calculus. I briefly introduced you to Ito's lemma last time,
+0:33
+but let's begin by reviewing it and stating it in a slightly more general form.
+0:39
+Last time what we did was we did the quadratic variation
+0:45
+of Brownian motion, Brownian process.
+0:51
+0:57
+We defined the Brownian process, Brownian motion, and then showed that it has quadratic variation, which
+1:11
+can be written in this form-- dB square is equal to dt.
+1:22
+And then we used that to show the simple form of Ito's lemma,
+1:33
+which says that if f is a function on the Brownian motion, then d of f is equal to f prime of dB_t
+1:48
+plus f double prime of dt.
+1:56
+This additional term was a characteristic of Ito calculus.
+2:03
+In classical calculus we only have this term, but we have this additional term. And if you remember, this happened exactly
+2:10
+because of this quadratic variation. Let's review it, and let's do it in a slightly more general
+2:17
+form. As you know, we have a function f depending on two variables, t and x.
+2:24
+Now we're interested in-- we want to evaluate
+2:30
+our information on the function f(t, B_t).
+2:35
+The second coordinate, we're planning
+2:41
+to put in the Brownian motion there. Then again, let's do the same analysis. Can we describe d of f in terms of these differentiations?
+2:52
+To do that, deflect this, let me start from Taylor expansion.
+2:58
+3:04
+f at a point t plus delta t, x plus delta x by Taylor
+3:16
+expansion for two variables is f of t of x plus partial of f
+3:31
+over partial of t at t comma x of delta t plus...
+3:39
+x.
+3:44
+That's the first-order terms. Then we have the second-order terms.
+4:27
+Then the third-order terms, and so on. That's just Taylor expansion.
+4:34
+If you look at it, we have a function f. We want to look at the difference of f when we change the first variable a little bit and the second variable
+4:41
+a little bit. We start from f of t of x. In the first-order terms, you take the partial derivative,
+4:47
+so take del f over del t, and then multiply by the t difference. Second term, you take the partial derivative
+4:54
+with respect to the second variable-- partial f over partial x-- and then multiply by del x.
+5:02
+That much is enough for classical calculus. But then, as we have seen before,
+5:08
+we ought to look at the second-order term. So let's first write down what it is.
+5:14
+That's exactly what happened in Taylor expansion, if you remember. If you don't remember, just believe me.
+5:20
+This 1 over 2 times, take the second derivatives, partial.
+5:26
+Let's write it in terms of-- yes? AUDIENCE: [INAUDIBLE]
+5:31
+PROFESSOR: Oh, yeah, you're right.
+5:36
+Thank you.
+5:45
+Is it good now? Let's write it as dt, all these deltas.
+5:52
+I'll just write like that.
+5:57
+I'll just not write down t and x. And what we have is f plus del f over del t dt plus del
+6:05
+f over del x dx plus the second-order terms.
+6:37
+The only important terms-- first of all, these terms are important.
+6:42
+But then, if you want to use x equals B of t-- so if you're now interested in f t comma B of t.
+6:49
+Or more generally, if you're interested in f t plus dt,
+6:55
+f B_t plus d of B_t, then these terms are important.
+7:03
+If you subtract f of t of B_t, what you get is these two terms.
+7:11
+Del f over del t dt plus del f over del
+7:16
+x-- I'm just writing this as a second variable differentiation-- at dB_t.
+7:22
+And then the second-order terms.
+7:28
+Instead of writing it all down, dt square is insignificant, and dt comma-- dt times dB_t also is insignificant.
+7:37
+But the only thing that matters will be this one. This is dB_t square, which you saw is equal to dt.
+7:45
+From the second-order term, we'll have this term surviving.
+7:52
+1 over 2 partial f over partial x second derivative, of dt.
+8:01
+That's it. If you rearrange it, what we get is partial f over partial t plus 1/2 this plus--
+8:18
+and that's the additional term.
+8:25
+If you ask me why these terms are not important and this term is important, I can't really say it rigorously.
+8:33
+But if you think about dB_t square equals dt, then d times B_t is kind of like square root of dt.
+8:39
+It's not a good notation, but if you do that-- these two terms are significantly smaller than dt
+8:45
+because you're taking a power of it. dt square becomes a lot smaller than dt, dt to the 3/2
+8:51
+is a lot smaller than dt. But this one survives because it's equal to dt here.
+8:59
+That's just the high-level description.
+9:05
+That's a slightly more sophisticated form of Ito's lemma. Let me write it down here.
+9:12
+And let's just fix it now.
+9:18
+If f of t of B_t-- that's d of f is equal to-- Any questions?
+9:48
+9:58
+Just remember, from the classical calculus term, we're only adding this one term there.
+10:05
+Yes? AUDIENCE: Why do we have x there? PROFESSOR: Because the second variable is supposed to be x.
+10:15
+I don't want to write down partial derivative with respect to a Brownian motion here because it doesn't look good.
+10:21
+It just means, take the partial derivative with respect
+10:26
+to the second term. So just view this as a function f of t of x,
+10:33
+evaluate it, and then plug in x equal B_t in the end,
+10:42
+because I don't want to write down partial B_t here.
+10:51
+Other questions?
+11:11
+Consider a stochastic process X of t such that d of X
+11:27
+is equal to mu times d of t plus sigma times d of B_t.
+11:35
+This is almost like a Brownian motion, but you have this additional term. This is called a drift term.
+11:41
+Basically, this happens if X_t is equal to mu*t plus sigma
+11:53
+of B_t. Mu and sigma are constants.
+12:01
+From now on, what we're going to study is stochastic process of this type, whose difference
+12:08
+can be written in terms of drift term and the Brownian motion term.
+12:16
+We want to do a slightly more general form of Ito's lemma, where we want f of t of X_t here.
+12:21
+That will be the main object of study.
+12:27
+I'll finally state the strongest Ito's lemma
+12:34
+that we're going to use.
+12:44
+f is some smooth function and X_t is a stochastic process
+12:54
+like that. X_t satisfies...
+13:06
+where B_t is a Brownian motion. Then df of t, X_t can be expressed
+13:17
+as-- it's just getting more and more complicated.
+13:38
+But it's based on this one simple principle, really. It all happened because of quadratic variation.
+13:45
+Now I'll show you why this form deviates from this form when we replace B to an X.
+13:58
+Remember here all other terms didn't matter,
+14:03
+that the only term that mattered was partial square of f...
+14:08
+of dx square.
+14:17
+To prove this, note that df is partial f over partial t
+14:30
+dt plus partial f over partial x d of X_t
+14:37
+plus 1/2 of d of x squared.
+14:42
+Just exactly the same, but I've replaced the dB-- previously,
+14:48
+what we had dB, I'm replacing to dX. Now what changes is dX_t can be written like that.
+14:58
+If you just plug it in, what you get here
+15:03
+is partial f over partial x mu dt plus sigma of dB_t.
+15:14
+Then what you get here is 1/2 of partials
+15:19
+and then mu plus sigma dB_t square.
+15:26
+Out of those three terms here we get mu square dt square plus 2 times mu sigma d mu dB plus sigma square dB square.
+15:37
+Only this was survives, just as before. These ones disappear.
+15:42
+And then you just collect the terms. So dt-- there's one dt here.
+15:48
+There's mu times that here, and that one will become a dt.
+15:55
+It's 1/2 of sigma square partial square... of dt.
+16:01
+And there's only one dB_t term here. Sigma-- I made a mistake, sigma.
+16:14
+16:25
+This will be a form that you'll use the most, because you want to evaluate some stochastic process--
+16:32
+some function that depends on time and that stochastic process. You want to understand the difference, df.
+16:39
+The X would have been written in terms
+16:44
+of a Brownian motion and a drift term, and then that's the Ito lemma for you.
+16:50
+But if you want to just-- if you just see this for the first time, it just looks too complicated.
+16:56
+You don't understand where all the terms are coming from. But in reality, what it's really doing is just take this Taylor expansion.
+17:05
+Remember these two classical terms, and remember that there's one more term here.
+17:11
+You can derive it if you want to.
+17:18
+Really try to know where it all comes from. It all started from this one fact, quadratic variation,
+17:28
+because that made some of the second derivative survive, and because of those, you get these kind
+17:34
+of complicated terms. Questions?
+17:51
+Let's do some examples. That's too much.
+18:02
+Sorry, I'm going to use it a lot, so let me record it.
+18:49
+Example number one. Let f of x be equal to x square, and then you
+19:04
+want to compute d of f at B_t.
+19:13
+I'll give you three minutes just to try a practice. Did you manage to do this?
+19:25
+It's a very simple example.
+19:32
+Assume it's just the function of two variables,
+19:37
+but it doesn't depend on t. You don't have to do that, but let me just do that.
+19:44
+Partial f over partial t is 0.
+19:49
+Partial f over partial x is equal to 2x, and the second derivative equal to 2 at t, x.
+20:01
+Now we just plug in t comma B_t, and what
+20:08
+you have is mu equals 0, sigma equals 1, if you want to write it in this formula.
+20:13
+20:19
+What you're going to have is 2 times B_t of dB_t
+20:25
+plus 1 over 2 times 2dt. If you write it down.
+20:31
+You can either use these parameters
+20:36
+and just plug in each of them to figure it out. Or a different way to do it is really
+20:43
+write down, remember the proof. This is partial f over partial t dt
+20:48
+plus partial f over partial x dx plus 1/2-- remember this one.
+20:58
+And x is dB_t here.
+21:04
+That one is 0, that one was 2x, so 2B_t dB_t. Use it one more time, so you get dt.
+21:11
+21:20
+Make sense? Let's do a few more examples.
+21:26
+22:03
+And you want to compute d of f at t comma B of t.
+22:11
+Let's do it this time. Again, partial f over partial t dt plus partial f
+22:19
+over partial x dB_t. That's the first-order terms.
+22:24
+The second-order term is 1/2 partial square f over partial x square of dB_t square, which is equal to dt.
+22:35
+22:43
+Let's do it. Partial f over partial t, you get mu times f.
+22:48
+This one is just equal to mu times f. Maybe I'm going too quick.
+22:55
+Mu times e to the mu t plus dx, dt.
+23:02
+Partial f over partial x is sigma times e to the mu t plus dx, and then dB_t
+23:12
+plus-- if you take the second derivative, you do that again, what you get is
+23:17
+1/2, and then sigma square times e to the mu t plus dx, dt.
+23:25
+Yes? AUDIENCE: In the original equation that you just wrote, isn't it 1/2 times sigma squared, and then the second derivative?
+23:31
+Up there. PROFESSOR: Here? AUDIENCE: Yes. PROFESSOR: 1/2? AUDIENCE: Times sigma squared.
+23:37
+PROFESSOR: Oh, sigma-- OK, that's a good question. But that sigma is different.
+23:44
+That's if you plug in X_t here. If you plug in X_t where X_t is equal to mu
+23:50
+prime dt plus sigma prime d of B_t,
+23:57
+then that sigma prime will become a sigma prime square here. But here the function is mu and sigma,
+24:04
+so maybe it's not a good notation. Let me use a and b here instead.
+24:11
+The sigma here is different from here. AUDIENCE: Yeah, that makes a lot more sense. PROFESSOR: If you replace a and b,
+24:18
+but I already wrote down all mu's and sigma's. That's a good point, actually.
+24:25
+But that's when you want to consider a general stochastic process here other than Brownian motion.
+24:31
+But here it's just a Brownian motion, so it's the most simple form. And that's what you get.
+24:36
+Mu plus 1/2 sigma square-- and these are just all f itself.
+24:45
+That's the good thing about exponential. f times dt plus sigma times d of B_t.
+24:51
+25:03
+Make sense?
+25:14
+And there's a reason I was covering this example. It's because-- let's come back to this question.
+25:22
+You want to model stock price using Brownian motion, Brownian
+25:35
+process, S of t.
+25:40
+But you don't want S_t to be a Brownian motion. What you want is a percentile difference
+25:46
+to be a Brownian motion, so you want this percentile difference to behave like a Brownian motion with some variance.
+25:58
+The question was, is S_t equal to e to the sigma times B of t
+26:11
+in this case? And I already told you last time that no, it's not true. We can now see why it's not true.
+26:18
+Take this function, S_t equals e to the sigma B_t, that's exactly where mu is equal to 0 here.
+26:24
+What we got here was d of S_t, in this case, is equal to-- mu
+26:30
+is 0, so we get 1/2 of sigma square times dt plus sigma
+26:36
+times d of B_t. We originally were targeting sigma times dB_t,
+26:44
+but we got this additional term which we didn't want in the first hand.
+26:51
+In other words, we have this drift.
+27:01
+I wasn't really clear in the beginning, but our goal was to model stock price where the expected value is 0 at all times.
+27:10
+Our guess was to take e to the sigma B_t, but it turns out that in this case we have a drift, if you just take
+27:16
+natural e to the sigma of B_t. To remove that drift, what you can do is subtract that term somehow.
+27:23
+If you can get rid of that term then you can see, if you add this mu to be minus 1 over 2 sigma square,
+27:30
+you can remove that term. That's why it doesn't work.
+27:35
+So instead use S of t equals e to the minus 1 over 2 sigma
+27:47
+square t plus sigma of B_t.
+27:58
+That's the geometric Brownian motion without drift. And the reason it has no drift is because of that.
+28:05
+If you actually do the computation, the dt term disappears.
+28:28
+Question?
+28:35
+So far we have been discussing differentiation. Now let's talk about integration.
+28:40
+Yes? AUDIENCE: Could you we do get this solution as [INAUDIBLE].
+28:47
+Could you also describe what it means? What does it mean, this solution of B_t?
+28:55
+Does that mean if we have a sample path B_t, then we could get a sample path for S_t?
+29:01
+PROFESSOR: Oh, what this means, yes. Whenever you have the B_t value, just at each time
+29:07
+take the exponential value. Because-- why we want to express this in terms of a Brownian
+29:13
+motion is, for Brownian motion we have a pretty good understanding. It's a really good process you understand fairly well,
+29:21
+and you have good control on it. But the problem is you want to have a process whose percentile
+29:28
+difference behaves like a Brownian motion. And this gives you a way of describing it
+29:34
+in terms of Brownian motion, as an exponential function of it.
+29:43
+Does that answer your question? AUDIENCE: Right, distribution means that if we have a sample path B_t,
+29:50
+that would be the corresponding sample path for S of t? Is it a pointwise evaluation?
+29:58
+PROFESSOR: That's a good question, actually. Think of it as a pointwise evaluation. That is not always correct, but for most
+30:07
+of the things that we will cover, it's safe to think about it that way.
+30:13
+But if you think about it path-wise all the time, eventually it fails.
+30:18
+But that's a very advanced topic.
+30:32
+So what this question is, basically B_t is a probability space, it's a probability distribution
+30:37
+over paths. For this equation, if you just look at it, it looks right,
+30:43
+but it doesn't really make sense, because B_t-- if it's a probability distribution, what is e to the B_t?
+30:50
+Basically, what it's saying is B_t is a probability distribution over paths. If you take omega according to-- a path according
+30:58
+to the Brownian motion sample probability distribution, and for this path it's well defined, this function.
+31:08
+So the probability density function of this path
+31:13
+is equal to the probability density function of e to the whatever that is in this distribution.
+31:19
+Maybe it confused you more.
+31:26
+Just consider this as some path, some well-defined function, and you have a well-defined function.
+31:31
+31:39
+Integral definition. I will first give you a very, very stupid definition
+31:46
+of integration. We say that we define F as the integration...
+32:00
+32:12
+if d of F is equal to f dB_t plus-- we
+32:25
+define it as an inverse of differentiation. Because differentiation is now well-defined--
+32:34
+we just defined integration as the inverse of it, just as in classical calculus.
+32:42
+So far, it doesn't have that good meaning,
+32:47
+other than being an inverse of it, but at least it's well-defined. The question is, does it exist?
+32:54
+Given f and g, does it exist, does integration always exist, and so on. There's lots of questions to ask, but at least this is some definition.
+33:02
+And the natural question is, does there exist a Riemannian
+33:11
+sum type description?
+33:25
+That means-- if you remember how we defined integral in calculus, you have a function f, integration
+33:47
+of f from a to b according to the Riemannian sum description
+33:58
+was, you just chop the interval into very fine pieces,
+34:04
+a_0, a_1, a_2, a_3, dot, dot, dot-- and then sum the area of these boxes, and take the limit.
+34:16
+And this is the limit of Riemannian sums.
+34:26
+Slightly more, if you want, it's the limit as n goes to infinity
+34:33
+of the function 1 over n times the sum of i equal zero to t--
+34:40
+I'll just call it 0 to b-- f of t*b over n minus f of t minus 1
+34:48
+over n. Does this ring a bell?
+35:03
+Question? AUDIENCE: [INAUDIBLE]
+35:10
+PROFESSOR: No, you're right. Good point, no we don't.
+35:17
+Thanks.
+35:22
+Does integral defined in this way have this Riemannian sum type description, is the question.
+35:31
+So keep that in mind. I will come back to this point later.
+35:36
+In fact, it turns out to be a very deep question
+35:41
+and very important question, this question, because if you remember like I hope you remember,
+35:48
+in the Riemannian sum, it didn't matter which point you took in this interval.
+35:54
+That was the whole point. You have the function. In the interval a_i to a_(i+1), you take any point
+36:02
+in the middle and make a rectangle according to that
+36:07
+point. And then, no matter which point you take, when you go to the limit, you had exactly the same sum
+36:12
+all the time. That's how you define the limit. But what's really interesting here
+36:20
+is that it's no longer true. If you take the left point all the time,
+36:26
+and you take the right point all the time, the two limits are different. And again, that's due to the quadratic variation,
+36:33
+because that much of variance can accumulate over time.
+36:38
+That's the reason we didn't start with Riemannian sum type definition of integral.
+36:44
+But I'll just make one remark. Ito integral is the limit of Riemannian sums
+37:01
+when always take the leftmost point of each interval.
+37:08
+37:16
+So you chop down this curve at-- the time interval into pieces, and for each rectangle,
+37:23
+pick the leftmost point, and use it as a rectangle.
+37:30
+And you take the limit. That will be your Ito integral defined. It will be exactly equal to this thing, the inverse of our Ito
+37:37
+differentiation. I won't be able to go into detail. What's more interesting is instead,
+37:44
+what happens if you take the rightmost point all the time, you get an equivalent theory of calculus.
+37:51
+It's just like Ito's calculus. It looks really, really similar and it's coherent itself,
+37:57
+so there is no logical flaw in it. It all makes sense, but the only difference is instead of a plus in the second-order term,
+38:03
+you get minuses. Let me just make this remark, because it's just
+38:09
+a theoretical part, this thing, but I think it's really cool.
+38:15
+Remark-- there's this and equivalent version.
+38:22
+Maybe equivalent is not the right word, but a very similar version of Ito calculus such that basically, what
+38:33
+it says is d B_t square is equal to minus dt.
+38:38
+Then that changed a lot of things. But this part, it's not that important.
+38:44
+Just cool stuff. Let's think about this a little bit more, this fact.
+38:53
+Taking the leftmost point all the time means if you want to make a decision for your time
+38:59
+interval-- so at time t of i and time t of i plus 1,
+39:05
+let's say it's the stock price. You want to say that you had so many stocks in this time
+39:14
+interval. Let's say you had so many stocks in this time interval
+39:20
+according to the values between this and this. In real world, your only choice you have is you
+39:26
+have to make the decision at time t of i. Your choice cannot depend on the future time.
+39:33
+You can't suddenly say, OK, in this interval the stock price increased a lot, so I'll assume that I had a lot of stocks in this interval.
+39:42
+In this interval, I knew it was going to drop, so I'll just take the rightmost interval.
+39:50
+I'll assume that I only had this many stock. You can't do that. Your decision has to be based on the leftmost point,
+39:56
+because the time. You can't see the future. And the reason Ito's calculus works well in our setting is
+40:04
+because of this fact, because it has inside it the fact that you cannot see the future.
+40:10
+Every decision is made based on the leftmost time.
+40:16
+If you want to make a decision for your time interval, you have to do it in the beginning.
+40:21
+That intuition is hidden inside of the theory,
+40:27
+and that's why it works so well. Let me reiterate this part a little bit more.
+40:33
+It's the definition of these things where you're only allowed to-- at time t,
+40:39
+you're only allowed to use the information up to time t.
+40:54
+Definition: delta t is an adapted process-- sorry,
+41:26
+adapted to another stochastic process X_t-- if for all values of time variables
+41:38
+delta t depends only on X_0 up to X_t.
+41:48
+There's a lot of vague statements inside here,
+41:53
+but what I'm trying to say is just assume X is the Brownian motion underlying stock price.
+41:59
+Your stock is changing. You want to come up with a strategy,
+42:06
+and you want to say that mathematically this strategy makes sense. And what it's saying is if your strategy
+42:13
+makes your decision at time t is only based on the past values of your stock price,
+42:19
+then that's an adapted process. This defines the processes that are reasonable,
+42:26
+that cannot see future. And these are all-- in terms of strategy, if delta_t is a portfolio strategy,
+42:34
+these are the only meaningful strategies that you can use.
+42:40
+And because of what I said before, because we're always taking the leftmost point, adaptive
+42:45
+processes just also fit very well with Ito's calculus. They'll come into play altogether.
+42:53
+Just a few examples.
+43:10
+First, a very stupid example. X_t is adapted to X_t.
+43:20
+Of course, because at time, X_t really depends on only X_t, nothing else.
+43:26
+Two, X_(t+1) is not adapted to X_t.
+43:36
+This is maybe a little bit vague, so we'll call it Y_t equals X_(t+1).
+43:41
+Y_t is the value at t plus 1, and it's not based
+43:49
+on the values up to time t. Just a very artificial example.
+43:56
+Another example, delta t equals minimum...
+44:03
+is adapted.
+44:21
+And I'll let you think about it. The fourth is quite interesting. Suppose T is fixed, some large integer,
+44:27
+or some large real number. Then you let delta t to be the maximum where X of s, where...
+44:44
+44:50
+It's not adapted.
+44:58
+What is this? This means at time T, I'm going to take at it this value, the maximum of all value
+45:08
+inside this part, the future. This refers to the future. It's not an adapted process.
+45:14
+45:21
+Any questions? Now we're ready to talk about the properties
+45:28
+of Ito's integral. Let's quickly review what we have.
+45:34
+First, I defined Ito's lemma-- that means differentiation in Ito calculus.
+45:41
+Then I defined integration using differentiation-- integration was an inverse operation of the differentiation.
+45:48
+But this integration also had an alternative description in terms of Riemannian sums, where
+45:53
+you're taking just the leftmost point as the reference
+45:58
+point for each interval. And then, as you see, this naturally
+46:04
+had this concept of using the leftmost point. And to abstract that concept, we've
+46:12
+come up with this adapted process, very natural process, which is like the real-life procedures,
+46:17
+real-life strategies we can think of. Now let's see what happens when you take the integral of adapted processes.
+46:25
+Ito integral has really cool properties.
+46:59
+The first thing is about normal distribution. B_t has normal distribution of 0 up to t.
+47:08
+So your Brownian motion at time t has normal distribution with 0, t. That means if your stochastic process is some constant times
+47:17
+B of t, of course, then you have 0 and c square t.
+47:23
+It's still a normal variable. That means if you integrate, that's
+47:28
+the integration of some sigma.
+47:39
+That's the integration of sigma of dB_t.
+47:46
+If sigma is a fixed constant, when you take the Ito integral of sigma times
+47:52
+dB_t, this constant, at each time you get a normal distribution.
+47:58
+And this is like saying the sum of normal distribution is also normal distribution. It has this hidden fact, because integral
+48:04
+is like sum in the limit. And this can be generalized.
+48:10
+If delta t is a process depending only on the time
+48:18
+variable-- so it does not depend on the Brownian motion-- then
+48:27
+the process X of t equals the integration of delta t dB_t
+48:35
+has normal distribution at all time, just like this.
+48:50
+We don't know the exact variance yet; the variance will depend on the sigmas. But still, it's like a sum of normal variables,
+48:57
+so we'll have normal distribution.
+49:03
+In fact, it just gets better and better.
+49:10
+The second fact is called Ito isometry. That was cool.
+49:15
+Can we compute the variance?
+49:29
+Yes? AUDIENCE: Can you put that board up? PROFESSOR: Sure.
+49:34
+AUDIENCE: Does it go up? PROFESSOR: This one doesn't go up. That's bad.
+49:40
+I wish it did go up.
+49:49
+This has a name called Ito isometry.
+49:56
+Can be used to compute the variance. B_t is a Brownian motion, delta t is adapted to a Brownian motion.
+50:03
+50:09
+Then the expectation of your Ito integral--
+50:17
+that's the Ito integral of your adapted process. That's the variance-- we take the square of it--
+50:25
+is equal to something cool.
+50:36
+The square just comes in. Quite nice, isn't it?
+50:44
+I won't prove it, but let me tell you why. We already saw this phenomenon before.
+50:50
+This is basically quadratic variation.
+50:58
+And the proof also uses it. If you take delta s equals to 1-- sorry,
+51:03
+I was using Korean-- 1 at all time, then what we have is
+51:09
+here you get a Brownian motion, B_t. So on the left you get like expectation of B_t square,
+51:19
+and on the right, what you get is t. Because when delta s is equal to 1
+51:27
+at all time, when you have to get from 0 to t you get t, and you have t on the right hand side.
+51:32
+That's what it's saying. And that was the content of quadratic variation, if you remember.
+51:38
+We're summing the squares-- maybe not exactly this, but you're summing the squares over small intervals.
+51:44
+52:00
+So that's a really good fact that you can use to compute the variance.
+52:05
+You have an Ito integral, you know the square, can be computed this simple way.
+52:14
+That's really cool. And one more property. This one will be really important.
+52:22
+You'll see it a lot in future lectures.
+52:28
+It's that when is Ito integral a martingale?
+52:46
+What's a martingale? Martingale meant if you have a stochastic process,
+52:52
+at any time t, whatever happens after that, the expected value
+53:01
+at time t is equal to 0. It doesn't have any natural tendency to go up or go down.
+53:07
+No matter which point you stop your process and you see your future, it doesn't have a natural tendency
+53:12
+to go up or go down. In formal language, it can be defined as where F_t
+53:29
+is the events X_0 up to X_t.
+53:35
+So if you take the conditional expectation based on whatever happened up to time t,
+53:42
+that expectation will just be whatever value you have at that time.
+53:48
+Intuitively, that just means you don't have any natural tendency to go up or go down.
+53:53
+Question is, when is an Ito integral a martingale?
+53:59
+54:28
+Adapted to B of t, then...
+54:35
+54:45
+is a martingale.
+54:51
+As long as g is not some crazy function, as long as g is reasonable-- one way can be reasonable if its
+55:05
+L^2-norm is bounded. If you don't know what it means, you can safely ignore it.
+55:11
+55:19
+Basically, if g doesn't-- it's not a crazy function if it doesn't grow too fast, then in most cases this integral is
+55:27
+always a martingale. If you flip it-- remember, integral
+55:34
+was defined as the inverse of differentiation. So if dX_t is equal to some function mu, that
+55:42
+depends on both t and B_t, times dt, plus sigma
+55:48
+of dB_t, what this means is X_t is a martingale
+55:56
+if that is 0 at all time, always.
+56:02
+56:07
+And if it's not 0, you have a drift, so it's not a martingale. That gives you some classification.
+56:13
+Now, if you look at a differential equation of this stochastic-- this is called a stochastic differential equation-- if you know
+56:19
+stochastic process, if you look at a stochastic differential equation, if it doesn't have a drift term, it's a martingale.
+56:26
+If it has a drift term, it's not a martingale. That'll be really useful later, so try to remember it.
+56:32
+The whole point is when you write down a stochastic process in terms of something times dt, something times dB_t, really this term
+56:40
+contributes towards the tendency, the slope of whatever
+56:45
+is going to happen in the future. And this is like the variance term. It adds some variance to your stochastic process.
+56:54
+But still, it doesn't add or subtract value over time, it fairly adds variation.
+57:03
+Remember that. That's very important fact.
+57:09
+You're going to use it a lot. For example, you're going to use it for pricing theory. In pricing theory, you come up with this stochastic process
+57:18
+or some strategy. You look at its value. Let's say X_t is your value of your portfolio over time.
+57:27
+If that portfolio has-- then you match it with your financial--
+57:34
+let me go over it slowly again. First you have a financial derivative, like option
+57:44
+of a stock. Then you have your portfolio strategy.
+57:55
+Assume that you have some strategy that, at the expiration time, gives you the exact value of the option.
+58:01
+Now you look at the difference between these two stochastic processes.
+58:06
+Basically what the thing is, when your variance goes to 0,
+58:14
+your drift also has to go to 0. So when you look at the difference,
+58:20
+if you can somehow get rid of this variance term, that means no matter what you do, that
+58:26
+will govern the value of your portfolio. If it's positive, that means you can always make money,
+58:34
+because there's no variance. Without variance, you make money. That's called arbitrage, and you cannot have that.
+58:41
+But I won't go into further detail because Vasily will cover it next time.
+58:46
+But just remember that flavor. So when you write something down in a stochastic differential equation form, that term is a drift term,
+58:55
+that term is a variance term. And if you don't have drift, it's a martingale.
+59:01
+That is very important.
+59:12
+Any questions? That's kind of the basics of Ito calculus.
+59:22
+I will give you some exercises on it, mostly just basic computation exercises, so that you'll
+59:29
+get familiar with it. Try to practice it. And let me cover one more thing called Girsanov theorem.
+59:38
+It's related, but these are really basics of the Ito calculus, so if you have any questions on this, please ask me
+59:46
+right now before I move on to the next topic.
+59:56
+The last thing I want to talk about today.
+1:00:43
+Here is an underlying question. Suppose you have two Brownian motions.
+1:00:57
+This is without drift. And you have another B tilde, Brownian motion with drift.
+1:01:06
+1:01:12
+These are two probability distributions over paths.
+1:01:18
+According to B_t, you're more likely to have some Brownian motion that has no drift.
+1:01:25
+That's a sample path. According to B tilde, you have some drift.
+1:01:31
+Your Brownian motion will--
+1:01:37
+A typical path will follow this line and will follow that line.
+1:01:46
+The question is this-- can we switch
+1:01:52
+from this distribution to this distribution by a change of measure?
+1:02:02
+Can we switch between the two measures
+1:02:12
+to probability distributions by a change of measure?
+1:02:23
+1:02:30
+Let me go a little bit more what it really means. Assume that you're just looking at a Brownian motion
+1:02:36
+from time 0 up to time t, some fixed time interval.
+1:02:41
+Then according to B_t, let's say this is a sample path omega.
+1:02:47
+You have some probability of omega-- this is a p.d.f.
+1:02:54
+given by this Brownian motion B. And then you
+1:03:01
+have another p.d.f., P tilde of omega, which is a p.d.f. given by B of t.
+1:03:11
+The question is, does there exist a Z depending on omega such that P of omega
+1:03:19
+is equal to Z times P tilde?
+1:03:39
+Do you understand the question?
+1:03:46
+Clearly, if you just look at it, they're quite different. The path that you get according to the distributions
+1:03:52
+are quite different. It's not clear why we should expect it at all.
+1:03:57
+1:04:02
+You'll see the answer soon. But let me discuss all this in a different context.
+1:04:17
+Just forget about all the Brownian motion and everything just for a moment.
+1:04:22
+In this concept, changing from one probability distribution to another distribution, it's a very important concept
+1:04:29
+in analysis and probability just in general, theoretically. And there's a name for this Z, for this changing measure.
+1:04:39
+If Z exists, it's called the Radon-Nikodym derivative.
+1:04:46
+Before doing that, let me talk a little bit more.
+1:04:53
+1:04:59
+Suppose P is a probability distribution over omega.
+1:05:09
+It's a probability distribution.
+1:05:18
+So this is some set, and P describes the probability that you have each element in the set.
+1:05:25
+And you have another probability distribution, P tilde.
+1:05:33
+We define P and P tilde to be equivalent if the probability
+1:05:45
+that A is greater than zero if and only if...
+1:05:53
+For all... These probability distributions describe the probability
+1:06:01
+of the subsets. Think about a very simple case. Sigma is equal to 1, 2, and 3.
+1:06:09
+P gives 1/3 probability to 1, 1/3 probability to 2, 1/3 probability to 3.
+1:06:16
+P tilde gives 2/3 probability to 3, 1 over 6 probability
+1:06:22
+to 2, 1 over 6 probability to 3. We have two probability distribution over some space.
+1:06:29
+They are equivalent if, whenever you
+1:06:34
+take a subset of your background set-- let's say 1, 2. When A is equal to 1, 2, according
+1:06:41
+to probability distribution P, the probability you fall into this set A is equal to 2/3.
+1:06:48
+According to P tilde, you have 5/6.
+1:06:54
+They're not the same. The probability itself is not the same,
+1:07:00
+but this condition is satisfied when it's 0. And when it's not 0, it's not 0. And you can just check that it's always true, because they're
+1:07:07
+all positive probabilities. On the other hand, if you take instead, say,
+1:07:14
+1/3 and 0, now you take your A to be 3.
+1:07:19
+Then you have 1/3 equal to 0.
+1:07:28
+This means, according to probability distribution P, there is some probability that you'll get 3.
+1:07:37
+But according to probability distribution P tilde, you don't have any probability of getting 3.
+1:07:43
+So they're not equivalent in this case. If you think about it, then it's really clear.
+1:07:49
+The theorem says-- this is a very important theorem in analysis, actually.
+1:07:57
+The theorem-- there exists a Z such that P of omega is equal
+1:08:08
+to... If and only if P and P tilde are equivalent.
+1:08:16
+1:08:22
+You can change from one probability measure to another probability measure just in terms of multiplication, if and only if they're equivalent.
+1:08:32
+And you can see that it's not the case for this when they're not equivalent. You can't make a zero probability to 1/3 probability
+1:08:37
+by multiplication. So in the finite world this is very just intuitive theorem,
+1:08:44
+but what this is saying is it's true for all probability spaces.
+1:08:50
+And these are called the Radon-Nikodym derivative.
+1:09:01
+Our question is, are these two Brownian motions equivalent?
+1:09:06
+The paths that this Brownian motion without drift takes and the Brownian motion with drift
+1:09:12
+takes, are they kind of the same but just skewed in distribution, or are they really fundamentally different?
+1:09:20
+That's the question.
+1:09:28
+And what Girsanov's theorem says is that they are equivalent. To me, it came as a little bit non-intuitive.
+1:09:36
+I would imagine that it's not equivalent, these two. These paths have a very natural tendency.
+1:09:42
+As it goes to infinity, these paths and these paths will really look a lot different,
+1:09:47
+because when you go really, really far, the paths which have drift will be just really
+1:09:53
+close to your line mu of t, while the paths which don't have drift will be really close to the x-axis.
+1:10:00
+But still, they are equivalent.
+1:10:06
+You can change from one to another. I'll just state that theorem without proof.
+1:10:13
+And this will also be used in pricing theory.
+1:10:20
+I'm not an expert enough to tell why, but basically what it's saying is, you switch some stochastic process
+1:10:28
+into a stochastic process without drift, thus making it into a martingale.
+1:10:33
+And martingale has a lot of meaning in pricing theory, as you'll see. This also has application.
+1:10:39
+That's why I'm trying to cover it, although it's quite a technical theorem. Try to remember at least a statement and the spirit
+1:10:46
+of what it means. It just means these two are equivalent, you can change from one to another
+1:10:52
+by a multiplicative function.
+1:11:08
+Let me just state it in a simple form. GUEST SPEAKER: If I could just interject a comment.
+1:11:14
+PROFESSOR: Sure. GUEST SPEAKER: With these changes of measure,
+1:11:19
+it turns out that all of these theories with continuous time processes should have an interpretation if you've
+1:11:27
+discretized time, and should consider sort of a finer and finer discretization of the process.
+1:11:34
+And with this change of measure, if you consider problems
+1:11:40
+in discrete stochastic processes like random walks,
+1:11:45
+basically how-- say if you're gambling against a casino
+1:11:52
+or against another player, and you look at how your winnings evolve as a random walk,
+1:11:58
+depending on your odds, your odds could be that you will tend to lose.
+1:12:03
+So there's basically a drift in your wealth as this random process evolves.
+1:12:08
+You can transform that process, basically by taking out
+1:12:15
+your expected losses, to a process which has zero change in expectation.
+1:12:22
+And so you can convert these gambling problems where there's drift to a version where the process, essentially,
+1:12:32
+has no drift and is a martingale. And the martingale theory in stochastic process courses
+1:12:37
+is very, very powerful. There's martingale convergence theorems. So you know that the limit of the martingale
+1:12:44
+is-- there's a convergence of the process, and that applies here as well.
+1:12:50
+PROFESSOR: You will see some surprising applications.
+1:12:57
+GUEST SPEAKER: Yeah. PROFESSOR: And try to at least digest the statement.
+1:13:03
+1:13:08
+When the guest speaker comes and says by Girsanov theorem, they actually know what it is.
+1:13:15
+There's a spirit. This is a very simple version.
+1:13:21
+There's a lot of complicated versions, but let me just do it.
+1:13:30
+So P is a probability distribution over paths
+1:13:40
+from [0, T] to the infinity. What this means is just paths from that-- stochastic process
+1:13:48
+defined from time 0 to time T. These are paths defined by a Brownian motion with drift mu.
+1:14:10
+And then P tilde is a probability distribution defined by Brownian motion without drift.
+1:14:16
+1:14:22
+Then P and P tilde are equivalent. Not only are they equivalent, we can actually
+1:14:29
+compute their Radon-Nikodym derivative.
+1:14:36
+And the Radon-Nikodym derivative Z
+1:14:44
+which is defined as T of-- which we denote like this
+1:14:50
+has this nice form.
+1:15:05
+That's a nice closed form. Let me just tell you a few implications of this.
+1:15:13
+1:15:31
+Now, assume you have some, let's say, value of your portfolio over time.
+1:15:37
+That's the stochastic process. And you measure it according to this probability distribution.
+1:15:44
+Let's say it depends on some stock price as the stock price is modeled using a Brownian motion with drift.
+1:15:51
+What this is saying is, now, instead of computing this expectation in your probability space--
+1:15:57
+so this is defined over the probability space P,
+1:16:03
+our sigma-- (omega, P) defined by this probability distribution. You can instead compute it in-- you
+1:16:25
+can compute as expectation in a different probability space.
+1:16:35
+You transform the problems about Brownian motion with drift into a problem about Brownian motion without a drift.
+1:16:41
+And the reason I have Z tilde instead of Z here is because I flipped. What you really should have is Z tilde here as expectation of Z.
+1:16:54
+If you want to use this Z. I don't expect you to really be able to do computations
+1:17:03
+and do that just by looking at this theorem once. Just really trying to digest what it means
+1:17:09
+and understand the flavor of it, that you can transform problems in one probability space
+1:17:14
+to another probability space. And you can actually do that when the two distributions are defined by Brownian motions when one has drift and one
+1:17:22
+doesn't have a drift. How we're going to use it is we're going to transform a non-martingale process
+1:17:29
+into a martingale process.
+1:17:35
+When you change into martingale it has very good physical meanings to it.
+1:17:43
+That's it for today. And you only have one more math lecture remaining and maybe one or two homeworks but if you have two,
+1:17:51
+the second one won't be that long. And you'll have a lot of guest lectures, exciting guest
+1:17:57
+lectures, so try not to miss them.

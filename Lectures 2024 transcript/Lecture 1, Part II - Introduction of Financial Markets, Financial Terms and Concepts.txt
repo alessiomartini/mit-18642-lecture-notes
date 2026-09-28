@@ -1,0 +1,603 @@
+0:00
+[SQUEAKING] [RUSTLING] [CLICKING]
+0:12
+JAKE XIA: So in my part of the first lecture, I will, before I get into the introduction
+0:18
+of some financial concepts and investment strategies,
+0:23
+give you some basics on the background information for this class. I will tell you three things first before that.
+0:31
+First is a bit of introduction of myself. Second, I tell you how this class was actually formed,
+0:39
+why we had this idea, why we decided to have this class. Third is, before you actually do the assignment 0,
+0:48
+submit your information, I'm going to survey the class a little bit, just get some idea of your background,
+0:56
+of the knowledge of financial markets and math, so we know what level we should target you at.
+1:03
+So first of all, me, so my connection with MIT, as Vasili
+1:09
+said, also quite similar. So I have a PhD from Core 6, electrical engineering
+1:16
+and computer science. And I worked in the engineering field
+1:21
+as a researcher for a few years, then switched to Wall Street as a quant.
+1:29
+Quant means using mathematics, building trading models. Back then, I joined Salomon Brothers.
+1:37
+So that tells you about my age because probably-- how many of you have heard about Salomon Brothers?
+1:44
+Oh, good for you. It's now part of Citigroup. But Salomon Brothers, back then, was the pioneer
+1:51
+of using quantitative trading strategies and also hiring mathematicians, of doing
+1:58
+those so-called arbitrage models, finding one stock or bond versus another,
+2:06
+basically finding relative value.
+2:12
+So I worked there for a couple of years as a quant. Then Morgan Stanley recruited me away to be a trader.
+2:20
+I ended up staying there for over 17 years, worked as various trading and trading management roles globally,
+2:29
+got sent around the globe. That's where I worked with Vasili.
+2:37
+And in 2013-- that was the year when we first recorded
+2:43
+our OpenCourseWare video for this class-- I actually switched my job from Morgan Stanley
+2:52
+to Harvard Management Company, which is the entity that manages Harvard University's endowment.
+3:00
+I joined as the chief risk officer to oversee risk management and also capital allocation.
+3:08
+That's when, back then, we had many internal fund managers
+3:15
+doing various strategies. We, since then, changed our model, about 7 years ago,
+3:23
+7 or 8 years ago, to focus on investing with external funds.
+3:28
+I subsequently also switched my focus full time, focusing on investing and finding
+3:36
+the right funds and managers. I'll tell you a bit more about that. But I will save that for later.
+3:43
+So that's basically about me. So I'll tell you a bit about the class.
+3:49
+So back, I want to say, maybe 14 or 15 years ago, when
+3:57
+Vasili and I were working together at Morgan Stanley, we came to MIT to recruit quite often.
+4:04
+And Vasili was from the math department. I was from Core 6. So we met a lot of really bright students
+4:14
+with quantitative background. But they don't really know much about finance.
+4:19
+And they ask many good questions. So we just felt like, in a half an hour
+4:25
+or one hour interview time slot, it's simply not enough for us to answer all the questions or get to know the students.
+4:34
+So we figured maybe the best way is to have a seminar to tell the students more about how
+4:41
+math is used in finance. So one seminar lecture actually got expanded to the whole term.
+4:49
+And so we invited different practitioners talking about how methods being applied in different fields,
+4:57
+solving different problems that the class actually got very popular.
+5:03
+I mean, one of the first classes, we've got students sit on the floor everywhere. They want to know about should they
+5:11
+pursue a career in quantitative finance? So the math department was very supportive.
+5:19
+And so we teamed up with Peter the following year to offer half of the lectures in actually math
+5:27
+to fill up all the background knowledge, and then kept the half of the class talking
+5:35
+about application cases. We even had field trips taking all the students to New York,
+5:42
+touring the trading floor of Morgan Stanley. We did that for a few years.
+5:47
+And we had various fun. And some students really ended up working in New York.
+5:55
+Some of them are still there in various jobs. So that's how this class came about.
+6:02
+So let me turn the table around, asking you a few quick questions. You don't have to state your name.
+6:09
+Just raise your hands. It's fine. How many of you have watched our OpenCourseWare recording
+6:14
+from 2013? Oh, great. Yeah, I see five or six hands.
+6:20
+So you knew something about this class. How many of you have done internship jobs
+6:29
+at the financial firm? A third. OK.
+6:36
+How many of you are math majors? Most of you. How many of you are graduate students?
+6:44
+OK, a few. How many of you actually are outside MIT? Because we have-- OK, great.
+6:50
+I want to welcome all the students that came from cross registration or sit-in from other schools.
+6:57
+We always have a few from other schools. So you're very welcome.
+7:02
+If you're unfamiliar with some of the MIT systems, please feel free to seek for help.
+7:10
+So that's all about the introduction. So let me get into the actual content for this lecture.
+7:17
+So as I said, the purpose of this first lecture is to give you some background information.
+7:22
+I realize some of you already have done intern jobs. So you know quite a bit.
+7:29
+But I want to also be sensitive to the students who have actually not done the internship positions.
+7:38
+And I can give you some basic knowledge. And I give you one example.
+7:44
+One of the first years when we had this class, so there were
+7:49
+some students didn't even know what a stock is, what a stock was. So you shouldn't feel bad if you have no knowledge
+7:58
+about the financial markets. We will make sure you have plenty of knowledge
+8:04
+when you finish the class in December.
+8:11
+So what is finance or financial markets about?
+8:17
+It's really about-- there is a market of exchanges
+8:23
+in the original form. People come to the market, at the village, exchanging goods.
+8:31
+You have something. I don't have something. I need something. So let's exchange.
+8:37
+So the Stock Exchange was formed with the same idea.
+8:42
+So some buyers want to own equity of a company. I'll explain what equity is.
+8:49
+Equity is basically ownership of a company, meaning stocks.
+8:54
+And they centralize all the trading of these stocks at a particular place.
+9:02
+These are exchanges. Many cities, large financial centers, have different exchanges.
+9:09
+And in the last few decades, that also has changed. It's no longer that centralized.
+9:16
+So people do a lot of over-the-counter, OTC, trading. So it's trade by appointment, trade by arrangement,
+9:25
+trade by contract. So you don't have to go to a centralized exchange
+9:30
+to finish a trade. Or there are electronic communication networks, or ECNs.
+9:38
+You can do that simply electronically. I mean, they also act as distributed exchanges.
+9:45
+So these are the major platforms of markets.
+9:51
+So what are the products people actually are trading or exchanging hands?
+9:56
+First is simply money. So Peter mentioned Bitcoin.
+10:02
+Bitcoin is actually kind of a form of money-- not the fiat form, but different forms.
+10:09
+But originally, gold, or metal, or paper money, or coins,
+10:17
+but now different currencies issued by different governments.
+10:22
+Those were basically the first way of-- first essential product
+10:29
+to trade with. Then you always hear about the stock market.
+10:35
+Stock market represents ownership of companies. Peter mentioned NVIDIA stock going up rapidly because people
+10:46
+bet on AI applications, the demand for GPU chips, and so on, data centers.
+10:52
+So to get ownership of a company, you buy stocks. I mean, also, you can buy equity indices,
+11:01
+meaning a basket of stocks. So you probably have heard of S&P 500.
+11:10
+So Standard & Poor's 500 is essentially five largest
+11:16
+companies here. So you can get exposure not to just simply one company,
+11:25
+you can get exposure to many of them at the same time. These are the ideas of index.
+11:33
+Or they can have different forms of that traded in ETF,
+11:40
+exchange traded funds, also representing often a basket of different stocks.
+11:47
+And there are also two tiers of markets.
+11:53
+So the exchange traded stocks is called the listed stocks.
+11:59
+So they have to go through a process called IPO, initial public offering, to become listed on the exchange.
+12:07
+But that's called the primary process
+12:13
+to go from a private company to become a public company, have stocks freely traded.
+12:20
+There are also private companies, which I'll get into later. But after it becomes listed, it's
+12:27
+traded by many other people. So it's called the secondary market. So after primary, getting listed, it's a secondary market.
+12:36
+So besides the large category of equity market, there's also a big category of bond or fixed income market.
+12:45
+So bond is essentially a loan. It's a securitized loan. So it becomes listed and tradable.
+12:53
+So the most commonly known bond is the US Treasury bond.
+12:58
+US government borrows money from the investors, us
+13:05
+or institutions. They pay interest periodically, either quarterly
+13:11
+or semiannually. And so the bond issuer has an obligation
+13:17
+to pay back the whole principal amount, or the notional amount,
+13:22
+at the end of the maturity. But they can also default on that payment,
+13:28
+on both the principal or the interest. So bond has a credit risk, meaning that the issuer may not
+13:36
+always pay back. So that involves the exposure of the credit of the issuer.
+13:44
+So that's basically related to a whole bunch of credit related
+13:50
+products. And 2008, global financial crisis
+13:58
+is really a credit crisis because that started in the mortgage market.
+14:05
+People borrowed money to buy houses, but couldn't pay back. And also, these mortgages were restructuring the different kind
+14:12
+of derivative products. And we'll get into that later.
+14:18
+So related to bonds, there's an interest rate curve, which is also very important.
+14:24
+It depends on maturity of the bonds. The interest payment, or the coupon, is actually different.
+14:33
+If you only borrow for three months, you pay certain interest. You borrow for 30 years, you pay another interest rate
+14:41
+every year. It depends on the curve shape of the interest rate, as well as the supply demand and the many other factors.
+14:50
+The Federal Reserve bank, which is the policy bank of the United
+14:55
+States, is responsible of setting the short term, the front-end interest rate
+15:03
+to affect the whole interest rate curve. I mean, right now, as many of you know,
+15:09
+the interest rate curve is actually inverted. The front-end interest rate is higher than the longer maturity,
+15:16
+which is not often the case. We can also get into that later.
+15:23
+So related to interest rates, there are real estate products,
+15:30
+as I mentioned, mortgage and asset backed securities.
+15:35
+And another whole category is commodities. I mentioned gold. But there's also crude oil--
+15:41
+Peter's example of the futures dipping down below $0 and agricultural products.
+15:48
+Now, we're in the era of electrifying everything.
+15:54
+Electric vehicles uses a lot of copper or lithium for batteries.
+16:01
+So those commodities are trading rapidly higher and also follows the cycle.
+16:10
+So I'm just giving you some ideas of the basic products. But on top of all these products,
+16:17
+you can also have derivative products, meaning you can derive other contracts of trading.
+16:26
+So you can have options. So I don't just buy the stock, I want to buy the right to own the stock in the future.
+16:34
+That is the option. So it's the right, but not the obligation. I can also say, I don't want to buy it now.
+16:41
+I just want to buy it a year from now. So that's a forward contract. So I just want to buy the stock index futures,
+16:50
+which is a very liquid and standardized contract. So you can also say, I want to do a swap.
+16:56
+I don't want really buy things. I want to say I buy it from you now. But a month later, I sell it back to you.
+17:03
+So it's a swap contract. And so there are many different ways of structuring a product for different purposes and needs.
+17:13
+So once you actually land on a job like that, you become an expert.
+17:19
+Your math will be very useful. So who are the players in the market?
+17:26
+So typically, they are the banks you deposit money with-- Bank of America, Chase.
+17:34
+They take deposits. They also lend out the money to home builders
+17:39
+or other commercial projects. They are the investment banks where you interview.
+17:45
+They come to MIT to recruit-- so the Morgan Stanley's, the Goldman Sachs, and others,
+17:51
+JP Morgan's. JP Morgan was actually a commercial bank. But since the termination of Glass-Steagall law in 1999,
+18:03
+they turned themselves into an investment bank-- they turned themselves back into investment bank because, many years ago,
+18:11
+before 1930, Morgan Stanley and JP Morgan were one company.
+18:16
+So they have essentially three main divisions in the investment
+18:25
+banking business. One is called equity. So when you go interview, if you're
+18:30
+interviewing with the equity department, you should know that that's to do with stocks.
+18:36
+When you're interviewing with the fixed income department, you're going to deal with bonds, interest rate
+18:43
+curves, currencies, possibly commodities, and other derivatives.
+18:49
+You can also join the so-called IBD, investment banking division, which is more about corporate finance
+18:56
+or raising money, taking a company from private to be a listed, public company or issuing
+19:04
+bonds or some other ways. So they are doing more services, and the client relationship
+19:12
+planning, and other type of investment banking services.
+19:20
+So beyond the investment banking business of these banks, they usually have asset management division.
+19:26
+So they produce products, such as funds, mutual funds,
+19:32
+or other type of higher return funds. They also provide wealth management services,
+19:40
+helping the individual or wealthy families to manage their wealth.
+19:49
+So outside the banks, there are hedge funds. So some of the internships must be with some hedge funds.
+19:56
+Hedge funds are essentially trading entities. So they use their capital or the investor's capital
+20:04
+to try to generate returns. So by the way, at the end of this, I'm going to assign a game to all of you, which is related
+20:12
+to investing and trading So retail investors, so they just
+20:19
+simply open a brokerage account-- and you probably have and your parents have-- and trade.
+20:26
+Central banks, they involve-- they're guiding the markets, usually
+20:31
+providing liquidity, or intervening the currencies, or whatever. They are policy driven.
+20:38
+There are corporates. So corporates come in mostly for hedging purposes. They want to reduce the exposure from the exports or imports.
+20:49
+What is the objective of all these players involved in the markets?
+20:55
+In one sentence, they try to maximize the gain while minimizing the losses.
+21:03
+Because financial markets are uncertain-- so you don't know, when you initiate a trade,
+21:10
+you will end up making money or losing money. So investors have the money.
+21:17
+They are seeking returns. The borrowers-- or you can think about them as managers.
+21:25
+They actually need the money. They can take the risk So the trade between the lender and the borrower
+21:32
+is essentially the main driving force of all the financial relationships. You can always pair them up this way.
+21:39
+And another example I'll just quickly mention-- you've probably heard the terms LP versus GP.
+21:46
+LP means limited partners. GP means general partners. Or in simple words, it's the investor
+21:56
+versus hedge fund manager. It's that relationship. If you one day want to raise a hedge fund,
+22:03
+you need to deal with your investors. So you need to sort out these kind of relationships.
+22:10
+So the trader types we can categorize into the three.
+22:17
+One is the hedgers, like corporates. They want to reduce risk. And the second is the market maker.
+22:22
+Like a lot of the bank trading desks, they make a buying price, a selling price, or bid,
+22:31
+or an offer. Their objective is to earn that spread, but not to take risk.
+22:37
+Every time, they try to earn that spread, then quickly flatten out the position.
+22:43
+The last category are the risk seekers, the proprietary traders, or the fund managers.
+22:49
+So they use their own capital to initiate risk.
+22:55
+And hopefully, they are betting right to make a return.
+23:01
+So how is this all related to math? Why do you need to know all these things?
+23:07
+I assume you're in this class because you have some interest of finding out how math can be
+23:13
+used in the financial markets. So the math is used also in the three different ways.
+23:20
+One is to come up with a pricing model, because these instruments, especially the derivatives,
+23:28
+the options, the forwards, the swaps is actually quite complicated.
+23:35
+In one of the guest lectures later on in the term, you will hear from John Hall.
+23:40
+He wrote a textbook many years ago on how to price options.
+23:47
+Vasili and I probably were, back then,
+23:53
+hungry readers of those books to figure out how differential equations can be used.
+24:00
+I mean, he was a pioneer in this field. And MIT actually is was at the frontier of all these
+24:10
+innovations back in the '70s. So you probably heard the Nobel Prize given
+24:15
+in the '90s to the Black-Scholes-Merton model. So that was a model using mathematics to price options.
+24:25
+So they won an economic price, Nobel Prize in economics.
+24:31
+So that's the pricing model side. The second part is also very important. It's risk management.
+24:38
+I mean, when you take on the risk, take on a position,
+24:44
+the first question you have to decide is how big the position should be.
+24:49
+So you have a certain amount of money. Do you want to put all in all your chips on one stock?
+24:55
+Or do you want diversify, put them into different stocks? Once you put your investment in, when do you change your mind?
+25:04
+When do you sell? When do you take profit? When do you cut loss? So all the things--
+25:13
+your greed, your emotions-- will drive you. On one hand, your fear will also drive you in other situations.
+25:22
+So risk management is actually a very quantitative process. You should let math speak for that process.
+25:31
+The last one is, I think, most people are interested in, especially sitting in your seats.
+25:37
+If you can make a trading strategy, perpetual money making
+25:42
+machine, using some kind of a hidden mathematics, wouldn't that be so cool?
+25:48
+You just go to the beach and let the machine make money for you. I mean, that's the dream of many quantitative managers.
+25:56
+And I would say some of them are very successful. Some of the funds out there, they
+26:02
+have achieved amazing outcomes using mathematics. But the problem is, once they found those secrets,
+26:09
+they would never disclose it. And if you join them, they will ask you to sign a lifetime
+26:15
+non-compete, meaning, when you leave the shop, you cannot say a word of what you learned.
+26:21
+Yeah, go ahead. STUDENT: If you sign a lifetime non-compete, don't they have to pay settlements when they fire you ultimately?
+26:27
+JAKE XIA: Yes. STUDENT: For a lifetime? JAKE XIA: Not a lifetime, unfortunately. Yeah, so we're not going to get into that for this.
+26:33
+Yeah, but first step, you have to find those secrets.
+26:41
+So how do you find those secrets? So people say, OK, why don't you just look at the data,
+26:47
+learn from the historical patterns, then extrapolate them? The efficient market theory says that's not possible.
+26:57
+If there is such thing in $100 bills lying on the ground, they will already have been picked up a long time ago.
+27:05
+Why would that secret be waiting for you to uncover? There are many smart people before you.
+27:13
+The behavioral finance theory says, oh, wait a second, because people are not totally rational.
+27:19
+Under certain situations, we're not thinking rationally. That's why we're providing these opportunities for others
+27:25
+to explore. Is this a zero sum game?
+27:32
+So I'm getting into now investment strategies.
+27:37
+I'm not, of course, telling you all the secrets. But I'm laying all the steps for you
+27:44
+to think about what you should focus on. So firstly, you should focus on, do
+27:49
+you want to do this by yourself? Or do you want to hire other people to do it for you? So this is the direct versus investing in other people's
+27:57
+funds or fund of funds. Do you want to focus on publicly traded markets?
+28:04
+As I said, all these things-- stocks, bonds, currencies. Or you probably interviewed or heard venture capital,
+28:12
+private equity, buyouts, real estate funds, natural resource funds.
+28:18
+I mean, they're not so transparent. But they seem to make a lot of returns, too.
+28:23
+You need to pick. These are two very different markets. Also, passive versus active.
+28:31
+Do you want to do the stock picking, selecting the stocks? Or do you just want to buy the index?
+28:38
+Buying S&P 500 in the last 10 years would have done very well and beating
+28:44
+most of the fund managers. So why shouldn't you just do the passive?
+28:52
+Also, systematic versus discretionary.
+28:59
+Do you want to make decisions based on some systematic or quantitative rules or models?
+29:04
+Or every time, do you want to make a decision by yourself using your human brain?
+29:11
+Do you even you want to follow the quantitative model using math?
+29:18
+Do you want to look for statistical patterns or some deterministic relationships?
+29:25
+Deterministic relationships, like a lot of physics. If A plus B, you will get C But in statistics, you
+29:34
+will have a probability of getting C. So I would say, nowadays, finding deterministic arbitrage
+29:43
+or trading strategies is very hard. Those $100 bills have definitely been picked up.
+29:50
+But sometimes, they still show up. Do you want to train following or mean reversion?
+29:59
+That means, when market goes up, do you want to buy more? Or market goes up, do you want to sell?
+30:04
+You play the contrarian or you buy the dip.
+30:10
+Do you want to focus on short term or you focus on long term? Short term, you're trading very fast
+30:17
+and you're trading the liquid. You can change your mind easily. Or you make your decisions very slowly.
+30:26
+You take your time. I mean, the start up companies you invest with your venture
+30:32
+capital may take 10 years to find out if it's successful or not.
+30:37
+Do you want to be a Warren Buffett, like value investor? You look at the current price should
+30:44
+be much lower than its value. Or you focus on the growth of the company.
+30:50
+You project NVIDIA'S future income for the next 10 years. As long as the future value is going
+30:57
+to be greater than the current value, you can invest in it.
+31:03
+I would say, in the last few years, more and more people are focusing on growth rather than value.
+31:09
+You need to figure out why. And history versus future.
+31:16
+Do you believe history will repeat itself, so you follow the patterns?
+31:21
+Or you actually don't simply extrapolate into the future.
+31:28
+The key is you need to understand your own objectives. So your objective is to maximize your gain
+31:35
+versus minimizing your loss. But that's not all of it.
+31:42
+You need to understand why do you need the money.
+31:48
+What's it for? How much can you afford to lose? How much are you going to spend every year?
+31:55
+And your life horizon of income versus spending, this
+32:01
+is a whole set of investment objectives you need to understand about yourself. Then you need to pick an area you're the best.
+32:10
+You have an edge over the rest of the market. You need to understand why you should make money.
+32:16
+Other people should give you the money. And you need to find a suitable strategy for you.
+32:21
+Ultimately, if math is your strength, you need to make math your edge.
+32:28
+OK. For that, I'm going to quickly talk about the trading game.
+32:36
+Then I will pass on to Vasili. So this game is about, for every single one of you,
+32:43
+to pick a stock or ETF, exchange traded funds, just traded
+32:50
+like stock, or bonds, or whatever only to buy. So I know some of you are more sophisticated.
+32:57
+So can I short? If you want to go short, you buy the short-related ETF.
+33:04
+So pick one stock. You are hypothetically given $10,000.
+33:09
+Everyone has $10,000, each one of you.
+33:14
+You need to let us know. Email us your selection. You pick only one thing.
+33:19
+You let us know before September 14. And we're going to give you the slide on the website.
+33:25
+So don't worry. The price you buy is at the close of Friday of September 13.
+33:33
+The price you sell is automatically set on Friday, November 15, so about a two-month period.
+33:41
+So you need to track on the spreadsheet how many shares you have bought. That's easy. $10,000, right?
+33:47
+You just convert into shares divided by per share price.
+33:53
+And your daily profit and loss in dollar and percentage, that gives you a practice of how to track your position.
+34:02
+Every day, there's a P&L, profit and loss. At the end of the close on November 15,
+34:09
+calculate the total loss or profit. And also, I want you to do one calculation to sum up
+34:16
+all the daily gains on one side, called G, and sum up all the daily losses, called L, in dollar terms.
+34:26
+So G minus L should be your net profit and loss. But I want you to calculate that ratio, G minus L divided
+34:34
+by G plus L. That gives you the quality of your trading strategy.
+34:40
+A bonus-- you are given a one-time chance to change your mind on October 11 close.
+34:47
+You email us your decision. If you want to switch before October 12,
+34:52
+you can switch to one other position. You can decide to not switch. But when you switch, you carry the balance, whatever is left.
+35:01
+Your $10,000, maybe $1,000 left or become $50,000, whatever roll into a new position.
+35:09
+So at the end of the term, we will announce the top three leaders. OK, for that, I'll pass it on to Vasili.
+35:17

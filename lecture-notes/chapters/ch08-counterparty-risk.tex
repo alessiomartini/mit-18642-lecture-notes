@@ -1,0 +1,1326 @@
+% !TEX root = ../main.tex
+\chapter{Counterparty Risk, Margin and CVA}\label{ch:counterparty}
+
+\begin{sources}
+\small
+\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+\textbf{Lecture} & \textbf{Speaker} & \textbf{Content}\\
+\midrule
+2024 L10 & J.~Shepherd & \emph{Counterparty Risk Optimization} (Quantile Technologies, part of LSEG).
+Types of risk and central clearing; coherent risk measures, VaR and expected shortfall (historical
+and model-building estimates, time scaling, back-testing, Rockafellar--Uryasev); variation and initial
+margin, ISDA SIMM; multilateral optimisation of initial margin in a network of banks, numerical issues,
+``nice'' and ``fair'' solutions.\\
+2013 L26 & Y.~Tang & \emph{Introduction to Counterparty Credit Risk} (Morgan Stanley, given remotely).
+CVA, DVA, funding risk, wrong-way risk (Berkshire Hathaway's index puts), the CVA conundrum;
+enterprise-level derivatives modelling; martingale measures, martingale testing, resampling and
+interpolation. Last minutes: closing remarks of the instructors (\cref{ch08:sec-closing}).\\
+\bottomrule
+\end{tabularx}
+
+\smallskip
+\textbf{Files.} Slides \file{mit18_642_f24_lec10.pdf} (51 slides); 2013 slides
+\file{MIT18_S096F13_lecnote26.pdf} (27 slides).
+\textbf{Problem sets.} No problem set of either year covers this chapter; all exercises are marked
+``not from the course''.
+\textbf{Not covered in class.} 2024: slide 17 (FRTB) was skipped, slides 26--28 (SIMM practicalities)
+and 48 (observed savings) only shown; 2013: slides 21--25 (extinguisher trade, ``bigger picture'')
+were not reached for lack of time (summarised in \cref{ch08:rem-extinguisher}).
+\end{sources}
+
+\section*{Motivation}
+An over-the-counter (OTC) derivative is a bilateral promise. Over the life of a swap sometimes you owe
+your counterparty money and sometimes it owes you; if it defaults while it owes you, you lose part of the
+receivable. Before 2008 this \emph{counterparty credit risk} was a side issue. During the crisis the
+mark-to-market losses it caused were larger than the losses from actual defaults \ts{13}{26}{6:22}, and the
+regulatory response (Basel~III capital for CVA, mandatory central clearing, margin rules for uncleared
+derivatives) changed the whole derivatives business. The two guest lectures show the two sides of this change:
+\begin{itemize}
+  \item \textbf{2013 (Y.~Tang, Morgan Stanley)}: \emph{pricing} counterparty risk. The credit valuation
+        adjustment (CVA) and its relatives (DVA, funding), wrong-way risk, and why all of them need models of
+        the whole portfolio, not of one trade at a time.
+  \item \textbf{2024 (J.~Shepherd, Quantile/LSEG)}: \emph{mitigating} it with collateral. Variation margin,
+        initial margin computed as a value-at-risk, and how a network of banks can reduce the total initial
+        margin they post by agreeing on new trades, found by convex optimisation.
+\end{itemize}
+The mathematics: option-like expectations under the pricing measure, coherent risk measures (VaR and
+expected shortfall), quadratic forms of Gaussian vectors, convex and mixed-integer optimisation, and change of
+numeraire. VaR is treated in more depth, from the 2013 lecture on the topic, in \cref{ch:var}.
+
+% ==================================================================
+\section{Counterparty risk in OTC derivatives}\label{ch08:sec-ccr}
+
+\paragraph{Types of risk.} Trading derivatives creates several risks \ts{24}{10}{3:11}:
+\emph{market} risk (values move with the market), \emph{credit} risk (a debtor does not pay an obligation),
+\emph{operational and legal} risk (people, systems and events; the hardest to model, because it is mostly
+people making mistakes), \emph{liquidity} risk (a transaction cannot be executed at the market price, typically
+because the position is so large that selling it moves the price, or outgoing cash flows cannot be funded),
+and \emph{counterparty} risk: the potential loss on the market value of transactions when the counterparty
+defaults.
+
+\paragraph{Counterparty versus credit risk.} Suppose you buy protection (a credit default swap, CDS) on a
+JPMorgan bond from Goldman Sachs. You have \emph{credit} risk to JPMorgan: the value of the CDS depends on
+JPMorgan defaulting. You have \emph{counterparty} risk to Goldman Sachs: whether it will actually pay what the
+CDS is worth \ts{24}{10}{4:13}. For a corporate bond the economics are similar, but the risk to the issuer
+is called \emph{issuer} risk \ts{13}{26}{3:10}. Counterparty risk has two components \ts{13}{26}{2:04}:
+\begin{itemize}
+  \item \emph{default risk}: at default we recover only a fraction $R$ of what we are owed;
+  \item \emph{mark-to-market (MTM) risk}: even if nothing is due for ten years, a widening of the
+        counterparty's credit spread lowers the value of the trade today, because a buyer of the trade would
+        pay less for it \ts{13}{26}{3:10}.
+\end{itemize}
+What makes counterparty risk harder than bond credit risk is that the amount at risk is \emph{random and
+two-sided}: the value of a swap can be positive or negative, and it depends on all trades with the same
+counterparty.
+
+\paragraph{Mitigation.} The standard tools (slide~4 of \file{lec10}) are \ts{24}{10}{5:15}: \emph{netting}
+of offsetting payments; \emph{hedging} with new trades; \emph{collateralisation} (collecting margin, a kind of
+insurance payment against the counterparty's default); contractual clauses such as periodic resets of the
+mark-to-market value or break clauses; and \emph{central clearing counterparties} (CCPs).
+
+\paragraph{Central clearing.} A CCP steps into the middle of bilateral trades by \emph{novation}: the trade
+between A and B is replaced by two trades, A with the CCP and the CCP with B \ts{24}{10}{6:15}. By itself
+this only changes the counterparty; the gain comes from \emph{multilateral netting}, since all of a firm's
+positions now face the same counterparty and offset (\cref{ch08:fig-ccp}) \ts{24}{10}{7:20}. As a rough
+rule, total counterparty risk scales like $\sum_{\text{counterparties}}\|\text{position}\|$, and netting reduces
+the number of terms. Standard (vanilla) interest-rate swaps must be cleared by regulation, while more exotic
+products such as swaptions are not eligible, so every bank ends up with a mixture of cleared and bilateral
+trades \ts{24}{10}{8:25}.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[>=Stealth,every node/.style={font=\small},
+  pt/.style={circle,draw,thick,minimum size=7mm,inner sep=0pt}]
+\begin{scope}
+  \node[pt] (C) at (0,2.4) {C}; \node[pt] (D) at (2.4,2.4) {D};
+  \node[pt] (A) at (0,0) {A};   \node[pt] (B) at (2.4,0) {B};
+  \draw[->,thick,defcol] (C) -- node[left]{125} (A);
+  \draw[->,thick,defcol] (A) -- node[below]{100} (B);
+  \draw[->,thick,defcol] (B) -- node[right]{100} (D);
+  \draw[->,thick,defcol] (D) -- node[above]{50} (C);
+  \node at (1.2,-1.0) {bilateral: gross $375$};
+\end{scope}
+\begin{scope}[xshift=5.2cm]
+  \node[pt] (C) at (0,2.4) {C}; \node[pt] (D) at (2.4,2.4) {D};
+  \node[pt] (A) at (0,0) {A};   \node[pt] (B) at (2.4,0) {B};
+  \node[circle,draw,thick,fill=okcol!15,minimum size=9mm,inner sep=0pt] (P) at (1.2,1.2) {\scriptsize CCP};
+  \draw[thick,thmcol] (A) -- node[pos=0.45,below right,inner sep=1pt]{$+25$} (P);
+  \draw[thick,black!30] (B) -- node[pos=0.45,below left,inner sep=1pt]{$0$} (P);
+  \draw[thick,thmcol] (C) -- node[pos=0.45,above right,inner sep=1pt]{$-75$} (P);
+  \draw[thick,thmcol] (D) -- node[pos=0.45,above left,inner sep=1pt]{$+50$} (P);
+  \node at (1.2,-1.0) {after netting at the CCP: $150$};
+\end{scope}
+\end{tikzpicture}
+\caption{Multilateral netting at a CCP (slide~5 of \file{lec10}). Left: four bilateral positions; an arrow
+into a node counts $+$, out of a node $-$. Right: after novation each party faces only the CCP and its
+positions net: A has $+125-100=+25$, B has $+100-100=0$ (no counterparty risk left), C has $+50-125=-75$,
+D has $+100-50=+50$. The CCP itself is flat.}\label{ch08:fig-ccp}
+\end{figure}
+
+\begin{finance}[What a CCP costs (not discussed in class)]
+Clearing concentrates risk in the CCP, which protects itself by collecting initial margin and contributions to a
+default fund from its members. Splitting a portfolio between cleared and bilateral trades also destroys netting
+\emph{between} the two sets. This is why ``move more trades into the CCP'' is a genuine design choice in the
+optimisation of \cref{ch08:sec-opt}, not an automatic improvement.
+\end{finance}
+
+% ==================================================================
+\section{Exposure, netting and collateral}\label{ch08:sec-exposure}
+
+Fix a counterparty and a \emph{netting set} (all trades covered by one master agreement, whose values are
+offset at default). Let $V(t)$ be the value \emph{to us} of the netting set computed with a
+counterparty-default-free model, and $C(t)$ the value of the collateral we hold ($C<0$ if we have posted).
+
+\begin{definition}[Exposure profiles]\label{ch08:def-exposure}
+The \emph{exposure} at time $t$ is $E(t)=\bigl(V(t)-C(t)\bigr)^+$, the amount we would lose (before
+recovery) if the counterparty defaulted at $t$. Then:
+\begin{itemize}
+  \item \emph{expected exposure} $\mathrm{EE}(t)=\E[E(t)]$, and \emph{expected positive exposure}
+        $\mathrm{EPE}=\frac1T\int_0^T\mathrm{EE}(t)\dd t$, called \emph{mean positive exposure} (MPE) in the 2013
+        slides;
+  \item \emph{negative exposure} $\bigl(V(t)-C(t)\bigr)^-=\max(C(t)-V(t),0)$, what we owe; its mean is the MNE of
+        the 2013 slides;
+  \item \emph{potential future exposure} $\mathrm{PFE}_q(t)$, the $q$-quantile of $E(t)$ (typically $q=95\%$
+        or $99\%$), used by banks to set credit limits (not discussed in class).
+\end{itemize}
+For pricing (CVA) the expectation is under the pricing measure $\Q$; for risk management under $\Prob$.
+\end{definition}
+
+The positive part is the key non-linearity: if $V>0$ at default we recover only $R\,V$, but if $V<0$ we
+still owe the full amount to the defaulted counterparty. There is no ``default gain'', and this asymmetry
+makes the loss an \emph{option-like} payoff \ts{13}{26}{19:10}. \Cref{ch08:fig-exposure} shows the typical
+shapes: the uncertainty of $V(t)$ grows like $\sqrt t$ by diffusion, while for a swap the remaining cash flows,
+and with them the sensitivity to rates, shrink linearly to maturity.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.78\linewidth,height=5.2cm,xmin=0,xmax=10,ymin=0,ymax=2.8,
+  xlabel={time $t$ (years)},ylabel={exposure / $\sigma$},
+  tick label style={font=\scriptsize},label style={font=\small},
+  legend style={font=\scriptsize,at={(0.02,0.98)},anchor=north west,draw=none,fill=none},
+  legend cell align=left]
+\addplot[defcol,thick,domain=0:10,samples=101]{0.3989*sqrt(x)*(1-x/10)};
+\addlegendentry{swap, EE}
+\addplot[defcol,thick,dashed,domain=0:10,samples=101]{1.645*sqrt(x)*(1-x/10)};
+\addlegendentry{swap, PFE$_{95\%}$}
+\addplot[thmcol,thick,domain=0:10,samples=101]{0.3989*0.5*sqrt(x)};
+\addlegendentry{forward, EE}
+\addplot[thmcol,thick,dashed,domain=0:10,samples=101]{1.645*0.5*sqrt(x)};
+\addlegendentry{forward, PFE$_{95\%}$}
+\end{axis}
+\end{tikzpicture}
+\caption{Stylised exposure profiles (not from the course). If $V(t)\sim N(0,s(t)^2)$ and there is no
+collateral, then $\mathrm{EE}(t)=s(t)/\sqrt{2\pi}\approx0.40\,s(t)$ and $\mathrm{PFE}_{95\%}(t)=1.645\,s(t)$.
+Swap: $s(t)=\sqrt t\,(1-t/T)$ with $T=10$ (diffusion times remaining duration, peak at $T/3$).
+FX forward: $s(t)=0.5\sqrt t$ (a single exchange at maturity).}\label{ch08:fig-exposure}
+\end{figure}
+
+\begin{proposition}[Netting reduces exposure]\label{ch08:prop-netting}
+For trades with values $V_1,\dots,V_n$ in one netting set,
+$\bigl(\sum_iV_i\bigr)^+\le\sum_iV_i^+$ pathwise; hence $\mathrm{EE}_{\text{net}}(t)\le\sum_i\mathrm{EE}_i(t)$.
+\end{proposition}
+\begin{proof}
+$x\mapsto x^+$ is subadditive: $(x+y)^+\le x^++y^+$ because the right side is $\ge x+y$ and $\ge0$.
+Induct on $n$ and take expectations.
+\end{proof}
+If one trade goes from $0$ to $+\$100$M and an offsetting trade with the same counterparty goes to $-\$100$M, the
+netted default loss is zero \ts{13}{26}{18:05}. The price of counterparty risk is therefore \emph{not} a sum of
+per-trade quantities: to price it for one new trade you must know every other trade facing the same
+counterparty. Ordinary derivative pricing never needs this \ts{13}{26}{7:29}.
+
+\paragraph{Collateral.} Under a \emph{Credit Support Annex} (CSA) to the master agreement the parties exchange
+collateral. \emph{Variation margin} (VM) is exchanged daily and equals the current value, $\mathrm{VM}(t)=V(t)$;
+the CSA also fixes thresholds below which no collateral is called, minimum transfer amounts and eligible assets
+(these details were not discussed in class, apart from the thresholds mentioned on the SIMM slides). With perfect
+daily VM the exposure is no longer the \emph{level} of $V$ but its \emph{increment} between the last margin call
+the defaulter honoured and the moment we have closed out or replaced the trades. That increment is covered by
+\emph{initial margin} (\cref{ch08:sec-margin}).
+
+\begin{intuition}[From $\sqrt{T}$ to $\sqrt{\text{MPOR}}$]
+For a diffusive value process the typical size of $V(t)$ after 5 years is $\sigma\sqrt{5}$, while the typical move
+over a 10-business-day close-out period is $\sigma\sqrt{10/250}$, about $9\%$ of it. Collateralisation replaces
+a large, slowly growing exposure by a small, constantly renewed one. The price is liquidity: margin must be
+paid in cash or high-quality securities, often at short notice.
+\end{intuition}
+
+% ==================================================================
+\section{CVA, DVA and funding: pricing counterparty risk}\label{ch08:sec-cva}
+
+\subsection{A puzzle}
+Tang opened with a question \ts{13}{26}{8:32}. You have an uncollateralised swap with value $0$ on day one
+(ignoring counterparty risk). Later its value is $+\$100$M, and then the counterparty unexpectedly defaults with
+$50\%$ recovery, so you receive $\$50$M in cash. Over the life of the trade, have you made $\$50$M, lost $\$50$M,
+or are you flat?
+
+A dealer has \emph{lost} $\$50$M \ts{13}{26}{12:45}. Its market risk is hedged, for example by an offsetting swap
+with another dealer or an exchange (or the trade is simply intermediated back to back). When the client trade went
+from $0$ to $+100$, the hedge went from $0$ to $-100$, and the hedge counterparty is solvent and must be paid in
+full. The dealer receives $50$ and pays $100$. In general the loss at default is $(1-R)$ times the exposure. A
+\emph{CVA desk} that had sold the trading desk protection on the counterparty (and itself bought CDS protection)
+would have made the trading desk whole \ts{13}{26}{13:53}.
+
+\subsection{Credit valuation adjustment}
+\begin{definition}[CVA, 2013 slides]\label{ch08:def-cva}
+The \emph{credit valuation adjustment} is the price of counterparty credit risk, an adjustment to the value given
+by a counterparty-default-free model or a broker quote \ts{13}{26}{4:13}. With $\tau$ the counterparty's default
+time, $T$ the final maturity of the netting set, $R_\tau$ the recovery rate, $V_{\tau-},C_{\tau-}$ the portfolio
+value and collateral just before default, and $\beta_t=\exp\bigl(\int_0^tr_u\dd u\bigr)$ the money-market account,
+\begin{equation}\label{ch08:eq-cva}
+  \mathrm{CVA}_{\mathrm{MPE}} = -\E_0^{\Q}\!\left[\ind_{\{\tau\le T\}}\,
+      \frac{(V_{\tau-}-C_{\tau-})^+\,(1-R_\tau)}{\beta_\tau}\right] \ts{13}{26}{15:57}.
+\end{equation}
+The adjusted value of the portfolio is $V_0+\mathrm{CVA}_{\mathrm{MPE}}$.
+\end{definition}
+The minus sign matters in practice: CVA on receivables is a cost, the amount charged to the counterparty.
+Theoretical papers often define CVA as a positive number and subtract it; that is fine as long as you are
+consistent \ts{13}{26}{14:55}. In \eqref{ch08:eq-cva}, $\ind_{\{\tau\le T\}}$ says there is no counterparty risk
+if the counterparty defaults after the portfolio has matured; $(V-C)^+$ is the exposure; $(1-R)$ turns it into a
+loss given default; and $\beta_\tau$ discounts \ts{13}{26}{17:01}.
+
+\begin{proposition}[CVA as an integral of expected exposure (not derived in class)]\label{ch08:prop-cvaee}
+Assume $\tau$ is independent of the market variables (no wrong-way risk, \cref{ch08:sec-wwr}), has a
+deterministic hazard rate $h(t)$ with survival function $S(t)=\exp\bigl(-\int_0^th\bigr)$, and $R$ is constant.
+Then
+\[
+  \mathrm{CVA} = -(1-R)\int_0^T \mathrm{EE}^*(t)\,h(t)S(t)\dd t,\qquad
+  \mathrm{EE}^*(t)=\E^{\Q}\!\left[\frac{(V_t-C_t)^+}{\beta_t}\right].
+\]
+If moreover $h$ and $r$ are constant, $\mathrm{EE}(t)\approx\mathrm{EPE}$ is roughly flat, and the CDS spread obeys
+the ``credit triangle'' $s\approx(1-R)h$, then
+\begin{equation}\label{ch08:eq-cvabote}
+  \mathrm{CVA}\approx-\,\mathrm{EPE}\times s\times D,\qquad D=\int_0^Te^{-(r+h)t}\dd t=\frac{1-e^{-(r+h)T}}{r+h},
+\end{equation}
+where $D$ is the risky duration (annuity) of the counterparty. This is the ``back-of-the-envelope'' formula of
+the slides: $-\,$MPE $\times$ CDS par spread $\times$ duration \ts{13}{26}{13:53}.
+\end{proposition}
+\begin{proof}
+Let $g(t)=\E^{\Q}\bigl[(V_t-C_t)^+/\beta_t\bigr]$. Since $\tau$ is independent of the market,
+$\E[\ind_{\{\tau\le T\}}(1-R)(V_{\tau-}-C_{\tau-})^+/\beta_\tau]=(1-R)\E[\ind_{\{\tau\le T\}}g(\tau)]$ (paths are
+continuous at a fixed time, so $V_{t-}=V_t$ a.s.), and $\tau$ has density $h(t)S(t)$. For the approximation, put
+$\mathrm{EE}^*(t)=e^{-rt}\mathrm{EPE}$ and $hS(t)=he^{-ht}$, then use $(1-R)h=s$.
+\end{proof}
+The wider the spread (default more likely) and the longer the duration (more time to default), the larger the
+charge \ts{13}{26}{14:55}.
+
+\begin{example}[Size of CVA]
+A 5-year uncollateralised swap book with $\mathrm{EPE}=\$5$M, counterparty spread $s=100$\,bp, $R=40\%$ (so
+$h=1.67\%$) and $r=3\%$: $D=(1-e^{-0.0467\cdot5})/0.0467=4.46$ and $\mathrm{CVA}\approx-5\cdot0.01\cdot4.46
+=-\$0.22$M. If the spread doubles, the CVA roughly doubles: a mark-to-market loss with no default at all.
+\end{example}
+
+\begin{intuition}[CVA is an option on a basket]
+$(V_\tau-C_\tau)^+$ is the payoff of a call on the netting set with strike equal to the collateral, exercised at
+the random time $\tau$. CVA is a default-probability-weighted strip of such options. Since a counterparty trades
+many products (rates, FX, credit, equity, commodities, mortgages), it is an option on a \emph{basket of cross-asset
+derivatives} \ts{13}{26}{20:11}. Pricing it needs a joint simulation of all risk factors of all trades: this is
+what Tang calls enterprise-level modelling (\cref{ch08:sec-martingale}), and the reason his group at Morgan Stanley
+was called Cross Asset Modeling.
+\end{intuition}
+
+\begin{finance}[CVA in the bank]
+CVA changes the true economic price of a trade, so it is charged to clients and hedged dynamically by a CVA
+desk, which buys CDS protection and hedges the market factors that drive $V$. It also enters regulatory capital:
+Basel~III added a CVA capital charge, so trades with large CVA consume more capital and lower the return on
+equity \ts{13}{26}{5:17}. In 2008, CVA mark-to-market losses were larger than the losses from actual defaults
+\ts{13}{26}{6:22}.
+\end{finance}
+
+\subsection{DVA and first-to-default}
+The same logic applied to \emph{our own} default gives a \emph{liability} CVA \ts{13}{26}{21:23}. With $\bar\tau$
+our default time and $\bar R$ our recovery, the slides write
+\[
+  \mathrm{CVA}_{\mathrm{MNE}} = -\E_0^{\Q}\!\left[\ind_{\{\bar\tau\le T\}}\,
+      \frac{(V_{\bar\tau-}-C_{\bar\tau-})^-\,(1-\bar R_{\bar\tau})}{\beta_{\bar\tau}}\right]
+  = \E_0^{\Q}\!\left[\ind_{\{\bar\tau\le T\}}\,
+      \frac{(C_{\bar\tau-}-V_{\bar\tau-})^+\,(1-\bar R_{\bar\tau})}{\beta_{\bar\tau}}\right]\ \ge 0 .
+\]
+This is a \emph{benefit}: if we default while owing money, we pay only a fraction of it. It is usually called
+\emph{debit valuation adjustment} (DVA) \ts{13}{26}{22:27}.
+
+\begin{coursenote}[Sign convention on slide~6 of \file{lecnote26}]
+For the displayed formula to be a benefit, $(x)^-$ must be read as $\min(x,0)\le0$, as Tang explains
+(``the positive sign becomes a negative sign''). With the other common convention $x^-=\max(-x,0)$ the
+formula would carry the opposite sign. The right-hand side above avoids the ambiguity.
+\end{coursenote}
+
+Should the two adjustments know about each other? If we default first, the counterparty's later default no longer
+matters to us, and vice versa. A \emph{bilateral} CVA puts first-to-default indicators $\ind_{\{\tau\le\min(\bar\tau,T)\}}$
+and $\ind_{\{\bar\tau\le\min(\tau,T)\}}$ into the two terms (not written in class). Tang's view is that for pricing
+this refinement does not need to be modelled; he gave references on the slides rather than discussing it
+\ts{13}{26}{23:30}.
+
+\begin{finance}[Why DVA is controversial (not discussed in class)]
+DVA means that a bank books a gain when its own credit worsens, and it can hardly be hedged, since a bank cannot
+sell protection on itself. Regulators therefore do not let DVA gains count towards capital, even though
+accounting standards include DVA in fair value.
+\end{finance}
+
+\subsection{Funding and liquidity risk}
+Second example \ts{13}{26}{23:30}: same trade, value $+\$100$M, uncollateralised, with market risk and counterparty
+risk properly hedged. Is anything left? Students proposed interest-rate risk (hedged by assumption) and
+``key-man'' risk \ts{13}{26}{25:40}. Tang's answer is \emph{funding liquidity risk} \ts{13}{26}{25:40}:
+\begin{itemize}
+  \item hedges are typically futures or collateralised trades. When our uncollateralised receivable is worth
+        $+100$ the hedge is worth $-100$, and we must post $100$ of cash \emph{now}, while the receivable
+        arrives only later. That cash must be borrowed at our unsecured funding spread \ts{13}{26}{26:47};
+  \item the amount depends on market moves (\emph{contingent} liquidity risk), and failing to raise it is how
+        firms die: ``you may end up like Lehman'' \ts{13}{26}{27:51};
+  \item symmetrically, an uncollateralised \emph{payable} generates a funding \emph{benefit} (we receive
+        collateral on its hedge), which can partially offset the funding need of the receivables
+        \ts{13}{26}{27:51};
+  \item further risks: unexpected tail events and (equity) capital \ts{13}{26}{28:54}.
+\end{itemize}
+In the spirit of \eqref{ch08:eq-cvabote}, a first estimate of the funding cost is $-s_F\times\mathrm{EPE}\times D$
+and of the benefit $+s_F\times|\mathrm{ENE}|\times D$, with $s_F$ our own funding spread (a common simplification,
+not from the lecture).
+
+\begin{finance}[The XVA family (terminology not used in class)]
+The adjustments to the default-free price are nowadays collectively called XVA: CVA (counterparty default),
+DVA (own default), FVA (funding of uncollateralised positions, split into cost FCA and benefit FBA), KVA (cost
+of regulatory capital held against the trade, Tang's ``capital''), and MVA (cost of funding the \emph{initial
+margin} of \cref{ch08:sec-margin} over the life of the trade). The 2013 lecture covered CVA, DVA, funding and
+capital. The 2024 lecture is about the world that the margin rules created, in which CVA is smaller because
+trades are collateralised and the cost has moved into margin; its reading list cites J.~Gregory, \emph{The xVA
+Challenge}.
+\end{finance}
+
+\subsection{Wrong-way risk}\label{ch08:sec-wwr}
+\begin{definition}[Wrong-way risk]
+\emph{Wrong-way risk} (WWR) is present when exposure to a counterparty is positively correlated with its
+probability of default: the counterparty owes us more exactly when it is more likely to default
+\ts{13}{26}{33:02}. (\emph{Right-way} risk is the opposite.) Then the independence assumption of
+\cref{ch08:prop-cvaee} fails, and the relevant exposure is the \emph{conditional} one,
+$\mathrm{CVA}=-(1-R)\int_0^T\E^{\Q}\bigl[(V_t-C_t)^+/\beta_t\,\big|\,\tau=t\bigr]\dd\Q(\tau\le t)$, which is
+larger than $\mathrm{EE}^*(t)$ under WWR.
+\end{definition}
+
+\begin{casestudy}[Berkshire Hathaway's index puts (2013 slides 8--9)]
+\textbf{The trade} \ts{13}{26}{29:54}. Selling a put below the current price is an alternative to buying the
+stock: similar downside, no upside beyond the premium, and a steady income if repeated (``name your price and
+get paid for it''). Around 2005--2006, as Tang recalls, Berkshire Hathaway sold long-dated (10--15 year) puts on
+four indices (S\&P~500, FTSE~100, Euro Stoxx~50, Nikkei~225) and collected about $\$4$bn of premium \emph{without
+posting collateral}. It was one of the largest derivative cash outflows of its time for the dealers, who were the
+buyers \ts{13}{26}{30:55}. Had Berkshire posted collateral, the 2008 sell-off would have required many billions of
+it (see page~16 of Berkshire's 2012 shareholder letter, cited on the slides).
+
+\textbf{The dealer's risks} \ts{13}{26}{31:56}. Handling long-dated equity options was not the difficulty; many dealers
+could not handle the \emph{counterparty} side: CVA on a large uncollateralised receivable; \emph{wrong-way} CVA,
+because in a sell-off the puts gain value while an insurer with large equity holdings becomes more likely to
+default \ts{13}{26}{33:02}; and \emph{wrong-way funding}, because the dealer paid $\$4$bn up front and had to fund
+its collateralised hedges exactly in a crisis \ts{13}{26}{34:06}. The dealer therefore charged CVA, wrong-way CVA,
+funding and wrong-way funding costs. It then had to risk-manage them: a static CDS hedge (fine for a bond) leaves
+\emph{gap risk} because the exposure changes over time \ts{13}{26}{35:11}. Part of the risk was sold to investors
+in Berkshire's bonds through a \emph{credit-linked note} paying a higher coupon, and through tranched portfolio
+protection \ts{13}{26}{36:17}.
+
+\textbf{Berkshire's side} \ts{13}{26}{37:18}. Selling puts is selling insurance on the equity market; the premium
+is day-one cash, a cheap source of funding (Buffett compared it to borrowing at about 1\%); and there is no cash
+outflow until maturity. So Berkshire suffered mark-to-market losses in 2008 but no liquidity drain.
+
+\textbf{Feedback} \ts{13}{26}{38:25}. In the crisis, dealers' CVA hedging meant buying more and more CDS
+protection on Berkshire, which widened Berkshire's CDS spread beyond what fundamentals suggested. Bond investors
+then demanded higher coupons, raising Berkshire's funding cost, so Berkshire approached dealers about posting
+collateral after all: ``no free lunch'' \ts{13}{26}{39:30}.
+
+\textbf{Who loses?} Tang's answer: the end buyers of the puts, the hedgers who pay the premium and gain nothing if
+the market does not fall far enough \ts{13}{26}{40:33}.
+\end{casestudy}
+
+\subsection{The CVA conundrum}
+To hedge CVA on counterparty A you buy credit protection on A from counterparty B. Now you have counterparty risk
+to B, so you buy protection on B from C, and so on: an infinite series \ts{13}{26}{41:41}. This also undermines
+the theory: arbitrage pricing is replication with hedge instruments, and here replication needs infinitely many
+of them \ts{13}{26}{43:52}. The practical way to stop the series at the first term is to buy the protection on A
+\emph{fully collateralised}, typically from a dealer under a CSA: collateral is settled as the value moves, much
+like daily settlement of futures, so the residual risk to B is negligible \ts{13}{26}{43:52}.
+
+\begin{coursenote}[Slides 21--25 of \file{lecnote26}: the extinguisher (not presented)]\label{ch08:rem-extinguisher}
+Tang ran out of time and referred students to the slides \ts{13}{26}{1:16:34}. The question: normally a dealer
+\emph{charges} CVA; how can it structure a trade in which it \emph{pays} the counterparty for the latter's default
+risk? Answer: a trade with positive value to the dealer that increases with the counterparty's default probability,
+namely an \emph{extinguisher} (zero-recovery) swap, which knocks out at zero value if either party defaults. It is
+worth something when the dealer expects to have more future \emph{payables} than receivables. Example: an
+emerging-market sovereign issues a USD bond and swaps it into local currency with a dealer (receives USD, pays
+local currency). Because of the interest-rate differential (the FX forward), the correlation between FX and
+credit, and the jump of the FX rate at default, the dealer expects to owe money on the swap; the extinguisher
+cancels this debt at the sovereign's default. In effect the dealer has bought protection on the sovereign from the
+sovereign itself, and can sell it on to a third party. Issues: it reduces recovery for the other creditors; the
+default event must reference the underlying bond; there are legal and franchise risks; and why would the sovereign
+default, knowing it would lose its receivable on the swap? Slide~25 places all this in the ``bigger picture'' of a
+bank's objectives: revenue, risk management (market, counterparty, liquidity, capital) and return on capital,
+with the non-linear portfolio effects requiring enterprise-level models.
+\end{coursenote}
+
+% ==================================================================
+\section{Risk measures: value at risk and expected shortfall}\label{ch08:sec-riskmeasures}
+Initial margin is a risk measure of a portfolio's value change, and to optimise it we must know which risk
+measures are well behaved. This section follows the first half of the 2024 lecture.
+
+\subsection{Coherent risk measures}
+A risk measure should capture both the \emph{size} of potential losses and their \emph{probability}
+\ts{24}{10}{8:25}. Below $L$ denotes the \emph{loss} of a portfolio over a horizon (a random variable; gains are
+negative losses) and $\rho(L)\in\R$ its risk.
+
+\begin{definition}[Coherent risk measure, Artzner et al.\ 1999]\label{ch08:def-coherent}
+$\rho$ is \emph{coherent} if for all losses $L,L_1,L_2$:
+\begin{enumerate}[(i)]
+  \item normalised: $\rho(0)=0$;
+  \item positively homogeneous: $\rho(\lambda L)=\lambda\rho(L)$ for $\lambda\ge0$;
+  \item translation invariant: $\rho(L+a)=\rho(L)+a$ for a deterministic amount $a\in\R$;
+  \item monotone: $L_1\le L_2$ in all scenarios $\Rightarrow\rho(L_1)\le\rho(L_2)$;
+  \item subadditive: $\rho(L_1+L_2)\le\rho(L_1)+\rho(L_2)$ \ts{24}{10}{9:29}.
+\end{enumerate}
+\end{definition}
+Subadditivity is the important one: merging two portfolios should not create risk, and it may reduce it through
+diversification \ts{24}{10}{10:31}.
+
+\begin{coursenote}[Erratum: slide~6 of \file{lec10}]
+The slide states homogeneity for all $\alpha$; it holds only for $\alpha\ge0$ (doubling a position doubles its
+risk, but reversing it does not negate the risk). It also writes translation invariance as
+$\rho(X+A)=\rho(X)+\alpha$ for ``a deterministic portfolio with guaranteed \emph{return} $\alpha$''. With $X$ a loss,
+as in the rest of the slides, adding a guaranteed \emph{gain} $\alpha$ \emph{lowers} the risk:
+$\rho(X-\alpha)=\rho(X)-\alpha$; equivalently, adding a deterministic \emph{loss} $a$ raises it by $a$, as in
+(iii) above. Finally, the reference list dates Artzner--Delbaen--Eber--Heath to 2022; the paper appeared in
+\emph{Mathematical Finance} in 1999, the year quoted in class.
+\end{coursenote}
+
+\subsection{VaR and ES}
+\begin{definition}[VaR and ES]\label{ch08:def-vares}
+For a confidence level $\beta\in(0,1)$ and a horizon (implicit in $L$):
+\begin{align*}
+  \mathrm{VaR}_\beta(L) &= \inf\{\ell\in\R:\ \Prob(L\le\ell)\ge\beta\}, \\
+  \mathrm{ES}_\beta(L)  &= \frac{1}{1-\beta}\int_\beta^1\mathrm{VaR}_u(L)\dd u .
+\end{align*}
+If $L$ has a continuous density $f_L$ then $\int_{-\infty}^{\mathrm{VaR}_\beta}f_L=\beta$ and
+\[
+  \mathrm{ES}_\beta(L)=\E\bigl[L\,\big|\,L\ge\mathrm{VaR}_\beta\bigr]
+  =\frac{1}{1-\beta}\int_{\mathrm{VaR}_\beta}^\infty x\,f_L(x)\dd x .
+\]
+\end{definition}
+VaR answers ``what is the loss that I am $\beta$ sure not to exceed over the next 10 days?'' (e.g.\ $\$10$M at
+$\beta=99\%$); ES answers ``if I am in the worst $1-\beta$ of cases, how much do I lose on average?''
+\ts{24}{10}{10:31}. Clearly $\mathrm{ES}_\beta\ge\mathrm{VaR}_\beta$, since ES averages quantiles $\mathrm{VaR}_u\ge
+\mathrm{VaR}_\beta$ \ts{24}{10}{12:35}. VaR was popularised by JPMorgan in the 1990s and ES appeared around 2000;
+both are used heavily by regulators and in counterparty risk.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.85\linewidth,height=5.2cm,xmin=-4,xmax=6.5,ymin=0,ymax=0.43,
+  xlabel={loss $L$},ylabel={density},ytick=\empty,
+  tick label style={font=\scriptsize},label style={font=\small},
+  declare function={fb(\x)=0.97*exp(-\x*\x/2)/sqrt(2*pi)+0.03*exp(-(\x-5)*(\x-5)/0.18)/(0.3*sqrt(2*pi));
+                    fr(\x)=exp(-\x*\x/(2*1.53983))/(1.24092*sqrt(2*pi));}]
+\addplot[fill=ideacol,fill opacity=0.25,draw=none,domain=2.041:6.5,samples=120]{fb(x)}\closedcycle;
+\addplot[fill=thmcol,fill opacity=0.25,draw=none,domain=2.041:6.5,samples=80]{fr(x)}\closedcycle;
+\addplot[ideacol,thick,domain=-4:6.5,samples=200]{fb(x)};
+\addplot[thmcol,thick,domain=-4:6.5,samples=200]{fr(x)};
+\draw[dashed] (axis cs:2.041,0) -- (axis cs:2.041,0.30) node[above,font=\scriptsize]{$\mathrm{VaR}_{95\%}=2.04$};
+\draw[thmcol,thick,->] (axis cs:2.56,0.13) node[above,font=\scriptsize]{ES $2.56$} -- (axis cs:2.56,0.005);
+\draw[ideacol,thick,->] (axis cs:3.96,0.13) node[above,font=\scriptsize]{ES $3.96$} -- (axis cs:3.96,0.005);
+\end{axis}
+\end{tikzpicture}
+\caption{Same VaR, different tails (in the spirit of slide~8 of \file{lec10}; numbers not from the course). Red:
+$N(0,1.24^2)$. Blue: $97\%\ N(0,1)+3\%\ N(5,0.3^2)$, a book that usually makes small gains but occasionally
+loses a lot. Both have $\mathrm{VaR}_{95\%}=2.04$, but the blue $\mathrm{ES}_{95\%}$ is $3.96$ against $2.56$:
+VaR does not see what lies beyond the quantile.}\label{ch08:fig-fattail}
+\end{figure}
+
+\paragraph{Fat tails.} VaR is blind to the shape of the tail beyond the quantile (\cref{ch08:fig-fattail})
+\ts{24}{10}{12:35}. Such a distribution is not artificial: a desk that sells out-of-the-money options collects a
+small premium most of the time and occasionally suffers a large loss when the options end in the money
+\ts{24}{10}{14:37}.
+
+\paragraph{VaR is not subadditive.} Slide~9 \ts{24}{10}{14:37}: two independent portfolios A and B each lose $100$
+with probability $4\%$ and $0$ otherwise. For each, $\mathrm{VaR}_{0.95}=0$ (the $4\%$ tail lies beyond the
+quantile) and $\mathrm{ES}_{0.95}=(4\cdot100+1\cdot0)/5=80$. The sum A+B loses $200$ w.p.\ $0.16\%$, $100$ w.p.\
+$7.68\%$, $0$ w.p.\ $92.16\%$, so $\mathrm{VaR}_{0.95}=100>0+0$ while $\mathrm{ES}_{0.95}=(0.16\cdot200+4.84\cdot100)/5
+=103.2\le160$ \ts{24}{10}{15:39}. ES is subadditive in general (it is coherent; the slides point to a paper with
+seven different proofs), but proving it takes some work. Conversely, for normal-like (elliptical) distributions
+VaR \emph{is} subadditive, so in practice the failure is less dramatic than such contrived examples suggest
+\ts{24}{10}{16:45}. For optimisation, however, it is fatal, because of the following fact.
+
+\begin{proposition}[Subadditivity and convexity]\label{ch08:prop-convex}
+Let $\rho$ be positively homogeneous. Then $\rho$ is subadditive iff it is convex.
+\end{proposition}
+\begin{proof}
+If $\rho$ is subadditive, then for $\lambda\in[0,1]$:
+$\rho(\lambda L_1+(1-\lambda)L_2)\le\rho(\lambda L_1)+\rho((1-\lambda)L_2)=\lambda\rho(L_1)+(1-\lambda)\rho(L_2)$.
+If $\rho$ is convex: $\rho(L_1+L_2)=2\rho\bigl(\tfrac12L_1+\tfrac12L_2\bigr)\le\rho(L_1)+\rho(L_2)$.
+\end{proof}
+Without homogeneity the equivalence fails: $\sqrt{|x|}$ is subadditive but not convex. The slides (slide~33) state
+``convexity is equivalent to sub-additivity''; the proposition makes precise when this is true.
+Since VaR is not subadditive, it is not convex as a function of the portfolio, and non-convex functions are much
+harder to minimise than convex ones \ts{24}{10}{16:45}.
+
+\paragraph{Spectral risk measures.} A risk measure can be described by the weight it puts on each quantile,
+$M_\phi(L)=\int_0^1\phi(u)\,\mathrm{VaR}_u(L)\dd u$ with $\phi\ge0$, $\int\phi=1$ \ts{24}{10}{17:45}. VaR puts all
+its weight on $u=\beta$ (a delta function); ES puts a flat weight $1/(1-\beta)$ on $u>\beta$; an
+\emph{exponential} spectral measure uses $\phi(u)\propto e^{-(1-u)/\gamma}$, weighting extreme losses most.
+$M_\phi$ is coherent iff $\phi$ is non-decreasing (Acerbi, 2002): a sensible risk-averse measure never gives
+worse losses less weight. This fails for VaR, whose weight drops to zero beyond $\beta$.
+
+\begin{intuition}[Quantile versus conditional mean]
+VaR is a quantile, like a median: it does not move if you drag the extreme tail further out. ES is the first moment
+of the tail, so it does. Convexity is the property that makes a minimisation problem a bowl with one bottom (the
+same role convexity of the free energy plays for thermodynamic stability); a risk measure without it can have
+many local minima in portfolio space.
+\end{intuition}
+
+\subsection{Normal model and time scaling}
+\begin{proposition}[Normal VaR and ES]\label{ch08:prop-normal}
+If $L\sim N(\mu,\sigma^2)$ and $z_\beta=N^{-1}(\beta)$, with $\varphi$ the standard normal density, then
+\[
+  \mathrm{VaR}_\beta=\mu+\sigma z_\beta,\qquad \mathrm{ES}_\beta=\mu+\sigma\,\frac{\varphi(z_\beta)}{1-\beta}
+  =\mu+\sigma\,\frac{e^{-z_\beta^2/2}}{\sqrt{2\pi}\,(1-\beta)}\ts{24}{10}{18:45}.
+\]
+\end{proposition}
+\begin{proof}
+$L=\mu+\sigma Z$ and quantiles are equivariant under increasing affine maps. For ES,
+$\E[Z\mid Z\ge z]=\frac{1}{1-\Phi(z)}\int_z^\infty x\varphi(x)\dd x=\frac{\varphi(z)}{1-\Phi(z)}$, since
+$x\varphi(x)=-\varphi'(x)$.
+\end{proof}
+Numerically, $z_{0.99}=2.326$ and $\varphi(z_{0.99})/0.01=2.665$, while $\varphi(z_{0.975})/0.025=2.338$. Hence
+under normality the $99\%$ VaR ($\mu+2.326\sigma$) and the $97.5\%$ ES ($\mu+2.338\sigma$) are almost the same
+number: this is how the regulators' switch from 99\% VaR to 97.5\% ES was calibrated (slide~17).
+
+\paragraph{Square root of time.} If daily changes $\Delta P_i$ are i.i.d.\ $N(0,\sigma^2)$, the $T$-day change has
+standard deviation $\sigma\sqrt T$, so $T$-day VaR $=\sqrt T\times$ one-day VaR, and the same for ES
+\ts{24}{10}{19:47}. Real returns are autocorrelated: a bad day tends to be followed by another.
+
+\begin{proposition}[Autocorrelated daily changes]\label{ch08:prop-autocorr}
+If $(\Delta P_i)$ is stationary with variance $\sigma^2$ and $\Corr(\Delta P_i,\Delta P_{i+k})=\rho^k$ (an AR(1)
+structure), then
+\[
+  \Var\Bigl(\sum_{i=1}^T\Delta P_i\Bigr)=\sigma^2\Bigl[T+2\sum_{k=1}^{T-1}(T-k)\rho^k\Bigr],
+\]
+and for normal changes with zero mean the ratio of $T$-day to one-day VaR (or ES) is the square root of the bracket.
+For $T=2$ it is $\sqrt{2(1+\rho)}$, as on slide~11.
+\end{proposition}
+\begin{proof}
+Expand the variance of the sum: there are $T$ diagonal terms and $2(T-k)$ pairs at lag $k$.
+\end{proof}
+\begin{center}\small
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+ & $T=1$ & $2$ & $5$ & $10$ & $50$ & $250$\\
+\midrule
+$\rho=0$    & 1.00 & 1.41 & 2.24 & 3.16 & 7.07 & 15.81\\
+$\rho=0.05$ & 1.00 & 1.45 & 2.33 & 3.31 & 7.43 & 16.62\\
+$\rho=0.1$  & 1.00 & 1.48 & 2.42 & 3.46 & 7.80 & 17.47\\
+$\rho=0.2$  & 1.00 & 1.55 & 2.62 & 3.79 & 8.62 & 19.35\\
+\bottomrule
+\end{tabular}
+\end{center}
+The table of slide~11 is reproduced exactly by the formula above. For the EURO STOXX the observed lag-one
+autocorrelation is about $0.1$ (between $0.05$ and $0.15$ for other indices) \ts{24}{10}{20:54}, so the usual
+10-day rule $\sqrt{10}=3.16$ underestimates the true factor $3.46$ by about $10\%$; yet almost everybody uses
+$\sqrt T$ \ts{24}{10}{21:59}. (The observed higher-lag autocorrelations on the slide are close to $0$ rather than
+$\rho^k$; with only a lag-one correlation the factor is $\sqrt{10+2\cdot9\cdot0.1}=3.44$, practically the same.)
+
+\subsection{Estimating VaR and ES}\label{ch08:sec-estimation}
+
+\begin{casestudy}[Historical simulation on four European indices (slides 12--15)]
+\textbf{Data} \ts{24}{10}{21:59}. Daily closes of IBEX~35 (Spain), CAC~40 (France), DAX (Germany) and EURO STOXX~50,
+2006--2023, containing two stress periods (the 2008 crisis and COVID in 2020). All four are in euros, so there is no FX
+conversion; holidays differ across countries: days when all markets were closed were dropped, otherwise the
+missing prices were forward-filled, which creates zero returns \ts{24}{10}{23:01}. (Shepherd's aside: in the
+industry a surprising share of time goes into holiday calendars and FX.)
+
+\textbf{Method} \ts{24}{10}{24:02}. With $v_i^j$ the level of index $j$ on day $i$ and positions
+$\bm\delta=(3000,4000,2000,1000)$ in CAC, DAX, IBEX, EURO STOXX, the P\&L of day $i$ is
+$\Delta P_i=\sum_j\delta_j\,(v_i^j-v_{i-1}^j)/v_{i-1}^j$. For a window of $n=500$ days (two years), sort the
+losses: the $99\%$ VaR is the 5th worst ($1\%$ of $500$) and the $99\%$ ES the mean of the 4 worst; the $97.5\%$ VaR
+is the 12th worst and the ES the mean of the 11 worst \ts{24}{10}{27:07}. (Some include the VaR scenario itself in
+the average; the market convention is to exclude it \ts{24}{10}{28:10}.)
+
+\textbf{Results} (slides 14--15; checked against the listed 12 largest losses):
+\begin{center}\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+window & $\mathrm{VaR}_{99}$ & $\mathrm{ES}_{99}$ & $\mathrm{VaR}_{97.5}$ & $\mathrm{ES}_{97.5}$\\
+\midrule
+2022--2023 (recent)   & 320 & 377 & 227 & 303\\
+2020--2021 (COVID)    & 450 & 815 & 306 & 534\\
+2015--2016 (calm)     & 297 & 477 & 246 & 348\\
+2007--2008 (crisis)   & 448 & 689 & 370 & 505\\
+\bottomrule
+\end{tabular}
+\end{center}
+\textbf{Lesson.} The choice of the historical window matters far more than any other modelling choice
+\ts{24}{10}{26:07}. This is why regulators added \emph{stressed VaR}: besides the most recent window, VaR is also
+computed on a fixed period known to be stressful (2008 or COVID) \ts{24}{10}{27:07}.
+\end{casestudy}
+
+\paragraph{Model building (variance--covariance).} Assume index returns $\Delta x_i\sim N(0,\sigma_i^2)$ with
+correlations $\rho_{ij}$, covariance $C_{ij}=\rho_{ij}\sigma_i\sigma_j$, and a linear portfolio
+$\Delta P=\sum_i\delta_i\Delta x_i$ with sensitivities $\delta_i=\partial P/\partial x_i$ \ts{24}{10}{28:10}. Then
+$\Delta P\sim N(0,\sigma_P^2)$ with
+\[
+  \sigma_P^2=\sum_{i,j}\rho_{ij}\delta_i\delta_j\sigma_i\sigma_j=\bm\delta\T C\bm\delta,\qquad
+  \mathrm{VaR}(T,\beta)=\sqrt T\,z_\beta\,\sigma_P,\qquad
+  \mathrm{ES}(T,\beta)=\sqrt T\,\frac{\varphi(z_\beta)}{1-\beta}\,\sigma_P .
+\]
+With the 2022--2023 daily covariance matrix of slide~16 (entries about $10^{-4}$, i.e.\ daily volatilities of
+about $1\%$) one gets $\sigma_P=96.6$, $\mathrm{VaR}(1,99\%)=225$ and $\mathrm{ES}(1,99\%)=257$ \ts{24}{10}{29:13},
+well below the historical $320$ and $377$ for the same period: the empirical distribution has fatter tails than the
+normal \ts{24}{10}{30:15}.
+
+\begin{coursenote}[Erratum: ES formula on slide~16 of \file{lec10}]
+The slide writes $\mathrm{ES}(T,\beta)=\sqrt T\,e^{-N^{-1}(\beta)}\sigma_P/(\sqrt{2\pi}(1-\beta))$. The exponent
+must be $-[N^{-1}(\beta)]^2/2$, as on slide~11 and in \cref{ch08:prop-normal}. The quoted $\mathrm{ES}=257$ was
+computed with the correct formula ($2.665\times96.6$); the misprinted one would give $376$.
+\end{coursenote}
+
+\subsection{Back-testing}
+A VaR model can be tested by counting \emph{exceptions}, days on which the realised loss exceeded the VaR
+\ts{24}{10}{30:15}. If the model is right, exceptions are independent Bernoulli trials with probability
+$p=1-\beta$, so the number $N$ of exceptions in $n$ days is $\mathrm{Bin}(n,p)$ and
+\[
+  \Prob(N\ge m)=\sum_{k=m}^n\binom nk p^k(1-p)^{n-k}.
+\]
+The rule of thumb is to reject the model if this probability is below $5\%$ \ts{24}{10}{31:18}. In the example the
+normal $\mathrm{VaR}(1,99\%)=225$ was exceeded on $12$ of the $500$ days, while $5$ were expected.
+
+\begin{coursenote}[Erratum: the back-test on slide~16 and in class]
+The slide's formula has $(1-p)^k$; the binomial probability needs $(1-p)^{n-k}$. More importantly, for
+$n=500$, $m=12$, $p=0.01$ the correct value is $\Prob(N\ge12)=0.52\%$, not $5.2\%$. By the stated $5\%$ rule the
+normal model is therefore \emph{rejected} (even at the $1\%$ level), whereas in class it was accepted as ``not
+overly aggressive'' \ts{24}{10}{1:20:34}. At the $5\%$ level the model is accepted with up to $9$ exceptions
+($\Prob(N\ge9)=6.7\%$) and rejected from $10$ on ($\Prob(N\ge10)=3.1\%$). The rejection also agrees with the
+comparison with the historical VaR ($225$ against $320$). Note that this back-test is in-sample (covariance and
+exceptions from the same window), which if anything favours the model.
+\end{coursenote}
+
+Back-testing VaR is easy; back-testing ES is not, and this is the main reason VaR is still used despite its flaws
+\ts{24}{10}{32:23}. ES is a property of the whole tail of a distribution, while each day provides a single draw: one
+realised loss cannot be compared with a tail mean without assumptions on the shape of the tail
+\ts{24}{10}{1:17:27}. Regulation moved from VaR (Basel~I, 10-day $99\%$) to stressed VaR (Basel~2.5) to ES at
+$97.5\%$ with variable liquidity horizons (FRTB, the Fundamental Review of the Trading Book). Banks still
+back-test the VaR: they build one distributional model, compute capital from its ES, and accept the ES if the VaR of
+the same model back-tests well \ts{24}{10}{1:16:23}. The ``model'' is the distributional assumption; VaR and ES are
+two numbers read off it \ts{24}{10}{1:18:28}.
+
+\subsection{Expected shortfall as an optimisation problem}
+Let $x\in X\subset\R^n$ be a portfolio, $y\in\R^m$ the random market change with density $p(y)$, and $f(x,y)$ the
+loss. Write $\psi(x,\alpha)=\Prob(f(x,y)\le\alpha)$, so $\mathrm{VaR}_\beta(x)=\min\{\alpha:\psi(x,\alpha)\ge\beta\}$.
+
+\begin{theorem}[Rockafellar--Uryasev]\label{ch08:thm-ru}
+Let
+\[
+  F_\beta(x,\alpha)=\alpha+\frac{1}{1-\beta}\int_{\R^m}\bigl[f(x,y)-\alpha\bigr]^+p(y)\dd y .
+\]
+If $\psi(x,\cdot)$ is continuous, then $F_\beta(x,\cdot)$ is convex and continuously differentiable,
+$\mathrm{VaR}_\beta(x)$ is a minimiser, and $\min_\alpha F_\beta(x,\alpha)=\mathrm{ES}_\beta(x)$. Consequently
+\[
+  \min_{x\in X}\mathrm{ES}_\beta(x)=\min_{(x,\alpha)\in X\times\R}F_\beta(x,\alpha),
+\]
+and if $f(\cdot,y)$ is convex and $X$ convex, this is a convex problem \ts{24}{10}{33:27}.
+\end{theorem}
+\begin{proof}
+$\alpha\mapsto[f-\alpha]^+$ is convex, so $F_\beta$ is convex in $\alpha$, and
+\[
+  \frac{\partial F_\beta}{\partial\alpha}=1-\frac{\Prob(f>\alpha)}{1-\beta}=1+\frac{\psi(x,\alpha)-1}{1-\beta}
+  =\frac{\psi(x,\alpha)-\beta}{1-\beta},
+\]
+which vanishes at $\alpha_\beta=\mathrm{VaR}_\beta(x)$. There
+\[
+  \int[f-\alpha_\beta]^+p\dd y=\int_{f\ge\alpha_\beta}f\,p\dd y-\alpha_\beta\bigl(1-\psi(x,\alpha_\beta)\bigr)
+  =(1-\beta)\mathrm{ES}_\beta-\alpha_\beta(1-\beta),
+\]
+so $F_\beta(x,\alpha_\beta)=\alpha_\beta+\mathrm{ES}_\beta-\alpha_\beta=\mathrm{ES}_\beta$ (slides 18--20). If $f$ is jointly
+convex in $(x,\alpha)$, so is $[f-\alpha]^+$ and hence $F_\beta$; minimising first over $\alpha$ and then over $x$ is
+the same as minimising jointly.
+\end{proof}
+With $S$ equally likely scenarios $y_s$ (historical or simulated) and linear losses $f(x,y_s)=-x\T r_s$, the problem
+becomes a \emph{linear program}:
+\[
+  \min_{x,\alpha,u}\ \alpha+\frac{1}{(1-\beta)S}\sum_{s=1}^Su_s\quad\text{s.t.}\quad u_s\ge -x\T r_s-\alpha,\ \ u_s\ge0,
+  \ \ x\in X ,
+\]
+``basically a linear problem'' \ts{24}{10}{34:27}. No such representation exists for VaR. So ES is harder to
+back-test but much easier to optimise, and for margin optimisation the latter matters more.
+
+% ==================================================================
+\section{Margin: variation margin, initial margin and ISDA SIMM}\label{ch08:sec-margin}
+
+\subsection{Why margin}
+Consider a bank A that is long a swap with C and short an offsetting swap with B (slide~21). A receives cash flows
+$\{T_i\}$ and pays $\{S_i\}$ on each swap, typically every three or six months; before the next payment date the
+counterparty may default and not pay \ts{24}{10}{35:33}. To mitigate this the parties exchange \emph{variation
+margin} daily, equal to the current value $V$ of the trades \ts{24}{10}{36:34}.
+
+If C defaults it stops paying VM. A must replace or unwind the trade with C, which takes some days; meanwhile its
+hedge with B keeps moving and A keeps paying VM to B. If the value of the defaulted trade to A rises in the
+meantime, A has to pay more for the replacement than the collateral it holds, and that is a loss
+\ts{24}{10}{37:35}. \emph{Initial margin} covers this loss.
+
+\begin{definition}[Margin]
+\emph{Margin} is collateral posted by one counterparty to the one that collects it, to cover potential losses on
+derivatives (slide~22).
+\begin{itemize}
+  \item \emph{Variation margin} (VM) covers the current present value.
+  \item \emph{Initial margin} (IM) covers the potential change of value between the counterparty's default and the
+        time $t=\delta t$ at which the surviving party can exit the position. The period $\delta t$ is the
+        \emph{margin period of risk} (MPOR).
+\end{itemize}
+IM is sized as a VaR (or ES) of the value change over the MPOR \ts{24}{10}{38:39}.
+\end{definition}
+
+Slide~23 shows it as a picture: a value path up to the default, a fan of possible paths over the MPOR, and a
+distribution at close-out whose upper tail is covered by the IM collected and whose lower tail is the IM posted.
+IM is held in segregated accounts and cannot be used for trading, so it is a real cost (the MVA of
+\cref{ch08:sec-cva}) \ts{24}{10}{1:12:07}.
+
+There are two kinds of IM \ts{24}{10}{38:39}. \emph{Cleared} IM is set by each CCP's own model and has existed for
+decades. \emph{Bilateral} IM on uncleared trades was introduced by the post-crisis rules (Basel~III/BCBS--IOSCO) and
+phased in from 2016; the industry standard model is ISDA's \emph{Standard Initial Margin Model} (SIMM).
+
+\subsection{The SIMM as a delta--gamma VaR}
+SIMM is an exposure-based proxy for a 10-business-day ($\delta t=14/365$ in calendar time), $99\%$ VaR
+\ts{24}{10}{39:41}. Let $P(t)$ be the portfolio value to the surviving party, the counterparty defaulting at $t=0$,
+with $\mathrm{VM}(0)=P(0)$. Ignoring path dependence, cash flows in $(0,\delta t)$ and discounting, and letting only
+the market state $\mathcal M$ move by $\Delta\mathcal M$ over the MPOR, a second-order expansion gives
+\[
+  P(\delta t)\approx P(0)+\bm\delta\T\Delta\mathcal M+\tfrac12\,\Delta\mathcal M\T\gamma\,\Delta\mathcal M ,
+\]
+with $\bm\delta$ the vector of deltas and $\gamma$ the (symmetric) gamma matrix. The loss is the \emph{increase}
+$P(\delta t)-P(0)$, since the collateral is frozen at $P(0)$, and IM should satisfy
+$\Prob\bigl(P(\delta t)-P(0)<\mathrm{IM}\bigr)=0.99$.
+
+\begin{proposition}[Moments of the delta--gamma P\&L]\label{ch08:prop-simm}
+If $\Delta\mathcal M\sim N(0,C)$, then $\Delta P=\bm\delta\T\Delta\mathcal M+\frac12\Delta\mathcal M\T\gamma\Delta\mathcal M$ has
+\[
+  \E[\Delta P]=\tfrac12\tr(\gamma C),\qquad \Var(\Delta P)=\bm\delta\T C\bm\delta+\tfrac12\tr\bigl((\gamma C)^2\bigr).
+\]
+Approximating $\Delta P$ by a normal with these moments,
+$\mathrm{IM}\approx\frac12\tr(\gamma C)+2.326\sqrt{\bm\delta\T C\bm\delta+\frac12\tr((\gamma C)^2)}$.
+\end{proposition}
+\begin{proof}
+Write $X=\Delta\mathcal M$. $\E[X\T\gamma X]=\sum_{ij}\gamma_{ij}C_{ij}=\tr(\gamma C)$. By Isserlis' (Wick's) theorem,
+$\E[X_iX_jX_kX_l]=C_{ij}C_{kl}+C_{ik}C_{jl}+C_{il}C_{jk}$, so
+\[\E[(X\T\gamma X)^2]=(\tr\gamma C)^2+2\tr(\gamma C\gamma C),\qquad \Var(X\T\gamma X)=2\tr((\gamma C)^2);\]
+the factor
+$\frac14$ gives $\frac12\tr((\gamma C)^2)$. The cross term $\Cov(\bm\delta\T X,X\T\gamma X)$ involves third moments of a
+centred Gaussian and vanishes.
+\end{proof}
+Without gamma this is exactly the model-building VaR of \cref{ch08:sec-estimation} with $T=10$, $\beta=0.99$:
+$\mathrm{IM}=2.326\sqrt{10}\sqrt{\bm\delta\T C_1\bm\delta}$ for a daily covariance $C_1$ \ts{24}{10}{39:41}. The
+gamma (convexity) terms are the ``two additional terms'' of the slide: SIMM is ``basically VaR''.
+
+\begin{coursenote}[Caveat on slide~25 of \file{lec10}]
+The slide gives $\mathrm{IM}\approx2.326\sqrt{10}\sqrt{\bm\delta\T C\bm\delta}+\frac12\sqrt{10}\tr(\gamma C)
++\lambda\sqrt{\frac12\tr((\gamma C)^2)}$. Two remarks.
+\begin{itemize}
+  \item Splitting the square root of a sum into a delta term and a
+      curvature term, with a separately calibrated multiplier $\lambda$, is a modelling choice (SIMM treats delta and
+      curvature margins separately), not a consequence of the derivation; moreover $\Delta P$ is not Gaussian, so
+      $\lambda$ absorbs the skew of the quadratic term.
+  \item The time scaling is inconsistent: if $C$ is the \emph{daily}
+      covariance, the 10-day covariance is $10C$, so the mean term is $\frac12\tr(\gamma\,10C)=5\tr(\gamma C)$, not
+      $\frac12\sqrt{10}\tr(\gamma C)$, and the last term scales by $10$, not by $1$. Deltas scale like $\sqrt T$, gammas
+      like $T$.
+\end{itemize}
+\end{coursenote}
+
+\subsection{SIMM in practice}
+The formulation above has too many risk factors (so $C$, $\bm\delta$, $\gamma$ are huge) and $\gamma$ is hard to
+compute. SIMM therefore simplifies further (slides 26--27): curvature is proxied from \emph{vega},
+$\gamma\propto\mathcal V/(T\sigma_N)$; risk factors are grouped into \emph{buckets} (e.g.\ currencies) and \emph{risk
+classes} (IR, FX, equity, commodity, qualifying and non-qualifying credit); sensitivities are delta, vega and
+curvature; the results are aggregated up a tree with prescribed correlations, and the \emph{product classes}
+(rates/FX, credit, equity, commodity) are simply added with no netting between them. Additional terms handle
+thresholds and concentration, and when several regulators apply the posted IM is the maximum over them.
+
+\paragraph{Calibration} \ts{24}{10}{40:43}. The correlations and risk weights, which cover all asset classes, are
+recalibrated on historical data. In the lecture (October 2024) SIMM~2.7, due in early December 2024, was expected to
+be the first calibration without the 2008 or COVID periods in its window, cutting SIMM IM by roughly $5$--$20\%$
+and releasing on the order of $\$40$bn of margin. When the 2020 shocks arrived, the annual calibration made SIMM
+underestimate risk for more than a year; ISDA, which owns the model and runs the calibration with the banks, then
+moved to semi-annual recalibration \ts{24}{10}{1:13:11}.
+
+\paragraph{Large positions} (slide~28). Big positions take longer to unwind, which is liquidity risk again. One
+approach scales the MPOR with the position size, $\Delta T=\Delta T_0\max(1,N/N_0)$; since IM grows like
+$N\sqrt{\Delta T}$, beyond $N_0$ one gets $\mathrm{IM}\propto N^{3/2}$. Another adds a concentration add-on
+$W(\bm\delta)\,\bm\delta\T C\bm\delta$ with $W$ increasing (e.g.\ piecewise linear). Both keep the IM convex in the
+position.
+
+% ==================================================================
+\section{Multilateral optimisation of initial margin}\label{ch08:sec-opt}
+This is the main topic of the 2024 lecture and the business of Quantile.
+
+\subsection{The problem}
+Consider parties $\mathcal P=\{A,B,C,D,E,\dots\}$ (banks) with bilateral portfolios against each other and cleared
+portfolios at one or more CCPs, all posting IM (slide~29) \ts{24}{10}{41:48}. The goal is to find a set of new
+\emph{hedge trades} between pairs of parties that reduces the total IM in the system (slide~30)
+\ts{24}{10}{42:50}. There are no hedge variables with the CCP: one can only book trades between two banks, but if
+the chosen instrument is clearable (a vanilla swap) the trade is cleared and changes the cleared IM instead of the
+bilateral one \ts{24}{10}{43:55}.
+
+\begin{definition}[Margin minimisation problem, slide 31]\label{ch08:def-mmp}
+Let $\mathcal H$ be the set of hedge instruments, $\mathcal M$ the market risk factors, $D^0_{p,q,m}$ the initial
+sensitivity of party $p$'s portfolio facing $q$ to factor $m$, and $D_{h,p,q,m}$ the sensitivity of one unit of hedge
+$h$. The unknowns are the amounts $x_{h,p,q}$ of hedge $h$ that $p$ trades with $q$. Solve
+\begin{align*}
+  \min_{x}\quad & \sum_{p\in\mathcal P}\Bigl(\sum_{q\ne p}\mathrm{SIMM}_{p,q}(D_{p,q})
+                   +\sum_{c\in\mathcal{CCP}}\mathrm{IM}_{p,c}(D_{p,c})\Bigr)\\
+  \text{s.t.}\quad & D_{p,q,m}=D^0_{p,q,m}+\textstyle\sum_{h\in\mathcal H}x_{h,p,q}D_{h,p,q,m} && \forall m\in\mathcal M,\\
+  & x_{h,p,q}=-x_{h,q,p} && \forall h,\ p\ne q \quad\text{(symmetry)},\\
+  & \textstyle\sum_{q}x_{h,p,q}=0 && \forall h,\ p \quad\text{(flatness)},\\
+  & T^-_{p,q,m}\le\textstyle\sum_hx_{h,p,q}D_{h,p,q,m}\le T^+_{p,q,m} && \forall m,\ p\ne q\quad\text{(risk limits)}.
+\end{align*}
+\end{definition}
+The objective is the total margin in the system: bilateral SIMM summed over all pairs, plus cleared IM summed over
+CCPs \ts{24}{10}{43:55}. The new risk is the old risk plus the sum of the hedges times their risk
+\ts{24}{10}{44:59}. The constraints:
+\begin{itemize}
+  \item \textbf{Symmetry}: if $p$ sells something to $q$, $q$ must buy exactly that from $p$. This was the
+        constraint the banks worried about most: telling Goldman to buy 100 from JPMorgan while telling JPMorgan
+        to sell 200 to Goldman would only be discovered when the trade is booked \ts{24}{10}{46:02}.
+  \item \textbf{Flatness} (cash-flow neutrality): whatever $p$ sells to one party it buys from others, so each
+        party's total position in every instrument, and hence its market risk, is unchanged. Only
+        \emph{counterparty} risk is reshuffled, and nobody makes or loses money from the system itself. It is not
+        strictly necessary, but relaxing it makes everything much harder \ts{24}{10}{47:02}.
+  \item \textbf{Risk limits}: each party can bound how much the risk to each factor against each counterparty may
+        change \ts{24}{10}{48:06}.
+\end{itemize}
+
+\begin{coursenote}[Notation on slide~31]
+The slide writes $\mathrm{IM}_{p,ccp}(D_{p,q})$; the argument should be the cleared sensitivity $D_{p,ccp}$. The
+risk update is written for bilateral risk only; for clearable hedge types $h\in\mathcal H_c$ the update goes to the
+CCP, $D_{p,c,m}=D^0_{p,c,m}+\sum_{h\in\mathcal H_c}\sum_qx_{h,p,q}D_{h,m}$, which is how cleared IM enters the
+optimisation \ts{24}{10}{42:50}.
+\end{coursenote}
+
+\subsection{Toy model: the median rule}
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[>=Stealth,every node/.style={font=\small},
+  pt/.style={circle,draw,thick,minimum size=6mm,inner sep=0pt},
+  lab/.style={fill=white,inner sep=1pt,font=\footnotesize}]
+\foreach \dx/\ab/\bc/\ca/\ttl in {0/{-2}/{-9}/{-10}/{initial (margin 21)},
+                                  4.2/{+9}/{+9}/{+9}/{hedges},
+                                  8.4/{7}/{0}/{-1}/{result (margin 8)}}{
+  \begin{scope}[xshift=\dx cm]
+    \node[pt] (A) at (1.2,2.0) {A}; \node[pt] (B) at (0,0) {B}; \node[pt] (C) at (2.4,0) {C};
+    \draw[->,thick,defcol] (A) -- node[lab]{$\ab$} (B);
+    \draw[->,thick,defcol] (B) -- node[lab]{$\bc$} (C);
+    \draw[->,thick,defcol] (C) -- node[lab]{$\ca$} (A);
+    \node at (1.2,-0.7) {\ttl};
+  \end{scope}}
+\node at (3.3,0.9) {\Large $+$};
+\node at (7.5,0.9) {\Large $=$};
+\end{tikzpicture}
+\caption{The toy model of slide~32. An arrow $p\to q$ labelled $x$ means that $p$'s position against $q$ is $x$
+(and $q$'s against $p$ is $-x$). Moving $t=9$ units around the cycle $A\to B\to C\to A$ satisfies symmetry and
+flatness by construction and reduces the total $|x|$ from $2+9+10=21$ to $7+0+1=8$.}\label{ch08:fig-triangle}
+\end{figure}
+
+\begin{proposition}[Median rule for a triangle]\label{ch08:prop-median}
+Three parties, one risk factor, one hedge instrument, bilateral margin proportional to $|$net position$|$ (the
+one-factor SIMM $2.326\sqrt{10}\,\sigma|D|$). Let $a_1,a_2,a_3$ be the initial positions oriented around the cycle
+$A\to B\to C\to A$. Then every hedge satisfying symmetry and flatness adds the same amount $t$ to all three oriented
+edges, and the total margin $\sum_k|a_k+t|$ is minimised at $t=-\operatorname{median}(a_1,a_2,a_3)$.
+\end{proposition}
+\begin{proof}
+Flatness at A gives $x_{AB}+x_{AC}=0$, i.e.\ $x_{AB}=x_{CA}$ by symmetry; at B, $x_{BA}+x_{BC}=0$, i.e.\
+$x_{BC}=x_{AB}$. So $x_{AB}=x_{BC}=x_{CA}=t$. The function $g(t)=\sum_k|a_k+t|$ is convex and piecewise linear with
+slope $\#\{k:a_k+t>0\}-\#\{k:a_k+t<0\}$, which changes sign at $t=-\operatorname{median}(a)$.
+\end{proof}
+In the example of slide~32, $a=(-2,-9,-10)$, the median is $-9$, and moving $9$ units around the triangle turns the
+positions into $(7,0,-1)$, cutting the margin from $21$ to $8$ \ts{24}{10}{48:06}. Any network can be decomposed into
+triangles, and one can think of the optimisation as moving the median around each triangle. Since edges are shared
+between triangles and there are additional constraints, this is only a heuristic and not the real solution method
+\ts{24}{10}{49:07}.
+
+\begin{coursenote}[Erratum: result panel of slide~32]
+In the ``result'' triangle the labels on the A--B edge are $-7$ next to A and $7$ next to B. Adding the ``initial''
+($-2$ at A, $2$ at B) and ``hedges'' ($9$ at A, $-9$ at B) panels gives $+7$ at A and $-7$ at B. The margin, which
+depends only on $|x|$, is unaffected.
+\end{coursenote}
+
+\begin{intuition}[Hedges are circulations on a graph]
+Think of $x_{h,\cdot,\cdot}$ as a \emph{flow} on the complete graph of parties: symmetry says it is an antisymmetric
+edge function, and flatness says its divergence vanishes at every node (Kirchhoff's current law). Divergence-free
+flows are circulations, i.e.\ the cycle space of the graph, of dimension $E-V+1$; for $n$ fully connected parties
+this is $\binom n2-n+1=\binom{n-1}{2}$, spanned by triangles. For a triangle it is one number, the $t$ above. The
+optimisation moves risk around loops without creating or destroying it at any node.
+\end{intuition}
+
+\subsection{Solving it in practice}
+In reality one writes down the problem and hands it to a numerical solver \ts{24}{10}{50:07}. Some lessons:
+\begin{itemize}
+  \item \textbf{Convexity is everything.} Minimising ES is piecewise linear, SIMM is \emph{nearly} convex and
+        concentration add-ons are \emph{potentially} convex (slide~33). Using general non-linear solvers did not
+        work well; it is much easier to approximate the objective by a genuinely convex function and use a mature
+        convex solver. Do not write your own \ts{24}{10}{51:07}. How hard a problem is depends on its structure
+        and sparsity much more than on its size.
+  \item \textbf{Modelling languages} separate the statement of a problem from the numerics. Quantile uses Gurobi;
+        the slide's example is the integer program $\max 5x_1+8x_2$ s.t.\ $x_1+x_2\le5$, $3x_1+7x_2\le25$,
+        $x_i\in\N$, solved in 10\,ms with optimum $31$ at $(3,2)$ \ts{24}{10}{52:08}.
+  \item \textbf{Size.} The FX-delta problem (slide~36): 25 parties, 30 currencies, cleared and uncleared
+        non-deliverable forwards (NDFs), one short maturity, about $18{,}000$ variables ($25\cdot24$ ordered pairs
+        $\times30$ currencies) and $40{,}000$ constraints (pairwise risk limits, pairwise IM-increase limits, notional
+        efficiency, symmetry, flatness, lot sizes), with SIMM plus cleared IM as a convex objective
+        \ts{24}{10}{53:14}. NDFs are chosen because each has exposure to exactly one risk factor, one currency pair.
+  \item \textbf{Linear algebra.} Interior-point methods take Newton steps: they find the zero of the gradient, and
+        each step requires solving with the Hessian, naively $O(n^3)\approx10^{13}$ flops for $n\sim40{,}000$
+        \ts{24}{10}{54:18}. In practice one does far better: the matrix is positive semidefinite (Cholesky), very
+        sparse (well under $0.1\%$ non-zero) and structured. A few global rows (symmetry) and party rows (flatness)
+        sit on top of a block-diagonal part, the $36{,}000$ risk constraints of individual $(p,q)$ pairs, which is
+        purely diagonal when each hedge has one risk factor. This \emph{Dantzig--Wolfe} (block-angular) structure
+        is exploited by the solvers \ts{24}{10}{55:18}.
+  \item \textbf{Presolve} removes redundant rows ($x_1\ge1$ is implied by $x_1\ge2$) and here halved the problem;
+        the barrier method then converged in 58 iterations and 11\,s, thanks to the quadratic convergence of Newton's
+        method \ts{24}{10}{59:29}.
+\end{itemize}
+
+\paragraph{Nearly parallel risks.} The real difficulties are numerical \ts{24}{10}{56:22}. Two trades with almost
+identical risk, e.g.\ exposures $3E$ and $E$ to two risk factors, give nearly singular systems (slide~39):
+\[
+  \begin{pmatrix}1&1\\ \tfrac13&\tfrac13\end{pmatrix}\binom{x_1}{y_1}=\binom{1}{\tfrac13}\ \text{has the solutions } y_1=1-x_1,
+  \quad\text{but}\quad
+  \begin{pmatrix}1&1\\ 0.3333&0.333\end{pmatrix}\binom{x_1}{y_1}=\binom{1}{b}
+\]
+has the unique solution $(0,1)$ for $b=0.333$, $(1,0)$ for $b=0.3333$, and $(-110,111)$ for $b=0.3$
+\ts{24}{10}{57:25}. The determinant is $-3\times10^{-4}$ and the condition number about $7\times10^3$, so rounding in
+the fourth digit moves the solution by $O(1)$ or even by hundreds. With a sign constraint $x_i\ge0$ the last system
+is declared \emph{infeasible} purely because of numerical noise \ts{24}{10}{58:28}. Most of the practical work is
+detecting and removing such situations, not solving convex problems in general.
+
+\paragraph{Results.} On a 5-party and a 20-party system with one risk factor and no constraints, almost all margin
+disappears, and every party ends up either long or short the factor against all its counterparties, never both:
+all risk has been netted (slides 41--42) \ts{24}{10}{1:00:32}. With real constraints (slide~43) the picture is less
+clean. The empty diagonal is ``margin against oneself'', and a block in the middle turned out to be the affiliates
+of one large bank, which do not exchange margin with each other \ts{24}{10}{1:01:35}. A second application
+(slide~44) is interest-rate margin: 15 parties, USD/EUR/GBP, swaptions and cleared swaps, about $5000$ variables
+and $10{,}000$ constraints, where each trade loads on several risk factors (a swap expiring in 12 years is exposed to
+the 10Y and 20Y swap rates).
+
+\subsection{Nice and fair solutions}
+A solution must be \emph{feasible} (all constraints hold) and \emph{optimal} (a good IM saving); in practice it
+must also be \emph{nice} and \emph{fair} \ts{24}{10}{1:02:40}.
+
+\paragraph{Nice.} Traders want round notionals (e.g.\ multiples of a million), few trades (\emph{notional
+efficiency}), trade packages, and possibly more trades moved into CCPs for reasons beyond IM. The worst headache
+came from NDFs: a USD notional and a EUR notional define the FX rate as their ratio, to 15 digits, but banks' booking
+systems keep only 6--8 decimals, so the notionals had to be chosen as round dollar amounts that give exact euro
+amounts at a 4- or 6-decimal rate \ts{24}{10}{1:03:41}. Rounding cannot be done afterwards. If a party sells 8 to one
+counterparty and buys 4 from each of two others, rounding to the nearest 10 gives $10$, $0$, $0$ and breaks
+flatness. Rounding must be part of the optimisation, which makes it a \emph{mixed-integer} problem, much harder:
+the FX rounding step of slide~46 had about $10^4$ integer variables and took about a minute of branch-and-bound
+\ts{24}{10}{1:04:43}.
+
+\paragraph{Fair.} What does fairness mean for an optimiser \ts{24}{10}{1:05:47}? In the four-party example of
+slide~47 three solutions give the same total saving:
+\begin{center}\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+party & scenario 1 & scenario 2 & scenario 3 & single-party best\\
+\midrule
+A & 4 & 0 & 2 & 4\\
+B & 4 & 4 & 4 & 4\\
+C & 4 & 4 & 4 & 4\\
+D & 0 & 4 & 2 & 4\\
+\bottomrule
+\end{tabular}
+\end{center}
+Scenarios 1 and 2 leave one party with nothing; scenario 3 splits the saving, but one could still ask why B and C get
+their full 4 \ts{24}{10}{1:06:47}. One proposal is a two-step algorithm. First optimise for each party alone, keeping
+all constraints, to get the best achievable $\mathrm{IM}_p^{\text{best}}$; then solve
+$\min\sum_p(\mathrm{IM}_p-\mathrm{IM}_p^{\text{best}})^2$ \ts{24}{10}{1:07:53}. Here the squared shortfalls are
+$16$, $16$ and $4+4=8$, so the algorithm picks scenario 3 \ts{24}{10}{1:09:00}. Fairness has no established definition
+yet; Shepherd considers it the most interesting open problem in this area.
+
+\paragraph{Network effect.} Across real runs, both the saving and the saving as a fraction of the initial IM grow with
+the number of participating parties (slide~49): bigger networks benefit everyone \ts{24}{10}{1:10:04}.
+
+\begin{finance}[Optimisation versus compression (not discussed in class)]
+\emph{Portfolio compression} terminates redundant offsetting trades (e.g.\ circles of swaps A--B--C--A) and replaces
+them with fewer trades of smaller gross notional and the same net risk. The IM optimisation of this lecture instead
+\emph{adds} new trades that redistribute risk between pairs of counterparties. Both keep every party's market risk
+unchanged (the flatness constraint) and exploit the same cycle structure of the network.
+\end{finance}
+
+% ==================================================================
+\section{Enterprise-level modelling and martingale tools}\label{ch08:sec-martingale}
+The second half of the 2013 lecture turns to the models behind CVA.
+
+\subsection{Trade-level versus enterprise-level models}
+A \emph{trade-level} model prices each trade independently (PV and Greeks), and the portfolio PV and Greeks are the
+sums: this is what ``derivatives model'' usually means \ts{13}{26}{44:53}. \emph{Enterprise-level} models handle the
+quantities that are \emph{not} linear in the trades: CVA, funding, capital (risk-weighted assets), liquidity
+\ts{13}{26}{45:57}. They must simulate all trades and all market factors of a portfolio consistently, with a proper
+joint distribution, while reusing the trade-level models to value each trade at future dates.
+
+There is also feedback to the trade-level model \ts{13}{26}{47:02}. A cancellable swap facing a counterparty close to
+default has an exercise boundary that ignores counterparty credit; cancelling early reduces or removes the CVA. In
+practice the CVA desk pays the trading desk the CVA saving, which the trade model can take as an input to its
+exercise decision \ts{13}{26}{48:05}.
+
+Putting models together is numerically delicate: some trades are priced by PDE, some by simulation, and a joint
+simulation introduces errors \ts{13}{26}{50:14}. Tang's remedy is built on martingales: the arbitrage-free price of
+every traded quantity is a martingale under a suitable measure, and those conditions can be tested and enforced.
+
+\subsection{Martingale measures and change of numeraire}
+By Harrison and Pliska, if $Y_t$ is the price of a traded asset with no intermediate cash flows and $N_t>0$ is a
+\emph{numeraire} (another such price), then $Y_t/N_t$ is a martingale under the measure $\Prob_N$ associated with
+$N$ \ts{13}{26}{52:18}. The standard pairs (slides 13--15; see \cref{ch:bs,ch:hjm,ch:quanto}) are:
+\begin{center}\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+numeraire & measure & martingale\\
+\midrule
+$\beta(t)=e^{\int_0^tr_u\dd u}$ & risk-neutral $\Q$ & $Y_t/\beta(t)$\\
+$P(t,T)$ (zero-coupon bond) & $T$-forward $\Prob_T$ & forward price $F_Y(t,T)=Y_t/P(t,T)$\\
+$P(t,T_{i+1})$ & $\Prob_{T_{i+1}}$ & forward LIBOR $L_i(t)=\frac{1}{\delta_i}\bigl(\frac{P(t,T_i)}{P(t,T_{i+1})}-1\bigr)$\\
+$A_{i,N}(t)=\sum_{j=i+1}^N\delta_{j-1}P(t,T_j)$ & annuity $\Prob_{A_{i,N}}$ & swap rate $S_{i,N}(t)=\frac{P(t,T_i)-P(t,T_N)}{A_{i,N}(t)}$\\
+$P^D(t,T)$ (domestic) & $\Prob_{T,D}$ & FX forward $F_{FX}(t,T)=\frac{S_{FX}(t)P^F(t,T)}{P^D(t,T)}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The pattern is always the same: write the quantity as a ratio of two traded assets \ts{13}{26}{55:28}. LIBOR is (a
+multiple of) a portfolio of two bonds divided by the bond $P(t,T_{i+1})$ \ts{13}{26}{53:23}; the swap rate is a
+portfolio of two bonds divided by the annuity \ts{13}{26}{54:27}; the FX forward is interest-rate parity, the foreign
+bond converted into domestic currency divided by the domestic bond.
+
+\begin{proposition}[Change of numeraire, slide 16]\label{ch08:prop-numeraire}
+Let $N_1,N_2>0$ be numeraires and $Y_T$ an $\mathcal F_T$-measurable payoff. Then
+\[
+  \E_t^{N_1}[Y_T]=\frac{N_2(t)}{N_1(t)}\;\E_t^{N_2}\!\left[Y_T\,\frac{N_1(T)}{N_2(T)}\right],\qquad
+  \text{i.e.}\quad \left.\frac{\dd\Prob_{N_1}}{\dd\Prob_{N_2}}\right|_{\mathcal F_T}=\frac{N_1(T)/N_1(0)}{N_2(T)/N_2(0)} .
+\]
+\end{proposition}
+\begin{proof}
+The price $X_t$ of the claim paying $X_T=Y_TN_1(T)$ does not depend on the measure used to compute it
+\ts{13}{26}{57:32}:
+$X_t=N_1(t)\E_t^{N_1}[X_T/N_1(T)]=N_2(t)\E_t^{N_2}[X_T/N_2(T)]$. Substitute $X_T$ and divide by $N_1(t)$.
+\end{proof}
+With $N_1=P(\cdot,T_i)$, $N_2=P(\cdot,T_{i+1})$ and $N_1(T)/N_2(T)=1+\delta_iL_i(T)$ for $T\le T_i$:
+$\E_t^{T_i}[Y_T]=\E_t^{T_{i+1}}\bigl[Y_T(1+\delta_iL_i(T))\bigr]/(1+\delta_iL_i(t))$. This is the change of measure
+behind the LIBOR market model \ts{13}{26}{56:29}.
+
+\paragraph{Credit: the survival measure} \ts{13}{26}{58:38}. By analogy with the swap rate one expects the forward
+CDS par spread $\tilde S_j(t,T_i,T_{i+1})$ of name $j$ to be a martingale under a ``risky annuity'' measure. The
+catch is that the risky annuity $\tilde A_j$ (the value per unit spread of the premium leg, which pays only while
+the name survives, i.e.\ a portfolio of zero-recovery defaultable bonds) drops to zero at default, and a numeraire
+must stay positive \ts{13}{26}{59:40}. Sch\"onbucher's solution is to ignore the default states
+\ts{13}{26}{1:00:45}: since $\ind_{\{t<\tau_j\}}\tilde S_j\tilde A_j$ is the value of the premium leg, a traded asset,
+$\ind_{\{t<\tau_j\}}\tilde S_j\tilde A_j/\beta(t)$ is a $\Q$-martingale, and the \emph{survival measure}
+\[
+  \left.\frac{\dd\Prob_{\tilde A_j}}{\dd\Q}\right|_{t}=\frac{\ind_{\{t<\tau_j\}}\tilde A_j(t,T_i,T_{i+1})}{\beta(t)\,\tilde A_j(0,T_i,T_{i+1})}
+\]
+makes $\tilde S_j(t,T_i,T_{i+1})$ a martingale \ts{13}{26}{1:03:55}. $\Prob_{\tilde A_j}$ is absolutely continuous
+with respect to $\Q$ but \emph{not equivalent} (it gives zero mass to default before $t$). One difficulty is traded
+for another, but the second is easier, provided what happens at default is modelled separately
+\ts{13}{26}{1:01:49}.
+
+\subsection{Martingale testing, resampling and interpolation}
+\begin{itemize}
+  \item \textbf{Martingale testing}: check in the numerical implementation that known martingale relations such as
+        $F(s)=\E_s[F(t)]$ hold; usually they fail slightly \ts{13}{26}{1:04:58}.
+  \item \textbf{Martingale resampling}: transform the simulated variables (linearly or log-linearly) so that they
+        satisfy the relations \emph{exactly}, keeping a variance metric fixed. The quadratic resampling of slide~19
+        is $X=\frac{\mathrm{Std}(X)}{\mathrm{Std}(X_0)}\bigl(X_0-\E[X_0]\bigr)+\E[X]$, with $X_0$ the raw simulated values,
+        $\E[X]$ the martingale target and $\mathrm{Std}(X)$ the target dispersion \ts{13}{26}{1:05:59}. This is moment
+        matching, familiar from variance reduction in Monte Carlo.
+  \item \textbf{Martingale interpolation}: models simulate only a few tenors (say 1Y and 5Y LIBOR). Interpolating a
+        missing tenor (3Y) linearly in maturity does \emph{not} preserve the martingale property; interpolating
+        linearly using the time-$s$ values as the independent variable does \ts{13}{26}{1:07:01}.
+\end{itemize}
+
+\begin{proposition}[Martingale interpolation]\label{ch08:prop-mginterp}
+Let $M(\cdot,T_1)$ and $M(\cdot,T_2)$ be martingales, $M(s,T)=\E_s[M(t,T)]$ for $s\le t$, and let the target
+$M(s,T_3)$ be known at a reference time $s$ (e.g.\ $s=0$, from today's curve). Define for $t\ge s$
+\[
+  M(t,T_3)=\frac{M(s,T_3)-M(s,T_2)}{M(s,T_1)-M(s,T_2)}\,M(t,T_1)+\frac{M(s,T_1)-M(s,T_3)}{M(s,T_1)-M(s,T_2)}\,M(t,T_2).
+\]
+Then $\E_s[M(t,T_3)]=M(s,T_3)$ \ts{13}{26}{1:10:06}.
+\end{proposition}
+\begin{proof}
+The weights are $\mathcal F_s$-measurable and sum to $1$. Taking $\E_s$ replaces $M(t,T_k)$ by $a_k=M(s,T_k)$, giving
+$\bigl[(a_3-a_2)a_1+(a_1-a_3)a_2\bigr]/(a_1-a_2)=a_3$ \ts{13}{26}{1:11:10}.
+\end{proof}
+Equivalently, $M(t,T_3)$ is read off the straight line through the points $(a_1,M(t,T_1))$ and $(a_2,M(t,T_2))$ at the
+abscissa $a_3$: linear interpolation with the ``right'' independent variable.
+
+\paragraph{The LIBOR market model} \ts{13}{26}{1:12:13}. Martingale modelling proceeds in three steps: find the
+measure under which a quantity is a martingale, represent the martingale as a stochastic integral (log-normal, CEV or
+stochastic volatility), then change to a common measure \ts{13}{26}{1:13:17}. For forward LIBORs,
+$\dd L_i/L_i=\lambda_i(t)\dd W_t^{T_{i+1}}$ under $\Prob_{T_{i+1}}$. Under the terminal measure $\Prob_{T_N}$ (slide~20),
+\[
+  \frac{\dd L_i(t)}{L_i(t)}=-\sum_{j=i+1}^{N-1}\frac{\lambda_i\lambda_j\delta_jL_j(t)}{1+\delta_jL_j(t)}\,\rho_{ij}\dd t
+  +\lambda_i\dd W_t^{T_N,L_i},\qquad \rho_{ij}=\Corr\bigl(\dd\ln L_i,\dd\ln L_j\bigr),
+\]
+the full-dimensional model with one Brownian motion per LIBOR and the correlations as inputs \ts{13}{26}{1:15:33}.
+The drift follows from \cref{ch08:prop-numeraire} and Girsanov's theorem (\cref{ch:stochcalc}); interest-rate models
+of this kind are the subject of \cref{ch:hjm}.
+
+% ==================================================================
+\section{Closing remarks of the 2013 course}\label{ch08:sec-closing}
+
+\begin{coursenote}[Tang's conclusion and the end of 18.S096 (2013)]
+Tang, who presented from New Jersey because snow had grounded his flight \ts{13}{26}{0:00}, concluded that banks need
+enterprise-level models for the non-linear portfolio effects (CVA, funding, liquidity, capital), built on top of
+trade-level models with martingale testing, resampling and interpolation. These risks have received much more
+attention since the crisis \ts{13}{26}{1:16:34}.
+
+The instructors then closed the course \ts{13}{26}{1:17:37}. A list of past final-paper topics was on the course site:
+mostly Black--Scholes, its extensions and manipulations of the Black--Scholes equation, one statistical analysis of
+commodity data (recommended as a direction), and numerical and Monte Carlo projects. Students were asked to reflect
+on what they had learned and on what they would like to explore next. P.~Kempthorne described the course as
+deliberately challenging, meant to give both the mathematical foundations and a real exposure to their applications
+through practitioners; he said the final papers he had read so far were good and that the faculty wanted to remain
+a resource after the course \ts{13}{26}{1:19:45}. The class would be repeated the following fall in a slightly
+different form, students were invited to suggest topics (one value of the course being access to speakers from the
+frontier of the industry), and to fill in the course review \ts{13}{26}{1:20:45}.
+\end{coursenote}
+
+\begin{coursenote}[2013 versus 2024]
+The two lectures reflect a decade of regulation. In 2013 many OTC trades were uncollateralised, and the focus was
+pricing and hedging CVA, DVA and funding at portfolio level. By 2024 standard swaps are centrally cleared and
+bilateral trades between banks carry daily VM and regulatory IM, so counterparty risk is managed mainly through
+collateral: the questions are how much margin (a VaR/ES) and how to reduce it (optimisation), and the cost of
+counterparty risk has partly turned into the cost of funding margin. Both speakers stress the same point: the
+relevant quantities are non-linear functions of the \emph{whole} portfolio, or even the whole network.
+\end{coursenote}
+
+\begin{coursenote}[Reading suggested on the slides]
+2024: S.~Boyd and L.~Vandenberghe, \emph{Convex Optimization} (the slide misspells the first name as ``Steven'');
+J.~Gregory, \emph{The xVA Challenge}; J.~Hull, \emph{Risk Management and Financial Institutions}; Artzner et al.\
+(1999) on coherent risk measures; Rockafellar and Uryasev on optimising CVaR; the BCBS--IOSCO margin framework and
+the ISDA SIMM~2.6 methodology; Embrechts and Wang, ``Seven proofs for the subadditivity of expected shortfall'';
+``Subadditivity re-examined: the case for Value-at-Risk''. 2013: Harrison--Kreps (1979), Harrison--Pliska (1981),
+Jamshidian (1997) on LIBOR and swap market models, Sch\"onbucher (2003) on survival measures, Tang and Li (2007),
+Tang and Williams (2010) on funding benefit and cost, Zhu and Pykhtin (2007), ``A guide to modeling counterparty
+credit risk''.
+\end{coursenote}
+
+% ==================================================================
+\begin{keyformulas}
+\begin{align*}
+&\text{Exposure:} && E(t)=(V(t)-C(t))^+,\\
+& && \mathrm{EE}(t)=\E[E(t)],\quad
+  \textstyle(\sum_iV_i)^+\le\sum_iV_i^+\\
+&\text{CVA:} && \mathrm{CVA}=-\E^{\Q}\bigl[\ind_{\{\tau\le T\}}(1-R)
+  (V_{\tau-}-C_{\tau-})^+/\beta_\tau\bigr]
+  \approx-\mathrm{EPE}\cdot s\cdot D\\
+&\text{DVA:} && \mathrm{DVA}=\E^{\Q}\bigl[\ind_{\{\bar\tau\le T\}}(1-\bar R)
+  (C_{\bar\tau-}-V_{\bar\tau-})^+/\beta_{\bar\tau}\bigr]\\
+&\text{VaR, ES:} && \mathrm{VaR}_\beta=\inf\{\ell:\Prob(L\le\ell)\ge\beta\},\\
+& && \mathrm{ES}_\beta=\tfrac1{1-\beta}\textstyle\int_\beta^1\mathrm{VaR}_u\dd u\\
+&\text{Normal:} && \mathrm{VaR}_\beta=\mu+z_\beta\sigma,\\
+& && \mathrm{ES}_\beta=\mu+\sigma\varphi(z_\beta)/(1-\beta),\\
+& && \sigma_P^2=\bm\delta\T C\bm\delta\\
+&\text{Time scaling:} && \text{factor }\sqrt{T+2\textstyle\sum_{k=1}^{T-1}(T-k)\rho^k}\\
+& && (\sqrt T\text{ if }\rho=0)\\
+&\text{Back-test:} && \Prob(N\ge m)=\textstyle\sum_{k\ge m}\binom nkp^k(1-p)^{n-k}\\
+&\text{Rockafellar--Uryasev:} && \mathrm{ES}_\beta=\min_\alpha\bigl\{\alpha+\tfrac{1}{1-\beta}\E[(L-\alpha)^+]\bigr\}\\
+&\text{Delta--gamma IM:} && \E\Delta P=\tfrac12\tr(\gamma C),\\
+& && \Var\Delta P=\bm\delta\T C\bm\delta+\tfrac12\tr((\gamma C)^2)\\
+&\text{Margin optim.:} && \min\textstyle\sum_p\bigl(\sum_q\mathrm{SIMM}_{p,q}
+  +\sum_c\mathrm{IM}_{p,c}\bigr),\\
+& && x_{h,p,q}=-x_{h,q,p},\ \sum_qx_{h,p,q}=0\\
+&\text{Change of numeraire:} && \E_t^{N_1}[Y_T]=\tfrac{N_2(t)}{N_1(t)}
+  \E_t^{N_2}\bigl[Y_TN_1(T)/N_2(T)\bigr]
+\end{align*}
+\end{keyformulas}
+
+% ==================================================================
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[Tang's puzzle with collateral (not from the course)]
+Redo the puzzle of \cref{ch08:sec-cva} (value $0\to+100$, default with $R=50\%$) when the trade is under a CSA with
+daily VM and zero threshold, the counterparty stops paying VM at default, and the value moves from $100$ to $104$
+during a 10-day MPOR. What is the loss with and without an initial margin of $5$? What part of the original $\$50$M
+loss does VM remove, and what part does IM remove?
+\end{exercise}
+
+\begin{exercise}[Netting and correlation (not from the course)]
+Two trades with the same counterparty have values $V_1,V_2\sim N(0,\sigma^2)$ at time $t$, with correlation $\rho$, and
+there is no collateral.
+\begin{enumerate}[(a)]
+  \item Compute $\mathrm{EE}$ with and without netting and show that the ratio is
+      $\sqrt{(1+\rho)/2}$.
+  \item What happens for $\rho=-1$ and $\rho=1$?
+  \item Explain why the CVA of a new trade depends on the
+      existing portfolio (the ``incremental CVA'').
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[CVA from exposure (not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Derive \cref{ch08:prop-cvaee} and the approximation \eqref{ch08:eq-cvabote}.
+  \item For the exposure profile
+      $\mathrm{EE}(t)=\sigma\sqrt t(1-t/T)/\sqrt{2\pi}$ of \cref{ch08:fig-exposure}, with $r=0$ and constant hazard rate $h$,
+      compute CVA to first order in $h$ and compare with $\mathrm{EPE}\cdot s\cdot T$.
+  \item Explain qualitatively how wrong-way
+      risk changes the result.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[VaR is not subadditive (not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Verify all the numbers of the A, B, A+B example (VaR and ES at $95\%$).
+  \item Replace the $4\%$ loss probability by
+      $p$ and find the range of $p$ for which $\mathrm{VaR}_{0.95}(A+B)>\mathrm{VaR}_{0.95}(A)+\mathrm{VaR}_{0.95}(B)$.
+  \item Show that for jointly normal losses VaR is subadditive at any $\beta\ge\frac12$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Normal model and FRTB (not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Prove \cref{ch08:prop-normal}.
+  \item Find the confidence level $\beta'$ at which the normal ES equals the normal
+      $99\%$ VaR, and compare it with the $97.5\%$ used by FRTB.
+  \item With $\bm\delta=(3000,4000,2000,1000)$ and the covariance
+      matrix of slide~16 (rows $(1.02,0.97,0.80,0.94)$, $(0.97,1.08,0.82,0.96)$, $(0.80,0.82,0.89,0.76)$,
+      $(0.94,0.96,0.76,0.96)$, all $\times10^{-4}$), reproduce $\sigma_P=96.6$, $\mathrm{VaR}=225$, $\mathrm{ES}=257$, and
+      compute the 10-day values with and without the autocorrelation correction for $\rho=0.1$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Back-testing (not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Compute $\Prob(N\ge12)$ for $N\sim\mathrm{Bin}(500,0.01)$ exactly and with the Poisson approximation.
+  \item Find the
+      largest number of exceptions accepted at the $5\%$ level.
+  \item Why is the in-sample back-test of the example biased in
+      favour of the model?
+  \item Explain why a single observed loss cannot ``test'' an ES forecast, and propose a test that
+      uses the ES forecasts and realised losses of many days.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[ES as a linear program (not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Complete the proof of \cref{ch08:thm-ru} for a discrete distribution with $S$ equally likely scenarios, taking
+      $\beta S$ to be an integer, and check that $\min_\alpha F$ is the average of the $(1-\beta)S$ largest losses.
+  \item Write the LP that minimises the $97.5\%$ ES of a long-only fully invested portfolio of the four indices over the
+      500 historical scenarios of 2022--2023.
+  \item Why can the same trick not be used for VaR?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Delta--gamma margin (not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Prove $\Var(X\T\gamma X)=2\tr((\gamma C)^2)$ for $X\sim N(0,C)$ and symmetric $\gamma$.
+  \item One risk factor with
+      daily variance $c$, delta $\delta$ and gamma $\gamma$: write mean and variance of the 10-day $\Delta P$ and check how each
+      term scales with the horizon.
+  \item For a short option position ($\gamma<0$ in the value to the surviving party) discuss
+      whether the normal approximation over- or underestimates the $99\%$ quantile.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Toy margin optimisation (not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Four parties on a cycle $A\to B\to C\to D\to A$ with oriented positions $a=(3,-5,8,-1)$: find the optimal
+      circulation $t$ and the margin saving.
+  \item Now add the chord A--C with position $2$: parametrise all hedges satisfying
+      symmetry and flatness (the cycle space has dimension $2$) and minimise the total $\sum|x|$.
+  \item For the fairness table
+      of \cref{ch08:sec-opt}, check the least-squares criterion and propose a different fairness criterion (e.g.\ max--min
+      of relative savings) that gives a different answer on some example.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Rounding and integrality (not from the course)]
+For the Gurobi example, $\max 5x_1+8x_2$ subject to $x_1+x_2\le5$, $3x_1+7x_2\le25$, $x_1,x_2\ge0$:
+\begin{enumerate}[(a)]
+  \item solve the LP
+      relaxation (optimum $32.5$ at $(2.5,2.5)$);
+  \item show that rounding the LP solution gives either an infeasible point or a
+      poor one;
+  \item find the integer optimum $31$ by enumeration. Relate this to the rounding of notionals in
+      \cref{ch08:sec-opt}.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Nearly parallel risks (not from the course)]
+For $A_\varepsilon=\bigl(\begin{smallmatrix}1&1\\ 1/3+\varepsilon&1/3\end{smallmatrix}\bigr)$ solve $A_\varepsilon(x,y)\T=(1,b)\T$
+and show that $x=(b-1/3)/\varepsilon$. Compute the condition number of $A_\varepsilon$ for small $\varepsilon$ and explain the
+three solutions of slide~39. How would you regularise the problem (e.g.\ a small penalty $\eta\|x\|^2$)?
+\end{exercise}
+
+\begin{exercise}[Change of numeraire (not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Prove \cref{ch08:prop-numeraire} and deduce that $L_i(t)$ is a $\Prob_{T_{i+1}}$-martingale.
+  \item Show that the swap
+      rate $S_{i,N}(t)$ is a martingale under the annuity measure and that it is a weighted average of forward LIBORs with
+      weights $\delta_jP(t,T_{j+1})/A_{i,N}(t)$.
+  \item Verify \cref{ch08:prop-mginterp} and show by an example that ordinary
+      linear interpolation in maturity $T$ is not a martingale in general.
+\end{enumerate}
+\end{exercise}

@@ -1,0 +1,520 @@
+% !TEX root = ../main.tex
+\chapter{Data Science and AI for Biomedical Portfolios}\label{ch:biomed}
+
+\begin{sources}
+\small
+\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+\textbf{Lecture} & \textbf{Speaker} & \textbf{Content}\\
+\midrule
+2024 L18 & A.~W.~Lo (MIT Sloan; guest) & Biomedicine at an inflection point (gene therapy); the ``valley of death''; risk versus uncertainty; Sharpe ratio and the Madoff example; one anti-cancer drug as an investment; a portfolio of 150 independent projects; rare diseases, correlation and BridgeBio; a fusion ``mega fund''; questions (patents, expertise, COVID-19 vaccines).\\
+\bottomrule
+\end{tabularx}
+
+\smallskip
+\textbf{Files.} Transcript only: \file{Lecture 18 - Applying Data Science and Artificial Intelligence to Managing Biomedical Portfolios.txt}. The same text exists as
+\file{18642-lecture-18-version-5_transcript.pdf} in \file{18.642-fall-2024/static_resources}. There are no slides, no
+problem set and no other file for this lecture; everything said about the slides below is therefore unknown, and the
+chapter is built on the spoken text.
+\textbf{Problem sets.} None. The exercises at the end are all \emph{not from the course}.
+\textbf{Not from the lecture.} Every derivation marked ``Reconstruction'' (correlated projects, binomial and
+beta-binomial counts, securitisation, ML for trial success) is my own mathematics behind the numbers quoted by
+Lo; the numerics were checked by a short Python script. The 2024 L1 slides list a past final-project paper,
+\emph{A Megafund Approach to Pediatric Oncology Drug Development}, which uses exactly this framework.
+\end{sources}
+
+\section*{Motivation}
+Prof.\ Lo is a financial economist (director of the MIT Laboratory for Financial Engineering, principal investigator
+at CSAIL) \ts{24}{18}{0:00}\ts{24}{18}{2:07}. His message is not about biology: it is that a \emph{financing structure} can change the
+risk--reward profile of an investment, and that the required mathematics is a few lines of probability. A single
+drug-development project is a lottery ticket that nobody wants: costly, slow, and very likely to fail. A
+portfolio of many such tickets whose outcomes are only weakly correlated has a much better ratio of expected
+return to risk, and that is what makes it fundable. The chapter follows the lecture and then adds the
+mathematics that the lecture only quotes:
+\begin{itemize}
+  \item the Sharpe ratio as the quantity to be raised, and the two ways to raise it (\cref{ch12:sec-sharpe});
+  \item the single-project calculation with its numbers, and the $\sqrt N$ law for independent projects
+        (\cref{ch12:sec-single,ch12:sec-portfolio});
+  \item \emph{what breaks when projects are correlated}: the variance of a sum, the diversification limit,
+        counts of successes, and parameter uncertainty as a hidden common factor
+        (\cref{ch12:sec-corr,ch12:sec-counts}); this is the point the lecturer stresses with rare diseases and
+        with the fusion question;
+  \item a sketch of securitisation (debt and equity tranches) and of predicting trial success from data
+        (\cref{ch12:sec-tranche,ch12:sec-ml});
+  \item the second example of the lecture, fusion energy, and a numerical erratum (\cref{ch12:sec-fusion}).
+\end{itemize}
+Portfolio variance is developed in general in \cref{ch:portfolio}; the covariance formula for sums is in
+\cref{ch:probability}.
+
+% ==================================================================
+\section{The setting: a valley of death}\label{ch12:sec-setting}
+
+The lecture opens with two clinical stories, both single-gene diseases treated by a one-time gene therapy
+(a correct copy of the gene is carried by a virus into the cells): Leber's congenital amaurosis, a blindness
+caused by one DNA ``typo'' \ts{24}{18}{4:07}, and Canavan disease, in which the myelin insulation of nerve
+cells degrades and children rarely live beyond about ten years \ts{24}{18}{6:13}\ts{24}{18}{9:19}. Lo uses them, together with
+the ``convergence'' of life sciences, physical sciences and engineering and the various ``omics''
+\ts{24}{18}{13:36}, to argue that science is advancing fast. The bottleneck he identifies is \emph{economics}
+\ts{24}{18}{14:39}.
+
+The specific obstacle is the \emph{valley of death}: the gap between academic experiments and the first
+human clinical trials, where money is hard to raise \ts{24}{18}{15:42}. He explains it with the distinction, familiar in economics, between
+\begin{itemize}
+  \item \emph{risk}: randomness whose probability law can be parametrised (normal, gamma, $\chi^2$), and
+  \item \emph{uncertainty}: ``unknown unknowns'', with no data from which to assess probabilities
+        \ts{24}{18}{16:47}.
+\end{itemize}
+Drug development has three features that investors must digest: it costs hundreds of millions to billions
+of dollars per approved drug, the probability of success is low, and the process takes 10 to 15 years
+\ts{24}{18}{17:50}. Compared with writing an app, all three are extreme.
+
+\begin{intuition}[Risk versus uncertainty, in physicist's terms]
+Risk is a stochastic model with known parameters (a Hamiltonian with a heat bath at known temperature);
+uncertainty is not knowing the Hamiltonian. \cref{ch12:sec-counts} shows that the two are not unrelated:
+uncertainty about a parameter that all projects share acts exactly like a common random field coupling them,
+and it limits diversification just as correlation does.
+\end{intuition}
+
+% ==================================================================
+\section{Sharpe ratio: what investors want}\label{ch12:sec-sharpe}
+
+Lo's classroom exercise shows four cumulative-return curves, unnamed, from 2008 onward, and asks which one
+to choose \ts{24}{18}{18:54}\ts{24}{18}{19:59}. The four assets are revealed as Treasury bills
+(safe, about zero real return), the S\&P~500, Pfizer, and the Fairfield Sentry fund, the feeder of Madoff's
+Ponzi scheme, which was chosen by most because it looked like the best trade-off \ts{24}{18}{20:04}\ts{24}{18}{21:04}. The moral
+is that investors want a high expected return per unit of risk, formalised by the Sharpe ratio.
+
+\begin{definition}[Sharpe ratio]\label{ch12:def-sharpe}
+For an investment with return $R$, risk-free return $r_f$ over the same horizon, the \emph{Sharpe ratio} is
+\[
+  \mathrm{SR}=\frac{\E[R]-r_f}{\sqrt{\Var R}}.
+\]
+\end{definition}
+The lecture quotes $\mathrm{SR}\approx0.33$ for the S\&P~500 and $0.34$ for Pfizer, and an ``order of magnitude
+higher'' figure, on paper, for the Ponzi scheme \ts{24}{18}{22:07}. Lo adds that the Sharpe ratio of
+biomedical investing has been declining for decades, not because the numerator is unattractive but
+because risk and uncertainty grow faster as the science becomes more sophisticated \ts{24}{18}{23:07}.
+
+There are, jokes Lo, two ways to increase a ratio: raise the numerator or lower the denominator
+(or both) \ts{24}{18}{24:11}. Better science and engineering act on both. What is under-used in biomedicine is
+\emph{new financing and business models}, and this is where mathematicians can contribute: constructing
+structures whose risk--reward trade-off differs from that of the underlying assets
+\ts{24}{18}{25:14}.
+
+\begin{finance}[Why the Madoff curve fooled people]
+A smooth, upward curve has a tiny sample standard deviation, so its Sharpe ratio is enormous; a Sharpe ratio
+that looks too good is itself a warning sign. In the lecture the point is behavioural (``we all want
+high-yielding, low-risk assets'') and it sets up the target: not a lottery ticket, but a pooled structure with a
+respectable Sharpe ratio \ts{24}{18}{22:07}.
+\end{finance}
+
+% ==================================================================
+\section{One anti-cancer drug as an investment}\label{ch12:sec-single}
+
+Lo poses the question as a fund. Raise \$200 million, wait 10 years, and with probability $95\%$ return nothing
+\ts{24}{18}{25:14}. The back-of-the-envelope numbers for an oncology project are \ts{24}{18}{26:19}\ts{24}{18}{27:22}:
+\begin{itemize}
+  \item cost of the clinical trials: about \$200 million, up front;
+  \item 10 years to complete them;
+  \item probability of success: a bit under $5\%$ historically ($3.4\%$ in oncology), rounded to $p=5\%$;
+  \item if successful, revenues of \$2 billion per year in years 11--20 (the patent lifetime is 20 years, so the
+        exclusivity runs until then), equivalent to a single payment of \$12.3 billion in year~10.
+\end{itemize}
+The equivalence is a present-value computation (\cref{sec:discounting}). The lecture does not state the discount
+rate, but the numbers are reproduced by $r=10\%$:
+\begin{equation}\label{ch12:eq-annuity}
+  2\times\sum_{k=1}^{10}\frac{1}{1.1^{\,k}}=2\times\frac{1-1.1^{-10}}{0.1}=2\times6.1446=12.29\approx12.3
+  \quad\text{(billion, at year 10).}
+\end{equation}
+(This is a \emph{Reconstruction}: only the \$12.3 billion is quoted.)
+
+\begin{example}[Reconstruction: mean and volatility of the single project]\label{ch12:ex-single}
+Let $G$ be the gross ten-year return, $G=12.3/0.2=61.5$ with probability $p=0.05$ and $0$ otherwise. Then
+\[
+  \E G=pG_0=3.075,\qquad \Var G=G_0^2\,p(1-p),\qquad \sqrt{\Var G}=61.5\sqrt{0.0475}=13.40,
+\]
+with $G_0=61.5$. The annualised expected return is $3.075^{1/10}-1\approx11.9\%$, the ``about $12\%$'' of the lecture. The
+annualised standard deviation, obtained by scaling the ten-year standard deviation by $\sqrt{10}$, is
+$13.40/\sqrt{10}=4.24$, that is $424\%$, the ``$423.5\%$'' of the lecture \ts{24}{18}{28:23} (the small
+difference comes from rounding of the inputs). The Sharpe ratio with $r_f\approx0$ is $0.12/4.24\approx0.03$,
+``close to zero'': hardly anyone would invest.
+\end{example}
+Lo's conclusion is that few investors take this bet \ts{24}{18}{28:23}. The scaling $\sqrt{10}$ used for the
+volatility is the usual rule for independent yearly increments; how the expected return is annualised is a convention
+(the simple average $207.5\%/10\approx21\%$ would give another number), so the pair $(12\%,423.5\%)$ is best taken as
+the lecturer's stated input to the next step.
+
+% ==================================================================
+\section{A portfolio of independent projects}\label{ch12:sec-portfolio}
+
+Instead of one project, invest in $N=150$ at once: this needs $150\times\$200\text{M}=\$30$ billion, a sum that
+Lo defers (``assume we have it'') \ts{24}{18}{29:26}. If the projects are independent and identically distributed
+the expected return of the portfolio equals that of each project, while
+the standard deviation is divided by $\sqrt N$: $423.5\%/\sqrt{150}=34.6\%$ \ts{24}{18}{30:30}. The Sharpe ratio is
+then about $12\%/34.6\%\approx0.35$, ten times the single-project value.
+
+\begin{proposition}[Reconstruction: equal-weight portfolio of $N$ i.i.d.\ projects]\label{ch12:prop-iid}
+Let $R_1,\dots,R_N$ be i.i.d.\ with mean $\mu$ and variance $\sigma^2$ (returns per dollar invested) and let
+$R_P=\frac1N\sum_i R_i$. Then $\E R_P=\mu$, $\Var R_P=\sigma^2/N$ and $\mathrm{SR}_N=\sqrt N\,\mathrm{SR}_1$.
+\end{proposition}
+\begin{proof}
+Linearity of $\E$ gives the mean. For the variance, independence gives
+$\Var\bigl(\sum_iR_i\bigr)=\sum_i\Var R_i=N\sigma^2$, and dividing the sum by $N$ divides the variance by $N^2$.
+\end{proof}
+With the numbers of \cref{ch12:ex-single}: $\mathrm{SR}_1=0.0283$, $\mathrm{SR}_{150}=0.0283\sqrt{150}=0.347$.
+Lo phrases the step as ``the variance of the sum is the sum of the variances'' and ``the risk goes down by the square
+root of the number of projects''; the second phrase refers to the standard deviation \ts{24}{18}{29:26}\ts{24}{18}{30:30}.
+
+\begin{intuition}[Central-limit bookkeeping]
+Ten thousand independent spins have relative fluctuations of order $10^{-2}$ of their mean: this is the same
+$1/\sqrt N$ law that makes pressure well defined. The economics of ``a \$30 billion fund'' is the statement that
+the fund is a large-$N$ system whose fluctuations are small, provided the couplings between the components are
+small; the rest of the chapter is about that proviso.
+\end{intuition}
+
+Lo then asks where \$30 billion would come from, and answers that if the fund is attractive enough, small
+investors can supply it in aggregate (part of a retirement account or of a summer-internship salary)
+\ts{24}{18}{30:30}. This is the second half of the strategy: the same mathematics that makes the fund attractive
+also justifies broad retail participation, and \cref{ch12:sec-tranche} sketches how such capital can be
+structured.
+
+% ==================================================================
+\section{Correlation: the real constraint}\label{ch12:sec-corr}
+
+The i.i.d.\ assumption is flagged by Lo himself (``I'll come back to that assumption later'')
+\ts{24}{18}{29:26}. He returns to it with \emph{rare diseases} \ts{24}{18}{31:30}. There are roughly $12{,}000$
+of them, each with a small patient population, but more than 30 million Americans are affected in
+aggregate. Development is comparatively cheap because trials can be small (he mentions a
+Leber's-amaurosis approval on 30--40 patients) and the target is a known gene \ts{24}{18}{32:31}\ts{24}{18}{33:36}. Above all
+the diseases are so different that the successes and failures of different programmes are barely
+correlated. To see why this matters, recall the variance of a sum.
+
+\begin{proposition}[Variance of a portfolio of $N$ correlated projects]\label{ch12:prop-corr}
+Let $R_1,\dots,R_N$ have common variance $\sigma^2$ and common pairwise correlation $\rho$. Then
+\begin{equation}\label{ch12:eq-varcorr}
+  \Var R_P=\frac{1}{N^2}\Bigl(\sum_i\Var R_i+\sum_{i\neq j}\Cov(R_i,R_j)\Bigr)
+  =\sigma^2\Bigl(\frac1N+\frac{N-1}{N}\,\rho\Bigr),
+\end{equation}
+so that
+\begin{equation}\label{ch12:eq-sharpecorr}
+  \mathrm{SR}_N=\frac{\mathrm{SR}_1}{\sqrt{\,1/N+(1-1/N)\rho\,}}\ \xrightarrow[N\to\infty]{}\ \frac{\mathrm{SR}_1}{\sqrt\rho}.
+\end{equation}
+\end{proposition}
+\begin{proof}
+The double sum $\sum_{i\neq j}$ has $N(N-1)$ ordered pairs, each equal to $\rho\sigma^2$. Hence
+$\Var R_P=\frac{1}{N^2}\bigl(N\sigma^2+N(N-1)\rho\sigma^2\bigr)$, which is~\eqref{ch12:eq-varcorr}.
+The Sharpe ratio uses the same expected return, whence~\eqref{ch12:eq-sharpecorr}.
+\end{proof}
+This is the statement of the lecture: with $N$ projects there are $N(N-1)/2$ pairwise covariances, ``a lot of them'',
+and in a typical investment portfolio they are almost all positive \ts{24}{18}{33:36}\ts{24}{18}{34:38}. Only when they vanish
+does the risk fall as $1/\sqrt N$. The relevant limit of \eqref{ch12:eq-varcorr} is the
+\emph{undiversifiable} floor $\sigma^2\rho$: no number of projects removes the common component.
+
+\begin{table}[ht]
+\centering\small
+\caption{Reconstruction: standard deviation and Sharpe ratio of an equal-weight portfolio for the single-project
+inputs of \cref{ch12:ex-single} (mean $12\%$, standard deviation $423.5\%$, $r_f=0$), computed from
+\eqref{ch12:eq-varcorr}.}\label{ch12:tab-corr}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+& \multicolumn{2}{c}{$N=15$} & \multicolumn{2}{c}{$N=150$}\\
+\cmidrule(lr){2-3}\cmidrule(l){4-5}
+$\rho$ & std.\ dev. & SR & std.\ dev. & SR\\
+\midrule
+$0$    & $109\%$ & $0.11$ & $34.6\%$ & $0.35$\\
+$0.01$ & $117\%$ & $0.10$ & $54.6\%$ & $0.22$\\
+$0.02$ & $124\%$ & $0.10$ & $69.0\%$ & $0.17$\\
+$0.05$ & $143\%$ & $0.08$ & $100\%$ & $0.12$\\
+$0.10$ & $169\%$ & $0.07$ & $138\%$ & $0.09$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.82\linewidth,height=6.2cm,xmode=log,xlabel={number of projects $N$},
+  ylabel={Sharpe ratio $\mathrm{SR}_N$},xmin=1,xmax=1000,ymin=0,ymax=1.0,
+  legend pos=north west,legend cell align=left,legend style={font=\footnotesize},grid=both,
+  grid style={black!10},samples=50,domain=1:1000,every axis plot/.append style={thick}]
+\addplot[defcol]{0.0283*sqrt(x)};
+\addlegendentry{$\rho=0$}
+\addplot[thmcol]{0.0283/sqrt(1/x+(1-1/x)*0.02)};
+\addlegendentry{$\rho=0.02$}
+\addplot[fincol]{0.0283/sqrt(1/x+(1-1/x)*0.05)};
+\addlegendentry{$\rho=0.05$}
+\addplot[intcol]{0.0283/sqrt(1/x+(1-1/x)*0.2)};
+\addlegendentry{$\rho=0.2$}
+\end{axis}
+\end{tikzpicture}
+\caption{Reconstruction: Sharpe ratio of an equal-weight portfolio of $N$ projects with pairwise correlation $\rho$,
+from \eqref{ch12:eq-sharpecorr} with $\mathrm{SR}_1=0.0283$. For $\rho=0$ it grows as $\sqrt N$; for $\rho>0$ it saturates
+at $\mathrm{SR}_1/\sqrt\rho$.}\label{ch12:fig-sharpe}
+\end{figure}
+
+\begin{coursenote}[How many projects, how much money?]
+Lo's claim is that because rare-disease programmes are nearly uncorrelated, one needs ``10 or 20''
+projects rather than 150, hence \$400--500 million rather than \$30 billion \ts{24}{18}{34:38}. That is not obtained by scaling the
+\$200 million per project of the oncology example: 15 such projects would cost \$3 billion. It also assumes that rare-disease
+projects are cheaper and have a different profile than the oncology numbers used above, which the lecture does
+not quantify. The reported input is a Monte Carlo simulation with industry numbers published in his paper,
+giving about $22\%$ per year and a Sharpe ratio above~1 \ts{24}{18}{35:38}; the parameters are not in the
+lecture, so \cref{ch12:tab-corr} should \emph{not} be read as a reproduction of that result: with the oncology
+inputs and $N=15$ a Sharpe ratio of $0.11$ is all one gets, even with independence.
+\end{coursenote}
+
+\begin{finance}[The BridgeBio story]\label{ch12:fin-bridge}
+A former student of Lo (a biotech venture capitalist) reran the simulations with his own parameters,
+then with further modifications; they ran about 35 versions over six months, after which he quit his job to
+found a company \ts{24}{18}{36:43}. BridgeBio Pharma came out of stealth in 2017 with a private-equity investor
+(KKR) taking part in a biotech for the first time; it raised about \$40 million after a friends-and-family round,
+then \$135 million, then \$300 million (about \$400--500 million in total), had about 15 projects, went public and raised a further
+\$750 million, and traded at about \$4.6 billion of market capitalisation on the day of the lecture
+\ts{24}{18}{37:45}\ts{24}{18}{38:48}. By his account about 20 projects were in the clinic, two drugs had been approved in 2021
+and the Canavan gene therapy shown earlier belongs to the company \ts{24}{18}{39:52}. Lo's remark, worth
+keeping: finance cannot turn a bad drug into a good one, but the wrong financing can destroy a good one; science
+comes first \ts{24}{18}{41:57}. (Facts about the company are as stated in class; they were not checked.)
+\end{finance}
+
+% ==================================================================
+\section{Counting successes}\label{ch12:sec-counts}
+
+For a project financed at year 0 the natural random variable is a Bernoulli success indicator
+$X_i\in\{0,1\}$ with $\Prob(X_i=1)=p$. This section is a \emph{Reconstruction} (not from the course) of what
+the number of successes looks like when the indicators are independent or correlated.
+
+\paragraph{Independent projects.}
+$K=\sum_iX_i\sim\mathrm{Bin}(N,p)$. The probability of at least one success is $1-(1-p)^N$: with $p=5\%$ it is
+$54\%$ for $N=15$ and $99.95\%$ for $N=150$ (the chance of nothing is $0.95^{150}=4.6\times10^{-4}$). If every success returns
+$G_0=61.5$ times a single project's cost and every project has the same cost, the portfolio (total cost $N$ units) returns
+$G_0K$ units, so the portfolio is at least at break-even when $K\ge N/G_0$. For $N=150$ this means $K\ge3$
+($150/61.5=2.44$), which has probability $98.2\%$; for $N=15$ it means $K\ge1$, probability $54\%$.
+
+\paragraph{Correlated outcomes.}
+Two Bernoulli variables with the same $p$ have $\Cov(X_i,X_j)=\rho\,p(1-p)$, and then
+\begin{equation}\label{ch12:eq-varK}
+  \Var K=Np(1-p)\bigl(1+(N-1)\rho\bigr),
+\end{equation}
+by the same counting argument as in \cref{ch12:prop-corr}: $\rho>0$ inflates the fluctuations of $K$ by
+$1+(N-1)\rho$ compared with the binomial. The distribution of $K$ also acquires a fat right tail and a fat mass at
+$0$. Two standard ways to produce correlated Bernoulli indicators:
+
+\begin{enumerate}[(a)]
+  \item \emph{One-factor Gaussian model} (reconstruction; the model behind many credit-risk portfolios). Let
+        $Z_i=\sqrt a\,Y+\sqrt{1-a}\,\varepsilon_i$ with $Y,\varepsilon_i$ i.i.d.\ $N(0,1)$ and
+        declare project $i$ a success if $Z_i<c=\Phi^{-1}(p)$. Given the common factor $Y$ the projects are independent with
+        success probability $q(Y)=\Phi\bigl((c-\sqrt a\,Y)/\sqrt{1-a}\bigr)$, so
+        $\Prob(K\ge k)=\E_Y\bigl[\Prob(\mathrm{Bin}(N,q(Y))\ge k)\bigr]$, a one-dimensional integral. The Bernoulli
+        correlation $\rho$ is smaller than the latent correlation $a$ (it is $0.026$ for $a=0.1$ and $0.058$ for $a=0.2$).
+  \item \emph{Uncertainty about $p$} (beta-binomial). The lecturer's distinction between risk and uncertainty has an exact
+        counterpart. Suppose the projects share an unknown success rate $\Pi\sim\mathrm{Beta}(\alpha,\beta)$ with
+        $\E\Pi=p$ and, given $\Pi$, are independent Bernoulli($\Pi$). Then $\Cov(X_i,X_j)=\Var\Pi$ and
+        \begin{equation}\label{ch12:eq-rhobeta}
+          \rho=\frac{\Var\Pi}{p(1-p)}=\frac{1}{\alpha+\beta+1}.
+        \end{equation}
+        Indeed $\Var\Pi=p(1-p)/(\alpha+\beta+1)$ for a beta distribution. The parameter $\alpha+\beta$ is the
+        ``effective sample size'' of the prior information about $p$: if the historical rate ($3.4\%$ against $5\%$)
+        were known to only about 50 observations, $\alpha+\beta=49$ and $\rho=0.02$, a correlation that no amount of
+        diversification can remove (\cref{ch12:tab-corr} with $\rho=0.02$).
+\end{enumerate}
+
+\begin{table}[ht]
+\centering\small
+\caption{Reconstruction: probability that the portfolio of $N$ projects with $p=5\%$ has at least $k$ successes,
+independent case ($\rho=0$), one-factor Gaussian model with latent correlation $a$ and beta-binomial
+($\alpha+\beta=49$, $\rho=0.02$). $N=150,k=3$ is break-even in the sense of the text.}\label{ch12:tab-counts}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+& $N=15,\ k\ge1$ & $N=150,\ k\ge1$ & $N=150,\ k\ge3$ & $N=150,\ k\ge4$\\
+\midrule
+independent          & $0.537$ & $0.9995$ & $0.982$ & $0.945$\\
+Gaussian, $a=0.1$    & $0.482$ & $0.968$  & $0.821$ & $0.730$\\
+Gaussian, $a=0.2$    & $0.432$ & $0.899$  & $0.689$ & $0.601$\\
+Gaussian, $a=0.5$    & $0.300$ & $0.616$  & $0.419$ & $0.368$\\
+beta-binomial        & $0.491$ & $0.970$  & $0.838$ & $0.753$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{intuition}[What correlation does to the tails]
+The mean number of successes ($7.5$ out of 150) is unchanged; what changes is the probability of the unlucky
+scenario in which \emph{everything fails together}. That scenario is invisible in the average and decisive for
+someone who has to repay creditors. This is why the lecture insists on the near-independence of rare diseases
+\ts{24}{18}{33:36} and why the portfolio manager's key parameter is a correlation, not a mean.
+\end{intuition}
+
+% ==================================================================
+\section{From portfolio to structure: a securitisation sketch}\label{ch12:sec-tranche}
+
+In the lecture the \$30 billion is obtained by appeal to the investing public \ts{24}{18}{30:30} and, for fusion, to
+retail money \ts{24}{18}{57:45}. The natural instrument, which Lo calls a ``mega fund'' \ts{24}{18}{54:42} and
+which the past final project of 2024 L1 develops for paediatric oncology, is a pool of projects funded by
+tranches of different seniority. He does not describe tranches in this lecture; the following is a generic
+\emph{Reconstruction}.
+
+\begin{example}[Reconstruction: one senior debt tranche on the 150-project pool]\label{ch12:ex-tranche}
+Pool of $N=150$ projects, all financed at year 0 by \$30 billion, with $K$ successes and terminal cash flow
+$V=12.3\,K$ (billion dollars) at year 10. Suppose the whole \$30 billion is raised as zero-coupon debt at $5\%$,
+so the face value due at year 10 is $30\times1.05^{10}=48.9$. It is repaid if and only if
+$12.3K\ge48.9$, i.e.\ $K\ge4$. With independent projects $\Prob(K\ge4)=0.945$; in the one-factor model the same probability is
+$0.73$ for $a=0.1$ and $0.60$ for $a=0.2$ (\cref{ch12:tab-counts}). A structure with a junior equity tranche that
+absorbs the first losses, and only a fraction of the capital raised as senior debt, would push the
+senior repayment probability far higher; but the equity holders take the correlation risk, and the
+example shows that its price depends mostly on $\rho$, not on $N$.
+\end{example}
+The moral of \cref{ch12:ex-tranche} is that securitisation transforms one risk profile into several
+(the same principle as in structured credit), and that a rating of the senior tranche is a statement about the joint
+law of the project outcomes. The correlation input is exactly what the two rare-disease and fusion arguments in the
+lecture are about.
+
+% ==================================================================
+\section{Where the data science and AI enter}\label{ch12:sec-ml}
+
+Despite the title, the lecture says almost nothing about machine learning: artificial intelligence appears in
+passing as a competitor for investors' money \ts{24}{18}{1:16:35}, and Lo's affiliation with CSAIL
+opens the talk \ts{24}{18}{0:00}. His actual ``data science'' is a \emph{simulation}
+of the portfolio with parameters supplied by industry experts \ts{24}{18}{35:38}. What follows is a
+short \emph{Reconstruction} (not from the course) of how the data would enter a real model.
+
+\begin{enumerate}[(a)]
+  \item \emph{Success probability from features.} Model the outcome $Y_i\in\{0,1\}$ of project $i$ with covariates $x_i$
+        (indication, mechanism, phase, sponsor, biomarker) as $\Prob(Y_i=1\mid x_i)=\sigma(w\T x_i)$, with
+        $\sigma(u)=1/(1+e^{-u})$, and fit $w$ by minimising the log-loss
+        $-\sum_i\bigl[Y_i\log\sigma(w\T x_i)+(1-Y_i)\log(1-\sigma(w\T x_i))\bigr]$ with a penalty on $\|w\|$
+        (regularisation, \cref{ch:regularized}; more general classifiers, \cref{ch:ml}). The output is a
+        project-specific $p_i$ in place of the pooled $p=5\%$; the portfolio mean is then $\sum_ip_iG_i$.
+  \item \emph{Shrinkage and uncertainty.} With few historical trials, the estimate of $p$ is imprecise, and a Bayesian update
+        of a $\mathrm{Beta}(\alpha,\beta)$ prior with $s$ successes in $n$ trials gives
+        $\mathrm{Beta}(\alpha+s,\beta+n-s)$ with mean $(\alpha+s)/(\alpha+\beta+n)$. By \eqref{ch12:eq-rhobeta}
+        the residual uncertainty about $p$ is the common factor that limits diversification; more data
+        lowers $\rho$.
+  \item \emph{Dependence between projects.} Correlations (shared mechanisms, shared regulators, shared
+        macro conditions for funding) are estimated from the same features, e.g.\ by treating shared
+        attributes as factors, as in \cref{ch:pca}; the sample correlation of a handful of binary outcomes
+        is very noisy, so the structure of the factors matters more than the numbers.
+\end{enumerate}
+
+\begin{coursenote}[What the lecture actually contains]
+No data set, code or slide of the lecture is available. The only quantitative statements are those reproduced in
+\cref{ch12:sec-single,ch12:sec-portfolio}: $\$200$M, 10 years, $5\%$, \$12.3B, $12\%$, $423.5\%$, $150$, $34.6\%$, Sharpe
+$\approx0.34$--$0.35$, the rare-disease reduction to 10--20 projects and \$400--500M, and a Sharpe ratio above 1 from a
+Monte Carlo of a published paper. Everything else in this chapter is derived here.
+\end{coursenote}
+
+% ==================================================================
+\section{Second example: a fusion mega fund}\label{ch12:sec-fusion}
+
+The second half of the lecture applies the same idea to energy. The argument is that the ``energy transition''
+is not a transition: consumption of oil, gas and coal is still growing as more people join the middle class,
+so low-carbon, on-demand sources are needed in addition \ts{24}{18}{42:02}\ts{24}{18}{43:03}. The candidates listed are fusion, fission and
+geothermal; fusion promises more energy per kilogram of fuel than fission and no long-lived waste, but requires the three
+Lawson conditions of temperature, pressure (density) and confinement time \ts{24}{18}{47:17}\ts{24}{18}{48:20}. Lo points to
+a 20-tesla magnet built at MIT with Commonwealth Fusion Systems in 2021 and a laboratory reaction with net energy
+gain \ts{24}{18}{49:23}\ts{24}{18}{50:27}.
+
+His question, asked with Dennis Whyte, is whether finance can pay for fusion. The idea is to \emph{decompose} ``a
+commercially viable power plant'' into a portfolio of enabling technologies (sustained
+plasma at about 100 million degrees, ultra-clean vacuum systems, magnetic confinement, and so on), each with a value of its
+own, for instance a vacuum system also useful in drug development, and to treat the portfolio as in the biomedical
+case, with perhaps 150 components \ts{24}{18}{51:34}\ts{24}{18}{52:37}\ts{24}{18}{53:39}. He adds a
+board of scientific and business advisers whose participation would follow once serious capital is deployed
+\ts{24}{18}{54:42}.
+
+A student asks whether the components would not be highly correlated. The answer is twofold: complete reactors from
+different companies are correlated, but not perfectly, because they use different approaches (magnetic versus
+inertial); and, more importantly, technologies such as heating, vacuum and magnet shaping have little to do with each
+other \ts{24}{18}{56:44}\ts{24}{18}{57:45}. In the language of \cref{ch12:prop-corr}: the argument is that
+$\rho$ is small, and it should be treated as the key empirical input, since the floor $\mathrm{SR}_1/\sqrt\rho$
+is not eliminated by adding components that share a common ``fusion is feasible'' factor (compare \eqref{ch12:eq-rhobeta}).
+
+\begin{coursenote}[Erratum: the retail-funding arithmetic]
+Lo asks for a one-time \$1,500 from each of $3\%$ of 130 million households, ``more than \$30 billion''
+\ts{24}{18}{56:44}\ts{24}{18}{57:45}. The product is
+\[
+  130\times10^{6}\times0.03\times1500=\$5.85\times10^{9},
+\]
+about \$5.9 billion, not \$30 billion; reaching \$30 billion at \$1,500 each needs about $15\%$ of households.
+(He also says once that fusion is ``when we split an atom'': that is fission; fusion joins nuclei. Both are slips of
+speech in the transcript; the intended meaning is clear.)
+\end{coursenote}
+
+\section{The rest of the lecture}\label{ch12:sec-rest}
+
+\paragraph{The Harvey Lodish story} \ts{24}{18}{58:45}. As a young faculty member in 1983 Lodish was
+approached to help develop a treatment for Gaucher's disease, a genetic enzyme deficiency; the company became Genzyme,
+which got the first enzyme-replacement therapy approved in 1991 and was sold to Sanofi for \$20 billion in 2014.
+In 2002 his unborn grandson was diagnosed with the same disease, and the drug saved him. The point Lo draws is that finance need not be
+zero-sum: ``doing well by doing good'' \ts{24}{18}{1:02:57}.
+
+\paragraph{Questions.}
+\begin{itemize}
+  \item \emph{Patents} \ts{24}{18}{1:05:05}: a patent gives exclusive use of the compound for 20 years (which is why revenues
+        run over years 11--20 in \cref{ch12:sec-single}); afterwards anyone can manufacture cheaply, like aspirin.
+        Producing the pill is cheap; the expensive part is the trials that lead to approval.
+  \item \emph{How to find and evaluate opportunities} \ts{24}{18}{1:07:08}\ts{24}{18}{1:12:24}: expertise. Neil Kumar (BridgeBio's
+        co-founder, a chemical-engineering PhD) worked at a consultancy on pharma strategy, then at a biotech venture
+        firm, which had passed on single-drug projects as too risky; the simulations gave him the conviction to fund
+        them himself.
+  \item \emph{How can students invest?} \ts{24}{18}{1:08:11}: BridgeBio is public, at very high risk; private companies are
+        harder; MIT is rich in opportunities for investors; Lo also teaches health-care financing (15.482, with an online
+        version in MIT's Open Learning Library) \ts{24}{18}{1:11:21}.
+  \item \emph{Crises} \ts{24}{18}{1:15:32}: COVID-19 temporarily removed the valley of death: the time between the
+        sequencing of the virus and the first human injection was 63 days, against 3--5 years normally; afterwards the valley returned
+        because vaccines are not attractive to investors compared with, for example, AI \ts{24}{18}{1:17:39}\ts{24}{18}{1:18:40}.
+\end{itemize}
+
+% ==================================================================
+\begin{keyformulas}
+\begin{itemize}
+  \item Sharpe ratio: $\mathrm{SR}=(\E R-r_f)/\sqrt{\Var R}$.
+  \item Single project (lecture): cost \$200M, 10 years, $p=5\%$, payoff \$12.3B; $\E G=3.075$ per dollar,
+        $\sqrt{\Var G}=61.5\sqrt{p(1-p)}=13.4$ over 10 years ($424\%$ per year after dividing by $\sqrt{10}$).
+  \item $N$ i.i.d.\ projects: $\Var R_P=\sigma^2/N$, $\mathrm{SR}_N=\sqrt N\,\mathrm{SR}_1$.
+  \item Common correlation $\rho$: $\Var R_P=\sigma^2\bigl(\tfrac1N+\tfrac{N-1}{N}\rho\bigr)$,
+        $\mathrm{SR}_N\to\mathrm{SR}_1/\sqrt\rho$.
+  \item Successes: $\Var K=Np(1-p)\bigl(1+(N-1)\rho\bigr)$; $\Prob(K\ge1)=1-(1-p)^N$ if independent.
+  \item Unknown $p\sim\mathrm{Beta}(\alpha,\beta)$: $\rho=1/(\alpha+\beta+1)$.
+\end{itemize}
+\end{keyformulas}
+
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[not from the course]
+Verify \eqref{ch12:eq-annuity}: find the discount rate for which \$2 billion in each of years 11--20 is worth
+\$12.3 billion at year 10, and compute the value at year 0 (in units of the \$200M cost) of the project of
+\cref{ch12:ex-single}, using its expected payoff.
+\end{exercise}
+
+\begin{exercise}[not from the course]
+Prove \eqref{ch12:eq-varK}. Then compute the standard deviation of $K$ for $N=150$, $p=0.05$ and $\rho\in\{0,0.02,0.05\}$
+and compare it with the mean $7.5$.
+\end{exercise}
+
+\begin{exercise}[not from the course]
+With $R_P=\frac1N\sum_iR_i$ and general covariance matrix $\Sigma$, the variance is $\frac{1}{N^2}\mathbf 1\T\Sigma\mathbf 1$
+(\cref{ch:portfolio}). Show that for the common-correlation matrix $\Sigma=\sigma^2[(1-\rho)I+\rho\,\mathbf 1\mathbf 1\T]$ this reproduces
+\eqref{ch12:eq-varcorr}, and find its eigenvalues. Which eigenvector carries the ``undiversifiable'' part?
+\end{exercise}
+
+\begin{exercise}[not from the course]
+Show that in the beta-binomial model of \cref{ch12:sec-counts}(b), $\rho=1/(\alpha+\beta+1)$, and that after observing
+$s$ successes in $n$ historical trials of a common process the posterior correlation between two future projects is
+$1/(\alpha+\beta+n+1)$. What sample size $n$ makes it fall below $0.005$ starting from $\alpha+\beta=49$?
+\end{exercise}
+
+\begin{exercise}[not from the course]
+In \cref{ch12:ex-tranche} let the senior debt be only a fraction $f$ of the \$30 billion, with face value $30f\times1.05^{10}$.
+Find, for the independent model, the smallest $f$ such that the senior tranche is repaid with probability at least $0.99$.
+(The rest of the capital is equity and absorbs the first losses.)
+\end{exercise}
+
+\begin{exercise}[not from the course]
+Erratum check: with the numbers of \cref{ch12:sec-fusion}, what fraction of the 130 million households must contribute \$1,500
+to raise \$30 billion? What one-time contribution per household would be needed from $3\%$ of them?
+\end{exercise}
+
+\begin{exercise}[not from the course]
+Simulate the one-factor Gaussian model of \cref{ch12:sec-counts}(a) for $N=150$, $p=0.05$, $a=0.1$ and estimate
+$\Prob(K\ge3)$ by Monte Carlo with $10^5$ paths; compare with \cref{ch12:tab-counts}.
+\end{exercise}

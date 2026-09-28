@@ -1,0 +1,1196 @@
+0:00
+The following content is provided under a Creative Commons license. Your support will help MIT OpenCourseWare
+0:06
+continue to offer high-quality educational resources for free. To make a donation or view additional materials
+0:13
+from hundreds of MIT courses, visit MIT OpenCourseWare at ocw.mit.edu.
+0:21
+PROFESSOR: We introduced the data last time. These were some macroeconomic variables
+0:27
+that can be used for forecasting the economy in terms of growth
+0:33
+and factors such as inflation or unemployment.
+0:39
+The case note goes through analyzing just three of these economic time series-- the unemployment rate,
+0:47
+the federal funds rate, and a measure of the CPI, or Consumer Price Index.
+0:56
+When one fits a vector autoregression model to this data, it turns out that the roots
+1:08
+of the characteristic polynomial are 1.002, then 0.9863.
+1:16
+And you recall when our discussion of vector autoregressive models, there's a characteristic equation
+1:23
+sort of in matrix form, the determinant is just like the univariate autoregressive case.
+1:29
+And in order for the process to be invertible, basically,
+1:44
+the roots of the characteristic polynomial need to be less than 1 in magnitude.
+1:50
+In this implementation of the vector autoregression model, the characteristic roots are the inverses
+1:57
+of the characteristic roots that we've been discussing. So anyway, this particular fit of the vector autoregression
+2:03
+model suggests that the process is non-stationary.
+2:11
+And so one should be considering different series
+2:17
+to model this as a stationary time series. But in terms of interpreting the regression model,
+2:26
+one can see-- to accommodate the non-stationarity,
+2:36
+we can take differences of all the series and fit the vector autoregression
+2:43
+to the difference series. So one way of eliminating any non-stationarity in time series
+2:49
+models, basically eliminate the random walk aspect of the processes, is to be modeling first differences.
+2:57
+And so doing that with this series-- let's see.
+3:06
+Here is just a graph of the time series properties of the difference series.
+3:11
+So with our original series, we take differences and eliminate
+3:19
+missing values in this R code. And this autocorrelation function
+3:25
+shows us basically the correlations
+3:31
+and autocorrelations of individual series and the cross-correlations across the different series.
+3:36
+So along the diagonals are the autocorrelation function. And one can see that every series
+3:43
+is correlation one with itself. But then at the first lag, positive for the Fed
+3:52
+funds and the CPI measure. And there's also some cross-correlations
+3:58
+that are strong. And whether or not a correlation is strong or not
+4:04
+depends upon how much uncertainty there is in our estimate of the correlation. And these dashed lines here correspond
+4:11
+to plus or minus two standard deviations of the correlation
+4:16
+coefficient when the correlation coefficient is equal to 0.
+4:23
+So any correlations that sort of go beyond those bounds
+4:28
+is statistically significant. The partial autocorrelation function is graphed here.
+4:39
+And let's say our time series problem set goes through some discussion of the partial autocorrelation
+4:46
+coefficients and the interpretation of those. The partial autocorrelation coefficients
+4:51
+are the correlation between one variable
+4:57
+and the lag of another after explaining for all lower degree lags. So it's like the incremental correlation of a variable
+5:06
+with a lag term that exists. And so if we are actually fitting regression models where
+5:13
+we include extra lags of a given variable, that partial autocorrelation coefficient
+5:20
+is essentially the correlation associated with the addition of the final lagged variable.
+5:27
+So here, we can see that each of these series is quite strongly correlated with itself.
+5:33
+But there are also some cross-correlations with, like, the unemployment rate and the Fed funds rate.
+5:42
+Basically, the Fed funds rate tends to go down when the unemployment rate goes up.
+5:50
+And so this data is indicating the association between these macroeconomic variables
+5:56
+and the evidence of that behavior. In terms of modeling the actual structural relations
+6:02
+between these, we need several, up to about 10 or 12 variables more than these three.
+6:08
+And then one can have a better understanding of the drivers of various macroeconomic features.
+6:15
+But this sort of illustrates the use of these methods with this reduced variable case.
+6:22
+Let me also go down here and just comment on the unemployment rate or the Fed funds rate.
+6:33
+6:46
+When fitting these vector autoregressive models with the packages that exist in R,
+6:52
+they give us output which provides the specification of each of the autoregressive models
+7:01
+for the different dependent variables, the different series of the process.
+7:07
+And so here is the case of the regression model for Fed funds
+7:13
+as a function of unemployment rate lagged, Fed funds rate lagged, and CPI lagged.
+7:21
+These are all on the different scale. When you're looking at these results, what's
+7:27
+important is basically how strong the signal-to-noise ratio is for estimating
+7:33
+these autoregressive parameters, vector autoregressive parameters.
+7:39
+And so with the Fed funds, you can look at the t values. And t values that are larger than 2
+7:45
+are certainly quite significant. And you can see that basically when the unemployment rate
+7:53
+coefficient is a negative 0.71, so if the unemployment
+7:59
+rate goes up, we expect to see the Fed rate going down
+8:05
+the next month. And the Fed funds rate for the lag 1 has a t value of 7.97.
+8:15
+So these are now models on the differences. So if the Fed funds rate was increased
+8:21
+last month or last quarter, it's likely to be increased again. And that's partly a factor of how slow the economy is
+8:31
+in reacting to changes and how the Fed doesn't want to shock the economy with large changes in their policy
+8:40
+rates. Another thing to notice here is that there's actually
+8:46
+a negative coefficient on the lag 2 Fed funds term, a negative 0.17.
+8:54
+And in interpreting these kinds of models, I think it's helpful just to think of,
+9:02
+if you have Fed funds sub t, that's equal to minus 0.71 times the unemployment rate at t minus 1.
+9:13
+And then we have plus 0.37 times the Fed funds, so t minus 1.
+9:24
+And this is delta. And then minus 1.8 times the Fed funds.
+9:31
+So t minus 2. In interpreting these coefficients,
+9:39
+notice that these two terms correspond to 0.19 times the Fed funds change 1 lag ago plus 0.18
+9:57
+times the change in that rate.
+10:03
+So when you see multiple lags coming into play in these models, the interpretation of them
+10:11
+can be made by considering different transformations
+10:17
+essentially of the underlying variables. In this form, you can see that OK, the Fed funds
+10:23
+tends to change the way it changed the previous month.
+10:30
+But it also may change depending on the double change
+10:38
+in the previous month. So there's a degree of acceleration in the Fed funds that is being captured here.
+10:44
+So the interpretation of these models sometimes requires some care.
+10:51
+This kind of analysis, I find it quite useful.
+11:02
+So let's push on to the next topic.
+11:09
+So today's topics are going to begin with a discussion of cointegration.
+11:15
+Cointegration is a major topic in time series analysis, which is dealing with the analysis of non-stationary time series.
+11:23
+And in the previous discussion, we addressed non-stationarity of series
+11:29
+by taking first differences to eliminate that non-stationarity.
+11:36
+But we may be losing some information with that differencing.
+11:41
+And cointegration provides a framework within which we characterize all available
+11:47
+information for statistical modeling, in a very systematic way.
+11:52
+So let's introduce the context within which
+11:58
+cointegration is relevant. It's relevant when we have a stochastic process,
+12:05
+a multivariate stochastic process, which is integrated of some order d.
+12:12
+And to be integrated of order d means that if we take the d-th difference,
+12:18
+then that d-th difference is stationary.
+12:23
+So and if you look at a time series
+12:33
+and you plot that over time, well, OK, a stationary time series we know should be something that basically
+12:43
+has a constant mean over time. There's some steady mean which that has.
+12:48
+And the variability is also constant. With some other time series, it might increase linearly
+12:59
+over time. And a series that increases linearly over time, well, if you take first differences, that
+13:05
+tends to take out that linear trend. If there are higher order differencing is required, then
+13:10
+that means that there's some curvature, quadratic say, that may exist in the data that is being taken out.
+13:18
+So this differencing is required to result in stationarity.
+13:25
+If the process does have vector autoregressive representation
+13:32
+in spite of its non-stationarity, then it can be represented by a polynomial lag of the x's is
+13:43
+equal to white noise epsilon. And the polynomial phi of L going
+13:53
+to have a factor term in there of 1 minus L,
+13:59
+basically the first difference to the d power. So if taking these the d-th order difference
+14:06
+reduces it to stationarity, then we
+14:12
+can express this vector autoregression in this way. So the phi star of L basically represents
+14:26
+the stationary vector autoregressive process on the d-th difference series.
+14:33
+14:47
+Now, as it says here, each of the component series
+14:52
+may be non-stationary and integrated, say of order one. But the process itself may not be jointly integrated.
+15:02
+In that it may be that there are linear combinations
+15:08
+of our multivariate series which are stationary. And so these linear combinations basically
+15:20
+represent the stationary features of the process. And those features can be apparent without looking
+15:31
+at differences. So in a sense, if you just focused on differences of these non-stationary multivariate
+15:38
+series, you would be losing out on information of the stationary structure of contemporaneous components
+15:49
+of the multivariate series. And so cointegration deals with this situation
+15:56
+where some linear combinations of the multivariate series
+16:01
+in fact are stationary.
+16:08
+So how do we represent that mathematically?
+16:15
+Well, we say that this multivariate time series process is cointegrated if there exists an m-vector beta
+16:24
+such that, defining linear weights on the x's, and
+16:29
+beta prime X_t is a stationary process.
+16:37
+The cointegration vector of beta can be scaled arbitrarily. So it's common practice, if one has
+16:49
+an interest, some primary interest, perhaps, in the first component series of process, to set that equal to 1.
+16:56
+And the expression basically says that our time t value of the first series
+17:06
+is related in a stationary way to a linear combination
+17:11
+of the other m minus 1 series. And this is a long-run equilibrium type relationship.
+17:21
+How does this arise? Well, it arises in many, many ways in economics and finance.
+17:30
+The term structure of interest rates, purchase power parity.
+17:36
+In the terms structure of interest rates,
+17:42
+basically the differences between yields on interest rates over different maturities,
+17:50
+those differences might be stationary. The overall level of interest might not be stationary,
+17:56
+but the spreads ought to be stationary. The purchase power parity in foreign exchange,
+18:04
+if you look at the value of currencies
+18:10
+for different countries, basically different countries ought to be able to purchase the same goods for roughly
+18:19
+the same price. And so if there are disparities in currency values, purchase power parity suggests that things will revert back
+18:27
+to some norm where everybody is paying on average over time
+18:32
+the same amount for different goods. Otherwise, there would be arbitrage.
+18:40
+Money demand, covered interest rate parity, law of one price, spot and futures. Let me show you another example that
+18:48
+will be in the case study for this chapter.
+18:54
+19:00
+View, full screen.
+19:06
+Let's think about energy futures. In fact, next Tuesday's talk from Morgan Stanley
+19:13
+is going to be an expert in commodity futures and options.
+19:18
+And that should be very interesting. Anyway, here, I'm looking at energy futures
+19:28
+from the Energy Information Administration. Actually, for this course, trying to get data that's freely available to students
+19:36
+is one of the things we do. So this data is actually available from the Energy
+19:42
+Information Administration of the government, which is now open, so I guess that'll be updated over time.
+19:48
+But basically these energy futures are traded on the Chicago Mercantile Exchange.
+19:55
+And basically CL is crude, West Texas intermediate crude,
+20:03
+light crude, which we have here, a time series from 2006
+20:08
+to basically yesterday. And you can see how at the start of the period around $60
+20:16
+and then went up to close to $140, and then it dropped down to around $40.
+20:22
+And it's been hovering around $100 lately. The second series here is gasoline, RBOB gasoline.
+20:33
+Always have to look this up. This is that reformulated blend stock for oxygenated blending
+20:42
+gasoline. Anyway, futures on this product are traded at the CME as well.
+20:48
+And then heating oil. And what's happening with these data
+20:56
+is that we have basically a refinery which processes
+21:08
+crude oil as an input.
+21:15
+And it basically refines it, distills it, and generates outputs, which include heating oil, gasoline,
+21:36
+and various other things like jet fuel and others.
+21:41
+So if we're looking at the prices, the futures prices of, say, gasoline and heating oil,
+21:49
+relating those to crude oil, well, certainly,
+21:55
+the cost of producing these products should depend on the cost of the input .
+22:01
+So I've got in the next plot, a translation of these futures
+22:10
+contracts into their price per barrel.
+22:15
+Turns out crude is quoted in dollars per barrel. And the gasoline heating oil are in cents per gallon.
+22:24
+So one multiplies. There are 42 gallons in a barrel. So you multiply those previous years by 42.
+22:30
+And this shows the plot of the prices of the futures where we're looking at essentially the same units of output relative to input.
+22:40
+And what's evident here is that while the futures for gasoline,
+22:45
+the blue, is consistently above the green, the input, and same for heating oil.
+22:52
+And those vary depending on which is greater. So if we look at the difference between, say,
+23:02
+the price of the heating oil future and the crude oil future, what does that represent?
+23:11
+That's the spread in value of the output minus the input.
+23:20
+Ray? AUDIENCE: [INAUDIBLE] cost of running the refinery?
+23:27
+PROFESSOR: So cost of refining. So let's look at, say, heating oil minus CL and, say,
+23:39
+this RBOB minus CL. So it's cost of refining.
+23:46
+What else could be a factor here? AUDIENCE: Supply and demand characteristics [INAUDIBLE].
+23:51
+PROFESSOR: Definitely. Supply and demand. If one product is demanded a lot more than another.
+23:58
+Supply and demand.
+24:05
+Anything else? AUDIENCE: Maybe for the outputs, if you were to find the difference between the outputs,
+24:11
+it would be something cyclical. For example, in the winter, heating oil is going to get far more valuable as gasoline,
+24:17
+because people drive less and people demand more for heating homes. PROFESSOR: Absolutely. That's a very significant factor with these.
+24:25
+There are seasonal effects that drive supply and demand. And so we can put seasonal effects in there
+24:35
+as affecting supply and demand. But certainly, you might expect to see seasonal structure here. Anything else?
+24:43
+Put on your traders hat. Profit, yes.
+24:49
+The refinery needs to make some profit. So there has to be some level of profit that's
+24:58
+acceptable and appropriate. So we have all these things driving basically
+25:05
+these differences. Let's just take a look at those differences. These are actually called the crack spreads.
+25:14
+Cracking in the business of refining is basically the breaking down of oil
+25:22
+into components, products. And on the top is the gasoline crack spread.
+25:31
+And the bottom is the heating oil crack spread. And one can see that as time series,
+25:37
+these actually look stationary. There certainly doesn't appear to be a linear trend up.
+25:45
+But there are, of course, many factors that could affect this.
+25:51
+So with that as motivation, how would we model such a series?
+25:59
+So let's go back to our lecture here.
+26:06
+All right, View, full size.
+26:15
+This is going to be a very technical discussion, but it's, at the end of the day, I think fairly straightforward.
+26:25
+And the objective actually of this lecture is to provide an introduction to the notation here, which
+26:31
+should make it seem like it's a very straightforward derivation process of these models.
+26:37
+So let's begin with just a recap of the vector autoregressive
+26:42
+model of order p. This is the extension of the univariate case where we have a vector C of constants, m constants,
+26:52
+and matrices phi_1 to phi_p corresponding to basically how the autoregression of one series
+27:01
+depends on all the other series. And then there's multivariate white noise eta_t,
+27:08
+which has mean 0 and some covariance structure in it.
+27:13
+And the stationarity-- if this series were stationary,
+27:19
+then the determinant of this matrix polynomial
+27:28
+would have roots outside the unit circle for complex z.
+27:33
+And if it's not stationary, then some of those roots
+27:39
+will be on the unit circle or beyond. So let's actually go to that non-stationary case
+27:45
+and suppose that the process is integrated of order one.
+27:50
+So if we were to take first differences, we would have stationarity.
+28:02
+Well, the derivation of the model proceeds by converting the original vector autoregressive
+28:12
+equation into an equation that's mostly relating to differences but with also some extra terms.
+28:19
+So let's begin the process by just subtracting the lagged value of the multivariate vector
+28:26
+from the original series. So we subtract X_(t-1) from both sides, and we get delta X_t is equal to C plus phi_1 minus I_m X_(t-1)
+28:37
+plus the rest. So that's a very simple step. We're just subtracting the lagged multivariate series
+28:46
+from both sides. Now, what we want to do is convert
+28:53
+the second term in the middle line into a difference term.
+28:59
+So what do we do? Well, we can subtract and add phi_1 minus I_m times X_(t-2).
+29:07
+If we do that, subtract and add that, we then get the delta X_t is C plus a multiple of delta
+29:13
+X_(t-1) plus this multiple of X_(t-2).
+29:19
+So we basically reduced the equations to differences in the first two terms
+29:25
+or in the current series and the lagged. But then we have the original series for lags t minus 2.
+29:33
+We can continue this process with the third.
+29:38
+And then at the end of the day, we end up getting this equation for the difference of the series
+29:46
+is equal to a constant plus a matrix multiple of the first difference multivariate series,
+29:53
+plus another matrix times the second difference, all the way down to the p-th difference,
+30:01
+or the p minus first difference. But at the end, we're left with terms
+30:07
+at p lags that have no differences in them. So we've been able to represent this series
+30:14
+as an autoregressive function of differences. But there's also a term on the undifferenced series
+30:24
+at the end that's left over. And or this argument can actually
+30:34
+proceed by eliminating differences in the reverse way, starting with the p-th lag and going up.
+30:42
+And one then can represent this as delta X_t is C plus some matrix times just the
+30:50
+lagged series plus various matrices times the differences
+30:56
+going back p minus 1 lags.
+31:05
+And so at the end of the day, this model basically for delta X_t is a constant
+31:14
+plus a matrix times the previous lagged series
+31:20
+or the first lag of the multivariate time series, plus various autoregressive lags of the differenced series.
+31:30
+So these notes give you the formulas for those,
+31:36
+and they're very easy to verify if you go through them one by one.
+31:41
+And when we look at this expression for the model,
+31:51
+this expresses the stochastic process model
+31:57
+for the difference series. This difference series is stationary.
+32:03
+We've eliminated the non-stationarity in the process. So that means the right-hand side
+32:09
+has to be stationary as well. And so while the terms which are matrix multiples of lags
+32:19
+of the differenced series, those are going to be stationary because we're just taking lags of the stationary multivariate time
+32:27
+series, the difference series. But this pi X_t term has to be stationary as well.
+32:36
+So this pi X_t contains the cointegrating terms. And fitting a sort of cointegrated vector
+32:46
+autoregression model involves identifying this term, pi X_t.
+32:53
+And given that the original series had unit roots,
+33:00
+it has to be the case that pi, the matrix, is singular.
+33:06
+So it's basically a transformation
+33:12
+of the data that eliminates that unit root in the overall series.
+33:19
+So the matrix pi is of reduced rank, and it's either rank zero, in which case
+33:27
+there's no cointegrating relationships, or its rank is less than m.
+33:34
+And the matrix pi does define the cointegrating relationships.
+33:40
+Now, these cointegrating relationships are the relationships in the process that are stationary.
+33:48
+And so basically there's a lot of information in that multivariate series with contemporaneous values
+33:57
+of the series. There is stationary structure at every single time point, which can be the target of the modeling.
+34:08
+So this matrix pi is of rank r less than m.
+34:16
+And so it can be expressed as basically alpha beta
+34:22
+prime, where these matrices are of rank r, alpha and beta.
+34:30
+And the columns of beta define linearly independent vectors which cointegrate x. And the decomposition of pi isn't unique.
+34:37
+You can basically, for any invertible r by r matrix g,
+34:43
+define another set of cointegrating relationships. So in the linear algebra structure of these problems,
+34:50
+there's basically an r-dimensional space where the process is stationary, and how
+34:56
+you define the coordinate system in that space is up to you
+35:02
+or subject to some choice.
+35:08
+So how do we estimate these models? Well, rather nice result of Sims, Stock, and Watson.
+35:15
+Actually, Sims, Christopher Sims, he got the Nobel Prize a few years ago for his work
+35:21
+in econometrics. And so this is a rather significant work that he did.
+35:33
+Anyway, he, together with Stock and Watson, prove that if you're estimating a vector autoregression model,
+35:41
+then the least squares estimator of the original model is basically sufficient to do an analysis
+35:49
+of this cointegrated vector autoregression process.
+35:56
+The parameter estimates from just fitting the vector autoregression are consistent for the underlying
+36:03
+parameters. And they have asymptotic distributions that are identical to those of maximum likelihood estimators.
+36:09
+And so what ends up happening is the least squares estimates
+36:18
+of the vector autoregression parameters lead to an estimation of the pi matrix.
+36:27
+And the constraints on the pi matrix which are basically pi
+36:40
+is of reduced rank, those will hold asymptotically. So let's just go back to the equation before,
+36:49
+to see if that looks familiar here.
+36:54
+So what that work says is that if we basically
+37:03
+fit the linear regression model regressing the difference series on the lag of the series plus lags of differences,
+37:13
+the least squares estimates of these underlying parameters will give us asymptotically efficient estimates
+37:21
+of this overall process. So we don't need to use any new tools to specify these models.
+37:31
+37:43
+There's an advanced literature on estimation methods for these models.
+37:49
+Johansen does describe maximum likelihood estimation
+37:55
+when the innovation terms are normally distributed.
+38:01
+And that methodology applies reduced rank regression
+38:07
+methodology and yields tests for what
+38:13
+the rank is of the cointegrating relationship. And these methods are implemented in our packages.
+38:20
+38:25
+Let's see. Let me just go back now to the-- so let's see.
+38:40
+The case study on the crack spread data
+38:47
+actually goes through sort of testing for non-stationarity in these underlying series.
+38:54
+And actually, why don't I just show you that? Let's go back here.
+38:59
+39:17
+If you can see this, for the crack spread data,
+39:23
+looking at the crude oil futures, basically the crude oil future can be evaluated to see if it's non-stationary.
+39:30
+And there's this augmented Dickey-Fuller test for non-stationarity.
+39:36
+And it basically has a null hypothesis that the model
+39:43
+or the series is non-stationary, or it has a unit root, versus the alternative that it doesn't.
+39:49
+And so testing that null hypothesis that it's non-stationary yields a p-value of 0.164
+39:56
+for CLC1, the first nearest contract,
+40:01
+near month contract of the futures for crude.
+40:07
+And so the data suggests that crude has a distribution that's non-stationary, integrated
+40:14
+order 1. And the HOC1 also basically has a test for-- p-value
+40:23
+for non-stationarity of 0.3265. So we can't reject non-stationarity or unit root
+40:31
+in those series with these test statistics. In analyzing the data, this suggests that we basically
+40:39
+need to accommodate that non-stationarity when we specify the models.
+40:46
+Let me just see if there's some results here.
+41:55
+For this series, actually the case notes will go through actually conducting this Johansen
+42:01
+procedure for testing for the rank of the cointegrated process. And that test basically has different test statistic
+42:11
+for testing whether the rank is 0, 1, less than or equal to 1, or less than or equal to 2.
+42:16
+And one can see that there's marginal-- the test statistic is almost significant at the 10% level
+42:25
+for the overall series. It's not significant for the rank
+42:32
+being less than or equal to 1. And so these results, it doesn't suggest there's
+42:38
+strong non-stationarity. But certainly with that non-stationarity
+42:45
+is no more than rank one for the series. And the eigenvector corresponding
+42:52
+to the stationary relationship is given by these coefficients of 1 on the crude oil future,
+43:00
+1.3 on the RBOB and minus 1.7 on the heating oil.
+43:08
+So what this suggests is that there's considerable variability in these energy futures contracts.
+43:20
+What appears to be stationary is some linear combination of crude plus gasoline minus heating oil.
+43:28
+And in terms of why does it combine that way, well, there are all kinds of factors
+43:35
+that we went through-- cost of refining, supply and demand, seasonality, which affect things.
+43:41
+And so when analyzed, sort of ignoring seasonality, these would be the linear combinations that appear
+43:50
+to be stationary over time. Yeah? AUDIENCE: Why did you choose to use the futures
+43:55
+prices as opposed to the spot? And how did you combine the data with actual [INAUDIBLE]? PROFESSOR: I chose this because if refiners are wanting
+44:07
+to hedge their risks, then they will go to the futures market to hedge those.
+44:14
+And so working with these data, one can then consider problems of hedging refinery production
+44:24
+risks. And so that's why. AUDIENCE: [INAUDIBLE]
+44:30
+PROFESSOR: OK, well, the Energy Information Administration provides historical data which gives the first month,
+44:39
+the second month, the third month available for each of these contracts. And so I chose the first month contract
+44:47
+for each of these features. Those 10 are the most liquid. Depending on what one is hedging,
+44:54
+one would use perhaps longer periods for those. There's some very nice finance problems
+45:02
+dealing with hedging, hedging these kinds of risks, and as well as trading these kinds of risk. Traders can try to exploit short term movements in these.
+45:11
+45:29
+Anyway, I'll let you look through these, the case note later. And it does provide some detail on the coefficient estimates.
+45:36
+And one can basically get a handle on how these things are being specified.
+45:43
+So let's go back.
+45:58
+The next topic I want to cover is linear state-space models.
+46:06
+It turns out that many of these time series
+46:12
+models appropriate in economics and finance can be expressed as a linear state-space model.
+46:20
+46:28
+I'm going to introduce the general notation first and then provide illustrations of this general notation
+46:35
+with a number of different examples. So the formulation is we have basically an observation vector
+46:46
+at time t, y_t. This is our multivariate time series that we're modeling. Now, I've chosen it to be k-dimensional
+46:53
+for the observations. There's an underlying state vector
+47:00
+that's of m dimensions, which basically characterizes the state of the process at time t.
+47:11
+There's an observation error vector at time t, epsilon_t. So it's k by 1 as well, corresponding to y.
+47:18
+And there's a state transition innovation error vector, which is n by 1, which actually can
+47:31
+be different from m, the dimension of the state vector. So we have-- in the state space specification,
+47:41
+we're going to specify two equations, one for how the states evolve over time and another for how
+47:47
+the observations or measurements evolve, depending on the underlying states. So let's first focus on a state equation
+47:55
+which describes how the state progresses from the state at time t to the state at time t plus 1.
+48:05
+Because this is a linear state-space model, basically the state at t plus 1 is
+48:10
+going to be some linear function of the states at time t plus some noise.
+48:16
+And that noise is given by eta_t,
+48:22
+being independent identically distributed white noise, or normally distributed with some covariance matrix
+48:31
+Q_t, positive definite. And R_t is some linear transformation
+48:37
+of those, which characterize the uncertainty in the particular states.
+48:42
+So there's a great deal of flexibility here in how things depend on each other. And right now, it will appear just like a lot of notation.
+48:53
+But as we see it in different cases, you'll see how these terms come into play. And they're very straightforward.
+48:59
+So we're considering simple linear transformations
+49:04
+of the states plus noise. And then the observation equation or measurement equation is a linear transformation
+49:13
+of the underlying states plus noise. So the matrix Z_t is the observation coefficients
+49:20
+matrix. And the noise or innovations epsilon_t are, we'll assume,
+49:25
+independent identically distributed normal, multivariate normal random variables with some covariance matrix H_t.
+49:33
+To be fully general, the subscript t means the covariance can depend on time t.
+49:40
+It doesn't have to, but it can. These two equations can be written together
+49:48
+in a joint equation where we see that the underlying state at time t, s, gets transformed with T sub t
+49:59
+to the state at t plus 1 plus residual innovation term.
+50:04
+And the observation equation y_t is Z_t s_t plus that. So we're representing how the states evolve over time
+50:12
+and how the observations depend on the underlying states in this joint equation.
+50:19
+And the structure of basically this sort of linear function of states plus error, the error term u_t
+50:28
+here is normally distributed with covariance matrix omega,
+50:33
+which has this structure. It's a block diagonal.
+50:38
+We have the covariance of the epsilons as the H. And the covariance of R_t eta_t is R_t Q_t R_t transpose.
+50:48
+So you may recall when we take a covariance matrix
+50:54
+of linear function of random variables given by a matrix,
+51:01
+then it's that linear function R times the covariance matrix times the transpose.
+51:07
+So that term comes into play. So let's see how a capital asset pricing
+51:16
+model with time-varying betas can be represented as a linear state-space model.
+51:24
+You'll recall, we discussed this model a few lectures ago, where we have the excess return of a given stock, r_t,
+51:33
+is a linear function of the excess return of the market
+51:39
+portfolio, r_(m,t), plus error. What we're going to do now is extend that previous model
+51:48
+by adding time dependence, t, to the regression parameters.
+51:54
+The alpha is not a constant. It is going to vary by time. And the beta is also going to very by time.
+52:02
+And how will they vary by time? Well, we're going to assume that the alpha_t is
+52:10
+a Gaussian random walk. And the beta is also a Gaussian random walk.
+52:17
+52:28
+And with that set up, we have the following expression for the state equation.
+52:35
+OK, the state equation, which is just the unknown parameters-- it's the alpha and the beta at given time t.
+52:40
+The state at time t gets adjusted to the state at time t plus 1 by just adding these random walk
+52:49
+terms to it. So it's a very simple process. We have the identity times the previous state
+52:55
+plus the identity times this vector of these innovations. So s_(t+1) is equal to T_t s_t plus R_t eta_t,
+53:04
+where this matrix, T sub t and R sub t are trivial; they're just the identity.
+53:10
+And eta_t has a covariance matrix
+53:15
+which is just given by Q_t, sigma squared nu, sigma squared epsilon.
+53:22
+This is a complex way, perhaps, of representing this model.
+53:28
+But it puts this simple model into that linear state-space framework.
+53:36
+Now, the observation equation is given by this expression
+53:45
+defining the Z_t matrix as the unit element and r_(m,t) So
+53:52
+it's basically a row vector, or a row matrix, one-row matrix.
+53:58
+And epsilon_t is the white noise process. Now, putting these equations together,
+54:05
+we basically have the equation for the state transition and the observation equation together.
+54:13
+We have this form for that.
+54:25
+So now, let's consider a second case of linear regression models where
+54:31
+we have a time varying beta. In a way, this case we just looked at
+54:37
+is a simple case of that. But let's look at a more general case where we have p independent variables, which
+54:45
+could be time-varying. So we have a regression model almost
+54:51
+as we've considered it previously. y_t is equal to x_t transpose beta_t plus epsilon_t.
+54:58
+The difference now is our regression coefficients beta are allowed to change over time.
+55:03
+55:09
+How do they change over time? Well, we're going to assume that those also follow independent random walks with variances
+55:19
+of the random walks that may depend on the component. So the joint state-space equation
+55:24
+here is given by the identity times s_t plus eta_t.
+55:32
+That's basically the random walk process for the underlying regression parameters.
+55:37
+And y_t is equal to x_t transpose times the same regression parameters plus the observation
+55:46
+error.
+55:56
+I guess needless to say, if we consider the special case where the random walk process is degenerate
+56:04
+and they're basically steps of size zero, then we get the normal linear regression model coming out
+56:10
+of this. If we were to be specifying the linear state-space
+56:17
+implementation of this model and consider successive estimates of the model parameters over time,
+56:25
+then these equations would give us recursive estimates for updating regressions as we add
+56:34
+additional values to the data, additional observations to the data.
+56:43
+Let's look at autoregressive models of order p.
+56:49
+The autoregressive model of order p for a univariate time
+56:55
+series has the setup given here.
+57:01
+It's a polynomial lag of the response
+57:07
+variable y_t is equal to the innovation epsilon_t. And we can define the state vector
+57:16
+to be equal to the vector of p values, p successive values
+57:24
+of the process. And so we basically get a combination
+57:33
+here of the observation equation and state equation joining where basically one of the states
+57:46
+is actually equal to the observation. And basically, with this definition
+57:52
+for a state of the vector at the next time point t,
+57:59
+that is equal to this linear transformation of the lagged state vector plus that innovation term.
+58:09
+I dropped the mic.
+58:16
+So the notation here shows the structure for how this linear state-space model is evolving.
+58:26
+Basically, the observation equation is the linear combination of the five
+58:32
+multiples of lags of the values plus the residual. And the previous lags of the states
+58:40
+are just simply the identities times those values, shifted.
+58:46
+So it's a very simple structure for the autoregressive process
+58:51
+as a linear state-space model. We have, as I was just saying, for the transition matrix T sub
+59:02
+t, this matrix and the observation equation
+59:09
+is essentially picking out the first element of the state vector, which has no measurement error.
+59:16
+So that simplifies that.
+59:21
+The moving average model of order q
+59:27
+could also be expressed as a linear state-space model.
+59:37
+Remember, the moving average model is one where our response variable, y, is simply
+59:43
+some linear combination of innovations,
+59:48
+q past innovations. And this state vector, if we consider
+59:55
+the state vector just being basically q lags of the innovations, then the transition
+1:00:04
+of those underlying states is given by this expression here.
+1:00:14
+And we have a state equation, an observation equation, which has these forms for these various transition matrices
+1:00:23
+and for how the innovation terms are related.
+1:00:30
+1:00:40
+Let me just finish up with example showing with the autoregressive moving average model.
+1:00:47
+And many years ago, it was actually very difficult to specify the estimation
+1:00:55
+methods for autoregressive moving average models. But the implementation of these models
+1:01:00
+as linear state-space models facilitated that greatly. And with the ARMA model, the setup basically
+1:01:13
+is a combination of the autoregressive moving average processes. We have an autoregression of the y's
+1:01:20
+is equal to a moving average of the residuals or the innovations.
+1:01:25
+And it's convenient in the setup for linear state-space models
+1:01:32
+to define the dimension m, which is the maximum of p and q
+1:01:37
+plus 1, and think of having basically a possibly m order
+1:01:45
+polynomial lag for each of those two series. And we can basically constrain those values
+1:01:55
+to be 0 if m is greater than p or m is greater than q.
+1:02:06
+And Harvey, in a very important work in '93, actually defined a particular state-space representation
+1:02:17
+for this process. And I guess it's important to know that with these linear state-space models,
+1:02:24
+we're dealing with characterizing structure in m-dimensional space.
+1:02:31
+There's often some choice in how you represent your underlying states.
+1:02:37
+You can basically re-parametrize the models by considering invertible linear transformations
+1:02:47
+of the underlying states. So let me go back here.
+1:02:52
+In expressing the state equation generally
+1:02:59
+is T sub t s_t plus R_t eta_t. This matrix T sub t and st-- basically s_t
+1:03:08
+can be replaced by a linear transformation of s_t, so long as we multiply the T sub t by the inverse
+1:03:16
+of that transformation. So there's flexibility in the choice of our linear state-space specification.
+1:03:22
+And so there really are many different equivalent linear
+1:03:28
+state-space models for a given process depending on exactly how you define the states
+1:03:35
+and the underlying transformation matrix T. And the beauty of Harvey's work was coming up
+1:03:44
+with a nice representation for the states, where we had very simple forms for the various matrices.
+1:03:53
+And the lecture notes here go through the derivation of that for the ARMA process.
+1:03:59
+And this derivation is-- I just want
+1:04:04
+to go through the first case just to highlight how the argument goes.
+1:04:11
+We basically have this equation, which is the original equation for an ARMA(p,q) process.
+1:04:17
+And Harvey says, well, define the first--
+1:04:25
+or the state at time t to be equal to the observation at time t.
+1:04:31
+If we do that, then how does this equation relate
+1:04:38
+to the basically-- this is the state at the next time point, t
+1:04:46
+plus 1, is equal to phi_1 times the state at time t, plus a second state at time t and a residual innovation
+1:05:00
+eta_t. So by choosing the first state to be the observation value
+1:05:09
+at that time, we can then solve for the second state,
+1:05:16
+which is given by this expression, just by rewriting our model equation in terms of s_(1,t),
+1:05:25
+s_(2,t) and eta_t. So this s_(2,t) is this function of the observations and eta_t.
+1:05:36
+So it's a very simple specification of the second state. Just what is that second state element
+1:05:48
+given this definition of the first one? And one can do this process iteratively
+1:05:54
+getting rid of the observations and replacing them by underlying states.
+1:06:01
+And at the end of the day, you end up with this very simple form for the transition matrix T.
+1:06:09
+Basically, the T has the autoregressive components as the first column of the T matrix.
+1:06:16
+And this R matrix has this vector of the moving average components.
+1:06:22
+So it's a very nice way to represent the model.
+1:06:28
+Coming up with it was something very clever that he did. But what one can see is that this basic model where
+1:06:36
+you have the states transitioning according
+1:06:41
+to a linear transformation of the previous state plus error, and the observation being some function of the current states,
+1:06:49
+plus error or not, depending on the formulation, is the representation.
+1:06:55
+Now, with all of these models, a reason
+1:07:03
+why linear state-space modeling is in fact effective
+1:07:08
+is that their specification is fully specified with the Kalman
+1:07:19
+filter. So with this formulation of linear state-space models,
+1:07:32
+the Kalman filter as a methodology is the recursive computation of the probability density
+1:07:41
+functions for the underlying states at basically
+1:07:48
+t plus 1 given information up to time t, as well as the joint density of the future state
+1:07:56
+and the future observation at t plus 1, given information up to time t.
+1:08:02
+And also just the marginal distribution of the next observation given the information up to time t.
+1:08:10
+1:08:20
+So what I want to do is just go through with you
+1:08:26
+how the Kalman filter is implemented and defined.
+1:08:31
+And the implementation of the Kalman filter requires us to have some notation that's a bit involved,
+1:08:40
+but we'll hopefully explain it so it's very straightforward.
+1:08:46
+There are basically conditional means of the states.
+1:08:52
+s sub t given t is the mean value of the state at time t given the information up to time t.
+1:08:59
+If we condition on t minus 1, then it's the expectation of the state at time t given the information up to t minus 1.
+1:09:06
+And then y t t minus 1 is the expectation
+1:09:12
+of the observation given information up to t minus 1. There's also conditional covariances
+1:09:18
+and mean squared errors. All these covariances are determined by omegas.
+1:09:26
+The subscript corresponds to states s, or observation y.
+1:09:33
+And basically, the conditioning set is either information up to time t, t minus 1 or t minus 1
+1:09:39
+in the second case. And we want to compute basically the covariance matrix
+1:09:45
+of the states given whatever the information is, information up to time t, t minus 1.
+1:09:52
+So these covariance matrices are the expectation
+1:09:57
+of the state minus their expectation under the conditioning times the state minus the expectation
+1:10:06
+transpose. That's the definition of that covariance matrix. So the different definitions here
+1:10:12
+correspond to just whether we're conditioning on different information.
+1:10:17
+And then the observation innovations or residuals
+1:10:23
+are the difference between an observation y_t
+1:10:29
+and its estimate given information up to t minus 1.
+1:10:37
+So the residuals in this process are the innovation residuals, one period ahead.
+1:10:44
+And the Kalman filter consists of four steps.
+1:10:50
+We basically want to, first, predict the state vector
+1:11:00
+one step ahead. So given our estimate of the state vector at time t minus 1,
+1:11:10
+we want to predict this state vector at time t. And we also want to predict the observation
+1:11:18
+at time t given our estimate at state vector time t minus 1.
+1:11:23
+And so at time t minus 1, we can estimate these quantities.
+1:11:31
+[INAUDIBLE] At t minus 1, we can basically predict
+1:11:40
+what the state is going to and predict what the observation is going to be. And we can estimate how much error there's
+1:11:47
+going to be in those estimates, by these covariance matrices.
+1:11:59
+The second step is updating these predictions
+1:12:05
+to get our estimate of the state given the observation at time t
+1:12:11
+and to update our uncertainty about that state given this new observation. So basically, our estimate of the state at time t
+1:12:21
+is an adjustment to our estimate given information up to t minus 1, plus a function of the difference between what we
+1:12:31
+observed and what we predicted. And this T_t function matrix is called the filter gain matrix.
+1:12:42
+And basically, it characterizes how do we adjust our prediction of the underlying state
+1:12:50
+depending on what happened. So that's the filter gain matrix.
+1:12:57
+So we actually do gain information with each observation about what the new value of the process
+1:13:03
+is. And that information is characterized by filter gain matrix.
+1:13:09
+You'll notice that the uncertainty in the state at time t, this omega_s of t given t, that's
+1:13:15
+equal to the covariance matrix given t minus 1. So it's our beginning level of uncertainty adjusted
+1:13:23
+by a term that tells us how much information did we get from that new information.
+1:13:29
+So notice that there's a minus sign there. We're basically reducing our uncertainty
+1:13:35
+about the state given the information in the innovation
+1:13:44
+that we now have observed. Then, there's a forecasting step which
+1:13:51
+is used to forecast the state one period forward,
+1:13:59
+is simply given by this linear transformation of the previous state. And we can also update our covariance matrix
+1:14:05
+for future states given the previous state by applying this formula which is a recursive formula
+1:14:13
+for estimating covariances. So we have forecasting algorithms
+1:14:24
+that are simple linear functions of these estimates. And then finally, there's a smoothing step
+1:14:35
+which is characterizing the conditional expectation
+1:14:43
+of underlying states, given information in the whole time
+1:14:49
+series. And so ordinarily with Kalman filters, Kalman filters
+1:14:55
+are applied sequentially over time where one basically is predicting ahead
+1:15:01
+one step, updating that prediction, predicting ahead another step, updating the information
+1:15:08
+on the states. And that overall process is the process
+1:15:19
+of actually computing the likelihood function for these linear state-space models.
+1:15:25
+And so the Kalman filter is basically ultimately applied
+1:15:32
+for successive forecasting of the process but also for helping us identify what the underlying model
+1:15:39
+parameters are using maximum likelihood methods. And so the likelihood function for the linear state-space
+1:15:48
+model is basically the-- or the log-likelihood is the log-likelihood of the entire data series,
+1:15:54
+give the unknown parameters. But that can be expressed as the product
+1:16:00
+of the conditional distributions of each successive observation, given the history.
+1:16:07
+And so basically, the likelihood of theta is the likelihood of the first observation
+1:16:12
+times the density of the second observation given the first times and so forth for the whole series.
+1:16:18
+And so the likelihood function is basically a function of all these terms that we were computing
+1:16:25
+with the Kalman filter. And with the Kalman filter, it basically
+1:16:33
+provides all the terms necessary for this estimation. If the error terms are normally distributed,
+1:16:42
+then the means and variances of these estimates are in fact characterizing the exact distributions
+1:16:52
+of the process. Basically, we're taking-- if the innovation series are all normal random variables, then
+1:16:59
+the linear state-space model, all it's doing is taking linear combinations of normals for the underlying states and for the actual observations.
+1:17:07
+And normal distributions are fully characterized by their mean vectors and covariance matrices. And the Kalman filter provides a way
+1:17:14
+to update these distributions for all these features
+1:17:21
+of a model, the underlying states as well as the distributions of the observations. So that's a brief introduction the Kalman filter.
+1:17:35
+Let's finish there. Thank you.

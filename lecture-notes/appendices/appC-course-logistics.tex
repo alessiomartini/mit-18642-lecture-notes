@@ -1,0 +1,160 @@
+% !TEX root = ../main.tex
+\chapter{Course Logistics}\label{app:logistics}
+
+This appendix collects the practical, non-mathematical information about how the two courses were
+run: syllabus and grading, calendar structure, problem-set and assignment logistics, the 2024
+investment game, the 2024 group project and final paper, and the 2013 instructor interview. It is
+assembled from the \file{pages/} subdirectories of the two OCW course sites (\file{syllabus},
+\file{calendar}, \file{assignments}, \file{problem-sets}, \file{investment-game},
+\file{group-project}, \file{final-paper} for 2024; \file{syllabus}, \file{instructor-insights},
+\file{projects}, \file{related-resources} for 2013), reporting only what those pages state.
+
+\section{18.642, Fall 2024}
+
+\subsection{Syllabus and grading}
+
+Two 1.5-hour lectures per week. Prerequisites: 18.03 (Differential Equations), 18.05 or 18.600
+(Probability), and 18.06 (Linear Algebra); prior finance knowledge is not required. Mathematics
+lectures were given by MIT mathematicians (mainly Peter Kempthorne), applications lectures by
+industry professionals (a mix of investment banks, FinTech and hedge funds).
+
+The class had five problem sets, an optional investment game, a mid-semester group project (a
+written lecture note plus an in-class presentation), and, in place of a final exam, a final paper on
+a math finance topic of the student's choice. The grading page states the weights explicitly:
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Component & Weight\\
+\midrule
+Homework (problem sets) & 40\%\\
+Group project presentation & 20\%\\
+Participation & 10\%\\
+Final paper & 30\%\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Calendar structure}
+
+The calendar page lists 26 lecture slots, alternating math lectures (mostly Kempthorne, covering the
+topics of \cref{part:2024}) with applications lectures by outside speakers (e.g.\ Jeff Shen of
+BlackRock on quantitative equity investing, L3; Andrew Gunstensen of Mizuho on rates, L7; Stefan
+Andreev of Two Sigma on PCA, L9; Andrew W.~Lo on AI in biomedical portfolios, L18; John Hull on
+machine learning, L23). Problem sets were due at lectures 3, 7, 9, 18 and 22. Lectures 15--17 were
+student presentations of the group project, and lecture 26 was the final paper presentations.
+
+\subsection{Problem sets}
+
+Five problem sets, each covering the math lecture topics up to that point (see
+\cref{app:materials} for the file-to-chapter mapping). The problem-sets page lists two accompanying
+readings: Gron, ``Optimal Portfolio Choice and Stochastic Volatility'' (\emph{Applied Stochastic
+Models in Business and Industry}, 2012), referenced by Problem 2 of Problem Set~2, and, for the PCA
+problem, a note on principal component analysis of interest rates plus sample R code (both used in
+\cref{ch:pca}); Problem Set~5 references Parkinson, ``The Extreme Value Method for Estimating the
+Variance of the Rate of Return'' (\emph{The Journal of Business}, 1980) and ships a companion R
+Markdown volatility case study.
+
+\subsection{Investment game}\label{appC:game}
+
+The investment game (ungraded) is stated in full detail in \cref{ex:game} of \cref{ch:markets}; it
+is not repeated here. Two points from the course page are purely administrative and not part of the
+exercise: students had to submit their choice of instrument to the instructors before 14 September
+2024, and their optional switch before 12 October 2024, and at the end of the term the instructors
+announced the top three performers by sharing the tracking spreadsheets.
+
+\subsection{Group project}
+
+Groups worked on an introductory, written lecture note aimed at fellow students with no prior
+knowledge of the topic; each group member submitted their own 5--7 page draft on their section. The
+first submission (``Draft 1'') was graded only on evidence of individual, focused effort (5+ pages
+of draft text), and closed with a reflection paragraph asking for specific feedback. It was followed
+by a peer review of another group's draft, revision, and a 15--20 minute oral presentation in class
+(lectures 15--17 on the calendar).
+
+The topics offered in 2024 were: How Human Fallacies Lead to Market Anomalies; Regression Modeling
+of UK Property Prices; The Use of Machine Learning in Predicting Future Interest Rates; Alternative
+Data; Jump-Diffusion Model; Maximizing Utility While Minimizing Risk; Fourier Analysis and Its
+Applications in the Stock Market; Black Scholes Merton Model; Implied Volatility; Partial
+Differential Equation Models for Option Pricing; Manipulating the Sports Betting Market; Time
+Series Modeling; Analyzing Volatility Curves in Option Pricing; The Black-Scholes Model; and
+Delta-Hedging.
+
+\subsection{Final paper}
+
+Every student wrote their own final paper, individually graded even when it continued a group
+project topic; sections of a joint paper had to be clearly attributed to their author. Papers were
+due on the last day of lectures, typically 10--15 pages, graded in part on mathematical content,
+writing quality, and organization. As with the group project, a Draft~1 was required first (3--4
+polished pages plus 1--2 pages of motivation, or 5--7 pages of developing notes, with a closing
+reflection section), assessed only on evidence of focused effort, followed by peer review the next
+week.
+
+The final-paper page lists 33 topics proposed for 2024, spanning market microstructure (credit
+expansion and land prices, election effects on volatility), derivatives pricing (SABR, Heston,
+jump-diffusion Monte Carlo, comparative Black-Scholes/Monte Carlo studies), portfolio and risk
+methods (Black-Litterman, PCA, tail-risk hedging), machine learning applications (LSTM volatility
+forecasting, reinforcement learning for Greeks hedging, AI-driven trading), and a few lighter
+entries (sports-betting binary options, ``The Wolf of Wall Street'' and stock-market cinematography,
+DEI-focused ETFs). The full list is not reproduced here; consult the source page for all 33 titles.
+
+\section{18.S096, Fall 2013}
+
+\subsection{Syllabus, goals and grading}
+
+Same meeting pattern (two 1.5-hour lectures/week) and a longer prerequisite list: 18.01, 18.02,
+18.03, 18.05 or 18.440, and 18.06. The course had no exams: problem sets were due two weeks after
+each math lecture, and the final grade was 75\% homework, 25\% final paper. The syllabus page lists
+ten explicit course goals, later repeated verbatim on the instructor-insights page, e.g.\ deriving
+the price-yield relationship and convexity, bootstrapping a yield curve, computing standard VaR,
+estimating option volatility, deriving Black--Scholes via risk-neutral arguments, PCA as matrix
+decomposition, limiting theorems, It\^o's lemma, and Girsanov's theorem and change of measure --
+i.e.\ essentially the syllabus of \cref{part:2024,part:2013} combined. The course also offered an
+optional field trip to Morgan Stanley's New York offices.
+
+\subsection{Instructor insights (2013)}
+
+The course grew out of Jake Xia's and Vasily Strela's wish, as MIT alumni working in industry, to
+give back to the department; it was first taught in Fall 2012 as invited industry lectures only, and
+the pure-math component was added the following year to better integrate theory and practice.
+Enrollment was about 50 students, mostly undergraduates with a few graduate students, mainly
+mathematics majors with some from EECS, economics, and aero/astro; about half had no prior finance
+background. Students were expected to spend about 12 hours/week on the course, split between the two
+lecture types and, outside class, problem sets (due two weeks after each lecture) and the final
+paper.
+
+\begin{coursenote}
+The instructors' own reflection: designing problem sets for a mixed-background cohort was an
+acknowledged difficulty (``Future offerings will distinguish core versus advanced problems''), which
+is one motivation, together with the addition of the applications lectures, for how the course
+evolved from 2013 to the 2024 edition mapped in \cref{app:materials}.
+\end{coursenote}
+
+\subsection{Final paper topics (2013)}\label{appC:2013paper}
+
+Twenty-five percent of the grade was the final paper (see above); the projects page gives sample
+topics -- portfolio risk management, regime-shift modeling, low-volatility investing, modeling
+financial bubbles (citing Didier Sornette's work), the Black--Scholes/heat-equation correspondence,
+hybrid FX/rate products, HJM versus short-rate models, and Ross recovery -- plus a list of topics
+actually chosen by students the previous year, mostly variations on the same themes (Black-Scholes
+to heat-equation derivations, HJM/Ho-Lee models, FX jump-diffusion bond pricing, Asian options,
+minimal-entropy martingale measures, PCA of energy/currency swap curves around the 2008 crisis, and
+Monte Carlo/Heston option pricing).
+
+\subsection{Related resources (2013)}
+
+The related-resources page lists six textbooks (Hull's \emph{Options, Futures, and Other
+Derivatives}; Baxter and Rennie's \emph{Financial Calculus}; Wilmott, Howison and Dewynne's
+\emph{The Mathematics of Financial Derivatives}; Grinold and Kahn's \emph{Active Portfolio
+Management}; Fabozzi, Focardi and Kolm's \emph{Financial Modeling of the Equity Market}; and Tsay's
+\emph{Analysis of Financial Time Series}) together with a financial glossary of about 40 terms
+(alpha, beta, the Greeks, VaR, swaptions, zero-coupon bonds, and so on). The glossary substantially
+overlaps with the terminology already introduced across \cref{part:2024,part:2013}; \cref{ex:glossary}
+in \cref{ch:markets} is the course's own suggested exercise for building such a glossary, so it is
+not reproduced again here.
+
+\section{Sources not covered}
+
+The 2024 \file{pages/week-1} through \file{week-15} pages are a lecture-by-lecture index used to
+build \cref{app:materials} and are not repeated here. No \file{case-studies} or
+\file{lecture-notes} index page beyond what is already listed in \cref{app:materials} added further
+logistics content for the 2013 course.

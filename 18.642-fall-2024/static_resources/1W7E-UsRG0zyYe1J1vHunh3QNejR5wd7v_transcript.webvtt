@@ -1,0 +1,6056 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.968 align:middle line:90%
+[SQUEAKING]
+
+00:00:01.968 --> 00:00:03.936 align:middle line:90%
+[RUSTLING]
+
+00:00:03.936 --> 00:00:07.380 align:middle line:90%
+[CLICKING]
+
+00:00:07.380 --> 00:00:17.060 align:middle line:90%
+
+
+00:00:17.060 --> 00:00:22.040 align:middle line:84%
+PROFESSOR: All right, I want to
+welcome Stefan Andreev as guest
+
+00:00:22.040 --> 00:00:22.900 align:middle line:90%
+lecture today.
+
+00:00:22.900 --> 00:00:28.400 align:middle line:84%
+He has been a significant part
+of this course over the past,
+
+00:00:28.400 --> 00:00:29.620 align:middle line:90%
+I think, 11 years.
+
+00:00:29.620 --> 00:00:32.880 align:middle line:90%
+Is that right, Stefan?
+
+00:00:32.880 --> 00:00:34.260 align:middle line:90%
+STEFAN ANDREEV: A long period.
+
+00:00:34.260 --> 00:00:35.700 align:middle line:90%
+And I can't count that far.
+
+00:00:35.700 --> 00:00:39.960 align:middle line:84%
+PROFESSOR: Partly because his
+lectures are the most popular
+
+00:00:39.960 --> 00:00:42.720 align:middle line:84%
+in the course, and we
+really are glad to have
+
+00:00:42.720 --> 00:00:44.320 align:middle line:90%
+him come back again.
+
+00:00:44.320 --> 00:00:47.880 align:middle line:84%
+His background is
+very interesting.
+
+00:00:47.880 --> 00:00:51.840 align:middle line:84%
+He has a PhD in Chemical
+Physics from Harvard.
+
+00:00:51.840 --> 00:00:55.480 align:middle line:84%
+And he has worked
+at the top firms
+
+00:00:55.480 --> 00:01:01.970 align:middle line:84%
+on Wall Street, Morgan Stanley,
+Citadel, and now to Sigma.
+
+00:01:01.970 --> 00:01:07.110 align:middle line:84%
+So he's a really great person
+to share his expertise with us.
+
+00:01:07.110 --> 00:01:08.570 align:middle line:90%
+So thank you.
+
+00:01:08.570 --> 00:01:10.090 align:middle line:90%
+STEFAN ANDREEV: Thank you.
+
+00:01:10.090 --> 00:01:10.750 align:middle line:90%
+Thank you.
+
+00:01:10.750 --> 00:01:13.290 align:middle line:90%
+Thank you, guys.
+
+00:01:13.290 --> 00:01:15.850 align:middle line:90%
+Very nice to meet you all.
+
+00:01:15.850 --> 00:01:18.373 align:middle line:90%
+Big class, big class this year.
+
+00:01:18.373 --> 00:01:19.040 align:middle line:90%
+That's exciting.
+
+00:01:19.040 --> 00:01:22.170 align:middle line:90%
+
+
+00:01:22.170 --> 00:01:24.770 align:middle line:84%
+I'll start with this before
+everybody gets tired.
+
+00:01:24.770 --> 00:01:26.170 align:middle line:90%
+I wanted to say that like I--
+
+00:01:26.170 --> 00:01:28.450 align:middle line:84%
+we're going to talk about
+principal component analysis
+
+00:01:28.450 --> 00:01:29.810 align:middle line:90%
+today.
+
+00:01:29.810 --> 00:01:35.570 align:middle line:84%
+And some of the main things I
+want you to take away from this
+
+00:01:35.570 --> 00:01:41.370 align:middle line:84%
+are this is a absolutely core
+data science tool in finance.
+
+00:01:41.370 --> 00:01:42.530 align:middle line:90%
+That's number one.
+
+00:01:42.530 --> 00:01:46.410 align:middle line:90%
+Number two, it's great to--
+
+00:01:46.410 --> 00:01:50.410 align:middle line:84%
+this kind of stuff, you
+only learn by doing it,
+
+00:01:50.410 --> 00:01:55.650 align:middle line:84%
+so actually doing
+some kind of project
+
+00:01:55.650 --> 00:02:00.410 align:middle line:84%
+where you use this toolkit
+is essential for you
+
+00:02:00.410 --> 00:02:03.290 align:middle line:90%
+to really learn it.
+
+00:02:03.290 --> 00:02:07.730 align:middle line:84%
+And three, if you ever want
+to get a job in finance,
+
+00:02:07.730 --> 00:02:12.650 align:middle line:84%
+I think having done
+a project with this
+
+00:02:12.650 --> 00:02:15.410 align:middle line:84%
+and having some familiarity
+with what this is about
+
+00:02:15.410 --> 00:02:18.570 align:middle line:84%
+might help you during
+interviews quite a bit.
+
+00:02:18.570 --> 00:02:21.370 align:middle line:84%
+We're going to have
+lectures and slides.
+
+00:02:21.370 --> 00:02:23.996 align:middle line:84%
+And we're going to have some--
+the slides are on the web,
+
+00:02:23.996 --> 00:02:27.290 align:middle line:90%
+on the classroom website.
+
+00:02:27.290 --> 00:02:32.530 align:middle line:84%
+In addition to that,
+there is a notebook,
+
+00:02:32.530 --> 00:02:34.130 align:middle line:84%
+and a Jupyter
+Notebook and a data
+
+00:02:34.130 --> 00:02:39.727 align:middle line:84%
+set that I've used to prepare
+these slides, at least
+
+00:02:39.727 --> 00:02:41.560 align:middle line:84%
+the first example we're
+going to talk about.
+
+00:02:41.560 --> 00:02:44.530 align:middle line:90%
+
+
+00:02:44.530 --> 00:02:47.290 align:middle line:84%
+Like I think that's
+a great reference
+
+00:02:47.290 --> 00:02:53.130 align:middle line:84%
+if you ever want to see how
+this stuff gets computed.
+
+00:02:53.130 --> 00:02:58.260 align:middle line:84%
+And if you want to do like
+a project, final project
+
+00:02:58.260 --> 00:03:05.080 align:middle line:84%
+in the class, it would be
+something like that notebook,
+
+00:03:05.080 --> 00:03:06.880 align:middle line:90%
+but a little more elaborate.
+
+00:03:06.880 --> 00:03:08.580 align:middle line:84%
+So it gives you a
+little bit of a flavor
+
+00:03:08.580 --> 00:03:13.380 align:middle line:84%
+of what the starting point
+and what the project would
+
+00:03:13.380 --> 00:03:16.980 align:middle line:84%
+be like, probably be a little
+more extensive than what
+
+00:03:16.980 --> 00:03:22.150 align:middle line:84%
+we're talking about here,
+but like in the same spirit.
+
+00:03:22.150 --> 00:03:24.780 align:middle line:90%
+
+
+00:03:24.780 --> 00:03:26.820 align:middle line:90%
+So yeah.
+
+00:03:26.820 --> 00:03:30.580 align:middle line:84%
+Now that we got this over with,
+let's talk about what is PCA
+
+00:03:30.580 --> 00:03:35.780 align:middle line:84%
+and where does it fit within
+the world of machine learning
+
+00:03:35.780 --> 00:03:37.340 align:middle line:90%
+algorithms.
+
+00:03:37.340 --> 00:03:41.300 align:middle line:84%
+And it's basically--
+it's a method
+
+00:03:41.300 --> 00:03:42.960 align:middle line:90%
+for unsupervised learning.
+
+00:03:42.960 --> 00:03:45.980 align:middle line:84%
+So it's basically a
+method to cluster,
+
+00:03:45.980 --> 00:03:49.070 align:middle line:84%
+reduce dimensionality to
+make sense of the data.
+
+00:03:49.070 --> 00:03:54.410 align:middle line:90%
+
+
+00:03:54.410 --> 00:03:56.270 align:middle line:90%
+It's not a regression.
+
+00:03:56.270 --> 00:03:58.330 align:middle line:84%
+There's no causality
+implied when you use PCA.
+
+00:03:58.330 --> 00:04:01.190 align:middle line:90%
+
+
+00:04:01.190 --> 00:04:03.730 align:middle line:84%
+Yeah, it's a way to
+understand data better,
+
+00:04:03.730 --> 00:04:06.870 align:middle line:84%
+especially data that
+has a lot of dimensions,
+
+00:04:06.870 --> 00:04:12.230 align:middle line:84%
+where many of those dimensions
+are highly correlated.
+
+00:04:12.230 --> 00:04:15.510 align:middle line:84%
+Here I've listed a
+bunch of examples
+
+00:04:15.510 --> 00:04:18.070 align:middle line:90%
+of where PCA can be applied.
+
+00:04:18.070 --> 00:04:23.950 align:middle line:84%
+Generally, it's widely
+applied in large data
+
+00:04:23.950 --> 00:04:28.670 align:middle line:84%
+sets, multi-dimensional
+data, like a lot of data.
+
+00:04:28.670 --> 00:04:31.210 align:middle line:84%
+The actual calculations
+are mostly linear algebra.
+
+00:04:31.210 --> 00:04:33.690 align:middle line:84%
+So it's efficient, and
+fast, and scalable.
+
+00:04:33.690 --> 00:04:39.862 align:middle line:84%
+And this is one of the reasons
+people generally like to use it.
+
+00:04:39.862 --> 00:04:41.570 align:middle line:84%
+I'm not going to go
+through all of these.
+
+00:04:41.570 --> 00:04:44.310 align:middle line:90%
+
+
+00:04:44.310 --> 00:04:48.270 align:middle line:90%
+Their applications vary widely--
+
+00:04:48.270 --> 00:04:50.880 align:middle line:90%
+they vary across science.
+
+00:04:50.880 --> 00:04:57.200 align:middle line:84%
+And in finance, it's used
+very extensively as well.
+
+00:04:57.200 --> 00:04:59.240 align:middle line:84%
+So first thing I
+wanted to talk about
+
+00:04:59.240 --> 00:05:04.963 align:middle line:84%
+is go through a
+visual example of--
+
+00:05:04.963 --> 00:05:06.880 align:middle line:84%
+some of these things
+that I want to talk about
+
+00:05:06.880 --> 00:05:11.680 align:middle line:84%
+are like my mental toy
+models that I always
+
+00:05:11.680 --> 00:05:16.600 align:middle line:84%
+refer to when I think about what
+is happening when I'm using PCA.
+
+00:05:16.600 --> 00:05:20.840 align:middle line:84%
+In this example--
+you guys see well?
+
+00:05:20.840 --> 00:05:22.360 align:middle line:90%
+OK, good.
+
+00:05:22.360 --> 00:05:27.460 align:middle line:84%
+In this example, I've prepared
+effectively three data sets.
+
+00:05:27.460 --> 00:05:30.260 align:middle line:84%
+But they're really
+like one data set.
+
+00:05:30.260 --> 00:05:31.352 align:middle line:90%
+I've just made this up.
+
+00:05:31.352 --> 00:05:32.060 align:middle line:90%
+There's just one.
+
+00:05:32.060 --> 00:05:34.560 align:middle line:84%
+It's like
+one-dimensional data set.
+
+00:05:34.560 --> 00:05:38.860 align:middle line:84%
+And all I've done is I've taken
+these one-dimensional data set,
+
+00:05:38.860 --> 00:05:42.400 align:middle line:84%
+and I've made it two
+dimensional by just
+
+00:05:42.400 --> 00:05:45.360 align:middle line:84%
+adding an extra coordinate
+like the blue line.
+
+00:05:45.360 --> 00:05:47.800 align:middle line:84%
+The extra coordinate
+y, I made 0.
+
+00:05:47.800 --> 00:05:49.680 align:middle line:84%
+And then I took this
+data set and I just
+
+00:05:49.680 --> 00:05:53.440 align:middle line:84%
+rotated it like 45 degrees
+and then 90 degrees.
+
+00:05:53.440 --> 00:05:59.680 align:middle line:84%
+And in this two-dimensional
+world, it's two sides.
+
+00:05:59.680 --> 00:06:00.980 align:middle line:90%
+Each point has two coordinates.
+
+00:06:00.980 --> 00:06:02.600 align:middle line:84%
+So it looks like
+it's two dimensional.
+
+00:06:02.600 --> 00:06:07.500 align:middle line:84%
+But I know it's one
+dimensional because I made it.
+
+00:06:07.500 --> 00:06:11.640 align:middle line:84%
+And the key thing
+that PCA would do
+
+00:06:11.640 --> 00:06:15.240 align:middle line:84%
+is PCA would immediately tell
+you, when it looks at this data,
+
+00:06:15.240 --> 00:06:18.240 align:middle line:84%
+that it's actually
+one dimensional.
+
+00:06:18.240 --> 00:06:19.040 align:middle line:90%
+You download it.
+
+00:06:19.040 --> 00:06:20.165 align:middle line:90%
+You do the calculation.
+
+00:06:20.165 --> 00:06:21.540 align:middle line:84%
+It's going to be
+one dimensional.
+
+00:06:21.540 --> 00:06:23.250 align:middle line:90%
+So how would it work?
+
+00:06:23.250 --> 00:06:27.680 align:middle line:90%
+
+
+00:06:27.680 --> 00:06:32.650 align:middle line:84%
+You can think of PCA as a way
+to rotate the coordinate system.
+
+00:06:32.650 --> 00:06:36.680 align:middle line:90%
+
+
+00:06:36.680 --> 00:06:40.212 align:middle line:84%
+Basically when you apply PCA
+to this, it will tell you--
+
+00:06:40.212 --> 00:06:42.180 align:middle line:84%
+if you apply it
+to the blue data,
+
+00:06:42.180 --> 00:06:47.730 align:middle line:84%
+it will tell you that the PC1,
+the first principal component--
+
+00:06:47.730 --> 00:06:50.350 align:middle line:84%
+Peter, you guys have done
+the math part already of PCA?
+
+00:06:50.350 --> 00:06:50.850 align:middle line:90%
+Yeah.
+
+00:06:50.850 --> 00:06:54.710 align:middle line:84%
+So the first principal component
+is going to be the x direction.
+
+00:06:54.710 --> 00:06:56.210 align:middle line:84%
+When you do the red
+line, it's going
+
+00:06:56.210 --> 00:06:58.950 align:middle line:84%
+to tell you that it's
+like the 1, 1 direction.
+
+00:06:58.950 --> 00:07:07.870 align:middle line:84%
+And it's going to just discover
+this direction dimensionality.
+
+00:07:07.870 --> 00:07:09.610 align:middle line:84%
+The first data set
+was very, very simple
+
+00:07:09.610 --> 00:07:12.370 align:middle line:84%
+because it's purely
+one dimensional.
+
+00:07:12.370 --> 00:07:14.610 align:middle line:84%
+This one here is the
+same thing, but I've
+
+00:07:14.610 --> 00:07:18.530 align:middle line:84%
+added a little bit of noise
+in the other dimension.
+
+00:07:18.530 --> 00:07:22.230 align:middle line:84%
+And now when I
+apply PCA to this,
+
+00:07:22.230 --> 00:07:24.310 align:middle line:84%
+it's going to tell me
+basically the same thing.
+
+00:07:24.310 --> 00:07:27.490 align:middle line:84%
+PC1 is going to be
+the same, but PC2
+
+00:07:27.490 --> 00:07:29.250 align:middle line:84%
+is going to have a
+little bit of variance
+
+00:07:29.250 --> 00:07:31.910 align:middle line:84%
+along PC2, along the
+perpendicular direction.
+
+00:07:31.910 --> 00:07:34.970 align:middle line:84%
+So in both of these
+cases, A and B,
+
+00:07:34.970 --> 00:07:39.330 align:middle line:84%
+it will tell me that PC1 and
+PC2 eigenvectors are the same.
+
+00:07:39.330 --> 00:07:41.250 align:middle line:84%
+And what's going
+to be different is
+
+00:07:41.250 --> 00:07:43.810 align:middle line:84%
+there's going to be
+0 variance in case
+
+00:07:43.810 --> 00:07:49.140 align:middle line:84%
+of B on the PC2 direction
+and a little bit of variance
+
+00:07:49.140 --> 00:07:54.060 align:middle line:84%
+in example A, along
+the PC2 direction.
+
+00:07:54.060 --> 00:07:57.030 align:middle line:90%
+So it basically tells us--
+
+00:07:57.030 --> 00:07:58.780 align:middle line:84%
+the two things it tells
+us, the directions
+
+00:07:58.780 --> 00:08:02.820 align:middle line:84%
+along which the data is
+concentrated and the variance
+
+00:08:02.820 --> 00:08:07.350 align:middle line:84%
+or how important that direction
+is on a relative basis.
+
+00:08:07.350 --> 00:08:13.435 align:middle line:90%
+
+
+00:08:13.435 --> 00:08:15.060 align:middle line:84%
+What's nice about
+this-- like I've done
+
+00:08:15.060 --> 00:08:18.140 align:middle line:90%
+this two-dimensional plots.
+
+00:08:18.140 --> 00:08:21.820 align:middle line:84%
+But PCA, like when you actually
+do it, it's just linear algebra.
+
+00:08:21.820 --> 00:08:24.100 align:middle line:90%
+And you can do it on--
+
+00:08:24.100 --> 00:08:26.740 align:middle line:84%
+you can do it on any
+number of dimensions.
+
+00:08:26.740 --> 00:08:28.300 align:middle line:90%
+You can do it on--
+
+00:08:28.300 --> 00:08:29.060 align:middle line:90%
+yeah.
+
+00:08:29.060 --> 00:08:32.039 align:middle line:84%
+So when you have
+high dimensionality,
+
+00:08:32.039 --> 00:08:36.260 align:middle line:84%
+this is a very robust
+and powerful tool.
+
+00:08:36.260 --> 00:08:39.179 align:middle line:84%
+What's really nice about that
+in the high dimensionality
+
+00:08:39.179 --> 00:08:41.240 align:middle line:90%
+is like it's not a minimization.
+
+00:08:41.240 --> 00:08:43.059 align:middle line:90%
+It's not an optimization.
+
+00:08:43.059 --> 00:08:45.380 align:middle line:84%
+It's just a linear
+algebra calculation.
+
+00:08:45.380 --> 00:08:47.320 align:middle line:90%
+And it's fast.
+
+00:08:47.320 --> 00:08:50.910 align:middle line:84%
+So you can process very large
+amounts of data very quickly.
+
+00:08:50.910 --> 00:08:56.100 align:middle line:90%
+
+
+00:08:56.100 --> 00:09:02.200 align:middle line:84%
+A very common-- like when
+you use this in practice,
+
+00:09:02.200 --> 00:09:03.700 align:middle line:84%
+like the answers
+that you get from--
+
+00:09:03.700 --> 00:09:09.260 align:middle line:84%
+the things you can learn
+from PCA are going to be--
+
+00:09:09.260 --> 00:09:12.280 align:middle line:84%
+it tells you a relationship
+between variables.
+
+00:09:12.280 --> 00:09:15.800 align:middle line:84%
+Like in our first example, if
+you look at this diagonal line,
+
+00:09:15.800 --> 00:09:18.260 align:middle line:90%
+it's going to tell you that--
+
+00:09:18.260 --> 00:09:20.160 align:middle line:84%
+like y equals x is
+kind of the line.
+
+00:09:20.160 --> 00:09:23.540 align:middle line:84%
+And then you can think, well,
+I can discover the same thing
+
+00:09:23.540 --> 00:09:28.000 align:middle line:90%
+if I regress y on x.
+
+00:09:28.000 --> 00:09:31.282 align:middle line:84%
+And then it's going to tell
+me pretty much like the same--
+
+00:09:31.282 --> 00:09:32.740 align:middle line:84%
+if I look at my
+diagonal line, it's
+
+00:09:32.740 --> 00:09:35.140 align:middle line:90%
+going to tell me the same thing.
+
+00:09:35.140 --> 00:09:38.220 align:middle line:84%
+And that is true in the
+one-dimensional example.
+
+00:09:38.220 --> 00:09:40.140 align:middle line:84%
+But I wanted to
+give an illustration
+
+00:09:40.140 --> 00:09:45.260 align:middle line:84%
+of what is the difference
+between regression and PCA?
+
+00:09:45.260 --> 00:09:47.816 align:middle line:90%
+
+
+00:09:47.816 --> 00:09:54.410 align:middle line:84%
+Remember, PCA is-- remember,
+it's unsupervised learning.
+
+00:09:54.410 --> 00:09:55.850 align:middle line:90%
+So there's no causality implied.
+
+00:09:55.850 --> 00:09:59.307 align:middle line:84%
+So x and y are kind of
+on the same footing.
+
+00:09:59.307 --> 00:10:00.890 align:middle line:84%
+Each dimension is
+on the same footing.
+
+00:10:00.890 --> 00:10:02.830 align:middle line:84%
+There's no special
+dimension that's dependent
+
+00:10:02.830 --> 00:10:04.430 align:middle line:90%
+and one that is independent.
+
+00:10:04.430 --> 00:10:07.250 align:middle line:84%
+So when you regress, this
+is like the same data set.
+
+00:10:07.250 --> 00:10:08.990 align:middle line:84%
+And you can see
+here the regression
+
+00:10:08.990 --> 00:10:13.190 align:middle line:84%
+of y versus x, the
+regression of x versus y.
+
+00:10:13.190 --> 00:10:17.430 align:middle line:84%
+And the PC1 line,
+they're similar.
+
+00:10:17.430 --> 00:10:20.550 align:middle line:90%
+But they're not the same.
+
+00:10:20.550 --> 00:10:22.430 align:middle line:90%
+Like it's actually optimizing--
+
+00:10:22.430 --> 00:10:24.370 align:middle line:84%
+it's minimizing the
+distance to the line.
+
+00:10:24.370 --> 00:10:27.910 align:middle line:90%
+
+
+00:10:27.910 --> 00:10:30.767 align:middle line:84%
+This is minimizing the distance
+in the perpendicular direction.
+
+00:10:30.767 --> 00:10:32.350 align:middle line:84%
+And the others are
+minimizing distance
+
+00:10:32.350 --> 00:10:34.090 align:middle line:84%
+in the independent
+variable direction,
+
+00:10:34.090 --> 00:10:36.090 align:middle line:90%
+so when you do a regression.
+
+00:10:36.090 --> 00:10:37.490 align:middle line:90%
+So it's not exactly the same.
+
+00:10:37.490 --> 00:10:39.560 align:middle line:84%
+I think it's good to
+keep that in mind.
+
+00:10:39.560 --> 00:10:45.800 align:middle line:84%
+Because sometimes if you
+really want to understand,
+
+00:10:45.800 --> 00:10:50.360 align:middle line:84%
+given an observation x,
+how I should model y,
+
+00:10:50.360 --> 00:10:52.620 align:middle line:84%
+maybe PCA is not
+the right approach.
+
+00:10:52.620 --> 00:10:55.640 align:middle line:84%
+Maybe you should
+run a regression.
+
+00:10:55.640 --> 00:10:59.280 align:middle line:84%
+But if you want to understand
+the correlation structure of x
+
+00:10:59.280 --> 00:11:01.160 align:middle line:84%
+and y, of two
+variables, there is
+
+00:11:01.160 --> 00:11:04.660 align:middle line:84%
+no-- you don't have necessarily
+one depends on the other.
+
+00:11:04.660 --> 00:11:07.100 align:middle line:84%
+You don't know anything
+about their relationship.
+
+00:11:07.100 --> 00:11:10.180 align:middle line:84%
+Then PCA is probably a
+more appropriate tool.
+
+00:11:10.180 --> 00:11:15.600 align:middle line:90%
+
+
+00:11:15.600 --> 00:11:18.080 align:middle line:84%
+Yeah, so I was just
+saying, if there
+
+00:11:18.080 --> 00:11:20.680 align:middle line:90%
+is some data that is in some--
+
+00:11:20.680 --> 00:11:24.640 align:middle line:84%
+if data is in a
+particular line, PC1,
+
+00:11:24.640 --> 00:11:26.220 align:middle line:84%
+which is the red
+direction here, you
+
+00:11:26.220 --> 00:11:28.260 align:middle line:84%
+will always discover
+where that direction is.
+
+00:11:28.260 --> 00:11:32.400 align:middle line:84%
+And if you actually map the
+data into PC coordinates,
+
+00:11:32.400 --> 00:11:35.640 align:middle line:84%
+it's just going to look like
+a straight line like that.
+
+00:11:35.640 --> 00:11:38.850 align:middle line:84%
+And a couple of things that
+I like about this example
+
+00:11:38.850 --> 00:11:43.690 align:middle line:84%
+is you can see how rotating
+the data set doesn't change
+
+00:11:43.690 --> 00:11:45.430 align:middle line:90%
+the PC coordinate output.
+
+00:11:45.430 --> 00:11:48.390 align:middle line:84%
+So it finds the
+direction appropriately.
+
+00:11:48.390 --> 00:11:51.570 align:middle line:84%
+The second thing that's very
+important is robustness.
+
+00:11:51.570 --> 00:11:53.570 align:middle line:90%
+In the real world, when you do--
+
+00:11:53.570 --> 00:11:56.610 align:middle line:84%
+it could be in
+science or in finance.
+
+00:11:56.610 --> 00:11:58.750 align:middle line:84%
+You're not going to
+have perfect data.
+
+00:11:58.750 --> 00:12:00.130 align:middle line:90%
+Everything is very noisy.
+
+00:12:00.130 --> 00:12:02.690 align:middle line:90%
+And noise is a huge problem.
+
+00:12:02.690 --> 00:12:05.550 align:middle line:84%
+And robustness to data
+noise is very important.
+
+00:12:05.550 --> 00:12:08.830 align:middle line:84%
+So this illustrates
+how robust things are.
+
+00:12:08.830 --> 00:12:15.050 align:middle line:84%
+So if I take one point
+and I just move it around,
+
+00:12:15.050 --> 00:12:19.730 align:middle line:84%
+you can see that the red
+line, which is the direction
+
+00:12:19.730 --> 00:12:22.410 align:middle line:90%
+of my PC1, doesn't--
+
+00:12:22.410 --> 00:12:24.930 align:middle line:90%
+it's quite robust.
+
+00:12:24.930 --> 00:12:28.750 align:middle line:84%
+It's quite robust to
+noise, to one particular.
+
+00:12:28.750 --> 00:12:31.970 align:middle line:84%
+If everything else is aligned,
+just moving around one data,
+
+00:12:31.970 --> 00:12:35.250 align:middle line:84%
+it doesn't really
+change things too much.
+
+00:12:35.250 --> 00:12:40.210 align:middle line:84%
+If I make them a little
+bit more spread out,
+
+00:12:40.210 --> 00:12:44.690 align:middle line:84%
+it's a little less robust,
+but it's still pretty robust.
+
+00:12:44.690 --> 00:12:46.270 align:middle line:84%
+And the thing that
+I wanted to say--
+
+00:12:46.270 --> 00:12:47.450 align:middle line:90%
+what happened?
+
+00:12:47.450 --> 00:12:50.890 align:middle line:84%
+People are just going to-- very
+often, you just take some data
+
+00:12:50.890 --> 00:12:52.930 align:middle line:90%
+and you just shove it into PCA.
+
+00:12:52.930 --> 00:12:55.893 align:middle line:84%
+And you don't actually care
+too much before you even
+
+00:12:55.893 --> 00:12:56.810 align:middle line:90%
+know what the data is.
+
+00:12:56.810 --> 00:12:58.110 align:middle line:90%
+And you just put it into PCA.
+
+00:12:58.110 --> 00:13:01.050 align:middle line:84%
+And PCA always
+gives you something.
+
+00:13:01.050 --> 00:13:02.610 align:middle line:84%
+But suppose the
+data doesn't really
+
+00:13:02.610 --> 00:13:05.770 align:middle line:90%
+have a dominant direction.
+
+00:13:05.770 --> 00:13:09.610 align:middle line:84%
+Then the PCA algorithm
+becomes not robust.
+
+00:13:09.610 --> 00:13:10.487 align:middle line:90%
+So you can see now.
+
+00:13:10.487 --> 00:13:11.570 align:middle line:90%
+Look, I'm moving one data.
+
+00:13:11.570 --> 00:13:13.850 align:middle line:84%
+And look what's happening
+to the coordinate.
+
+00:13:13.850 --> 00:13:15.850 align:middle line:90%
+One data point is--
+
+00:13:15.850 --> 00:13:17.330 align:middle line:84%
+I can just move
+that a little bit,
+
+00:13:17.330 --> 00:13:19.770 align:middle line:84%
+and it's just
+completely giving me--
+
+00:13:19.770 --> 00:13:24.330 align:middle line:84%
+the output is super sensitive
+to any noise in the data.
+
+00:13:24.330 --> 00:13:27.290 align:middle line:90%
+So it's worthless.
+
+00:13:27.290 --> 00:13:30.810 align:middle line:84%
+So it's very important when
+we're looking at the data
+
+00:13:30.810 --> 00:13:34.027 align:middle line:84%
+if we don't really know
+what this data looks like.
+
+00:13:34.027 --> 00:13:35.360 align:middle line:90%
+Sometimes it's high-dimensional.
+
+00:13:35.360 --> 00:13:37.380 align:middle line:84%
+You can't even
+really visualize it.
+
+00:13:37.380 --> 00:13:41.700 align:middle line:84%
+You have to think, how do I
+understand whether there's
+
+00:13:41.700 --> 00:13:44.460 align:middle line:84%
+actual structure in the data
+that I'm trying to discover?
+
+00:13:44.460 --> 00:13:46.300 align:middle line:90%
+This will help me discover--
+
+00:13:46.300 --> 00:13:47.663 align:middle line:90%
+quantify the structure.
+
+00:13:47.663 --> 00:13:49.580 align:middle line:84%
+But it's also good to
+understand qualitatively
+
+00:13:49.580 --> 00:13:51.080 align:middle line:90%
+how much the structure is.
+
+00:13:51.080 --> 00:13:54.540 align:middle line:90%
+
+
+00:13:54.540 --> 00:13:57.380 align:middle line:90%
+One thing that PCA also--
+
+00:13:57.380 --> 00:13:59.546 align:middle line:84%
+part of the PCA
+analysis at the output--
+
+00:13:59.546 --> 00:14:00.046 align:middle line:90%
+yes?
+
+00:14:00.046 --> 00:14:04.900 align:middle line:84%
+AUDIENCE: Yeah, how many
+is [INAUDIBLE] making it
+
+00:14:04.900 --> 00:14:07.900 align:middle line:84%
+around the parts to
+see how robust it
+
+00:14:07.900 --> 00:14:10.660 align:middle line:84%
+is, to see if the data is
+actually close to the line
+
+00:14:10.660 --> 00:14:11.570 align:middle line:90%
+or not?
+
+00:14:11.570 --> 00:14:13.490 align:middle line:90%
+STEFAN ANDREEV: Well, it's--
+
+00:14:13.490 --> 00:14:16.300 align:middle line:90%
+
+
+00:14:16.300 --> 00:14:18.080 align:middle line:90%
+no, but what--
+
+00:14:18.080 --> 00:14:20.460 align:middle line:84%
+I don't have-- you can
+write tools to do that.
+
+00:14:20.460 --> 00:14:23.260 align:middle line:84%
+But I think what
+you want-- one thing
+
+00:14:23.260 --> 00:14:26.500 align:middle line:84%
+that you can do that
+is very important when
+
+00:14:26.500 --> 00:14:31.140 align:middle line:84%
+you do your PCA analysis is
+to look at the eigenvalues.
+
+00:14:31.140 --> 00:14:33.510 align:middle line:84%
+Because very often, people
+look at the eigenvectors.
+
+00:14:33.510 --> 00:14:34.930 align:middle line:84%
+And they're like, oh,
+these are my directions.
+
+00:14:34.930 --> 00:14:36.597 align:middle line:84%
+And I'm going to
+project things, and I'm
+
+00:14:36.597 --> 00:14:40.470 align:middle line:84%
+going to assume everything
+is factorized nicely.
+
+00:14:40.470 --> 00:14:43.250 align:middle line:84%
+And we don't really look
+as much at the eigenvalues,
+
+00:14:43.250 --> 00:14:45.750 align:middle line:84%
+but it's very important to
+look at the eigenvalues.
+
+00:14:45.750 --> 00:14:50.590 align:middle line:84%
+And the reason is that in
+this example, when there's
+
+00:14:50.590 --> 00:14:53.430 align:middle line:84%
+no dominant direction,
+the eigenvalues, which
+
+00:14:53.430 --> 00:14:55.990 align:middle line:84%
+measure the variance
+along each direction,
+
+00:14:55.990 --> 00:14:57.250 align:middle line:90%
+would be very similar.
+
+00:14:57.250 --> 00:15:00.270 align:middle line:84%
+So when you look
+at-- when you're
+
+00:15:00.270 --> 00:15:04.030 align:middle line:84%
+using a principal component like
+the first principal component,
+
+00:15:04.030 --> 00:15:07.990 align:middle line:84%
+you want to make sure that the
+eigenvalue of that component
+
+00:15:07.990 --> 00:15:12.070 align:middle line:84%
+you're using is quite
+distinct from the rest
+
+00:15:12.070 --> 00:15:14.710 align:middle line:90%
+of the eigenvalues.
+
+00:15:14.710 --> 00:15:16.670 align:middle line:84%
+In finance, we'll
+see later we're
+
+00:15:16.670 --> 00:15:18.710 align:middle line:84%
+dealing with the
+time series of PCA.
+
+00:15:18.710 --> 00:15:21.270 align:middle line:84%
+Every day, you
+construct a PCA model.
+
+00:15:21.270 --> 00:15:24.030 align:middle line:84%
+So anything that's a
+number here, the eigenvalue
+
+00:15:24.030 --> 00:15:25.970 align:middle line:84%
+is actually a time
+series of eigenvalue.
+
+00:15:25.970 --> 00:15:29.430 align:middle line:84%
+So the thing I look at a
+lot when I'm doing analysis
+
+00:15:29.430 --> 00:15:33.680 align:middle line:84%
+is I look at eigenvalue
+plots in log space.
+
+00:15:33.680 --> 00:15:39.880 align:middle line:84%
+And I want to see that each
+distinct component that I use--
+
+00:15:39.880 --> 00:15:42.000 align:middle line:84%
+ideally, you want
+to see that it's
+
+00:15:42.000 --> 00:15:48.560 align:middle line:84%
+an order of magnitude different
+than the next one in variance,
+
+00:15:48.560 --> 00:15:52.460 align:middle line:84%
+basically, which if
+that's true, that's great.
+
+00:15:52.460 --> 00:15:54.540 align:middle line:90%
+And that doesn't always happen.
+
+00:15:54.540 --> 00:15:55.873 align:middle line:90%
+But at least you want it to be--
+
+00:15:55.873 --> 00:15:57.415 align:middle line:84%
+visually, you want
+it to be distinct.
+
+00:15:57.415 --> 00:15:58.700 align:middle line:90%
+You want it to be different.
+
+00:15:58.700 --> 00:16:02.280 align:middle line:84%
+You don't want-- if you have
+a time series of things,
+
+00:16:02.280 --> 00:16:04.900 align:middle line:84%
+you don't want the first
+and the second one to cross.
+
+00:16:04.900 --> 00:16:08.040 align:middle line:84%
+And if that's happening, then
+the first and second principal
+
+00:16:08.040 --> 00:16:11.520 align:middle line:84%
+component-- if the
+eigenvalues are small changes
+
+00:16:11.520 --> 00:16:14.440 align:middle line:84%
+or causing them
+to switch places,
+
+00:16:14.440 --> 00:16:16.600 align:middle line:84%
+it basically means there
+isn't a lot of structure.
+
+00:16:16.600 --> 00:16:19.240 align:middle line:84%
+And the PCA output is
+noisy, and it's actually
+
+00:16:19.240 --> 00:16:22.600 align:middle line:84%
+going to obfuscate
+rather than clarify
+
+00:16:22.600 --> 00:16:24.440 align:middle line:90%
+the thing you're looking at.
+
+00:16:24.440 --> 00:16:27.200 align:middle line:84%
+I've put here a little
+bit of math notation.
+
+00:16:27.200 --> 00:16:30.680 align:middle line:84%
+You guys have done your
+math lecture on PCA,
+
+00:16:30.680 --> 00:16:34.120 align:middle line:84%
+so we can be
+relatively quick here.
+
+00:16:34.120 --> 00:16:37.400 align:middle line:90%
+But I do want to go through it.
+
+00:16:37.400 --> 00:16:42.520 align:middle line:84%
+The main thing is
+you have your data.
+
+00:16:42.520 --> 00:16:46.600 align:middle line:84%
+Data matrix is
+generally-- there's
+
+00:16:46.600 --> 00:16:49.100 align:middle line:90%
+n observations in p dimensions.
+
+00:16:49.100 --> 00:16:50.880 align:middle line:84%
+And we think of
+that as a matrix.
+
+00:16:50.880 --> 00:16:57.120 align:middle line:84%
+And then if this matrix is x,
+then every day's observation are
+
+00:16:57.120 --> 00:17:00.360 align:middle line:90%
+vectors of size p.
+
+00:17:00.360 --> 00:17:06.040 align:middle line:84%
+And then you have a covariance
+matrix, which is XT times X.
+
+00:17:06.040 --> 00:17:13.079 align:middle line:90%
+And then there is--
+
+00:17:13.079 --> 00:17:19.480 align:middle line:84%
+I've here defined the wk,
+or the orthonormal vectors
+
+00:17:19.480 --> 00:17:21.900 align:middle line:84%
+representing the-- these
+are the eigenvectors.
+
+00:17:21.900 --> 00:17:22.400 align:middle line:90%
+Wk.
+
+00:17:22.400 --> 00:17:24.440 align:middle line:84%
+And then I've
+written down the math
+
+00:17:24.440 --> 00:17:29.610 align:middle line:84%
+of how you do the projection of
+data onto principal components
+
+00:17:29.610 --> 00:17:33.770 align:middle line:84%
+and how you compute
+the variance.
+
+00:17:33.770 --> 00:17:35.230 align:middle line:90%
+How do you get these vectors?
+
+00:17:35.230 --> 00:17:40.530 align:middle line:90%
+Well, there is-- you could do--
+
+00:17:40.530 --> 00:17:43.010 align:middle line:84%
+you could take your data,
+compute covariance matrix,
+
+00:17:43.010 --> 00:17:47.410 align:middle line:84%
+feed it into an eigenvalue
+calculator, which is basically--
+
+00:17:47.410 --> 00:17:51.810 align:middle line:84%
+in my work, our
+data is not really--
+
+00:17:51.810 --> 00:17:54.070 align:middle line:84%
+the number of dimensions
+is not actually that high.
+
+00:17:54.070 --> 00:17:56.850 align:middle line:90%
+So that's pretty-- that's OK.
+
+00:17:56.850 --> 00:18:02.710 align:middle line:84%
+It does scale, as that
+thing is potentially
+
+00:18:02.710 --> 00:18:05.610 align:middle line:84%
+maybe a little bit slow, but
+it's not actually that slow.
+
+00:18:05.610 --> 00:18:08.290 align:middle line:84%
+There is also a more
+efficient method
+
+00:18:08.290 --> 00:18:11.990 align:middle line:84%
+called SVD, Singular
+Value Decomposition,
+
+00:18:11.990 --> 00:18:16.010 align:middle line:84%
+where you can just compute your
+projections without calculating
+
+00:18:16.010 --> 00:18:18.123 align:middle line:90%
+the covariance matrix.
+
+00:18:18.123 --> 00:18:19.790 align:middle line:84%
+I like to compute the
+covariance matrix,
+
+00:18:19.790 --> 00:18:22.450 align:middle line:84%
+because we generally need to
+compute the covariance matrix
+
+00:18:22.450 --> 00:18:23.870 align:middle line:90%
+for other things in any case.
+
+00:18:23.870 --> 00:18:29.180 align:middle line:84%
+So if you have it
+already, then it's--
+
+00:18:29.180 --> 00:18:30.480 align:middle line:90%
+you might as well use it.
+
+00:18:30.480 --> 00:18:35.620 align:middle line:90%
+
+
+00:18:35.620 --> 00:18:37.580 align:middle line:84%
+So there's some--
+I've listed here
+
+00:18:37.580 --> 00:18:41.020 align:middle line:84%
+some properties of
+this eigenvector matrix
+
+00:18:41.020 --> 00:18:44.880 align:middle line:84%
+that are important,
+that it's orthonormal,
+
+00:18:44.880 --> 00:18:49.740 align:middle line:84%
+which means that the transpose
+of the eigenvector matrix
+
+00:18:49.740 --> 00:18:52.260 align:middle line:90%
+is also an inverse.
+
+00:18:52.260 --> 00:18:55.800 align:middle line:84%
+The covariance matrices
+can be written as the--
+
+00:18:55.800 --> 00:18:58.720 align:middle line:84%
+in this form, where lambda
+is the eigenvalue matrix.
+
+00:18:58.720 --> 00:19:01.100 align:middle line:90%
+That's the SVD decomposition.
+
+00:19:01.100 --> 00:19:04.040 align:middle line:84%
+There's total variance
+quantity you can think about,
+
+00:19:04.040 --> 00:19:05.700 align:middle line:84%
+which is the
+variance of x, which
+
+00:19:05.700 --> 00:19:07.320 align:middle line:90%
+is just the trace of lambda.
+
+00:19:07.320 --> 00:19:13.340 align:middle line:84%
+So the product of eigenvalues is
+the variance of your data set.
+
+00:19:13.340 --> 00:19:17.900 align:middle line:84%
+And there is something called
+percent variance explained,
+
+00:19:17.900 --> 00:19:21.740 align:middle line:84%
+which is just defined
+as how much variance
+
+00:19:21.740 --> 00:19:25.300 align:middle line:84%
+is along a particular
+PC direction divided
+
+00:19:25.300 --> 00:19:26.860 align:middle line:90%
+by the total variance.
+
+00:19:26.860 --> 00:19:32.228 align:middle line:84%
+So that adds up to
+100% when you're--
+
+00:19:32.228 --> 00:19:35.140 align:middle line:84%
+but that's very useful
+because if you remember
+
+00:19:35.140 --> 00:19:37.740 align:middle line:84%
+how I was saying want to
+look at the eigenvalues
+
+00:19:37.740 --> 00:19:41.620 align:middle line:84%
+to understand how important
+each direction is,
+
+00:19:41.620 --> 00:19:44.380 align:middle line:84%
+variance explained tells
+you that as a number.
+
+00:19:44.380 --> 00:19:47.580 align:middle line:84%
+You want to look at--
+you want to-- when you're
+
+00:19:47.580 --> 00:19:51.220 align:middle line:84%
+trying to model your data
+set with as few dimensions as
+
+00:19:51.220 --> 00:19:54.980 align:middle line:84%
+possible, you want to
+add more PC directions
+
+00:19:54.980 --> 00:19:59.020 align:middle line:84%
+until you get to a relatively
+high variance explained.
+
+00:19:59.020 --> 00:20:01.420 align:middle line:90%
+If you're able to explain--
+
+00:20:01.420 --> 00:20:03.040 align:middle line:84%
+if you have a
+10-dimensional data set,
+
+00:20:03.040 --> 00:20:07.120 align:middle line:84%
+and you're able to explain 80%
+of it using three dimensions,
+
+00:20:07.120 --> 00:20:08.920 align:middle line:90%
+that's a pretty big win.
+
+00:20:08.920 --> 00:20:11.780 align:middle line:90%
+
+
+00:20:11.780 --> 00:20:16.380 align:middle line:84%
+And I've also written out
+this out-of-sample variance
+
+00:20:16.380 --> 00:20:17.000 align:middle line:90%
+explained.
+
+00:20:17.000 --> 00:20:20.000 align:middle line:84%
+Or very often, what we
+do is we calculate a PCA.
+
+00:20:20.000 --> 00:20:22.030 align:middle line:84%
+We calibrate it on
+historical data,
+
+00:20:22.030 --> 00:20:26.814 align:middle line:84%
+and then we apply
+it to future data
+
+00:20:26.814 --> 00:20:33.210 align:middle line:84%
+that we're trying to model
+what will happen in the future.
+
+00:20:33.210 --> 00:20:35.470 align:middle line:84%
+Especially in
+finance we do that.
+
+00:20:35.470 --> 00:20:41.830 align:middle line:84%
+So when the data you're
+calibrating your PCA on
+
+00:20:41.830 --> 00:20:46.310 align:middle line:84%
+is different than the
+other data, then this--
+
+00:20:46.310 --> 00:20:49.410 align:middle line:84%
+you hope that the structure of
+the two data sets are the same.
+
+00:20:49.410 --> 00:20:51.070 align:middle line:84%
+So if the structure
+is the same, you'll
+
+00:20:51.070 --> 00:20:53.650 align:middle line:84%
+get the same variance
+explained structure.
+
+00:20:53.650 --> 00:20:57.770 align:middle line:84%
+But to the extent that
+it's not true, you may not.
+
+00:20:57.770 --> 00:21:04.150 align:middle line:84%
+So you may see that your
+dominance of certain PC1 factors
+
+00:21:04.150 --> 00:21:04.670 align:middle line:90%
+becomes--
+
+00:21:04.670 --> 00:21:06.190 align:middle line:84%
+it starts to explain
+less variance
+
+00:21:06.190 --> 00:21:09.550 align:middle line:84%
+as your out-of-sample
+data becomes
+
+00:21:09.550 --> 00:21:12.350 align:middle line:84%
+more different from the
+data, which you calibrate.
+
+00:21:12.350 --> 00:21:15.910 align:middle line:84%
+So this is a little bit of
+the modeling part of it,
+
+00:21:15.910 --> 00:21:21.100 align:middle line:84%
+where going to be using some
+data to calibrate the model.
+
+00:21:21.100 --> 00:21:22.720 align:middle line:84%
+And then you're
+going to use this
+
+00:21:22.720 --> 00:21:28.480 align:middle line:84%
+to predict the variance, the
+correlation structure of what
+
+00:21:28.480 --> 00:21:30.360 align:middle line:84%
+happens in the future,
+like future market
+
+00:21:30.360 --> 00:21:31.510 align:middle line:90%
+moves or future returns.
+
+00:21:31.510 --> 00:21:35.480 align:middle line:90%
+
+
+00:21:35.480 --> 00:21:43.760 align:middle line:84%
+So a typical-- what do we
+generally do when we apply PCA?
+
+00:21:43.760 --> 00:21:45.300 align:middle line:84%
+We're going to
+take our data set.
+
+00:21:45.300 --> 00:21:47.640 align:middle line:90%
+We're going to demean it.
+
+00:21:47.640 --> 00:21:52.840 align:middle line:84%
+And then maybe we're going to
+normalize the variance to 1.
+
+00:21:52.840 --> 00:21:55.170 align:middle line:84%
+When I say "maybe"-- and
+the reason this "maybe" is--
+
+00:21:55.170 --> 00:21:56.420 align:middle line:90%
+sometimes you want to do that.
+
+00:21:56.420 --> 00:21:57.253 align:middle line:90%
+Sometimes you don't.
+
+00:21:57.253 --> 00:22:01.320 align:middle line:90%
+
+
+00:22:01.320 --> 00:22:03.320 align:middle line:84%
+Very often, whether
+you want to do that
+
+00:22:03.320 --> 00:22:10.160 align:middle line:84%
+or not depends on how exactly
+are you going to use your PC
+
+00:22:10.160 --> 00:22:14.335 align:middle line:90%
+factors and your dimensions.
+
+00:22:14.335 --> 00:22:16.210 align:middle line:84%
+Generally, I would say
+that most of the time,
+
+00:22:16.210 --> 00:22:19.970 align:middle line:84%
+you want to normalize
+it in a certain--
+
+00:22:19.970 --> 00:22:21.610 align:middle line:84%
+you want to
+normalize it in a way
+
+00:22:21.610 --> 00:22:24.570 align:middle line:84%
+that you want the expected--
+at least the expected variance
+
+00:22:24.570 --> 00:22:26.490 align:middle line:84%
+along different--
+along your dimensions
+
+00:22:26.490 --> 00:22:27.900 align:middle line:90%
+to be unit, to be similar.
+
+00:22:27.900 --> 00:22:30.410 align:middle line:90%
+
+
+00:22:30.410 --> 00:22:32.890 align:middle line:84%
+Then you're going to compute
+your covariance matrix
+
+00:22:32.890 --> 00:22:36.490 align:middle line:90%
+and calculate the eigenvalues.
+
+00:22:36.490 --> 00:22:40.770 align:middle line:84%
+And then you're going to order
+them by decreasing eigenvalue.
+
+00:22:40.770 --> 00:22:44.990 align:middle line:84%
+And then you're going to have a
+certain cutoff, where you say,
+
+00:22:44.990 --> 00:22:46.570 align:middle line:90%
+only the top--
+
+00:22:46.570 --> 00:22:49.850 align:middle line:84%
+I'm going to use only the
+top x factors to model
+
+00:22:49.850 --> 00:22:52.010 align:middle line:90%
+the of my data set.
+
+00:22:52.010 --> 00:22:53.276 align:middle line:90%
+Yeah?
+
+00:22:53.276 --> 00:22:55.990 align:middle line:84%
+AUDIENCE: So you said maybe
+you would normalize it.
+
+00:22:55.990 --> 00:22:59.450 align:middle line:84%
+What would be a concrete example
+of where it would be better
+
+00:22:59.450 --> 00:23:00.750 align:middle line:90%
+to not normalize it?
+
+00:23:00.750 --> 00:23:05.850 align:middle line:90%
+
+
+00:23:05.850 --> 00:23:09.160 align:middle line:84%
+STEFAN ANDREEV: Well,
+here's an example.
+
+00:23:09.160 --> 00:23:12.130 align:middle line:90%
+
+
+00:23:12.130 --> 00:23:15.190 align:middle line:84%
+So actually-- yes, I
+will start with this.
+
+00:23:15.190 --> 00:23:19.825 align:middle line:84%
+So this is an example of-- it's
+a little bit of a toy example.
+
+00:23:19.825 --> 00:23:21.450 align:middle line:84%
+And I'll talk about
+a real example too.
+
+00:23:21.450 --> 00:23:26.010 align:middle line:84%
+So in this toy example, there's
+the blue and the red data set.
+
+00:23:26.010 --> 00:23:31.610 align:middle line:84%
+And the red one looks
+like it's one-dimensional.
+
+00:23:31.610 --> 00:23:35.390 align:middle line:84%
+And the blue looks
+like it's just a blob.
+
+00:23:35.390 --> 00:23:37.410 align:middle line:84%
+There's no direct
+dimensionality.
+
+00:23:37.410 --> 00:23:40.630 align:middle line:84%
+So if I tell you,
+should we use PCA?
+
+00:23:40.630 --> 00:23:41.690 align:middle line:90%
+Is there a way--
+
+00:23:41.690 --> 00:23:44.130 align:middle line:84%
+is PCA going to work
+on the blue data set?
+
+00:23:44.130 --> 00:23:46.570 align:middle line:84%
+Is it going to reduce
+dimensionality?
+
+00:23:46.570 --> 00:23:48.490 align:middle line:84%
+And the answer would
+be no, because there
+
+00:23:48.490 --> 00:23:50.850 align:middle line:90%
+is no dominant direction.
+
+00:23:50.850 --> 00:23:53.030 align:middle line:84%
+And in the red one,
+it definitely will.
+
+00:23:53.030 --> 00:23:55.290 align:middle line:84%
+It will pick the
+right direction.
+
+00:23:55.290 --> 00:23:57.170 align:middle line:84%
+Now, what's fun about
+these two examples
+
+00:23:57.170 --> 00:24:03.170 align:middle line:84%
+is that these two are the same
+data, except in the blue data
+
+00:24:03.170 --> 00:24:08.610 align:middle line:84%
+set, I've normalized the
+variance along x and y.
+
+00:24:08.610 --> 00:24:11.770 align:middle line:90%
+And in the red one, I haven't.
+
+00:24:11.770 --> 00:24:24.190 align:middle line:84%
+So if these two dimensions
+were temperature versus--
+
+00:24:24.190 --> 00:24:26.740 align:middle line:90%
+
+
+00:24:26.740 --> 00:24:30.820 align:middle line:84%
+temperature in Seattle
+versus pressure in Atlanta
+
+00:24:30.820 --> 00:24:35.580 align:middle line:84%
+or something, that are very
+distinct and generally different
+
+00:24:35.580 --> 00:24:38.300 align:middle line:84%
+things, where you're only
+interested in correlation
+
+00:24:38.300 --> 00:24:42.420 align:middle line:84%
+and the relative variance
+is not very meaningful,
+
+00:24:42.420 --> 00:24:43.980 align:middle line:84%
+then you would want
+to normalize it.
+
+00:24:43.980 --> 00:24:48.500 align:middle line:84%
+Because otherwise, the units
+are not going to be-- you
+
+00:24:48.500 --> 00:24:50.740 align:middle line:84%
+want to have somewhat
+related units.
+
+00:24:50.740 --> 00:24:53.880 align:middle line:84%
+So the units will be standard
+deviations if you normalize it.
+
+00:24:53.880 --> 00:24:56.320 align:middle line:84%
+If you don't, the units
+will be arbitrary.
+
+00:24:56.320 --> 00:25:00.100 align:middle line:84%
+And they don't-- it
+wouldn't really make sense.
+
+00:25:00.100 --> 00:25:06.100 align:middle line:90%
+On the other hand, if this was--
+
+00:25:06.100 --> 00:25:08.420 align:middle line:84%
+if x-axis was your
+grades on quiz 1
+
+00:25:08.420 --> 00:25:11.950 align:middle line:84%
+and y-axis was your
+grades on quiz 2,
+
+00:25:11.950 --> 00:25:14.830 align:middle line:84%
+these two are the
+same units now.
+
+00:25:14.830 --> 00:25:17.250 align:middle line:84%
+And you might not
+want to normalize.
+
+00:25:17.250 --> 00:25:19.270 align:middle line:90%
+You want to actually--
+
+00:25:19.270 --> 00:25:21.532 align:middle line:84%
+these grades are-- these
+numbers are meaningful
+
+00:25:21.532 --> 00:25:22.490 align:middle line:90%
+relative to each other.
+
+00:25:22.490 --> 00:25:24.430 align:middle line:84%
+So there's not
+necessarily-- you want
+
+00:25:24.430 --> 00:25:28.710 align:middle line:84%
+to actually model the actual
+grades, including the variance
+
+00:25:28.710 --> 00:25:29.890 align:middle line:90%
+of quiz 1 and quiz 2.
+
+00:25:29.890 --> 00:25:32.325 align:middle line:84%
+So there is no necessarily
+need to normalize it.
+
+00:25:32.325 --> 00:25:33.450 align:middle line:90%
+AUDIENCE: That makes sense.
+
+00:25:33.450 --> 00:25:34.030 align:middle line:90%
+Thank you.
+
+00:25:34.030 --> 00:25:37.570 align:middle line:84%
+STEFAN ANDREEV: Yeah, but
+that part is-- to be honest,
+
+00:25:37.570 --> 00:25:40.670 align:middle line:84%
+that part is very much
+the art of things.
+
+00:25:40.670 --> 00:25:42.210 align:middle line:84%
+We have a lot of
+discussion at work.
+
+00:25:42.210 --> 00:25:43.130 align:middle line:90%
+Are we normalizing it?
+
+00:25:43.130 --> 00:25:44.670 align:middle line:90%
+How are we normalizing it?
+
+00:25:44.670 --> 00:25:47.150 align:middle line:84%
+What are we using
+to normalize it?
+
+00:25:47.150 --> 00:25:50.672 align:middle line:84%
+That's like-- surprisingly,
+this is-- sometimes
+
+00:25:50.672 --> 00:25:52.630 align:middle line:84%
+cutting-edge research is
+to actually understand
+
+00:25:52.630 --> 00:25:54.790 align:middle line:90%
+how you normalize it.
+
+00:25:54.790 --> 00:25:57.510 align:middle line:84%
+These are the things that
+actually make a difference.
+
+00:25:57.510 --> 00:25:59.550 align:middle line:84%
+The other thing I
+mentioned is that we
+
+00:25:59.550 --> 00:26:01.390 align:middle line:90%
+need to demean the data set.
+
+00:26:01.390 --> 00:26:03.390 align:middle line:90%
+Why is that important?
+
+00:26:03.390 --> 00:26:06.070 align:middle line:84%
+Because remember, the
+principal component analysis
+
+00:26:06.070 --> 00:26:07.870 align:middle line:90%
+is a rotation.
+
+00:26:07.870 --> 00:26:12.070 align:middle line:84%
+So it always rotates
+around (0, 0).
+
+00:26:12.070 --> 00:26:16.110 align:middle line:90%
+So what 0 is, it matters a lot.
+
+00:26:16.110 --> 00:26:18.867 align:middle line:84%
+And this is two examples
+of the same data set.
+
+00:26:18.867 --> 00:26:20.450 align:middle line:84%
+These two plots are
+the same data set.
+
+00:26:20.450 --> 00:26:23.510 align:middle line:84%
+But one is not demeaned,
+and the other is demeaned.
+
+00:26:23.510 --> 00:26:26.030 align:middle line:84%
+So this one here
+is centered at 0.
+
+00:26:26.030 --> 00:26:30.850 align:middle line:84%
+And PCA finds that there is a
+direction, a dominant direction.
+
+00:26:30.850 --> 00:26:31.410 align:middle line:90%
+It finds it.
+
+00:26:31.410 --> 00:26:33.390 align:middle line:90%
+It works like it's supposed to.
+
+00:26:33.390 --> 00:26:35.830 align:middle line:84%
+This one here is
+not centered at 0.
+
+00:26:35.830 --> 00:26:38.230 align:middle line:84%
+For example, let's say you
+do a bunch of stock prices.
+
+00:26:38.230 --> 00:26:41.190 align:middle line:90%
+You just put prices into PCA.
+
+00:26:41.190 --> 00:26:42.890 align:middle line:84%
+Stock prices are
+not centered at 0.
+
+00:26:42.890 --> 00:26:44.090 align:middle line:90%
+They're always positive.
+
+00:26:44.090 --> 00:26:47.330 align:middle line:84%
+So it's going to
+have some direction,
+
+00:26:47.330 --> 00:26:49.330 align:middle line:84%
+but it's going to be
+somewhere far away from 0.
+
+00:26:49.330 --> 00:26:51.080 align:middle line:84%
+When you run PCA on
+it, it's going to be--
+
+00:26:51.080 --> 00:26:55.070 align:middle line:84%
+it's going to try to rotate
+around 0, but it's not.
+
+00:26:55.070 --> 00:26:59.950 align:middle line:84%
+It can't find anything because
+it's not-- you're not--
+
+00:26:59.950 --> 00:27:01.110 align:middle line:90%
+you can see why.
+
+00:27:01.110 --> 00:27:02.530 align:middle line:90%
+You can't rotate this thing.
+
+00:27:02.530 --> 00:27:03.170 align:middle line:90%
+You can't.
+
+00:27:03.170 --> 00:27:06.680 align:middle line:84%
+There's nothing to find if
+you don't center it at 0.
+
+00:27:06.680 --> 00:27:08.220 align:middle line:90%
+You cannot rotate around.
+
+00:27:08.220 --> 00:27:11.680 align:middle line:84%
+It's rotating always
+around the origin.
+
+00:27:11.680 --> 00:27:18.580 align:middle line:84%
+So mean near 0 or close to 0
+or exactly 0 is very important.
+
+00:27:18.580 --> 00:27:22.760 align:middle line:90%
+
+
+00:27:22.760 --> 00:27:24.543 align:middle line:84%
+And surprisingly,
+it's surprising
+
+00:27:24.543 --> 00:27:25.460 align:middle line:90%
+how often it comes up.
+
+00:27:25.460 --> 00:27:29.440 align:middle line:84%
+Somebody just does PCA
+on some numbers that are
+
+00:27:29.440 --> 00:27:32.840 align:middle line:90%
+just large, positive numbers.
+
+00:27:32.840 --> 00:27:34.400 align:middle line:90%
+And nothing comes out.
+
+00:27:34.400 --> 00:27:35.860 align:middle line:84%
+And they're like,
+it doesn't work.
+
+00:27:35.860 --> 00:27:38.680 align:middle line:84%
+But you just have
+to normalize to 0.
+
+00:27:38.680 --> 00:27:39.860 align:middle line:90%
+How do we actually do it?
+
+00:27:39.860 --> 00:27:43.920 align:middle line:84%
+Well, this is just the
+examples of various places
+
+00:27:43.920 --> 00:27:47.340 align:middle line:84%
+that have implementations of
+these eigenvalue calculations.
+
+00:27:47.340 --> 00:27:52.920 align:middle line:84%
+I think when I started
+doing this 11--
+
+00:27:52.920 --> 00:27:56.520 align:middle line:84%
+I don't know how many years ago,
+this actually was more relevant.
+
+00:27:56.520 --> 00:27:58.563 align:middle line:84%
+Now, it's like
+everybody uses Python.
+
+00:27:58.563 --> 00:27:59.980 align:middle line:84%
+Everybody knows
+Jupyter Notebooks.
+
+00:27:59.980 --> 00:28:03.970 align:middle line:84%
+And you guys-- now
+it's standard toolkit.
+
+00:28:03.970 --> 00:28:07.210 align:middle line:90%
+
+
+00:28:07.210 --> 00:28:12.060 align:middle line:84%
+Now, what's special about
+finance when it comes to PCA?
+
+00:28:12.060 --> 00:28:15.210 align:middle line:90%
+
+
+00:28:15.210 --> 00:28:17.487 align:middle line:84%
+Mostly, what is
+special about finance--
+
+00:28:17.487 --> 00:28:19.070 align:middle line:84%
+and this is not
+exclusive, by the way.
+
+00:28:19.070 --> 00:28:22.210 align:middle line:84%
+But most of the
+time, we are going
+
+00:28:22.210 --> 00:28:26.130 align:middle line:90%
+to be doing PCA on time series.
+
+00:28:26.130 --> 00:28:32.390 align:middle line:84%
+In quantitative finance, in
+the Quant world that I live in
+
+00:28:32.390 --> 00:28:38.810 align:middle line:84%
+and I work in, I would
+say, the general job
+
+00:28:38.810 --> 00:28:44.370 align:middle line:84%
+is to discover patterns that
+have happened in the past
+
+00:28:44.370 --> 00:28:48.210 align:middle line:84%
+and try to use that
+information to model the future
+
+00:28:48.210 --> 00:28:52.690 align:middle line:84%
+and to somehow use that
+as part of your toolkit
+
+00:28:52.690 --> 00:28:56.020 align:middle line:84%
+to make predictions and to
+place bets in the markets.
+
+00:28:56.020 --> 00:28:58.730 align:middle line:90%
+
+
+00:28:58.730 --> 00:29:04.700 align:middle line:84%
+So every day, every trading
+session, every observation
+
+00:29:04.700 --> 00:29:10.460 align:middle line:84%
+is an opportunity to bet
+and to make predictions.
+
+00:29:10.460 --> 00:29:13.420 align:middle line:84%
+And you can understand the
+thing about time series
+
+00:29:13.420 --> 00:29:16.700 align:middle line:84%
+is that the history
+now and the history
+
+00:29:16.700 --> 00:29:20.460 align:middle line:84%
+on the next opportunities to
+bet is not that different.
+
+00:29:20.460 --> 00:29:22.500 align:middle line:90%
+It has one extra data point.
+
+00:29:22.500 --> 00:29:24.560 align:middle line:84%
+Later, it has an
+additional data point,
+
+00:29:24.560 --> 00:29:26.040 align:middle line:90%
+but everything else is the same.
+
+00:29:26.040 --> 00:29:32.180 align:middle line:84%
+So there is a slow-changing
+time series of information.
+
+00:29:32.180 --> 00:29:34.040 align:middle line:90%
+And how we handle that--
+
+00:29:34.040 --> 00:29:38.020 align:middle line:84%
+there is a whole time
+series data science
+
+00:29:38.020 --> 00:29:39.940 align:middle line:90%
+class that one can take.
+
+00:29:39.940 --> 00:29:44.540 align:middle line:84%
+But especially
+with regard to PCA,
+
+00:29:44.540 --> 00:29:50.420 align:middle line:84%
+it's important to
+understand what
+
+00:29:50.420 --> 00:29:53.150 align:middle line:84%
+impact does that time
+series aspect have on PCA.
+
+00:29:53.150 --> 00:29:56.180 align:middle line:90%
+
+
+00:29:56.180 --> 00:29:59.380 align:middle line:84%
+A couple of things, I
+think, are important.
+
+00:29:59.380 --> 00:30:02.340 align:middle line:90%
+
+
+00:30:02.340 --> 00:30:06.620 align:middle line:84%
+We generally are going to
+be interested in modeling
+
+00:30:06.620 --> 00:30:11.100 align:middle line:84%
+the changes of things, of
+variables, not the levels.
+
+00:30:11.100 --> 00:30:14.720 align:middle line:84%
+Part of that is the thing
+I was just talking about,
+
+00:30:14.720 --> 00:30:17.060 align:middle line:90%
+which is demeaning.
+
+00:30:17.060 --> 00:30:22.100 align:middle line:84%
+And part of it is that when
+you make bets in the market,
+
+00:30:22.100 --> 00:30:24.700 align:middle line:84%
+you make money based
+on how things change
+
+00:30:24.700 --> 00:30:27.860 align:middle line:84%
+after your bet, not the
+price, the absolute level
+
+00:30:27.860 --> 00:30:29.240 align:middle line:90%
+of where the price is at.
+
+00:30:29.240 --> 00:30:33.438 align:middle line:84%
+So returns are what matters,
+not the price of something,
+
+00:30:33.438 --> 00:30:34.230 align:middle line:90%
+the absolute price.
+
+00:30:34.230 --> 00:30:37.500 align:middle line:90%
+
+
+00:30:37.500 --> 00:30:40.600 align:middle line:84%
+Then the next thing
+is, so when we do--
+
+00:30:40.600 --> 00:30:45.100 align:middle line:84%
+when we model-- when we have
+our data in finance, generally,
+
+00:30:45.100 --> 00:30:49.120 align:middle line:84%
+the data is the historical
+returns or history of something.
+
+00:30:49.120 --> 00:30:49.880 align:middle line:90%
+History of prices.
+
+00:30:49.880 --> 00:30:50.672 align:middle line:90%
+History of returns.
+
+00:30:50.672 --> 00:30:54.113 align:middle line:84%
+History of anything, of
+whatever you're modeling.
+
+00:30:54.113 --> 00:30:55.530 align:middle line:84%
+It doesn't have
+to be just prices.
+
+00:30:55.530 --> 00:30:58.830 align:middle line:90%
+It could be anything that--
+
+00:30:58.830 --> 00:31:02.070 align:middle line:90%
+any technical indicator.
+
+00:31:02.070 --> 00:31:05.030 align:middle line:84%
+And that means that
+every day, there
+
+00:31:05.030 --> 00:31:07.610 align:middle line:84%
+is a history that is similar,
+but a little different.
+
+00:31:07.610 --> 00:31:09.810 align:middle line:90%
+So the history changes.
+
+00:31:09.810 --> 00:31:14.550 align:middle line:84%
+Your information about what
+has happened changes slowly.
+
+00:31:14.550 --> 00:31:19.230 align:middle line:84%
+And that means that when
+you're looking at your PCA,
+
+00:31:19.230 --> 00:31:23.150 align:middle line:84%
+you have to now
+define, how am I going
+
+00:31:23.150 --> 00:31:24.830 align:middle line:84%
+to define my data
+matrix, which I'm
+
+00:31:24.830 --> 00:31:28.030 align:middle line:84%
+using to calculate my
+eigenvectors and eigenvalues?
+
+00:31:28.030 --> 00:31:32.030 align:middle line:84%
+And one of the main choices
+are how long of a history
+
+00:31:32.030 --> 00:31:35.630 align:middle line:90%
+I want to use and how much--
+
+00:31:35.630 --> 00:31:40.430 align:middle line:84%
+how do I weight history,
+more recent history
+
+00:31:40.430 --> 00:31:43.830 align:middle line:90%
+versus further away history?
+
+00:31:43.830 --> 00:31:46.910 align:middle line:84%
+And these are some of
+the main hyperparameters
+
+00:31:46.910 --> 00:31:50.470 align:middle line:84%
+of principal component
+analysis in finance.
+
+00:31:50.470 --> 00:31:55.910 align:middle line:84%
+How many things I'm
+including in my data set.
+
+00:31:55.910 --> 00:31:58.440 align:middle line:90%
+How far back am I looking?
+
+00:31:58.440 --> 00:32:01.560 align:middle line:84%
+How am I weighting
+those observations
+
+00:32:01.560 --> 00:32:04.800 align:middle line:90%
+as I pass through time?
+
+00:32:04.800 --> 00:32:08.370 align:middle line:84%
+And then the last thing is
+the robustness of the data.
+
+00:32:08.370 --> 00:32:12.840 align:middle line:90%
+
+
+00:32:12.840 --> 00:32:16.280 align:middle line:84%
+Very often, there is a trade-off
+between including more data
+
+00:32:16.280 --> 00:32:18.560 align:middle line:90%
+points.
+
+00:32:18.560 --> 00:32:22.160 align:middle line:84%
+But each marginal
+addition of data--
+
+00:32:22.160 --> 00:32:24.560 align:middle line:84%
+each marginal dimension of
+data that I'm looking at
+
+00:32:24.560 --> 00:32:28.580 align:middle line:90%
+could be less robust.
+
+00:32:28.580 --> 00:32:32.580 align:middle line:84%
+And we'll talk about in
+the examples later on.
+
+00:32:32.580 --> 00:32:34.800 align:middle line:90%
+But there are some--
+
+00:32:34.800 --> 00:32:40.920 align:middle line:84%
+we have to think carefully
+about how robust the data we're
+
+00:32:40.920 --> 00:32:41.540 align:middle line:90%
+putting in is.
+
+00:32:41.540 --> 00:32:46.240 align:middle line:84%
+Because if it's too noisy, if
+it's not representative of where
+
+00:32:46.240 --> 00:32:48.520 align:middle line:84%
+our bets are going
+to be, then it
+
+00:32:48.520 --> 00:32:50.980 align:middle line:84%
+becomes less relevant to
+our modeling down the line.
+
+00:32:50.980 --> 00:32:53.560 align:middle line:84%
+On the other hand, if
+we don't include enough,
+
+00:32:53.560 --> 00:32:56.010 align:middle line:84%
+we're also going to be
+missing opportunities
+
+00:32:56.010 --> 00:32:59.670 align:middle line:84%
+to understand the structure
+of the information.
+
+00:32:59.670 --> 00:33:03.930 align:middle line:84%
+So again, that's
+part of the art of--
+
+00:33:03.930 --> 00:33:06.730 align:middle line:84%
+actually, of the
+practitioner, is to actually
+
+00:33:06.730 --> 00:33:09.490 align:middle line:84%
+have some feeling, have
+some intuition about what
+
+00:33:09.490 --> 00:33:11.770 align:middle line:84%
+I should include and what
+I should not include.
+
+00:33:11.770 --> 00:33:14.850 align:middle line:84%
+And we'll talk about
+an example here.
+
+00:33:14.850 --> 00:33:19.810 align:middle line:84%
+The first example, and the main
+example I want to go through,
+
+00:33:19.810 --> 00:33:25.050 align:middle line:84%
+is applying principal component
+analysis to the United States
+
+00:33:25.050 --> 00:33:25.830 align:middle line:90%
+bond market.
+
+00:33:25.830 --> 00:33:26.628 align:middle line:90%
+Yes?
+
+00:33:26.628 --> 00:33:28.170 align:middle line:84%
+AUDIENCE: Well,
+earlier you mentioned
+
+00:33:28.170 --> 00:33:30.370 align:middle line:84%
+that your time
+[INAUDIBLE], in this case,
+
+00:33:30.370 --> 00:33:36.050 align:middle line:84%
+this time series was really,
+like, historical [INAUDIBLE].
+
+00:33:36.050 --> 00:33:40.930 align:middle line:84%
+Is there any play with the
+granularity of the time
+
+00:33:40.930 --> 00:33:46.110 align:middle line:84%
+series, the different,
+I guess, window sizes,
+
+00:33:46.110 --> 00:33:50.150 align:middle line:84%
+I would say, of how granular
+the data is going to be,
+
+00:33:50.150 --> 00:33:52.090 align:middle line:90%
+whether it's second--
+
+00:33:52.090 --> 00:33:54.930 align:middle line:84%
+STEFAN ANDREEV: Yeah, that's
+a whole other dimension
+
+00:33:54.930 --> 00:33:57.490 align:middle line:84%
+of how granular it
+is, absolutely right.
+
+00:33:57.490 --> 00:34:00.050 align:middle line:84%
+It's not just about
+how long of a history,
+
+00:34:00.050 --> 00:34:01.410 align:middle line:90%
+but how granular it is.
+
+00:34:01.410 --> 00:34:04.010 align:middle line:90%
+
+
+00:34:04.010 --> 00:34:08.130 align:middle line:84%
+Well, the examples I'm
+going to show you right now
+
+00:34:08.130 --> 00:34:12.449 align:middle line:90%
+are based on daily observations.
+
+00:34:12.449 --> 00:34:19.090 align:middle line:84%
+But why did I decide to
+use daily observations?
+
+00:34:19.090 --> 00:34:24.170 align:middle line:84%
+The short answer is every-- by
+the way, very often, in my work,
+
+00:34:24.170 --> 00:34:26.290 align:middle line:90%
+we use daily observations.
+
+00:34:26.290 --> 00:34:30.530 align:middle line:84%
+The reason is that daily
+observations are just
+
+00:34:30.530 --> 00:34:31.469 align:middle line:90%
+more available.
+
+00:34:31.469 --> 00:34:34.449 align:middle line:84%
+Generally, more
+high-quality data history
+
+00:34:34.449 --> 00:34:38.330 align:middle line:84%
+is available for longer periods
+of time for daily observations.
+
+00:34:38.330 --> 00:34:43.889 align:middle line:84%
+Second, yes, intraday
+observations are--
+
+00:34:43.889 --> 00:34:47.050 align:middle line:90%
+they represent additional data.
+
+00:34:47.050 --> 00:34:51.179 align:middle line:84%
+However, the quality
+of the imagery
+
+00:34:51.179 --> 00:34:54.500 align:middle line:84%
+that data, meaning how
+much noise there is,
+
+00:34:54.500 --> 00:34:57.980 align:middle line:84%
+can very often, in practice, be
+much higher for intraday data
+
+00:34:57.980 --> 00:34:59.560 align:middle line:90%
+than it is for end of day data.
+
+00:34:59.560 --> 00:35:01.060 align:middle line:90%
+That may not always be true.
+
+00:35:01.060 --> 00:35:03.780 align:middle line:84%
+There are situations
+where that's not true.
+
+00:35:03.780 --> 00:35:06.540 align:middle line:84%
+And there's entire
+fields in finance
+
+00:35:06.540 --> 00:35:10.580 align:middle line:84%
+that deal with high-frequency
+trading in those fields
+
+00:35:10.580 --> 00:35:14.240 align:middle line:84%
+end of day data is just
+like their whole trading,
+
+00:35:14.240 --> 00:35:16.900 align:middle line:84%
+buying, holding, and
+selling happens 10 times
+
+00:35:16.900 --> 00:35:17.880 align:middle line:90%
+for the entire day.
+
+00:35:17.880 --> 00:35:20.800 align:middle line:84%
+So day start and end of
+day with no positions.
+
+00:35:20.800 --> 00:35:23.080 align:middle line:84%
+And for them, daily
+is not relevant.
+
+00:35:23.080 --> 00:35:24.620 align:middle line:90%
+It's too slow.
+
+00:35:24.620 --> 00:35:26.860 align:middle line:84%
+They need to understand
+how the market moves
+
+00:35:26.860 --> 00:35:31.020 align:middle line:90%
+in a very fast timescale.
+
+00:35:31.020 --> 00:35:38.240 align:middle line:84%
+So how often how you sample
+time is a whole other story.
+
+00:35:38.240 --> 00:35:40.220 align:middle line:84%
+And basically,
+how we sample time
+
+00:35:40.220 --> 00:35:44.820 align:middle line:84%
+is going to impact the units of
+volatility because volatility
+
+00:35:44.820 --> 00:35:49.130 align:middle line:84%
+is measured in units of square
+root of time, basically.
+
+00:35:49.130 --> 00:35:55.110 align:middle line:84%
+So it's very important to know
+that and to understand, to keep
+
+00:35:55.110 --> 00:35:58.170 align:middle line:84%
+that in mind, that whatever
+the frequency of sampling is,
+
+00:35:58.170 --> 00:35:59.670 align:middle line:84%
+that's going to
+give you effectively
+
+00:35:59.670 --> 00:36:01.790 align:middle line:90%
+the unit of your volatility.
+
+00:36:01.790 --> 00:36:03.350 align:middle line:84%
+And then if you want
+to annualize it,
+
+00:36:03.350 --> 00:36:05.690 align:middle line:84%
+you need to apply
+appropriate factors.
+
+00:36:05.690 --> 00:36:08.190 align:middle line:84%
+And comparing volatilities
+of different units
+
+00:36:08.190 --> 00:36:09.730 align:middle line:90%
+is not going to be meaningful.
+
+00:36:09.730 --> 00:36:13.150 align:middle line:90%
+So that's important.
+
+00:36:13.150 --> 00:36:19.350 align:middle line:84%
+Going back to this example,
+the US bond market--
+
+00:36:19.350 --> 00:36:21.510 align:middle line:90%
+so why am I--
+
+00:36:21.510 --> 00:36:23.350 align:middle line:84%
+why is this an
+interesting example?
+
+00:36:23.350 --> 00:36:25.870 align:middle line:84%
+I work in fixed income,
+which is basically
+
+00:36:25.870 --> 00:36:32.970 align:middle line:84%
+where we trade bonds and
+various derivatives of bonds.
+
+00:36:32.970 --> 00:36:36.427 align:middle line:84%
+And those are the biggest
+markets in the world.
+
+00:36:36.427 --> 00:36:38.510 align:middle line:84%
+There's a huge amounts of
+money being transferred.
+
+00:36:38.510 --> 00:36:40.260 align:middle line:84%
+They're not necessarily
+the most volatile.
+
+00:36:40.260 --> 00:36:41.930 align:middle line:90%
+Equities are much more volatile.
+
+00:36:41.930 --> 00:36:46.170 align:middle line:84%
+But they are extremely
+deep, extremely liquid.
+
+00:36:46.170 --> 00:36:51.710 align:middle line:84%
+And they also allow people
+who trade in them to take
+
+00:36:51.710 --> 00:36:53.190 align:middle line:90%
+large amounts of leverage.
+
+00:36:53.190 --> 00:36:55.950 align:middle line:84%
+So even though they're
+not by themselves
+
+00:36:55.950 --> 00:36:58.690 align:middle line:84%
+that volatile, if once
+you take leverage,
+
+00:36:58.690 --> 00:37:02.030 align:middle line:84%
+you can increase volatility
+by taking leverage.
+
+00:37:02.030 --> 00:37:04.590 align:middle line:90%
+So you can actually make--
+
+00:37:04.590 --> 00:37:08.510 align:middle line:84%
+you can construct portfolios
+that are actually quite volatile
+
+00:37:08.510 --> 00:37:16.390 align:middle line:84%
+and deliver substantial
+market volatility and returns.
+
+00:37:16.390 --> 00:37:19.830 align:middle line:84%
+So there's a lot
+of huge industry
+
+00:37:19.830 --> 00:37:24.030 align:middle line:84%
+of money managers, hedge
+funds that trade fixed income.
+
+00:37:24.030 --> 00:37:28.190 align:middle line:84%
+And the US bond market is
+the prototypical example
+
+00:37:28.190 --> 00:37:28.970 align:middle line:90%
+of fixed income.
+
+00:37:28.970 --> 00:37:30.345 align:middle line:84%
+It's the most
+liquid in the world
+
+00:37:30.345 --> 00:37:33.310 align:middle line:84%
+by far, the most
+well-structured.
+
+00:37:33.310 --> 00:37:37.590 align:middle line:84%
+So it's a great
+example to play with.
+
+00:37:37.590 --> 00:37:41.230 align:middle line:84%
+Another reason I'm using
+it is because there
+
+00:37:41.230 --> 00:37:44.270 align:middle line:84%
+is pricing data from
+the Federal Reserve
+
+00:37:44.270 --> 00:37:46.360 align:middle line:90%
+that is freely available.
+
+00:37:46.360 --> 00:37:48.240 align:middle line:84%
+And that's the data
+that we're going
+
+00:37:48.240 --> 00:37:51.920 align:middle line:84%
+to use right now
+to do our analysis,
+
+00:37:51.920 --> 00:37:54.710 align:middle line:84%
+this data is like, it's actually
+quite high-quality data.
+
+00:37:54.710 --> 00:38:00.040 align:middle line:90%
+
+
+00:38:00.040 --> 00:38:04.400 align:middle line:84%
+I think that if you want
+to do a project like this,
+
+00:38:04.400 --> 00:38:08.960 align:middle line:84%
+would be a great data set to
+play with because it's real
+
+00:38:08.960 --> 00:38:14.760 align:middle line:84%
+and it goes on for
+a very long time,
+
+00:38:14.760 --> 00:38:18.880 align:middle line:84%
+and you can apply you can
+apply our PCA techniques to it.
+
+00:38:18.880 --> 00:38:21.360 align:middle line:84%
+So the first
+question to ask is--
+
+00:38:21.360 --> 00:38:24.080 align:middle line:84%
+remember, we have
+our data set now.
+
+00:38:24.080 --> 00:38:25.300 align:middle line:90%
+What does it consist of?
+
+00:38:25.300 --> 00:38:30.040 align:middle line:84%
+Well, in the United
+States, the US Treasury
+
+00:38:30.040 --> 00:38:34.080 align:middle line:84%
+issues a bunch of T-bills,
+short maturity bills,
+
+00:38:34.080 --> 00:38:35.700 align:middle line:90%
+that they raise money.
+
+00:38:35.700 --> 00:38:38.560 align:middle line:84%
+That's how they raise
+money for the debt.
+
+00:38:38.560 --> 00:38:40.640 align:middle line:84%
+But the part we're
+going to concern with
+
+00:38:40.640 --> 00:38:44.130 align:middle line:84%
+is going to be the US
+Treasury notes and bonds which
+
+00:38:44.130 --> 00:38:46.890 align:middle line:84%
+are kind of the
+longer-dated instruments
+
+00:38:46.890 --> 00:38:48.490 align:middle line:90%
+that US Treasury issues.
+
+00:38:48.490 --> 00:38:50.610 align:middle line:84%
+They issue on a
+very regular basis--
+
+00:38:50.610 --> 00:38:54.530 align:middle line:84%
+every month, there is a
+schedule of auctions that is
+
+00:38:54.530 --> 00:38:57.970 align:middle line:90%
+very well known and repetitive.
+
+00:38:57.970 --> 00:39:00.790 align:middle line:84%
+And they always issue a
+2-year bond, a 3-year bond,
+
+00:39:00.790 --> 00:39:02.830 align:middle line:84%
+5-year bond, 7-year
+bond, 10-year bond,
+
+00:39:02.830 --> 00:39:04.770 align:middle line:90%
+and a 30-year bond.
+
+00:39:04.770 --> 00:39:08.330 align:middle line:84%
+And there's actually now a
+20-year bond that started about
+
+00:39:08.330 --> 00:39:09.730 align:middle line:90%
+three or four years ago.
+
+00:39:09.730 --> 00:39:14.370 align:middle line:84%
+But we're not going to look at
+that right now because it's very
+
+00:39:14.370 --> 00:39:16.070 align:middle line:90%
+new and it's not as liquid.
+
+00:39:16.070 --> 00:39:19.610 align:middle line:84%
+So we're just going
+to focus on these.
+
+00:39:19.610 --> 00:39:22.570 align:middle line:84%
+And the other thing
+about these bonds
+
+00:39:22.570 --> 00:39:26.590 align:middle line:84%
+is that they're all
+debts of the US Treasury.
+
+00:39:26.590 --> 00:39:29.570 align:middle line:84%
+So in a sense,
+they're very similar.
+
+00:39:29.570 --> 00:39:33.150 align:middle line:84%
+If I give you money
+for six months
+
+00:39:33.150 --> 00:39:37.610 align:middle line:84%
+and I also give you a
+separate loan for three years,
+
+00:39:37.610 --> 00:39:38.710 align:middle line:90%
+I've given you two loans.
+
+00:39:38.710 --> 00:39:41.000 align:middle line:84%
+The first thing that
+these two things are--
+
+00:39:41.000 --> 00:39:43.972 align:middle line:84%
+basically, you
+still owe me money.
+
+00:39:43.972 --> 00:39:45.680 align:middle line:84%
+One is longer in
+maturity than the other,
+
+00:39:45.680 --> 00:39:47.960 align:middle line:90%
+but you're still owing me money.
+
+00:39:47.960 --> 00:39:53.220 align:middle line:84%
+So in terms of the way the
+price of these securities
+
+00:39:53.220 --> 00:39:56.820 align:middle line:84%
+evolves, they all
+depend on the interest
+
+00:39:56.820 --> 00:40:00.860 align:middle line:84%
+rates, the path of short-term
+interest rates of the Federal
+
+00:40:00.860 --> 00:40:03.560 align:middle line:84%
+Reserve, and the
+expectations of that path.
+
+00:40:03.560 --> 00:40:07.300 align:middle line:84%
+So they're all
+derivatives of that.
+
+00:40:07.300 --> 00:40:11.340 align:middle line:84%
+The implications of
+that is that the returns
+
+00:40:11.340 --> 00:40:17.640 align:middle line:84%
+or the changes of bond yields
+are very highly correlated.
+
+00:40:17.640 --> 00:40:19.100 align:middle line:84%
+So here, on the
+bottom right, I've
+
+00:40:19.100 --> 00:40:24.642 align:middle line:84%
+shown the correlation
+matrix of changes.
+
+00:40:24.642 --> 00:40:27.100 align:middle line:84%
+And you can see that it's like
+these numbers are very, very
+
+00:40:27.100 --> 00:40:28.820 align:middle line:90%
+high.
+
+00:40:28.820 --> 00:40:32.860 align:middle line:84%
+So this is a data
+set where everything
+
+00:40:32.860 --> 00:40:38.140 align:middle line:84%
+is very, very highly correlated
+prime candidate for PCA.
+
+00:40:38.140 --> 00:40:39.800 align:middle line:84%
+Whenever you see a
+correlation matrix,
+
+00:40:39.800 --> 00:40:45.020 align:middle line:84%
+it has high concentrations
+of high correlations,
+
+00:40:45.020 --> 00:40:46.900 align:middle line:90%
+the prime candidate of PCA.
+
+00:40:46.900 --> 00:40:49.140 align:middle line:84%
+So what are these
+numbers I'm looking at?
+
+00:40:49.140 --> 00:40:53.020 align:middle line:84%
+On the left chart, I've
+shown the US yield curve.
+
+00:40:53.020 --> 00:40:58.300 align:middle line:84%
+So on any given day, we can
+observe the prices of 2-year
+
+00:40:58.300 --> 00:41:00.580 align:middle line:84%
+bonds, 3-year bonds,
+5-year bonds, 7-year bonds,
+
+00:41:00.580 --> 00:41:02.180 align:middle line:90%
+10-year bonds, 30-year bonds.
+
+00:41:02.180 --> 00:41:03.780 align:middle line:90%
+What is the price of that?
+
+00:41:03.780 --> 00:41:06.980 align:middle line:90%
+And I don't know if--
+
+00:41:06.980 --> 00:41:11.220 align:middle line:84%
+Peter, have you guys
+done bond math yet?
+
+00:41:11.220 --> 00:41:13.338 align:middle line:84%
+PETER: A little bit
+bond math, a little.
+
+00:41:13.338 --> 00:41:14.380 align:middle line:90%
+STEFAN ANDREEV: A little.
+
+00:41:14.380 --> 00:41:17.160 align:middle line:84%
+So we know the prices where
+these things buy and sell.
+
+00:41:17.160 --> 00:41:18.680 align:middle line:90%
+They're very transparent prices.
+
+00:41:18.680 --> 00:41:22.220 align:middle line:84%
+And we can convert
+prices to yields.
+
+00:41:22.220 --> 00:41:24.740 align:middle line:84%
+So basically, a yield
+is like the implied rate
+
+00:41:24.740 --> 00:41:27.140 align:middle line:84%
+of return of the
+bond, effectively,
+
+00:41:27.140 --> 00:41:30.260 align:middle line:84%
+given its price over the
+course of its maturity.
+
+00:41:30.260 --> 00:41:34.700 align:middle line:84%
+And then, when we plot these
+yields, on this plot here,
+
+00:41:34.700 --> 00:41:36.990 align:middle line:90%
+I've plotted the yields.
+
+00:41:36.990 --> 00:41:40.050 align:middle line:84%
+The yield is on the y-axis
+versus the maturity of the bond.
+
+00:41:40.050 --> 00:41:44.670 align:middle line:84%
+And I've sampled five
+days from history.
+
+00:41:44.670 --> 00:41:47.550 align:middle line:84%
+And this is what's known
+as the yield curve.
+
+00:41:47.550 --> 00:41:52.490 align:middle line:84%
+That is the most important input
+of macroeconomics in the world
+
+00:41:52.490 --> 00:41:55.090 align:middle line:84%
+is the US-- the shape of
+the dollar yield curve.
+
+00:41:55.090 --> 00:41:58.670 align:middle line:90%
+
+
+00:41:58.670 --> 00:42:01.410 align:middle line:84%
+Most of the time, the yield
+curve is upward sloping,
+
+00:42:01.410 --> 00:42:06.330 align:middle line:84%
+so people require a bigger
+return to lend money for longer.
+
+00:42:06.330 --> 00:42:09.390 align:middle line:84%
+And the US Treasury
+generally requires that.
+
+00:42:09.390 --> 00:42:11.030 align:middle line:90%
+But sometimes, that is not true.
+
+00:42:11.030 --> 00:42:12.890 align:middle line:84%
+Sometimes, you can see
+this top blue line.
+
+00:42:12.890 --> 00:42:16.110 align:middle line:84%
+Sometimes, the yields actually--
+it starts out downward sloping
+
+00:42:16.110 --> 00:42:17.590 align:middle line:90%
+and then flattens out.
+
+00:42:17.590 --> 00:42:20.950 align:middle line:84%
+So these yields can have
+a variety of shapes.
+
+00:42:20.950 --> 00:42:24.028 align:middle line:84%
+And this is just
+the level of yields.
+
+00:42:24.028 --> 00:42:25.570 align:middle line:84%
+What we're betting
+on is the changes.
+
+00:42:25.570 --> 00:42:29.390 align:middle line:84%
+So we're betting on how this
+curve evolves day to day.
+
+00:42:29.390 --> 00:42:32.990 align:middle line:84%
+And you can see from
+these yield curves
+
+00:42:32.990 --> 00:42:36.475 align:middle line:84%
+that you can imagine
+how, if I were
+
+00:42:36.475 --> 00:42:38.100 align:middle line:84%
+to show you a movie
+of the yield curve,
+
+00:42:38.100 --> 00:42:39.900 align:middle line:90%
+it's going to flop around.
+
+00:42:39.900 --> 00:42:42.162 align:middle line:84%
+It's going to be like little
+strings that flop around.
+
+00:42:42.162 --> 00:42:43.620 align:middle line:84%
+It's going to be
+going up and down.
+
+00:42:43.620 --> 00:42:45.880 align:middle line:90%
+It's going to slope, like this.
+
+00:42:45.880 --> 00:42:48.060 align:middle line:84%
+It's going to have a
+whole set of dynamics.
+
+00:42:48.060 --> 00:42:50.680 align:middle line:90%
+
+
+00:42:50.680 --> 00:42:53.120 align:middle line:84%
+And that those
+dynamics is what we're
+
+00:42:53.120 --> 00:42:55.420 align:middle line:90%
+trying to model with PCA here.
+
+00:42:55.420 --> 00:43:00.040 align:middle line:90%
+
+
+00:43:00.040 --> 00:43:04.400 align:middle line:84%
+Bonus question is
+do you guys know
+
+00:43:04.400 --> 00:43:06.880 align:middle line:84%
+what is the shape of
+the yield curve now?
+
+00:43:06.880 --> 00:43:09.320 align:middle line:90%
+What does it look like?
+
+00:43:09.320 --> 00:43:12.310 align:middle line:84%
+Are short-term interest rates
+higher than long-term interest
+
+00:43:12.310 --> 00:43:12.810 align:middle line:90%
+rates?
+
+00:43:12.810 --> 00:43:16.200 align:middle line:90%
+
+
+00:43:16.200 --> 00:43:22.480 align:middle line:84%
+Has anybody-- we had a very
+prominent Federal Reserve
+
+00:43:22.480 --> 00:43:29.800 align:middle line:84%
+meeting recently, and do
+you remember what they did?
+
+00:43:29.800 --> 00:43:31.998 align:middle line:90%
+The action the Fed took was--
+
+00:43:31.998 --> 00:43:34.040 align:middle line:84%
+the action the Fed took
+was to cut interest rates
+
+00:43:34.040 --> 00:43:35.760 align:middle line:90%
+by 50 basis points.
+
+00:43:35.760 --> 00:43:37.542 align:middle line:90%
+So what the Fed is doing--
+
+00:43:37.542 --> 00:43:39.000 align:middle line:84%
+it's cutting the
+interest rate that
+
+00:43:39.000 --> 00:43:40.880 align:middle line:84%
+is the leftmost point
+on this yield curve
+
+00:43:40.880 --> 00:43:44.200 align:middle line:90%
+that they're setting that point.
+
+00:43:44.200 --> 00:43:46.240 align:middle line:84%
+Everything else, the
+rest of the curve,
+
+00:43:46.240 --> 00:43:48.960 align:middle line:84%
+is market expectations
+of what that point will
+
+00:43:48.960 --> 00:43:50.640 align:middle line:90%
+do in the future.
+
+00:43:50.640 --> 00:43:53.280 align:middle line:84%
+So they moved this point
+down by 50 basis points.
+
+00:43:53.280 --> 00:43:55.720 align:middle line:84%
+50 basis points
+means half a percent.
+
+00:43:55.720 --> 00:44:00.440 align:middle line:84%
+So it went down
+by half a percent.
+
+00:44:00.440 --> 00:44:04.640 align:middle line:84%
+Right now, this blue curve,
+even though it's from 2023,
+
+00:44:04.640 --> 00:44:07.560 align:middle line:90%
+that's pretty recent.
+
+00:44:07.560 --> 00:44:09.580 align:middle line:84%
+The curve is still
+downward sloping.
+
+00:44:09.580 --> 00:44:13.920 align:middle line:84%
+It looks a little bit
+more like this right now.
+
+00:44:13.920 --> 00:44:16.600 align:middle line:84%
+For a very long time, it was
+actually really inverted.
+
+00:44:16.600 --> 00:44:19.880 align:middle line:84%
+It was going downward
+sloping, like that.
+
+00:44:19.880 --> 00:44:21.900 align:middle line:84%
+Now the back is
+starting to flatten out,
+
+00:44:21.900 --> 00:44:25.890 align:middle line:84%
+but it's still quite high in the
+front end and downward sloping.
+
+00:44:25.890 --> 00:44:30.320 align:middle line:90%
+
+
+00:44:30.320 --> 00:44:32.950 align:middle line:84%
+So unrelated to what
+we're talking about,
+
+00:44:32.950 --> 00:44:37.110 align:middle line:90%
+but kind of a fun fact.
+
+00:44:37.110 --> 00:44:45.090 align:middle line:84%
+So now, when we look at your
+changes, when we look at the--
+
+00:44:45.090 --> 00:44:48.450 align:middle line:84%
+we take our data, we compute
+yield changes, so the changes
+
+00:44:48.450 --> 00:44:51.890 align:middle line:90%
+of yields on day to day.
+
+00:44:51.890 --> 00:44:54.430 align:middle line:90%
+We should demean that data set.
+
+00:44:54.430 --> 00:44:56.210 align:middle line:84%
+But generally,
+demeaning doesn't really
+
+00:44:56.210 --> 00:44:59.170 align:middle line:84%
+help that much because the mean
+is going to be very close to 0
+
+00:44:59.170 --> 00:45:01.310 align:middle line:84%
+because changes are
+sometimes going to go up.
+
+00:45:01.310 --> 00:45:05.010 align:middle line:84%
+Sometimes, they're
+going to go down.
+
+00:45:05.010 --> 00:45:07.108 align:middle line:84%
+Over the history
+of 20 or 30 years
+
+00:45:07.108 --> 00:45:08.650 align:middle line:84%
+that we're talking
+about here, you're
+
+00:45:08.650 --> 00:45:12.570 align:middle line:90%
+not going to have a large mean.
+
+00:45:12.570 --> 00:45:15.860 align:middle line:84%
+Still, it's always good
+practice to demean it.
+
+00:45:15.860 --> 00:45:18.410 align:middle line:84%
+It won't change,
+much, the result.
+
+00:45:18.410 --> 00:45:25.110 align:middle line:84%
+But in this example, I didn't
+actually normalize the variance.
+
+00:45:25.110 --> 00:45:27.570 align:middle line:84%
+I think we just
+left it in there.
+
+00:45:27.570 --> 00:45:29.760 align:middle line:84%
+So we did PCA on
+covariance matrix,
+
+00:45:29.760 --> 00:45:32.620 align:middle line:84%
+and the reason is that the
+units, the yield changes
+
+00:45:32.620 --> 00:45:34.480 align:middle line:90%
+are comparable units.
+
+00:45:34.480 --> 00:45:40.660 align:middle line:84%
+And looking at the PCA
+without normalizing
+
+00:45:40.660 --> 00:45:43.140 align:middle line:90%
+the variance is actually--
+
+00:45:43.140 --> 00:45:46.580 align:middle line:90%
+it's a very meaningful output.
+
+00:45:46.580 --> 00:45:49.620 align:middle line:84%
+We want to understand
+how volatile.
+
+00:45:49.620 --> 00:45:52.340 align:middle line:84%
+It's going to tell us something
+about the relative volatilities
+
+00:45:52.340 --> 00:45:55.100 align:middle line:90%
+of points.
+
+00:45:55.100 --> 00:45:59.185 align:middle line:84%
+So when we do that
+and then we look at--
+
+00:45:59.185 --> 00:46:01.140 align:middle line:84%
+what I'm plotting
+here on the top
+
+00:46:01.140 --> 00:46:06.798 align:middle line:84%
+are the eigenvectors, so the
+principal component factors,
+
+00:46:06.798 --> 00:46:08.340 align:middle line:84%
+the shapes of the
+principal component
+
+00:46:08.340 --> 00:46:11.460 align:middle line:90%
+factors on various days.
+
+00:46:11.460 --> 00:46:13.440 align:middle line:90%
+So this plot can be confusing.
+
+00:46:13.440 --> 00:46:15.500 align:middle line:84%
+And I want to make
+sure that we're all
+
+00:46:15.500 --> 00:46:16.880 align:middle line:90%
+on the same page what it is.
+
+00:46:16.880 --> 00:46:20.080 align:middle line:90%
+
+
+00:46:20.080 --> 00:46:22.758 align:middle line:90%
+This is the yields.
+
+00:46:22.758 --> 00:46:23.800 align:middle line:90%
+And we take these yields.
+
+00:46:23.800 --> 00:46:26.360 align:middle line:84%
+We look at the
+changes of yields.
+
+00:46:26.360 --> 00:46:28.750 align:middle line:90%
+And we put them through PCA.
+
+00:46:28.750 --> 00:46:32.010 align:middle line:84%
+And remember, the output of PCA
+is eigenvectors and eigenvalues.
+
+00:46:32.010 --> 00:46:36.570 align:middle line:84%
+Eigenvectors means every point,
+like 2-year, 3-year, 5-year,
+
+00:46:36.570 --> 00:46:37.770 align:middle line:90%
+10-year, 30-year.
+
+00:46:37.770 --> 00:46:40.910 align:middle line:84%
+Everything has a
+number now, loading.
+
+00:46:40.910 --> 00:46:45.030 align:middle line:84%
+We call that, the number,
+the eigenvector coefficient.
+
+00:46:45.030 --> 00:46:46.050 align:middle line:90%
+I call that loading.
+
+00:46:46.050 --> 00:46:50.590 align:middle line:90%
+That's a term that we use.
+
+00:46:50.590 --> 00:46:54.370 align:middle line:84%
+That loading is, again,
+there's a time series of those.
+
+00:46:54.370 --> 00:47:00.910 align:middle line:84%
+And I'm plotting here select
+five different dates in history
+
+00:47:00.910 --> 00:47:03.590 align:middle line:84%
+of what that eigenvector
+looks like-- what
+
+00:47:03.590 --> 00:47:05.790 align:middle line:84%
+the first principal
+component looks like,
+
+00:47:05.790 --> 00:47:07.810 align:middle line:84%
+what the second principal
+component looks like,
+
+00:47:07.810 --> 00:47:09.850 align:middle line:84%
+what the third principal
+component looks like.
+
+00:47:09.850 --> 00:47:12.510 align:middle line:90%
+
+
+00:47:12.510 --> 00:47:18.910 align:middle line:84%
+These are snapshots, like
+five snapshots in time.
+
+00:47:18.910 --> 00:47:22.830 align:middle line:84%
+And I'm plotting
+maturity versus loading.
+
+00:47:22.830 --> 00:47:24.890 align:middle line:84%
+And there's actually
+three dimensions here.
+
+00:47:24.890 --> 00:47:26.450 align:middle line:84%
+There's maturity,
+loading, and time.
+
+00:47:26.450 --> 00:47:29.110 align:middle line:84%
+So I can show you a
+three-dimensional plot, but that
+
+00:47:29.110 --> 00:47:31.590 align:middle line:90%
+would just be like confusing.
+
+00:47:31.590 --> 00:47:33.530 align:middle line:84%
+So I'm showing
+here cross-section.
+
+00:47:33.530 --> 00:47:37.670 align:middle line:84%
+So these are various
+cross-sections on time.
+
+00:47:37.670 --> 00:47:43.590 align:middle line:84%
+And you can see that there is
+a clear and persistent pattern
+
+00:47:43.590 --> 00:47:47.870 align:middle line:84%
+in what the
+eigenvectors look like.
+
+00:47:47.870 --> 00:47:52.430 align:middle line:84%
+The first one, PC1,
+is called the level.
+
+00:47:52.430 --> 00:47:53.956 align:middle line:90%
+That basically means that--
+
+00:47:53.956 --> 00:47:57.070 align:middle line:90%
+
+
+00:47:57.070 --> 00:47:58.490 align:middle line:90%
+all the loadings are positive.
+
+00:47:58.490 --> 00:48:00.250 align:middle line:84%
+So it means when the
+yield curves move,
+
+00:48:00.250 --> 00:48:05.050 align:middle line:84%
+generally, they move up and down
+together in the same direction.
+
+00:48:05.050 --> 00:48:08.950 align:middle line:84%
+So if 10-year rate is going up,
+probably 2-year rate is going up
+
+00:48:08.950 --> 00:48:11.430 align:middle line:84%
+as well, 5-year rate
+is going up as well.
+
+00:48:11.430 --> 00:48:14.350 align:middle line:84%
+And hence the term
+rates are going up.
+
+00:48:14.350 --> 00:48:16.358 align:middle line:84%
+Rates are going up means,
+generally speaking,
+
+00:48:16.358 --> 00:48:17.650 align:middle line:90%
+everything is going up or down.
+
+00:48:17.650 --> 00:48:21.310 align:middle line:84%
+And that is the
+move that explains
+
+00:48:21.310 --> 00:48:24.880 align:middle line:84%
+most of the variance
+of the yield curve.
+
+00:48:24.880 --> 00:48:27.740 align:middle line:84%
+But, on top of that, now
+there is a second move,
+
+00:48:27.740 --> 00:48:29.120 align:middle line:90%
+which is we call this PC2.
+
+00:48:29.120 --> 00:48:32.140 align:middle line:84%
+And when we look at the
+shape of it, we can say,
+
+00:48:32.140 --> 00:48:35.760 align:middle line:84%
+oh it starts out negative on
+the front end of the curve
+
+00:48:35.760 --> 00:48:39.020 align:middle line:84%
+and it's positive on
+the back end the curve.
+
+00:48:39.020 --> 00:48:41.120 align:middle line:90%
+That's the slope.
+
+00:48:41.120 --> 00:48:44.000 align:middle line:84%
+So that's kind of a steepening
+of the curve versus flattening
+
+00:48:44.000 --> 00:48:45.000 align:middle line:90%
+of the curve.
+
+00:48:45.000 --> 00:48:47.700 align:middle line:90%
+That is the second PC factor.
+
+00:48:47.700 --> 00:48:49.200 align:middle line:84%
+So this first PC
+factor, by the way,
+
+00:48:49.200 --> 00:48:53.500 align:middle line:84%
+explains around like 90% of the
+variance, maybe 85 or something.
+
+00:48:53.500 --> 00:48:57.200 align:middle line:84%
+And the second PC factor
+explains between 5% and 10%
+
+00:48:57.200 --> 00:48:59.080 align:middle line:90%
+of the variance--
+
+00:48:59.080 --> 00:49:01.840 align:middle line:90%
+very huge difference.
+
+00:49:01.840 --> 00:49:06.520 align:middle line:84%
+And the third factor is like
+the curvature, so how curvy--
+
+00:49:06.520 --> 00:49:08.600 align:middle line:90%
+what is the curvature of the--
+
+00:49:08.600 --> 00:49:11.760 align:middle line:84%
+it's positive on the front end,
+positive at the third year,
+
+00:49:11.760 --> 00:49:17.040 align:middle line:84%
+and negative at the belly
+of the curve, 10-year point.
+
+00:49:17.040 --> 00:49:18.982 align:middle line:84%
+And that has the smallest
+amount of variance.
+
+00:49:18.982 --> 00:49:19.940 align:middle line:90%
+So what does that mean?
+
+00:49:19.940 --> 00:49:22.482 align:middle line:84%
+If you think mentally of the
+movie of what the yield curve is
+
+00:49:22.482 --> 00:49:24.572 align:middle line:84%
+doing, it's mostly
+going up and down,
+
+00:49:24.572 --> 00:49:26.030 align:middle line:84%
+mostly going up
+and down like that.
+
+00:49:26.030 --> 00:49:29.910 align:middle line:84%
+But it's also slope,
+a little bit of slope.
+
+00:49:29.910 --> 00:49:32.370 align:middle line:84%
+So it's mostly up and down,
+but a little bit of slope,
+
+00:49:32.370 --> 00:49:36.330 align:middle line:84%
+and a little bit of
+curvature, like that.
+
+00:49:36.330 --> 00:49:40.790 align:middle line:84%
+So that's what this thing tells
+us is the dynamics of the curve.
+
+00:49:40.790 --> 00:49:43.530 align:middle line:90%
+
+
+00:49:43.530 --> 00:49:47.530 align:middle line:90%
+Now some of these things are--
+
+00:49:47.530 --> 00:49:50.130 align:middle line:84%
+the structure of this thing
+actually tells you a lot.
+
+00:49:50.130 --> 00:50:00.770 align:middle line:84%
+You can see how the PC1 level,
+the maturity at which it--
+
+00:50:00.770 --> 00:50:04.970 align:middle line:84%
+it starts out steep, upward
+sloping, and then it levels out.
+
+00:50:04.970 --> 00:50:07.810 align:middle line:84%
+The maturity in years
+at which it levels out--
+
+00:50:07.810 --> 00:50:10.090 align:middle line:84%
+I've plotted here what
+the maturity is, at which
+
+00:50:10.090 --> 00:50:13.250 align:middle line:84%
+it kind of levels out, where
+the short-term rate decoupled
+
+00:50:13.250 --> 00:50:14.730 align:middle line:90%
+from long-term rates.
+
+00:50:14.730 --> 00:50:18.110 align:middle line:84%
+And if you plot
+that in time series,
+
+00:50:18.110 --> 00:50:25.530 align:middle line:84%
+you can see that
+it was very short.
+
+00:50:25.530 --> 00:50:28.770 align:middle line:84%
+Monetary policy was
+basically only governing
+
+00:50:28.770 --> 00:50:33.130 align:middle line:84%
+the short end of the curve up
+to two years up until right
+
+00:50:33.130 --> 00:50:34.630 align:middle line:90%
+after the post-financial crisis.
+
+00:50:34.630 --> 00:50:37.330 align:middle line:84%
+And then the Fed became
+very, very powerful
+
+00:50:37.330 --> 00:50:38.470 align:middle line:90%
+post-financial crisis.
+
+00:50:38.470 --> 00:50:40.450 align:middle line:84%
+The Fed said,
+we're going to keep
+
+00:50:40.450 --> 00:50:42.165 align:middle line:90%
+rates low for a very long time.
+
+00:50:42.165 --> 00:50:44.290 align:middle line:84%
+And all of a sudden, this
+thing exploded and became
+
+00:50:44.290 --> 00:50:46.430 align:middle line:90%
+very, very, very high.
+
+00:50:46.430 --> 00:50:51.610 align:middle line:84%
+So basically, the short
+end rates were governing,
+
+00:50:51.610 --> 00:50:56.850 align:middle line:84%
+effectively, the rates
+up to four or five years.
+
+00:50:56.850 --> 00:50:58.530 align:middle line:84%
+And then, up to
+COVID, they started
+
+00:50:58.530 --> 00:51:00.342 align:middle line:90%
+to decrease up until COVID.
+
+00:51:00.342 --> 00:51:02.490 align:middle line:84%
+COVID happened, Fed
+came in and said,
+
+00:51:02.490 --> 00:51:03.910 align:middle line:84%
+we're going to
+bring the bazooka.
+
+00:51:03.910 --> 00:51:07.730 align:middle line:84%
+So everybody's like, OK,
+they're going to keep rates
+
+00:51:07.730 --> 00:51:09.170 align:middle line:90%
+low for a long time as well.
+
+00:51:09.170 --> 00:51:13.010 align:middle line:84%
+It exploded again, and
+now it's back down again.
+
+00:51:13.010 --> 00:51:16.530 align:middle line:84%
+So that's already
+something that is kind
+
+00:51:16.530 --> 00:51:17.760 align:middle line:90%
+of like a regime indicator.
+
+00:51:17.760 --> 00:51:20.020 align:middle line:84%
+You can see how
+the market behavior
+
+00:51:20.020 --> 00:51:23.203 align:middle line:84%
+is reflected in the shape
+of these PC factors.
+
+00:51:23.203 --> 00:51:25.620 align:middle line:84%
+That tells you so much about
+what's going on in the market
+
+00:51:25.620 --> 00:51:29.860 align:middle line:84%
+when you look in the
+details of these factors.
+
+00:51:29.860 --> 00:51:34.260 align:middle line:84%
+Something like where
+is the bottom of PC3?
+
+00:51:34.260 --> 00:51:35.860 align:middle line:90%
+Where is the belly?
+
+00:51:35.860 --> 00:51:38.160 align:middle line:84%
+You can see that,
+sometimes, it's at 10 years.
+
+00:51:38.160 --> 00:51:39.760 align:middle line:84%
+Sometimes, it
+becomes close to 5.
+
+00:51:39.760 --> 00:51:41.660 align:middle line:90%
+Sometimes, it's close to 15.
+
+00:51:41.660 --> 00:51:45.340 align:middle line:90%
+That's also a regime indicator.
+
+00:51:45.340 --> 00:51:46.560 align:middle line:90%
+PC loading stability.
+
+00:51:46.560 --> 00:51:49.740 align:middle line:84%
+So here I'm taking
+this graph PC1 graph.
+
+00:51:49.740 --> 00:51:53.100 align:middle line:84%
+But instead of plotting
+loading versus maturity,
+
+00:51:53.100 --> 00:51:55.860 align:middle line:84%
+I'm plotting
+loading versus time.
+
+00:51:55.860 --> 00:52:00.260 align:middle line:90%
+And each maturity point is line.
+
+00:52:00.260 --> 00:52:02.820 align:middle line:84%
+So it tells me the
+stability of my loadings.
+
+00:52:02.820 --> 00:52:05.740 align:middle line:84%
+Generally, you want to
+look at that because you
+
+00:52:05.740 --> 00:52:08.420 align:middle line:90%
+want factors that are stable.
+
+00:52:08.420 --> 00:52:10.960 align:middle line:84%
+And PC1 loadings
+are pretty stable.
+
+00:52:10.960 --> 00:52:16.790 align:middle line:84%
+But where the changes
+in PC1 loadings,
+
+00:52:16.790 --> 00:52:18.450 align:middle line:84%
+very often, they're
+quite meaningful.
+
+00:52:18.450 --> 00:52:21.710 align:middle line:90%
+In 2008 crisis, 2-year rate--
+
+00:52:21.710 --> 00:52:23.750 align:middle line:90%
+this blue line is a 2-year rate.
+
+00:52:23.750 --> 00:52:25.250 align:middle line:84%
+The short end becomes
+very volatile.
+
+00:52:25.250 --> 00:52:26.958 align:middle line:84%
+Nobody knows what the
+Fed is going to do.
+
+00:52:26.958 --> 00:52:28.430 align:middle line:90%
+There's a lot of volatility.
+
+00:52:28.430 --> 00:52:31.390 align:middle line:90%
+It then collapses post-2012.
+
+00:52:31.390 --> 00:52:34.670 align:middle line:84%
+The Fed is not doing anything,
+so the 2-year point is not
+
+00:52:34.670 --> 00:52:36.350 align:middle line:90%
+moving.
+
+00:52:36.350 --> 00:52:37.130 align:middle line:90%
+Then it goes up.
+
+00:52:37.130 --> 00:52:38.490 align:middle line:90%
+Maybe the Fed is going to move.
+
+00:52:38.490 --> 00:52:42.005 align:middle line:84%
+Then, after COVID,
+it also collapses.
+
+00:52:42.005 --> 00:52:43.130 align:middle line:90%
+And now it's back up again.
+
+00:52:43.130 --> 00:52:44.670 align:middle line:84%
+The Fed is very
+active right now.
+
+00:52:44.670 --> 00:52:48.015 align:middle line:84%
+This ends in 2023,
+this data set.
+
+00:52:48.015 --> 00:52:49.390 align:middle line:84%
+If I make it a
+little bit longer,
+
+00:52:49.390 --> 00:52:53.060 align:middle line:84%
+you see this line actually went
+very high in the recent history.
+
+00:52:53.060 --> 00:52:56.270 align:middle line:90%
+
+
+00:52:56.270 --> 00:52:59.030 align:middle line:90%
+So these things are--
+
+00:52:59.030 --> 00:53:05.230 align:middle line:84%
+they all come from
+this data, but they
+
+00:53:05.230 --> 00:53:08.030 align:middle line:84%
+tell you a lot about the
+behavior, the regime,
+
+00:53:08.030 --> 00:53:12.630 align:middle line:84%
+and the dynamics of
+interest rate market.
+
+00:53:12.630 --> 00:53:14.520 align:middle line:90%
+This is the variance explained.
+
+00:53:14.520 --> 00:53:17.480 align:middle line:84%
+I think this is a way--
+remember how I was telling you
+
+00:53:17.480 --> 00:53:20.440 align:middle line:84%
+how we look at
+eigenvalues and we
+
+00:53:20.440 --> 00:53:24.020 align:middle line:84%
+want to make sure that
+they're well-segregated?
+
+00:53:24.020 --> 00:53:27.560 align:middle line:84%
+Well, this is a
+way to look at it.
+
+00:53:27.560 --> 00:53:29.680 align:middle line:84%
+If you look at this chart,
+and the first factor
+
+00:53:29.680 --> 00:53:32.040 align:middle line:84%
+explains so much
+variance, it's like, yeah,
+
+00:53:32.040 --> 00:53:34.380 align:middle line:90%
+that's a good factor.
+
+00:53:34.380 --> 00:53:35.520 align:middle line:90%
+That's a good factor.
+
+00:53:35.520 --> 00:53:37.360 align:middle line:90%
+That's a solid factor.
+
+00:53:37.360 --> 00:53:42.200 align:middle line:84%
+And you know that this
+thing is persistent.
+
+00:53:42.200 --> 00:53:44.000 align:middle line:84%
+This thing is
+likely to continue.
+
+00:53:44.000 --> 00:53:45.580 align:middle line:90%
+It's likely to be stable.
+
+00:53:45.580 --> 00:53:48.303 align:middle line:84%
+And it's a good part of
+your model for the future.
+
+00:53:48.303 --> 00:53:50.220 align:middle line:84%
+If you look at variance
+explained by a factor,
+
+00:53:50.220 --> 00:53:52.440 align:middle line:90%
+this is a log plot.
+
+00:53:52.440 --> 00:53:55.560 align:middle line:84%
+You see how the first and
+second and third factor
+
+00:53:55.560 --> 00:53:59.320 align:middle line:84%
+are separated by order of
+magnitude, so they never cross?
+
+00:53:59.320 --> 00:54:02.720 align:middle line:84%
+So that means that
+these factors are robust
+
+00:54:02.720 --> 00:54:09.280 align:middle line:84%
+and they're very useful
+factors for modeling.
+
+00:54:09.280 --> 00:54:11.180 align:middle line:84%
+You want to see this
+kind of picture.
+
+00:54:11.180 --> 00:54:13.760 align:middle line:84%
+What you don't want to see
+is like lines that are all
+
+00:54:13.760 --> 00:54:14.995 align:middle line:90%
+tangled up with each other.
+
+00:54:14.995 --> 00:54:16.120 align:middle line:90%
+You don't want to see that.
+
+00:54:16.120 --> 00:54:18.078 align:middle line:84%
+You want to see something
+like this in general,
+
+00:54:18.078 --> 00:54:20.920 align:middle line:90%
+when you're looking at PCA.
+
+00:54:20.920 --> 00:54:24.140 align:middle line:84%
+Again, these are eigenvalues I'm
+looking at-- variance explained.
+
+00:54:24.140 --> 00:54:29.200 align:middle line:90%
+
+
+00:54:29.200 --> 00:54:32.200 align:middle line:84%
+And this out-of-sample
+covariance is when I'm--
+
+00:54:32.200 --> 00:54:38.160 align:middle line:84%
+this is basically when I
+calibrate my PCA, remember,
+
+00:54:38.160 --> 00:54:41.540 align:middle line:84%
+if I take a single data
+set, however I choose it,
+
+00:54:41.540 --> 00:54:47.120 align:middle line:84%
+and I do run PCA, the PC1
+projections and the PC2
+
+00:54:47.120 --> 00:54:50.720 align:middle line:84%
+projections are going to be
+uncorrelated with each other
+
+00:54:50.720 --> 00:54:52.280 align:middle line:90%
+by construction.
+
+00:54:52.280 --> 00:54:54.600 align:middle line:84%
+But if I take the
+same loadings now
+
+00:54:54.600 --> 00:54:59.240 align:middle line:84%
+and I look at the
+future returns,
+
+00:54:59.240 --> 00:55:03.660 align:middle line:84%
+there is nothing that says that
+if I project my future data,
+
+00:55:03.660 --> 00:55:05.640 align:middle line:84%
+future returns onto
+the same loadings,
+
+00:55:05.640 --> 00:55:09.890 align:middle line:84%
+those might actually
+become correlated.
+
+00:55:09.890 --> 00:55:14.210 align:middle line:84%
+So here, I'm computing kind
+of future returns projected
+
+00:55:14.210 --> 00:55:18.790 align:middle line:84%
+onto PC factors using data
+calibrated on past history.
+
+00:55:18.790 --> 00:55:23.890 align:middle line:84%
+And you see that they're
+not fully orthogonal.
+
+00:55:23.890 --> 00:55:25.630 align:middle line:84%
+However, they're
+quite orthogonal.
+
+00:55:25.630 --> 00:55:30.990 align:middle line:84%
+So it means that the dynamics
+are mostly preserved.
+
+00:55:30.990 --> 00:55:34.690 align:middle line:84%
+The PC factors
+are mostly stable.
+
+00:55:34.690 --> 00:55:37.593 align:middle line:84%
+This is something you would
+expect, you would hope to see.
+
+00:55:37.593 --> 00:55:40.010 align:middle line:84%
+You don't want to see these
+numbers, off-diagonal numbers,
+
+00:55:40.010 --> 00:55:44.530 align:middle line:84%
+to become 30%-50%, that means
+that your PCA model is quite
+
+00:55:44.530 --> 00:55:45.110 align:middle line:90%
+unstable.
+
+00:55:45.110 --> 00:55:49.710 align:middle line:84%
+But if your out-of-sample
+correlation is pretty small,
+
+00:55:49.710 --> 00:55:50.790 align:middle line:90%
+that's a good thing.
+
+00:55:50.790 --> 00:55:55.730 align:middle line:90%
+
+
+00:55:55.730 --> 00:55:59.130 align:middle line:90%
+Now what do we do with this PCA?
+
+00:55:59.130 --> 00:56:03.050 align:middle line:90%
+Well, one of the key things is--
+
+00:56:03.050 --> 00:56:06.050 align:middle line:84%
+I want to go back to this
+slide for one reason.
+
+00:56:06.050 --> 00:56:11.440 align:middle line:84%
+Suppose you say, well,
+I want to bet on curve--
+
+00:56:11.440 --> 00:56:13.080 align:middle line:84%
+I want to bet on
+the second factor.
+
+00:56:13.080 --> 00:56:16.220 align:middle line:84%
+I have a model that I
+want to bet on curves,
+
+00:56:16.220 --> 00:56:19.460 align:middle line:84%
+depending on relative value
+of 10-year bonds versus 5-year
+
+00:56:19.460 --> 00:56:23.380 align:middle line:84%
+bonds or 30-year bonds
+versus 10-year bonds.
+
+00:56:23.380 --> 00:56:25.900 align:middle line:84%
+I can use PCA to
+isolate effects that
+
+00:56:25.900 --> 00:56:29.100 align:middle line:84%
+are idiosyncratic to
+particular points on the curve
+
+00:56:29.100 --> 00:56:30.940 align:middle line:90%
+to particular factors.
+
+00:56:30.940 --> 00:56:35.540 align:middle line:84%
+And I can basically say,
+well, if I hedge out
+
+00:56:35.540 --> 00:56:40.060 align:middle line:84%
+the vast majority of the
+variance by hedging out PC1,
+
+00:56:40.060 --> 00:56:44.180 align:middle line:84%
+and I look at the residual
+PC1 residuals, which
+
+00:56:44.180 --> 00:56:51.200 align:middle line:84%
+is PC2 and above, what can
+I say about those returns?
+
+00:56:51.200 --> 00:56:54.395 align:middle line:90%
+How can I model those?
+
+00:56:54.395 --> 00:56:56.520 align:middle line:84%
+And the key thing-- you
+can construct these things.
+
+00:56:56.520 --> 00:56:58.437 align:middle line:84%
+You can say, oh, I want
+to model these things.
+
+00:56:58.437 --> 00:57:01.940 align:middle line:84%
+But the key is, once
+you have a good model,
+
+00:57:01.940 --> 00:57:03.380 align:middle line:90%
+how do you trade them?
+
+00:57:03.380 --> 00:57:05.650 align:middle line:90%
+So being able to construct--
+
+00:57:05.650 --> 00:57:08.710 align:middle line:84%
+to understand how PC loadings
+translate to portfolios
+
+00:57:08.710 --> 00:57:11.390 align:middle line:84%
+is very important
+because it tells you
+
+00:57:11.390 --> 00:57:14.870 align:middle line:84%
+how I can use this
+methodology to construct
+
+00:57:14.870 --> 00:57:19.030 align:middle line:84%
+specific portfolios that are
+uncorrelated to each other
+
+00:57:19.030 --> 00:57:27.550 align:middle line:84%
+and give me a new kind
+of target to model.
+
+00:57:27.550 --> 00:57:30.630 align:middle line:84%
+If I didn't do
+that, I still have,
+
+00:57:30.630 --> 00:57:33.350 align:middle line:84%
+like, eight things I can
+trade, or six things--
+
+00:57:33.350 --> 00:57:36.110 align:middle line:84%
+2-year, 3-year, 5-year,
+10-year, and 30-year bonds.
+
+00:57:36.110 --> 00:57:39.070 align:middle line:84%
+But they're so correlated,
+where I'm trading 10-year bonds
+
+00:57:39.070 --> 00:57:43.030 align:middle line:84%
+or 30-year bond, if I just trade
+10-year bond outright or 30-year
+
+00:57:43.030 --> 00:57:45.830 align:middle line:84%
+bond outright, I'm mostly
+getting the same return.
+
+00:57:45.830 --> 00:57:49.710 align:middle line:84%
+So to be able to increase the
+diversity of the target I'm
+
+00:57:49.710 --> 00:57:54.270 align:middle line:84%
+capturing, I'm using PCA to
+construct more portfolios that
+
+00:57:54.270 --> 00:57:56.110 align:middle line:84%
+are going to be
+uncorrelated and present me
+
+00:57:56.110 --> 00:58:00.230 align:middle line:84%
+with more opportunities
+to model, to make bets.
+
+00:58:00.230 --> 00:58:03.270 align:middle line:84%
+That's a key use case
+for PCA in finance.
+
+00:58:03.270 --> 00:58:05.830 align:middle line:84%
+We take these things that
+are very highly correlated.
+
+00:58:05.830 --> 00:58:09.070 align:middle line:84%
+And now I'm going to
+create, out of these six
+
+00:58:09.070 --> 00:58:10.470 align:middle line:84%
+highly-correlated
+portfolios, I'm
+
+00:58:10.470 --> 00:58:12.990 align:middle line:84%
+going to create three
+or four portfolios that
+
+00:58:12.990 --> 00:58:16.950 align:middle line:90%
+are not highly correlated.
+
+00:58:16.950 --> 00:58:22.390 align:middle line:84%
+These portfolios are going to
+be defined by my PCA factors.
+
+00:58:22.390 --> 00:58:25.910 align:middle line:84%
+So remember the
+factors on any given
+
+00:58:25.910 --> 00:58:31.030 align:middle line:84%
+day, they give me a loading on
+every tenure, on every maturity.
+
+00:58:31.030 --> 00:58:32.110 align:middle line:90%
+Did you have a question?
+
+00:58:32.110 --> 00:58:32.670 align:middle line:90%
+OK.
+
+00:58:32.670 --> 00:58:34.890 align:middle line:84%
+Yeah, they give me a
+loading on every maturity.
+
+00:58:34.890 --> 00:58:38.150 align:middle line:84%
+So it tells me-- and I
+can think of this loading
+
+00:58:38.150 --> 00:58:44.350 align:middle line:84%
+as telling me how much to
+own of this particular bond
+
+00:58:44.350 --> 00:58:46.470 align:middle line:90%
+on that maturity.
+
+00:58:46.470 --> 00:58:52.670 align:middle line:84%
+So PC1 means buy every
+bond in some equal amount.
+
+00:58:52.670 --> 00:58:53.870 align:middle line:90%
+That's PC1.
+
+00:58:53.870 --> 00:58:59.550 align:middle line:84%
+PC2 is like, oh, you should
+sell some to your bonds,
+
+00:58:59.550 --> 00:59:01.720 align:middle line:90%
+buy some 30-year bonds.
+
+00:59:01.720 --> 00:59:05.280 align:middle line:84%
+Basically, the portfolio
+is going to be--
+
+00:59:05.280 --> 00:59:07.760 align:middle line:84%
+the portfolio is
+going to be defined.
+
+00:59:07.760 --> 00:59:12.480 align:middle line:84%
+You're going to
+basically buy bonds
+
+00:59:12.480 --> 00:59:18.120 align:middle line:84%
+according to the loading
+on every point on PC2.
+
+00:59:18.120 --> 00:59:19.780 align:middle line:84%
+Why is this portfolio
+interesting?
+
+00:59:19.780 --> 00:59:22.680 align:middle line:84%
+Well, it's interesting
+because PCA tells us
+
+00:59:22.680 --> 00:59:25.480 align:middle line:84%
+that if I construct this
+portfolio like this,
+
+00:59:25.480 --> 00:59:28.960 align:middle line:84%
+it would have no
+sensitivity to PC1.
+
+00:59:28.960 --> 00:59:32.220 align:middle line:84%
+But PC1 is, like,
+90% of my variance.
+
+00:59:32.220 --> 00:59:36.000 align:middle line:84%
+So that means that if I
+construct the PC2 portfolio,
+
+00:59:36.000 --> 00:59:39.680 align:middle line:84%
+I have effectively hedged
+out 90% of the variance
+
+00:59:39.680 --> 00:59:41.178 align:middle line:90%
+of the individual bonds.
+
+00:59:41.178 --> 00:59:42.720 align:middle line:84%
+And I've constructed
+something that's
+
+00:59:42.720 --> 00:59:48.960 align:middle line:84%
+new, less volatile, but
+uncorrelated to my original
+
+00:59:48.960 --> 00:59:51.920 align:middle line:90%
+outright tenure bond.
+
+00:59:51.920 --> 00:59:54.720 align:middle line:90%
+Same thing with PC3.
+
+00:59:54.720 --> 00:59:58.040 align:middle line:84%
+I can construct these
+PC3 portfolios that are--
+
+00:59:58.040 --> 01:00:00.830 align:middle line:84%
+and by the way, these things
+actually trade in the market.
+
+01:00:00.830 --> 01:00:02.550 align:middle line:90%
+They're called curves.
+
+01:00:02.550 --> 01:00:05.650 align:middle line:90%
+PC2 things are-- they're curves.
+
+01:00:05.650 --> 01:00:09.590 align:middle line:84%
+You buy 2-year, you sell
+10-year, or vice versa.
+
+01:00:09.590 --> 01:00:13.450 align:middle line:84%
+And then there's 5's, which are
+like 2's, 10's, and 30's, where
+
+01:00:13.450 --> 01:00:16.650 align:middle line:84%
+you sell 10-year and you
+buy 2-year and 30-year.
+
+01:00:16.650 --> 01:00:17.313 align:middle line:90%
+Yes?
+
+01:00:17.313 --> 01:00:18.730 align:middle line:84%
+AUDIENCE: Is there
+any application
+
+01:00:18.730 --> 01:00:20.290 align:middle line:84%
+of the higher-order
+PCs or are they
+
+01:00:20.290 --> 01:00:22.170 align:middle line:84%
+just [INAUDIBLE]
+up to the variance,
+
+01:00:22.170 --> 01:00:23.570 align:middle line:90%
+you don't really bother with?
+
+01:00:23.570 --> 01:00:25.695 align:middle line:84%
+STEFAN ANDREEV: They are
+the most interesting thing
+
+01:00:25.695 --> 01:00:30.090 align:middle line:84%
+because the PC1 stuff
+is easy to bet on.
+
+01:00:30.090 --> 01:00:32.290 align:middle line:84%
+You just buy 10-year
+bond, buy and sell.
+
+01:00:32.290 --> 01:00:37.330 align:middle line:84%
+If you can model that and
+predict it, that's awesome.
+
+01:00:37.330 --> 01:00:40.090 align:middle line:90%
+But first, that's hard.
+
+01:00:40.090 --> 01:00:42.470 align:middle line:84%
+But also, it's only one
+thing you can predict.
+
+01:00:42.470 --> 01:00:44.715 align:middle line:84%
+What are you doing
+10-year or 30-years?
+
+01:00:44.715 --> 01:00:46.090 align:middle line:84%
+You're predicting
+only one thing,
+
+01:00:46.090 --> 01:00:49.690 align:middle line:84%
+so you can make
+a model for that.
+
+01:00:49.690 --> 01:00:53.210 align:middle line:84%
+Being able to construct
+these portfolios, PC2 and 3,
+
+01:00:53.210 --> 01:00:58.400 align:middle line:84%
+you're able to create,
+out of these bonds that
+
+01:00:58.400 --> 01:01:00.650 align:middle line:84%
+are highly correlated, you're
+able to create something
+
+01:01:00.650 --> 01:01:03.770 align:middle line:84%
+that is entirely
+different from the PC1--
+
+01:01:03.770 --> 01:01:04.930 align:middle line:90%
+uncorrelated.
+
+01:01:04.930 --> 01:01:08.590 align:middle line:84%
+So now we have something
+else that you can model.
+
+01:01:08.590 --> 01:01:10.410 align:middle line:90%
+And because of the market is--
+
+01:01:10.410 --> 01:01:13.030 align:middle line:90%
+so the market is liquid.
+
+01:01:13.030 --> 01:01:15.490 align:middle line:84%
+It needs to be very liquid
+because, remember this,
+
+01:01:15.490 --> 01:01:17.270 align:middle line:84%
+it doesn't explain
+a lot of variance.
+
+01:01:17.270 --> 01:01:20.010 align:middle line:84%
+So if you construct this thing,
+it's not going to move much.
+
+01:01:20.010 --> 01:01:23.250 align:middle line:84%
+But all that means is I
+just need to buy more of it.
+
+01:01:23.250 --> 01:01:27.050 align:middle line:84%
+If I buy enough of it, even
+though a single unit might not
+
+01:01:27.050 --> 01:01:29.110 align:middle line:84%
+move much, when I
+buy enough of it,
+
+01:01:29.110 --> 01:01:30.450 align:middle line:90%
+it's still going to move enough.
+
+01:01:30.450 --> 01:01:32.770 align:middle line:84%
+And that's the
+point of leverage.
+
+01:01:32.770 --> 01:01:35.210 align:middle line:84%
+So if I sell a bunch
+of 2-year bond,
+
+01:01:35.210 --> 01:01:41.090 align:middle line:84%
+buy a bunch of 30-year bond,
+now if I buy the same notion
+
+01:01:41.090 --> 01:01:44.370 align:middle line:84%
+of-- buy and sell the
+same notionals as the PC1,
+
+01:01:44.370 --> 01:01:46.470 align:middle line:84%
+it's not going
+to, like you said,
+
+01:01:46.470 --> 01:01:48.370 align:middle line:84%
+it's not going to
+move very much.
+
+01:01:48.370 --> 01:01:50.450 align:middle line:84%
+Maybe it's going to
+move only one third
+
+01:01:50.450 --> 01:01:53.290 align:middle line:90%
+as much as my PC1 portfolio.
+
+01:01:53.290 --> 01:01:59.340 align:middle line:84%
+But if I scale it up
+by a factor of 3, now
+
+01:01:59.340 --> 01:02:03.140 align:middle line:84%
+my new portfolio, PC2, has the
+same daily standard deviation
+
+01:02:03.140 --> 01:02:05.540 align:middle line:90%
+as my PC1 portfolio.
+
+01:02:05.540 --> 01:02:06.720 align:middle line:90%
+And it's orthogonal.
+
+01:02:06.720 --> 01:02:08.883 align:middle line:84%
+So you just need,
+basically-- so what
+
+01:02:08.883 --> 01:02:11.300 align:middle line:84%
+did I need to do that I need
+to be able to buy three times
+
+01:02:11.300 --> 01:02:12.220 align:middle line:90%
+as much?
+
+01:02:12.220 --> 01:02:14.180 align:middle line:84%
+So it needs the market
+needs to be liquid.
+
+01:02:14.180 --> 01:02:16.340 align:middle line:84%
+I need to have
+access to leverage.
+
+01:02:16.340 --> 01:02:18.380 align:middle line:90%
+You can do the same with PC3.
+
+01:02:18.380 --> 01:02:22.280 align:middle line:84%
+And yes, in the big liquid
+markets, like US Treasury,
+
+01:02:22.280 --> 01:02:24.060 align:middle line:84%
+there is enough
+access to leverage
+
+01:02:24.060 --> 01:02:26.100 align:middle line:90%
+where you can actually do that.
+
+01:02:26.100 --> 01:02:27.940 align:middle line:84%
+You will see a lot of
+times in the press--
+
+01:02:27.940 --> 01:02:30.020 align:middle line:90%
+it's a very hot topic now.
+
+01:02:30.020 --> 01:02:32.220 align:middle line:84%
+The CFTC is trying to
+regulate how much leverage
+
+01:02:32.220 --> 01:02:36.870 align:middle line:84%
+exists in the financial markets,
+especially in interest rates.
+
+01:02:36.870 --> 01:02:38.460 align:middle line:84%
+Because of this,
+because of the fact
+
+01:02:38.460 --> 01:02:41.020 align:middle line:84%
+that PC1 is so explains
+so much, people
+
+01:02:41.020 --> 01:02:43.180 align:middle line:84%
+use massive amounts of
+leverage to gain access
+
+01:02:43.180 --> 01:02:49.340 align:middle line:84%
+to, basically, enough volatility
+to make these bets on PC2 and 3.
+
+01:02:49.340 --> 01:02:53.840 align:middle line:84%
+And that can create-- it
+means you own large amount.
+
+01:02:53.840 --> 01:02:57.870 align:middle line:84%
+You own long and short, massive
+amounts of certain bonds.
+
+01:02:57.870 --> 01:03:00.650 align:middle line:84%
+That can be dangerous if it's
+systemic in a certain way,
+
+01:03:00.650 --> 01:03:02.670 align:middle line:90%
+and it presents risk.
+
+01:03:02.670 --> 01:03:07.030 align:middle line:84%
+But it's definitely doable
+because there is so much debt.
+
+01:03:07.030 --> 01:03:08.870 align:middle line:84%
+There's so much
+debt in the world
+
+01:03:08.870 --> 01:03:13.787 align:middle line:84%
+that there is enough out
+there where you can bet--
+
+01:03:13.787 --> 01:03:15.370 align:middle line:84%
+you can gain this
+leverage, basically.
+
+01:03:15.370 --> 01:03:19.997 align:middle line:84%
+And it's very accessible
+to professional investors.
+
+01:03:19.997 --> 01:03:20.830 align:middle line:90%
+AUDIENCE: Thank you.
+
+01:03:20.830 --> 01:03:22.830 align:middle line:84%
+STEFAN ANDREEV:
+So yeah, actually,
+
+01:03:22.830 --> 01:03:26.750 align:middle line:84%
+far from it being
+irrelevant, that
+
+01:03:26.750 --> 01:03:29.910 align:middle line:84%
+is actually where, a lot of
+times, the money is made.
+
+01:03:29.910 --> 01:03:35.190 align:middle line:84%
+But it is true that as you go,
+why can't we go to PC4 and 5?
+
+01:03:35.190 --> 01:03:37.350 align:middle line:84%
+The amount of leverage
+you need to make this work
+
+01:03:37.350 --> 01:03:41.670 align:middle line:84%
+becomes so high it becomes
+really expensive to trade.
+
+01:03:41.670 --> 01:03:42.710 align:middle line:90%
+Yes?
+
+01:03:42.710 --> 01:03:45.410 align:middle line:84%
+AUDIENCE: This is usually
+[INAUDIBLE], as you said before,
+
+01:03:45.410 --> 01:03:49.030 align:middle line:84%
+that this allows you
+where you can scale up
+
+01:03:49.030 --> 01:03:51.750 align:middle line:84%
+to get the volatility
+that you need
+
+01:03:51.750 --> 01:03:55.560 align:middle line:84%
+is only useful for the
+fixed income market
+
+01:03:55.560 --> 01:03:58.840 align:middle line:84%
+because it's more
+liquid than if you're
+
+01:03:58.840 --> 01:04:01.680 align:middle line:84%
+applying the same thing
+in equities, for example?
+
+01:04:01.680 --> 01:04:04.680 align:middle line:84%
+It's not as good,
+but you could get--
+
+01:04:04.680 --> 01:04:09.500 align:middle line:84%
+if you were to buy that many
+of whatever security costs,
+
+01:04:09.500 --> 01:04:13.920 align:middle line:84%
+too much of shift,
+or stuff like that?
+
+01:04:13.920 --> 01:04:17.560 align:middle line:84%
+STEFAN ANDREEV:
+Well, it turns out
+
+01:04:17.560 --> 01:04:24.640 align:middle line:84%
+that it's not really
+true what you say,
+
+01:04:24.640 --> 01:04:27.040 align:middle line:90%
+and the reason is the following.
+
+01:04:27.040 --> 01:04:30.520 align:middle line:84%
+Yeah, the volumes and notional
+volumes of equity market
+
+01:04:30.520 --> 01:04:32.040 align:middle line:90%
+may be a little bit smaller.
+
+01:04:32.040 --> 01:04:33.680 align:middle line:90%
+They're still very large.
+
+01:04:33.680 --> 01:04:37.120 align:middle line:84%
+And the variance explained of
+the first principal component
+
+01:04:37.120 --> 01:04:40.200 align:middle line:84%
+equities is not nearly as
+high as it is in rates.
+
+01:04:40.200 --> 01:04:43.200 align:middle line:84%
+So you don't need as
+much leverage to get--
+
+01:04:43.200 --> 01:04:45.940 align:middle line:84%
+the second principal component
+has got a lot of volatility,
+
+01:04:45.940 --> 01:04:49.200 align:middle line:84%
+a lot more relative to the
+first, than in this example
+
+01:04:49.200 --> 01:04:50.880 align:middle line:90%
+here.
+
+01:04:50.880 --> 01:04:53.700 align:middle line:84%
+Later in the slides, which
+I think we might not get to,
+
+01:04:53.700 --> 01:04:57.200 align:middle line:84%
+there is also an example with
+equity indices in Europe--
+
+01:04:57.200 --> 01:04:59.120 align:middle line:90%
+the same concept there.
+
+01:04:59.120 --> 01:05:00.523 align:middle line:84%
+And by the way,
+a lot of equity--
+
+01:05:00.523 --> 01:05:02.440 align:middle line:84%
+there is a whole field
+of hedge funds equities
+
+01:05:02.440 --> 01:05:05.240 align:middle line:84%
+that are equity
+long, short, neutral.
+
+01:05:05.240 --> 01:05:08.320 align:middle line:84%
+They are basically
+betting on equities
+
+01:05:08.320 --> 01:05:10.400 align:middle line:90%
+without taking directional risk.
+
+01:05:10.400 --> 01:05:11.820 align:middle line:90%
+So everybody is trying--
+
+01:05:11.820 --> 01:05:13.980 align:middle line:84%
+all these guys are
+hedging out PC1.
+
+01:05:13.980 --> 01:05:15.400 align:middle line:90%
+They're taking leverage.
+
+01:05:15.400 --> 01:05:16.920 align:middle line:90%
+It exists.
+
+01:05:16.920 --> 01:05:18.840 align:middle line:84%
+It's just a little more
+expensive to trade,
+
+01:05:18.840 --> 01:05:20.840 align:middle line:84%
+but it gives you opportunities
+that you wouldn't
+
+01:05:20.840 --> 01:05:23.840 align:middle line:90%
+be able to access otherwise.
+
+01:05:23.840 --> 01:05:25.480 align:middle line:90%
+Yes?
+
+01:05:25.480 --> 01:05:27.773 align:middle line:84%
+AUDIENCE: I'm curious for
+some products, especially
+
+01:05:27.773 --> 01:05:28.940 align:middle line:90%
+ones that are more illiquid.
+
+01:05:28.940 --> 01:05:35.280 align:middle line:84%
+They might trade one, rarely,
+and two, around specific events.
+
+01:05:35.280 --> 01:05:39.080 align:middle line:84%
+The prices that you
+see are necessarily
+
+01:05:39.080 --> 01:05:42.960 align:middle line:84%
+indicative of how the
+prices would have traded
+
+01:05:42.960 --> 01:05:44.340 align:middle line:90%
+a day or two before that?
+
+01:05:44.340 --> 01:05:50.410 align:middle line:84%
+And how do you think
+about how to, I guess,
+
+01:05:50.410 --> 01:05:53.850 align:middle line:84%
+clean data, in a way, or
+understand that there's
+
+01:05:53.850 --> 01:05:55.330 align:middle line:84%
+a lot of idiosyncratic
+factors that
+
+01:05:55.330 --> 01:05:57.690 align:middle line:84%
+go on with fixing
+the price, especially
+
+01:05:57.690 --> 01:05:59.610 align:middle line:90%
+ones that are more liquid?
+
+01:05:59.610 --> 01:06:02.550 align:middle line:84%
+STEFAN ANDREEV: Yeah,
+it's a great question.
+
+01:06:02.550 --> 01:06:06.570 align:middle line:84%
+There's a lot of art that
+goes-- a lot of domain knowledge
+
+01:06:06.570 --> 01:06:08.890 align:middle line:90%
+that goes into that.
+
+01:06:08.890 --> 01:06:12.570 align:middle line:84%
+In this example with
+bonds, yeah, there
+
+01:06:12.570 --> 01:06:18.330 align:middle line:84%
+are certainly events where
+the market is very volatile.
+
+01:06:18.330 --> 01:06:23.190 align:middle line:84%
+And when we look
+at daily returns,
+
+01:06:23.190 --> 01:06:25.530 align:middle line:84%
+if I look at 10 years
+of daily returns
+
+01:06:25.530 --> 01:06:28.730 align:middle line:84%
+and I'm going to estimate
+a standard deviation,
+
+01:06:28.730 --> 01:06:35.530 align:middle line:84%
+and I'm going to say,
+well, on average,
+
+01:06:35.530 --> 01:06:39.610 align:middle line:84%
+yields move by, I don't
+know, 5 to 6 basis points
+
+01:06:39.610 --> 01:06:42.250 align:middle line:84%
+per day, something which
+is-- that's roughly
+
+01:06:42.250 --> 01:06:44.410 align:middle line:90%
+how much they move.
+
+01:06:44.410 --> 01:06:49.600 align:middle line:84%
+And then if I'm sitting
+there and tomorrow is like--
+
+01:06:49.600 --> 01:06:55.460 align:middle line:84%
+there was this example in
+August that there was a huge--
+
+01:06:55.460 --> 01:06:58.270 align:middle line:90%
+
+
+01:06:58.270 --> 01:07:00.400 align:middle line:84%
+there was a huge
+number that comes out,
+
+01:07:00.400 --> 01:07:04.380 align:middle line:84%
+a huge print that was
+related to the inflation.
+
+01:07:04.380 --> 01:07:10.340 align:middle line:84%
+And on that day, if you look
+at the price of the day before
+
+01:07:10.340 --> 01:07:13.100 align:middle line:84%
+versus the price after
+the announcement,
+
+01:07:13.100 --> 01:07:15.980 align:middle line:84%
+the volatility that people
+expected on this day
+
+01:07:15.980 --> 01:07:18.380 align:middle line:90%
+was probably twice as high.
+
+01:07:18.380 --> 01:07:21.780 align:middle line:84%
+So people expected the standard
+deviation of daily move
+
+01:07:21.780 --> 01:07:26.160 align:middle line:84%
+that was priced in was probably
+10 to 12 basis points per day.
+
+01:07:26.160 --> 01:07:29.540 align:middle line:90%
+
+
+01:07:29.540 --> 01:07:32.020 align:middle line:84%
+Does that mean that
+all this is irrelevant?
+
+01:07:32.020 --> 01:07:32.840 align:middle line:90%
+No, it's not.
+
+01:07:32.840 --> 01:07:35.900 align:middle line:84%
+It just means that when you're
+thinking about the risk you're
+
+01:07:35.900 --> 01:07:39.180 align:middle line:84%
+taking, you have to
+understand that if you take
+
+01:07:39.180 --> 01:07:43.620 align:middle line:84%
+a certain amount of-- for
+the same number of bonds
+
+01:07:43.620 --> 01:07:47.740 align:middle line:84%
+or the same number of the
+same investment that you hold,
+
+01:07:47.740 --> 01:07:49.340 align:middle line:84%
+if you hold it on
+that kind of a day,
+
+01:07:49.340 --> 01:07:50.840 align:middle line:84%
+you would just have
+a lot more risk.
+
+01:07:50.840 --> 01:07:53.380 align:middle line:84%
+So when you're doing
+your risk management,
+
+01:07:53.380 --> 01:07:55.040 align:middle line:90%
+you have to account for that.
+
+01:07:55.040 --> 01:07:56.040 align:middle line:90%
+Do you want to do that?
+
+01:07:56.040 --> 01:07:56.998 align:middle line:90%
+Do you want to hold it?
+
+01:07:56.998 --> 01:07:58.900 align:middle line:84%
+Do you want to maybe
+shrink your position?
+
+01:07:58.900 --> 01:08:00.220 align:middle line:84%
+Or if you have a
+view, maybe you don't
+
+01:08:00.220 --> 01:08:01.440 align:middle line:90%
+want to shrink your position.
+
+01:08:01.440 --> 01:08:03.600 align:middle line:84%
+But you have to
+just be aware of it.
+
+01:08:03.600 --> 01:08:06.320 align:middle line:84%
+The correlations are very
+likely to continue to hold.
+
+01:08:06.320 --> 01:08:09.300 align:middle line:90%
+Sometimes, things happen.
+
+01:08:09.300 --> 01:08:10.040 align:middle line:90%
+COVID happens.
+
+01:08:10.040 --> 01:08:11.940 align:middle line:90%
+For example, COVID hit.
+
+01:08:11.940 --> 01:08:15.860 align:middle line:84%
+These loadings, the dynamics of
+the curve, changed overnight.
+
+01:08:15.860 --> 01:08:21.130 align:middle line:84%
+The PC loadings, the way the
+curve started to behave--
+
+01:08:21.130 --> 01:08:23.380 align:middle line:84%
+the central bank came, and
+there was an emergency cut,
+
+01:08:23.380 --> 01:08:27.420 align:middle line:84%
+and things changed
+super quickly.
+
+01:08:27.420 --> 01:08:29.473 align:middle line:84%
+Being able to reflect
+that in your model
+
+01:08:29.473 --> 01:08:31.140 align:middle line:84%
+is very important
+because now, if you're
+
+01:08:31.140 --> 01:08:35.540 align:middle line:84%
+trying to take a PC2 bet,
+but your PC loadings are not
+
+01:08:35.540 --> 01:08:38.540 align:middle line:84%
+indicative of how the
+current dynamics are,
+
+01:08:38.540 --> 01:08:43.370 align:middle line:84%
+you're going to be ending
+up taking massive leverage.
+
+01:08:43.370 --> 01:08:45.430 align:middle line:84%
+But you're not
+really PC1 hedged,
+
+01:08:45.430 --> 01:08:48.670 align:middle line:84%
+so all this leverage is going to
+produce huge amounts of returns
+
+01:08:48.670 --> 01:08:54.229 align:middle line:84%
+and noise in your P&L. So these
+are the practical questions
+
+01:08:54.229 --> 01:08:57.404 align:middle line:84%
+that you face when you're
+actually doing this thing.
+
+01:08:57.404 --> 01:08:59.529 align:middle line:84%
+And remember, you need
+history to train your model.
+
+01:08:59.529 --> 01:09:00.529 align:middle line:90%
+So you're sitting there.
+
+01:09:00.529 --> 01:09:01.470 align:middle line:90%
+COVID happened.
+
+01:09:01.470 --> 01:09:04.970 align:middle line:84%
+It was a big cut, emergency
+cut from the central bank.
+
+01:09:04.970 --> 01:09:07.430 align:middle line:90%
+They cut, like, 1% in one day.
+
+01:09:07.430 --> 01:09:09.630 align:middle line:90%
+And you know it's a new world.
+
+01:09:09.630 --> 01:09:13.590 align:middle line:84%
+But there is no data
+on how the new world is
+
+01:09:13.590 --> 01:09:15.850 align:middle line:84%
+going to behave because it
+just happened two days ago.
+
+01:09:15.850 --> 01:09:17.267 align:middle line:84%
+You don't have 10
+years of history
+
+01:09:17.267 --> 01:09:19.069 align:middle line:90%
+to calibrate your PCA model.
+
+01:09:19.069 --> 01:09:20.910 align:middle line:90%
+So what are you going to do?
+
+01:09:20.910 --> 01:09:22.490 align:middle line:84%
+And there's a lot
+of answers to that.
+
+01:09:22.490 --> 01:09:23.850 align:middle line:90%
+You can look at implied markets.
+
+01:09:23.850 --> 01:09:25.609 align:middle line:84%
+There's a lot of
+answers to that.
+
+01:09:25.609 --> 01:09:30.189 align:middle line:84%
+But how you answer that
+question, that's critical.
+
+01:09:30.189 --> 01:09:32.833 align:middle line:90%
+That's critical, yeah.
+
+01:09:32.833 --> 01:09:34.250 align:middle line:84%
+AUDIENCE: Can I
+follow up to that?
+
+01:09:34.250 --> 01:09:34.710 align:middle line:90%
+STEFAN ANDREEV: Yeah.
+
+01:09:34.710 --> 01:09:36.330 align:middle line:84%
+AUDIENCE: Do you
+think it's worth,
+
+01:09:36.330 --> 01:09:40.920 align:middle line:84%
+in some sense, almost slicing
+your data into pieces where you
+
+01:09:40.920 --> 01:09:45.520 align:middle line:84%
+think things will behave
+in similar fashions,
+
+01:09:45.520 --> 01:09:49.359 align:middle line:84%
+and then, like, you say
+something, a similar model,
+
+01:09:49.359 --> 01:09:53.160 align:middle line:84%
+to better understand how they
+behave in those specific regimes
+
+01:09:53.160 --> 01:09:54.960 align:middle line:90%
+or even times?
+
+01:09:54.960 --> 01:09:57.480 align:middle line:84%
+STEFAN ANDREEV: Yeah, that's
+certainly a thing that that is
+
+01:09:57.480 --> 01:10:00.600 align:middle line:84%
+a thing that you can do,
+like regime-specific--
+
+01:10:00.600 --> 01:10:03.920 align:middle line:84%
+you can group together data that
+are specific to this regime.
+
+01:10:03.920 --> 01:10:06.620 align:middle line:84%
+Oh, I'm going to look at, right
+now, the Fed is cutting rates.
+
+01:10:06.620 --> 01:10:09.400 align:middle line:84%
+I'm going to model
+my curve behavior not
+
+01:10:09.400 --> 01:10:12.080 align:middle line:84%
+by looking at the last
+five years of history,
+
+01:10:12.080 --> 01:10:15.280 align:middle line:84%
+but I'm going to look
+at joined together
+
+01:10:15.280 --> 01:10:17.640 align:middle line:84%
+historical periods where
+the Fed was cutting rates
+
+01:10:17.640 --> 01:10:19.040 align:middle line:90%
+and just look at that.
+
+01:10:19.040 --> 01:10:22.360 align:middle line:84%
+It's an approach, and
+it's a sensible approach.
+
+01:10:22.360 --> 01:10:25.425 align:middle line:84%
+Now, when you do that,
+you're introducing other--
+
+01:10:25.425 --> 01:10:27.800 align:middle line:84%
+yes, the Fed is cutting rates,
+but there are other things
+
+01:10:27.800 --> 01:10:28.820 align:middle line:90%
+that were not the same.
+
+01:10:28.820 --> 01:10:31.760 align:middle line:84%
+So there's no perfect
+answer in that
+
+01:10:31.760 --> 01:10:34.120 align:middle line:84%
+because, again, you're
+still trying to use the past
+
+01:10:34.120 --> 01:10:35.060 align:middle line:90%
+to predict the future.
+
+01:10:35.060 --> 01:10:37.980 align:middle line:90%
+And there is no perfect answer.
+
+01:10:37.980 --> 01:10:39.660 align:middle line:84%
+But there are many
+valid answers.
+
+01:10:39.660 --> 01:10:48.170 align:middle line:90%
+
+
+01:10:48.170 --> 01:10:51.450 align:middle line:84%
+This is a description of how you
+construct these PC portfolios
+
+01:10:51.450 --> 01:10:53.530 align:middle line:90%
+and PC residuals.
+
+01:10:53.530 --> 01:10:55.650 align:middle line:84%
+We have some of
+the pros and cons.
+
+01:10:55.650 --> 01:10:59.890 align:middle line:84%
+I already talked
+about some of these.
+
+01:10:59.890 --> 01:11:07.950 align:middle line:84%
+And I kind of wanted to talk
+about the output of this.
+
+01:11:07.950 --> 01:11:11.330 align:middle line:84%
+So here, I've created a
+little trading strategy
+
+01:11:11.330 --> 01:11:17.050 align:middle line:90%
+based on the returns of--
+
+01:11:17.050 --> 01:11:22.490 align:middle line:84%
+basically, a momentum mean
+reversion strategy for PC1
+
+01:11:22.490 --> 01:11:24.298 align:middle line:90%
+and looked at the performance.
+
+01:11:24.298 --> 01:11:26.590 align:middle line:84%
+It doesn't really work great,
+but that's not the point.
+
+01:11:26.590 --> 01:11:29.690 align:middle line:84%
+The point is that it's an
+illustration of how this works.
+
+01:11:29.690 --> 01:11:32.050 align:middle line:84%
+All the code of how
+this was created
+
+01:11:32.050 --> 01:11:33.870 align:middle line:84%
+and how you could
+calculate these things
+
+01:11:33.870 --> 01:11:38.450 align:middle line:84%
+is part of that Jupyter Notebook
+that is accompanying the slides
+
+01:11:38.450 --> 01:11:39.430 align:middle line:90%
+that you can download.
+
+01:11:39.430 --> 01:11:42.930 align:middle line:84%
+And the data is there
+in a CSV file, which
+
+01:11:42.930 --> 01:11:44.450 align:middle line:90%
+you can pull from the Fed--
+
+01:11:44.450 --> 01:11:46.090 align:middle line:90%
+an updated version of.
+
+01:11:46.090 --> 01:11:50.790 align:middle line:84%
+So if you are interested
+in doing a project,
+
+01:11:50.790 --> 01:11:53.770 align:middle line:84%
+there's a lot of
+standard strategies
+
+01:11:53.770 --> 01:12:01.383 align:middle line:84%
+that you can try, for example,
+to write and to test out.
+
+01:12:01.383 --> 01:12:03.550 align:middle line:84%
+Again, the point is not to
+actually go and trade it,
+
+01:12:03.550 --> 01:12:06.890 align:middle line:84%
+but to actually
+practice a little bit,
+
+01:12:06.890 --> 01:12:08.630 align:middle line:90%
+applying PCA to real data.
+
+01:12:08.630 --> 01:12:11.970 align:middle line:84%
+And there's no substitute
+to actually doing it
+
+01:12:11.970 --> 01:12:14.970 align:middle line:84%
+because you see that,
+in every single step,
+
+01:12:14.970 --> 01:12:15.972 align:middle line:90%
+there's choices to make.
+
+01:12:15.972 --> 01:12:16.930 align:middle line:90%
+There's little details.
+
+01:12:16.930 --> 01:12:19.050 align:middle line:84%
+And these details
+matter and being
+
+01:12:19.050 --> 01:12:24.690 align:middle line:84%
+able to understand the pros and
+cons of each of these details.
+
+01:12:24.690 --> 01:12:28.010 align:middle line:84%
+One lecture is not enough
+to go over everything.
+
+01:12:28.010 --> 01:12:30.330 align:middle line:84%
+I've wanted to give you
+a little taste of what
+
+01:12:30.330 --> 01:12:32.350 align:middle line:84%
+it's like to deal
+with this stuff,
+
+01:12:32.350 --> 01:12:34.190 align:middle line:90%
+but it's a very powerful tool.
+
+01:12:34.190 --> 01:12:39.540 align:middle line:84%
+It's used all around the
+street for modeling of things
+
+01:12:39.540 --> 01:12:41.860 align:middle line:90%
+like stocks and bonds.
+
+01:12:41.860 --> 01:12:47.420 align:middle line:84%
+And it's a great thing to have
+in your toolkit as somebody who
+
+01:12:47.420 --> 01:12:50.920 align:middle line:84%
+is looking for a job in finance,
+if you decide to do that.
+
+01:12:50.920 --> 01:12:53.700 align:middle line:90%
+
+
+01:12:53.700 --> 01:12:55.280 align:middle line:90%
+So I'm going to stop here.
+
+01:12:55.280 --> 01:12:57.560 align:middle line:84%
+Down here, there
+is another example,
+
+01:12:57.560 --> 01:12:59.660 align:middle line:84%
+which is European
+stock market indices.
+
+01:12:59.660 --> 01:13:02.700 align:middle line:84%
+Same thing-- tells you
+about the correlation, what
+
+01:13:02.700 --> 01:13:06.140 align:middle line:84%
+the various principal
+components are, what they mean,
+
+01:13:06.140 --> 01:13:08.240 align:middle line:84%
+and tells you
+about the strategy.
+
+01:13:08.240 --> 01:13:12.100 align:middle line:84%
+So there's two
+examples in the slides.
+
+01:13:12.100 --> 01:13:14.700 align:middle line:84%
+We don't need to go
+through both of them.
+
+01:13:14.700 --> 01:13:17.440 align:middle line:84%
+I know that, in five
+minutes, you have to leave.
+
+01:13:17.440 --> 01:13:22.980 align:middle line:84%
+So I wanted to give
+a little bit of time
+
+01:13:22.980 --> 01:13:26.300 align:middle line:84%
+for questions and
+for discussion.
+
+01:13:26.300 --> 01:13:32.630 align:middle line:84%
+Thank you so much for being so
+active and interactive, rather.
+
+01:13:32.630 --> 01:13:34.230 align:middle line:90%
+You guys have.
+
+01:13:34.230 --> 01:13:37.430 align:middle line:84%
+You guys have asked more
+questions in this class than--
+
+01:13:37.430 --> 01:13:42.030 align:middle line:84%
+it's like definitely one of
+the top question-asking classes
+
+01:13:42.030 --> 01:13:44.850 align:middle line:84%
+in my experience
+doing this class.
+
+01:13:44.850 --> 01:13:46.800 align:middle line:90%
+So I love that.
+
+01:13:46.800 --> 01:13:49.370 align:middle line:84%
+That shows that the
+stuff is interesting,
+
+01:13:49.370 --> 01:13:50.770 align:middle line:90%
+so I'm very happy to hear that.
+
+01:13:50.770 --> 01:13:53.390 align:middle line:90%
+
+
+01:13:53.390 --> 01:13:58.250 align:middle line:84%
+So yeah, I definitely wanted to
+ask if you have any questions.
+
+01:13:58.250 --> 01:14:02.210 align:middle line:84%
+And in particular,
+if this is clear,
+
+01:14:02.210 --> 01:14:04.990 align:middle line:84%
+I really want to make sure
+that this stuff is clear--
+
+01:14:04.990 --> 01:14:08.690 align:middle line:84%
+these top three plots,
+what they represent.
+
+01:14:08.690 --> 01:14:09.190 align:middle line:90%
+Yeah?
+
+01:14:09.190 --> 01:14:10.815 align:middle line:84%
+AUDIENCE: Is there
+any chance you could
+
+01:14:10.815 --> 01:14:13.295 align:middle line:90%
+explain the bottom left one?
+
+01:14:13.295 --> 01:14:14.170 align:middle line:90%
+STEFAN ANDREEV: Yeah.
+
+01:14:14.170 --> 01:14:21.190 align:middle line:84%
+So the bottom left
+one, basically.
+
+01:14:21.190 --> 01:14:28.050 align:middle line:84%
+So if there's two PC1
+shapes, this is date 1,
+
+01:14:28.050 --> 01:14:32.320 align:middle line:90%
+and there is one that is date 2.
+
+01:14:32.320 --> 01:14:43.560 align:middle line:84%
+I kind of said, well, what I'm
+looking for is basically the--
+
+01:14:43.560 --> 01:14:47.080 align:middle line:84%
+I'm looking for
+the maturity point
+
+01:14:47.080 --> 01:14:51.720 align:middle line:84%
+where the loadings cross
+a certain threshold
+
+01:14:51.720 --> 01:14:53.383 align:middle line:84%
+because, at the
+end, both of these
+
+01:14:53.383 --> 01:14:54.800 align:middle line:84%
+are going to be
+kind of relatively
+
+01:14:54.800 --> 01:14:56.180 align:middle line:90%
+flat towards the back end.
+
+01:14:56.180 --> 01:14:58.300 align:middle line:84%
+So basically, 10-year
+bonds and 30-year bonds,
+
+01:14:58.300 --> 01:15:00.320 align:middle line:84%
+when the rates move up and down,
+they're going to move the same
+
+01:15:00.320 --> 01:15:01.160 align:middle line:90%
+amount.
+
+01:15:01.160 --> 01:15:03.300 align:middle line:84%
+But on the very front end,
+that's not really true.
+
+01:15:03.300 --> 01:15:04.060 align:middle line:90%
+And why is that?
+
+01:15:04.060 --> 01:15:06.640 align:middle line:84%
+Well, on the very
+front end, the rates
+
+01:15:06.640 --> 01:15:08.020 align:middle line:84%
+are governed by
+the central bank.
+
+01:15:08.020 --> 01:15:12.480 align:middle line:84%
+So central bank is saying, we're
+going to set the rates here.
+
+01:15:12.480 --> 01:15:15.320 align:middle line:84%
+Expectations can vary for what
+happens 10 years down the line.
+
+01:15:15.320 --> 01:15:17.320 align:middle line:84%
+But expectations are
+what's going to happen over
+
+01:15:17.320 --> 01:15:19.640 align:middle line:84%
+the next couple
+of months are not
+
+01:15:19.640 --> 01:15:22.360 align:middle line:84%
+going to vary very much
+because that is basically--
+
+01:15:22.360 --> 01:15:24.560 align:middle line:90%
+the Fed sets that.
+
+01:15:24.560 --> 01:15:27.240 align:middle line:84%
+The Fed tells you what
+is going to happen.
+
+01:15:27.240 --> 01:15:32.400 align:middle line:90%
+So the loading of this PC1--
+
+01:15:32.400 --> 01:15:35.480 align:middle line:84%
+that front point is much
+less volatile in general.
+
+01:15:35.480 --> 01:15:36.440 align:middle line:90%
+That can change.
+
+01:15:36.440 --> 01:15:39.600 align:middle line:84%
+It could also be that in the
+recent-- in the last couple
+
+01:15:39.600 --> 01:15:44.080 align:middle line:84%
+of months, the actual
+shape of the PC1 factor
+
+01:15:44.080 --> 01:15:45.620 align:middle line:90%
+was probably like that.
+
+01:15:45.620 --> 01:15:48.080 align:middle line:84%
+And the reason is that the
+front end was so uncertain.
+
+01:15:48.080 --> 01:15:49.023 align:middle line:90%
+Nobody knew.
+
+01:15:49.023 --> 01:15:49.940 align:middle line:90%
+Are they going to cut?
+
+01:15:49.940 --> 01:15:50.898 align:middle line:90%
+Are they going to hike?
+
+01:15:50.898 --> 01:15:53.440 align:middle line:84%
+We don't really know
+what's going to happen.
+
+01:15:53.440 --> 01:15:55.920 align:middle line:84%
+But generally
+speaking, the front end
+
+01:15:55.920 --> 01:16:00.320 align:middle line:84%
+is going to be less volatile
+than the back end because
+
+01:16:00.320 --> 01:16:06.560 align:middle line:84%
+of the fact that the
+Federal Reserve--
+
+01:16:06.560 --> 01:16:10.600 align:middle line:84%
+they control the front
+end part of the curve.
+
+01:16:10.600 --> 01:16:15.360 align:middle line:84%
+So what I'm plotting is,
+effectively, at what point does
+
+01:16:15.360 --> 01:16:18.400 align:middle line:90%
+the loadings cross a threshold?
+
+01:16:18.400 --> 01:16:21.900 align:middle line:84%
+And if the Fed
+controls the curve,
+
+01:16:21.900 --> 01:16:24.960 align:middle line:84%
+if people believe the
+Fed is going to have--
+
+01:16:24.960 --> 01:16:27.730 align:middle line:84%
+if there's clarity on the
+Fed's policy over a longer
+
+01:16:27.730 --> 01:16:31.890 align:middle line:84%
+period of time, we're going
+to have lower loadings
+
+01:16:31.890 --> 01:16:35.050 align:middle line:84%
+on the front of the curve
+for longer periods of time.
+
+01:16:35.050 --> 01:16:38.350 align:middle line:84%
+And if there is less clarity,
+that period is going to shrink,
+
+01:16:38.350 --> 01:16:41.150 align:middle line:84%
+meaning, yeah, they're always
+going to control the front end.
+
+01:16:41.150 --> 01:16:45.170 align:middle line:84%
+But how quickly do we
+decouple from that?
+
+01:16:45.170 --> 01:16:47.170 align:middle line:84%
+And that's what
+I'm plotting here.
+
+01:16:47.170 --> 01:16:49.470 align:middle line:84%
+On every day, I'm
+taking this point.
+
+01:16:49.470 --> 01:16:50.270 align:middle line:90%
+This is on day one.
+
+01:16:50.270 --> 01:16:51.690 align:middle line:90%
+It's going to be here.
+
+01:16:51.690 --> 01:16:53.630 align:middle line:84%
+On some other day,
+it's going to be here.
+
+01:16:53.630 --> 01:16:57.050 align:middle line:84%
+And I'm plotting a time
+series of that point.
+
+01:16:57.050 --> 01:17:01.050 align:middle line:84%
+At what time in maturity
+years, at which maturity
+
+01:17:01.050 --> 01:17:03.503 align:middle line:90%
+do we cross the threshold?
+
+01:17:03.503 --> 01:17:05.170 align:middle line:84%
+AUDIENCE: Can you
+explain the connection
+
+01:17:05.170 --> 01:17:08.465 align:middle line:84%
+between the curvature and the
+macroeconomics situation there?
+
+01:17:08.465 --> 01:17:10.090 align:middle line:84%
+STEFAN ANDREEV: The
+curvature and what?
+
+01:17:10.090 --> 01:17:11.848 align:middle line:84%
+AUDIENCE: The
+macroeconomics, like.
+
+01:17:11.848 --> 01:17:12.890 align:middle line:90%
+STEFAN ANDREEV: Ah, yeah.
+
+01:17:12.890 --> 01:17:15.910 align:middle line:90%
+
+
+01:17:15.910 --> 01:17:19.490 align:middle line:84%
+So the PC3 shape,
+remember, was like--
+
+01:17:19.490 --> 01:17:22.770 align:middle line:90%
+this is 0.
+
+01:17:22.770 --> 01:17:26.860 align:middle line:84%
+And it's positive,
+negative, positive.
+
+01:17:26.860 --> 01:17:30.740 align:middle line:84%
+So the short end and
+the back end are--
+
+01:17:30.740 --> 01:17:37.260 align:middle line:84%
+basically, once you hedge out,
+the curvature and the levels,
+
+01:17:37.260 --> 01:17:38.140 align:middle line:90%
+what remains is--
+
+01:17:38.140 --> 01:17:41.580 align:middle line:90%
+
+
+01:17:41.580 --> 01:17:43.860 align:middle line:84%
+once you hedge out the slope
+and levels, what remains
+
+01:17:43.860 --> 01:17:44.680 align:middle line:90%
+is the curvature.
+
+01:17:44.680 --> 01:17:51.020 align:middle line:84%
+And the question is, at that
+point, how does the curve move?
+
+01:17:51.020 --> 01:17:53.540 align:middle line:90%
+And I can give you two examples.
+
+01:17:53.540 --> 01:17:56.340 align:middle line:84%
+In dollars, you can see
+that most of the time,
+
+01:17:56.340 --> 01:18:00.320 align:middle line:84%
+the bottom of this graph is
+at around 10-year maturity.
+
+01:18:00.320 --> 01:18:04.460 align:middle line:84%
+So that means that once you
+hedge out slope and curvature,
+
+01:18:04.460 --> 01:18:07.540 align:middle line:84%
+10-year bonds are going to
+be anticorrelated with 2-year
+
+01:18:07.540 --> 01:18:08.995 align:middle line:90%
+and 30-year bonds.
+
+01:18:08.995 --> 01:18:10.620 align:middle line:84%
+So it's going to move
+around like that,
+
+01:18:10.620 --> 01:18:14.940 align:middle line:84%
+with where the belly of
+the curve is 10-year point.
+
+01:18:14.940 --> 01:18:18.140 align:middle line:84%
+Now if I look at
+another country that
+
+01:18:18.140 --> 01:18:20.760 align:middle line:84%
+is more like an emerging
+markets country, for example,
+
+01:18:20.760 --> 01:18:27.020 align:middle line:84%
+like Mexico, it's going to
+look like this, where this is
+
+01:18:27.020 --> 01:18:30.700 align:middle line:90%
+going to be around five years.
+
+01:18:30.700 --> 01:18:32.740 align:middle line:84%
+What is the
+significance of this?
+
+01:18:32.740 --> 01:18:35.420 align:middle line:90%
+Well, it tells you--
+
+01:18:35.420 --> 01:18:39.900 align:middle line:84%
+you can think of this as the
+curve has distinct parts.
+
+01:18:39.900 --> 01:18:41.980 align:middle line:90%
+Different things drive it.
+
+01:18:41.980 --> 01:18:44.700 align:middle line:84%
+The very front end, we
+say, is the central bank.
+
+01:18:44.700 --> 01:18:49.780 align:middle line:84%
+Then there's a period after
+that is really mostly driven
+
+01:18:49.780 --> 01:18:52.060 align:middle line:90%
+by inflation expectations.
+
+01:18:52.060 --> 01:18:54.060 align:middle line:84%
+And then the very long
+end is a lot of it
+
+01:18:54.060 --> 01:18:57.860 align:middle line:90%
+is about growth expectations.
+
+01:18:57.860 --> 01:19:04.780 align:middle line:84%
+And the point where this
+bottom of the curvature
+
+01:19:04.780 --> 01:19:10.820 align:middle line:84%
+is, it really tells you a lot
+about what part of the curve
+
+01:19:10.820 --> 01:19:11.360 align:middle line:90%
+is--
+
+01:19:11.360 --> 01:19:14.500 align:middle line:84%
+where does this crossover
+go from inflation
+
+01:19:14.500 --> 01:19:17.340 align:middle line:84%
+being dominant to
+growth being dominant?
+
+01:19:17.340 --> 01:19:22.293 align:middle line:84%
+Different players invest in
+different parts of the curve.
+
+01:19:22.293 --> 01:19:23.710 align:middle line:84%
+The back end of
+the curve, there's
+
+01:19:23.710 --> 01:19:26.230 align:middle line:84%
+a lot of pensions, insurance
+companies investing
+
+01:19:26.230 --> 01:19:27.170 align:middle line:90%
+in the very long end.
+
+01:19:27.170 --> 01:19:28.870 align:middle line:90%
+They have long-term liabilities.
+
+01:19:28.870 --> 01:19:30.010 align:middle line:90%
+They invest here.
+
+01:19:30.010 --> 01:19:34.570 align:middle line:84%
+Very front end is a
+lot of 2-year rates,
+
+01:19:34.570 --> 01:19:38.510 align:middle line:84%
+a lot of speculators, a lot
+of people who need short-term
+
+01:19:38.510 --> 01:19:39.710 align:middle line:90%
+financing.
+
+01:19:39.710 --> 01:19:44.790 align:middle line:84%
+10-year in the US, between 5 and
+10 years is where most corporate
+
+01:19:44.790 --> 01:19:46.650 align:middle line:84%
+bonds, most
+corporations they issue,
+
+01:19:46.650 --> 01:19:49.150 align:middle line:84%
+they raise debt in the
+5 to 10-year maturity.
+
+01:19:49.150 --> 01:19:53.790 align:middle line:84%
+So different players participate
+in the different parts
+
+01:19:53.790 --> 01:19:54.950 align:middle line:90%
+of the curve.
+
+01:19:54.950 --> 01:19:59.463 align:middle line:84%
+And that means the
+dynamics are different.
+
+01:19:59.463 --> 01:20:01.130 align:middle line:84%
+Once you hedge out
+those two components,
+
+01:20:01.130 --> 01:20:02.750 align:middle line:90%
+you start to discover those--
+
+01:20:02.750 --> 01:20:04.970 align:middle line:84%
+these dynamics are small,
+relatively speaking,
+
+01:20:04.970 --> 01:20:07.450 align:middle line:84%
+on the scale of rates
+going up and down.
+
+01:20:07.450 --> 01:20:09.510 align:middle line:84%
+But once you remove
+that, you start
+
+01:20:09.510 --> 01:20:10.770 align:middle line:90%
+to discover these features.
+
+01:20:10.770 --> 01:20:14.070 align:middle line:84%
+They're kind of hidden
+under this big noise
+
+01:20:14.070 --> 01:20:16.270 align:middle line:90%
+of rates going up and down.
+
+01:20:16.270 --> 01:20:18.850 align:middle line:84%
+And you start to see these
+things start to pop out.
+
+01:20:18.850 --> 01:20:21.840 align:middle line:90%
+
+
+01:20:21.840 --> 01:20:25.600 align:middle line:84%
+This being longer term, it tells
+you, again, something about--
+
+01:20:25.600 --> 01:20:28.200 align:middle line:84%
+developed markets tend
+to have this belly be
+
+01:20:28.200 --> 01:20:33.960 align:middle line:84%
+further out because people
+look at a longer-term horizon,
+
+01:20:33.960 --> 01:20:36.240 align:middle line:90%
+essentially, for investing.
+
+01:20:36.240 --> 01:20:38.340 align:middle line:84%
+The pension funds
+invest for longer.
+
+01:20:38.340 --> 01:20:40.800 align:middle line:90%
+They buy longer-term bonds.
+
+01:20:40.800 --> 01:20:44.940 align:middle line:84%
+And generally, people invest
+in longer term than in, say,
+
+01:20:44.940 --> 01:20:47.400 align:middle line:90%
+emerging market countries.
+
+01:20:47.400 --> 01:20:54.000 align:middle line:84%
+So when you compare these
+factors across countries,
+
+01:20:54.000 --> 01:20:56.740 align:middle line:84%
+you can actually make sense
+of some of these things.
+
+01:20:56.740 --> 01:21:01.320 align:middle line:84%
+And you can quantify
+those things,
+
+01:21:01.320 --> 01:21:03.070 align:middle line:84%
+and they can become
+features for modeling.
+
+01:21:03.070 --> 01:21:08.440 align:middle line:90%
+
+
+01:21:08.440 --> 01:21:11.640 align:middle line:84%
+AUDIENCE: One more
+question, perhaps?
+
+01:21:11.640 --> 01:21:12.958 align:middle line:90%
+STEFAN ANDREEV: Yeah.
+
+01:21:12.958 --> 01:21:14.500 align:middle line:84%
+AUDIENCE: For a lot
+of these markets,
+
+01:21:14.500 --> 01:21:16.083 align:middle line:84%
+you're not going to
+get prices equally
+
+01:21:16.083 --> 01:21:18.530 align:middle line:90%
+for something like US Treasury.
+
+01:21:18.530 --> 01:21:21.970 align:middle line:90%
+Is there a way in which by--
+
+01:21:21.970 --> 01:21:23.970 align:middle line:84%
+trying to ask for
+transactional prices,
+
+01:21:23.970 --> 01:21:28.050 align:middle line:84%
+do a synthetic [INAUDIBLE] with
+data [INAUDIBLE] would have?
+
+01:21:28.050 --> 01:21:31.010 align:middle line:84%
+STEFAN ANDREEV: Yeah,
+getting access to good data
+
+01:21:31.010 --> 01:21:35.570 align:middle line:84%
+is step one in every
+quantitative finance project.
+
+01:21:35.570 --> 01:21:39.510 align:middle line:84%
+I would say that
+that may be true,
+
+01:21:39.510 --> 01:21:42.470 align:middle line:90%
+but there's ways to get it.
+
+01:21:42.470 --> 01:21:45.970 align:middle line:84%
+First of all, there's bond
+futures, which are effectively
+
+01:21:45.970 --> 01:21:47.230 align:middle line:90%
+futures on bonds.
+
+01:21:47.230 --> 01:21:48.550 align:middle line:90%
+Those trade on exchanges.
+
+01:21:48.550 --> 01:21:50.970 align:middle line:84%
+The data also tends to be
+pretty high quality and readily
+
+01:21:50.970 --> 01:21:51.590 align:middle line:90%
+available.
+
+01:21:51.590 --> 01:21:53.070 align:middle line:90%
+So there's ways to get it.
+
+01:21:53.070 --> 01:21:57.770 align:middle line:84%
+But yeah, for every
+particular market you look at,
+
+01:21:57.770 --> 01:22:00.050 align:middle line:84%
+there's going to be
+certain data quality
+
+01:22:00.050 --> 01:22:03.010 align:middle line:90%
+issues you have to overcome.
+
+01:22:03.010 --> 01:22:05.588 align:middle line:84%
+US market is the
+easiest for that.
+
+01:22:05.588 --> 01:22:07.130 align:middle line:84%
+Now it's part of,
+for example, that's
+
+01:22:07.130 --> 01:22:09.297 align:middle line:84%
+why for example, if you're
+going to do your project,
+
+01:22:09.297 --> 01:22:11.570 align:middle line:84%
+you're not going to look
+at South African rates
+
+01:22:11.570 --> 01:22:14.010 align:middle line:84%
+because it's just
+hard to get good data.
+
+01:22:14.010 --> 01:22:16.690 align:middle line:84%
+But if you're in a hedge
+fund, maybe, oh, it's
+
+01:22:16.690 --> 01:22:18.690 align:middle line:84%
+worth getting the data
+and putting some effort
+
+01:22:18.690 --> 01:22:21.070 align:middle line:84%
+because maybe you have
+less competition there.
+
+01:22:21.070 --> 01:22:22.590 align:middle line:90%
+You can maybe make some money.
+
+01:22:22.590 --> 01:22:25.170 align:middle line:84%
+Or maybe you have some ideas
+where you could model it,
+
+01:22:25.170 --> 01:22:27.290 align:middle line:84%
+where you can actually
+have some predictive power
+
+01:22:27.290 --> 01:22:28.390 align:middle line:90%
+in South African rates.
+
+01:22:28.390 --> 01:22:30.930 align:middle line:84%
+So you make that
+investment of time.
+
+01:22:30.930 --> 01:22:33.200 align:middle line:90%
+But it's all part of that.
+
+01:22:33.200 --> 01:22:36.290 align:middle line:90%
+
+
+01:22:36.290 --> 01:22:38.410 align:middle line:84%
+The harder it is to
+get the data usually
+
+01:22:38.410 --> 01:22:39.850 align:middle line:84%
+means that there's
+probably going
+
+01:22:39.850 --> 01:22:42.290 align:middle line:84%
+to be more opportunities
+for quantitative modeling
+
+01:22:42.290 --> 01:22:44.030 align:middle line:90%
+because it's hard for everybody.
+
+01:22:44.030 --> 01:22:45.710 align:middle line:84%
+If it's easy, then
+everybody can do it.
+
+01:22:45.710 --> 01:22:54.768 align:middle line:84%
+So you always have to be on the
+edge of the wave to make money.
+
+01:22:54.768 --> 01:22:55.310 align:middle line:90%
+PETER: Great.
+
+01:22:55.310 --> 01:22:56.810 align:middle line:90%
+Thank you so much.
+
+01:22:56.810 --> 01:22:58.480 align:middle line:90%
+STEFAN ANDREEV: You're welcome.
+
+01:22:58.480 --> 01:23:14.000 align:middle line:90%

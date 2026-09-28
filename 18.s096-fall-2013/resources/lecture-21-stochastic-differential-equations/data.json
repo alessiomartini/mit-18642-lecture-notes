@@ -1,0 +1,45 @@
+{
+  "content": "<p><strong>Description:</strong> This lecture covers the topic of stochastic differential equations, linking probablity theory with ordinary and partial differential equations.</p>\n<p><strong>Instructor:</strong> Dr. Choongbum Lee</p>\n",
+  "content_type": "resource",
+  "description": "",
+  "draft": false,
+  "end_time": "",
+  "file": null,
+  "file_size": "129899264",
+  "iscjklanguage": false,
+  "learning_resource_types": [
+    "Lecture Videos"
+  ],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "ocw_type": "",
+  "optional_tab_title": "",
+  "optional_text": "",
+  "parent_title": "Video Lectures",
+  "parent_type": "CourseSection",
+  "related_resources_text": "",
+  "resource_index_text": "",
+  "resourcetype": "Video",
+  "start_time": "",
+  "title": "Lecture 21: Stochastic Differential Equations",
+  "uid": "bd900179-63c3-d6eb-9b51-a8acdf4e0102",
+  "video_files": {
+    "archive_url": "http://www.archive.org/download/MIT18.S096F13/MIT18_S096F13_lec21_300k.mp4",
+    "video_captions_resources": [
+      {
+        "file": "/courses/18-s096-topics-in-mathematics-with-applications-in-finance-fall-2013/dd291dedf9cb551299fe9c6c00a98da7_qdbkvD4N-us.vtt",
+        "language": "en"
+      }
+    ],
+    "video_thumbnail_file": "https://img.youtube.com/vi/qdbkvD4N-us/default.jpg",
+    "video_transcript_resources": [
+      {
+        "file": "/courses/18-s096-topics-in-mathematics-with-applications-in-finance-fall-2013/74a46222ca5c89217c141f6da7156d76_qdbkvD4N-us.pdf",
+        "language": "en"
+      }
+    ]
+  },
+  "video_metadata": {
+    "video_tags": "18-s096-topics-in-mathematics-with-applications-in-finance-fall-2013, coefficient matching method, finite difference method, heat equation, stochastic differential equations",
+    "youtube_id": "qdbkvD4N-us"
+  }
+}

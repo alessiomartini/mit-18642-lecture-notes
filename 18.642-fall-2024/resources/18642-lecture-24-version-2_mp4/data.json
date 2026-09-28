@@ -1,0 +1,35 @@
+{
+  "body": "",
+  "content": "<p>The lecture provides an in-depth introduction to stochastic calculus, focusing on Brownian motion with drift and the construction of Itô integrals, which extend ordinary calculus to stochastic processes. Key concepts include the definition of Itô integrals for random and deterministic functions, the Itô isometry connecting variance and integrand norms, and Itô’s formula, which generalizes Taylor expansions to stochastic settings, enabling applications such as solving partial differential equations and martingale problems in quantitative finance.</p>\n",
+  "content_type": "resource",
+  "draft": false,
+  "file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/18642-lecture-24-version-2_360p_16_9.mp4",
+  "file_size": 162568968,
+  "file_type": "video/mp4",
+  "image_metadata": {
+    "caption": "",
+    "credit": "",
+    "image-alt": ""
+  },
+  "iscjklanguage": false,
+  "learning_resource_types": [
+    "Lecture Videos"
+  ],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "resourcetype": "Video",
+  "title": "Lecture 24: Stochastic Calculus",
+  "uid": "4a3a461e-27c4-4329-995f-8e9376542d17",
+  "video_files": {
+    "archive_url": "",
+    "video_captions_file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/1xmVMGOmcN7NiMoq9yCB0QPkqweFdShXl_transcript.webvtt",
+    "video_thumbnail_file": "https://img.youtube.com/vi/5cruqmIF6l0/default.jpg",
+    "video_transcript_file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/1xmVMGOmcN7NiMoq9yCB0QPkqweFdShXl_transcript.pdf"
+  },
+  "video_metadata": {
+    "source": "",
+    "video_speakers": "",
+    "video_tags": "18-642-topics-in-mathematics-with-applications-in-finance-fall-2024, brownian motion, conditional distribution, drift parameter, filtration, itô integral, itô’s formula, martingale, partial differential equation, probability measure, stochastic calculus, stochastic differential equation, volatility",
+    "youtube_description": "MIT 18.642 Topics in Mathematics with Applications in Finance, Fall 2024\nInstructor: Peter Kempthorne\nView the complete course: https://ocw.mit.edu/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024\nYouTube Playlist: https://www.youtube.com/playlist?list=PLUl4u3cNGP601Q2jo-J_3raNCMMs6Jves\n\nThe lecture provides an in-depth introduction to stochastic calculus, focusing on Brownian motion with drift and the construction of Itô integrals, which extend ordinary calculus to stochastic processes. Key concepts include the definition of Itô integrals for random and deterministic functions, the Itô isometry connecting variance and integrand norms, and Itô’s formula, which generalizes Taylor expansions to stochastic settings, enabling applications such as solving partial differential equations and martingale problems in quantitative finance.\n\nLicense: Creative Commons BY-NC-SA\nMore information at https://ocw.mit.edu/terms\nMore courses at https://ocw.mit.edu\nSupport OCW at http://ow.ly/a1If50zVRlQ\n\nWe encourage constructive comments and discussion on OCW’s YouTube and other social media channels. Personal attacks, hate speech, trolling, and inappropriate comments are not allowed and may be removed. More details at https://ocw.mit.edu/comments.",
+    "youtube_id": "5cruqmIF6l0"
+  }
+}

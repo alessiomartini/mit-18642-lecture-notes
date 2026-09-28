@@ -1,0 +1,1188 @@
+0:00
+[SQUEAKING] [RUSTLING] [CLICKING]
+0:06
+PETER KEMPTHORNE: All right.
+0:12
+Well, welcome to the first math lecture. The topic today is linear algebra.
+0:18
+And what I expect is that, for most of you, the topics will be very familiar.
+0:25
+At least we'll be covering basic fundamentals of vector algebra,
+0:31
+then dealing with special matrices, matrices that are used in applications, eigenvectors
+0:40
+and eigenvalue, decompositions, singular value decompositions,
+0:46
+and then, finally, the Perron-Frobenius theorem.
+0:51
+And what's really neat about quantitative finance is that linear algebra can really
+0:59
+be very useful in understanding different computations we want to do. So it makes our life easier.
+1:07
+Well, let's just begin with a discussion of basic linear algebra concepts.
+1:15
+I'll use a notation where often I'll have a bold vector notation--
+1:21
+or bold letter for noting a vector.
+1:26
+So this bold v is a vector in m-dimensional space.
+1:31
+And it just consists of an ordered list of numbers. And we can think of it as a column vector typically.
+1:41
+Sometimes, we'll think of it as a row vector. But special cases of vectors will be the vector of all
+1:50
+0's and the vector of all 1's. And we can think of a graphical representation
+1:58
+of a vector, where we can think of it
+2:05
+as perhaps just a single point in, in this case,
+2:10
+two-dimensional space. Or with an origin here, we might think of the vector representing
+2:20
+the directed line segment from the origin to that point,
+2:26
+where this is v1 and this is v2. Depending on our application, both of these can be useful.
+2:34
+And a basic example for us could be the closing prices
+2:44
+on a given day for all stocks in the S&P 500 index.
+2:50
+So we can think of p boldface being a vector of 500 values
+2:57
+corresponding to the closing price of stocks that are in the S&P 500 index.
+3:04
+Importantly, the prices are positive.
+3:09
+So that's where the R plus comes into play. And if we consider a portfolio holding shares of the S&P 500
+3:21
+stocks, we can represent that with a vector q.
+3:27
+And the value of such a portfolio at the end of the day
+3:32
+is simply the sum of the quantities, the shares
+3:38
+times the price per share.
+3:46
+And later on, we'll see that q dot p, the dot
+3:55
+product of those two vectors, gives us the value of the portfolio.
+4:00
+What we're going to find useful is to actually
+4:07
+add to our 500 stocks the value of a cash holding
+4:15
+in the portfolio. So we can think of p0 of t just being a fixed $1.
+4:26
+And then q0 tells us how many dollars we hold. And so our portfolio value, vt, will be given by this number.
+4:42
+And we can think about rebalancing portfolios,
+4:48
+computing portfolio and loss on a daily basis. And we can characterize rebalancing the portfolio
+5:00
+as shifting from shares held at the end of day t
+5:07
+to qj of t plus 1 to be held through day t plus 1
+5:16
+by adjusting the quantity for each stock by a delta j.
+5:22
+And if we constrain the sum of the change in shares
+5:30
+across the j stocks and cash and the pj,
+5:36
+multiplying by the pj of t, we can constrain this sum to be equal to 0.
+5:43
+So this would correspond to a rebalancing of the portfolio
+5:49
+and basically not taking any of distributions from the account.
+5:57
+Now, with the net gain, let's see, this terminology, PnL,
+6:07
+it's, in a sense, a misnomer, I think, because it's really profit and loss.
+6:14
+But it's referred to as PnL, portfolio net gain. We can just look at the change in value from day t
+6:22
+to day t plus 1. And this will have this simple form for the change in portfolio
+6:31
+value-- basically, the shares that are held from the end of day t to t plus 1 times the change in price from day t
+6:40
+to day t plus 1. And so this is the portfolio net gain.
+6:48
+And here, we're talking about portfolio management
+6:53
+maybe on a daily basis, where, at the end of the day, we make a decision as how to rebalance our portfolio.
+7:02
+And there's a net gain during that period.
+7:08
+One could adjust the period of rebalancing
+7:13
+to be intraday on a regular or irregular basis. And we'd have to have extra notation to do that.
+7:22
+Now, with vector concepts, if we multiply vector v by a scalar c,
+7:36
+then we just multiply through each of the components of v by that scalar.
+7:41
+And if we add two vectors, we simply comprise the sum of components element by element.
+7:51
+And the dot product between two vectors is simply the sum of the product of the two.
+7:59
+So this allows us to work with vector algebra associated
+8:07
+with portfolios. If we have two portfolios, we can consider, let's see--
+8:16
+we can think of a qt and, in this notation, a wt
+8:28
+as two different portfolios. And with each of these portfolios,
+8:35
+we can determine what the profit and loss is of each portfolio.
+8:43
+So for q, it's the value at the end of day minus the value at the beginning of the day and similarly
+8:51
+for portfolio w. And it's useful to include in the notation here
+9:00
+this BOD and EOD to represent begining of day, end of day.
+9:07
+And what's relevant actually is that the qt
+9:18
+portfolio composition, while it's indexed by t,
+9:26
+it's actually determined at the end of day t minus 1.
+9:32
+And so one needs to be careful in doing computations
+9:39
+with portfolio value measurement that you're always
+9:44
+using portfolios that are defined using only information up to a given time point.
+9:51
+So if we're going to be rebalancing at the end of the day for investment the next day,
+9:58
+we can't know what will happen on the next day.
+10:03
+All right. Well, with these portfolios that are just simple vectors,
+10:11
+we can look at their difference. And so if we look at dt equal to qt minus wt,
+10:22
+this defines another portfolio. We often constrain portfolios to be long only,
+10:30
+meaning the q's and w's are positive or 0.
+10:37
+But there's no reason why we can't allow component weights
+10:44
+in portfolios to be negative. And in this case, it's negative shares.
+10:49
+And so one can have a long short portfolio that is given by d.
+11:00
+And we can calculate the profit and loss of that d portfolio
+11:05
+by subtracting the profit and loss of the q and w.
+11:11
+Now, let's see, with short selling in markets, let's see--
+11:18
+who in the class might offer a description of what it means to sell short a stock?
+11:25
+So suppose that we have dt sub 2 is equal to, say, negative 200.
+11:36
+What would that mean? Or can we actually realize a portfolio
+11:44
+where we're short one of the stocks by 200 shares?
+11:50
+I'm sure someone-- OK.
+11:55
+What's your name? STUDENT: Alexander. PETER KEMPTHORNE: OK, thank you, Alexander. STUDENT: I believe it is when you sell someone else's stock,
+12:00
+and then you buy it back [INAUDIBLE]. PETER KEMPTHORNE: Yes. You basically sell first, buy back later.
+12:07
+And you sell by-- you don't have the stock. So you borrow it from some seller.
+12:15
+And brokerage accounts that have margin
+12:20
+allow you to engage in this kind of transaction.
+12:26
+And so the policy of the brokerage is that if you want to sell short a stock,
+12:34
+they need to locate some shares for you to borrow. And what's rather neat about that selling short
+12:44
+is that your brokerage account gets credited with the sale of those shares.
+12:52
+So your brokerage account will have a positive cash
+12:57
+flow due to the short selling. And with such a positive contribution to the brokerage
+13:06
+account, you can actually invest long in more than, say, 100% of your wealth
+13:14
+that's in the-- or of your bank account or brokerage account. So that's quite advantageous and allows for very interesting
+13:26
+trading opportunities. All right. Well, an important special case of a long short portfolio
+13:35
+is a zero-cost portfolio. And this would be one where the sum of basically the values
+13:45
+of the long and short positions balance each other perfectly. And so we have a portfolio, dt in this case,
+13:56
+where the d components are not all 0. But the value, the net value of the portfolio is, in fact, 0.
+14:06
+And we can hope for the possibility of an arbitrage
+14:14
+portfolio, which could be a portfolio that has zero cost,
+14:21
+but has a positive profit and loss over a period.
+14:30
+And this kind of opportunity, generally--
+14:36
+well, it doesn't exist in efficient markets. But markets are never completely efficient.
+14:45
+And so it can be feasible to identify
+14:51
+portfolios that may be close to an arbitrage portfolio.
+14:59
+What, in fact, happens is that this profit and loss
+15:05
+of a zero-cost portfolio will be random.
+15:10
+And depending upon the market model that applies to the market we're trading in,
+15:20
+it may be that there are opportunities that yield a positive profit all the time, in which case
+15:29
+we would say that's an arbitrage opportunity. What we'll see later today is the question of,
+15:37
+under what conditions is there no arbitrage in a given market?
+15:45
+And how do we characterize prices of assets in a market
+15:51
+with no arbitrage? And ultimately, it turns out that option pricing theory, that
+16:01
+was mentioned last time of Black, Scholes, and Merton, is all based upon arbitrage-free markets and the implications
+16:11
+of that. And we'll see that, in arbitrage-free markets,
+16:18
+there does not exist any arbitrage portfolios. And what will be neat is to understand why that's the case.
+16:26
+All right. So we have random prices at the end of day t.
+16:36
+And so the profit and loss is going to be random.
+16:42
+I guess it's relevant to note that there are strategies of statistical arbitrage.
+16:49
+And those are strategies where we have portfolio specifications
+16:57
+d-star for which this random profit and loss is
+17:02
+a distribution that tends to generate positive returns. And so there's a statistical likelihood of making money.
+17:11
+But it's often not a pure arbitrage, but what we might call a statistical arbitrage.
+17:18
+All right. Well, let's review just some other concepts of vectors.
+17:25
+We have the norm of a vector being the length of a vector.
+17:34
+So if we have a vector v here, and the norm of v
+17:44
+is basically the length of this vector.
+17:50
+And if we consider what the dot product is between two vectors,
+17:56
+we have this cosine formula for what the dot product is.
+18:03
+It's actually the length of v times the length
+18:08
+of w times the cosine of the angle between the two.
+18:13
+So if we have another vector w here, then
+18:23
+the dot product corresponds to that formula. And what's interesting about that formula is that it actually
+18:32
+corresponds to-- the dot product corresponds to the length of the segment
+18:42
+along w that is closest to v.
+18:48
+And so with this dot product notation,
+18:54
+we actually can talk about orthogonality between vectors
+19:00
+in m-dimensional space.
+19:05
+And those can be very useful. We'll actually see this orthogonality
+19:14
+applied when we talk about regression and least squares regression.
+19:19
+So you may be familiar with some of these topics from that discussion.
+19:24
+All right. Well, with vectors, a really important topic
+19:31
+is whether vectors are linearly independent of each other.
+19:38
+And so if we have two vectors, v and w, they are linearly independent if the only linear combination
+19:49
+of the two which gives us the 0 vector is the linear combination
+19:56
+with c1 equals c2 equals 0. So linear independence is essentially the case
+20:08
+that we have a v and w that aren't aligned
+20:14
+with each other in two dimensions,
+20:19
+at least vectors emanating from the origin having that property. And the utility of linear independence
+20:26
+is that we can work with a vector space, capital S here.
+20:36
+And the definition of a vector space is that any vector can be rescaled
+20:44
+by an arbitrary constant c. And it's still in the space. And with any two vectors, v and w, in the space,
+20:51
+their sum is in the space. With a vector space, what's very useful is
+20:59
+a basis for the space, which corresponds to linearly
+21:06
+independent vectors, v1 to vp, such that the only
+21:13
+linear combination giving the 0 vector is the linear combination where all the coefficients
+21:19
+are equal to 0. All right.
+21:25
+Well, let's just go through all of matrix algebra, pretty much.
+21:32
+We can extend from vectors to matrices where we have m rows and n columns in a matrix A,
+21:43
+a rectangular matrix. And one very useful representation of a matrix
+21:52
+is as a collection of column vectors that are stacked one after the other.
+21:59
+And so we can denote bold a sub 1 through bold a sub
+22:05
+n as the column vectors. And with matrix algebra, let's see,
+22:18
+well, we can multiply a matrix, capital A, by a constant.
+22:24
+And we end up multiplying each of the components, elements
+22:30
+of the table of A values by the same constant c.
+22:35
+With a transpose operation, a transpose is simply to flip rows and columns.
+22:43
+And so if we have a sub ij being the i-th row j-th column
+22:50
+element of A, then Aji corresponds to the j-th row
+22:56
+and i-th column. Now, if we think of the transpose
+23:03
+of each of the column vectors in A, that's a row vector.
+23:09
+And our transpose of the matrix A
+23:14
+can be thought of as stacked row vectors corresponding to the same vectors, a1 through an.
+23:23
+Now, one of the reasons for thinking of a matrix as being a composition of different column vectors
+23:32
+is that, when we multiply a matrix A by a vector v,
+23:40
+then this corresponds to the linear combination
+23:47
+of the columns of A with coefficients corresponding to v1
+23:55
+through vn. So we have a linear combination of A's columns.
+24:01
+And this representation of matrix vector multiplication
+24:08
+turns out to be very, very useful. Perhaps less useful is that, if we look at the matrix vector
+24:21
+product, it's also a vector of dot products of A's rows with v.
+24:29
+And so being comfortable with dot products is potentially useful.
+24:37
+But for the moment, thinking of linear combinations of columns of A is very useful.
+24:47
+So I guess, if we think of the columns of A corresponding
+24:55
+to potentially a basis of vectors, then Av corresponds to another vector in the space spanned
+25:05
+by those columns. All right. Now, when we multiply two matrices together,
+25:14
+we actually have a matrix A and a matrix B,
+25:20
+each with their respective columns, vectors. And we can basically expand the matrix B into b1 through bp,
+25:30
+and then do the matrix vector product for each term.
+25:37
+This is equivalent, actually, to looking at element Cij, which are just these double sums.
+25:44
+When I learned linear algebra decades ago,
+25:50
+I used these double sums, which were not very intuitive
+25:55
+to interpret, although one with a simple algebra notation
+26:02
+can prove everything. But things are much easier to prove with this other notation.
+26:07
+Now, what's important when we multiply two matrices together is that the matrices have to be conformal,
+26:16
+meaning we need to be able to multiply A times the column
+26:22
+vectors of B. So the m by n matrix of A
+26:33
+has to be able to multiply the m by p matrix of B. Actually,
+26:45
+I think there's a-- all right, let's see.
+26:51
+Yeah, sorry. And there are n columns in A and n rows in B.
+26:58
+And so the result is an m by p matrix. All right.
+27:05
+Well, with different matrix operations, you learn in linear algebra all of these rules,
+27:13
+these laws associated with matrix algebra computations.
+27:20
+Everything is pretty obvious, except maybe when you transpose a product, you reverse the order
+27:29
+of the product of transposes. And if you consider reversing the order of matrix
+27:37
+multiplications, if one can reverse the order,
+27:43
+if A and B have the same number of rows and columns, it turns out that the commutative law
+27:51
+for multiplication doesn't apply to matrices. So you want to be careful with those distinctions.
+28:00
+All right. So special matrices, when we have a symmetric matrix,
+28:08
+then its transpose equals itself. So the matrix has basically--
+28:18
+well, let's see. The off-diagonal entries are matched one by one
+28:27
+with Aij equaling Aji. The identity matrix is a matrix with 1's along the diagonal.
+28:37
+And it can be convenient to represent this as the matrix of columns where E sub
+28:47
+j is a simple matrix or a simple vector,
+28:54
+which is all 0's, but then a single 1, where this is the j-th row.
+29:03
+And different computations can be made easy with that
+29:09
+sometimes. Now, there's a notation of using the J matrix to be the matrix
+29:17
+of all 1's. And the matrix J turns out to be a vector 1 times its transpose.
+29:29
+And we have diagonal matrices where
+29:37
+the matrix is all 0's except for the diagonal entries, which may or may not be 0, and are given by the list D1 through Dn.
+29:45
+All right. OK. Well now, we can turn to some applications that use matrices.
+29:55
+And the first one we want to discuss is stochastic matrices.
+30:02
+So these are matrices which will consider a stochastic matrix
+30:11
+that's square. And the columns of A sum to 1.
+30:18
+So we'll have an A with A1, A2 up to Am or An.
+30:31
+And basically, the sum of Aij, i equaling 1 to m,
+30:39
+is going to equal to 1.
+30:47
+This kind of matrix is associated with Markov chains, where we think of there
+30:56
+being m possible states.
+31:04
+So we basically have m rows and m columns.
+31:10
+And we have this notation Aij, or lowercase aij,
+31:15
+is equal to the probability that the state, the next state,
+31:23
+equals i, given the previous state
+31:28
+equals j is given by this Aij.
+31:34
+31:40
+Let's see. For each column j, we have, if the previous state at time t
+31:50
+was j, then there's a transition to a state at time t plus 1.
+32:00
+And these transition probabilities, in some cases,
+32:07
+can be assumed to be stable or stationary over t.
+32:13
+And with a Markov chain, we can think of there basically
+32:19
+being different states which are indexed from 1 up to m.
+32:31
+And we might think of these as being nodes in a graph.
+32:43
+And there's a probability of moving from one node
+32:50
+to another for each time point. And these probabilities of transitions
+33:02
+might be stationary in a stationary Markov chain model.
+33:07
+Well, if we have a vector, pi, which
+33:14
+is going to be basically pi of t equaling pi 1 of t, pi 2 of t,
+33:23
+down to pi m of t, so this m vector, pi, tells us
+33:34
+at time t what's the likelihood of being in any of the states.
+33:43
+Then, if we want to compute the probabilities of states
+33:49
+at time t plus 1, then it turns out to be simply the matrix vector product of A times pi of t.
+34:02
+So this formula gives us the model
+34:08
+for how the probabilities of states occurring changes
+34:14
+from time t to t plus 1. Now, if we consider what is the probability
+34:26
+vector at time t plus 2, well, we have the same matrix vector model
+34:34
+where the stationary transition probabilities A are multiplied by the vector of probabilities at t plus 1.
+34:44
+And we can substitute in what that product is, which is A pi.
+34:51
+And so we basically get the square of the transition probability matrix
+34:57
+times the pi vector at time t. Now, what's interesting to ask with Markov chains is,
+35:08
+if we start out with a pi vector at time 0
+35:17
+and we have the model that the likelihood of different states evolves such that the t period transition probabilities from pi
+35:33
+0 to t is given by this formula, then does this limit exist
+35:41
+or not? And so let me just ask that question to the class.
+35:53
+Anyone remember from stochastic processes perhaps
+35:58
+or linear algebra whether that has a limit?
+36:06
+Yes? STUDENT: The stationary distribution. PETER KEMPTHORNE: If it exists, it's the stationary distribution.
+36:12
+And so basically, if pi star is the stationary distribution,
+36:20
+it is equal to a pi star so that we're at a limiting distribution
+36:29
+where there's no change in probabilities, continuing from t equal to infinity to infinity plus 1.
+36:40
+Then this would be the formula. Now, are there circumstances where
+36:48
+such a stationary distribution doesn't exist? Yes, OK.
+36:53
+And when is that? I see some solid nods. Yes? STUDENT: When it's periodic. PETER KEMPTHORNE: When it's periodic, yep.
+37:00
+So you could have cycles in the process. And a simplest case would be two states
+37:08
+that just alternate even odd being one state or the other as an example. So we need to have acyclic distributions.
+37:18
+Or the Markov chain needs to be acyclic.
+37:28
+And actually, all these topics are quite interesting when
+37:36
+you study them. It turns out that you can prove that a Markov chain is acyclic
+37:46
+if all of its components of the A matrix, if every single one,
+37:54
+is nonzero, so that there's always a possibility of transitioning from one state to another.
+38:04
+That's a bit too restrictive. But it turns out that, if you consider
+38:09
+a particular power of A, that for some power,
+38:16
+not necessarily very big, but there's at some point of looking at powers of A, the A to that power
+38:25
+is a matrix of all positive entries. So it's interesting just how these mathematical features
+38:33
+can be shown. Now, let's see.
+38:39
+All right. So if it does exist, we have a stationary distribution.
+38:44
+And that's nice. Let me just point out that, I guess,
+38:50
+in the first problem set for the course that's been posted-- that's due a week from Friday.
+38:56
+So this is a healthy amount of time away, I hope, for everybody--
+39:01
+we're asking you to look at some simple Markov chains and explore the stationary distribution of those cases.
+39:11
+And the Markov chain model is used for modeling whether, say, trades at the buy or sell side--
+39:24
+weather successive trades in a stock
+39:32
+will be at the buy side or sell side, depending on what the previous trade was at All right.
+39:37
+Well, let's move on to another class of matrices that's of interest.
+39:42
+39:48
+Actually, before doing that, I'm going to jump ahead just in terms of topics. But this formula for the stationary distribution
+39:58
+is a formula that's very specific to eigenvalues
+40:06
+and eigenvectors. And so if you think of the matrix A having eigenvalues
+40:16
+and eigenvectors, what's the eigenvalue
+40:23
+and what's the eigenvector in this case?
+40:32
+Does anybody-- yes, go ahead. STUDENT: Eigenvalue value of 1, and the eigenvectors would be
+40:39
+all the pi stars [INAUDIBLE]. PETER KEMPTHORNE: So this basically
+40:46
+is a case where one of the eigenvalues is 1. Or sorry, one of the eigenvalues is 1.
+40:53
+And this is satisfied. We'll see later that, basically, the other eigenvalues
+41:03
+may be smaller than 1. And when you multiply the A matrix by itself
+41:13
+to many, many powers, then it's only this one eigenvector that doesn't
+41:19
+get shrunk to 0 in the limit. All right. Well, let's turn to positive matrices.
+41:27
+Positive matrices arise in economics, where we think of there being, say, prices
+41:34
+of goods under different states of the market
+41:41
+or costs of goods under states of the market. And those are all positive.
+41:49
+And we can think of this arising in a single period market
+41:59
+model, where we have n assets indexed by i and, let's see,
+42:13
+we have two periods-- or sorry, a single period with a beginning and end, t0 and t
+42:21
+equals capital T. And if we think of what is the price of assets at time 0,
+42:34
+we may know what those are at time 0. And then what are the subsequent prices at the end
+42:41
+of the single period? Capital T. And those prices may or may not be known.
+42:53
+And so let me just give an example here with two assets.
+43:01
+And so we're going to think of the two-period model.
+43:09
+And we're going to have n equal to 2.
+43:17
+We're going to consider basically a bond, B,
+43:26
+which takes on Values.
+43:35
+that will be B0 at t equals 0 and BT at time capital T.
+43:48
+And we'll consider the case of a bond which
+43:54
+basically pays interest at the interest rate RF.
+44:03
+So this B0 price of the bond at time 0
+44:11
+grows to B sub capital T, which is basically growing
+44:18
+at a simple interest rate of RF. And let's see.
+44:25
+We can talk about RB, the return of this, just being BT minus B0.
+44:35
+So this is the absolute return.
+44:41
+And we can also define the percent return,
+44:49
+which would be looking at R sub B equal to the absolute return
+44:59
+divided by the initial value. So this would be the percentage return.
+45:06
+And let's see. If we subtract this here, we end up
+45:13
+getting that this is B0 RF times T.
+45:23
+So this turns out to be equal to simply RF T as the percent return.
+45:32
+And let's see. We can also talk about the simple rate of return,
+45:44
+which would be given by-- well, let's see. Actually, maybe, here I should write R sub B and here
+45:54
+R sub B instead of R sub F because I want to define R sub f to be equal to basically 1 over t,
+46:07
+the average rate of return. So it's equal to this times BT minus B0 over B0.
+46:18
+And so this, simply, in this case, is equal to that RB.
+46:26
+And I guess, I'll be using a notation of characterizing
+46:34
+an interest rate as being a risk-free interest rate, if this bond is guaranteed to have that final value.
+46:45
+And so in quantitative finance, we often talk about risk-free rates.
+46:51
+And nothing in the world is risk-free. But when governments can print money
+46:58
+to pay off their liabilities, then it essentially is a risk-free rate.
+47:05
+And we worry less about it with countries with stronger economies.
+47:12
+Now, this is the first asset.
+47:17
+Let's also consider a stock, S, which has at time 0 a value of S0.
+47:26
+And then at time T, it's going to be random.
+47:33
+And so we have S sub T is going to equal
+47:40
+different possible outcomes. And we'll consider a special case
+47:45
+where it's STu and STd, where we have an underlying state
+47:59
+being an up or a down market. So we have a random outcome for ST.
+48:11
+We're not yet specifying what probabilities are associated with these different states.
+48:17
+And so there are two states at time T, omega equal to--
+48:29
+well, maybe I'll just write u and omega equal to d for that. And so in thinking of a single market model with n assets, not
+48:41
+just two, we are defining basically two assets--
+48:48
+I guess I'm using j for the assets instead of i.
+48:54
+But we basically have known asset prices at time 0 and potentially random prices at time capital T.
+49:05
+And so we can model this by associating different states
+49:16
+or scenarios at time capital T that are indexed w1 to wm.
+49:24
+And we then can have different prices in that.
+49:32
+So here's the framework for this right now, at least the framework with two assets.
+49:43
+And we can also characterize portfolios of the n
+49:50
+equals 2 assets. And we can define a pi vector being
+49:58
+simply equal to a weight in the bond and a weight in the stock, units of the stock, units of the bond,
+50:09
+given by this vector. And so what we can then do is deal
+50:21
+with modeling the outcomes of this portfolio.
+50:27
+If we consider v0, the value of the portfolio at time 0,
+50:40
+this would be just pi B times B0 plus pi S times S0.
+50:48
+And at time capital T, then our portfolio
+51:00
+would have values pi B BT plus pi S times STu for the up
+51:14
+case and pi B BT plus pi S times STd
+51:23
+when w is equal to d, when the state is down. So this value of the portfolio will be random,
+51:36
+depending upon the likelihood of these up and down states.
+51:43
+Well, with this setup, it's useful at this point
+51:52
+to introduce you to some concepts, which
+51:59
+is contingent claims and replicating portfolios.
+52:07
+52:17
+And so suppose that we have a contingent claim
+52:26
+C, which has a value C0, is the value at t equal to 0.
+52:38
+And Ct will be the value of this contingent claim
+52:46
+depending upon whether we have an up or down-- well, actually, I'll reverse it, a down or an up market.
+52:53
+53:03
+What we end up doing in these market models is being able to model the prices of contingent claims
+53:18
+when we can replicate the contingent claim with a portfolio of the underlying assets.
+53:26
+So we can ask, does there exist a portfolio of B and S such
+53:40
+that pi Bv plus pi S STu equals CTd and pi B plus pi S St--
+54:12
+I've got these notations wrong-- equals to CTu.
+54:22
+So if this were the case, then--
+54:29
+if so, then we could have C0 equaling pi B B0 plus pi S S0.
+54:44
+And we would replicate this contingent claim payoff
+54:52
+at time capital T. Now, mathematically,
+54:59
+can we solve for portfolio coefficients that
+55:09
+satisfy this contingent claim?
+55:18
+Any thoughts?
+55:26
+Well, let's see. If we look at CTd versus CTu--
+55:34
+and here's the origin. If we had a portfolio that was just the bond,
+55:47
+we might have BT here and BT here.
+55:53
+And here's the point corresponding to BT, BT.
+55:58
+And here's the vector corresponding to the portfolio that's just the bond.
+56:04
+And if we look at the stock, the portfolio, that's
+56:12
+just the stock, we might have STd here, and then way up here
+56:23
+maybe STu, the value of the stock when the market is up.
+56:30
+And so this would be our ST vector
+56:36
+in the two-dimensional space corresponding to down market
+56:41
+state versus up market state.
+56:47
+Now, given this figure, if we think of just an arbitrary
+56:59
+point in this space of contingent claims, can we construct a portfolio that matches that?
+57:07
+Yes? STUDENT: Sorry, can you explain what [INAUDIBLE]? PETER KEMPTHORNE: Yes. OK.
+57:12
+The contingent claim is a payoff that
+57:19
+is contingent upon the state of the market at that time.
+57:27
+And it's either a down market or an up market
+57:33
+over the one period. And the payoff, if it's an up market, is CTu.
+57:41
+And the payoff, if it's a down market, is CTd. And in this space of contingent claims,
+57:49
+we can draw vectors corresponding to the stock and the bond as these vectors.
+58:01
+And so what's curious to think about is--
+58:10
+suppose we have a contingent claim that--
+58:16
+well, let's see. Suppose we consider a call option contingent claim.
+58:23
+58:30
+Well, let's see. So there would be a strike price of--
+58:38
+let's see-- A strike price of K to buy the stock at time T.
+58:56
+And in order for this to be of interest, we might have K being smaller than STu and greater than STd.
+59:07
+So we have a call option with strike price K to buy the stock.
+59:19
+And the contingent claim of the call
+59:25
+would be 0, if we have the down market.
+59:35
+And it would be STu minus K if it's the up market.
+59:41
+59:46
+So we could consider 0 in the down market. And basically, maybe this would be CT minus K here.
+59:58
+So this vector here would correspond to the payoff
+1:00:05
+of this call option.
+1:00:11
+So under what circumstances can we take a linear combination of these two vectors
+1:00:19
+and get this vector?
+1:00:26
+Yes? STUDENT: So you've got to short one of the stocks? PETER KEMPTHORNE: Yeah. I mean, basically, we can solve for this
+1:00:36
+here by substituting in for this 0 and P minus K,
+1:00:44
+and then just solve it to get our two equations and two
+1:00:49
+unknowns. So if this system of equations, two equations and two unknowns, has a solution, then we can solve it.
+1:00:58
+And what is interesting is to consider
+1:01:06
+what are the space of all possible contingent claims. And let me just turn to this note.
+1:01:18
+This is on Canvas. But this note that's been posted in Canvas talks
+1:01:24
+about a one-period economy with two assets in section 1. That's what I've just outlined on the chalkboard here.
+1:01:31
+One can generalize that to a single period model with more than two assets.
+1:01:39
+That's chapter section 2. And then one can generalize to--
+1:01:46
+not generalize, but one can consider visualizing the assets and portfolios in section 3 here.
+1:01:54
+And so what I do in the last section here
+1:02:02
+is looking at the vector of payoffs of the bond and the stock, colored differently.
+1:02:11
+And so this is a bond that may pay off the same amount in the down versus the up market.
+1:02:19
+And the stock pays off more in the up market than the down.
+1:02:25
+And then one can consider collections of portfolios that weight the bond and the stock
+1:02:36
+so that the positive weights sum to 1. And so these vectors correspond to the payoff vectors
+1:02:46
+of those long portfolios. And if we consider--
+1:02:55
+well, let's see-- looking at those long portfolios, instead of representing vectors as pointed segments
+1:03:03
+from the origin, one could just represent them as points in the space.
+1:03:08
+And that representation is helpful when we want to consider a variety of other portfolios
+1:03:16
+in the mix. And so here's a graph showing the value of the payoff
+1:03:28
+if we consider portfolios that can invest up
+1:03:34
+to 100% in each of the bond or the stock or both.
+1:03:43
+And so if we invest 100% in both,
+1:03:48
+we basically get the payoffs that are really high. And if we don't invest much, close to 0 in both,
+1:03:59
+then we get the 0 vector. But this graph shows the contingent claims
+1:04:10
+that are mapped or equivalent by replicating portfolios of these types.
+1:04:17
+And so if we then allow for shorting, this extends the contingent claims
+1:04:25
+to allow for negative payoffs, which are graphed here,
+1:04:35
+basically with the payoff in the down market versus the up. And what's of interest here, although it's not
+1:04:42
+quite easy to see, is there are portfolios
+1:04:48
+where the initial value of the portfolio is 0.
+1:04:56
+And so that would correspond to a long short portfolio that
+1:05:03
+is implemented with zero cost.
+1:05:11
+So this is the payoff vector at T
+1:05:16
+and looking at the value where we white out those portfolios that have zero cost.
+1:05:26
+Now, what's useful here to see is that, with these kinds of portfolios,
+1:05:33
+we can replicate different contingent claims which correspond to different points in this space.
+1:05:43
+If we were able to invest more than 100% of our portfolio,
+1:05:55
+long or short, then we could actually realize any point in this space, in some cases.
+1:06:05
+And so any contingent claim could be solved for with this equation here.
+1:06:16
+And that's rather neat. But it also is reasonable to consider
+1:06:23
+if we make certain assumptions on the market, such as, as you buy more of an asset, you don't
+1:06:31
+change the price of the asset. There's basically a fixed price is suitable
+1:06:37
+regardless of how much. And there's no constraint on short selling the asset,
+1:06:44
+that you can do that with liberty. So there are these kinds of properties that arise.
+1:06:52
+Now, with the case of extending from the bond
+1:06:57
+and the single stock to m-- sorry, little n assets, then everything generalizes.
+1:07:07
+And we end up having a positive price matrix at time T
+1:07:15
+corresponding to different payoffs of the individual assets at time capital T for different states omega 1 through omega m.
+1:07:28
+And with this kind of setup, one can represent the initial value
+1:07:41
+of a portfolio Q being the sum of the Q weights
+1:07:51
+times the initial prices in the A0 vector. And then the payoff of the portfolio at time capital T
+1:08:01
+is given by the same weights qj times the time capital T prices.
+1:08:07
+But we have different prices depending upon what state occurs.
+1:08:15
+And so in this case, we have basically our matrix
+1:08:21
+A times Q giving us the vector of state-dependent values
+1:08:29
+at time capital T. And so with this model,
+1:08:37
+we can contemplate there being an arbitrage portfolio
+1:08:43
+where the initial value is not positive.
+1:08:50
+I guess one could constrain this to be 0. But it's easier to just say less than or equal to 0.
+1:08:55
+If we have a negative cost, that means
+1:09:00
+we get paid to implement this portfolio.
+1:09:06
+And it will be an arbitrage portfolio if the likelihood of a negative payoff is 0
+1:09:19
+and there's some likelihood of a positive payoff.
+1:09:25
+Such a portfolio would be risk-free, in terms of downside risk.
+1:09:32
+We never lose money. We either make money all the time in at least one
+1:09:38
+of the states. So this is an arbitrage portfolio.
+1:09:44
+Now, with this model, there can be
+1:09:52
+conditions that ensure that there is no arbitrage in the market.
+1:09:59
+And so that's one issue to think about.
+1:10:08
+What conditions would ensure no arbitrage? And another condition that's of interest
+1:10:16
+is called market completeness, which is,
+1:10:21
+are there portfolios that can realize any payoff vector?
+1:10:27
+So in looking at the contingent claims payoff,
+1:10:33
+can we span this space fully with portfolios
+1:10:40
+of the underlying assets in the market? And so if we can represent any contingent payoff
+1:10:50
+as a portfolio, then we say that the market is complete.
+1:10:56
+And it turns out that the conditions of no arbitrage
+1:11:07
+and market completeness are related to whether a pricing measure exists on scenarios.
+1:11:16
+And so think about Q star being a probability distribution
+1:11:23
+over the underlying states, omega 1 through omega m.
+1:11:29
+And it turns out that if the initial price of the j-th asset
+1:11:44
+is the discounted expected terminal price of that j-th asset across the different states,
+1:11:55
+then Q star is called a pricing measure. So our initial prices equal a discount
+1:12:05
+factor times the expected terminal time t values.
+1:12:12
+If such a pricing measure exists,
+1:12:19
+then there's no arbitrage.
+1:12:26
+So it's no arbitrage if all of the qj stars are positive.
+1:12:32
+So if this pricing measure gives positive weight to each of the underlying states,
+1:12:37
+then there's no arbitrage. And we say that the market is complete with no arbitrage
+1:12:45
+if this pricing measure is unique. So it's an interesting set of properties
+1:12:55
+that actually are quite, well, useful to know about.
+1:13:01
+And these models actually underlie much of option pricing theory and arbitrage relationships
+1:13:12
+in quantitative finance. And in this single period model, note
+1:13:22
+that we have distributed there's this reference of this book
+1:13:27
+by Albanese and Campolieti, where they
+1:13:33
+go through proofs of these. And they can get a bit technical. But the basic ideas, I think, are relatively accessible.
+1:13:42
+Now, let's see. Moving on to other applications of matrices,
+1:13:53
+we can consider systems of linear equations
+1:13:59
+and their solution, where we basically have m equations in n unknowns.
+1:14:12
+And so with these m equations, we have Ax equals B, a B vector.
+1:14:25
+And to solve such a system of equations,
+1:14:30
+well, one case where we can solve these is where our number of unknowns and number of equations
+1:14:39
+are the same and our coefficients matrix A in the system of equations has full rank.
+1:14:48
+So A being square and of full rank
+1:14:54
+has a determinant that's non-zero and its inverse matrix exists.
+1:15:02
+And so we can actually just take our system of equations and multiply both sides by the inverse of A and get our answer.
+1:15:15
+When the number of equations is smaller than the number of unknowns, then we
+1:15:23
+have an undetermined system of equations. When m is greater than n, it's overdetermined and so forth.
+1:15:30
+So these are different cases that you likely are familiar with from your study of linear algebra.
+1:15:36
+All right. The next topic in our remaining few minutes
+1:15:46
+is eigenvalues and eigenvectors.
+1:15:51
+When we have square matrices A, we
+1:15:57
+can consider the existence of an eigenvalue lambda
+1:16:03
+and an eigenvector V such that the matrix A times
+1:16:10
+v is equal to just the scalar lambda times v. So
+1:16:16
+the matrix vector product just rescales v by the factor lambda.
+1:16:24
+And one can solve for eigenvalues and eigenvectors
+1:16:30
+by just re-expressing the eigenvalue-eigenvector relationship as this system of equations.
+1:16:40
+And so this system of equations will correspond to--
+1:16:47
+Let's see.
+1:16:53
+This system of equations can be solved
+1:17:00
+by saying that the determinant of A minus lambda i
+1:17:05
+is equal to 0. And so if lambda equals 1 of the roots of this polynomial,
+1:17:16
+then that lambda will be an eigenvalue.
+1:17:25
+And one can then, for that fixed eigenvalue, solve for the eigenvector v that satisfies that.
+1:17:34
+Now, there are properties with eigenvalues and eigenvectors
+1:17:43
+that are very useful, one of which is that the maximum eigenvalue magnitude corresponds
+1:17:56
+to the maximum length of Av for vectors v that are of length 1.
+1:18:04
+And when we have a matrix A that has independent eigenvalues
+1:18:16
+or eigenvectors, then, in this special case,
+1:18:22
+we can consider defining the matrix S to be the matrix whose columns are the different eigenvectors.
+1:18:32
+And if you look at this equation here, if we multiply the original matrix A by this S matrix,
+1:18:43
+then each column of the product is the corresponding eigenvalue
+1:18:49
+times the corresponding eigenvector. This equation here is very straightforward
+1:18:57
+from the notation above. And if we consider the inverse of this S matrix
+1:19:08
+that exists if the eigenvectors are linearly independent,
+1:19:14
+then we can write A to be S lambda S inverse.
+1:19:20
+And this representation of the matrix A
+1:19:27
+also gives us the way of diagonalizing A by pre and post-multiplying by S inverse and S respectively.
+1:19:37
+And so with powers of a diagonalizable matrix A,
+1:19:42
+they have a very nice form. We basically get cancellation of S And S inverse in the products
+1:19:51
+of A times itself. And so powers of A simply are the same matrix S times lambda,
+1:20:02
+the diagonal matrix of eigenvalues to the k-th power times S inverse. And so these are very useful in defining state equations
+1:20:15
+and Kalman filters. All right.
+1:20:20
+So let me just-- I guess I'll finish there. There's some interesting key theorems
+1:20:28
+in the remainder of these notes. I think they're pretty readable. And I'll maybe point out these during our next lecture.
+1:20:37
+But there we are. Also, let's see, I posted an RStudio program
+1:20:49
+that computes portfolios of S&P 500 stocks and looks
+1:20:57
+at the changing value over time. And so I hope people can explore those programs
+1:21:05
+and try to use those in the RStudio Cloud.

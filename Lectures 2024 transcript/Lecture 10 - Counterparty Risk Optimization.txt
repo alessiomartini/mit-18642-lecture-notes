@@ -1,0 +1,1444 @@
+0:00
+[SQUEAKING] [RUSTLING] [CLICKING]
+0:11
+PROFESSOR: All right. Well, today's guest lecturer is James Shepherd with Quantile--
+0:16
+JAMES SHEPHERD: Quantile, yeah. PROFESSOR: --which is a wholly owned subsidiary of LSEG.
+0:23
+And your background in quant finance is quite long.
+0:31
+And so I'll let you share some of the highlights. JAMES SHEPHERD: OK. PROFESSOR: Thank you very much, James. JAMES SHEPHERD: Thank you very much.
+0:36
+Do I need that. PROFESSOR: No. JAMES SHEPHERD: OK. Thank you very much. Thank you for having me. This supposed to finish about-- so a quarter to 4:00.
+0:42
+Yeah. I'd like to leave some time for questions. PROFESSOR: Until-- yeah. 10 to 4:00. JAMES SHEPHERD: OK.
+0:48
+Thank you very much for having me. Yes, I'm James. Yes, I work for Quantile Technologies.
+0:54
+That's a fintech company, founded in about 2016,
+0:59
+to do counterparty risk optimization, which is the subject of today's talk.
+1:05
+A couple of years ago, we got bought out by the London Stock Exchange Group, which is why my email now says LSEG.
+1:12
+Prior to that, I was at Morgan Stanley for quite a long time, which is where I know Vasiliy and Jake from,
+1:19
+which is how I've ended up here. So we're going to talk today, we're
+1:24
+going to work our way up to talking about optimizing a thing called initial margin, which is
+1:31
+a measure of counterparty risk. So we're going to start off talking
+1:37
+about different types of risk. Sorry. PROFESSOR: [INAUDIBLE]
+1:42
+JAMES SHEPHERD: I've just emailed them to Peter. Sorry about that. PROFESSOR: [INAUDIBLE]
+1:48
+JAMES SHEPHERD: The first view is just kind of like warmup stuff, so you're not missing too much.
+1:53
+So the first part of the talk, we're going to talk about are different types of risk that you
+1:58
+have with derivative trading. And we're going to talk about expected shortfall
+2:03
+and value at risk. Just out of interest? Do people know what these terms are,
+2:08
+or is it worth my explaining them a little bit? AUDIENCE: Explain. JAMES SHEPHERD: OK, I will do that.
+2:16
+Then we'll talk about how that relates to initial margin and counterparty risk. And then we'll work our way up to how
+2:24
+we optimize this initial margin within a network of financial institutions.
+2:32
+And we'll talk a lot about the challenges that you get in the real world.
+2:38
+Because this is a maths talk, I feel morally obliged to chuck some equations in the thing from time to time.
+2:44
+But largely, I'll skip over that and talk a little bit about some of the intuition, some of the toy models.
+2:50
+And I've put a bunch of references. When you get the thing, there's a bunch of references at the end, which has got some of the proper maths
+2:57
+and proofs and more detailed stuff behind it, if you're interested in that.
+3:04
+So in the shape of derivatives, when we talk about the different kinds of risks that can arise when you're trading derivatives,
+3:11
+market risk is probably the most common one. So that's the value of the derivative goes up and down as the market changes.
+3:19
+Credit risk, again, is reasonably well understood.
+3:25
+It's the rise when you've got exposure to a debtor defaulting.
+3:33
+Operational risk is largely when somebody screws up. It's probably actually the hardest one
+3:39
+to do any mathematical modeling on operational risk because it's quite hard to model people just messing up, which
+3:47
+is really what that is. Liquidity risk is when you've got a transaction, which
+3:53
+is well, as the name suggests, illiquid, which can happen when you've got a very large position.
+4:00
+So if you're trying to sell a massive position in some particular stock, you start selling that thing. And then because you start selling it,
+4:06
+that moves the market. And so you can't sell the whole thing at the position that the market was when you started.
+4:13
+So liquidity risk happens it's a kind of obscure instrument. And we'll come back to it in this.
+4:19
+It happens again if you've got a very, very large position. And what we're mostly going to talk about today
+4:26
+is counterparty risk, which is the exposure that you've got when you trade derivatives to a counterparty defaulting.
+4:36
+I think maybe a question you might have here is, what's the difference between counterparty risk
+4:43
+and credit risk? So the example you can have to differentiate this is, if I do a trade with Goldman Sachs,
+4:51
+let's say, a credit derivative swap that has some JPMorgan corporate bond as the underlying,
+4:57
+then I have credit risk with respect to JPMorgan. Because if JPMorgan defaults on its corporate bond,
+5:04
+then the value of my derivative will change. And I have counterparty risk to Goldman Sachs
+5:10
+because, depending on what happens to the value of that derivative, Goldman Sachs may or may not
+5:15
+pay me that amount of money. That's the difference between those two.
+5:22
+Make sense? So once you've got a type of risk,
+5:28
+once you've got some risk, generally speaking, you want to mitigate it, i.e., reduce either
+5:34
+the probability of it happening, or reduce the impact of that risk happening, not just for counterparty risk, for all kinds of risk.
+5:42
+Hopefully, reasonably obvious that people want to try and make the impact of once you've identified the risk,
+5:49
+make the impact of that smaller. So there's a bunch of different ways that you can do that.
+5:54
+We're largely going day-- to talk about the hedging, which means book some trades to offset--
+6:00
+book some new trades, which will offset the risk that you've just discovered that you've got. And we'll talk about collateralization,
+6:08
+which is really paying margin payments from the person you've got-- the person you're exposed to,
+6:15
+you would collect a margin payment from them, which is kind of like an insurance payment against them defaulting.
+6:20
+And that's mostly what we're going to talk about today. There are other things you can do.
+6:27
+And there's a thing called central clearing counterparties, which I thought nobody would have heard of. But apparently, someone's-- Andrew Gunstensen has already
+6:34
+mentioned this a little bit. So I hope I might skip over this slide because they are important in the trading of derivatives.
+6:44
+So I have a quick slide on CCPs. So normally, you trade derivatives,
+6:50
+and they're bilateral trades. So JPMorgan trades with Goldman Sachs and so on. So we've got here, you've got four parties.
+6:57
+Say, A trades with B. A trades with C. It's got a position of 100 versus B. 125
+7:03
+in the opposite direction versus C. And what a central clearing counterparty does,
+7:09
+as the name kind of suggests, is that it steps into the middle of all these trades.
+7:14
+And so instead of A facing B and A facing C, A just faces the CCP.
+7:20
+And so does B, and so does C, and so does D. Just by doing that you haven't really achieved much.
+7:26
+You've just changed your counterparty risk from being versus B and C to versus the CCP.
+7:35
+But once the thing is in the CCP, you've got both the 125 and the 100.
+7:41
+And you can net those two positions together. And so you can net that down and say, well, now, instead of having 100 plus 125,
+7:48
+I've only got 25 as my risk. And the same story for all the others.
+7:53
+So in the case of B, when we had exactly equal and offsetting positions, B's ended up with no counterparty risk at all.
+8:00
+So B's in a very, very happy situation. And everyone else is slightly happier than they were before.
+8:06
+There are other advantages of CCPs, which I'm not really going to talk about too much.
+8:12
+But the thing to know is that some derivatives are mandated to clear at CCP.
+8:19
+So interest rate swaps-- pretty much if you have a standard vanilla interest rate swap, you have to do this.
+8:25
+You don't get a choice. But more exotic trades like, say, an interest rate swap or something-- an interest rate swaption,
+8:33
+they are not eligible to be cleared at a CCP. So some are. Some are not.
+8:38
+So what you end up with is a portfolio with some bilateral trades versus a bunch of different counterparties and some trades at the CCP.
+8:47
+So almost everybody will end up with a mixture of stuff.
+8:56
+So now we're going to talk about quantitative risk measures. So what you want from a risk measure, or any general risk
+9:04
+measure, it should quantify somewhat the size of the total risk or the size of the total impact.
+9:10
+How much money could you possibly lose? And it should also quantify the probability
+9:16
+of losing that amount. So there's two aspects to it-- the size and the probability.
+9:23
+So in 1999, there's a paper by Artzner--
+9:29
+there's a reference at the back-- came up with these properties of a risk function, which
+9:37
+is nice properties, which are known as a coherent risk function if it satisfies those five properties.
+9:46
+Mostly, they say things like the function behaves kind of normally.
+9:52
+We'll come back-- so the important one is subadditivity.
+9:59
+Anyone heard of subadditivity as a thing? So basically, what that says is if I have two portfolios
+10:07
+X1 and X2, and I've got some risk on X1 and some risk on X2, and then I bash those two portfolios together,
+10:13
+and now I've got a combined portfolio, the risk on my combined portfolio, according to my risk measure,
+10:19
+ought to be less than or equal to the sum of the risk on the two portfolios I had in the first place,
+10:25
+which seems kind of sensible. If I put some stuff here and some stuff here and put it together, it seems unlikely
+10:31
+that I've manufactured some risk out of doing this. But now conversely, it seems highly plausible
+10:36
+that there might be some diversification of putting these two things together. And so my overall risk might well be smaller.
+10:42
+It seems a very plausible and reasonable property to ask for from a risk measure.
+10:50
+So we're going to talk about two risk measures in particular,
+10:57
+which are probably the two most common ones for looking at a whole portfolio. One is Value at Risk, which I probably
+11:04
+will keep referring to as VaR, and the other is expected shortfall. So value at risk is this amount here.
+11:11
+It says, if I've got-- it says, what is the maximum--
+11:17
+for a given confidence level, what is the maximum amount that I can say that I will lose more than that amount.
+11:26
+So for example. can I be 99% certain that I won't lose more than $10 million
+11:35
+over, say, the next 10 days? So I have a confidence level is called beta.
+11:41
+There's a time horizon, which we'll talk about in a sec. And the VaR is how much money can I
+11:49
+be 99% or beta percent confident that I won't lose more than this amount?
+11:55
+The expected shortfall says, conditional that I've
+12:00
+exceeded that amount of loss, so given I'm in the 1% tail
+12:06
+if beta is 99%, or the 5% tail if beta is 95%, if I'm in that tail, what is my expected loss, given
+12:14
+that I've exceeded VaR? So that's what expected shortfall is.
+12:19
+So hopefully, it's indicated on here that this is the percentage. This dark area here is 1 minus beta.
+12:26
+So this is, say, 1% or minus 5%. The VaR is the biggest amount before I get into the tail.
+12:35
+And the expected shortfall is the average value of that tail.
+12:41
+Clearly, the expected shortfall should be bigger than the VaR. Hopefully, that's obvious for the same confidence level.
+12:48
+So VaR was kind of popularized by JPMorgan in about the 1990s,
+12:59
+something like that. Expected shortfall came around about 2000. And both of them are heavily used
+13:04
+by regulators and lots and lots of counterparty risk measures today.
+13:11
+VaR is probably the most well-known one and most common. It's got a couple of problems.
+13:17
+The first problem is if you have these kind of weird fat tail
+13:22
+probabilities. So you've got two probability distributions, red and blue.
+13:28
+The blue has this weird fat tail bit over here. And we'll just say, well, the area under the blue bit
+13:35
+and the red bit is the same. So both these distributions have the same VaR because the area up to here--
+13:42
+assume there's a little bit of blue here. The area up to here is the same as the area under that.
+13:47
+So both these distributions have the same VaR. But clearly, the blue one has a much bigger probability
+13:54
+of doing some fairly horrific loss. And also, hopefully clearly, the blue one
+14:00
+would have a much bigger expected shortfall than the red one because the average of the blue one is about here.
+14:05
+The average of the red one is about here. So VaR doesn't distinguish between those two different cases.
+14:11
+And you might say, well, this is ridiculous because nobody's going to have a-- in real life that kind of distribution
+14:18
+can't possibly exist. But that is not completely ridiculous distribution.
+14:23
+It's not totally uncommon trading policy to sell a whole bunch out of the money options.
+14:30
+And if you sell a bunch out of the money options, what most of the time going to happen is you're going to take a small profit from the sale of those options.
+14:37
+And most of the time, they will expire still out of the money. They won't get exercised, and you're going to take a profit.
+14:42
+But some of the time the market will move enough. And if it moves enough, they'll get exercised,
+14:49
+and you're going to lose a lot of money on those options. So that-- even though I did contrive that for the purposes of this lecture,
+14:55
+that kind of distribution is not as ridiculous as you might think.
+15:01
+So that's the first problem. The second related problem is that value at risk
+15:07
+is not subadditive. So this, again, a little bit of a contrived example
+15:14
+to show that if you take, say, the 95% VaR. I take two portfolios A and B, with those kind
+15:21
+of probability of happening. A and B by themselves, the VaR, is zero
+15:27
+because there's a 96% chance I'm going to lose nothing. So 95% the VaR is going to be zero.
+15:34
+The expected shortfall of those things is given. I'm in that last 5% tail.
+15:39
+1% of the 5, I'm going to lose nothing and 4% of the 5, I'm going to lose 100.
+15:45
+So I get to 80. And if you do the maths and just add the two things up, and you do the A plus B, you can discover
+15:51
+that the VaR of the combined portfolio is 100, and the expected shortfall is 103.
+15:57
+So that is a kind of example that shows that VaR is not subadditive.
+16:03
+Expected short-- obviously, this is not proving that expected shortfall is subadditive. It is, in this case.
+16:09
+It's quite hard-ish to prove that expected shortfall is subadditive. It is.
+16:14
+And I put one of the things at the end is seven different proofs that it is subadditive.
+16:19
+So you can pick your favorite one from the thing at the end.
+16:25
+I also put an example at the end-- so even though this one is a very contrived example.
+16:31
+So in real life, most things are kind of normal or normal-like.
+16:37
+And in that case, VaR is subadditive. So in real-life situations, this is not as much of a problem
+16:45
+as you might think. And there's a paper at the end. It talks also a lot about that and says,
+16:51
+actually, lots of people criticize VaR because they come up with these kind of crazy examples, but it's not too bad.
+16:57
+For our purposes, given we want to go on to optimizing stuff,
+17:03
+it is critically bad. Because subadditivity-- we'll come back to this
+17:09
+again in a sec-- is basically the same thing as convexity. So not being subadditive means VaR is not really
+17:16
+a convex function, in general. And convex functions are way, way, way easier
+17:21
+to optimize than nonconvex functions. So even though it's not a problem
+17:27
+if you just want to know VaR. It is a massive problem if you want to optimize one of these things.
+17:33
+And we'll come back to this again in a little bit.
+17:39
+I just wanted to quickly point out that there's lots and lots of other risk measures you can possibly choose here.
+17:45
+VaR and expected shortfall just happened to be the two common ones. You can characterize a risk measure by how much weight
+17:53
+it puts on a particular percentile. So VaR is putting all of its weight on the beta percentile.
+17:59
+Expected shortfall puts zero on everything less than beta and averages out everything above beta.
+18:04
+But you could say, well, both of those-- you can make some criticisms of them.
+18:09
+You could say, well, I should put a little bit of weight on something that's a bit less than the beta percentage, and I should weight the--
+18:15
+the really, really extreme tail losses, I should weight them more than the just beyond the tail losses.
+18:22
+So you can imagine having these exponential spectral risk functions that have these kind of functions, which do exactly
+18:29
+those things, that they put an awful lot of weight on the really bad losses at the 99% and 99.9% things.
+18:38
+And it scales off going down. It's just to point out there's a few different choices
+18:45
+you can make here.
+18:51
+So both VaR and expected shortfall, they've basically got two parameters. They've got the confidence level,
+18:56
+and they've got the time horizon. So we'll talk a bit about the time horizon.
+19:05
+So that means I want to make sure that I'm going to lose less than this amount of money over one day, five days, 10 days.
+19:13
+That's the time horizon. How long have I got to avoid losing this amount of money? If you were to make the assumption
+19:20
+that the change in the portfolio-- so this delta P is a normal distribution, then VaR and expected shortfall
+19:29
+would have these two formats here. So they would also be normal.
+19:37
+And if you assume that people make these kind of assumptions in the thing, that the mean change on a daily basis
+19:47
+is zero, which is not a crazy kind of assumption, then both VaR and expected shortfall
+19:53
+would be proportional to the standard deviation with these things. They would be normal.
+19:58
+And if you did that, and you assumed that all the daily changes were independently--
+20:05
+they were all kind of independent identical normal distributions so you could add them all up. Then you would discover that the T-day
+20:11
+VaR and the T-day expected shortfall is proportional to the square root of the one-day VaR, which
+20:17
+is the normal approximation that people make with those things. In reality, it seems that the losses--
+20:28
+the changes that you'd have on a typical portfolio or a typical market data are not independent.
+20:33
+If you lose a lot of money one day, it's a reasonable chance you might lose some money on the-- or the market might go down on the second day.
+20:39
+So there's a thing called autocorrelation, which is basically the correlation of a time series with itself shifted by one day.
+20:46
+And so you can-- which is what this thing here. And if you assume that that autocorrelation, rho, is
+20:54
+some number, then it would modify the T-day VaR
+21:01
+for two days by this formula. So I put in this table. So the top row is assuming that there's no autocorrelation.
+21:09
+So that's 1 root 2 root 5, root 10 and so on is the top row. And then as you increase the autocorrelation,
+21:16
+the T-day VaR, as a function of the one-day VaR, gets bigger and bigger.
+21:23
+So I did some-- I'll show you some market data in a sec. So I took a set of observations from the EURO-STOXX stock index.
+21:30
+And that suggests that the rho, the autocorrelation, is about 0.1.
+21:36
+I did some other indices, and they were all between 0.05 and 1.15.
+21:42
+So 0.1 is kind of reasonable. And generally, people take a 10-day VaR thing as a normal
+21:51
+thing. So you'd be looking at about this number here, this 3.46.
+21:59
+It's about-- that means to say that the standard approximation of using the square root of--
+22:07
+saying the square root of the one-day VAR-- sorry-- the square root of T times the one-day VAR
+22:13
+is probably going to underestimate the actual T-day VaR by about 10% because it's 3.46 divided by 3.16.
+22:22
+But nevertheless, almost everybody just says that the T-day VaR is the one-day VaR times root T.
+22:32
+So this is where I got the data from. So I picked four stock indexes--
+22:39
+Ibex, CAC, DAX, and EURO-STOXX. That's, if you don't know, Spanish, French, German,
+22:45
+and a kind of pan-European stock index. So from 2006 to 2024, you can see
+22:53
+there's a couple of periods of stress in here. One in 2008 time frame, around about here,
+23:01
+which was the global financial crash, and one in about 2020, which was COVID.
+23:07
+And some degree of calmness in between those two periods.
+23:12
+Clearly, there's some correlation between these things
+23:18
+that's there. On a practical note, there's a couple of things worth pointing out. I picked these stock indices because they're all European,
+23:26
+which means I don't need to worry about FX rates when I'm playing with these things.
+23:32
+But even though they're European, they're from different countries. And the different countries have different holidays.
+23:40
+And so you have to decide what I'm going to do-- what you're going to do when one of these indexes is on holiday and not trading.
+23:48
+What I did here was that if all of them were on holiday, I'm ignoring the day completely. And if one of them was not on holiday, but the rest were,
+23:55
+I just fill forward. And so you'd see a daily change of zero on those. That might not necessarily be the most sensible thing to do.
+24:02
+It doesn't really make that much difference. But the reason I mention it is because if you
+24:08
+work in this kind of industry for that, you end up spending a surprising and disproportionate amount
+24:15
+of time dealing with both FX and holiday calendars. You probably don't expect to be doing this.
+24:21
+But holiday calendars-- you spend a lot of your time trying to work out what are you going to do with these kind of things?
+24:28
+So there's a couple of different ways you can estimate VaR.
+24:35
+One is historical simulation, and one is doing model building.
+24:42
+We'll have a quick look at both of them. So the historical simulation, basically is we're going to go back and look at the time series.
+24:50
+We'll look at the value of each of these indices, the CAC, DAX, IBEX, and EURO-STOXX on each day.
+24:58
+And we'll come up with a portfolio. So I just made up some portfolios. Say I'm going to have 3,000 units of CAC, 4,000 of DAX,
+25:04
+and so on and so on. And we'll call that the portfolio weight. And so now, I can figure out that on the day--
+25:13
+the change in value on day I is going to be the relative change in the underlying market index.
+25:21
+For example, the second row minus the first row for the first day and so on, multiplied by the weight for that index.
+25:28
+Then just sum it up over all the indices. And that will give me the change on the I-th day.
+25:33
+So then I can take the distribution of those things,
+25:41
+and I will get something that looks like that. Hopefully, that's big enough.
+25:48
+So one thing to add here is that when you're doing that, when you're looking at these historical simulations, you
+25:55
+have to decide over what period, over what historical period, am I going to look at?
+26:01
+And the main thing to notice here is that depending on what historical period you look at,
+26:07
+it makes a massive difference to both the VaR and the expected shortfall. So what normally happens, if you normally talk about VaR,
+26:15
+you talk about the most recent, say, two years. These are all two-year periods, by the way.
+26:22
+So the top left, 2022 to the end of 2023. Given my series went up to the end of 2023,
+26:28
+this top left box would be what you would normally put in as VaR, the most recent 500 days, basically,
+26:35
+assuming there's 250 days in a year, which is more or less true. The ones on the right, they're from the two stress periods--
+26:43
+the global financial crisis and COVID. And as you might imagine, if you compute VaR based off those two
+26:52
+periods, you get a much, much bigger number than you do of either of the calm periods, the most
+26:57
+recent one, 2022, or a period in between the global financial crisis and COVID, 2015 to 2016 with that.
+27:07
+So that makes, by far and away, the biggest difference, which period you choose.
+27:12
+And because of that, regulators have recently introduced-- well, not that recently-- introduced the concept of a thing
+27:19
+called stress VaR. So in addition to taking the most recent two years, five years, 10 years, whatever you decide to choose,
+27:26
+you also pick a fixed period known to be stressful.
+27:31
+So people will pick either COVID, or they will pick the global financial crisis.
+27:36
+And then that's generally known as S-VaR, or stressed VaR because there's such a big variation
+27:42
+in these terms that are there. And then just to break it down in terms of what you actually
+27:52
+did here, what I actually did was I took all those changes-- so there was 500 changes in each period, more or less.
+27:58
+I ordered them from the biggest change to the-- from the biggest loss to the biggest gain, these things here.
+28:04
+And then the 5th worst one-- that's the VaR, for the 99% VaR,
+28:10
+because that's 1%. And the 12th worst one, that's the 97.5. It's not that complicated.
+28:16
+You just order the thing. You take the 5th worst one, 12th worst one, that's what VaR is. And expected shortfall, for the 99%,
+28:23
+you take the average of the worst four. And for the 97.5, you take the average of the worst 11.
+28:31
+There is some debate about that. Some people claim you should take the average of the worst five, so including the 320, and the average of the worst 12.
+28:40
+I think standard market convention is to take the four. Doesn't matter that much.
+28:46
+But that's all that's actually happening here to do these.
+28:54
+All OK so far? To do the model building approach, it's kind of similar.
+29:02
+We just make the assumptions that everything is normally distributed. The daily changes are normally distributed
+29:07
+with mean zero and a sigma I. We assume
+29:13
+that there's some kind of correlation between all the different indices. And So you say, well, the sigma for the portfolio
+29:18
+is going to be this term here. So there's a variance-covariance matrix between the-- right--
+29:27
+that you get. And using the assumption that VaR and expected shortfall
+29:32
+are proportional to the sigma again, you get these two expressions.
+29:39
+So all you need to do for the model-building approach is figure out what the variance-covariance matrix is
+29:44
+between these different elements, which I computed here. And I come up with a VaR, and I get these two numbers--
+29:52
+225 and 257. The main thing to note about that is that it's significantly, significantly less
+30:00
+than the historical VaR. So the 99th-- this is computed for the 2022-2023 period.
+30:07
+So the historical VaR-- those equivalent numbers were 320 and 377,
+30:15
+basically showing that these normal distributions,
+30:20
+it's clearly not a normal distribution. There's a fatter tail in there than you would expect.
+30:25
+But you can say, well-- you can work out, is this an acceptable VaR model?
+30:31
+Yes or no. So what you can say is given I've got something
+30:36
+where I'm going to take 500 trials, and I expect to see-- and I expect the VaR-- the actual loss
+30:44
+to have exceeded the VaR 1% of the time, that's the definition of VaR. And what is the probability that I'm going to see 12 or more--
+30:55
+so there's 12 violations, by the way. So if I take this 225 and say, how many times did it actually--
+31:03
+according to that period, how many times was it actually-- the loss was bigger than 225, or there were 12 scenarios bigger than 225?
+31:11
+So what is the probability that I would see 12 or more days out of a sample of 500 that
+31:18
+exceeded the VaR? So that comes from the binomial distribution, which is
+31:26
+that formula, and you get 5.2%. And the general rule of thumb is that if the probability is
+31:33
+5% or more of getting that degree of-- that number of violations of the VaR, you say that the model is OK.
+31:42
+And if the probability is less than 5%, you'd probably reject the model and say the VaR is not a good model.
+31:49
+So even though the VAR here is significantly lower than the historical simulation, you
+31:56
+would probably accept that as an OK kind of model.
+32:02
+And the only other point I wanted to make on that
+32:08
+is that what we've basically done there is a back-testing of VaR. So we basically came up with a model, and we said,
+32:14
+how good is that model? How many times, based on some historical simulation, was the VaR exceeded?
+32:23
+So it's really, really easy to do back-testing of VAR. The single main reason why people still
+32:31
+use VaR over expected shortfall is because doing this for expected shortfall is quite tricky.
+32:38
+It's not even clear what it means to do back-testing of expected shortfall. Because, I mean, the expected shortfall
+32:46
+is a function of the probability distribution. It's the mean of the tail. You can't really compare that with one sample
+32:54
+that I've drawn from the distribution. It's like comparing apples with oranges.
+32:59
+There's a whole bunch of debate around whether back-testing expected shortfall is flat-out
+33:06
+impossible, difficult, or not. And there's a bunch of papers at the end on this as well.
+33:14
+But it's definitely a lot trickier than doing it for VaR. And that is the main reason, people still
+33:20
+use VaR, despite its shortcomings around the subadditivity and the handling of the tails.
+33:27
+So I'm going to skip over some stuff. This is some stuff around regulation.
+33:33
+And I'll just quickly mention this slide because--
+33:38
+so one of the problems with expected shortfall is it's kind of defined in terms of VaR,
+33:46
+because it's the mean loss that you would get, given you've exceeded VaR in the first place.
+33:52
+What you can do is there's a-- this function here-- this is in the paper by Rockafellar and Uryasev, which is in the back.
+34:01
+It says, if you take this function F, which is this expression here, and you try-- and then
+34:08
+you minimize that over alpha. You consider this to be a function of X, which is the portfolio, and alpha is just a number,
+34:16
+and you minimize this over alpha, then the minimal value of that function
+34:21
+is the expected shortfall. And so you can find the expected shortfall by taking that F
+34:27
+and minimizing it. And that is basically if you replace the integral with a sum, that's basically a linear problem.
+34:35
+And so it's relatively easy to find the expected shortfall. Moreover, if you minimize it with respect to alpha and X,
+34:44
+now what you've done is you've found the portfolio with the minimal expected shortfall, i.e.,
+34:51
+you have minimized the expected shortfall, which is basically what we're trying to do in this whole thing.
+34:59
+So you just have to consider this function here. You can minimize that over X and alpha,
+35:04
+which is basically a linear problem. And that essentially is how you minimize expected shortfall.
+35:11
+No such equivalent thing exists for value at risk. So even though expected shortfall is trickier
+35:18
+to back test, it's easier to minimize,
+35:26
+which is what I care about more I'll skip over it.
+35:33
+So that's expected shortfall and VaR. So now we're going to start talking about counterparty risk
+35:38
+and margin. So if you have in the derivative world--
+35:47
+so if I have A has got two trades, one with B, one with C. Derivatives typically swaps,
+35:53
+means I'm going to exchange a series of cash flows between the two parties. And typically, those cash flows will
+35:59
+be exchanged, say, over a three-month period or six-month period. So A, in this case, is receiving some cash flows.
+36:07
+It's paying the series Si to B and receiving Ti from B. A is exposed to the fact that before the next cash
+36:15
+flow arrives from B, B might default and not pay the cash flow. And the same story for C.
+36:22
+So A has counterparty risk to both B and C because when we get to the next cash flow date in, say, three
+36:29
+months time or six months time or a year's time, they might not pay that cash flow that they're due.
+36:34
+So that's the fundamental reason why they have counterparty risk for derivatives. In order to mitigate against the fact
+36:41
+that there might not pay that cash flow, what actually happens is that they pay--
+36:46
+is that all these counterparties exchange on a daily basis the exchange variation margin, which
+36:56
+means that-- which is equal to the value of these derivatives. So as the value goes up and down of these things,
+37:02
+they'll be paying variation margin to one another. And that mitigates against the cost of the cash flow
+37:08
+not getting paid. But if they're paying variation margin from one to another, and then one party or other goes bust and defaults,
+37:16
+then you've still got to pay the variation margin to the other person. And as soon as one party goes bust, what A would try and do--
+37:23
+so if C goes bust here, A would try and replace that trade. It would take it some number of days to replace that trade with something else
+37:30
+or unwind that trade, during which time the value of that trade might go up.
+37:35
+And because the value of that trade is going up, it's having to pay an increased amount of variation margin to B.
+37:42
+And so therefore, it incurs a loss. And so it incurs a loss because during the period between when
+37:48
+C defaults and when it manages to replace that trade, the value of the trade will change or go up, basically.
+37:57
+And that is the loss. So in order to mitigate against that risk,
+38:03
+A will collect initial margin. That's what initial margin is. That's essentially a covering you
+38:09
+for the risk in between when a party defaults and when you manage to unwind or replace that position.
+38:19
+That slide just says what I just said. And then I have another slide, which says the same thing again
+38:25
+in a picture. So you have the variation margin is getting paid up until here
+38:32
+between all these things. You get some default will happen here. We don't know what's going to happen. The risk can go up or down.
+38:39
+And some loss could potentially be incurred at this point. This should hopefully sound to you
+38:46
+a little bit like what we just discussed with VaR and expected shortfall. And so initial margin--
+38:51
+in order-- how much initial margin should I collect? Well, basically it's going to be a VaR based on how long you
+38:58
+think it's going to take you to unwind that position, which is called the margin period of risk.
+39:05
+There's two kinds of initial margin, depending on whether your trade is a cleared trade or a bilateral trade.
+39:13
+The cleared margin is set up by the clearing house, the CCP.
+39:19
+And that's always been the case for years and years and years. Up until 2016, people were not paying initial margin
+39:26
+on bilateral trades. That changed when ISDA came up with their standard initial margin, which is the form--
+39:35
+I've put the formula down here, but it's kind of similar-- it's basically VaR is what they put here.
+39:41
+And the only difference compared to what we just discussed is that because it's handling nonlinear portfolios,
+39:48
+there's a gamma term in there, which I didn't talk about before.
+39:53
+And when you work it all the way through, you make exactly the same assumptions, that everything is normal.
+39:58
+Mean is zero. You end up with the exact same term we saw before.
+40:04
+Or you also-- SIMM assumes that it's a 10-day margin period of risk. And it's a 99% confidence interval.
+40:11
+So the 99% confidence interval, that's the inverse normal of 99%
+40:17
+That's the 10-day margin period of risk.
+40:23
+That's the exact same term we looked at in the VaR before. And then you get two additional terms
+40:28
+that come from the convexity, which is kind of similar. The main point is that initial margin is basically
+40:37
+some variant of VaR, or potentially expected shortfall.
+40:43
+In real life, there's lots and lots more simplifying assumptions that people make around all these things
+40:52
+to try and simplify stuff. And all these kind of correlations
+40:57
+between all the different parameters-- this covers the entire world, all different asset classes,
+41:04
+by the way. And so they get kind of recalibrated on a yearly basis. If you Google SIMM COVID now, you'll
+41:13
+probably see quite a lot of stuff in there because SIMM 2.7 is about to come out
+41:19
+in the beginning of December. And that'll be the first one that's calibrated without any of the COVID or global financial crisis
+41:28
+data in there. And what's going to happen, what people expect to happen, is that the initial margin calculated by this SIMM
+41:34
+is going to massively reduce by somewhere in the region of 5% to 20%. And what that will do is release something
+41:42
+in the region of $40 billion of margin back out into the wild. Because today, people are paying initial margin,
+41:48
+all these different things with these high levels of-- using these high levels of VaR. When they recalibrate in the first week of December,
+41:55
+everything will come down. Everybody will release all the initial margin. So there's quite a lot of stuff around that
+42:01
+in the news at the moment. That just talks about how the structure--
+42:06
+you roll everything up into one number across all the different portfolios.
+42:13
+And I'll skip over that. So that's what margin is. So now we come on to trying to optimize the initial margin.
+42:24
+I put margin here. I mean initial margin. So the situation that we're thinking about
+42:30
+is we've got multiple different financial participants-- A, B, C, D, E. Think of them as banks. And we've got--
+42:36
+I've put one CCP. There could, in fact, be multiple CCPs in the middle.
+42:41
+And all these participants have got a bunch of bilateral trades versus each other, and they've got a bunch of trades versus the CCP.
+42:50
+That's the situation that we've got. And they're all posting margin to each other in this situation.
+42:58
+And what we are trying to do by optimizing stuff is come up with a bunch of hedge trades, which
+43:07
+is these X, H variables between all the different participants in order to try and minimize the margin, i.e.,
+43:15
+the VaR, in the entire system. That's the goal of what we're trying to get to.
+43:22
+And you might say, well, why are there no trades versus the CCP? Well, you're ignoring the cleared margin.
+43:29
+That's just a practical issue. You can't book trades between the CCP and a bank.
+43:37
+All you can do is book bilateral trade between A and B, A and E, all these different things.
+43:42
+And depending on which trades you choose, some of them will be cleared or not cleared.
+43:48
+If you pick a trade, where the trade type is like an interest rate swap, then that will be mandated to clear.
+43:55
+And so even though it's between A and B, it'll get cleared. And it will affect the cleared margin and not
+44:00
+the bilateral margin That's why there's no actual trades booked between the CCP and any of these people,
+44:08
+Because that's what we're trying to do. So that's the problem we're trying to solve,
+44:14
+which looks like a lot of maths, but in fact, is not that complicated. So what we're trying to do, is we're
+44:21
+trying to minimize summed over all of the parties, so all of the banks-- A, B, C, D, E--
+44:27
+the margin of all those people. So the margin is made up of the SIMM,
+44:33
+the bilateral margin summed over all the counterparties, plus the cleared margin summed over all the CCPs
+44:41
+that are there. So that just says the sum of all the margin in the system is what I'm trying to minimize.
+44:47
+And we say, well, where SIMM and the initial margin, there's some functions of risk, as we've discussed.
+44:53
+We know what the function is. It's Var-like, let's say. So we know that SIMM and--
+44:59
+oops, sorry-- initial margin are some functions of the risk. And we know that the risk position that's there
+45:08
+is equal to the initial risk, which is the zero, plus the sum over all the hedges
+45:16
+that we're going to book. So we're going to propose a bunch of trades. So we sum over all the hedges that we're going to book, the size of the hedge which
+45:23
+is the X, which is the thing we're trying to find, multiplied by the risk of that particular hedge.
+45:30
+So that's how we know what the new risk is. And we've got a couple of constraints
+45:35
+that we need to put in the system. This is the most important one. This is what we call the symmetry constraint,
+45:42
+even though it looks like it looks like an asymmetry constraint. What this says is that if P sells something to Q,
+45:51
+Q had better buy that same thing from P. Exactly.
+45:56
+And this was-- when we first set this up, this was, in reality, the thing that people were most worried
+46:02
+that we would mess up. Because the biggest problem that could have happened here is that we told--
+46:07
+we set up a thing. We tell a Goldman Sachs, go and buy 100 million of stuff
+46:13
+from JPMorgan. And then we tell JPMorgan, go and sell 200 million
+46:19
+of stuff to Goldman Sachs. So Goldman Sachs sees their thing, and says buy 100 million.
+46:24
+They think, that looks good to us. We'll agree to this. JPMorgan sees their thing, which says, sell 200 million of stuff
+46:30
+to Goldman Sachs. And JPMorgan goes, that looks good. We'll agree to this. Goldman Sachs doesn't see what we told JPMorgan,
+46:37
+and JPMorgan doesn't see what we told Goldman Sachs. And they only discover that something's
+46:42
+gone horrifically wrong when they try and do that trade. So the reason that doesn't happen
+46:49
+is because we've got this constraint in the system that says that, whatever Goldman Sachs buys from JPMorgan,
+46:54
+JPMorgan had better sell that exact same thing to Goldman Sachs. That is the most important constraint in the whole system.
+47:02
+The second constraint, the big one that we've got in there, is this one, which says-- this is cash flow flatness.
+47:09
+This says that for any party, let's say, Goldman Sachs, if I sell something to one party,
+47:19
+I'd better buy that exact same thing from some combination of other people.
+47:24
+That's what that constraint says. We don't need that to be in the system.
+47:29
+It's a kind of safety valve that's in there. The advantage of having this in here
+47:34
+is it says, if I'm definitely sure that everything is cash flow flat across the system,
+47:40
+nobody's going to make any money or lose any money out of the whole system. Because I'm going to sell something.
+47:46
+I'm going to sell something to there. I'm going to buy it from somewhere else. So I'm just-- all I'm doing is shuffling risk
+47:51
+around the system. You could relax that, and you could say, well, some parties could make some money.
+47:57
+Some could lose some money. Some could change some risk. But it makes everything a lot trickier. So we basically enforce this around the system.
+48:06
+And then the last constraint is a risk constraint which comes from the parties themselves.
+48:12
+And what this says is that Goldman Sachs or some party might say, well, I don't really want to go--
+48:19
+I might not want to go long a particular risk factor versus some particular counterparty for whatever
+48:25
+reason. So the first two are system-wide constraints
+48:30
+that we impose on the thing. And the last one is a constraint which basically says, don't change the risk too much, which is what parties say.
+48:40
+So all of that maths, that's all it's saying.
+48:46
+So if we look at-- it's kind of-- if we look at a very, very simple example. If I take a three-party system--
+48:52
+A, B, C-- so this might be a bit small-- and you put it in there and say, well, how could I minimize the margin around that system?
+48:59
+And the way you'd minimize it, you've got AC's got to trade with 10, AB's got to trade with 2, and BC has got a trade with 9.
+49:07
+Well, what you do is you move the median trade around the whole triangle. If you move one median trade around-- one trade
+49:14
+around the whole triangle, I'm guaranteed to satisfy by construction those first two
+49:21
+constraints because I'm only moving the exact same thing around the whole system. And if I'm moving, just say in this case, 9.
+49:30
+I'm going to-- A is going to buy 9, sell 9. B is going to buy 9, sell 9. C is going to buy 9, sell 9.
+49:35
+So I'm going to satisfy the second constraint as well. I've ignored the third constraint for now.
+49:40
+And the reason I picked that is-- those particular examples with 2, 9, and 10, is that actually if you fiddle around with the maths a bit,
+49:48
+the thing you should move is the median trade given any triangle. And you can take any network, and you can always
+49:55
+break a network into a bunch of triangles. And for every triangle, you just move the median around.
+50:00
+That's what you should do. The problems are this won't satisfy all the different-- if you have additional constraints, it causes problems.
+50:07
+And obviously, some edges of this triangle would also be edges of other triangles.
+50:13
+And so you end up and you can-- it won't generally solve the problem. But it's a good way of thinking about it.
+50:20
+We always think about triangles and how you would move risk around in a particular triangle.
+50:25
+So that's that.
+50:31
+In reality, we just use a big numerical solver around this. What we're in the business here is we're solving minimization problems or operational research
+50:41
+type problems. They're of the form minimize F subject to some other stuff.
+50:46
+And as I mentioned earlier, solving complex problems is way, way, way easier than solving general, nonlinear
+50:53
+problems. And convexity is basically the same thing as subadditivity. That's the definition of convexity.
+50:59
+And that should remind you of the definition we saw earlier of subadditivity. So we saw earlier minimizing expected shortfall.
+51:07
+That's basically a piecewise linear problem. All these things we're talking about, SIMM is nearly convex.
+51:13
+There are different add-ons that you can have, which are usually convex. And some of the maths that we get into
+51:19
+is, how do you come up with approximations of these things which genuinely are convex.
+51:25
+We tried using proper nonlinear solvers on these things. Way easier just to approximate the function you want and use
+51:31
+a convex solver on it. Because the state of the technology for solving convex optimization problems is really, really, really good.
+51:39
+It would be crazy to write your own version of a convex optimization solver because there are loads of open source
+51:45
+and commercial available-- things available. So don't do it.
+51:50
+Just plug it into a system, and it works. The thing to note is that how difficult
+51:57
+it is to solve the problem is really, really, really sensitive on the specifics of the problem.
+52:02
+And that doesn't really mean the size of the problem. The size is not really too much of an issue.
+52:08
+It's all kinds of the structure of the problem, how sparse is the problem. And the thing these are the things
+52:13
+that matter in the real world Also, it's a good idea to use modeling languages.
+52:21
+So there are lots of modeling languages available. Gurobi is the one we use. I think you may-- people might have used it.
+52:28
+I think you can get it for free if you're an academic institution. In case anybody wants to spend 10 seconds trying
+52:35
+to solve that in their head, this is an integer problem, trying to minimize 5 x1 plus 8 x2 subject to those two
+52:42
+constraints, you can probably do that in your head.
+52:49
+Hang on. So we did that. Sorry.
+52:56
+So we did it on Gurobi. Using the 24 physical cores probably
+53:02
+is overkill for that problem, but it comes up in 10 milliseconds with the answer of 31.
+53:07
+Hopefully, if you did it, that's what you tried, just to show how easy it is to solve
+53:14
+some of these problems. In real life, a typical problem that we would have
+53:20
+might have 25 different parties in the network. Might be, say, for an FX delta 30-odd different currencies that
+53:28
+we've got in there. We pick different kinds of hedge instruments, so we try and pick simple ones.
+53:34
+The reason for picking things like nondeliverable FX forwards is that each individual hedge type there
+53:40
+has exposure to exactly one underlying, namely the currency. If I pick a dollar euro nondeliverable,
+53:46
+that's got exposure to the dollar-euro FX rate and nothing but the dollar-euro FX rate in this case, which turns out
+53:52
+to be useful. And if you do that, you end up with a system which is something like, say, 20,000 variables, 40,000 constraints.
+54:01
+Something like that is the real size of the problem. And really, when you're solving convex optimization problems,
+54:10
+solving convex optimization problems is easy because the convex problem looks like a bowl. And so they have one minimum.
+54:18
+And so you can convert the optimization problem into a root-finding problem, which is find where the root
+54:25
+of the derivative is-- where the derivative is equal to zero. So that's root-finding.
+54:30
+People generally use something like Newton-Raphson for root-finding. When you use Newton-Raphson, you've
+54:37
+got to compute a Hessian matrix. And then you need to invert that Hessian matrix.
+54:42
+That's the slow part of the entire system is that you're repeatedly inverting Hessian matrices.
+54:48
+So the matrix might be 40,000-ish. Matrix inversion is basically an n cubed kind of operation.
+54:55
+So you end up with this unfeasibly large number of operations to solve. In general, most computers will not be able to factorize
+55:04
+a 40,000 matrix for a randomly chosen 40,000 by 40,000 matrix.
+55:12
+However, the problems that we have here are very much not randomly chosen matrices.
+55:18
+They have an awful lot of structure involved, and they're massively, massively sparse.
+55:23
+And most solvers, the reason why they're very mature, is they take advantage of all this matrix structure that's
+55:31
+there. And so they can do way, way, way better than you'd expect from this. So in particular, for FX delta, the matrix
+55:40
+looks a little bit like this right. So you've got a bit stuff at the top of the matrix, which is the thing I talked around around the symmetry constraints
+55:48
+and the flatness constraints. But the vast, vast majority of the constraints are those ones at the bottom of that picture, which
+55:55
+are the risk constraints specified by the individual parties. And they are guaranteed to be block diagonal.
+56:03
+Because each-- if I have a particular hedge, say, the hedge AB, that's only going
+56:09
+to affect the risk between party A and party B at worst case. And then the hedges between A and C,
+56:15
+they're only going to affect the risk between parties A and C. So I'm definitely going to get a block diagonal matrix down here.
+56:22
+And everything else is going to be zero. So the vast majority is going to be zero. And if I pick these NDF trades as well,
+56:28
+and those SDF trades only have exposure to one risk factor themselves, I'm just going to get a straight diagonal matrix here.
+56:34
+And obviously, inverting a straight diagonal matrix is trivially easy. So I've got a bit at the top, which makes
+56:40
+it a bit more complicated. But it's a little bit at the top, plus basically a massive, big diagonal matrix.
+56:46
+That's called a Dantzig-Wolfe structure, and there are techniques known to factorize and invert
+56:52
+those kind of things.
+56:57
+So then I like this slide. I think this is the one slide I've used all three years.
+57:03
+The problems that you get into in real life are not solving the big minimization problem.
+57:11
+You just literally write down the math that you want, more or less plug that into the solver.
+57:19
+But in real life, you get situations where you've got nearly parallel risks.
+57:25
+You have two trades which are nearly the same, but not quite exactly the same, or can't be represented
+57:31
+exactly the same on a computer. So this example here, if I really
+57:36
+wanted to solve this first equation here, obviously everyone-- hopefully, you can see that essentially,
+57:42
+there's lots of solutions to that right with this. But you can't represent a third properly on a computer.
+57:49
+So if you actually tried to represent that on a computer, what you might end up with, for example, instead of putting a third, a third X1
+57:58
+plus a third Y1 as your second equation, you might end up with this thing here 0.333 x1--
+58:05
+sorry-- 0.3333 x1 plus 0.333 Y1. And that has this solution.
+58:11
+0, 1. But you make a tiny, tiny change to that thing-- so all I did was I flipped over the solution here.
+58:21
+Instead of having three 3's at the end, having four 3's at the end. And instead of getting a solution 0, 1, I've now got a solution 1, 0.
+58:28
+And if I make another small change to those things, it says instead of-- I'm going to get 0.3.
+58:35
+Then that has a single solution of minus 110, 111. That's the solution to that problem.
+58:43
+Now, it's highly plausible I might also say, well, I want all these X's to be positive. That might be a thing in there.
+58:49
+And so entirely due to numerical noise, it will say if I want X to be positive, and the only solution to this problem is minus 110, 111,
+58:57
+any system is going to go, well, that's infeasible and so it will refuse to solve it. And so the problems that we get into real life
+59:05
+is trying to understand these things and coming up with techniques to remove these kind of situations from the system, rather than trying
+59:15
+to actually solve convex optimization problems in their general form.
+59:22
+That's there. This is the same thing as before, except now for the FX delta, the full FX delta problem,
+59:29
+we're up to 48 cores now. And you can see here, it really was 114,000--
+59:34
+it was 100,000 by 100,000 matrix is what we ended up trying to solve.
+59:39
+It's worth noting this presolve thing here removed close to half of it.
+59:45
+What presolve is, is sometimes you get all these different constraints, and you have them in there. And you end up with a constraint that says X1 is greater than 1,
+59:52
+and another one that says X1 is greater than 2. So you might as well chuck out the first constraint
+59:58
+and say, well, if X1 is greater than 1 and it's greater than 2, chuck out the first one, and just keep the X1 is greater than 2 constraint.
+1:00:04
+And that happens a lot. And so you can massively reduce the size. And so we get down to a thing like this.
+1:00:12
+But you can see even this problem, you can solve it in 11 seconds and with very, very
+1:00:19
+few iterations, which is basically a testament to the amazing power of Newton-Raphson quadratic
+1:00:26
+convergence. So what happens when you try and solve it?
+1:00:32
+This is how you have the initial risk, and this is with the optimized risk on the right-hand side. As you might expect, it tries to form--
+1:00:40
+it tries to basically get it, but I don't have some positive numbers and some negative numbers. It tries to nestle the risk together.
+1:00:45
+So what you can see here.
+1:00:51
+You try this on a 20-party system, again just removing all the constraints.
+1:00:56
+Again, it can remove almost all the margin between the different systems. And you end up with either--
+1:01:01
+for any given row, either pink stuff or green stuff. It's either positive or negative. But you don't have pink and green stuff in the same row
+1:01:09
+or in the same column. And what that says is it managed to get rid of all the situations where I was up. I was up here and down there.
+1:01:15
+I just want to be up or down. So I've netted all the risk together. That's what the system was basically trying to do.
+1:01:26
+You try it on a real system with all the constraints and stuff like that, it's less convincing what it was trying to do because the constraints hold this stuff
+1:01:35
+in check here with their-- Just out of interest, this kind of diagonal
+1:01:42
+line down the front, that's essentially the margin versus itself. So you obviously cannot pay margin to yourself,
+1:01:49
+which is why you get a kind of blank line down the diagonal.
+1:01:54
+And the square stuff in the middle-- I originally thought that was some bug.
+1:02:00
+But what that is, is trading between interaffiliates of the same entity.
+1:02:05
+So somebody like JPMorgan or Bank of America will have lots of entities, some of which don't pay margin to each other.
+1:02:12
+What I probably did here was I ordered all the entities alphabetically. So this is probably, I'm guessing, given I did that,
+1:02:20
+that's probably all the interaffiliated of JPMorgan is the one in the middle since that's--
+1:02:25
+or maybe it's Morgan Stanley. It'll be some company which has got a letter roughly in the middle of the alphabet with many entities
+1:02:33
+not trading margin versus each other. That's that.
+1:02:40
+That's another example doing interest rate stuff. So what we've discussed so far is solving the optimization
+1:02:48
+problems. It has to be feasible, which means it satisfies all the constraints. And it has to be optimal, which means
+1:02:54
+it finds a good margin saving. But on top of that, it's interesting to try
+1:03:01
+and make them nice and try and make them fair. So what a nice thing would be is that you don't really
+1:03:08
+want to have horrible looking notionals. You don't want to have to have a trade with some complicated notional in there.
+1:03:15
+You'd like to just trade 100 million of this or 200 million of that. The biggest amount of headache we got into ever was trading
+1:03:24
+with these NDF FX trades, where we would trade it with a $1
+1:03:29
+notional with some 200,000 million point 74,
+1:03:35
+and then something else with the Euros, like 0.53 in the Euros. And then we compute the FX rate, which
+1:03:41
+would be the one divided by the other. And the FX rate would come out to be a 15 decimal point number,
+1:03:50
+and then everything would be fine. And then we'd give it to the banks, and they would complain. And they would say, well, our system only
+1:03:57
+handles six decimal places or eight decimal places in the trading system. And when I do that, and I put six decimal places
+1:04:03
+in the FX rate, it changes my euro notional. It gets a little bit off. And so we ended up having to put notionals in that
+1:04:11
+were round numbers of dollars. And that came out as an exact round numbers of euros
+1:04:17
+using a four decimal place FX rate, or a six decimal point FX rate.
+1:04:22
+And that turns out to be quite tricky because you need to round all these numbers.
+1:04:29
+And you can't just take a solution and just round it to the nearest ten.
+1:04:34
+So if I have a party, which they've got a-- and I'm selling eight units of something to one person,
+1:04:43
+and I've offset that by buying four units from the second person and four units from a third person,
+1:04:48
+everything is flat. But if I round everything to the nearest 10, then I've rounded the 8 to 10.
+1:04:54
+And I round both 4's down to zero. So now I'm no longer flat. So you can't do this rounding as a post-processing step
+1:05:02
+afterwards because it breaks the flatness in the whole system. So you have to do it as part of the optimization.
+1:05:10
+If you do it as part of the optimization, that makes it into a mixed integer problem. And that makes it considerably, considerably harder.
+1:05:16
+People also want-- by nice, they want a small number of trades.
+1:05:22
+They don't want to have to trade thousands and thousands of trades in order to get some of this margin saving.
+1:05:28
+They'd like to have a small number of trades. We talk about it as notional efficiency.
+1:05:33
+And there are other advantages of CCPs, I mentioned earlier, in addition to just the netting.
+1:05:40
+And so there's some advantage of saying, well, I want to put-- I'd like to put more trades into the CCP.
+1:05:47
+And so you might do some-- that might be a nice thing to have for other reasons not directly related
+1:05:54
+to initial margin. So you can add all these niceness features into the system. The problem with adding the nicest, things
+1:06:00
+like round numbers, small numbers, like trade counts, these kind of things, they all make basically continuous problem
+1:06:07
+into a mixed integer problem, which is hard to solve.
+1:06:15
+And then fairness is--
+1:06:21
+well, the first question is, what does it mean? What does what does fairness mean in an optimization problem?
+1:06:28
+So you have this example. Hopefully, you can see this. This is a four-- back to the triangle system--
+1:06:35
+four-party system. It's kind of symmetric between A and D.
+1:06:41
+There are three possible things you can do, all of which have the same overall saving here.
+1:06:47
+Essentially, you can ignore D, and solve the A, B, C problem, in which case D gets no saving.
+1:06:56
+You could ignore A and get the same saving. Or you could kind of split the saving between A and D.
+1:07:06
+So they are the three different scenarios that you can get right. So I put them down in the table at the bottom. So scenario one is the ignoring D.
+1:07:12
+This is the saving that you get. A gets saving of 4. A, B, C, will get a saving of 4. D gets nothing.
+1:07:18
+So this is-- you can argue that's not fair
+1:07:27
+because D gets nothing there. You can argue scenario 2 is not fair because A gets nothing.
+1:07:34
+You can argue that of these scenarios, scenario 3 is the fairest, just intuitively.
+1:07:43
+It still might not be the fairest because, well, why did A get 2 and D get 2, but B and C got their full 4 allocation?
+1:07:53
+So the concept of fairness is not a well-defined one. One thing you can look at is--
+1:08:03
+whoops-- have a two-step system. So you, first of all, figure out what is the best possible saving
+1:08:11
+that any one party can get. So the best possible saving that all of these people can get
+1:08:17
+is always 4. And so you do a whole bunch of optimizations where you ignore
+1:08:23
+everybody else and just try and optimize for A. Then just optimize for B. Then optimize for C. Then optimize
+1:08:28
+for D. Now I get the best possible thing that each one can be, subject to all of the constraints
+1:08:34
+still being there. When I know that, now I'm going to say what I'm actually going to solve, is how do I minimize
+1:08:41
+the square of the difference from my actual solution to those things? So I've got a least squares problem
+1:08:47
+that's in there, which is this problem here. And that's the thing.
+1:08:52
+So I'm going to do one more optimization at the end when I solve that problem. And I'm going to say that's the answer that I've got.
+1:09:00
+And you can see if I did that, in this case, clearly with the squared scenario,
+1:09:05
+3 is going to definitely come out as being the best solution because B and C will be zero in those things.
+1:09:12
+And then for scenario 3, I'll get 4 plus 4.
+1:09:18
+Whereas, in scenario 1 and scenario 2, I will get a 16 from the square.
+1:09:24
+So if I were to do that on this case, this would be an algorithm that would deterministically give me
+1:09:32
+scenario 3 as the fairest. But there are other ways of defining fairness.
+1:09:39
+And I don't think it's a well-established kind of a thing yet. I think it's the single most interesting problem that we've
+1:09:46
+got in the optimization space. And then I'll skip over.
+1:09:53
+This is just some pictures of what we've kind of really got in terms of saving. The more interesting one is really
+1:09:59
+this, which is showing the kind of network effect. So you can expect, obviously, that as I
+1:10:04
+put more and more banks or parties into the system, the savings should go up.
+1:10:10
+That's kind of a reasonable thing. But more than that, the saving divided by the initial,
+1:10:16
+that also goes up. So you get not just the total saving in the system
+1:10:21
+goes up, but the total-- the efficiency increases, the more people
+1:10:27
+you add into the system. I wouldn't put too much faith into whether it's really linear or whether it's a kind of not linear thing in there.
+1:10:36
+But there was clearly a drift upwards in these things, which basically says that if you want to do this, the most effective thing you can do
+1:10:45
+is get big networks of people. And big networks of people are beneficial to everybody
+1:10:51
+in the system. That's basically the story of that picture that's there.
+1:10:59
+I think that is the end. Yeah. So that's just a quick summary. We talked about value at risk and expected shortfall.
+1:11:05
+Talked about the centrally cleared and bilateral. We talked about counterparty risk, what variation margin is
+1:11:11
+initial margin. What we're really trying to do is optimize this initial margin. That basically comes down to doing constrained convex
+1:11:18
+optimization. The difficulty in constrained optimization is really all the numerical issues that you've got.
+1:11:25
+And actually, the interesting problems are not-- it's so much solving the feasibility and optimality
+1:11:30
+bit, but how do you add the niceness and the fairness on top of that?
+1:11:37
+Hopefully, that is the end of your slides. There you go. Thank you very much.
+1:11:42
+[APPLAUSE]
+1:11:49
+That makes sense to anybody, or-- [LAUGHS] anyone have any questions?
+1:11:56
+PROFESSOR: Go ahead. AUDIENCE: Yeah, I had a question about the SIMM that you mentioned. JAMES SHEPHERD: Yeah.
+1:12:01
+AUDIENCE: It's going to-- like, this new thing that's coming out and-- JAMES SHEPHERD: Yeah. AUDIENCE: Is that what you said? JAMES SHEPHERD: Yeah.
+1:12:07
+AUDIENCE: It's going to be the first one where it's not using data from a stressful time, like COVID, for example?
+1:12:15
+JAMES SHEPHERD: Yeah, yeah, yeah. AUDIENCE: I was wondering, what goes into that data cut-off,
+1:12:21
+and then what implications do you think that will have for just overall behavioral [INAUDIBLE],
+1:12:29
+or just affecting the economy [INAUDIBLE]. JAMES SHEPHERD: So I don't think it will necessarily-- well,
+1:12:35
+the effect on the economy is going to be-- well, potentially, there is going to be a lot of margin released back into the system. So essentially, margin is money that cannot be used for trading.
+1:12:44
+It's essentially locked away in segregated accounts. So the release of all that margin into the system
+1:12:50
+means there's more margin available for trading. That's kind of the effect that it would have on the system.
+1:12:57
+In terms of the kind of choice of parameters, I think effectively, Monsieur, that really it's a roughly a two-year lookback, similar to what
+1:13:04
+I was doing in the toy examples that I had earlier. So this is-- even though it's looking at other different
+1:13:11
+things, the stress ended roughly '20, '21, '22-ish, something
+1:13:16
+like that. So basically, it's going to be looking at a region that's, say, from 2021 or 2022 beyond.
+1:13:23
+And that's the reason that all these big shocks that have happened in 2020, they're too far in the past
+1:13:30
+to be counted in the correlation these days. Now, of course, there might be some more.
+1:13:36
+This exact same thing was about to happen in 2018, 2019, just before that happened. And they would also have been about to say, well,
+1:13:44
+let's just smooth it all out. And then what did happen was then all these shocks came in,
+1:13:50
+and people decided that what SIMM was doing was massively underestimating the VaR.
+1:13:56
+And the fact that they were only recalibrating on a yearly basis was kind of problematic because they had to wait a whole year,
+1:14:03
+and in fact, a year and a bit because of the timing they had in December and the way they came out before they could start, including these shocks
+1:14:10
+that happened in 2020. So actually, as a result of that,
+1:14:16
+they moved from an annual recalibration process to a semi-annual process, so that they
+1:14:21
+could bring the effect of these shocks in more quickly.
+1:14:29
+AUDIENCE: Is "they" the regulators? JAMES SHEPHERD: ISDA. It's the International Swaps Derivatives Association.
+1:14:36
+So there's a panel. They chair it. It's ISDA's model.
+1:14:41
+They're the ones who ultimately put that thing there. But there's a lot of collaboration with various banks and other interested parties.
+1:14:50
+1:14:56
+Yeah? AUDIENCE: I've heard recently that there's the raising-- like increasing using a lever of data
+1:15:02
+rather than just [INAUDIBLE] the pros and cons of that [INAUDIBLE]. JAMES SHEPHERD: It's a different beta.
+1:15:08
+AUDIENCE: OK. JAMES SHEPHERD: Yeah. So that's a beta in terms of-- well, this beta here is just a confidence interval.
+1:15:14
+So let's just say-- the beta is the, I'm 99% confident I won't lose more than this.
+1:15:19
+Yeah.
+1:15:24
+AUDIENCE: Do you mind going back to the slide where you talk about back testing-- or I guess the limitations on back testing expected shortfall.
+1:15:34
+JAMES SHEPHERD: Yeah. Hang on. That one.
+1:15:39
+AUDIENCE: Yeah, I guess it was--
+1:15:45
+I guess in my-- what are some ways that you can almost cut corners,
+1:15:51
+like make some assumptions that allow you to calculate
+1:15:56
+expected shortfall. What do you have to assume for it to be possible to do? JAMES SHEPHERD: To be possible to back test?
+1:16:04
+AUDIENCE: [INAUDIBLE], yeah. JAMES SHEPHERD: Well, you have to make some assumptions
+1:16:10
+around the form of the tail. So if you were to say, well, the tail is kind of flat,
+1:16:15
+or you have some structure in that thing, you could start to say, does it fit in there? What normally happens in real life
+1:16:23
+is that regulators have moved from VaR from saying, well, your actual initial margin and capital should be based--
+1:16:31
+that used to be VaR. Then it was stress-VaR, and now it's moved to expected shortfall. But they still require you to back test VaR
+1:16:39
+So what you generally do is you build a model, which contains-- which will predict both VaR and expected shortfall.
+1:16:45
+You compute the number using the expected shortfall number. And then you back test the VaR because that's a little easier.
+1:16:51
+And then you say, well I've built the model consistently. And all I did was apply a different multiplier for the expected shortfall versus the VaR.
+1:16:57
+So if the VaR back tests properly, then I'm prepared to accept the expected shortfall.
+1:17:05
+AUDIENCE: Right. If you assume a different shape in the tails,
+1:17:10
+then theoretically that's not necessarily a valid statistical test.
+1:17:17
+Is that [INAUDIBLE]? JAMES SHEPHERD: Well, it is. But when you're back testing-- you're back testing, and you say, well,
+1:17:22
+what happened on the 23rd of December 2015? Well, there was no distribution.
+1:17:27
+That's just whatever happened on that date. So there's no distribution there. So you can't say-- it's difficult to make an assumption about whether or not
+1:17:36
+that was kind of predicted or not predicted. Because it just-- it's a single draw
+1:17:44
+from the distribution as opposed to the shape of the distribution. It doesn't tell you anything. You can make any assumption you want about the tail.
+1:17:51
+But because I've taken one number, it doesn't really show me anything. Does that make sense? AUDIENCE: Yeah.
+1:17:57
+JAMES SHEPHERD: Yeah? AUDIENCE: I guess building on from that, so you mentioned that you can back past on both the shortfall
+1:18:05
+and bar on bar instead of a shortfall? And that's kind of like this-- and then helps you
+1:18:11
+like predict more accurately. Are these models accurate enough to account
+1:18:16
+for the difference [INAUDIBLE] of somewhere between bar and shortfall? Are they precise enough to you?
+1:18:23
+JAMES SHEPHERD: Are they-- well, it depends how you build up the model. So essentially, my model here--
+1:18:28
+the model wasn't really a VaR model or an expected shortfall model. The model that I proposed here was that everything--
+1:18:36
+that the daily changes are normally distributed. And in this case, that they're independent--
+1:18:42
+all the daily changes are independent. That was essentially my model. Having made that assumption, I get a VaR number and an expected
+1:18:50
+shortfall number, and I can back test the VaR. In real life, people make more sophisticated choices.
+1:18:56
+They don't assume that it's normally distributed. You can have other distributions. You don't assume that all the changes are
+1:19:03
+independent of each other, but the model is not really a VaR model necessarily, or an expected
+1:19:08
+shortfall model. The model is, what did I assume about the distribution? Having made those assumptions, I get a VAR number
+1:19:16
+and I get an expected shortfall number. Does that make sense? AUDIENCE: On this example, when you were explaining it,
+1:19:24
+you said that-- let's see. I guess the actual shortfall was 5.2%, was it, through the mod--
+1:19:34
+or through the historical simulation. JAMES SHEPHERD: Yeah. So what it said was that this came up-- so the VaR came up
+1:19:43
+as 2.25, based on the model. If I go back to this table-- so this is the leftmost column here.
+1:19:50
+In reality, we can see that there were 12 actual days when
+1:19:57
+I exceeded that number. There should have been five. That was the intention. So you say, but if I was trying to produce
+1:20:04
+something that had a 1%-- I'm supposed to exceed VaR 1% of the time.
+1:20:10
+That's the definition of VaR. So if I'm trying to come up with a model where I expect something
+1:20:17
+to happen 1% of the time, or I expect the VaR to be exceeded 1% of the time, then I do 500 draws of that thing, and I say,
+1:20:28
+well, how many times was it actually exceeded? And then the probability of that being 12 is 5%.
+1:20:34
+AUDIENCE: So you are being conservative. Like this-- JAMES SHEPHERD: Yes. AUDIENCE: This VaR is conservative. Therefore, it's OK.
+1:20:40
+Even though it's wrong in a sense, or at least it's not calibrated. But it's conservative.
+1:20:46
+JAMES SHEPHERD: It's not that conservative. A conservative VaR would be bigger than the historical VaR.
+1:20:52
+So the actual thing is the historical VaR was 300 or something. Conservative would be a bigger number.
+1:20:59
+But it's not overly aggressive, let's say. I think that's probably the way to put it.
+1:21:07
+PROFESSOR: Any other questions? Anyway, thanks very much, again. JAMES SHEPHERD: OK. Thank you. [APPLAUSE]
+1:21:15

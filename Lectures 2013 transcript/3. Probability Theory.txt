@@ -1,0 +1,1154 @@
+0:00
+The following content is provided under a Creative Commons license. Your support will help MIT OpenCourseWare
+0:06
+continue to offer high quality educational resources for free. To make a donation or view additional materials
+0:13
+from hundreds of MIT courses, visit MIT OpenCourseWare at ocw.mit.edu.
+0:21
+PROFESSOR: OK, so good afternoon. Today, we will review probability theory.
+0:30
+So I will mostly focus on-- I'll give you some distributions.
+0:36
+So probabilistic distributions, that will be of interest to us throughout the course. And I will talk about moment-generating function
+0:44
+a little bit. Afterwards, I will talk about law of large numbers
+0:50
+and central limit theorem.
+0:56
+Who has heard of all of these topics before? OK.
+1:02
+That's good. Then I'll try to focus more on a little bit more of the advanced stuff.
+1:07
+Then a big part of it will be review for you.
+1:13
+So first of all, just to agree on terminology, let's review some definitions.
+1:21
+So a random variable X-- we will talk
+1:32
+about discrete and continuous random variables.
+1:38
+Just to set up the notation, I will write discrete as X
+1:47
+and continuous random variable as Y for now. So they are given by its probability distribution--
+1:52
+discrete random variable is given by its probability mass function, f sub X, I will denote.
+2:02
+And continuous is given by probability distribution function.
+2:11
+I will denote by f sub Y. So pmf and pdf.
+2:17
+Here, I just use a subscript because I
+2:23
+wanted to distinguish f sub x and f sub y. But when it's clear which random variable we're talking about,
+2:29
+I'll just say f. So what is this? A probability mass function is a function from the sample space
+2:42
+to non-negative reals such that the sum over all points
+2:50
+in the domain equals 1. The probability distribution is very similar.
+2:57
+The function from the sample space non-negative
+3:02
+reals, but now the integration over the domain.
+3:11
+So it's pretty much safe to consider our sample space to be the real numbers for continuous random variables.
+3:20
+Later in the course, you will see some examples where it's not the real numbers. But for now, just consider it as real numbers.
+3:29
+3:34
+For example, probability mass function. If X takes 1 with probability 1/3,
+3:46
+minus 1 with probability 1/3, and 0 with probability 1/3.
+3:53
+Then our probability mass function is f_x(1) equals
+4:01
+f_x(-1), 1/3, just like that.
+4:08
+An example of a continuous random variable is if-- let's say, for example, if f sub Y is
+4:17
+equal to 1 for all y in [0,1], then
+4:25
+this is pdf of uniform random variable
+4:36
+where the space is [0,1]. So this random variable just picks one out
+4:41
+of the three numbers with equal probability. This picks one out of this, all the real numbers between 0
+4:47
+and 1, with equal probability. These are just some basic stuff.
+4:54
+You should be familiar with this, but I wrote it down just so that we agree on the notation.
+5:00
+OK. Both of the boards don't slide. That's good.
+5:06
+A few more stuff. Expectation-- probability first.
+5:14
+Probability of an event can be computed as probability of A
+5:22
+is equal to either sum of all points in A-- this probability
+5:28
+mass function-- or integral over the set A
+5:36
+depending on what you're using. And expectation, or mean is-- expectation of X
+5:50
+is equal to the sum over all x, x times that.
+5:55
+And expectation of Y is the integral over omega.
+6:01
+Oh, sorry. Space. y times.
+6:11
+OK. And one more basic concept I'd like to review
+6:16
+is two random variables X_1, X_2 are independent if probability
+6:32
+that X_1 is in A and X_2 is in B equals
+6:38
+the product of the probabilities, for all events A
+6:48
+and B. OK.
+6:54
+All agreed?
+6:59
+So for independence, I will talk about independence of several random variables as well. There are two concepts of independence--
+7:09
+not two, but several. The two most popular are mutually independent events
+7:17
+and pairwise independent events.
+7:23
+Can somebody tell me the difference between these two for several variables?
+7:28
+Yes?
+7:34
+AUDIENCE: So usually, independent means all the random variables are independent, like X_1 is independent with every others.
+7:42
+But pairwise means X_1 and X_2 are independent, but X_1, X_2, and x_3, they may not be independent.
+7:51
+PROFESSOR: OK. Maybe-- yeah. So that's good.
+7:57
+So let's see-- for the example of three random variables,
+8:04
+it might be the case that each pair are independent. X_1 and X_2 X_1 is independent with X_2,
+8:10
+X_1 is independent with X_3, X_2 is with X_3. But altogether, it's not independent.
+8:15
+What that means is, this type of statement is not true.
+8:20
+So there are say A_1, A_2, A_3 for which this does not hold. But that's just some technical detail.
+8:28
+We will mostly just consider mutually independent events. So when we say that several random variables are independent, it just means whatever collection you take,
+8:36
+they're all independent.
+8:43
+OK. So a little bit more fun stuff [? in this ?] overview.
+8:50
+So we defined random variables. And one of the most universal random variable,
+8:59
+or distribution, is a normal distribution.
+9:10
+It's a continuous random variable. Our continuous random variable has normal distribution,
+9:21
+is said to have normal distribution, if-- N(mu,
+9:29
+sigma)-- if the probability distribution function is given
+9:40
+as 1 over sigma square root 2 pi,
+9:46
+e to the minus x minus mu squared.
+9:57
+For all reals. OK?
+10:04
+So mu mean over-- that's one of the most
+10:12
+universal random variables-- distributions, the most important one as well.
+10:18
+10:28
+OK. So this distribution, how it looks like-- I'm sure you saw this bell curve before.
+10:36
+It looks like this if it's N(0,1), let's say.
+10:42
+And that's your y. So it's centered around the origin,
+10:48
+and it's symmetrical on the origin. So now let's look at our purpose.
+10:55
+Let's think about our purpose. We want to model a financial product or a stock,
+11:01
+the price of the stock, using some random variable. The first thing you can try is to use normal distribution.
+11:09
+Normal distribution doesn't make sense, but we can say the price at day n minus the price at day n
+11:19
+minus 1 is normal distribution.
+11:25
+Is this a sensible definition? That's not really.
+11:30
+So it's not a good choice. You can model it like this, but it's not a good choice.
+11:35
+There may be several reasons, but one reason is that it doesn't take into account the order of magnitude
+11:40
+of the price itself. So the stock-- let's say you have a stock price that
+11:49
+goes something like that. And say it was $10 here, and $50 here.
+11:58
+Regardless of where your position is at, it says that the increment, the absolute value of increment
+12:05
+is identically distributed at this point and at this point.
+12:11
+But if you observed how it works, usually that's not normally distributed.
+12:18
+What's normally distributed is the percentage of how much it changes daily.
+12:24
+So this is not a sensible model, not a good model.
+12:32
+But still, we can use normal distribution
+12:41
+to come up with a pretty good model.
+12:49
+So instead, what we want is a relative difference
+13:06
+to be normally distributed.
+13:15
+That is the percent.
+13:26
+The question is, what is the distribution of price?
+13:33
+What does the distribution of price?
+13:45
+So it's not a very good explanation. Because I'm giving just discrete increments while
+13:52
+these are continuous random variables and so on. But what I'm trying to say here is that normal distribution
+13:59
+is not good enough. Instead, we want the percentage change to be normally distributed.
+14:05
+And if that is the case, what will be the distribution
+14:11
+of the random variable? In this case, what will be the distribution of the price?
+14:27
+One thing I should mention is, in this case, if each discrement is normally distributed,
+14:34
+then the price at day n will still
+14:39
+be a normal random variable distributed like that.
+14:47
+So if there's no tendency-- if the average daily increment is
+14:53
+0, then no matter how far you go, your random variable will be normally distributed.
+14:58
+But here, that will not be the case.
+15:06
+So we want to see what the distribution of P_n will be in this case.
+15:11
+OK.
+15:17
+To do that-- let me formally write down what I want to say.
+15:29
+What I want to say is this. I want to define a log-normal distribution Y,
+15:46
+or log-normal random variable Y, such that log of Y
+16:07
+is normally distributed.
+16:24
+So to derive the probability distribution of this from the normal distribution, we can use the change of variable formula, which
+16:40
+says the following: suppose X and Y
+16:47
+are random variables such that-- probability of X
+17:16
+minus x-- for all x.
+17:26
+17:32
+Then F of Y of y-- the first-- of f
+17:48
+sub X is equal to f sub Y of y.
+17:58
+h of x.
+18:07
+So let's try to fit into this story. We want to have a random variable Y such
+18:14
+that log Y is normally distributed. Here-- so you can put log of x here.
+18:26
+If Y is normally distributed, X will be the distribution that we're interested in.
+18:32
+So using this formula, we can find probability distribution function of the log-normal distribution using
+18:40
+the probability distribution of normal. So let's do that.
+19:05
+AUDIENCE: [INAUDIBLE], right? PROFESSOR: Yes.
+19:12
+So it's not a good choice. Locally, it might be good choice. But if it's taken over a long time,
+19:20
+it won't be a good choice. Because it will also take negative values, for example.
+19:28
+So if you just take this model, what's going to happen over a long period of time is it's going to hit this square root of n,
+19:35
+negative square root of n line infinitely often.
+19:42
+And then it can go up to infinity, or it can go down to infinity eventually.
+19:47
+So it will take negative values and positive values.
+19:53
+That's one reason, but there are several reasons why that's not a good choice. If you look at a very small scale,
+19:59
+it might be OK, because the base price doesn't change that much. So if you model in terms of ratio,
+20:05
+our if you model it in an absolute way, it doesn't matter that much. But if you want to do it a little bit more large scale,
+20:13
+then that's not a very good choice. Other questions?
+20:20
+Do you want me to add some explanation?
+20:25
+OK. So let me get this right.
+20:32
+Y. I want X to be-- yes.
+20:45
+I want X to be the log normal distribution.
+20:56
+And I want Y to be normal distribution
+21:04
+or a normal random variable. Then the probability that X is at most x
+21:12
+equals the probability that Y is at most-- sigma.
+21:24
+Y is at most log x. That's the definition of log-normal distribution.
+21:33
+Then by using this change of variable formula,
+21:39
+probability density function of X is equal to probability density function of Y at log
+21:46
+x times the differentiation of log x which is 1 over x.
+21:54
+So it becomes 1 over x sigma square root
+22:00
+2 pi, e to the minus log x minus mu squared.
+22:07
+So log-normal distribution can also
+22:13
+be defined as the distribution which has probability mass function this.
+22:22
+You can use either definition. Let me just make sure that I didn't mess up in the middle.
+22:29
+Yes. And that only works for x greater than 0.
+22:39
+Yes? AUDIENCE: [INAUDIBLE]? PROFESSOR: Yeah. So all logs are natural log. It should be ln.
+22:46
+Yeah. Thank you. OK. So question-- what's the mean of this distribution here?
+22:58
+Yeah? AUDIENCE: 1? PROFESSOR: Not 1. It might be mu.
+23:04
+Is it mu? Oh, sorry. It might be e to the mu.
+23:09
+Because log X, the normal distribution had mean mu.
+23:15
+log x equals mu might be the center. If that's the case, x is e to the mu will be the mean.
+23:20
+Is that the case? Yes? AUDIENCE: Can you get the mu minus [INAUDIBLE]?
+23:27
+PROFESSOR: Probably right. I don't remember what's there. There is a correcting factor. I don't remember exactly what that is,
+23:34
+but I think you're right. So one very important thing to remember
+23:39
+is log-normal distribution are referred to in terms of the parameters mu and sigma,
+23:48
+because that's the mu and sigma up here and here coming from the normal distribution. But those are not the mean and variance anymore,
+23:57
+because you skew the distribution. It's no longer centered at mu.
+24:03
+log X is centered at mu, but when it takes exponential, it becomes skewed. And we take the average, you'll see that the mean
+24:12
+is no longer e to the mu. So that doesn't give the mean. That doesn't imply that the mean is e to the sigma.
+24:18
+That doesn't imply that the variance is something like e to the sigma. That's just totally nonsense.
+24:27
+Just remember-- these are just parameters, some parameters. It's no longer mean or variance.
+24:32
+And in your homework, one exercise,
+24:39
+we'll ask you to compute the mean and variance of the random variable. But really, just try to have it stick in your mind
+24:48
+that mu and sigma is no longer mean and variance. That's only the case for normal random variables.
+24:56
+And the reason we are still using mu and sigma is because of this derivation. And it's easy to describe it in those.
+25:02
+OK.
+25:07
+So the normal distribution and log-normal distribution will probably be the distributions
+25:13
+that you'll see the most throughout the course. But there are some other distributions that you'll also see.
+25:23
+I need this.
+25:32
+I will not talk about it in detail. It will be some exercise questions.
+25:38
+For example, you have Poisson distribution or exponential
+25:44
+distributions.
+25:52
+These are some other distributions that you'll see. And all of these-- normal, log-normal, Poisson,
+25:59
+and exponential, and a lot more can be grouped into a family of distributions
+26:04
+called exponential family.
+26:18
+So a distribution is called to be in an exponential family--
+26:24
+A distribution belongs to exponential family
+26:36
+if there exists a theta, a vector that parametrizes
+26:50
+the distribution such that the probability density
+27:05
+function for this choice of parameter theta
+27:10
+can be written as h of x times c of theta
+27:16
+times the exponent of sum from i equal 1 to k--
+27:22
+27:35
+Yes. So here, when I write only x, h should only depend on x, not on theta.
+27:43
+When I write some function of theta, it should only depend on theta, not on x. So h(x), t_i(x) depends only on x and c(theta) on my value
+28:01
+theta, depends only on theta. That's an abstract thing. It's not clear why this is so useful,
+28:07
+at least from the definition. But you're going to talk about some distribution
+28:14
+for an exponential family, right? Yeah. So you will see something about this. But one good thing is, they exhibit
+28:21
+some good statistical behavior, the things-- when you group them into-- all distributions
+28:28
+in the exponential family have some nice statistical properties, which makes it good.
+28:35
+That's too abstract. Let's see how log-normal distribution actually falls
+28:42
+into the exponential family.
+28:47
+AUDIENCE: So, let me just comment. PROFESSOR: Yeah, sure. AUDIENCE: The notion of independent random variables,
+28:53
+you went over how the-- well, the probability density functions of collections of random variables
+29:00
+if they're mutually independent is the product of the probability densities
+29:05
+of the individual variables. And so with this exponential family, if you have random variables from the same exponential
+29:12
+family, products of this density function factor out
+29:18
+into a very simple form. It doesn't get more complicated as you look at the joint density of many variables,
+29:24
+and in fact simplifies to the same exponential family. So that's where that becomes very useful.
+29:30
+PROFESSOR: So it's designed so that it factors out when it's multiplied. It factors out well.
+29:37
+OK. So-- sorry about that.
+29:43
+Yeah, log-normal distribution. So take h(x), 1 over x.
+29:49
+Before that, let's just rewrite that in a different way. So 1 over x sigma square root 2 pi, e to the minus log
+29:58
+x [INAUDIBLE] squared. Square.
+30:04
+Can be rewritten as 1 over x, times 1 over sigma
+30:10
+squared 2 pi, e to the minus log x square
+30:18
+over 2 sigma square plus mu log x over sigma square
+30:30
+minus mu square.
+30:37
+Let's write it like that. Set up h(x) equals 1 over x.
+30:42
+c of theta-- sorry, theta equals mu sigma.
+30:51
+c(theta) is equal to 1 over sigma square root 2 pi, e to the minus mu square.
+30:57
+So you will parametrize this family
+31:03
+in terms of mu and sigma. Your h of x here will be 1 over x.
+31:09
+Your c(theta) will be this term and the last term here, because this doesn't depend on x.
+31:16
+And then you have to figure out what w and t is. You can let w_1 of x be log x square.
+31:24
+t_1-- no, t_1 of x be log x square, w_1 of theta be minus 1
+31:38
+over 2 sigma square. And similarly, you can let t_2 equals log
+31:44
+x and w_2 equals mu over sigma.
+31:51
+It's just some technicality, but at least you
+31:56
+can see it really fits in.
+32:02
+OK. So that's all about distributions that I want to talk about.
+32:10
+And then let's talk a little bit more about more interesting stuff, in my opinion.
+32:15
+I like this stuff better. There are two main things that we're interested in.
+32:23
+When we have a random variable, at least for our purpose, what
+32:30
+we want to study is given a random variable, first,
+32:42
+we want to study a statistics.
+32:50
+So we want to study this statistics, whatever that means.
+32:55
+And that will be represented by the k-th moments
+33:02
+of the random variable.
+33:10
+Where k-th moment is defined as expectation of X to the k.
+33:15
+33:20
+And a good way to study all the moments together in one function is a moment-generating function.
+33:26
+33:34
+So this moment-generating function encodes all the k-th moments of a random variable.
+33:40
+So it contains all the statistical information of a random variable. That's why moment-generating function
+33:46
+will be interesting to us. Because when you want to study it, you don't have to consider each moment separately.
+33:52
+It gives a unified way. It gives a very good feeling about your function.
+33:58
+That will be our first topic. Our second topic will be we want to study its long-term or large-scale behavior.
+34:10
+34:18
+So for example, assume that you have a normal distribution-- one random variable with normal distribution.
+34:24
+If we just have a single random variable, you really have no control.
+34:30
+It can be anywhere. The outcome can be anything according to that distribution.
+34:39
+But if you have several independent random variables with the exact same distribution,
+34:44
+if the number is super large-- let's say 100 million-- and you plot how many random variables fall into each point
+34:55
+into a graph, you'll know that it has to look very close to this curve.
+35:01
+It will be more dense here, sparser there, and sparser there.
+35:06
+So you don't have individual control on each of the random variables. But when you look at large scale,
+35:12
+you know, at least with very high probability, it has to look like this curve.
+35:19
+Those kind of things are what we want to study. When we look at this long-term behavior or large scale
+35:25
+behavior, what can we say? What kind of events are guaranteed to happen with probability, let's say, 99.9%?
+35:35
+And actually, some interesting things are happening. As you might already know, two typical theorems of this type
+35:44
+will be, in this topic will be law of large numbers and central limit theorem.
+35:53
+36:02
+So let's start with our first topic-- the moment-generating function.
+36:26
+The moment-generating function of a random variable is defined as-- I write it as m sub
+36:31
+X. It's defined as expectation of e to the t times x
+36:39
+where t is some parameter. t can be any real.
+36:47
+You have to be careful. It doesn't always converge. So remark: does not necessarily exist.
+36:58
+37:09
+So for example, one of the distributions you already saw does not have moment-generating function.
+37:15
+The log-normal distribution does not
+37:22
+have any moment-generating function.
+37:30
+And that's one thing you have to be careful. It's not just some theoretical thing.
+37:35
+The statement is not something theoretical. It actually happens for some random variables
+37:42
+that you encounter in your life. So be careful.
+37:48
+And that will actually show some very interesting thing
+37:54
+I will later explain. Some very interesting facts arise from this fact.
+37:59
+Before going into that, first of all,
+38:06
+why is it called moment-generating function? It's because if you take the k-th derivative
+38:14
+of this function, then it actually
+38:26
+gives the k-th moment of your random variable.
+38:33
+That's where the name comes from.
+38:43
+It's for all integers.
+38:58
+And that gives a different way of writing a moment-generating function.
+39:11
+Because of that, we may write the moment-generating function
+39:18
+as the sum from k equals 0 to infinity, t to the k,
+39:24
+k factorial, times a k-th moment.
+39:37
+That's like the Taylor expansion. Because you know all the derivatives, you know what the functions would be.
+39:43
+Of course, only if it exists. This might not converge.
+39:55
+So if moment-generating function exists, they pretty much classify your random variables.
+40:01
+So if two random variables, X, Y,
+40:09
+have the same moment-generating function,
+40:16
+then X and Y have the same distribution.
+40:24
+40:30
+I will not prove this theorem. But it says that moment-generating function,
+40:35
+if it exists, encodes really all the information about your random variables.
+40:41
+You're not losing anything. However, be very careful when you're applying this theorem.
+40:50
+Because remark, it does not imply
+40:59
+that all random variables with identical k-th moments
+41:20
+for all k has the same distribution.
+41:26
+41:37
+Do you see it? If X and Y have a moment-generating function,
+41:43
+and they're the same, then they have the same distribution.
+41:49
+This looks a little bit controversial to this theorem. It says that it's not necessarily the case
+41:56
+that two random variables, which have identical moments-- so all k-th moments are the same for two variables--
+42:04
+even if that's the case, they don't necessarily have to have the same distribution.
+42:10
+Which seems like it doesn't make sense if you look at this theorem. Because moment-generating function is defined in terms of the moments.
+42:16
+If two random variables have the same moment, we have the same moment-generating function. If they have the same moment-generating function,
+42:22
+they have the same distribution. There is a hole in this argument.
+42:28
+Even if they have the same moments, it doesn't necessarily imply that they
+42:33
+have the same moment-generating function. They might both not have moment-generating functions.
+42:39
+That's the glitch. Be careful. So just remember that even if they have the same moments,
+42:47
+they don't necessarily have the same distribution. And the reason is because-- one reason is because the moment-generating function might not exist.
+42:56
+And if you look in to Wikipedia, you'll see an example of when it happens, of two random variables where this happens.
+43:03
+43:10
+So that's one thing we will use later. Another thing that we will use later,
+43:17
+it's a statement very similar to that, but it says something about a sequence of random variables.
+43:25
+So if X_1, X_2, up to X_n is a sequence of random variables
+43:39
+such that the moment-generating function exists,
+43:48
+and it converges-- ah, it goes to infinity.
+43:57
+Tends to the moment-generating function
+44:03
+of some random variable t. X. For some random variable X for all t.
+44:13
+Here, we're assuming that all moment-generating function
+44:18
+exists. So again, the situation is, you have a sequence of random variables.
+44:24
+Their moment-generating function exists. And in each point t, it converges
+44:31
+to the value of the moment-generating function of some other random variable x.
+44:38
+And what should happen? In light of this theorem, it should be the case
+44:43
+that the distribution of this sequence gets closer and closer to the distribution
+44:49
+of this random variable x. And to make it formal, to make that information formal, what
+45:00
+we can conclude is, for all x, the probability
+45:09
+X_i is less than or equal to x tends to the probability
+45:15
+that at x. So in this sense, the distributions
+45:22
+of these random variables converges to the distribution of that random variable.
+45:30
+So it's just a technical issue. You can just think of it as these random variables converge
+45:38
+to that random variable. If you take some graduate probability course, you'll see that there's several possible ways
+45:47
+to define convergence. But that's just some technicality. And the spirit here is just really
+45:53
+the sequence converges if its moment-generating function converges.
+45:59
+So as you can see from these two theorems, moment-generating function, if it exists, is a really powerful tool that allows you
+46:08
+to control the distribution. You'll see some applications later in central limit theorem.
+46:16
+Any questions?
+46:21
+AUDIENCE: [INAUDIBLE]?
+46:28
+PROFESSOR: This one? Why?
+46:34
+AUDIENCE: Because it starts with t, and the right-hand side has nothing general.
+46:40
+PROFESSOR: Ah. Thank you.
+46:47
+We evaluated at zero.
+46:53
+Other questions? Other corrections? AUDIENCE: When you say the moment-generating function
+46:59
+doesn't exist, do you mean that it isn't analytic or it doesn't converge? PROFESSOR: It might not converge.
+47:04
+So log-normal distribution, it does not converge. So for all non-zero t, it does not
+47:10
+converge, for log-normal distribution. AUDIENCE: [INAUDIBLE]?
+47:16
+PROFESSOR: Here? Yes. Pointwise convergence implies pointwise convergence.
+47:22
+No, no. Because it's pointwise, this conclusion is also rather weak.
+47:30
+It's almost the weakest convergence in distribution.
+48:01
+OK. The law of large numbers.
+48:12
+49:04
+So now we're talking about large-scale behavior. Let X_1 up to X_n be independent random variables
+49:09
+with identical distribution. We don't really know what the distribution is, but we know that they're all the same.
+49:15
+In short, I'll just refer to this condition as i.i.d. random variables later.
+49:21
+Independent, identically distributed random variables.
+49:29
+And let mean be mu, variance be sigma square.
+49:36
+49:44
+Let's also define X as the average of n random variables.
+49:50
+Then the probability that-- X-- for all-- all positive
+50:22
+[INAUDIBLE].
+50:31
+So whenever you have identical independent distributions, when you take their average, if you take a large enough number
+50:39
+of samples, they will be very close to the mean, which makes sense.
+50:44
+51:04
+So what's an example of this? Before proving it, example of this theorem in practice
+51:14
+can be seen in the casino.
+51:22
+So for example, if you're playing blackjack in a casino, when you're playing against the casino,
+51:38
+you have a very small disadvantage. If you're playing at the optimal strategy,
+51:52
+you have-- does anybody know the probability? It's about 48%, 49%.
+52:00
+About 48% chance of winning.
+52:09
+That means if you bet $1 at the beginning of each round,
+52:14
+the expected amount you'll win is $0.48.
+52:22
+The expected amount that the casino will win is $0.52.
+52:28
+But it's designed so that the variance is so big that this expectation is hidden, the mean is hidden.
+52:37
+From the player's point of view, you only have a very small sample. So it looks like the mean doesn't matter,
+52:44
+because the variance takes over in a very short scale. But from the casino's point of view,
+52:50
+they're taking a very large n there. So for each round, let's say from the casino's
+53:02
+point of view, it's like taking, they
+53:13
+are taking enormous value of n.
+53:20
+53:26
+n here. And that means as long as they have the slightest advantage,
+53:32
+they'll be winning money, and a huge amount of money.
+53:38
+And most games played in the casinos are designed like this. It looks like the mean is really close to 50%,
+53:45
+but it's hidden, because they designed it so the variance is big.
+53:51
+But from the casino's point of view, they have enough players to play the game so that the law of large numbers just makes them money.
+54:02
+54:07
+The moral is, don't play blackjack. Play poker.
+54:15
+The reason that the rule of law of large numbers doesn't apply, at least in this sense, to poker--
+54:23
+can anybody explain why? It's because poker, you're playing against other players.
+54:32
+If you have an advantage, if your skill-- if you believe that there is skill in poker-- if your skill is better
+54:38
+than the other player by, let's say, 5% chance, then you have an edge over that player.
+54:47
+So you can win money. The only problem is that because-- poker, you're
+54:53
+not playing against the casino.
+55:00
+Don't play against casino. But they still have to make money.
+55:06
+So what they do instead is they take rake. So for each round that the players play,
+55:12
+they pay some fee to the casino. And how the casino makes money at the poker table
+55:19
+is by accumulating those fees. They're not taking chances there.
+55:25
+But from the player's point of view, if you're better than the other player, and the amount of edge
+55:32
+you have over the other player is larger than the fee that the casino charges to you, then
+55:38
+now you can apply law of large numbers to yourself and win.
+55:45
+And if you take an example as poker, it looks like-- OK, I'm not going to play poker.
+55:54
+But if it's a hedge fund, or if you're doing high-frequency trading, that's the moral behind it.
+56:04
+So that's the belief you should have. You have to believe that you have an edge.
+56:10
+Even if you have a tiny edge, if you can have enough number of trials,
+56:16
+if you can trade enough of times using some strategy that you believe is winning over time, then law of large numbers
+56:26
+will take it from there and will bring you money, profit.
+56:34
+Of course, the problem is, when the variance is big,
+56:41
+your belief starts to fall. At least, that was the case for me when I was playing poker.
+56:48
+Because I believed that I had an edge, but when there is really swing, it
+56:55
+looks like your expectation is negative. And that's when you have to believe in yourself.
+57:01
+Yeah.
+57:07
+That's when your faith in mathematics is being challenged. It really happened.
+57:12
+I hope it doesn't happen to you. Anyway, that's proof law of large numbers.
+57:22
+How do you prove it? The proof is quite easy.
+57:27
+First of all, one observation-- expectation of X is just
+57:32
+expectation of 1 over n times sum of X_i's.
+57:41
+And that, by linearity, just becomes the sum of--
+57:52
+and that's mu. OK. That's good.
+57:59
+And then the variance, what's the variance of X?
+58:04
+That's the expectation of X minus mu
+58:09
+square, which is the expectation sum over all i's, minus mu
+58:20
+square. I'll group them.
+58:26
+That's the expectation of 1 over n sum of X_i minus mu square.
+58:33
+i is from 1 to n.
+58:43
+What did I do wrong? 1 over n is inside the square. So I can take it out and square, n square.
+58:50
+And then you're summing n terms of sigma square. So that is equal to sigma square over n.
+58:57
+59:02
+That means the effect of averaging n terms does not affect your average,
+59:08
+but it affects your variance. It divides your variance by n.
+59:15
+If you take larger and larger n, your variance gets smaller and smaller.
+59:22
+And using that, we can prove this statement. There's only one thing you have to notice--
+59:27
+that the probability that x minus mu is greater than epsilon. When you multiply this by epsilon square.
+59:35
+This will be less than or equal to the variance of x.
+59:41
+The reason this inequality holds is because variance X is defined as the expectation of X minus mu
+59:46
+square. For all the events when you have X minus mu at least epsilon,
+59:52
+your multiplying factor X square will be at least epsilon square. This term will be at least epsilon square
+1:00:00
+when you fall into this event. So your variance has to be at least that.
+1:00:07
+And this is known to be sigma square over n. So probability that x minus mu is greater
+1:00:15
+than epsilon is at most sigma square over n epsilon squared.
+1:00:21
+That means if you take n to go to infinity, that goes to zero. So the probability that you deviate from the mean
+1:00:29
+by more than epsilon goes to 0. You can actually read out a little bit more from the proof.
+1:00:35
+It also tells a little bit about the speed of convergence.
+1:00:41
+So let's say you have a random variable X. Your mean is 50.
+1:00:50
+You epsilon is 0.1. So you want to know the probability
+1:00:55
+that you deviate from your mean by more than 0.1. Let's say you want to be 99% sure.
+1:01:06
+Want to be 99% sure that X minus mu is less than 0.1,
+1:01:14
+or X minus 50 is less than 0.1. In that case, what you can do is-- you want this to be 0.01.
+1:01:23
+It has to be 0.01. So plug in that, plug in your variance, plug in your epsilon.
+1:01:29
+That will give you some bound on n. If you have more than that number of trials, you can be 99% sure that you don't deviate from your mean
+1:01:38
+by more than epsilon. So that does give some estimate, but I should mention that this is a very bad estimate.
+1:01:46
+There are much more powerful estimates that can be done here. That will give the order of magnitude-- I didn't really calculate here, but it looks like it's close to millions.
+1:01:53
+It has to be close to millions. But in practice, if you use a lot more powerful tool
+1:02:00
+of estimating it, it should only be hundreds or at most thousands.
+1:02:05
+1:02:13
+So the tool you'll use there is moment-generating functions, something similar to moment-generating functions. But I will not go into it.
+1:02:20
+Any questions? OK. For those who already saw law of large numbers before,
+1:02:28
+the name suggests there's also something called strong law of large numbers.
+1:02:35
+In that theorem, your conclusion is stronger.
+1:02:41
+So the convergence is stronger than this type of convergence.
+1:02:47
+And also, the condition I gave here is a very strong condition.
+1:02:53
+The same conclusion is true even if you weaken some of the conditions.
+1:02:58
+So for example, the variance does not have to exist. It can be replaced by some other condition, and so on.
+1:03:06
+But here, I just want it to be a simple form so that it's easy to prove. And you at least get the spirit of what's happening.
+1:03:14
+1:03:20
+Now let's move on to the next topic-- central limit theorem.
+1:03:26
+1:04:11
+So weak law of large numbers says
+1:04:16
+that if you have IID random variables, 1 over n times
+1:04:22
+sum over X_i's converges to mu, the mean, in some weak sense.
+1:04:27
+And the reason it happened was because this had
+1:04:33
+mean mu and variance sigma square over n.
+1:04:39
+We've exploited the fact that variance vanishes to get this.
+1:04:49
+So the question is, what happens if you replace 1 over n by 1 over square root n?
+1:04:54
+What happens if-- for the random variable
+1:05:04
+1 over square root n times X_i?
+1:05:14
+The reason I'm making this choice of 1 over square root n is because if you make this choice,
+1:05:19
+now the average has mean mu and variance sigma square just
+1:05:26
+as in X_i's. So this is the same as X_i.
+1:05:34
+1:05:40
+Then what should it look like? If the random variable is the same mean and same variance
+1:05:46
+as your original random variable, the distribution
+1:05:52
+of this, should it look like the distribution of X_i?
+1:06:00
+If mean is mu. Thank you very much. The case when mean is 0.
+1:06:05
+1:06:13
+OK. For this special case, will it look like X_i, or will it not look like X_i?
+1:06:20
+If it doesn't look like X_i, can we say anything interesting about the distribution of this?
+1:06:27
+And central limit theorem answers this question. When I first saw it, I thought it was really interesting.
+1:06:34
+Because normal distribution comes up here.
+1:06:40
+And that's probably one of the reasons that normal distribution is so universal. Because when you take many independent events
+1:06:50
+and take the average in this sense, their distribution converges to a normal distribution.
+1:06:56
+Yes? AUDIENCE: How did you get mean equals [INAUDIBLE]? PROFESSOR: I didn't get it. I assumed it if X-- yeah.
+1:07:02
+1:07:29
+So theorem: let X_1, X_2, to X_n be
+1:07:41
+IID random variables with mean, this time, mu and variance
+1:07:51
+sigma squared. And let X-- or Y_n.
+1:07:59
+Y_n be square root n times 1 over n, of X_i minus mu.
+1:08:10
+1:08:24
+Then the distribution of Y_n converges
+1:08:41
+to that of normal distribution with mean 0 and variance sigma.
+1:08:50
+What this means-- I'll write it down again--
+1:08:57
+it means for all x, probability that Y_n is less than or equal to x converges
+1:09:03
+the probability that normal distribution is less than or equal to x.
+1:09:08
+1:09:14
+What's really interesting here is, no matter what distribution you had in the beginning,
+1:09:20
+if we average it out in this sense, then you converge to the normal distribution.
+1:09:25
+1:09:35
+Any questions about this statement, or any corrections?
+1:09:40
+Any mistakes that I made? OK.
+1:09:46
+Here's the proof. I will prove it when the moment-generating function
+1:09:54
+exists. So assume that the moment-generating functions exists. So proof assuming m of X_i exists.
+1:10:04
+1:10:16
+So remember that theorem. Try to recall that theorem where if you
+1:10:22
+know that the moment-generating function of Y_n's converges to the moment-generating function of the normal, then
+1:10:29
+we have the statement. The distribution converges. So that's the statement we're going to use.
+1:10:34
+That means our goal is to prove that the moment-generating function of these Y_n's converge to the moment-generating
+1:10:43
+function of the normal for all t, pointwise convergence.
+1:10:51
+1:10:56
+And this part is well known. I'll just write it down.
+1:11:01
+It's known to be e to the t square sigma square over 2.
+1:11:08
+That just can be computed.
+1:11:18
+So we want to somehow show that the moment-generating function of this Y_n converges to that.
+1:11:25
+The moment-generating function of Y_n is equal to expectation of e to t Y_n.
+1:11:36
+1:11:42
+e to the t, 1 over square root n, sum of X_i minus mu.
+1:11:50
+And then because each of the X_i's are independent,
+1:11:57
+this sum will split into products. Product of-- let me split it better.
+1:12:14
+Meets the expectation-- we didn't use independent yet.
+1:12:19
+Sum becomes products of e to the t, 1 over square root n, X_i
+1:12:26
+minus mu.
+1:12:34
+And then because they're independent, this product can go out.
+1:12:40
+Equal to the product from 1 to n expectation e to the t times
+1:12:49
+square root n--
+1:12:56
+OK. Now they're identically distributed, so you just have to take the n-th power of that. That's equal to the expectation of e
+1:13:03
+to the t over square root n, X_i minus mu, to the n-th power.
+1:13:11
+Now we'll do some estimation. So use the Taylor expansion of this.
+1:13:19
+What we get is expectation of 1 plus that, t over square root n
+1:13:30
+xi minus mu, plus 1 over 2 factorial, that squared,
+1:13:36
+t over square root n, xi minus mu squared,
+1:13:43
+plus 1 over 3 factorial, that cubed plus so on.
+1:13:55
+Then that's equal to 1-- Ah, to the n-th power.
+1:14:02
+The linearity of expectation, 1 comes out. Second term is 0, because X_i have mean mu.
+1:14:12
+So that disappears. This term-- we have 1 over 2, t squared over n, X_i minus mu
+1:14:26
+square. X_i minus mu square, when you take expectation, that will be sigma square.
+1:14:35
+And then the terms after that, because we're only interested in proving that for fixed t,
+1:14:42
+this converges-- so we're only proving pointwise convergence. You may consider t as a fixed number.
+1:14:49
+So as n goes to infinity-- if n is really, really large, all these terms will be smaller order of magnitude
+1:14:56
+than n, 1 over n. Something like that happens.
+1:15:02
+1:15:08
+And that's happening because we're fixed. For fixed t, we have to prove it.
+1:15:14
+So if we're saying something uniformly about t, that's no longer true. Now we go back to the exponential form.
+1:15:21
+So this is pretty much just e to that term,
+1:15:26
+1 over 2 t square sigma square over n plus little o of 1 over n to the n-th power.
+1:15:37
+Now, that n can be multiplied to cancel out.
+1:15:42
+And we see that it's e to t square sigma square over 2 plus the little o of 1.
+1:15:48
+So if you take n to go to infinity, that term disappears, and we prove
+1:15:55
+that it converges to that. And then by the theorem that I stated before, if we have this,
+1:16:04
+we know that the distribution converges.
+1:16:09
+Any questions? OK. I'll make one final remark.
+1:16:15
+1:16:29
+So suppose there is a random variable x whose mean we do not
+1:16:42
+know, whose mean is unknown.
+1:16:53
+Our goal is to estimate the mean.
+1:16:58
+And one way to do that is by taking many independent trials of this random variable.
+1:17:05
+So take independent trials X_1, X_2, to X_n, and use 1 over--
+1:17:21
+X_1 plus... X_n as our estimator.
+1:17:32
+Then the law of large numbers says that this will be very close to the mean. So if you take n to be large enough,
+1:17:39
+you will more than likely have some value which is very close to the mean. And then the central limit theorem
+1:17:47
+tells you how the distribution of this variable
+1:17:53
+is around the mean. So we don't know what the real value is, but we know that the distribution
+1:18:00
+of the value that we will obtain here is something like that around the mean.
+1:18:09
+And because normal distribution have very small tails,
+1:18:17
+the tail distributions is really small, we will get really close really fast.
+1:18:23
+And this is known as the maximum likelihood estimator, is it?
+1:18:34
+OK, yeah. For some distributions, it's better
+1:18:39
+to take some other estimator. Which is quite interesting.
+1:18:47
+At least my intuition is to take this for every single case, looks like that will be a good choice.
+1:18:52
+But it turns out that that's not the case; for some distributions there's a better choice than this.
+1:18:59
+And Peter will later talk about it.
+1:19:06
+If you're interested in, come back. And that's it for today, any questions?
+1:19:13
+So next Tuesday we will have an outside speaker, and it will be on bonds.
+1:19:21
+and I don't think anything from linear algebra will be here.

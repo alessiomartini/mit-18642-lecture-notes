@@ -1,0 +1,128 @@
+{
+  "audience": [],
+  "course_description": "This is an updated version of {{% resource_link \"27e63b7c-484a-4e85-bf49-460d6c108ea2\" \"*18.S096 Topics in Mathematics with Applications in Finance*\" %}} from Fall 2013. Please visit the {{% resource_link \"27e63b7c-484a-4e85-bf49-460d6c108ea2\" \"*18.S096* site\" %}} for more materials and lecture recordings. {{% resource_link \"2b860f0c-9c52-44f8-af14-85bc49312fb4\" \"An investment game\" %}} is also available as an additional learning resource.\n\nThe purpose of the class is to expose undergraduate and graduate students to the mathematical concepts and techniques used in the financial industry. The course will consist of a set of mathematics lectures on topics in linear algebra, probability, statistics, stochastic processes, and numerical methods. Mathematics lectures will be mixed with lectures illustrating the corresponding application in the financial industry. MIT mathematicians will teach the mathematics part while industry professionals will give the lectures on applications in finance.",
+  "course_description_html": "<p>This is an updated version of <a     href=\"https://ocw.mit.edu/courses/18-s096-topics-in-mathematics-with-applications-in-finance-fall-2013/\"  ><em>18.S096 Topics in Mathematics with Applications in Finance</em></a> from Fall 2013. Please visit the <a     href=\"https://ocw.mit.edu/courses/18-s096-topics-in-mathematics-with-applications-in-finance-fall-2013/\"  ><em>18.S096</em> site</a> for more materials and lecture recordings. <a   class=\"external-link \"   target=\"_blank\"   href=\"https://www.hedgehogcamp.ai\"  aria-label=\"An investment game (opens in a new tab)\"  >An investment game</a> is also available as an additional learning resource.</p>\n<p>The purpose of the class is to expose undergraduate and graduate students to the mathematical concepts and techniques used in the financial industry. The course will consist of a set of mathematics lectures on topics in linear algebra, probability, statistics, stochastic processes, and numerical methods. Mathematics lectures will be mixed with lectures illustrating the corresponding application in the financial industry. MIT mathematicians will teach the mathematics part while industry professionals will give the lectures on applications in finance.</p>\n",
+  "course_image": {
+    "content": "4ae73d5f-a236-4cf1-b7f2-5511e0ceecfd",
+    "website": "topics-in-mathematics-with-applications-in-finance"
+  },
+  "course_image_metadata": {
+    "body": "",
+    "content_type": "resource",
+    "draft": false,
+    "file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/mit18_642_f24.jpg",
+    "file_size": 334878,
+    "file_type": "image/jpeg",
+    "gdrive_url": "",
+    "image_metadata": {
+      "caption": "A random walk (martingale) with IID Bernoulli steps (+1, −1) over 10,000 steps. (Image courtesy of Dr. Peter Kempthorne.)",
+      "credit": "",
+      "image-alt": "Multiple colored lines represent different random walk trajectories."
+    },
+    "iscjklanguage": false,
+    "learning_resource_types": [],
+    "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "resourcetype": "Image",
+    "title": "mit18_642_f24.jpg",
+    "uid": "4ae73d5f-a236-4cf1-b7f2-5511e0ceecfd",
+    "video_files": {
+      "archive_url": "",
+      "video_captions_file": "",
+      "video_captions_resource": {
+        "content": "",
+        "website": "topics-in-mathematics-with-applications-in-finance"
+      },
+      "video_thumbnail_file": "",
+      "video_transcript_file": "",
+      "video_transcript_resource": {
+        "content": "",
+        "website": "topics-in-mathematics-with-applications-in-finance"
+      }
+    },
+    "video_metadata": {
+      "source": "",
+      "video_speakers": "",
+      "video_tags": "",
+      "youtube_description": "",
+      "youtube_id": ""
+    }
+  },
+  "course_title": "Topics in Mathematics with Applications in Finance",
+  "department_numbers": [
+    "18"
+  ],
+  "extra_course_numbers": "",
+  "hide_download": false,
+  "image_src": "./static_resources/mit18_642_f24.jpg",
+  "instructors": [
+    {
+      "first_name": "Peter",
+      "last_name": "Kempthorne",
+      "middle_initial": "",
+      "salutation": "Dr.",
+      "title": "Dr. Peter Kempthorne",
+      "uid": "da32551f-181b-fd93-6628-39dbe0972ea8",
+      "url": "https://ocw.mit.edu/search/?q=Dr.+Peter+Kempthorne"
+    },
+    {
+      "first_name": "Vasily",
+      "last_name": "Strela",
+      "middle_initial": "",
+      "salutation": "Dr.",
+      "title": "Dr. Vasily Strela",
+      "uid": "faa9703b-4a3b-0de3-2f4b-ccbe661f2324",
+      "url": "https://ocw.mit.edu/search/?q=Dr.+Vasily+Strela"
+    },
+    {
+      "first_name": "Jake",
+      "last_name": "Xia",
+      "middle_initial": "",
+      "salutation": "Dr.",
+      "title": "Dr. Jake Xia",
+      "uid": "9154ffa3-87de-a1ce-586c-5a7d40f769c3",
+      "url": "https://ocw.mit.edu/search/?q=Dr.+Jake+Xia"
+    }
+  ],
+  "learning_resource_types": [
+    "Lecture Notes",
+    "Lecture Videos",
+    "Problem Sets",
+    "Activity Assignments",
+    "Projects",
+    "Readings"
+  ],
+  "legacy_uid": "",
+  "level": [
+    "Undergraduate"
+  ],
+  "mit_learn_topics": [
+    [
+      "Business & Management",
+      "Finance & Accounting"
+    ],
+    [
+      "Science & Math",
+      "Mathematics"
+    ]
+  ],
+  "primary_course_number": "18.642",
+  "site_short_id": "18.642-fall-2024",
+  "site_uid": "ec553bfe-7a59-46a5-ad49-bcaa3272645f",
+  "site_url_path": "courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024",
+  "term": "Fall",
+  "topics": [
+    [
+      "Business",
+      "Finance"
+    ],
+    [
+      "Mathematics",
+      "Applied Mathematics"
+    ],
+    [
+      "Mathematics",
+      "Probability and Statistics"
+    ]
+  ],
+  "year": "2024"
+}

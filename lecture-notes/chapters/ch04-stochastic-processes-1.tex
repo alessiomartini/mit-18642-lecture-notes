@@ -1,0 +1,1058 @@
+% !TEX root = ../main.tex
+\chapter{Stochastic Processes I: Random Walks, Markov Chains, Martingales}\label{ch:sp1}
+
+\begin{sources}
+\small
+\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+\textbf{Lecture} & \textbf{Speaker} & \textbf{Content}\\
+\midrule
+2024 L5 (from 1:12:25) & P.~Kempthorne & Definition of a martingale; the simple random walk and simulations of its paths; the martingale $S_n^2-n\sigma^2$.\\
+2024 L6 (first 67 min) & P.~Kempthorne & Product and exponential martingales; filtrations, non-anticipating strategies and martingale transforms; stopping times; gambler's ruin (fair and biased) by optional stopping; Markov processes and chains, $n$-step transitions; credit-rating migration; an up/down Markov chain for AAPL.\\
+2013 L5 & C.~Lee & Processes as distributions over paths; simple random walk, its properties, gambler's ruin by recursion; Markov chains, transition matrix, stationary distribution via Perron--Frobenius; martingales, stopping times, optional stopping theorem.\\
+\bottomrule
+\end{tabularx}
+
+\smallskip
+\textbf{Files.} Slides \file{mit18_642_f24_lec05.pdf} (\emph{Stochastic Processes I}, 44 slides in 88 pages of
+incremental builds); 2013 lecture notes \file{MIT18_S096F13_lecnote5.pdf}. The R script
+\file{MC_Example1.r} used for the AAPL example (slide 44) was distributed on Canvas only and is not among
+the OCW files.
+\textbf{Problem sets.} 2024 PS2 Problem~1, PS3 Problem~3; 2013 PS2 Problems A-3, A-4, B-5.
+\textbf{Elsewhere.} The first 72 minutes of 2024 L5 (PCA, $\chi^2$/$t$/$F$ distributions, LLN, CLT,
+a one-period CAPM) are in \cref{ch:probability}; the second half of 2024 L6 (regression) is in
+\cref{ch:regression}.
+\end{sources}
+
+\section*{Motivation}
+A price history is one realisation of a \emph{stochastic process}. Standing at time $t$ we know the
+past path and want to say something about the future: whether it depends on the past (can prices be
+predicted?), how the process behaves in the long run, and how likely extreme ``boundary'' events are
+\ts{13}{5}{8:25}. This chapter introduces three families of discrete-time processes that answer these
+questions in increasing generality and that return, in continuous time, for the rest of the course:
+\begin{itemize}
+  \item the \emph{random walk}, the simplest model of a price and the discrete skeleton of Brownian
+        motion (\cref{ch:sp2});
+  \item \emph{Markov chains}, where the future depends on the past only through the present state
+        (credit ratings, market regimes); they extend the stochastic matrices of \cref{sec:markov};
+  \item \emph{martingales}, the mathematical model of a fair game. Discounted prices are martingales
+        under the risk-neutral measure, gains from trading are martingale transforms (discrete
+        stochastic integrals, \cref{ch:stochcalc}), and the optional stopping theorem turns
+        hard probability questions into one-line computations.
+\end{itemize}
+For a physicist: the random walk is diffusion, a Markov chain is a master equation relaxing to
+equilibrium, and a martingale is a quantity that is conserved \emph{on average}; optional stopping is the
+use of such a conservation law to solve a boundary-value problem.
+
+% ------------------------------------------------------------------
+\section{Stochastic processes}\label{ch04:sec-processes}
+
+\begin{definition}[Stochastic process]
+A \emph{stochastic process} is a family $\{X_t,\ t\in\mathcal T\}$ of random variables on a common
+probability space $(\Omega,\mathcal F,\Prob)$, indexed by \emph{time}: $\mathcal T=\{0,1,2,\dots\}$
+(discrete time) or $\mathcal T=[0,\infty)$ (continuous time) \ts{13}{5}{1:03}. Equivalently, each outcome
+$\omega\in\Omega$ selects a whole \emph{path} $t\mapsto X_t(\omega)$, so a process is a probability
+distribution on a space of paths \ts{13}{5}{3:09}.
+\end{definition}
+The first reading is the intuitive one (a random value at each time); the second is the one needed to do
+mathematics: at time $t$ we observe the initial segment of a path drawn once and for all, and we reason
+about the unobserved rest of it.
+
+\begin{example}[Same marginals, different processes {\ts{13}{5}{4:10}}]\label{ch04:ex-threeproc}
+For $t\ge0$ consider
+\begin{enumerate}[(a)]
+  \item $X_t=t$ with probability~1;
+  \item $X_t=\varepsilon t$ for all $t$, with a
+      \emph{single} sign $\varepsilon=\pm1$ drawn with probability $1/2$ each;
+  \item $X_t=\varepsilon_tt$ with an
+      independent sign $\varepsilon_t$ for every $t$.
+\end{enumerate}
+In (b) and (c) every $X_t$ has the same distribution
+($\pm t$ with probability $1/2$), but in (b) one observation reveals the entire future, while in (c) the
+past says nothing about the future beyond $X_t\in\{t,-t\}$ \ts{13}{5}{7:20}. A process is \emph{not}
+determined by its one-time marginals: what matters is the joint law of the path.
+\end{example}
+
+% ------------------------------------------------------------------
+\section{The random walk}\label{ch04:sec-rw}
+
+\begin{definition}[Random walk]\label{ch04:def-rw}
+Let $X_1,X_2,\dots$ be i.i.d.\ with mean $\mu$ and variance $\sigma^2$, and let $S_0=0$,
+$S_n=X_1+\dots+X_n$. $\{S_n\}$ is a \emph{random walk} with steps $X_i$. When
+$\Prob(X_i=+1)=\Prob(X_i=-1)=\tfrac12$ it is the (one-dimensional) \emph{simple random walk} (SRW)
+\ts{13}{5}{12:35}, \ts{24}{5}{1:14:36}.
+\end{definition}
+
+The path can be drawn as the graph of $n\mapsto S_n$, or as the trajectory of a walker taking unit steps
+left or right on a line \ts{13}{5}{13:40}. The 2013 course and the 2024 problem sets also use the
+\emph{biased} walk ($\Prob(X=+1)=p\ne\tfrac12$) and walks with a zero step (2024 PS2 Problem~1,
+\cref{ch04:ex-ps2-1}).
+
+\begin{proposition}[Basic properties]\label{ch04:prop-rw}
+For a random walk:
+\begin{enumerate}[(i)]
+  \item $\E[S_n]=n\mu$ and $\Var(S_n)=n\sigma^2$; for the SRW $\E[S_n]=0$, $\Var(S_n)=n$ \ts{24}{5}{1:15:36};
+  \item (independent increments) for $0\le k_0\le k_1\le\dots\le k_r$ the increments
+        $S_{k_1}-S_{k_0},\dots,S_{k_r}-S_{k_{r-1}}$ are mutually independent \ts{13}{5}{20:56};
+  \item (stationary increments) $S_{k+h}-S_k\eqd S_h$ for all $k,h\ge0$ \ts{13}{5}{22:03};
+  \item (CLT) $(S_n-n\mu)/(\sigma\sqrt n)\to N(0,1)$ in distribution.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(i) Linearity of expectation, and additivity of variance for independent summands.
+
+(ii) The increment over $(k_{i-1},k_i]$ is a function of the block $X_{k_{i-1}+1},\dots,X_{k_i}$;
+functions of disjoint blocks of independent variables are independent.
+
+(iii) $S_{k+h}-S_k=X_{k+1}+\dots+X_{k+h}$ is a sum of $h$ i.i.d.\ copies of $X$, like $S_h$.
+
+(iv) Central limit theorem, \cref{ch:probability}.
+\end{proof}
+Properties (ii) and (iii) are exactly those that define Brownian motion in continuous time
+\ts{13}{5}{22:03}: the random walk is ``the fundamental stochastic process'', and much of
+\cref{ch:sp2} is its continuous limit.
+
+\paragraph{The $\sqrt n$ scale.} By (iv) the SRW at time $n$ is typically at distance of order
+$\sqrt n$ from the origin, not $n$: although $|S_n|$ could be as large as $n$, the probability that
+$|S_n|\le 2\sqrt n$ tends to $0.954$ \ts{13}{5}{17:51}. Simulated paths (slides 4--8) become more
+jagged as $n$ grows and stay mostly inside the envelopes $\pm\sqrt n$, $\pm2\sqrt n$, $\pm3\sqrt n$
+\ts{24}{5}{1:16:43}; see \cref{ch04:fig-rw}. Nevertheless the envelopes are crossed again and again: with
+probability one the SRW returns to $0$ infinitely often, and for every $c>0$ it exceeds $c\sqrt n$
+infinitely often \ts{13}{5}{18:52} (a consequence of the law of the iterated logarithm,
+$\limsup_n S_n/\sqrt{2n\ln\ln n}=1$ a.s., not proved in the course).
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[x=0.058cm,y=0.075cm,>=Stealth]
+  \draw[black!40] (0,-40) rectangle (200,40);
+  \draw[black!25] (0,0) -- (200,0);
+  \foreach \yy in {-40,-20,0,20,40} \draw[black!40] (0,\yy) -- (-2,\yy) node[left,font=\scriptsize,black]{$\yy$};
+  \foreach \xx in {0,50,100,150,200} \draw[black!40] (\xx,-40) -- (\xx,-42) node[below,font=\scriptsize,black]{$\xx$};
+  \node[below,font=\small] at (100,-47) {step $n$};
+  \node[rotate=90,font=\small] at (-17,0) {$S_n$};
+  \draw[thmcol,thick,domain=0:200,samples=100] plot (\x,{sqrt(\x)});
+  \draw[thmcol,thick,domain=0:200,samples=100] plot (\x,{-sqrt(\x)});
+  \draw[thmcol,thick,dashed,domain=0:200,samples=100] plot (\x,{2*sqrt(\x)});
+  \draw[thmcol,thick,dashed,domain=0:200,samples=100] plot (\x,{-2*sqrt(\x)});
+  \pgfmathsetseed{3}
+  \foreach \n [evaluate=\n as \s using {\p+2*round(rnd)-1}, remember=\s as \p (initially 0)] in {1,...,200}
+    {\draw[defcol] (\n-1,\p) -- (\n,\s);}
+  \pgfmathsetseed{17}
+  \foreach \n [evaluate=\n as \s using {\p+2*round(rnd)-1}, remember=\s as \p (initially 0)] in {1,...,200}
+    {\draw[intcol] (\n-1,\p) -- (\n,\s);}
+  \pgfmathsetseed{29}
+  \foreach \n [evaluate=\n as \s using {\p+2*round(rnd)-1}, remember=\s as \p (initially 0)] in {1,...,200}
+    {\draw[fincol] (\n-1,\p) -- (\n,\s);}
+  \pgfmathsetseed{41}
+  \foreach \n [evaluate=\n as \s using {\p+2*round(rnd)-1}, remember=\s as \p (initially 0)] in {1,...,200}
+    {\draw[cscol] (\n-1,\p) -- (\n,\s);}
+  \node[thmcol,font=\scriptsize,anchor=west] at (201,{sqrt(200)}) {$\sqrt n$};
+  \node[thmcol,font=\scriptsize,anchor=west] at (201,{2*sqrt(200)}) {$2\sqrt n$};
+  \node[thmcol,font=\scriptsize,anchor=west] at (201,{-sqrt(200)}) {$-\sqrt n$};
+  \node[thmcol,font=\scriptsize,anchor=west] at (201,{-2*sqrt(200)}) {$-2\sqrt n$};
+\end{tikzpicture}
+\caption{Four simulated paths of the simple random walk (200 steps) with the one- and two-standard-deviation
+envelopes $\pm\sqrt n$, $\pm2\sqrt n$; slides 4--8 of \file{lec05} show the same picture for up to 10\,000
+steps \ts{24}{5}{1:16:43}.}\label{ch04:fig-rw}
+\end{figure}
+
+\begin{coursenote}[Slips in the 2013 lecture]
+At \ts{13}{5}{16:47} the value $S_t$ is said to be approximately normal ``with mean 0 and variance
+$\sqrt t$''; the variance is $t$ and the \emph{standard deviation} is $\sqrt t$, which is the scale meant
+in the rest of the discussion. (The $1/t$ proposed by a student is the variance of the average $S_t/t$.)
+\end{coursenote}
+
+\begin{intuition}[Diffusion]
+$S_n$ is the position of a particle receiving independent unit kicks: $\langle S_n^2\rangle=n$ is
+Einstein's $\langle x^2\rangle=2Dt$ with $D=\tfrac12$ (unit step, unit time). Rescaling space by
+$\sqrt n$ and time by $n$, $t\mapsto S_{\lfloor nt\rfloor}/\sqrt n$ converges to Brownian motion
+(Donsker's theorem, \cref{ch:sp2}); the jagged look of the long simulated paths is the nowhere-differentiability
+of Brownian paths in the making.
+\end{intuition}
+
+\begin{finance}[Random walks as price models]
+L.~Bachelier (1900), cited in the 2013 notes, modelled prices on the Paris exchange as a random walk;
+the 2013 notes call the SRW ``a (rather inaccurate) model of stock price''. The course refines it in
+two directions that appear in the problem sets: a drift, calibrated to an expected daily price change
+(2024 PS2 Problem~1, where an intraday price moves in 78 five-minute steps), and a random walk for
+the \emph{logarithm} of the price, $\log P_t=\log P_{t-1}+X_t$ (2024 PS3 Problem~3), which keeps prices
+positive and makes returns, not price changes, i.i.d. Time-varying volatility comes later
+(\cref{ch:volatility}).
+\end{finance}
+
+% ------------------------------------------------------------------
+\section{Markov chains}\label{ch04:sec-mc}
+
+\subsection{The Markov property}
+\begin{definition}[Markov process, Markov chain]\label{ch04:def-markov}
+A process $\{X_t\}$ is a \emph{Markov process} if for all times $u<s<t$, given the present value $X_s$,
+the future value $X_t$ is independent of the past values $X_u$ \ts{24}{6}{36:30}:
+\[
+  \bigl[X_t\mid X_r,\ r\le s\bigr]\ \eqd\ \bigl[X_t\mid X_s\bigr].
+\]
+A discrete-time Markov process with a finite or countable \emph{state space} $S$ is a \emph{Markov chain}:
+\begin{equation}\label{ch04:eq-markov}
+  \Prob(X_{n+1}=j\mid X_0=i_0,\dots,X_{n-1}=i_{n-1},X_n=i)=\Prob(X_{n+1}=j\mid X_n=i)
+\end{equation}
+for all states and all $n$ \ts{24}{6}{39:38}.
+\end{definition}
+``The effect of the past on the future is summarised by the current state'' \ts{13}{5}{33:32}: two paths
+arriving at the same state at time $s$ have the same future distribution, however they got there
+\ts{24}{6}{38:30}.
+
+\begin{example}[Random walks are Markov]
+If $S_{n+1}=S_n+X_{n+1}$ with $X_{n+1}$ independent of $(S_0,\dots,S_n)$, then
+$\Prob(S_{n+1}\in\cdot\mid S_0,\dots,S_n)$ is the law of $S_n+X$, a function of $S_n$ only. For the SRW,
+$\Prob(S_{n+1}=s\mid S_0,\dots,S_n)=\tfrac12$ if $s=S_n\pm1$ and $0$ otherwise \ts{13}{5}{37:45}. The
+state space $\mathbb Z$ is infinite, so there is no finite transition matrix \ts{13}{5}{43:12}.
+\end{example}
+
+\subsection{Transition matrices}
+The one-step transition probabilities $\Prob(X_{n+1}=j\mid X_n=i)$ together with the initial
+distribution $p_i=\Prob(X_0=i)$ specify the law of the whole process \ts{24}{6}{41:45}. The chain has
+\emph{stationary} (time-homogeneous) transition probabilities if these do not depend on $n$
+\ts{24}{6}{42:52}; then they form the \emph{transition matrix}
+\[
+  P=(P_{ij})_{i,j\in S},\qquad P_{ij}=\Prob(X_{n+1}=j\mid X_n=i),\qquad P_{ij}\ge0,\quad \sum_{j}P_{ij}=1,
+\]
+a \emph{row}-stochastic matrix (row $i$ = where you are, column $j$ = where you go) \ts{24}{6}{43:58}.
+All chains below are time-homogeneous.
+
+\begin{coursenote}[Row versus column conventions]
+The 2024 slides use the row-stochastic $P$ above, acting on
+\emph{row} vectors of probabilities from the right. The 2013 notes (and
+\cref{sec:markov}) use the column-stochastic $A=P\T$ acting on column
+vectors: $\bm\pi(t+1)=A\bm\pi(t)$ is the transpose of
+$\bm p^{(t+1)}=\bm p^{(t)}P$. This chapter uses $P$. In the 2013
+lecture the machine example below was first written in the row form
+and then ``flipped'' \ts{13}{5}{51:41}.
+\end{coursenote}
+
+\begin{proposition}[Law of the path]\label{ch04:prop-path}
+$\Prob(X_0=i_0,X_1=i_1,\dots,X_n=i_n)=p_{i_0}\,P_{i_0i_1}P_{i_1i_2}\cdots P_{i_{n-1}i_n}$.
+\end{proposition}
+\begin{proof}
+Write $A=\{X_0=i_0,\dots,X_{n-1}=i_{n-1}\}$ and $B=\{X_n=i_n\}$. Then $\Prob(A\cap B)=\Prob(A)\Prob(B\mid A)$
+(joint = marginal $\times$ conditional), $\Prob(B\mid A)=\Prob(X_n=i_n\mid X_{n-1}=i_{n-1})$ by the Markov
+property, and this equals $P_{i_{n-1}i_n}$ by stationarity. Induction on $n$ \ts{24}{6}{45:04}, \ts{24}{6}{48:09}.
+\end{proof}
+
+\begin{theorem}[$n$-step transitions, Chapman--Kolmogorov]\label{ch04:thm-nstep}
+Let $P^{(n)}_{ij}=\Prob(X_{m+n}=j\mid X_m=i)$ (independent of $m$). Then
+\[
+  P^{(n)}_{ij}=\sum_{k\in S}P_{ik}\,P^{(n-1)}_{kj},\quad P^{(0)}=I,\qquad\text{hence}\qquad P^{(n)}=P^n,
+  \quad P^{(m+n)}=P^{(m)}P^{(n)} .
+\]
+The distribution of $X_n$ is the row vector $\bm p^{(n)}=\bm p\,P^n$, i.e.\
+$\Prob(X_n=k)=\sum_jp_jP^{(n)}_{jk}$ \ts{24}{6}{52:29}.
+\end{theorem}
+\begin{proof}[Proof (first-step analysis)]
+Condition on the first step \ts{24}{6}{49:16}:
+\begin{align*}
+P^{(n)}_{ij}&=\sum_k\Prob(X_1=k\mid X_0=i)\,\Prob(X_n=j\mid X_1=k,X_0=i)
+ =\sum_kP_{ik}\,\Prob(X_n=j\mid X_1=k)\\
+ &=\sum_kP_{ik}\,\Prob(X_{n-1}=j\mid X_0=k)=\sum_kP_{ik}P^{(n-1)}_{kj},
+\end{align*}
+using the Markov property and then stationarity. In matrix form
+$P^{(n)}=PP^{(n-1)}$ \ts{24}{6}{51:21}; induction gives $P^n$.
+\end{proof}
+The 2013 notes decompose on the \emph{last} step instead, $P^{(n)}_{ij}=\sum_kP^{(n-1)}_{ik}P_{kj}$, and
+the lecture reads the two-step matrix as a matrix product (``sum over all intermediate states'')
+\ts{13}{5}{42:08}. First-step analysis is the more useful habit: it is how hitting probabilities and
+expected hitting times are computed (\cref{ch04:sec-ruin}).
+
+\begin{example}[A machine that breaks {\ts{13}{5}{44:15}}]\label{ch04:ex-machine}
+A machine is working (W) or broken (B) each day. If working it breaks the next day with probability
+$0.01$; if broken it is repaired by the next day with probability $0.8$:
+\[
+  P=\begin{pmatrix}0.99&0.01\\0.8&0.2\end{pmatrix},\qquad
+  P^2=\begin{pmatrix}0.9881&0.0119\\0.952&0.048\end{pmatrix}.
+\]
+What is the state distribution after ten years, $\bm e_W P^{3650}$ \ts{13}{5}{46:26}? The lecture
+``cheats'': after so long the distributions on day 3650 and 3651 should coincide, so the answer $\bm\pi$ should
+satisfy $\bm\pi=\bm\pi P$ \ts{13}{5}{47:27}. This is the two-state chain of \cref{ex:twostate} with
+$p=0.01$, $q=0.8$: $\bm\pi=(0.8,\,0.01)/0.81=(0.98765,\,0.01235)$ and the second eigenvalue is
+$1-p-q=0.19$, so $P^n$ converges to the matrix with both rows equal to $\bm\pi$ like $0.19^n$ and
+$P^{3650}$ equals it to machine precision. In the long run the machine is broken on $1.23\%$ of the days.
+\end{example}
+
+\subsection{Stationary distributions and convergence}
+\begin{definition}[Stationary distribution]
+A probability (row) vector $\bm\pi$ on $S$ is \emph{stationary} if $\bm\pi P=\bm\pi$, i.e.\
+$\pi_j=\sum_k\pi_kP_{kj}$ for all $j$ \ts{13}{5}{53:49}. If $X_0\sim\bm\pi$ then $X_n\sim\bm\pi$ for every
+$n$ \ts{13}{5}{54:52}. Equivalently, $\bm\pi\T$ is an eigenvector of eigenvalue $1$ of the column-stochastic
+$A=P\T$.
+\end{definition}
+
+\begin{theorem}[Convergence to equilibrium]\label{ch04:thm-conv}
+Let $S$ be finite with $m$ states and suppose some power $P^k$ has all entries positive (in particular, if
+all $P_{ij}>0$). Then there is a unique stationary distribution $\bm\pi$, all $\pi_j>0$, and for every
+initial distribution
+\[
+  \bigl\|\bm p\,P^n-\bm\pi\bigr\|_1\le 2\,(1-m\delta)^{\lfloor n/k\rfloor},\qquad
+  \delta=\min_{i,j}(P^k)_{ij}>0 ;
+\]
+in particular $P^{(n)}_{ij}\to\pi_j$ for all $i,j$: the chain forgets its initial state geometrically fast.
+\end{theorem}
+
+\paragraph{The course's argument} (2013 notes, Theorem~3.3, for $k=1$ \ts{13}{5}{49:36}).
+$A=P\T$ is column-stochastic with positive entries. By \cref{prop:stochastic}
+its eigenvalues satisfy $|\lambda|\le1$ and $1$ is one of them; by
+Perron--Frobenius (\cref{thm:pf}) the dominant eigenvalue is simple, has a
+positive eigenvector, and all other eigenvalues have $|\lambda|<1$. The positive
+eigenvector, normalised, is $\bm\pi$, and the other modes of $A^n\bm p\T$
+decay (as in the state equations of \cref{sec:eigen}), so
+$A^n\bm p\T\to\bm\pi\T$ \ts{13}{5}{52:41}.
+
+\begin{proof}[A self-contained proof (not from the course)]
+For two probability vectors $\bm\mu,\bm\nu$ let $\bm d=\bm\mu-\bm\nu$, so
+$\sum_id_i=0$. Then, writing $Q=P^k$,
+\begin{align*}
+  (\bm dQ)_j&=\sum_id_iQ_{ij}=\sum_id_i\,(Q_{ij}-\delta)\\
+  &\quad\Rightarrow\quad
+  \|\bm dQ\|_1\le\sum_i|d_i|\sum_j(Q_{ij}-\delta)=(1-m\delta)\,\|\bm d\|_1,
+\end{align*}
+because $Q_{ij}-\delta\ge0$ and each row of $Q$ sums to $1$; similarly
+$\|\bm dP\|_1\le\|\bm d\|_1$. Hence $\bm\mu\mapsto\bm\mu Q$ is a contraction
+of the (complete) simplex in the $\ell^1$ distance, and by Banach's
+fixed-point theorem has a unique fixed point $\bm\pi$. Since
+$(\bm\pi P)Q=(\bm\pi Q)P=\bm\pi P$, $\bm\pi P$ is also a fixed point of
+$Q$, so $\bm\pi P=\bm\pi$; any stationary distribution of $P$ is fixed
+by $Q$, hence equals $\bm\pi$. Finally
+\begin{align*}
+  \|\bm pP^n-\bm\pi\|_1&=\|(\bm p-\bm\pi)P^n\|_1\\
+  &\le(1-m\delta)^{\lfloor n/k\rfloor}\|\bm p-\bm\pi\|_1,
+\end{align*}
+with $\|\bm p-\bm\pi\|_1\le2$, and $\pi_j=(\bm\pi Q)_j\ge\delta>0$.
+\end{proof}
+
+\begin{intuition}[Relaxation to equilibrium]
+$\bm p^{(n+1)}=\bm p^{(n)}P$ is a discrete-time master equation. The stationary distribution is its
+equilibrium and $1-|\lambda_2|$ (the spectral gap) is the inverse relaxation time, as in \cref{ex:twostate}.
+The contraction proof has a probabilistic meaning (coupling): run two copies of the chain from different
+starts; at every block of $k$ steps they have probability at least $m\delta$ of landing in the same state,
+after which they can be glued together. The initial condition is forgotten as soon as the copies have
+met.
+\end{intuition}
+
+\begin{coursenote}[The puzzle left open in the 2013 lecture]
+For the machine example the lecture sums the two components of $A\bm v=\lambda\bm v$ ($A$ column-stochastic)
+and gets $\sum_iv_i=\lambda\sum_iv_i$, hence $\lambda=1$; then notices that the same argument seems to
+force \emph{every} eigenvalue to be $1$, which is absurd, and leaves the point open \ts{13}{5}{56:57}. The
+resolution: the identity only says that $\lambda=1$ \emph{or} $\sum_iv_i=0$. Eigenvectors of the other
+eigenvalues have components summing to zero (like $(1,-1)\T$ in \cref{ex:twostate}), so they cannot be
+normalised to probability vectors. For the Perron--Frobenius eigenvector, which is positive, the sum is
+non-zero and the argument correctly gives $\lambda_0=1$.
+\end{coursenote}
+
+\paragraph{When the hypotheses fail.}
+\begin{itemize}
+  \item \emph{Periodicity.} The 2013 notes (Example~3.2) consider the walk $X_{n+1}=X_n\pm1\pmod N$ on the
+        cycle $\mathbb Z_N$, with stationary distribution $\pi_i=1/N$ (the matrix is doubly stochastic, 2013 PS2
+        A-4). If $N$ is even the chain alternates between even and odd states, no power of $P$ is positive and
+        $P^{(n)}_{ij}$ does not converge: a stationary distribution need not be a limit (compare the chain
+        $\bigl(\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\bigr)$ in \cref{sec:markov}).
+  \item \emph{Reducibility.} If the state space splits into pieces that do not communicate, the stationary
+        distribution need not be unique (2013 PS2 A-4(a)). States $i,j$ \emph{communicate} if each can be
+        reached from the other in some number of steps; a chain whose transition graph is strongly connected
+        is \emph{irreducible} \ts{24}{6}{1:03:03}. For a finite irreducible chain the stationary distribution is
+        unique and positive; if moreover it is aperiodic, some $P^k$ is positive and \cref{ch04:thm-conv}
+        applies (standard facts, not proved in the course).
+  \item \emph{Infinite state space.} ``A corresponding theorem is not true'' (2013 notes): the SRW on $\mathbb Z$
+        has no stationary distribution. Indeed $\pi_j=\tfrac12(\pi_{j-1}+\pi_{j+1})$ makes $j\mapsto\pi_j$ linear;
+        being non-negative on all of $\mathbb Z$ it is constant, and a constant cannot sum to $1$.
+\end{itemize}
+
+\paragraph{Estimating a chain from data (not discussed in class).} Given an observed path with $n_{ij}$
+transitions $i\to j$, \cref{ch04:prop-path} gives the likelihood $\prod_{i,j}P_{ij}^{\,n_{ij}}$ (times
+$p_{i_0}$). Maximising $\sum_{ij}n_{ij}\log P_{ij}$ subject to $\sum_jP_{ij}=1$ with Lagrange multipliers gives
+the empirical frequencies $\hat P_{ij}=n_{ij}/\sum_kn_{ik}$; this is what the R package \texttt{markovchain}
+uses in the case study below.
+
+\subsection{Markov chains in finance}
+
+\paragraph{Credit ratings.} Rating agencies (S\&P, Moody's, Fitch) grade corporate and sovereign borrowers
+from AAA (highest) through AA, A, BBB (investment grade) to BB, B, CCC, CC, C (speculative grade) and D
+(default) \ts{24}{6}{52:29}. The rating determines the interest rate at which a company can borrow by
+issuing bonds \ts{24}{6}{53:29}. Modelling the rating of an issuer as a Markov chain with a one-year
+\emph{migration matrix}, default being an absorbing state ($P_{DD}=1$), the probability of default within
+$n$ years for an issuer rated $i$ today is $(P^n)_{iD}$. Slide~43 shows such a matrix (attributed to the
+CreditMetrics Technical Document): a AAA issuer keeps its rating over one year with probability
+$43.78\%$, while a CCC issuer is upgraded to B with probability $41.53\%$, stays CCC with $32.46\%$ and
+defaults with $19.15\%$ \ts{24}{6}{54:32}.
+
+\begin{coursenote}[On the migration table of slide 43]
+In the widely quoted one-year matrices (S\&P, Moody's, CreditMetrics) roughly 90\% of AAA issuers keep
+their rating; the AAA row on the slide, which sends more than half of the AAA issuers to AA, is unusual.
+The OCW version marks the table's source as unknown; use its numbers as an illustration only.
+\end{coursenote}
+
+\begin{example}[Default probabilities from a migration matrix (not from the course)]\label{ch04:ex-credit}
+With three states, investment grade (IG), high yield (HY) and default (D), take
+\[
+  P=\begin{pmatrix}0.97&0.025&0.005\\0.05&0.90&0.05\\0&0&1\end{pmatrix}.
+\]
+The cumulative default probabilities $(P^n)_{\cdot D}$ are $0.5\%,\ 3.46\%,\ 8.46\%$ for an IG issuer and
+$5\%,\ 20.75\%,\ 33.87\%$ for an HY issuer at $n=1,5,10$ years; they are not $n$ times the one-year
+probability, because issuers migrate between grades before defaulting. Since D is absorbing and reachable from
+everywhere, the unique stationary distribution is $\bm e_D$: every issuer eventually defaults, and the interesting
+quantities are transient ones.
+\end{example}
+
+\begin{finance}[Uses and caveats of rating chains (not discussed in class)]
+Migration matrices drive credit-portfolio models (CreditMetrics), regulatory capital, and the pricing of
+credit-risky bonds and credit derivatives (\cref{ch:counterparty,ch:quanto}). The Markov assumption is only an
+approximation: recently downgraded issuers are more likely to be downgraded again (``rating momentum''),
+and migration rates vary with the business cycle, so the matrix is not time-homogeneous.
+\end{finance}
+
+\begin{casestudy}[Up and down days of AAPL (slide 44, \file{MC_Example1.r})]
+\textbf{Goal.} Check whether the direction of daily price moves has short memory \ts{24}{6}{55:39}.
+\textbf{Data.} AAPL daily closing prices $P_t$ downloaded with \texttt{quantmod} (2013/14 to September 2024);
+the chain is fitted on the last four and a half years \ts{24}{6}{58:51}.
+\textbf{Method.} A day is Up if $P_t>P_{t-1}$ and Down if $P_t<P_{t-1}$. The two-day state on day $t$ is one
+of UU, UD, DU, DD (moves on days $t-1$ and $t$), which gives a 4-state chain whose transitions are partly
+forced: from UU one can only go to UU or UD, and so on (\cref{ch04:fig-mc}). The package
+\texttt{markovchain} (Spedicato, 2017) estimates the transition matrix by empirical frequencies and draws the
+transition graph \ts{24}{6}{59:56}. The same is repeated with three-day states (8 states) \ts{24}{6}{1:02:01}.
+\textbf{Results} (as reported in class; no knitted output is available). Two up days tend to be followed by a
+third ($\hat P(\mathrm{UU}\to\mathrm{UU})>0.5$), while after two down days a reversal is more likely
+($\hat P(\mathrm{DD}\to\mathrm{DD})<0.5$) \ts{24}{6}{1:00:56}. In the 8-state chain, three down days are
+followed by an up day with probability close to $0.6$; the largest probability of a down day, $0.510$,
+follows a mixed state with two up days preceded by a down day \ts{24}{6}{1:05:15}. All states communicate
+(the graph is strongly connected) \ts{24}{6}{1:04:05}.
+\textbf{Lesson.} Discretising returns into a few states and fitting a Markov chain is a quick exploratory
+tool, easy to rerun on other tickers or periods \ts{24}{6}{1:06:18}. \emph{Our remark:} with about 1100
+trading days each of the 8 states is visited roughly 140 times, so an estimated probability near $0.5$ has a
+standard error of about $\sqrt{0.25/140}\approx0.04$: $0.510$ is indistinguishable from $0.5$, and even
+$0.6$ is only about two standard errors away, before accounting for having looked at 8 states. Note also that
+the slide's definitions leave days with $P_t=P_{t-1}$ unclassified; one inequality should be
+non-strict, as the lecturer points out \ts{24}{6}{55:39}.
+\end{casestudy}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[>=Stealth,every node/.style={font=\small},
+    st/.style={circle,draw=defcol,thick,fill=defcol!6,minimum size=9mm,inner sep=0pt}]
+  % machine chain
+  \node[st] (W) at (0,0) {W};
+  \node[st] (B) at (2.8,0) {B};
+  \draw[->,thick] (W) to[bend left=25] node[above,font=\scriptsize]{$0.01$} (B);
+  \draw[->,thick] (B) to[bend left=25] node[below,font=\scriptsize]{$0.8$} (W);
+  \draw[->,thick] (W) to[loop above,looseness=6] node[above,font=\scriptsize]{$0.99$} (W);
+  \draw[->,thick] (B) to[loop above,looseness=6] node[above,font=\scriptsize]{$0.2$} (B);
+  \node[font=\footnotesize] at (1.4,-1.6) {(a) machine chain, \cref{ch04:ex-machine}};
+  % two-day chain
+  \begin{scope}[xshift=6.3cm,yshift=0.9cm]
+  \node[st] (UU) at (0,0) {UU};
+  \node[st] (UD) at (3,0) {UD};
+  \node[st] (DU) at (0,-2.2) {DU};
+  \node[st] (DD) at (3,-2.2) {DD};
+  \draw[->,thick,intcol] (UU) to[loop left,looseness=6] (UU);
+  \draw[->,thick,thmcol] (UU) -- (UD);
+  \draw[->,thick,intcol] (UD) to[bend left=12] (DU);
+  \draw[->,thick,thmcol] (UD) -- (DD);
+  \draw[->,thick,intcol] (DU) -- (UU);
+  \draw[->,thick,thmcol] (DU) to[bend left=12] (UD);
+  \draw[->,thick,intcol] (DD) -- (DU);
+  \draw[->,thick,thmcol] (DD) to[loop right,looseness=6] (DD);
+  \node[font=\footnotesize] at (1.5,-3.4) {(b) two-day up/down states};
+  \end{scope}
+\end{tikzpicture}
+\caption{(a) The two-state machine chain of the 2013 lecture. (b) Allowed transitions of the two-day
+states of the AAPL case study: the second letter of today's state is the first letter of tomorrow's; green
+arrows are followed by an up day, red ones by a down day. The estimated probabilities were shown in class
+\ts{24}{6}{1:00:56}.}\label{ch04:fig-mc}
+\end{figure}
+
+% ------------------------------------------------------------------
+\section{Martingales}\label{ch04:sec-mart}
+
+\subsection{Information and conditional expectation}
+Let $X_1,X_2,\dots$ be the observed process. The \emph{information set} $\mathcal F_n$ collects what is known at
+time $n$, i.e.\ the values of $X_1,\dots,X_n$ (formally, the $\sigma$-algebra they generate) \ts{24}{6}{8:32}.
+A random variable $Y$ is \emph{known at time $n$}, written $Y\in\mathcal F_n$, iff $Y=f(X_1,\dots,X_n)$ for
+some function $f$; the increasing family $\{\mathcal F_n\}$ is a \emph{filtration}, and one writes
+$\E[Z\mid\mathcal F_n]=\E[Z\mid X_1,\dots,X_n]$ \ts{24}{6}{13:00}. We use the following properties of
+conditional expectation (\cref{ch:probability}), valid for integrable $Z$:
+\begin{itemize}
+  \item \emph{taking out what is known}: $\E[YZ\mid\mathcal F_n]=Y\,\E[Z\mid\mathcal F_n]$ if $Y\in\mathcal F_n$;
+  \item \emph{tower property}: $\E\bigl[\E[Z\mid\mathcal F_n]\mid\mathcal F_m\bigr]=\E[Z\mid\mathcal F_m]$ for
+        $m\le n$; in particular $\E\bigl[\E[Z\mid\mathcal F_n]\bigr]=\E[Z]$;
+  \item \emph{independence}: $\E[Z\mid\mathcal F_n]=\E[Z]$ if $Z$ is independent of $X_1,\dots,X_n$.
+\end{itemize}
+
+\subsection{Definition and first properties}
+\begin{definition}[Martingale]\label{ch04:def-mart}
+A sequence $M_n=f_n(X_1,\dots,X_n)$, $n\ge1$, with $M_0$ a constant, is a \emph{martingale} with respect
+to $\{X_n\}$ (or to $\{\mathcal F_n\}$) if for all $n\ge1$
+\begin{equation}\label{ch04:eq-mart}
+  \E|M_n|<\infty\qquad\text{and}\qquad \E[M_n\mid\mathcal F_{n-1}]=M_{n-1}
+\end{equation}
+\ts{24}{5}{1:13:28}. It is a \emph{submartingale} if $\E[M_n\mid\mathcal F_{n-1}]\ge M_{n-1}$ and a
+\emph{supermartingale} if $\le$ (terms not used in class).
+\end{definition}
+Standing at time $n-1$, the best prediction of the next value is the current value: the conditional
+expectations of the future are ``flat'' \ts{24}{6}{2:05}. If $M_n$ is the balance of a gambler, the game is
+\emph{fair}: whatever happened so far, the expected gain of the next round is zero \ts{13}{5}{1:01:24}. The
+balance of a roulette player is a supermartingale, not a martingale: the game is designed so that
+$\E[M_{n+1}\mid\mathcal F_n]<M_n$ \ts{13}{5}{1:02:24}.
+
+\begin{coursenote}[2013 versus 2024 definitions]
+The 2013 notes define a martingale with respect to its own past, $X_t=\E[X_{t+1}\mid X_0,\dots,X_t]$, and
+omit the integrability condition. The 2024 definition allows the conditioning information to be generated
+by a different, ``driving'' sequence $X_n$ (as in the examples below). A martingale with respect to
+$\{X_n\}$ is also a martingale with respect to its own past, by the tower property, since
+$M_0,\dots,M_{n-1}$ are functions of $X_1,\dots,X_{n-1}$.
+\end{coursenote}
+
+\begin{proposition}\label{ch04:prop-mart}
+If $\{M_n\}$ is a martingale then $\E[M_n\mid\mathcal F_m]=M_m$ for all $m\le n$, and $\E[M_n]=M_0$ for all
+$n$. The increments $D_k=M_k-M_{k-1}$ satisfy $\E[D_k\mid\mathcal F_{k-1}]=0$; if they are square-integrable
+they are uncorrelated, and $\Var(M_n)=\sum_{k=1}^n\E[D_k^2]$.
+\end{proposition}
+\begin{proof}
+By the tower property, $\E[M_n\mid\mathcal F_m]=\E\bigl[\E[M_n\mid\mathcal F_{n-1}]\mid\mathcal F_m\bigr]
+=\E[M_{n-1}\mid\mathcal F_m]$, and induction on $n-m$ (2013 notes, Proposition~4.2). Taking $m=0$ gives
+$\E M_n=M_0$. For $j<k$, $D_j\in\mathcal F_{k-1}$, so
+$\E[D_jD_k]=\E\bigl[D_j\,\E[D_k\mid\mathcal F_{k-1}]\bigr]=0$; hence the variance of the sum is the sum of
+the variances.
+\end{proof}
+
+\subsection{Examples}\label{ch04:sec-mart-ex}
+The 2024 slides give four families; each one is used later.
+
+\begin{example}[Sums: random walks {\ts{24}{5}{1:13:28}}]\label{ch04:ex-m1}
+If $X_n$ are independent with $\E X_n=0$, then $S_n=X_1+\dots+X_n$ is a martingale:
+$\E[S_n\mid\mathcal F_{n-1}]=S_{n-1}+\E[X_n]=S_{n-1}$. In particular the SRW is a martingale
+\ts{13}{5}{1:01:24}. With non-zero means, the \emph{compensated} walk $S_n-\sum_{k\le n}\E X_k$ is a
+martingale.
+\end{example}
+
+\begin{example}[Squares: $S_n^2-n\sigma^2$ {\ts{24}{5}{1:17:44}}]\label{ch04:ex-m2}
+If moreover $\Var(X_n)=\sigma^2$, then $M_n=S_n^2-n\sigma^2$ is a martingale:
+\[
+  \E[S_n^2\mid\mathcal F_{n-1}]=S_{n-1}^2+2S_{n-1}\E[X_n]+\E[X_n^2]=S_{n-1}^2+\sigma^2 .
+\]
+Its paths look very different from those of $S_n$ (slides 10--12): bounded below by $-n\sigma^2$, unbounded
+above, with a long right tail \ts{24}{6}{3:09}. It measures how much the walk has spread compared with its
+expected spread; its continuous-time analogue $B_t^2-t$ encodes the quadratic variation of Brownian
+motion, the origin of the extra term in It\^o's formula (\cref{ch:stochcalc}).
+\end{example}
+
+\begin{example}[Products {\ts{24}{6}{4:15}}]\label{ch04:ex-m3}
+If $X_n\ge0$ are independent with $\E X_n=1$ and $M_0=1$, then $M_n=X_1X_2\cdots X_n$ is a martingale:
+$\E[M_n\mid\mathcal F_{n-1}]=M_{n-1}\E[X_n]=M_{n-1}$. The 2024 slides take $X_n\in\{0.5,\,1.5\}$ with
+probability $1/2$ each: the wealth of someone who stakes everything, every period, on a fair bet that gains
+or loses 50\% \ts{24}{6}{5:20}. The 2013 lecture takes $X_n=2$ with probability $1/3$ and $X_n=\tfrac12$
+with probability $2/3$, again with mean $1$ \ts{13}{5}{1:03:24}.
+\end{example}
+
+The simulations in class show a few paths growing to 5--10 times the initial wealth, while most lose
+almost everything \ts{24}{6}{5:20}. The calculation behind the pictures (ours): $\E M_n=1$ for every $n$, but
+$\log M_n=\sum_k\log X_k$ is a random walk with drift $\E\log X=\tfrac12\ln0.75=-0.144$ per step, so
+$M_n\to0$ almost surely by the law of large numbers. After 50 steps the median wealth is
+$0.75^{25}\approx7.5\times10^{-4}$, and $\Prob(M_{50}\ge1)=\Prob(\mathrm{Bin}(50,\tfrac12)\ge32)\approx0.032$;
+the mean $1$ is carried by rare paths (the largest possible value is $1.5^{50}\approx6\times10^8$). In the 2013
+example $\E\log X=\tfrac13\ln2-\tfrac23\ln2<0$ as well.
+
+\begin{intuition}[Mean versus typical behaviour]
+For multiplicative processes the mean and the typical value part ways: $\E M_n$ is dominated by
+exponentially rare paths, much as a partition function can be dominated by rare configurations. The
+typical growth rate is $\E\log X$, not $\log\E X$; by Jensen's inequality $\E\log X<\log\E X=0$ unless $X$ is
+constant. In finance this is the gap between arithmetic and geometric mean returns (``volatility drag''),
+and the reason for the debate mentioned in class \ts{24}{5}{49:47} on whether an investor should maximise
+the expected \emph{logarithm} of wealth (the Kelly criterion, of which Paul Samuelson was the best-known
+critic).
+\end{intuition}
+
+\begin{example}[Exponential martingales {\ts{24}{6}{6:28}}]\label{ch04:ex-m4}
+Let $Y_n$ be i.i.d.\ with moment generating function $\phi(\lambda)=\E\,e^{\lambda Y}<\infty$. Then
+$X_n=e^{\lambda Y_n}/\phi(\lambda)$ are independent with mean $1$, so by \cref{ch04:ex-m3}
+\begin{equation}\label{ch04:eq-expmart}
+  M_n=\frac{e^{\lambda S_n}}{\phi(\lambda)^n},\qquad S_n=Y_1+\dots+Y_n,
+\end{equation}
+is a martingale for every fixed $\lambda$ \ts{24}{6}{7:30}. If $\lambda_0\ne0$ solves $\phi(\lambda_0)=1$,
+then $M_n=e^{\lambda_0S_n}$ is a martingale. Since $\phi$ is convex with $\phi(0)=1$ and $\phi'(0)=\E Y$, such
+a root exists (with the sign opposite to $\E Y$) as soon as $\E Y\ne0$ and $\phi$ grows beyond $1$ on that side,
+e.g.\ for bounded steps taking both signs.
+\end{example}
+For $\pm1$ steps, $\phi(\lambda)=pe^\lambda+qe^{-\lambda}$ and $\phi(\lambda)=1$ is a quadratic equation in
+$e^\lambda$ with roots $1$ and $q/p$: hence $(q/p)^{S_n}$ is a martingale (\cref{ch04:fig-ruin}, left)
+\ts{24}{6}{33:19}. This is the key to the biased gambler's ruin (\cref{ch04:sec-ruin}). The exponent
+$\lambda_0$ is the ``adjustment coefficient'' of actuarial ruin theory, and \eqref{ch04:eq-expmart} is the
+discrete ancestor of the exponential martingale $e^{\lambda B_t-\lambda^2t/2}$ of Brownian motion and of
+the change of measure behind risk-neutral pricing (\cref{ch:bs}).
+
+\paragraph{Markov versus martingale.} The two notions are independent \ts{13}{5}{1:05:32}. The SRW is both.
+A biased walk is Markov but not a martingale. A martingale that is not Markov (our example): toss a fair
+coin $\xi_1$ and let $M_n=\xi_1+c(\xi_1)\sum_{k=2}^n\xi_k$ with further fair signs $\xi_k$ and step size
+$c=1$ if $\xi_1=+1$, $c=2$ if $\xi_1=-1$. It is a martingale (a martingale transform, see below), but
+$M_3=-1$ can be reached with either step size, so the law of $M_4$ given $M_3=-1$ depends on the earlier path.
+Processes of neither kind are the rule rather than the exception.
+
+\begin{remark}[Prices or log-prices?]\label{ch04:rem-logprice}
+If $\log P_t$ is a random walk with i.i.d.\ steps $X_t$ (2024 PS3 Problem~3), the price itself satisfies
+$\E[P_t\mid\mathcal F_{t-1}]=P_{t-1}\E\,e^{X}$, so $P_t$ is a martingale iff $\E e^X=1$. For normal steps
+$\E e^X=e^{\mu+\sigma^2/2}$, i.e.\ iff $\mu=-\sigma^2/2$: a martingale log-price ($\mu=0$) gives an
+\emph{upward}-drifting price. This lognormal correction (2024 PS2 Problem~2, \cref{ch:probability}) is the same
+$-\sigma^2/2$ that appears in the drift of $\log S_t$ under Black--Scholes.
+\end{remark}
+
+% ------------------------------------------------------------------
+\section{Martingale transforms and stopping times}\label{ch04:sec-stopping}
+
+\subsection{Trading strategies as martingale transforms}
+\begin{definition}[Non-anticipating sequence, martingale transform]
+A sequence $\{A_n,\ n\ge1\}$ is \emph{non-anticipating} (or predictable) with respect to $\{\mathcal F_n\}$ if
+$A_n\in\mathcal F_{n-1}$ for every $n$: $A_n$ is decided with the information available at time $n-1$
+\ts{24}{6}{9:44}. The \emph{martingale transform} of a martingale $\{M_n\}$ by $\{A_n\}$ is
+\[
+  \tilde M_n=M_0+A_1(M_1-M_0)+A_2(M_2-M_1)+\dots+A_n(M_n-M_{n-1})
+  =M_0+\sum_{k=1}^nA_k\,\Delta M_k
+\]
+\ts{24}{6}{10:51}.
+\end{definition}
+
+\begin{theorem}[Martingale transform theorem]\label{ch04:thm-transform}
+If $\{M_n\}$ is a martingale and $\{A_n\}$ is non-anticipating and bounded, $|A_n|\le C_n$ for constants
+$C_n$, then $\{\tilde M_n\}$ is a martingale with respect to $\{\mathcal F_n\}$ \ts{24}{6}{13:00}.
+\end{theorem}
+\begin{proof}
+$\tilde M_n$ is a function of $X_1,\dots,X_n$ and
+$\E|\tilde M_n|\le|M_0|+\sum_{k\le n}C_k\bigl(\E|M_k|+\E|M_{k-1}|\bigr)<\infty$. Taking out what is known,
+\[
+  \E[\tilde M_n-\tilde M_{n-1}\mid\mathcal F_{n-1}]=A_n\,\E[M_n-M_{n-1}\mid\mathcal F_{n-1}]=A_n\cdot0=0 .
+  \qedhere
+\]
+\end{proof}
+
+\begin{finance}[You cannot beat a fair game]
+Read $M_n$ as the (discounted) price of an asset and $A_k$ as the number of shares held from $k-1$ to $k$,
+chosen using only the information available at $k-1$ \ts{24}{6}{10:51}. Then $\tilde M_n-M_0=\sum_kA_k\Delta M_k$ is
+the cumulative trading gain: exactly the ``holdings times price increment, holdings decided first'' sum of
+\eqref{eq:pnl} and the discrete version of the It\^o integral $\int\theta_t\dd S_t$ (\cref{ch:stochcalc}).
+The theorem says that if prices are martingales, \emph{every} bounded trading strategy has zero expected gain.
+This is the content of the fundamental theorem of asset pricing read backwards: absence of arbitrage is
+equivalent to the existence of a measure $\Q$ under which discounted prices are martingales; in one period
+this is the relation $P_0=\beta\,\E_Q[P_T]$ of \cref{thm:ftap}.
+\end{finance}
+
+\subsection{Stopping times}
+\begin{definition}[Stopping time]\label{ch04:def-stop}
+A random variable $\tau$ with values in $\{0,1,2,\dots\}\cup\{\infty\}$ is a \emph{stopping time} with respect to
+$\{\mathcal F_n\}$ if $\{\tau\le n\}\in\mathcal F_n$ for every $n$ (equivalently $\{\tau=n\}\in\mathcal F_n$)
+\ts{24}{6}{14:04}.
+\end{definition}
+Viewing $\omega$ as a path, the event $\{\omega:\tau(\omega)\le n\}$ is decided by the first $n$ steps of the path:
+at every time we know whether we have already stopped \ts{24}{6}{16:16}. A stopping time is a rule to quit a
+game that looks only at what has happened so far \ts{13}{5}{1:09:40}.
+
+\begin{example}[Stopping times and non-stopping times {\ts{13}{5}{1:10:49}}]\label{ch04:ex-stop}
+In the coin-toss game with balance $S_n$:
+\begin{enumerate}[(a)]
+  \item the first time the balance reaches \$100, $\tau=\min\{n:S_n=100\}$, is a stopping time; so is the first
+        time it reaches either \$100 or $-\$50$, and any first hitting time of a set;
+  \item the time of the first peak (the first local maximum of the balance) is \emph{not} a stopping time:
+        to know that $n$ is a peak one must see $S_{n+1}<S_n$ \ts{13}{5}{1:11:50};
+  \item one step after the first peak \emph{is} a stopping time, as a student remarks \ts{13}{5}{1:12:51}.
+\end{enumerate}
+\end{example}
+
+\begin{definition}[Stopped and truncated processes]
+For a stopping time $\tau$, the value at the stopping time is $X_\tau=\sum_{n\ge0}X_n\,\ind\{\tau=n\}$ (on
+$\{\tau<\infty\}$) \ts{24}{6}{17:24}. Since $\tau$ can be infinite, one works with the truncated times
+$n\wedge\tau=\min(n,\tau)$ \ts{24}{6}{18:28} and the \emph{stopped process} $\{X_{n\wedge\tau},\ n\ge0\}$, which
+follows $X$ until $\tau$ and then stays frozen. $X_{n\wedge\tau}=\sum_{k<n}X_k\ind\{\tau=k\}+X_n\ind\{\tau\ge n\}$ is a
+function of $X_0,\dots,X_n$.
+\end{definition}
+
+\begin{theorem}[Stopped martingales are martingales]\label{ch04:thm-stopped}
+If $\{M_n\}$ is a martingale and $\tau$ a stopping time, then $\{M_{n\wedge\tau}\}$ is a martingale; in
+particular $\E[M_{n\wedge\tau}]=M_0$ for every $n$.
+\end{theorem}
+\begin{proof}
+Let $A_k=\ind\{\tau\ge k\}=1-\ind\{\tau\le k-1\}$. It is bounded and $A_k\in\mathcal F_{k-1}$, because
+$\{\tau\le k-1\}\in\mathcal F_{k-1}$. The transform telescopes up to the stopping time:
+\[
+  M_0+\sum_{k=1}^nA_k(M_k-M_{k-1})=M_0+\sum_{k=1}^{n\wedge\tau}(M_k-M_{k-1})=M_{n\wedge\tau},
+\]
+which is a martingale by \cref{ch04:thm-transform} \ts{24}{6}{20:29}. Then apply \cref{ch04:prop-mart}.
+\end{proof}
+
+\begin{coursenote}[Erratum: slides 17, 20 and 23 of \file{lec05}]
+\begin{itemize}
+  \item Slide 23 (proof above): ``else replace $M_n$ by $M_n'=M_n-M_{n-1}$'' should read $M_n'=M_n-M_0$ (to reduce to
+        $M_0=0$ one subtracts the initial value, not the previous one). In the displayed identity the right-hand side
+        should have $n$ in place of the summation index $k$:
+        $\sum_{k=1}^nA_k(M_k-M_{k-1})=M_\tau\ind(\tau\le n-1)+M_n\ind(\tau\ge n)=M_{n\wedge\tau}$.
+  \item Slide 20 calls $\{0,1,2,\dots\}$ the ``state space'' of the process; in the definition of a stopping time it
+        plays the role of the \emph{time index set}, in which $\tau$ takes values (together with $\infty$).
+  \item Slide 17: in the special case the sum should read $S_n=\sum_{i=1}^nY_i$, and $\lambda_0$ must be a root of
+        $\phi(\lambda_0)=1$ other than the trivial root $\lambda_0=0$.
+\end{itemize}
+\end{coursenote}
+
+\subsection{The optional stopping theorem}
+\cref{ch04:thm-stopped} gives $\E M_{n\wedge\tau}=M_0$ at every fixed $n$. The \emph{optional stopping theorem}
+passes to the limit $n\to\infty$, where $M_{n\wedge\tau}\to M_\tau$ on $\{\tau<\infty\}$.
+
+\begin{theorem}[Optional stopping]\label{ch04:thm-ost}
+Let $\{M_n\}$ be a martingale and $\tau$ a stopping time. Then $\E[M_\tau]=\E[M_0]$ in each of the following
+cases:
+\begin{enumerate}[(i)]
+  \item $\tau\le T$ for a constant $T$ (2013 notes, Theorem~5.3, ``Doob's optional stopping theorem, weak form'')
+        \ts{13}{5}{1:14:06};
+  \item $\tau<\infty$ almost surely and the stopped process is bounded, $|M_{n\wedge\tau}|\le K$ for all $n$;
+  \item $\E\tau<\infty$ and the increments are bounded, $|M_n-M_{n-1}|\le c$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(i) For $n=T$, $M_{T\wedge\tau}=M_\tau$, so $\E M_\tau=\E M_0$ by \cref{ch04:thm-stopped}. (This is the 2013 proof:
+$M_\tau=M_0+\sum_{i=0}^{T-1}(M_{i+1}-M_i)\ind\{\tau\ge i+1\}$, and each term has zero mean after conditioning on
+$\mathcal F_i$, because $\{\tau\ge i+1\}$ is decided by time $i$.)
+
+(ii) Since $\tau<\infty$, $M_{n\wedge\tau}=M_\tau$ for all $n\ge\tau$, so $M_{n\wedge\tau}\to M_\tau$ almost surely; by
+bounded convergence $\E M_\tau=\lim_n\E M_{n\wedge\tau}=\E M_0$.
+
+(iii) $|M_{n\wedge\tau}|\le|M_0|+c\,\tau$, an integrable bound, so dominated convergence applies as in (ii).
+\end{proof}
+
+``A mortal being has no winning strategy'' in a fair game (2013 notes): whatever rule you use to decide when to
+quit, as long as it does not peek into the future and you cannot play for an unbounded time with unbounded credit,
+your expected final balance equals your initial one \ts{13}{5}{1:06:34}, \ts{13}{5}{1:15:08}. The hypotheses are
+not decorations: 2013 notes, Exercise~5.4 (\cref{ch04:ex-note54}), asks why stopping the SRW when it first
+reaches \$100 does not contradict the theorem although $\E S_\tau=100$.
+
+\begin{finance}[The ``martingale'' betting system (not discussed in class)]
+Bet \$1 on a fair coin; after each loss double the stake; stop at the first win. With $A_k=2^{k-1}$ on
+$\{\tau\ge k\}$ and $\tau$ the first win, the net gain at $\tau$ is $2^{\tau-1}-(1+2+\dots+2^{\tau-2})=+1$ with
+certainty, although $\E\tau=2<\infty$. Condition (iii) fails because the stakes, i.e.\ the increments of the
+transformed process, are unbounded, and so does (ii), since the loss before the first win is unbounded. At any fixed
+horizon $n$ the game is still fair: with probability $1-2^{-n}$ you have won \$1, with probability $2^{-n}$ you have lost
+$2^n-1$, and the mean is $0$. This doubling scheme is the historical meaning of ``martingale'' in gambling (the
+lecturer recalls the other meaning, a horse's bridle \ts{24}{5}{1:18:49}). Its trading version, doubling a losing
+position to win it back, needs unlimited capital and is a classic route to ruin.
+\end{finance}
+
+% ------------------------------------------------------------------
+\section{Gambler's ruin}\label{ch04:sec-ruin}
+Two players bet \$1 per round on a fair coin until one of them is broke. Let $S_n$ be my net gain after $n$
+rounds, with my bankroll $B$ and my opponent's bankroll $A$ ($A,B$ positive integers) \ts{24}{6}{21:35},
+\ts{13}{5}{23:03}. The game ends at
+\[
+  \tau=\min\{n:\ S_n=+A\ \text{or}\ S_n=-B\},
+\]
+a stopping time (a first hitting time), and I take all my opponent's money iff $S_\tau=+A$ \ts{24}{6}{22:46}.
+
+\begin{lemma}\label{ch04:lem-finite}
+For a walk with steps $\pm1$ and $\Prob(X=+1)=p\in(0,1)$, $\Prob(\tau>n(A+B))\le(1-p^{A+B})^n$. Hence
+$\tau<\infty$ almost surely and $\E\tau<\infty$.
+\end{lemma}
+\begin{proof}
+Split time into blocks of $A+B$ steps. If all steps of a block are $+1$ the walk, wherever it is in $(-B,A)$,
+leaves the interval during that block. Blocks are independent and each has only $+1$ steps with probability
+$p^{A+B}$, so surviving $n$ blocks has probability at most $(1-p^{A+B})^n$. Then
+$\E\tau=\sum_{m\ge0}\Prob(\tau>m)\le(A+B)\sum_{n\ge0}(1-p^{A+B})^n<\infty$.
+\end{proof}
+
+\begin{proposition}[Fair gambler's ruin]\label{ch04:prop-ruin}
+For the SRW,
+\[
+  \Prob(S_\tau=+A)=\frac{B}{A+B},\qquad \Prob(S_\tau=-B)=\frac{A}{A+B},\qquad \E\tau=AB .
+\]
+\end{proposition}
+\begin{proof}
+$S_n$ is a martingale and $|S_{n\wedge\tau}|\le\max(A,B)$, so by \cref{ch04:lem-finite} and optional stopping (b),
+$0=\E S_\tau=A\,\Prob(S_\tau=A)-B\,\bigl(1-\Prob(S_\tau=A)\bigr)$ \ts{24}{6}{23:52}, \ts{24}{6}{24:54}, which gives the
+first formula. For the second, $M_n=S_n^2-n$ is a martingale (\cref{ch04:ex-m2} with $\sigma^2=1$), so by
+\cref{ch04:thm-stopped}
+\[
+  \E\bigl[S_{n\wedge\tau}^2\bigr]=\E[n\wedge\tau]\qquad\text{for every }n.
+\]
+As $n\to\infty$ the left side tends to $\E S_\tau^2$ by bounded convergence ($S^2_{n\wedge\tau}\le\max(A^2,B^2)$) and the
+right side to $\E\tau$ by monotone convergence ($n\wedge\tau\uparrow\tau$). Hence \ts{24}{6}{29:13}
+\[
+  \E\tau=\E S_\tau^2=A^2\,\frac{B}{A+B}+B^2\,\frac{A}{A+B}=AB .\qedhere
+\]
+\end{proof}
+
+With equal bankrolls each player wins with probability $\tfrac12$, by symmetry \ts{13}{5}{25:08}. Playing until I
+win \$100 or lose \$50 ($A=100$, $B=50$), I win with probability $1/3$ \ts{13}{5}{26:08}, and the game lasts
+$5000$ rounds on average. In a fair game the richer player is more likely to win everything
+\ts{24}{6}{27:05}, and the expected duration is the product of the bankrolls \ts{24}{6}{29:13}.
+
+\begin{coursenote}[Erratum: slides 24--26 of \file{lec05}]
+\begin{itemize}
+  \item ``Problem: Solve for $\Prob(\tau=+A)$'' (and the title of slide 25) should read $\Prob(S_\tau=+A)$: $\tau$ is a
+        time, $S_\tau$ the level hit. A student pointed this out in class and the lecturer confirmed \ts{24}{6}{26:05}.
+  \item ``$\lim_{n\to\infty}\E(S_{n\wedge\tau})=S_\tau$ w.p.~1'' mixes a number and a random variable: the correct
+        statement is $S_{n\wedge\tau}\to S_\tau$ almost surely (because $\Prob(\tau=\infty)=0$), and then
+        $\E S_\tau=\lim_n\E S_{n\wedge\tau}=0$ by bounded convergence.
+  \item Slide 26: ``$M_{n\wedge\tau}\le\max(A^2,B^2)+\tau$, bounded r.v.'' is not a valid justification, since $\tau$ is not
+        bounded. The limit must be taken separately in the two terms of $M_{n\wedge\tau}=S^2_{n\wedge\tau}-n\wedge\tau$,
+        with bounded and monotone convergence, as in the proof above.
+\end{itemize}
+\end{coursenote}
+
+\paragraph{The 2013 route: first-step analysis.} Let $f(k)$ be the probability of hitting $+A$ before $-B$ when
+starting from $k\in\{-B,\dots,A\}$ \ts{13}{5}{29:19}. Conditioning on the first toss and using the stationarity of
+the increments,
+\[
+  f(k)=\tfrac12f(k+1)+\tfrac12f(k-1)\quad(-B<k<A),\qquad f(A)=1,\quad f(-B)=0
+\]
+\ts{13}{5}{30:20}. The increments $f(k+1)-f(k)$ are therefore constant: $f(-B+r)=\alpha r$ with
+$\alpha=1/(A+B)$, and $f(0)=B/(A+B)$ (2013 notes, Section~2).
+
+\begin{intuition}[Harmonic functions and electrostatics]
+The recursion says that $f$ is \emph{discrete-harmonic}: its value is the average of its neighbours, i.e.\ its discrete
+Laplacian vanishes. Equivalently $f(S_{n\wedge\tau})$ is a martingale, which is why the two methods agree. The hitting
+probability is the solution of a Dirichlet problem, like the potential between two plates held at potentials $0$ and
+$1$, hence linear. In continuous time the same idea links expectations of Brownian functionals to PDEs (backward
+Kolmogorov and Feynman--Kac equations, used to price options in \cref{ch:bs}).
+\end{intuition}
+
+\begin{remark}[A student's symmetry argument {\ts{13}{5}{27:11}}]
+For $A=100$, $B=50$ a student guessed $1/3$ as follows. Let $g(a,b)$ be the probability of gaining $a$ before losing
+$b$. To gain $100$ before losing $50$, the walk must first reach $+50$ before $-50$ (probability $\tfrac12$); from $+50$
+it must then gain $50$ before losing $100$, with probability $g(50,100)=1-g(100,50)$ by the reflection
+$S\mapsto-S$. So $g=\tfrac12(1-g)$ and $g=1/3$. The lecturer was unsure it could be made rigorous; it can: restarting the
+walk at a stopping time gives again a SRW independent of the past (the \emph{strong Markov property}, not proved in
+this course).
+\end{remark}
+
+\paragraph{The biased walk.} Now $\Prob(X=+1)=p$, $\Prob(X=-1)=q=1-p$, $p\ne\tfrac12$ \ts{24}{6}{30:16}. First-step
+analysis still works but is laborious \ts{24}{6}{31:16}; the exponential martingale solves the problem in two lines
+\ts{24}{6}{32:19}.
+
+\begin{proposition}[Biased gambler's ruin]\label{ch04:prop-biased}
+With $r=q/p\ne1$,
+\[
+  \Prob(S_\tau=+A)=\frac{r^B-1}{r^{A+B}-1}.
+\]
+\end{proposition}
+\begin{proof}
+By \cref{ch04:ex-m4}, $M_n=r^{S_n}$ is a martingale with $M_0=1$. Since $-B\le S_{n\wedge\tau}\le A$, $M_{n\wedge\tau}$ lies
+between $r^{-B}$ and $r^{A}$, and optional stopping (b) with \cref{ch04:lem-finite} gives \ts{24}{6}{34:22}
+\[
+  1=\E\,r^{S_\tau}=r^{A}\,\Prob(S_\tau=A)+r^{-B}\bigl(1-\Prob(S_\tau=A)\bigr)
+  \quad\Longrightarrow\quad \Prob(S_\tau=A)=\frac{1-r^{-B}}{r^A-r^{-B}}=\frac{r^B-1}{r^{A+B}-1}.\qedhere
+\]
+\end{proof}
+As $p\to\tfrac12$, $r=1+\varepsilon$ with $\varepsilon\to0$, and the ratio tends to $B\varepsilon/((A+B)\varepsilon)=B/(A+B)$,
+recovering the fair case. The expected duration (not derived in class) follows from the martingale
+$S_n-n(p-q)$ (\cref{ch04:ex-m1}) and optional stopping (c) (bounded increments, $\E\tau<\infty$):
+$\E S_\tau=(p-q)\,\E\tau$ (Wald's identity), so
+\[
+  \E\tau=\frac{A\,\Prob(S_\tau=A)-B\,\Prob(S_\tau=-B)}{p-q}.
+\]
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[name=phiax,width=0.47\linewidth,height=5.2cm,domain=-2:1,samples=100,ymin=0,ymax=3,xmin=-2,xmax=1,
+  xlabel={$\lambda$},ylabel={$\phi(\lambda)$},title={\small MGF of a step, $p=0.8$},
+  tick label style={font=\scriptsize},label style={font=\small}]
+  \addplot[defcol,thick] {0.8*exp(x)+0.2*exp(-x)};
+  \addplot[black!40,dashed] {1};
+  \draw[thmcol,thick] (axis cs:-1.3863,0) -- (axis cs:-1.3863,3);
+  \node[thmcol,font=\scriptsize,anchor=south west,align=left] at (axis cs:-1.35,1.6) {$\lambda_0=\ln(q/p)$\\$=-1.386$};
+\end{axis}
+\begin{axis}[at={(phiax.east)},anchor=west,xshift=1.4cm,width=0.47\linewidth,height=5.2cm,
+  domain=0:40,samples=41,ymin=0,ymax=1,xmin=0,xmax=40,
+  xlabel={my bankroll $B$ (with $A+B=40$)},ylabel={$\Prob(S_\tau=+A)$},title={\small Probability of winning all},
+  tick label style={font=\scriptsize},label style={font=\small},
+  legend style={font=\scriptsize,at={(0.03,0.97)},anchor=north west,draw=none,fill=none}]
+  \addplot[intcol,thick] {((0.47/0.53)^x-1)/((0.47/0.53)^40-1)};
+  \addplot[intcol!60,thick,dashed] {((0.49/0.51)^x-1)/((0.49/0.51)^40-1)};
+  \addplot[black,thick] {x/40};
+  \addplot[thmcol!60,thick,dashed] {((0.51/0.49)^x-1)/((0.51/0.49)^40-1)};
+  \addplot[thmcol,thick] {((0.53/0.47)^x-1)/((0.53/0.47)^40-1)};
+  \legend{$p=0.53$,$p=0.51$,$p=0.50$,$p=0.49$,$p=0.47$}
+\end{axis}
+\end{tikzpicture}
+\caption{Left: the moment generating function $\phi(\lambda)=pe^\lambda+qe^{-\lambda}$ of a $\pm1$ step equals $1$ at
+$\lambda=0$ and at $\lambda_0=\ln(q/p)$, as on slide 28 \ts{24}{6}{33:19}. Right: probability of winning the
+opponent's whole bankroll, \cref{ch04:prop-biased}, as a function of my initial capital when the total capital is
+$40$. A bias of a few percent per bet turns the straight line of the fair game into an S-shaped curve.}\label{ch04:fig-ruin}
+\end{figure}
+
+\begin{casestudy}[Probability surface in R (slides 30--31)]
+The slides define \texttt{fcn.probA(A,B)} implementing \cref{ch04:prop-biased} with $p=0.53$, evaluate it on the grid
+$A,B\in\{1,\dots,30\}$ with \texttt{outer} (after \texttt{Vectorize}), and draw the surface (\texttt{persp3D}) and its
+contour lines \ts{24}{6}{35:30}. Some values: $A=B=10$ gives $0.769$ and $A=B=20$ gives $0.917$. Against an opponent of
+unlimited wealth ($A\to\infty$) the probability of never being ruined is $1-r^B$: $0.45$ for $B=5$, $0.70$ for $B=10$ and
+$0.97$ for $B=30$. This is why the contour lines on slide~31 become horizontal for large $A$.
+\end{casestudy}
+
+\begin{finance}[Edges and ruin (numbers ours)]
+The limits $A\to\infty$ make the 2013 remark precise: ``if one has some advantage over an opponent in some game, then no
+matter how small that advantage is, he/she will win in the long run''. With $p>q$ the probability of never being ruined
+against an infinitely rich opponent is $1-(q/p)^B>0$; with $p<q$ ruin is certain. The casino is the infinitely rich
+opponent with the edge: betting \$1 on red at European roulette ($p=18/37$) with \$100, aiming to reach \$200, succeeds
+with probability $0.0045$ after about $3700$ bets on average; aiming for \$20 starting from \$10 succeeds with probability
+$0.37$. For a trader, $p-q$ is the edge per trade and $B$ the capital in units of the bet size: a small edge protects
+against ruin only if the bets are small relative to the capital.
+\end{finance}
+
+\begin{coursenote}[2013 versus 2024 treatment]
+2013 derives the fair ruin probability by first-step analysis and then, at the end of the lecture, re-derives
+$\Prob=1/3$ for $(100,-50)$ as an application of optional stopping, glossing over the fact that the hitting time is
+unbounded \ts{13}{5}{1:16:09}. 2024 builds the machinery first (transforms, stopping times, stopped martingales), then
+computes the ruin probability, the expected duration and the biased case, all by optional stopping. 2013 has instead
+the link between stationary distributions and Perron--Frobenius, which 2024 does not discuss.
+\end{coursenote}
+
+% ------------------------------------------------------------------
+\section{Looking ahead}\label{ch04:sec-ahead}
+\begin{itemize}
+  \item \emph{Random walk $\to$ Brownian motion} (\cref{ch:sp2}): independent stationary increments and the $\sqrt t$
+        scale survive the limit; $S_n^2-n$ becomes $B_t^2-t$ and $e^{\lambda S_n}/\phi(\lambda)^n$ becomes
+        $e^{\lambda B_t-\lambda^2t/2}$.
+  \item \emph{Martingale transforms $\to$ It\^o integrals} (\cref{ch:stochcalc,ch:sde}): gains from trading, and the
+        reason why hedged portfolios under the risk-neutral measure are martingales (\cref{ch:bs}).
+  \item \emph{Markov chains $\to$ Markov diffusions}: Chapman--Kolmogorov becomes the Fokker--Planck equation, and
+        first-step analysis becomes the backward equation behind option-pricing PDEs.
+  \item \emph{Optional stopping} returns in first-passage problems: barrier options, default times in structural credit
+        models, American-style early exercise.
+  \item The \emph{Poisson process}, the continuous-time counting process of events with exponential waiting times, is
+        not covered in these lectures; 2013 PS2 builds the Poisson distribution from exponential waiting times
+        (\cref{ch:probability}).
+\end{itemize}
+
+% ------------------------------------------------------------------
+\begin{keyformulas}
+\begin{align*}
+&\text{Random walk:} && \E S_n=n\mu,\quad \Var S_n=n\sigma^2,\\
+& && (S_n-n\mu)/(\sigma\sqrt n)\to N(0,1)\\
+&\text{Markov chain:} && \Prob(X_0=i_0,\dots,X_n=i_n)
+  =p_{i_0}P_{i_0i_1}\cdots P_{i_{n-1}i_n},\\
+& && P^{(n)}=P^n,\quad \bm p^{(n)}=\bm pP^n\\
+&\text{Stationary dist.:} && \bm\pi P=\bm\pi;\quad P^k>0\ \Rightarrow\
+  P^{(n)}_{ij}\to\pi_j\ \text{geometrically}\\
+&\text{Martingale:} && \E[M_n\mid\mathcal F_{n-1}]=M_{n-1},\\
+& && \E[M_n\mid\mathcal F_m]=M_m,\quad \E M_n=M_0\\
+&\text{Examples:} && S_n,\quad S_n^2-n\sigma^2,\\
+& && \textstyle\prod_kX_k\ (\E X=1),\quad e^{\lambda S_n}/\phi(\lambda)^n\\
+&\text{Transform:} && \tilde M_n=M_0+\textstyle\sum_{k\le n}A_k\,\Delta M_k,\\
+& && A_k\in\mathcal F_{k-1}\ \Rightarrow\ \text{martingale}\\
+&\text{Opt. stopping:} && \E M_\tau=\E M_0\ \text{if $\tau$ bounded,}\\
+& && \text{or $M_{n\wedge\tau}$ bounded, or $\E\tau<\infty$ \& bounded steps}\\
+&\text{Fair ruin:} && \Prob(S_\tau=A)=\tfrac{B}{A+B},\quad \E\tau=AB\\
+&\text{Biased ruin:} && \Prob(S_\tau=A)=\tfrac{(q/p)^B-1}{(q/p)^{A+B}-1},\\
+& && \E\tau=\tfrac{\E S_\tau}{p-q}
+\end{align*}
+\end{keyformulas}
+
+% ------------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\subsection*{From the 2024 problem sets}
+
+\begin{exercise}[PS2 (2024), Problem 1: random walk with bias]\label{ch04:ex-ps2-1}
+Let $X_n$ be i.i.d.\ steps with $\Prob(X_n=+1)=p$, $\Prob(X_n=0)=1-(p+q)$, $\Prob(X_n=-1)=q$, where $p,q>0$ and $p+q<1$
+(symmetric if $p=q$, biased upwards if $p>q$), and $S_n=\sum_{i=1}^nX_i$, $S_0=0$.
+\begin{enumerate}[(a)]
+  \item Derive the moment generating function $M_{X_i}(t)$ of a step and the mean and variance of $X_i$.
+  \item Derive the moment generating function $M_{S_n}(t)$ and the mean and variance of $S_n$.
+  \item With $\mu$, $\sigma^2$ the mean and variance of a step, prove that $Z_n=(S_n-n\mu)/\sqrt{n\sigma^2}$ converges in
+      distribution to $N(0,1)$.
+  \item Model the intraday price of a stock as such a walk with 78 five-minute steps (the six and a half hours of NYSE
+      trading), with $p=0.52$ and $q=0.47$. Which step size gives an expected daily price change of $+\$0.50$? With that
+      step size, what is the standard deviation of the daily price change?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS3 (2024), Problem 3: random walk for the log price]\label{ch04:ex-ps3-3}
+Let $P_t$ be an asset price, $S_t=\log P_t$ and $X_t=S_t-S_{t-1}=\log(P_t/P_{t-1})$, with the $X_t$ i.i.d., $\E X_t=\mu$
+and $\Var X_t=\sigma^2>0$.
+\begin{enumerate}[(a)]
+  \item For which $(\mu,\sigma^2)$ is $\{S_t\}$ a Markov process? Explain.
+  \item For which $(\mu,\sigma^2)$ is $\{S_t\}$ a martingale? Explain.
+  \item Let $S_0=0$ and $\tau=\min\{t:\ S_t>0.20\ \text{or}\ S_t<-0.20\}$, the first time the log price rises above
+      $0.20$ or falls below $-0.20$. If the steps are i.i.d.\ $N(\mu,\sigma^2)$, which conditions on $\mu$ and $\sigma^2$ make
+      $\Prob(S_\tau>0.20)>\tfrac12$? (The problem statement says ``$S_t$ are i.i.d.\ Normal''; the steps $X_t$ are meant.)
+\end{enumerate}
+\end{exercise}
+
+\subsection*{From 2013 Problem Set 2}
+
+\begin{exercise}[PS2 (2013), A-3: identify Markov processes]
+Which of the following are Markov processes?
+\begin{enumerate}[(a)]
+  \item The simple random walk $S_t$.
+  \item $X_t=|S_t|$.
+  \item $X_0=0$,
+      $X_{t+1}=X_t+(Y_t-\tfrac1\lambda)$ with $Y_t$ i.i.d.\ exponential with parameter $\lambda$.
+  \item $X_0=0$,
+      $X_{t+1}=X_t+Z_tZ_{t-1}\cdots Z_0$ with $Z_t$ i.i.d.\ log-normal.
+  \item $X_0=0$, $X_{t+1}=X_t+W_t+W_{t-1}+\dots+W_0$ with
+      $W_t$ i.i.d.\ normal.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS2 (2013), A-4]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Construct a finite Markov chain whose stationary distribution is not unique.
+  \item A chain is \emph{doubly stochastic} if, in addition to $\sum_jp_{ij}=1$, also $\sum_ip_{ij}=1$ for every $j$ (the
+      problem phrases this as ``each row sums to one'' for the transposed matrix $A$ of the 2013 notes). Prove that the uniform
+      distribution $\pi_j=1/m$ is stationary for a doubly stochastic chain on $m$ states.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS2 (2013), B-5: walk with reflecting barriers]
+A person walks on the line, stepping right with probability $b$ and left with probability $1-b$ at each period. He
+starts in one of the positions $1,\dots,m$; a step to $0$ (or to $m+1$) is instantly reflected back to $1$ (or to $m$).
+Equivalently, in position $1$ (position $m$) he stays put with probability $1-b$ (probability $b$).
+\begin{enumerate}[(a)]
+  \item Model this as a Markov chain and write its transition matrix.
+  \item Find the stationary distribution.
+\end{enumerate}
+\end{exercise}
+
+\subsection*{From the 2013 lecture notes}
+
+\begin{exercise}[\file{lecnote5}, Proposition 2.1]
+Prove the independent- and stationary-increment properties of the random walk (\cref{ch04:prop-rw}) directly from
+the definition, and check which of them survive if the steps are independent but not identically distributed.
+\end{exercise}
+
+\begin{exercise}[\file{lecnote5}, Exercise 5.4]\label{ch04:ex-note54}
+In the coin-toss game the gambler stops the first time her balance reaches \$100. By construction $\E S_\tau=100$. Does
+this contradict the optional stopping theorem? Which hypothesis of \cref{ch04:thm-ost} fails?
+\end{exercise}
+
+\begin{exercise}[\file{lecnote5}, Exercise 5.5]
+For positive integers $a,b$ the player stops the first time the balance equals $a$ or $-b$. Find the distribution of
+$S_\tau$. (This is \cref{ch04:prop-ruin}; redo it without looking. The notes write ``$X_\tau=b$'' for the second
+outcome; $-b$ is meant.)
+\end{exercise}
+
+\subsection*{Additional exercises}
+
+\begin{exercise}[Stopping times (not from the course)]
+Let $\sigma,\tau$ be stopping times. Show that $\sigma\wedge\tau$, $\sigma\vee\tau$ and $\tau+1$ are stopping times, but that
+$\tau-1$ in general is not. Deduce that ``one step after the first peak'' is a stopping time and ``the first peak'' is
+not (\cref{ch04:ex-stop}).
+\end{exercise}
+
+\begin{exercise}[Biased ruin by first-step analysis (not from the course)]
+For the biased walk let $f(k)=\Prob(\text{hit }A\text{ before }-B\mid S_0=k)$. Show that
+$f(k)=pf(k+1)+qf(k-1)$, solve this linear recursion (characteristic roots $1$ and $q/p$) with $f(A)=1$, $f(-B)=0$, and
+recover \cref{ch04:prop-biased}. Then use Wald's identity to show that the expected duration tends to $AB$ as
+$p\to\frac12$.
+\end{exercise}
+
+\begin{exercise}[A martingale that is not Markov (not from the course)]
+For the process $M_n=\xi_1+c(\xi_1)\sum_{k=2}^n\xi_k$ of \cref{ch04:sec-mart-ex}, write $M_n$ as a martingale
+transform, and compute $\Prob(M_4=-3\mid M_3=-1)$ and $\Prob(M_4=-3\mid M_3=-1,\ M_1=-1)$ to show that $\{M_n\}$ is not
+Markov.
+\end{exercise}
+
+\begin{exercise}[Time to default (not from the course)]
+For the rating chain of \cref{ch04:ex-credit}, let $Q$ be the $2\times2$ block of transitions among the non-default
+states. Show that the expected number of years before default, starting from IG or HY, is the vector
+$(I-Q)^{-1}\bm 1$ (condition on the first step), and compute it.
+\end{exercise}

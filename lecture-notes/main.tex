@@ -1,0 +1,100 @@
+\documentclass[11pt,a4paper,openany]{book}
+\input{preamble}
+
+% Compile only some chapters while working on them, e.g.:
+% \includeonly{chapters/ch01-markets-bonds}
+
+\begin{document}
+
+\frontmatter
+\begin{titlepage}
+  \centering
+  \vspace*{3cm}
+  {\Huge\bfseries Topics in Mathematics\\[4pt] with Applications in Finance\par}
+  \vspace{1cm}
+  {\Large Lecture notes\par}
+  \vspace{0.5cm}
+  {\large based on MIT 18.642 (Fall 2024) and MIT 18.S096 (Fall 2013)\par}
+  \vspace{2cm}
+  {\large Personal study notes of Alessio Martini\par}
+  \vfill
+  \begin{minipage}{0.85\textwidth}\small
+    These notes are a personal, non-commercial study aid derived from the MIT OpenCourseWare
+    courses \emph{18.642 Topics in Mathematics with Applications in Finance} (Fall 2024;
+    instructors Peter Kempthorne, Vasily Strela, Jake Xia) and \emph{18.S096 Topics in
+    Mathematics with Applications in Finance} (Fall 2013; instructors Peter Kempthorne,
+    Choongbum Lee, Vasily Strela, Jake Xia), and on the guest lectures given in those courses.
+    The original material is licensed under Creative Commons BY-NC-SA 4.0
+    (\url{https://ocw.mit.edu/terms}); these notes are shared under the same licence.
+    Lecture content is paraphrased and re-derived, not transcribed; any mistakes are mine.
+  \end{minipage}
+  \vspace{1cm}
+\end{titlepage}
+
+\chapter*{How to use these notes}
+\addcontentsline{toc}{chapter}{How to use these notes}
+
+Each chapter covers one \emph{topic} of the course. Chapters are ordered as the topics first
+appear in the 2024 course (18.642); lectures from 2013 (18.S096) on the same topic are merged
+into the same chapter, while 2013 lectures with no 2024 counterpart form
+Part~\ref{part:2013}. Every chapter opens with a \textbf{Sources} box listing the lectures
+(with their videos), slides, notes, case studies and problem sets it is built on.
+
+\paragraph{Boxes.}
+\begin{itemize}
+  \item \textcolor{defcol}{\textbf{Definitions}} (blue), \textcolor{thmcol}{\textbf{theorems}} (red),
+        \textcolor{intcol}{\textbf{examples}} (green), \textcolor{exercol}{\textbf{exercises}} and
+        \textcolor{srccol}{\textbf{remarks}} are marked with a coloured bar on the left.
+  \item \textcolor{keycol}{\textbf{Key formulas}} boxes collect the formulas to remember.
+  \item \textcolor{intucol}{\textbf{Intuition}} boxes give the ``physicist's reading'' of a result.
+  \item \textcolor{fincol}{\textbf{In finance}} boxes explain where the mathematics is used in practice.
+  \item \textcolor{cscol}{\textbf{Case study}} boxes summarise the R case studies distributed with the course.
+  \item \textcolor{srccol}{\textbf{Course notes}} flag errata in the slides, differences between the
+        2013 and 2024 versions, and material that was not recorded.
+  \item \textcolor{anscol}{\textbf{Answer}} boxes reply to the doubts in your margin notes (below).
+\end{itemize}
+
+\paragraph{Video timestamps.} A tag such as \ts{24}{12}{23:10} means: lecture~12 of the 2024
+course, at minute 23:10 of the video, is where the point is explained in class. The 2024
+lecture~1 is split into three videos, written \ts{24}{1-II}{12:36}.
+
+\paragraph{Your annotations.} While reading, write directly in the chapter files. The macro \verb|\note{...}| prints a comment in the margin next to the text where it is written: a doubt, an idea, a reminder. For example \verb|\note{Why is duration divided by $1+y$?}| produces the box in the margin here. A doubt is answered in an \textbf{Answer} box right below the paragraph carrying the note; a request or reminder that has been carried out stays in the margin, marked DONE (\verb|\note*{...}|).\note{Why is the duration of a zero-coupon bond $T/(1+y)$ and not simply $T$? \emph{(Example: delete it from \file{main.tex}.)}}
+
+\tableofcontents
+
+\mainmatter
+\part{The 2024 course (18.642)}\label{part:2024}
+\include{chapters/ch01-markets-bonds}
+\include{chapters/ch02-linear-algebra}
+\include{chapters/ch03-probability}
+\include{chapters/ch04-stochastic-processes-1}
+\include{chapters/ch05-regression}
+\include{chapters/ch06-linear-rates}
+\include{chapters/ch07-pca-factor-models}
+\include{chapters/ch08-counterparty-risk}
+\include{chapters/ch09-time-series}
+\include{chapters/ch10-portfolio}
+\include{chapters/ch11-stochastic-processes-2}
+\include{chapters/ch12-biomedical-portfolios}
+\include{chapters/ch13-volatility}
+\include{chapters/ch14-event-contracts}
+\include{chapters/ch15-black-scholes}
+\include{chapters/ch16-machine-learning}
+\include{chapters/ch17-stochastic-calculus}
+\include{chapters/ch18-sde}
+
+\part{Additional topics from 2013 (18.S096)}\label{part:2013}
+\include{chapters/ch19-var}
+\include{chapters/ch20-regularized-models}
+\include{chapters/ch21-commodities}
+\include{chapters/ch22-option-probability-duality}
+\include{chapters/ch23-quanto-credit}
+\include{chapters/ch24-hjm}
+\include{chapters/ch25-ross-recovery}
+
+\appendix
+\include{appendices/appA-materials-map}
+\include{appendices/appB-r-setup}
+\include{appendices/appC-course-logistics}
+
+\end{document}

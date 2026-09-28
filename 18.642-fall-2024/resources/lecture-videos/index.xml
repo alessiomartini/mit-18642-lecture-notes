@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Lecture Videos on MIT OpenCourseWare</title>
+    <link>/resources/lecture-videos/</link>
+    <description>Recent content in Lecture Videos on MIT OpenCourseWare</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="/resources/lecture-videos/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Lecture 1, Part I: Introduction of the Class</title>
+      <link>/resources/18642-lecture-1-part-1_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-1-part-1_mp4/data.json</guid>
+      <description>&lt;p&gt;This video provides an introductory overview of a course combining mathematical theory and real-world financial applications, featuring lectures by academics and industry experts. The instructors emphasize the practical use of mathematics in finance, covering topics like bond math, portfolio optimization, and machine learning, while utilizing tools such as RStudio Cloud for data analysis. Additionally, the course includes guest speakers from prominent financial institutions, offering students exposure to cutting-edge quantitative finance concepts and industry practices.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 1, Part II: Introduction of Financial Markets, Financial Terms and Concepts</title>
+      <link>/resources/18642-lecture-1-part-2-version-2_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-1-part-2-version-2_mp4/data.json</guid>
+      <description>&lt;p&gt;In this video Jake Xia provides an overview of key financial concepts, including market structure, types of financial products like stocks, bonds, derivatives, and the roles of various market participants. He also introduces investment strategies, emphasizing the importance of understanding personal financial goals, risk management, and the use of mathematical models in pricing and trading, culminating in a practical trading game to apply these concepts.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 1, Part III: Bond “Mathematics”</title>
+      <link>/resources/18642-lecture-1-part-3_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-1-part-3_mp4/data.json</guid>
+      <description>&lt;p&gt;This segment by Vasily Strela provides an explanation of interest rates, bonds, and their fundamental role in finance. It covers key concepts such as compound interest, discounting future cash flows, zero-coupon and coupon bonds, and the inverse relationship between bond prices and yields. The discussion also explores yield curves, their historical shapes, and how they can signal economic recessions, emphasizing the importance of understanding bond price sensitivities through measures like duration and convexity for effective fixed-income investing.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 10: Counterparty Risk Optimization</title>
+      <link>/resources/18642-lecture-10-version-2_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-10-version-2_mp4/data.json</guid>
+      <description>&lt;p&gt;This lecture by James Shepherd from LSEG provides an in-depth explanation of counterparty risk optimization in derivative trading, focusing on key risk measures like value at risk (VaR) and expected shortfall. It covers the mathematical foundations, practical challenges in margin calculation, and the use of convex optimization techniques to minimize initial margin across networks of financial institutions, highlighting the complexities of real-world implementation and fairness considerations.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 11: Regression Analysis (cont.)</title>
+      <link>/resources/18642-lecture-11-version-2_1_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-11-version-2_1_mp4/data.json</guid>
+      <description>&lt;p&gt;This lecture covers the theory and application of regression modeling, including linear regression properties, hypothesis testing, and advanced methods like ridge, lasso, and principal components regression. It also explores practical use cases such as ETF sector regressions and empirical analysis of the capital asset pricing model, highlighting model diagnostics, parameter estimation, and challenges like residual distribution and regime changes.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 12: Time Series Analysis</title>
+      <link>/resources/18642-lecture-12-version-2_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-12-version-2_mp4/data.json</guid>
+      <description>&lt;p&gt;This lecture provides an introduction to time series analysis, focusing on concepts such as stationarity, autocorrelation, and transformations like log returns to achieve stationarity in financial data. It also covers key models including autoregressive (AR), moving average (MA), and combined ARMA models, explaining their properties, estimation methods, and how differencing can handle non-stationary series.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 13: Portfolio Management</title>
+      <link>/resources/18642-lecture-13-version-4_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-13-version-4_mp4/data.json</guid>
+      <description>&lt;p&gt;This lecture provides a comprehensive overview of portfolio management, focusing on the practical aspects of asset allocation, risk measurement, and investment sizing beyond traditional modern portfolio theory, highlighting its limitations and proposing improved approaches such as gain-loss ratios. It also explores behavioral finance concepts like crowding behavior and power law distributions, emphasizing the importance of dynamic rebalancing and understanding market influences from powerful agents such as governments and large funds.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 14: Stochastic Processes II</title>
+      <link>/resources/18642-lecture-14-version-2_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-14-version-2_mp4/data.json</guid>
+      <description>&lt;p&gt;Brownian motion is a fundamental stochastic process characterized by continuous, random, and independent increments with normally distributed changes over time, whose variance grows proportionally with the time interval. It serves as a mathematical model for diverse natural and financial phenomena, exhibiting key properties such as the Markov property, reflection principle, quadratic variation, and extensions like Brownian motion with drift, reflected and absorbed Brownian motions, and the Brownian bridge, all crucial for understanding random dynamics and derivative pricing.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 18: Applying Data Science and Artificial Intelligence to Managing Biomedical Portfolios</title>
+      <link>/resources/18642-lecture-18-version-5_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-18-version-5_mp4/data.json</guid>
+      <description>&lt;p&gt;The lecture by Professor Andrew Lo highlights how innovative financial engineering can address major societal challenges like rare diseases and energy transition by creating diversified investment portfolios that reduce risk and attract capital. Using examples from gene therapy breakthroughs and fusion energy development, he emphasizes the critical role of new financing models in turning high-risk, long-term scientific projects into viable ventures that can generate significant social and economic returns.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 19: Volatility Modeling</title>
+      <link>/resources/18642-lecture-19-version-2_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-19-version-2_mp4/data.json</guid>
+      <description>&lt;p&gt;This lecture provides a comprehensive overview of volatility modeling in finance, covering fundamental concepts such as realized volatility, historical and implied volatility, and various estimation techniques including exponential moving averages and advanced estimators like the Garman-Klass and Yang-Zhang models. It also delves into stochastic process models like geometric Brownian motion, jump diffusion, and time-varying volatility models such as ARCH and GARCH, alongside practical time series forecasting methods and empirical case studies, highlighting their applications and comparative efficiencies.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 2: Linear Algebra</title>
+      <link>/resources/18642-lecture-2-version-2_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-2-version-2_mp4/data.json</guid>
+      <description>&lt;p&gt;The lecture introduces linear algebra with a focus on its applications in quantitative finance, covering vector and matrix fundamentals, portfolio valuation, and concepts like short selling, arbitrage, and contingent claims. It further explores stochastic matrices and Markov chains, eigenvalues and eigenvectors, and their roles in modeling financial markets, culminating in discussions on no-arbitrage conditions, market completeness, and pricing measures essential for option pricing theory.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 20: Building the First Federally (CFTC) Regulated Exchange Dedicated to Trading on Events</title>
+      <link>/resources/18642-lecture-20-version-2_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-20-version-2_mp4/data.json</guid>
+      <description>&lt;p&gt;This lecture recounts a detailed discussion featuring Tarek Mansour, an MIT alumnus and founder of Kalshi, about building a regulated prediction market exchange in the US. He shares his journey from working at top Wall Street firms to overcoming regulatory challenges as part of building Kalshi business, emphasizing perseverance, innovation in financial markets, and the potential of prediction markets to transform how risks and future events are traded and priced.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 21: Black-Scholes Formula, Risk Neutral Valuation</title>
+      <link>/resources/18642-lecture-21-version-2_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-21-version-2_mp4/data.json</guid>
+      <description>&lt;p&gt;This lecture explores the fundamental concept of risk-neutral pricing as a powerful framework for derivative valuation, illustrated through examples like forward contracts and options. It further explains the derivation of the Black-Scholes equation from stochastic calculus, highlighting how derivative prices depend primarily on volatility and interest rates, not on investors’ risk preferences, and concludes with practical insights into option replication and hedging strategies.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 23: Introduction to Machine Learning</title>
+      <link>/resources/18642-lecture-23-version-2_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-23-version-2_mp4/data.json</guid>
+      <description>&lt;p&gt;John Hull, a distinguished expert in derivatives and machine learning, shares his extensive journey from mathematics to applying machine learning in finance, emphasizing its transformative role in the current industrial revolution. He explains core machine learning concepts, including supervised, unsupervised, and reinforcement learning, illustrated with practical examples like neural networks for option pricing and reinforcement learning for decision-making, highlighting both theoretical foundations and real-world applications such as hedging strategies that reduce transaction costs and improve risk management.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 24: Stochastic Calculus</title>
+      <link>/resources/18642-lecture-24-version-2_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-24-version-2_mp4/data.json</guid>
+      <description>&lt;p&gt;The lecture provides an in-depth introduction to stochastic calculus, focusing on Brownian motion with drift and the construction of Itô integrals, which extend ordinary calculus to stochastic processes. Key concepts include the definition of Itô integrals for random and deterministic functions, the Itô isometry connecting variance and integrand norms, and Itô’s formula, which generalizes Taylor expansions to stochastic settings, enabling applications such as solving partial differential equations and martingale problems in quantitative finance.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 25: Stochastic Calculus (cont.); Stochastic Differential Equations</title>
+      <link>/resources/18642-lecture-25-version-2_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-25-version-2_mp4/data.json</guid>
+      <description>&lt;p&gt;This final lecture provides an in-depth discussion of Itô’s formula and its generalizations, illustrating how it applies to functions of Brownian motion, especially in finance for modeling derivative pricing and geometric Brownian motion. It also explains the derivation of the Black-Scholes differential equation through risk-neutral hedging, the solution of the heat (diffusion) equation as a fundamental tool for solving such PDEs, and introduces more advanced stochastic differential equations like the Ornstein-Uhlenbeck process, emphasizing their broad applications beyond finance.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 4: Linear Algebra (cont.); Probability Theory</title>
+      <link>/resources/18642-lecture-4-version-2_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-4-version-2_mp4/data.json</guid>
+      <description>&lt;p&gt;The lecture provides an overview of key linear algebra concepts such as eigenvalues, eigenvectors, matrix diagonalization, and singular value decomposition, emphasizing their applications in modeling dynamic systems and data analysis. It also introduces foundational probability theory concepts, including distributions, moments, covariance, principal component analysis, and their relevance to finance, portfolio management, and stochastic modeling.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 5: Probability Theory (cont.); Stochastic Processes I</title>
+      <link>/resources/18642-lecture-5-version-2_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-5-version-2_mp4/data.json</guid>
+      <description>&lt;p&gt;Principal components analysis (PCA) is a statistical technique that transforms a random vector in a multidimensional space by shifting and rotating coordinates to identify orthogonal directions of maximum variability, often used in financial data to simplify complex covariance structures. Additionally, the discussion covers foundational probability concepts such as the central limit theorem, utility optimization in asset pricing, and introduces stochastic processes like martingales, highlighting their importance in modeling financial markets and solving probability problems.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 6: Stochastic Processes I (cont.); Regression Analysis</title>
+      <link>/resources/18642-lecture-6-version-3_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-6-version-3_mp4/data.json</guid>
+      <description>&lt;p&gt;The lecture discusses martingales and their powerful applications in solving problems in stochastic processes, including random walks, stopping times, and gambler’s ruin probabilities, highlighting how martingale properties simplify complex analyses. It then introduces Markov processes and chains, explaining their memoryless property and applications in finance such as credit rating transitions and stock price modeling, before transitioning to regression analysis, focusing on multiple linear regression, model assumptions, and estimation techniques.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 7: Linear Rates, Products, and Models</title>
+      <link>/resources/18642-lecture-7-version-2_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-7-version-2_mp4/data.json</guid>
+      <description>&lt;p&gt;Andrew Gunstensen, head of quantitative strategies at Mizuho in New York and MIT PhD in Geophysics, delivers an insightful and comprehensive talk on linear interest rate products, focusing on fundamentals, market structure, valuation, hedging, and electronic trading. He covers the basics of interest rates and their significance as the largest and most liquid financial markets, the transition from LIBOR to SOFR after the 2008 financial crisis, and the complexities of discounting, yield curve construction, and swap valuation.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 8: Regression Analysis (cont.)</title>
+      <link>/resources/18642-lecture-8-version-2_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-8-version-2_mp4/data.json</guid>
+      <description>&lt;p&gt;This lecture provides a comprehensive overview of linear regression modeling, focusing on ordinary least squares (OLS) estimation, its mathematical formulation, and statistical properties. It discusses the derivation of the least squares estimator, the interpretation of the Hat matrix as a projection, the distributional assumptions under the normal linear model, inference using t- and F-tests, and model diagnostics including residual analysis and influence measures, concluding with extensions to generalized least squares for correlated errors.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lecture 9: Principal Component Analysis in Finance</title>
+      <link>/resources/18642-lecture-9-version-2_mp4/data.json</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/resources/18642-lecture-9-version-2_mp4/data.json</guid>
+      <description>&lt;p&gt;This lecture features a detailed guest lecture by Stefan Andreev on principal component analysis (PCA) and its critical applications in quantitative finance, especially in modeling the U.S. bond market. The lecture explains PCA’s mathematical foundations, practical challenges, and how it helps identify key factors driving yield curve dynamics, enabling portfolio construction and risk management in highly correlated financial markets.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,1028 @@
+% !TEX root = ../main.tex
+\chapter{Stochastic Processes II: Brownian Motion}\label{ch:sp2}
+
+\begin{sources}
+\small
+\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+\textbf{Lecture} & \textbf{Speaker} & \textbf{Content}\\
+\midrule
+2024 L14 & P.~Kempthorne & History; Brownian motion with diffusion coefficient $\sigma^2$: increments, Markov property, covariance; transition density and the diffusion equation; Brownian motion as limit of normalised random walks (invariance principle); reflection principle, maximum, first hitting time; reflected and absorbed Brownian motion; Brownian bridge and the empirical distribution function; Brownian motion with drift; gambler's ruin by infinitesimal one-step analysis; non-differentiability; quadratic variation; log-price quadratic variation; Laplace increments at exponential times; filtrations and adapted processes.\\
+2013 L17 & C.~Lee & Continuous-time processes and why their law is hard to describe; the existence theorem for standard Brownian motion; random-walk limit; Brown, Einstein and Bachelier; zero crossings, $\sqrt t$ envelope, nowhere differentiability; distribution of the maximum by the reflection principle; quadratic variation and $(\dd B)^2=\dd t$; Brownian motion with drift; \emph{why $S_t\ne e^{B_t}$}, Taylor expansion and the first appearance of It\^o's lemma.\\
+\bottomrule
+\end{tabularx}
+
+\smallskip
+\textbf{Files.} 2024 slides \file{mit18_642_f24_lec14_1.pdf} (77 pages with overlays, 20 slides) and the figure decks
+\file{lec14_2} (two-dimensional Brownian motion, 201 animation frames), \file{lec14_3} (normal densities $p(x\mid t)$,
+$t=1,\dots,10$), \file{lec14_4} (limiting random walk, 201 frames), \file{lec14_5} (reflected Brownian motion, three trials),
+\file{lec14_6} ($\Prob[M(t)>x]$), \file{lec14_7} (hitting-time density), \file{lec14_8} (gambler's ruin with drift, four
+panels), \file{lec14_9} (quadratic variation, 201 frames); 2013 note \file{MIT18_S096F13_lecnote17.pdf}.
+\textbf{Problem sets.} 2024 PS4 Problems~1--2 (conditional moments and scaling of Brownian motion; Problems~3--4 are the
+maximum-likelihood estimation of a geometric Brownian motion, \cref{ch:volatility}); 2024 PS5 Problems~1--2 (L\'evy processes:
+Brownian motion with drift and the Poisson process, with simulations; Problems~3--5 are volatility estimation,
+\cref{ch:volatility}). 2013 PS8 Problem~A-2 is 2024 PS4 Problem~1 and Problem~B-1 is on two-dimensional Brownian motion; PS8
+belongs to \cref{ch:stochcalc}, see the course note in \cref{ch11:sec-ahead}. The exercises are at the end of the chapter.
+\textbf{Not covered.} The construction of Brownian motion (the existence theorem is only quoted in both years), the
+proofs of Donsker's theorem and of nowhere differentiability, and the law of the iterated logarithm.
+The R code that generated the figure decks is not part of the download; the figures of this chapter are recomputed from formulas.
+\end{sources}
+
+\section*{Motivation}
+Chapter~\ref{ch:sp1} studied random walks, martingales and stopping times in discrete time. Prices, however,
+change at every instant a trade takes place, and the mathematics of derivative pricing (\cref{ch:stochcalc,ch:sde,ch:bs}) is
+carried by a \emph{continuous-time} model. Its basic building block is \emph{Brownian motion}, the continuous-time random walk.
+It was found three times, in three unrelated places: by the botanist Robert Brown (1827), watching pollen grains jitter in
+water; by Louis Bachelier (1900), as a model of prices on the Paris exchange; by Albert Einstein (1905), who explained
+Brown's observation by the bombardment of the grain by water molecules and obtained the diffusion law
+$\langle x^2\rangle=2Dt$ \ts{24}{14}{0:00}\ts{13}{17}{18:21}\ts{13}{17}{20:29}. Norbert Wiener, an MIT mathematician,
+gave it its rigorous foundation in 1923, which is why it is also called the \emph{Wiener process}
+\ts{24}{14}{1:04}\ts{13}{17}{13:43}.
+
+The reason for its centrality is a \emph{universality} statement, made precise in \cref{ch11:sec-donsker}: any random walk with
+finite-variance steps, watched from far away, looks like Brownian motion. For a physicist this is the central limit theorem in
+disguise; for a trader it says that a price built from many small, roughly independent trades is described by two numbers, a
+drift and a volatility. This chapter develops the calculus of \emph{sample paths} that the next chapters use:
+
+\begin{itemize}
+  \item the definition and the elementary properties (Gaussian, Markov, martingale), and the diffusion equation
+        (\cref{ch11:sec-def});
+  \item Brownian motion as the scaling limit of the random walk (\cref{ch11:sec-donsker});
+  \item the strange geometry of the paths: continuous but nowhere differentiable, with \emph{finite quadratic variation}
+        $[B]_T=T$, the fact that later becomes It\^o's lemma (\cref{ch11:sec-paths});
+  \item the reflection principle, giving the law of the running maximum and of the first hitting time
+        (\cref{ch11:sec-reflection}), with reflected and absorbed Brownian motion;
+  \item Brownian motion with drift and the gambler's ruin problem, geometric Brownian motion, and why the
+        price is \emph{not} $e^{B_t}$ (\cref{ch11:sec-drift,ch11:sec-gbm});
+  \item further processes built from $B$: bridge, random-time sampling, two dimensions, L\'evy processes, filtrations
+        (\cref{ch11:sec-variants}).
+\end{itemize}
+
+% ==================================================================
+\section{Definition and elementary properties}\label{ch11:sec-def}
+
+\subsection{Brownian motion}
+In discrete time the law of a random walk is specified through its increments: ``each step is $\pm1$ with probability
+$\tfrac12$''. In continuous time there is no next step to describe, so one lists \emph{properties} of increments over all
+intervals and asserts that a process with these properties exists \ts{13}{17}{4:10}\ts{13}{17}{5:18}\ts{13}{17}{9:28}.
+
+\begin{definition}[Standard Brownian motion]\label{ch11:def-bm}
+A stochastic process $\{B(t),\,t\ge0\}$ is a \emph{standard Brownian motion} (Wiener process) if
+\begin{enumerate}[(i)]
+  \item $B(0)=0$ and $t\mapsto B(t)$ is continuous (with probability one);
+  \item (stationary Gaussian increments) for $0\le s<t$, $B(t)-B(s)\sim N(0,\,t-s)$;
+  \item (independent increments) for $t_1\le t_2\le t_3\le t_4$ the increments $B(t_2)-B(t_1)$ and $B(t_4)-B(t_3)$ are
+        independent; more generally the increments over non-overlapping intervals are mutually independent
+        \ts{24}{14}{3:08}\ts{24}{14}{4:13}\ts{24}{14}{5:17}\ts{13}{17}{7:21}.
+\end{enumerate}
+\end{definition}
+
+The 2024 slides call $\sigma^2$ the \emph{diffusion coefficient} and write $B(t+\Delta t)-B(t)\sim N(0,\sigma^2\Delta t)$
+already in the definition; from the slide on drift onwards $B$ is standard and $\sigma B$ is used. We follow the second convention:
+\emph{Brownian motion with diffusion coefficient $\sigma^2$} is $\sigma B(t)$, and one may start it at any level $x$ by
+adding $x$ (``Brownian motion started at $x$'') \ts{24}{14}{9:36}. Property (ii) is the one to remember: over a time span
+$h$ the process moves by a centred normal variable whose \emph{variance is the time elapsed}, so its typical size is
+$\sqrt h$ \ts{13}{17}{12:40}.
+
+\begin{coursenote}[Existence, and why the definition is indirect]
+Both lecturers stress that (i)--(iii) are a \emph{list of demands} on a probability law on the space of continuous
+paths, and that the theorem ``such a law exists'' is hard and not proved in the course \ts{13}{17}{6:20}\ts{13}{17}{10:36}\ts{13}{17}{11:37}.
+The sample space is the space of paths $\omega:[0,\infty)\to\R$ itself, with $\Prob$ a measure on it (Wiener measure); a
+path is an outcome, and there is no ``density at $\omega$'' \ts{13}{17}{5:18}. One standard route (Wiener 1923; L\'evy 1948)
+builds $B$ as a uniform limit of random piecewise-linear functions obtained by refining a dyadic grid; another is
+Donsker's theorem below, where $B$ is \emph{defined} as the limit of rescaled random walks (this is how the 2024 lecture
+introduces it, \ts{24}{14}{17:22}). What (i)--(iii) do determine is the joint law of $(B(t_1),\dots,B(t_m))$ for every finite
+set of times, by writing $B(t_k)$ as a sum of independent normal increments; continuity of the paths is the extra input
+that makes the law unique on path space.
+\end{coursenote}
+
+\begin{proposition}[Gaussian characterisation]\label{ch11:prop-gauss}
+A process with continuous paths and $B(0)=0$ is a standard Brownian motion if and only if it is a centred Gaussian process
+with covariance function $\Cov(B(s),B(t))=\min(s,t)$.
+\end{proposition}
+\begin{proof}
+($\Rightarrow$) Take $s\le t$. Then $B(t)=B(s)+[B(t)-B(s)]$ with independent summands, so
+$\E[B(s)B(t)]=\E[B(s)^2]+\E[B(s)]\,\E[B(t)-B(s)]=s+0$ \ts{24}{14}{7:33}\ts{24}{14}{8:34}. Any vector $(B(t_1),\dots,B(t_m))$ is a linear
+image of independent normal increments, hence jointly Gaussian.
+($\Leftarrow$) For $s<t$ the variable $B(t)-B(s)$ is centred normal with variance $t-2s+s=t-s$. For
+$s_1<t_1\le s_2<t_2$, $\Cov(B(t_1)-B(s_1),B(t_2)-B(s_2))=t_1-t_1-s_1+s_1=0$ (write out the four
+minima); jointly Gaussian and uncorrelated implies independent.
+\end{proof}
+Note the meaning of the covariance: $B(s)$ and $B(t)$ are correlated to the extent that the two time windows $[0,s]$ and $[0,t]$
+overlap, $\Corr(B(s),B(t))=\sqrt{s/t}$ for $s<t$ \ts{24}{14}{8:34}.
+
+\begin{proposition}[Elementary properties]\label{ch11:prop-elem}
+Let $B$ be a standard Brownian motion and $\mathcal F_t=\sigma(B(u),u\le t)$.
+\begin{enumerate}[(i)]
+  \item \emph{Mean and variance.} $\E B(t)=0$, $\Var B(t)=t$: the standard deviation grows like $\sqrt t$
+        \ts{24}{14}{6:28}\ts{24}{14}{7:33}.
+  \item \emph{Markov property.} For $h>0$, $B(t+h)=B(t)+[B(t+h)-B(t)]$ where the bracket is $N(0,h)$ and independent of
+        $\mathcal F_t$; hence the law of $B(t+h)$ given $\mathcal F_t$ is $N(B(t),h)$, which depends on the past only through $B(t)$
+        \ts{24}{14}{5:17}\ts{24}{14}{6:28}\ts{24}{14}{11:54}.
+  \item \emph{Martingales.} $B(t)$, $B(t)^2-t$ and, for every real $\lambda$, $\exp(\lambda B(t)-\tfrac12\lambda^2t)$ are
+        martingales with respect to $\{\mathcal F_t\}$.
+  \item \emph{Symmetries.} $-B$; the shifted process $B(t_0+t)-B(t_0)$; the rescaled process $c^{-1/2}B(ct)$ for $c>0$; and the
+        time-inverted process $tB(1/t)$ ($t>0$, and $0$ at $t=0$) are again standard Brownian motions.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(i) is property (ii) of \cref{ch11:def-bm} with $s=0$.
+
+(ii) is property (iii) of \cref{ch11:def-bm} together with the definition of $\mathcal F_t$.
+
+(iii) For $s<t$, using independence of
+$B(t)-B(s)$ from $\mathcal F_s$: $\E[B(t)\mid\mathcal F_s]=B(s)$;
+$\E[B(t)^2\mid\mathcal F_s]=B(s)^2+2B(s)\E[B(t)-B(s)]+\E[(B(t)-B(s))^2]=B(s)^2+(t-s)$; and with the moment generating
+function of a normal variable, $\E[e^{\lambda(B(t)-B(s))}]=e^{\lambda^2(t-s)/2}$, so
+$\E[e^{\lambda B(t)-\lambda^2t/2}\mid\mathcal F_s]=e^{\lambda B(s)}e^{\lambda^2(t-s)/2}e^{-\lambda^2t/2}=e^{\lambda B(s)-\lambda^2s/2}$.
+
+(iv) Each candidate is continuous (at $t=0$ for the inverted one use $B(u)/u\to0$, which is the law of large numbers for
+$B$), centred Gaussian, and one checks that its covariance is $\min(s,t)$; then apply \cref{ch11:prop-gauss}.
+For the rescaling, $\Cov(c^{-1/2}B(cs),c^{-1/2}B(ct))=c^{-1}\min(cs,ct)=\min(s,t)$; this is the content of 2024 PS4
+Problem~2 (\cref{ch11:ex-scaling}); for the inversion, $st\min(1/s,1/t)=\min(t,s)$.
+\end{proof}
+
+Property (c) is the continuous-time image of \cref{ch04:ex-m1,ch04:ex-m2,ch04:ex-m4}: the same three martingales that
+appeared for the random walk (sum, square minus $n\sigma^2$, exponential) survive the limit. The variance $t$ that
+appears in $B^2-t$ is the \emph{quadratic variation} of \cref{ch11:sec-paths}. The martingale $\exp(\lambda B-\lambda^2t/2)$ is
+the ancestor of the change of measure behind risk-neutral pricing (\cref{ch:bs}).
+
+\begin{intuition}[The physicist's reading]\label{ch11:int-physics}
+Standard Brownian motion is the position of a free overdamped particle whose velocity has been eliminated: the Langevin
+equation $\dot x=\sqrt{2D}\,\xi(t)$ with white noise $\xi$ has solution $x(t)=\sqrt{2D}\,B(t)$, so
+$\langle x^2\rangle=2Dt$ (Einstein's law) and $\sigma^2=2D$. The white noise $\xi=\dot B$ does not exist as a function
+(\cref{ch11:sec-paths}); only its integral does. The law of the whole path is the \emph{Wiener measure}, the measure of the
+Euclidean path integral of a free particle,
+$\propto\exp\bigl(-\tfrac12\int_0^t\dot x^2\dd s\bigr)\prod\dd x(s)$, formal but useful; the transition density below is
+its propagator (the heat kernel), and $\min(s,t)$ is the Green function of $-\dd^2/\dd t^2$ with Dirichlet condition at $0$.
+\end{intuition}
+
+\begin{finance}[Bachelier's model]
+Bachelier's thesis modelled the price itself as $S(t)=S(0)+\mu t+\sigma B(t)$, ``arithmetic'' Brownian motion; the
+2013 note credits him with the first use of the process to value stocks and options \ts{13}{17}{13:43}. Its defect is that the price becomes
+negative with positive probability, so equities are modelled through $\log S$ or through relative changes
+(\cref{ch11:sec-gbm}). The arithmetic model survives where levels can be negative or small compared with their moves, in
+particular for interest rates and spreads, where ``normal volatility'' is quoted in basis points per year.
+\end{finance}
+
+% ------------------------------------------------------------------
+\subsection{Transition density and the diffusion equation}\label{ch11:sec-diffusion}
+Let $B^x$ be Brownian motion started at $x$, i.e.\ $x+B$. For $\tau>0$ and diffusion coefficient $\sigma^2$, the density of
+$B^x(s+\tau)$ given $B^x(s)=x$ is the Gaussian
+\begin{equation}\label{ch11:eq-kernel}
+  p(y,\tau\mid x)=\frac1{\sqrt{2\pi\sigma^2\tau}}\exp\Bigl(-\frac{(y-x)^2}{2\sigma^2\tau}\Bigr),
+\end{equation}
+that is, $\Prob[B(t)\le c\mid B(s)=x]=\Phi\bigl((c-x)/(\sigma\sqrt{t-s})\bigr)$ in terms of the standard normal cdf $\Phi$ and pdf
+$\varphi$ \ts{24}{14}{9:36}\ts{24}{14}{10:42}\ts{24}{14}{11:54}\ts{24}{14}{13:03}.
+
+\begin{proposition}[Diffusion equation]\label{ch11:prop-heat}
+The kernel \eqref{ch11:eq-kernel} satisfies
+\begin{equation}\label{ch11:eq-heat}
+  \frac{\partial p}{\partial\tau}=\frac{\sigma^2}2\,\frac{\partial^2p}{\partial y^2},
+  \qquad \int_{-\infty}^{\infty}p(y,\tau\mid x)\dd y=1\ \ (\tau>0),\qquad p(y,\tau\mid x)\xrightarrow[\tau\downarrow0]{}\delta(y-x),
+\end{equation}
+and \eqref{ch11:eq-heat} has no other solution with these properties. The same holds in the variable $x$ (backward equation).
+\end{proposition}
+\begin{proof}
+Put $u=y-x$. Then $\partial_\tau p=p\,\bigl(-\tfrac1{2\tau}+\tfrac{u^2}{2\sigma^2\tau^2}\bigr)$ and
+$\partial_y^2p=p\,\bigl(-\tfrac1{\sigma^2\tau}+\tfrac{u^2}{\sigma^4\tau^2}\bigr)$, so $\partial_\tau p=\tfrac{\sigma^2}2\partial_y^2p$.
+Integrating \eqref{ch11:eq-heat} over $y$ gives $\partial_\tau\int p=\tfrac{\sigma^2}2[\partial_yp]_{-\infty}^{\infty}=0$: probability
+is conserved \ts{24}{14}{16:17}. The Fourier transform in $y$ turns the equation into $\partial_\tau\hat p=-\tfrac12\sigma^2k^2\hat p$,
+whose solution with $\hat p(k,0)=e^{-ikx}$ is $e^{-ikx-\sigma^2k^2\tau/2}$, the transform of \eqref{ch11:eq-kernel}; this gives uniqueness
+among tempered solutions \ts{24}{14}{17:22}. The backward version follows from $p$ depending on $y-x$ only.
+\end{proof}
+The semigroup property (Chapman--Kolmogorov, \cref{ch04:thm-nstep}) is the convolution identity
+$\int p(z,\tau_2\mid y)\,p(y,\tau_1\mid x)\dd y=p(z,\tau_1+\tau_2\mid x)$, the statement that a sum of independent normals is normal
+with added variances. In other disciplines \eqref{ch11:eq-heat} is the \emph{heat equation}, in population dynamics the
+\emph{Fokker--Planck} or \emph{Kolmogorov forward} equation \ts{24}{14}{17:22}; it returns in the valuation of derivatives
+(\cref{ch:bs}), where the Black--Scholes PDE is a backward equation of this type.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.9\linewidth,height=5cm,xlabel={$y$},ylabel={$p(y,t\mid0)$},xmin=-6,xmax=6,ymin=0,ymax=0.45,
+  legend style={at={(0.5,1.03)},anchor=south,legend columns=3,font=\footnotesize},grid=major,grid style={black!10}]
+  \addplot[thick,color=defcol,domain=-6:6,samples=100] {1/sqrt(2*pi*1)*exp(-x^2/(2*1))};
+  \addplot[thick,color=intcol,domain=-6:6,samples=100] {1/sqrt(2*pi*2.5)*exp(-x^2/(2*2.5))};
+  \addplot[thick,color=thmcol,domain=-6:6,samples=100] {1/sqrt(2*pi*6)*exp(-x^2/(2*6))};
+  \addplot[only marks,mark=*,mark size=1.6pt,color=defcol] coordinates {(-1,0.24197) (1,0.24197)};
+  \addplot[only marks,mark=*,mark size=1.6pt,color=intcol] coordinates {(-1.5811,0.15316) (1.5811,0.15316)};
+  \addplot[only marks,mark=*,mark size=1.6pt,color=thmcol] coordinates {(-2.4495,0.09946) (2.4495,0.09946)};
+  \legend{{$t=1$},{$t=2.5$},{$t=6$}}
+\end{axis}
+\end{tikzpicture}
+\caption{Diffusion of the density of $B(t)$ (the panels of \file{lec14_3}, which shows $t=1,1.5,\dots,10$). The
+density drops at the centre and rises in the tails; the dots mark the inflection points $y=\pm\sqrt t$, where the curvature
+changes sign, so that $\partial_tp<0$ inside and $>0$ outside \ts{24}{14}{14:08}\ts{24}{14}{15:14}.}\label{ch11:fig-heat}
+\end{figure}
+
+
+% ==================================================================
+\section{Brownian motion as the limit of random walks}\label{ch11:sec-donsker}
+
+Let $X_1,X_2,\dots$ be i.i.d.\ with $\E X_i=0$, $\Var X_i=1$, and $S_n=X_1+\dots+X_n$
+(\cref{ch04:sec-rw}). By the central limit theorem (\cref{ch03:thm-clt}), $\Prob[S_n/\sqrt n\le c]\to\Phi(c)$, i.e.\ $\Prob[S_n\le x]\approx\Phi(x/\sqrt n)$
+\ts{24}{14}{17:22}\ts{24}{14}{18:27}. To speak about a \emph{path} rather than one time, rescale space by $\sqrt n$ and time by $n$.
+
+\begin{definition}[Normalised random walk]\label{ch11:def-bn}
+$B_n(t)=S_{\lfloor nt\rfloor}/\sqrt n$ for $t\ge0$, where $\lfloor nt\rfloor$ is the largest integer $\le nt$; the process jumps at
+$t=k/n$ by $X_k/\sqrt n$ and is constant in between \ts{24}{14}{19:29}. The piecewise-linear version, which joins the points
+$(k/n,S_k/\sqrt n)$ (the version of the 2013 note, ``connect the dots''), is continuous and differs from it by at most
+$\max_{k\le nT}|X_k|/\sqrt n$ on $[0,T]$ \ts{13}{17}{14:56}\ts{13}{17}{16:01}.
+\end{definition}
+
+\begin{coursenote}[Erratum in the 2013 note]
+\file{lecnote17} defines the piecewise-linear path by $Z(t/n)=Y_t$ for a walk with variance-one steps; the rescaling by $1/\sqrt n$ is missing (the
+values would be of order $\sqrt n$ and no limit could exist). The correct definition is $Z(t/n)=Y_t/\sqrt n$, as in the 2024 slides.
+\end{coursenote}
+
+\begin{theorem}[Donsker's invariance principle]\label{ch11:thm-donsker}
+As $n\to\infty$ the process $B_n$ converges in distribution (weakly, as a random element of the space of paths on $[0,T]$
+with the uniform metric) to a standard Brownian motion $B$, whatever the distribution of the steps $X_i$
+\ts{24}{14}{20:44}. In particular, for every continuous functional $F$ of the path (e.g.\ $\sup_{t\le1}$, $\int_0^1(\cdot)^2\dd t$,
+the value at time $1$), $F(B_n)\xrightarrow{d}F(B)$.
+\end{theorem}
+\begin{proof}[What is proved here]
+\emph{Finite-dimensional convergence.} For $0\le t_1<\dots<t_m$ the increments $B_n(t_j)-B_n(t_{j-1})$ are sums of
+$\lfloor nt_j\rfloor-\lfloor nt_{j-1}\rfloor\sim n(t_j-t_{j-1})$ i.i.d.\ steps divided by $\sqrt n$, over disjoint blocks, hence independent; by the central limit
+theorem each converges to $N(0,t_j-t_{j-1})$, and by independence jointly, which is exactly the joint law of the increments of $B$
+\ts{13}{17}{17:19}. This gives $\Var B(t)=\lim_n\Var B_n(t)=t$ and $\E B(t)=0$, the mean and variance of the slides
+\ts{24}{14}{19:29}. \emph{Tightness}, that no path of $B_n$ oscillates wildly between grid times so that the limit is a
+continuous process, requires a maximal inequality (Kolmogorov or Doob) and is not proved in the course; it is what turns
+convergence of the finite-dimensional laws into convergence of laws on path space \ts{13}{17}{6:20}.
+\end{proof}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.47\linewidth,height=4.8cm,xlabel={$t$},ylabel={$B_n(t)$},xmin=0,xmax=1,title={$n=20$, $\pm1$ steps},title style={font=\footnotesize},grid=major,grid style={black!10}]
+  \addplot[thick,const plot,color=defcol] coordinates {(0.000,0.000) (0.050,-0.224) (0.100,-0.447) (0.150,-0.224) (0.200,-0.447) (0.250,-0.224) (0.300,0.000) (0.350,0.224) (0.400,0.000) (0.450,-0.224) (0.500,-0.447) (0.550,-0.671) (0.600,-0.447) (0.650,-0.224) (0.700,-0.447) (0.750,-0.224) (0.800,-0.447) (0.850,-0.224) (0.900,0.000) (0.950,0.224) (1.000,0.447)};
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[width=0.47\linewidth,height=4.8cm,xlabel={$t$},xmin=0,xmax=1,title={$n=150$},title style={font=\footnotesize},
+  legend style={at={(0.5,1.25)},anchor=south,legend columns=2,font=\scriptsize},grid=major,grid style={black!10}]
+  \addplot[thick,color=defcol] coordinates {(0.000,0.000) (0.007,0.082) (0.013,0.163) (0.020,0.082) (0.027,0.163) (0.033,0.082) (0.040,0.163) (0.047,0.245) (0.053,0.163) (0.060,0.245) (0.067,0.163) (0.073,0.082) (0.080,0.000) (0.087,0.082) (0.093,0.000) (0.100,-0.082) (0.107,-0.163) (0.113,-0.245) (0.120,-0.327) (0.127,-0.408) (0.133,-0.327) (0.140,-0.408) (0.147,-0.327) (0.153,-0.245) (0.160,-0.327) (0.167,-0.408) (0.173,-0.490) (0.180,-0.572) (0.187,-0.490) (0.193,-0.572) (0.200,-0.490) (0.207,-0.408) (0.213,-0.327) (0.220,-0.408) (0.227,-0.490) (0.233,-0.408) (0.240,-0.490) (0.247,-0.408) (0.253,-0.327) (0.260,-0.245) (0.267,-0.327) (0.273,-0.245) (0.280,-0.163) (0.287,-0.082) (0.293,-0.163) (0.300,-0.245) (0.307,-0.163) (0.313,-0.245) (0.320,-0.327) (0.327,-0.408) (0.333,-0.327) (0.340,-0.408) (0.347,-0.327) (0.353,-0.408) (0.360,-0.490) (0.367,-0.408) (0.373,-0.327) (0.380,-0.245) (0.387,-0.163) (0.393,-0.245) (0.400,-0.327) (0.407,-0.245) (0.413,-0.163) (0.420,-0.082) (0.427,-0.163) (0.433,-0.245) (0.440,-0.163) (0.447,-0.245) (0.453,-0.327) (0.460,-0.245) (0.467,-0.327) (0.473,-0.245) (0.480,-0.327) (0.487,-0.408) (0.493,-0.327) (0.500,-0.408) (0.507,-0.490) (0.513,-0.572) (0.520,-0.653) (0.527,-0.735) (0.533,-0.653) (0.540,-0.572) (0.547,-0.653) (0.553,-0.735) (0.560,-0.653) (0.567,-0.572) (0.573,-0.653) (0.580,-0.735) (0.587,-0.816) (0.593,-0.898) (0.600,-0.816) (0.607,-0.735) (0.613,-0.653) (0.620,-0.735) (0.627,-0.653) (0.633,-0.572) (0.640,-0.653) (0.647,-0.572) (0.653,-0.653) (0.660,-0.735) (0.667,-0.653) (0.673,-0.572) (0.680,-0.653) (0.687,-0.572) (0.693,-0.490) (0.700,-0.572) (0.707,-0.653) (0.713,-0.572) (0.720,-0.490) (0.727,-0.408) (0.733,-0.490) (0.740,-0.572) (0.747,-0.490) (0.753,-0.572) (0.760,-0.490) (0.767,-0.408) (0.773,-0.490) (0.780,-0.572) (0.787,-0.490) (0.793,-0.572) (0.800,-0.490) (0.807,-0.408) (0.813,-0.327) (0.820,-0.245) (0.827,-0.327) (0.833,-0.245) (0.840,-0.327) (0.847,-0.408) (0.853,-0.327) (0.860,-0.245) (0.867,-0.327) (0.873,-0.408) (0.880,-0.327) (0.887,-0.245) (0.893,-0.163) (0.900,-0.082) (0.907,-0.163) (0.913,-0.245) (0.920,-0.163) (0.927,-0.245) (0.933,-0.327) (0.940,-0.408) (0.947,-0.490) (0.953,-0.572) (0.960,-0.490) (0.967,-0.408) (0.973,-0.490) (0.980,-0.572) (0.987,-0.490) (0.993,-0.572) (1.000,-0.490)};
+  \addplot[thick,color=thmcol] coordinates {(0.000,0.000) (0.007,-0.106) (0.013,-0.204) (0.020,-0.309) (0.027,-0.230) (0.033,-0.259) (0.040,-0.339) (0.047,-0.431) (0.053,-0.397) (0.060,-0.483) (0.067,-0.587) (0.073,-0.537) (0.080,-0.635) (0.087,-0.661) (0.093,-0.661) (0.100,-0.698) (0.107,-0.702) (0.113,-0.593) (0.120,-0.635) (0.127,-0.738) (0.133,-0.888) (0.140,-0.905) (0.147,-0.933) (0.153,-0.912) (0.160,-0.950) (0.167,-0.989) (0.173,-1.048) (0.180,-1.090) (0.187,-1.077) (0.193,-1.108) (0.200,-1.100) (0.207,-0.945) (0.213,-0.905) (0.220,-1.034) (0.227,-0.893) (0.233,-0.864) (0.240,-0.941) (0.247,-0.867) (0.253,-0.866) (0.260,-0.916) (0.267,-0.968) (0.273,-1.049) (0.280,-1.045) (0.287,-0.957) (0.293,-0.984) (0.300,-0.950) (0.307,-0.796) (0.313,-0.896) (0.320,-0.875) (0.327,-0.900) (0.333,-0.986) (0.340,-1.070) (0.347,-1.071) (0.353,-1.036) (0.360,-1.079) (0.367,-1.075) (0.373,-1.016) (0.380,-0.991) (0.387,-0.921) (0.393,-0.883) (0.400,-0.843) (0.407,-0.694) (0.413,-0.643) (0.420,-0.632) (0.427,-0.574) (0.433,-0.650) (0.440,-0.677) (0.447,-0.612) (0.453,-0.561) (0.460,-0.434) (0.467,-0.434) (0.473,-0.553) (0.480,-0.394) (0.487,-0.305) (0.493,-0.391) (0.500,-0.279) (0.507,-0.276) (0.513,-0.424) (0.520,-0.459) (0.527,-0.500) (0.533,-0.370) (0.540,-0.435) (0.547,-0.456) (0.553,-0.478) (0.560,-0.509) (0.567,-0.584) (0.573,-0.566) (0.580,-0.478) (0.587,-0.427) (0.593,-0.503) (0.600,-0.597) (0.607,-0.587) (0.613,-0.645) (0.620,-0.696) (0.627,-0.833) (0.633,-0.674) (0.640,-0.599) (0.647,-0.679) (0.653,-0.605) (0.660,-0.495) (0.667,-0.690) (0.673,-0.735) (0.680,-0.767) (0.687,-0.714) (0.693,-0.723) (0.700,-0.742) (0.707,-0.747) (0.713,-0.596) (0.720,-0.419) (0.727,-0.462) (0.733,-0.538) (0.740,-0.318) (0.747,-0.398) (0.753,-0.445) (0.760,-0.442) (0.767,-0.402) (0.773,-0.318) (0.780,-0.286) (0.787,-0.358) (0.793,-0.316) (0.800,-0.296) (0.807,-0.143) (0.813,-0.144) (0.820,-0.253) (0.827,-0.338) (0.833,-0.220) (0.840,-0.264) (0.847,-0.436) (0.853,-0.483) (0.860,-0.483) (0.867,-0.386) (0.873,-0.469) (0.880,-0.415) (0.887,-0.350) (0.893,-0.407) (0.900,-0.422) (0.907,-0.278) (0.913,-0.137) (0.920,-0.067) (0.927,-0.040) (0.933,0.053) (0.940,0.041) (0.947,0.033) (0.953,-0.037) (0.960,-0.036) (0.967,-0.043) (0.973,0.183) (0.980,0.168) (0.987,0.271) (0.993,0.379) (1.000,0.364)};
+  \legend{{$\pm1$ steps},{Gaussian steps}}
+\end{axis}
+\end{tikzpicture}
+\caption{Normalised random walks $B_n(t)=S_{\lfloor nt\rfloor}/\sqrt n$ (two independent simulations, seeds fixed). Already at
+$n=150$ the Bernoulli and the Gaussian walk are visually indistinguishable, the point of the animation \file{lec14_4}
+(there up to $n=2000$) \ts{24}{14}{21:46}\ts{24}{14}{22:47}.}\label{ch11:fig-donsker}
+\end{figure}
+
+\begin{intuition}[Universality: the CLT as a fixed point]
+Only the first two moments of the steps survive in the limit; all the rest (skewness, kurtosis, lattice structure) is
+washed out at rate $1/\sqrt n$. This is the renormalisation-group picture: $S_n/\sqrt n$ is the coarse-graining of
+$S_n$ by a factor $n$, and the Gaussian is the fixed point of this flow, with $\sigma^2$ the only relevant coupling. The
+consequence for modelling is what the lecture emphasised: one may use Brownian motion when the microscopic steps are
+non-Gaussian, provided they have finite variance and are not too dependent \ts{24}{14}{22:47}\ts{24}{14}{23:52}. The 2013
+lecture gives the two physical examples: the pollen grain receives a huge number of tiny left/right pushes from
+water molecules (Einstein), and a stock price is pushed up or down by a huge number of tiny buy and sell orders
+\ts{13}{17}{17:19}\ts{13}{17}{18:21}\ts{13}{17}{21:30}\ts{13}{17}{23:45}. The limit fails when the variance is infinite (stable L\'evy
+processes with jumps) or when the steps are strongly dependent (long memory, fractional Brownian motion).
+\end{intuition}
+
+\begin{finance}[Sampling frequency and the model]
+An analyst observes prices on a grid of spacing $h$: if the increments are like a random walk, the sampled process at fine
+resolution looks like Brownian motion (\cref{ch11:thm-donsker} with $n\sim1/h$) \ts{13}{17}{17:19}. Two warnings. At very short horizons
+(ticks) market microstructure (bid--ask bounce) makes the increments negatively correlated, so the limit is not
+Brownian; and price jumps have heavy tails, so ``finite variance'' can fail (\cref{ch03:sec-heavy}). Universality is a
+statement about the \emph{long-horizon} behaviour of the sum of many small steps.
+\end{finance}
+
+\paragraph{Where the theorem is used.} Because $F(B_n)\to F(B)$ for continuous $F$, asymptotic distributions of statistics
+of random walks are the distributions of functionals of Brownian motion. For the simple random walk one even has an exact
+discrete analogue of the maximum formula of \cref{ch11:sec-reflection}: $\Prob[\max_{k\le n}S_k\ge a]=2\Prob[S_n>a]+\Prob[S_n=a]$
+(checked exactly for $n=100$, $a=10$: both sides equal $0.3197$), so $\Prob[\max_{k\le n}S_k\ge a\sqrt n]\to2(1-\Phi(a))$, the
+Brownian result. Similarly $n^{-2}\sum_kS_{k-1}^2\to\int_0^1B(t)^2\dd t$ and $n^{-1}\sum_kS_{k-1}X_k\to\int_0^1B\dd B$,
+which is how the Dickey--Fuller limit of \cref{ch09:eq-df} (\cref{ch09:sec-df}) is obtained; the Kolmogorov--Smirnov statistic
+of \cref{ch11:sec-bridge} is another example.
+
+% ==================================================================
+\section{Sample paths: roughness and quadratic variation}\label{ch11:sec-paths}
+
+\subsection{Size, zeros and the envelope}
+Almost every Brownian path has the following features (2013 lecture): it \emph{crosses the $t$-axis infinitely often}, in
+fact it has zeros accumulating at $t=0$ and at every later zero, and it neither drifts off nor stays near zero; at time $t_0$
+it is $N(0,t_0)$, so it stays ``around'' the curves $\pm\sqrt t$ (typical size $\sqrt{t_0}$, never $100$ times that in
+practice) \ts{13}{17}{25:48}\ts{13}{17}{26:48}. The precise version of ``it does not deviate too much'' is the law of the
+iterated logarithm (not proved in the course): $\limsup_{t\to\infty}B(t)/\sqrt{2t\ln\ln t}=1$ almost surely, so the
+$\sqrt t$ envelope is exceeded infinitely often, but only by slowly growing factors (compare \cref{ch04:sec-rw}).
+
+\subsection{Non-differentiability}
+The path is continuous by definition, but it is nowhere differentiable, which was ``really surprising'' in the words of the 2013 lecture,
+and matters because the whole of classical calculus is built on derivatives \ts{13}{17}{27:48}\ts{13}{17}{28:53}.
+
+\begin{proposition}[No derivative]\label{ch11:prop-nodiff}
+Fix $t_0\ge0$. With probability one, $B$ is not differentiable at $t_0$. In fact, with probability one there is no
+$t_0$ at which $B$ is differentiable (Paley--Wiener--Zygmund, 1933).
+\end{proposition}
+\begin{proof}[Proof of the first statement]
+The heuristic of the slides \ts{24}{14}{1:02:33}\ts{24}{14}{1:03:39}: the difference quotient $D(\Delta t)=[B(t_0+\Delta t)-B(t_0)]/\Delta t$
+is $N(0,1/\Delta t)$, so for every fixed $M<\infty$, $\Prob(|D|\le M)=\Prob(|N(0,1)|\le M\sqrt{\Delta t})\le M\sqrt{2\Delta t/\pi}\to0$:
+the slope does not settle down; it is of order $(\Delta t)^{-1/2}$ (equivalently $\Delta B=O_P(\sqrt{\Delta t})\gg\Delta t$).
+To make this a proof, note that a finite derivative at $t_0$ forces, for some integers $K,m$, $|B(t_0+s)-B(t_0)|\le Ks$ for all
+$0<s<1/m$; the event $E_{K,m}$ so defined satisfies $\Prob(E_{K,m})\le\Prob(|B(t_0+\delta)-B(t_0)|\le K\delta)\le K\sqrt{2\delta/\pi}$
+for every $\delta<1/m$, hence $\Prob(E_{K,m})=0$; take the countable union over $K,m$ \ts{13}{17}{43:15}\ts{13}{17}{44:19}\ts{13}{17}{45:23}.
+The statement for all $t_0$ simultaneously needs a covering argument and is quoted.
+\end{proof}
+
+\begin{coursenote}[Erratum in the 2013 proof of non-differentiability]
+The written proof (\file{lecnote17}, Proposition~2.4) bounds the event by $\Prob(M(\delta)\le A\delta)$ for the maximum
+$M(\delta)=\max_{s\le\delta}B(s)$, and computes it as ``$2(1-\Phi(A\sqrt\delta))$, which tends to zero''. That value tends to $1$, not
+$0$. By \cref{ch11:prop-max} the correct value is $\Prob(M(\delta)\le A\delta)=2\Phi(A\sqrt\delta)-1$, which does tend to $0$; the
+lecture itself stumbles over the direction of the inequality at this point \ts{13}{17}{46:23}. Both versions are statements for a fixed $t_0$; the slide of 2024 (``not differentiable at $t$, for any $t\ge0$'') is likewise a statement for each fixed $t$.
+The argument above avoids the maximum altogether.
+\end{coursenote}
+
+\subsection{Quadratic variation}
+Let $\Pi=\{0=t_0<t_1<\dots<t_n=T\}$ be a partition of $[0,T]$ with mesh $|\Pi|=\max_j(t_j-t_{j-1})$ and define the
+$\Pi$-quadratic variation
+\ts{24}{14}{1:03:39}\ts{24}{14}{1:04:44}\ts{24}{14}{1:05:45}
+\[
+  QV_\Pi([0,T])=\sum_{j=1}^{n}\bigl[B(t_j)-B(t_{j-1})\bigr]^2 .
+\]
+
+\begin{theorem}[Quadratic variation of Brownian motion]\label{ch11:thm-qv}
+$QV_\Pi([0,T])\to T$ as $|\Pi|\to0$ in $L^2$ (hence in probability), and almost surely along any sequence of partitions with
+$\sum_k|\Pi_k|<\infty$, for instance the dyadic partitions \ts{24}{14}{1:06:57}\ts{13}{17}{47:24}.
+\end{theorem}
+\begin{proof}
+Write $\Delta_j=t_j-t_{j-1}$ and $\Delta_jB=B(t_j)-B(t_{j-1})\sim N(0,\Delta_j)$, independent over $j$. Then
+$\E(\Delta_jB)^2=\Delta_j$, $\Var[(\Delta_jB)^2]=3\Delta_j^2-\Delta_j^2=2\Delta_j^2$ (the fourth moment of $N(0,\Delta_j)$ is $3\Delta_j^2$), so
+\[
+  \E\,QV_\Pi=\sum_j\Delta_j=T,\qquad
+  \Var\,QV_\Pi=2\sum_j\Delta_j^2\le2|\Pi|\sum_j\Delta_j=2|\Pi|\,T\xrightarrow[|\Pi|\to0]{}0 .
+\]
+For equally spaced points $QV_\Pi\eqd(T/n)\,\chi^2_n$ \ts{24}{14}{1:08:03}, mean $T$ and variance $2T^2/n$. Chebyshev's inequality gives
+convergence in probability; if $\sum_k|\Pi_k|<\infty$ then $\sum_k\Prob(|QV_{\Pi_k}-T|>\varepsilon)\le\sum_k2|\Pi_k|T/\varepsilon^2<\infty$ and
+Borel--Cantelli gives almost sure convergence.
+\end{proof}
+
+\begin{coursenote}[Erratum and remarks on the proof in the notes and slides]
+\begin{itemize}
+  \item The 2013 proof invokes the law of large numbers for the sum of $n$ i.i.d.\ variables $(B(t_{i+1})-B(t_i))^2$ of mean $T/n$; the
+      summands change with $n$ (a triangular array), so the classical law does not apply verbatim, and the mean and variance computation above (Chebyshev)
+      is the clean way; the quantity converges in $L^2$ and, for nested partitions, almost surely. The lecture's own computation
+      had a slip corrected by a student (the mean of $X_i^2$ is $T/n$, not $T^2/n^2$) \ts{13}{17}{56:07}.
+  \item Slide~19 of \file{lec14\_1} (PDF pages 73--74) says ``$QV([0,T])=1$ for virtually every path''; the value is $T$ (it equals $1$ only for $T=1$), as the
+      claim on the same slide states.
+  \item On the slide of the Brownian bridge (slide~13, \cref{ch11:sec-bridge}) ``Moments of $B(t)$'' should read
+      ``moments of $X(t)$''.
+  \item Slide~2 dates Einstein's diffusion paper to 1904; it appeared in 1905 (as in the 2013 note and in
+      our Motivation).
+  \item The diffusion equation on slide~6 (PDF page 15) is written $\partial_tp=\tfrac12\partial_y^2p$, which is the case $\sigma=1$ announced there
+      (``easy to verify for $s=0$ and $\sigma=1$''); for a general diffusion coefficient the factor is $\tfrac12\sigma^2$, \cref{ch11:prop-heat}.
+\end{itemize}
+\end{coursenote}
+
+The theorem says that the \emph{sum of squared increments is not random and does not depend on the path}: $[B]_T=T$ for
+almost every path \ts{24}{14}{1:06:57}\ts{24}{14}{1:09:17}. Compare a continuously differentiable function $f$: by the mean value theorem
+$\sum_j(f(t_j)-f(t_{j-1}))^2=\sum_jf'(s_j)^2\Delta_j^2\le\max|f'|^2\,|\Pi|\,T\to0$, so its quadratic variation is zero
+\ts{13}{17}{48:29}\ts{13}{17}{49:39}\ts{13}{17}{50:42}\ts{13}{17}{52:44}. Brownian paths ``bounce back and forth too much'': the squared moves
+do not vanish as the grid is refined. Two corollaries.
+
+\begin{corollary}[Infinite total variation]\label{ch11:cor-tv}
+Almost surely $\sum_j|B(t_j)-B(t_{j-1})|\to\infty$ as $|\Pi|\to0$.
+\end{corollary}
+\begin{proof}
+$\sum_j\Delta_jB^2\le\max_j|\Delta_jB|\cdot\sum_j|\Delta_jB|$. The left side tends to $T>0$ and, by uniform continuity of the
+path, $\max_j|\Delta_jB|\to0$; hence the sum of absolute increments diverges.
+\end{proof}
+So one cannot define $\int f\dd B$ pathwise as a Riemann--Stieltjes integral, and the stochastic (It\^o) integral of \cref{ch:stochcalc} is needed.
+
+The rule of thumb is written
+\begin{equation}\label{ch11:eq-dB2}
+  (\dd B)^2=\dd t,\qquad \dd B\,\dd t=0,\qquad (\dd t)^2=0,
+\end{equation}
+where $\dd B\sim\sqrt{\dd t}$ carries the whole effect at second order: the increments of a Brownian path are of order
+$\sqrt{\Delta t}$, their squares of order $\Delta t$ (summing to a finite number), while a product $\Delta B\,\Delta t$
+is $O(\Delta t^{3/2})$ and vanishes on summation \ts{13}{17}{53:49}. This is the reason why the Taylor expansion of a function of $B$ has a second-order term (\cref{ch11:sec-gbm}).
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.95\linewidth,height=5cm,xlabel={$t$},ylabel={$QV_n(t)$},xmin=0,xmax=1,ymin=0,ymax=1.4,
+  legend style={at={(0.5,1.03)},anchor=south,legend columns=3,font=\footnotesize},grid=major,grid style={black!10}]
+  \addplot[thick,color=defcol] coordinates {(0.000,0.000) (0.000,0.000) (0.020,0.083) (0.020,0.083) (0.040,0.214) (0.040,0.214) (0.060,0.217) (0.060,0.217) (0.080,0.224) (0.080,0.224) (0.100,0.228) (0.100,0.228) (0.120,0.229) (0.120,0.229) (0.140,0.311) (0.140,0.311) (0.160,0.312) (0.160,0.312) (0.180,0.327) (0.180,0.327) (0.200,0.547) (0.200,0.547) (0.220,0.548) (0.220,0.548) (0.240,0.551) (0.240,0.551) (0.260,0.552) (0.260,0.552) (0.280,0.561) (0.280,0.561) (0.300,0.584) (0.300,0.584) (0.320,0.587) (0.320,0.587) (0.340,0.591) (0.340,0.591) (0.360,0.593) (0.360,0.593) (0.380,0.611) (0.380,0.611) (0.400,0.612) (0.400,0.612) (0.420,0.612) (0.420,0.612) (0.440,0.659) (0.440,0.659) (0.460,0.665) (0.460,0.665) (0.480,0.671) (0.480,0.671) (0.500,0.671) (0.500,0.671) (0.520,0.677) (0.520,0.677) (0.540,0.752) (0.540,0.752) (0.560,0.753) (0.560,0.753) (0.580,0.755) (0.580,0.755) (0.600,0.775) (0.600,0.775) (0.620,0.790) (0.620,0.790) (0.640,0.792) (0.640,0.792) (0.660,0.808) (0.660,0.808) (0.680,0.814) (0.680,0.814) (0.700,0.815) (0.700,0.815) (0.720,0.824) (0.720,0.824) (0.740,0.984) (0.740,0.984) (0.760,1.004) (0.760,1.004) (0.780,1.023) (0.780,1.023) (0.800,1.078) (0.800,1.078) (0.820,1.080) (0.820,1.080) (0.840,1.090) (0.840,1.090) (0.860,1.094) (0.860,1.094) (0.880,1.117) (0.880,1.117) (0.900,1.117) (0.900,1.117) (0.920,1.117) (0.920,1.117) (0.940,1.157) (0.940,1.157) (0.960,1.168) (0.960,1.168) (0.980,1.168) (0.980,1.168) (1.000,1.193)};
+  \addplot[thick,color=thmcol] coordinates {(0.000,0.000) (0.010,0.009) (0.020,0.025) (0.030,0.038) (0.040,0.045) (0.050,0.052) (0.060,0.058) (0.070,0.065) (0.080,0.083) (0.090,0.097) (0.100,0.103) (0.110,0.110) (0.120,0.116) (0.130,0.133) (0.140,0.146) (0.150,0.151) (0.160,0.154) (0.170,0.171) (0.180,0.180) (0.190,0.193) (0.200,0.199) (0.210,0.216) (0.220,0.224) (0.230,0.234) (0.240,0.245) (0.250,0.249) (0.260,0.260) (0.270,0.272) (0.280,0.280) (0.290,0.288) (0.300,0.307) (0.310,0.313) (0.320,0.323) (0.330,0.328) (0.340,0.335) (0.350,0.344) (0.360,0.352) (0.370,0.362) (0.380,0.385) (0.390,0.402) (0.400,0.410) (0.410,0.423) (0.420,0.433) (0.430,0.438) (0.440,0.452) (0.450,0.464) (0.460,0.474) (0.470,0.483) (0.480,0.494) (0.490,0.505) (0.500,0.509) (0.510,0.515) (0.520,0.526) (0.530,0.530) (0.540,0.537) (0.550,0.552) (0.560,0.558) (0.570,0.574) (0.580,0.583) (0.590,0.598) (0.600,0.607) (0.610,0.623) (0.620,0.634) (0.630,0.645) (0.640,0.657) (0.650,0.664) (0.660,0.674) (0.670,0.687) (0.680,0.695) (0.690,0.702) (0.700,0.713) (0.710,0.729) (0.720,0.738) (0.730,0.745) (0.740,0.753) (0.750,0.764) (0.760,0.776) (0.770,0.789) (0.780,0.800) (0.790,0.812) (0.800,0.822) (0.810,0.831) (0.820,0.841) (0.830,0.850) (0.840,0.853) (0.850,0.874) (0.860,0.881) (0.870,0.882) (0.880,0.896) (0.890,0.898) (0.900,0.911) (0.910,0.925) (0.920,0.933) (0.930,0.939) (0.940,0.953) (0.950,0.963) (0.960,0.968) (0.970,0.988) (0.980,0.997) (0.990,1.013) (1.000,1.031)};
+  \addplot[dashed,black!70] coordinates {(0,0) (1,1)};
+  \legend{{$n=50$ steps},{$n=1000$ steps},{$T=t$}}
+\end{axis}
+\end{tikzpicture}
+\caption{Cumulative quadratic variation $QV_n(t)=\sum_{k\le nt}(\Delta B_k)^2$ of a Gaussian random walk
+$\Delta B_k=X_k/\sqrt n$, at two resolutions. At $t=1$ the values are $1.19$ and $1.03$ (theory: standard deviation
+$\sqrt{2/n}$, i.e.\ $0.20$ and $0.045$); the path converges to the straight line $t$, as in \file{lec14\_9}
+(there $n$ up to $2000$) \ts{24}{14}{1:08:03}\ts{24}{14}{1:09:17}.}\label{ch11:fig-qv}
+\end{figure}
+
+\begin{finance}[Realised variance and stochastic volatility]
+If the log price is $\log(P_t/P_0)=\mu t+\sigma B(t)$, the sum of squared log returns over a period $[0,T]$ (the \emph{realised
+variance}) estimates $\sigma^2T$ \emph{without knowing the drift and without error as the sampling becomes finer}: with
+$n$ returns its relative standard deviation is $\sqrt{2/n}$ (about $8.9\%$ for $n=252$ daily returns of one year, so
+$8.9\%/2\approx4.5\%$ in volatility terms). This is the theoretical basis for measuring volatility by high-frequency data
+(\cref{ch:volatility}). The lecture proposes plotting the cumulative squared returns of an asset against time: for a Brownian model the
+graph is a straight line of slope $\sigma^2$; slope changes and curvature reveal periods of low and high volatility and
+suggest a model of dynamic volatility \ts{24}{14}{1:10:21}\ts{24}{14}{1:11:22}\ts{24}{14}{1:12:22}. Drift, by contrast, cannot be
+learned by refining the sampling: $\hat\mu$ has standard error $\sigma/\sqrt T$ whatever $n$ is (2024 PS4 Problem~3,
+\cref{ch:volatility}).
+\end{finance}
+
+
+% ==================================================================
+\section{The reflection principle, the maximum and hitting times}\label{ch11:sec-reflection}
+
+Suppose Brownian motion models a stock price during a trading day (9:30 to 16:00). Traders care about the \emph{highest
+and lowest} values reached, not only the closing value \ts{13}{17}{31:00}: barrier options pay if a level is touched, a stop-loss triggers when it is
+reached, a firm defaults when its value hits a threshold. The two objects are the running maximum and the first hitting time.
+For a standard Brownian motion $B$ and levels $a>0$ define
+\begin{equation}\label{ch11:eq-defM}
+  M(t)=\max_{0\le u\le t}B(u),\qquad \tau_a=\min\{u\ge0:\ B(u)=a\}.
+\end{equation}
+The maximum exists because a continuous function attains its maximum on the compact set $[0,t]$ \ts{24}{14}{28:05}\ts{13}{17}{31:00}.
+Since the path is continuous and starts at $0<a$, hitting $a$ before $t$ and having a maximum $\ge a$ are the same event:
+\begin{equation}\label{ch11:eq-tauM}
+  \{\tau_a\le t\}=\{M(t)\ge a\}.
+\end{equation}
+$\tau_a$ is a \emph{stopping time} (\cref{ch04:def-stop}): whether $\tau_a\le t$ is decided by the path up to time $t$
+\ts{24}{14}{24:53}\ts{13}{17}{33:04}.
+
+\begin{lemma}[Reflection principle]\label{ch11:lem-reflection}
+Let $\widetilde B(u)=B(u)$ for $u\le\tau_a$ and $\widetilde B(u)=a-\bigl(B(u)-a\bigr)=2a-B(u)$ for $u>\tau_a$: the path is
+reflected in the level $a$ from the first hitting time on. Then $\widetilde B$ is again a standard Brownian motion
+\ts{24}{14}{24:53}\ts{24}{14}{25:57}.
+\end{lemma}
+The proof uses the \emph{strong Markov property}: at the stopping time $\tau_a$ the process $B(\tau_a+u)-B(\tau_a)$ is a new
+Brownian motion independent of the past $\mathcal F_{\tau_a}$; the Markov property of \cref{ch11:prop-elem}(ii) still holds when the fixed time $s$ is replaced by a
+stopping time, because $\tau_a$ can be approximated by discrete stopping times (\cref{ch04:thm-stopped}) (2013 note: ``the
+distribution of $B(t)-B(\tau_a)$ is not affected by the fact that we conditioned on $\tau_a<t$'') \ts{13}{17}{35:54}. Since $-B$ is
+also a Brownian motion, gluing the old path up to $\tau_a$ to the reflected new increment $-(B(\tau_a+u)-a)$ gives
+a process with the same law. The lemma is the statement that after touching the level the path is equally likely to go
+up or down \ts{24}{14}{24:53}\ts{24}{14}{25:57}\ts{24}{14}{26:57}; \cref{ch11:fig-refl} shows one path and its reflection (the deck
+\file{lec14\_5} shows it for $x=50$ and $10\,000$ steps).
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.95\linewidth,height=5.4cm,xlabel={$t$},xmin=0,xmax=1,ymin=-0.7,ymax=1.5,
+  legend style={at={(0.5,1.03)},anchor=south,legend columns=3,font=\footnotesize},grid=major,grid style={black!10}]
+  \addplot[thick,color=defcol] coordinates {(0.000,0.000) (0.005,-0.042) (0.010,0.003) (0.015,0.076) (0.020,0.149) (0.025,0.277) (0.030,0.250) (0.035,0.289) (0.040,0.263) (0.045,0.162) (0.050,0.112) (0.055,0.122) (0.060,0.057) (0.065,0.044) (0.070,0.123) (0.075,0.163) (0.080,0.204) (0.085,0.228) (0.090,0.216) (0.095,0.084) (0.100,0.154) (0.105,0.047) (0.110,0.062) (0.115,0.055) (0.120,0.065) (0.125,0.082) (0.130,0.059) (0.135,0.122) (0.140,0.032) (0.145,0.088) (0.150,-0.032) (0.155,0.052) (0.160,0.016) (0.165,0.042) (0.170,0.149) (0.175,-0.004) (0.180,-0.026) (0.185,0.014) (0.190,0.078) (0.195,0.174) (0.200,0.217) (0.205,0.253) (0.210,0.261) (0.215,0.279) (0.220,0.284) (0.225,0.355) (0.230,0.366) (0.235,0.413) (0.240,0.527) (0.245,0.610) (0.250,0.586) (0.255,0.579) (0.260,0.631) (0.265,0.585) (0.270,0.456) (0.275,0.384) (0.280,0.422) (0.285,0.407) (0.290,0.382) (0.295,0.435) (0.300,0.361) (0.305,0.521) (0.310,0.522) (0.315,0.499) (0.320,0.643) (0.325,0.566) (0.330,0.531) (0.335,0.525) (0.340,0.457) (0.345,0.433) (0.350,0.474) (0.355,0.486) (0.360,0.483) (0.365,0.553) (0.370,0.686) (0.375,0.797) (0.380,0.648) (0.385,0.745) (0.390,0.800) (0.395,0.829) (0.400,0.760) (0.405,0.728) (0.410,0.713) (0.415,0.614) (0.420,0.702) (0.425,0.765) (0.430,0.764) (0.435,0.697) (0.440,0.792) (0.445,0.837) (0.450,0.912) (0.455,0.883) (0.460,1.052) (0.465,1.042) (0.470,1.181) (0.475,1.039) (0.480,1.061) (0.485,1.066) (0.490,0.888) (0.495,0.842) (0.500,0.756) (0.505,0.656) (0.510,0.603) (0.515,0.520) (0.520,0.543) (0.525,0.576) (0.530,0.595) (0.535,0.537) (0.540,0.502) (0.545,0.621) (0.550,0.597) (0.555,0.595) (0.560,0.554) (0.565,0.591) (0.570,0.654) (0.575,0.710) (0.580,0.740) (0.585,0.790) (0.590,0.775) (0.595,0.819) (0.600,0.749) (0.605,0.756) (0.610,0.817) (0.615,0.746) (0.620,0.801) (0.625,0.823) (0.630,0.737) (0.635,0.616) (0.640,0.499) (0.645,0.425) (0.650,0.448) (0.655,0.465) (0.660,0.552) (0.665,0.713) (0.670,0.679) (0.675,0.535) (0.680,0.429) (0.685,0.286) (0.690,0.237) (0.695,0.199) (0.700,0.289) (0.705,0.182) (0.710,0.164) (0.715,0.146) (0.720,0.137) (0.725,0.096) (0.730,0.245) (0.735,0.232) (0.740,0.235) (0.745,0.284) (0.750,0.300) (0.755,0.425) (0.760,0.339) (0.765,0.325) (0.770,0.289) (0.775,0.283) (0.780,0.346) (0.785,0.303) (0.790,0.164) (0.795,0.168) (0.800,0.094) (0.805,0.137) (0.810,0.153) (0.815,0.301) (0.820,0.339) (0.825,0.280) (0.830,0.305) (0.835,0.381) (0.840,0.386) (0.845,0.384) (0.850,0.365) (0.855,0.336) (0.860,0.270) (0.865,0.356) (0.870,0.384) (0.875,0.282) (0.880,0.358) (0.885,0.360) (0.890,0.376) (0.895,0.387) (0.900,0.471) (0.905,0.314) (0.910,0.312) (0.915,0.352) (0.920,0.343) (0.925,0.226) (0.930,0.137) (0.935,0.152) (0.940,0.253) (0.945,0.116) (0.950,0.075) (0.955,0.098) (0.960,0.116) (0.965,0.156) (0.970,0.239) (0.975,0.295) (0.980,0.193) (0.985,0.174) (0.990,0.098) (0.995,0.100) (1.000,0.209)};
+  \addplot[thick,dashed,color=thmcol] coordinates {(0.390,0.800) (0.390,0.800) (0.395,0.771) (0.400,0.840) (0.405,0.872) (0.410,0.887) (0.415,0.986) (0.420,0.898) (0.425,0.835) (0.430,0.836) (0.435,0.903) (0.440,0.808) (0.445,0.763) (0.450,0.688) (0.455,0.717) (0.460,0.548) (0.465,0.558) (0.470,0.419) (0.475,0.561) (0.480,0.539) (0.485,0.534) (0.490,0.712) (0.495,0.758) (0.500,0.844) (0.505,0.944) (0.510,0.997) (0.515,1.080) (0.520,1.057) (0.525,1.024) (0.530,1.005) (0.535,1.063) (0.540,1.098) (0.545,0.979) (0.550,1.003) (0.555,1.005) (0.560,1.046) (0.565,1.009) (0.570,0.946) (0.575,0.890) (0.580,0.860) (0.585,0.810) (0.590,0.825) (0.595,0.781) (0.600,0.851) (0.605,0.844) (0.610,0.783) (0.615,0.854) (0.620,0.799) (0.625,0.777) (0.630,0.863) (0.635,0.984) (0.640,1.101) (0.645,1.175) (0.650,1.152) (0.655,1.135) (0.660,1.048) (0.665,0.887) (0.670,0.921) (0.675,1.065) (0.680,1.171) (0.685,1.314) (0.690,1.363) (0.695,1.401) (0.700,1.311) (0.705,1.418) (0.710,1.436) (0.715,1.454) (0.720,1.463) (0.725,1.504) (0.730,1.355) (0.735,1.368) (0.740,1.365) (0.745,1.316) (0.750,1.300) (0.755,1.175) (0.760,1.261) (0.765,1.275) (0.770,1.311) (0.775,1.317) (0.780,1.254) (0.785,1.297) (0.790,1.436) (0.795,1.432) (0.800,1.506) (0.805,1.463) (0.810,1.447) (0.815,1.299) (0.820,1.261) (0.825,1.320) (0.830,1.295) (0.835,1.219) (0.840,1.214) (0.845,1.216) (0.850,1.235) (0.855,1.264) (0.860,1.330) (0.865,1.244) (0.870,1.216) (0.875,1.318) (0.880,1.242) (0.885,1.240) (0.890,1.224) (0.895,1.213) (0.900,1.129) (0.905,1.286) (0.910,1.288) (0.915,1.248) (0.920,1.257) (0.925,1.374) (0.930,1.463) (0.935,1.448) (0.940,1.347) (0.945,1.484) (0.950,1.525) (0.955,1.502) (0.960,1.484) (0.965,1.444) (0.970,1.361) (0.975,1.305) (0.980,1.407) (0.985,1.426) (0.990,1.502) (0.995,1.500) (1.000,1.391)};
+  \addplot[thin,black!60] coordinates {(0,0.8) (1,0.8)};
+  \addplot[thin,dotted,black!60] coordinates {(0.390,-0.7) (0.390,0.8)};
+  \node[font=\footnotesize,anchor=north west] at (axis cs:0.395,-0.42) {$\tau_a$};
+  \node[font=\footnotesize,anchor=south west] at (axis cs:0.01,0.82) {level $a=0.8$};
+  \legend{{path $B$},{reflected path $\widetilde B$ after $\tau_a$}}
+\end{axis}
+\end{tikzpicture}
+\caption{A simulated Brownian path ($200$ steps, $a=0.8$) and its reflection in the level $a$ after the first hitting time
+$\tau_a$. The two paths have the same probability; the original ends below $a$, its reflection above.}\label{ch11:fig-refl}
+\end{figure}
+
+\begin{proposition}[Distribution of the maximum]\label{ch11:prop-max}
+For $t>0$ and $a>0$,
+\begin{equation}\label{ch11:eq-max}
+  \Prob[M(t)\ge a]=2\,\Prob[B(t)>a]=2\Bigl[1-\Phi\Bigl(\frac a{\sqrt t}\Bigr)\Bigr].
+\end{equation}
+Equivalently $M(t)\eqd|B(t)|$, with density $\sqrt{2/(\pi t)}\,e^{-m^2/(2t)}$ on $m>0$, and $\E M(t)=\sqrt{2t/\pi}$.
+\end{proposition}
+\begin{proof}
+Two views, both used in the lectures.
+\emph{Path pairing} \ts{24}{14}{28:05}\ts{24}{14}{29:20}\ts{24}{14}{30:27}. Let $A_{\mathrm{END}}=\{B(t)>a\}$ and $A_{\mathrm{MAX}}=\{M(t)\ge a\}$.
+By continuity $A_{\mathrm{END}}\subset A_{\mathrm{MAX}}$ (a path ending above $a$ has crossed it, so $\tau_a<t$). Every
+$\omega_0\in A_{\mathrm{END}}$ is paired with its reflection $\omega_1$ (\cref{ch11:lem-reflection}), which
+ends below $a$ but has still maximum $\ge a$, and has the same probability; conversely every path in $A_{\mathrm{MAX}}\setminus A_{\mathrm{END}}$
+arises this way. Hence $\Prob[A_{\mathrm{MAX}}]=\Prob[A_{\mathrm{MAX}}\cap A_{\mathrm{END}}]+\Prob[A_{\mathrm{MAX}}\cap A_{\mathrm{END}}^c]
+=\Prob[A_{\mathrm{END}}]+\Prob[A_{\mathrm{END}}]$ (the event $B(t)=a$ has probability $0$).
+\emph{Conditioning on $\tau_a$} \ts{13}{17}{34:09}\ts{13}{17}{36:56}\ts{13}{17}{40:08}. Given $\tau_a<t$, the strong Markov property says $B(t)-B(\tau_a)=B(t)-a$
+is symmetric, so $\Prob[B(t)>a\mid\tau_a<t]=\Prob[B(t)<a\mid\tau_a<t]=\tfrac12$. Therefore
+$\Prob[M(t)\ge a]=\Prob[\tau_a<t]=2\Prob[B(t)>a,\ \tau_a<t]=2\Prob[B(t)>a]$, the last step because $B(t)>a$ already
+implies $\tau_a<t$.
+The rest follows from $\Prob[B(t)>a]=1-\Phi(a/\sqrt t)$, by differentiating in $a$, and by $\E M=\int_0^\infty\Prob[M>a]\dd a$.
+\end{proof}
+
+\begin{remark}[Joint law of maximum and endpoint; not discussed in class]\label{ch11:rem-joint}
+The same reflection gives, for $m>0$ and $x\le m$, $\Prob[M(t)\ge m,\ B(t)\le x]=\Prob[B(t)\ge2m-x]=1-\Phi\bigl((2m-x)/\sqrt t\bigr)$
+(reflect the part of the path after $\tau_m$: the event $\{B(t)\le x\}$ becomes $\{\widetilde B(t)\ge2m-x\}$).
+For $x=m$ this is \eqref{ch11:eq-max}. By symmetry, the minimum satisfies $\Prob[\min_{u\le t}B(u)\le-a]=2[1-\Phi(a/\sqrt t)]$
+as well.
+\end{remark}
+
+\begin{finance}[Barrier events: a path is twice as likely to touch a level as to end beyond it]
+Let $\log(S_t/S_0)=\sigma B(t)$ (no drift, $\sigma=30\%$ per year). The probability that the price is below $S_0e^{-0.2}\approx0.82\,S_0$ \emph{at the end of
+one year} is $\Phi(-0.2/0.3)=25.2\%$; the probability that the stock \emph{touches} that level at some time during the year is
+$2\Phi(-0.2/0.3)=50.5\%$ (\cref{ch11:prop-max} applied to $-B$). For a knock-out or knock-in
+barrier option, or a stop-loss, the touching probability is what matters, and ``double the terminal probability'' is
+the first-order rule; a drift or discrete (say daily) monitoring changes the number, the latter by lowering it
+(a path can cross between two observations without being seen) \ts{13}{17}{31:00}. Range-based volatility estimators
+combine the maximum and the minimum of the log price over a day: with the range $R=\max-\min$ of a driftless Brownian path one has
+$\E R^2=4\ln2\cdot\sigma^2t$ (Parkinson 1980, derived from the joint law of \cref{ch11:rem-joint}; it is the subject of 2024 PS5 Problem~3 and
+of \cref{ch:volatility}); in the 2013 lecture Kempthorne, from the audience, remarks that he uses the range of the process as a more precise measure of volatility than close-to-close prices
+\ts{13}{17}{39:05}\ts{13}{17}{40:08}.
+\end{finance}
+
+\subsection{First hitting time}
+By \eqref{ch11:eq-tauM} and \cref{ch11:prop-max},
+\begin{equation}\label{ch11:eq-hitcdf}
+  \Prob[\tau_a\le t]=2\Bigl[1-\Phi\Bigl(\frac a{\sqrt t}\Bigr)\Bigr],\qquad
+  f_{\tau_a}(t)=\frac{a}{\sqrt{2\pi}}\,t^{-3/2}\,e^{-a^2/(2t)},\quad0<t<\infty,
+\end{equation}
+\sloppy the density being the derivative in $t$ (using $\frac{\dd}{\dd t}\Phi(a t^{-1/2})=-\tfrac12 a t^{-3/2}\varphi(a t^{-1/2})$)
+\ts{24}{14}{31:35}\ts{24}{14}{32:37}\ts{24}{14}{33:44}. This is the L\'evy distribution.
+
+\begin{proposition}[Properties of $\tau_a$]\label{ch11:prop-tau}
+\leavevmode
+\begin{enumerate}[(i)]
+  \item $\tau_a<\infty$ almost surely: a Brownian path reaches every level.
+  \item $\E\tau_a=\infty$: the tail is $\Prob[\tau_a>t]=2\Phi(a/\sqrt t)-1\sim a\sqrt{2/(\pi t)}$ and $\int^\infty t^{-1/2}\dd t=\infty$.
+  \item The density is unimodal with mode at $t=a^2/3$, and its median is $a^2/\bigl(\Phi^{-1}(3/4)\bigr)^2\approx2.198\,a^2$.
+  \item Scaling: $\tau_a\eqd a^2\tau_1$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(i) $\Prob[\tau_a\le t]\to2[1-\Phi(0)]=1$ as $t\to\infty$.
+
+(ii) as stated.
+
+(iii) $\frac{\dd}{\dd t}\ln f=-\tfrac{3}{2t}+\tfrac{a^2}{2t^2}=0$ at $t=a^2/3$;
+the median solves $2[1-\Phi(a/\sqrt t)]=\tfrac12$, i.e.\ $a/\sqrt t=\Phi^{-1}(3/4)=0.6745$.
+
+(iv) from \eqref{ch11:eq-hitcdf}, which depends on $a/\sqrt t$ only.
+\end{proof}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.47\linewidth,height=5cm,xlabel={$t$},ylabel={$\Prob[M(t)>x]$},xmin=0,xmax=5,ymin=0,ymax=0.7,
+  title={Maximum exceeds $x$ before $t$},title style={font=\footnotesize},
+  legend style={at={(0.03,0.97)},anchor=north west,font=\scriptsize},grid=major,grid style={black!10}]
+  \addplot[thick,color=defcol] coordinates {(0.040,0.000) (0.141,0.008) (0.242,0.042) (0.344,0.088) (0.445,0.134) (0.546,0.176) (0.647,0.214) (0.749,0.248) (0.850,0.278) (0.951,0.305) (1.052,0.330) (1.153,0.352) (1.255,0.372) (1.356,0.390) (1.457,0.407) (1.558,0.423) (1.660,0.438) (1.761,0.451) (1.862,0.464) (1.963,0.475) (2.064,0.486) (2.166,0.497) (2.267,0.507) (2.368,0.516) (2.469,0.525) (2.571,0.533) (2.672,0.541) (2.773,0.548) (2.874,0.555) (2.976,0.562) (3.077,0.569) (3.178,0.575) (3.279,0.581) (3.380,0.587) (3.482,0.592) (3.583,0.597) (3.684,0.602) (3.785,0.607) (3.887,0.612) (3.988,0.617) (4.089,0.621) (4.190,0.625) (4.291,0.629) (4.393,0.633) (4.494,0.637) (4.595,0.641) (4.696,0.644) (4.798,0.648) (4.899,0.651) (5.000,0.655)};
+  \addplot[thick,color=intcol] coordinates {(0.040,0.000) (0.141,0.000) (0.242,0.000) (0.344,0.001) (0.445,0.003) (0.546,0.007) (0.647,0.013) (0.749,0.021) (0.850,0.030) (0.951,0.040) (1.052,0.051) (1.153,0.063) (1.255,0.074) (1.356,0.086) (1.457,0.098) (1.558,0.109) (1.660,0.121) (1.761,0.132) (1.862,0.143) (1.963,0.153) (2.064,0.164) (2.166,0.174) (2.267,0.184) (2.368,0.194) (2.469,0.203) (2.571,0.212) (2.672,0.221) (2.773,0.230) (2.874,0.238) (2.976,0.246) (3.077,0.254) (3.178,0.262) (3.279,0.269) (3.380,0.277) (3.482,0.284) (3.583,0.291) (3.684,0.297) (3.785,0.304) (3.887,0.310) (3.988,0.317) (4.089,0.323) (4.190,0.329) (4.291,0.334) (4.393,0.340) (4.494,0.345) (4.595,0.351) (4.696,0.356) (4.798,0.361) (4.899,0.366) (5.000,0.371)};
+  \addplot[thick,color=thmcol] coordinates {(0.040,0.000) (0.141,0.000) (0.242,0.000) (0.344,0.000) (0.445,0.000) (0.546,0.000) (0.647,0.000) (0.749,0.001) (0.850,0.001) (0.951,0.002) (1.052,0.003) (1.153,0.005) (1.255,0.007) (1.356,0.010) (1.457,0.013) (1.558,0.016) (1.660,0.020) (1.761,0.024) (1.862,0.028) (1.963,0.032) (2.064,0.037) (2.166,0.041) (2.267,0.046) (2.368,0.051) (2.469,0.056) (2.571,0.061) (2.672,0.066) (2.773,0.072) (2.874,0.077) (2.976,0.082) (3.077,0.087) (3.178,0.092) (3.279,0.098) (3.380,0.103) (3.482,0.108) (3.583,0.113) (3.684,0.118) (3.785,0.123) (3.887,0.128) (3.988,0.133) (4.089,0.138) (4.190,0.143) (4.291,0.148) (4.393,0.152) (4.494,0.157) (4.595,0.162) (4.696,0.166) (4.798,0.171) (4.899,0.175) (5.000,0.180)};
+  \legend{{$x=1$},{$x=2$},{$x=3$}}
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[width=0.47\linewidth,height=5cm,xlabel={$t$},ylabel={$f(t\mid x)$},xmin=0,xmax=5,ymin=0,ymax=0.5,
+  title={Density of the hitting time $\tau_x$},title style={font=\footnotesize},
+  legend style={at={(0.97,0.97)},anchor=north east,font=\scriptsize},grid=major,grid style={black!10}]
+  \addplot[thick,color=defcol] coordinates {(0.050,0.002) (0.134,0.195) (0.218,0.395) (0.302,0.459) (0.386,0.456) (0.469,0.428) (0.553,0.393) (0.637,0.358) (0.721,0.326) (0.805,0.297) (0.889,0.271) (0.973,0.249) (1.057,0.229) (1.141,0.211) (1.225,0.196) (1.308,0.182) (1.392,0.170) (1.476,0.159) (1.560,0.149) (1.644,0.140) (1.728,0.132) (1.812,0.124) (1.896,0.117) (1.980,0.111) (2.064,0.106) (2.147,0.100) (2.231,0.096) (2.315,0.091) (2.399,0.087) (2.483,0.083) (2.567,0.080) (2.651,0.077) (2.735,0.073) (2.819,0.071) (2.903,0.068) (2.986,0.065) (3.070,0.063) (3.154,0.061) (3.238,0.059) (3.322,0.057) (3.406,0.055) (3.490,0.053) (3.574,0.051) (3.658,0.050) (3.742,0.048) (3.825,0.047) (3.909,0.045) (3.993,0.044) (4.077,0.043) (4.161,0.042) (4.245,0.041) (4.329,0.039) (4.413,0.038) (4.497,0.037) (4.581,0.036) (4.664,0.036) (4.748,0.035) (4.832,0.034) (4.916,0.033) (5.000,0.032)};
+  \addplot[thick,color=intcol] coordinates {(0.050,0.000) (0.134,0.000) (0.218,0.001) (0.302,0.006) (0.386,0.019) (0.469,0.035) (0.553,0.052) (0.637,0.068) (0.721,0.081) (0.805,0.092) (0.889,0.100) (0.973,0.106) (1.057,0.111) (1.141,0.113) (1.225,0.115) (1.308,0.116) (1.392,0.115) (1.476,0.115) (1.560,0.114) (1.644,0.112) (1.728,0.110) (1.812,0.108) (1.896,0.106) (1.980,0.104) (2.064,0.102) (2.147,0.100) (2.231,0.098) (2.315,0.095) (2.399,0.093) (2.483,0.091) (2.567,0.089) (2.651,0.087) (2.735,0.085) (2.819,0.083) (2.903,0.081) (2.986,0.079) (3.070,0.077) (3.154,0.076) (3.238,0.074) (3.322,0.072) (3.406,0.071) (3.490,0.069) (3.574,0.067) (3.658,0.066) (3.742,0.065) (3.825,0.063) (3.909,0.062) (3.993,0.061) (4.077,0.059) (4.161,0.058) (4.245,0.057) (4.329,0.056) (4.413,0.055) (4.497,0.054) (4.581,0.053) (4.664,0.052) (4.748,0.051) (4.832,0.050) (4.916,0.049) (5.000,0.048)};
+  \addplot[thick,color=thmcol] coordinates {(0.050,0.000) (0.134,0.000) (0.218,0.000) (0.302,0.000) (0.386,0.000) (0.469,0.000) (0.553,0.001) (0.637,0.002) (0.721,0.004) (0.805,0.006) (0.889,0.009) (0.973,0.012) (1.057,0.016) (1.141,0.019) (1.225,0.022) (1.308,0.026) (1.392,0.029) (1.476,0.032) (1.560,0.034) (1.644,0.037) (1.728,0.039) (1.812,0.041) (1.896,0.043) (1.980,0.044) (2.064,0.046) (2.147,0.047) (2.231,0.048) (2.315,0.049) (2.399,0.049) (2.483,0.050) (2.567,0.050) (2.651,0.051) (2.735,0.051) (2.819,0.051) (2.903,0.051) (2.986,0.051) (3.070,0.051) (3.154,0.051) (3.238,0.051) (3.322,0.051) (3.406,0.051) (3.490,0.051) (3.574,0.050) (3.658,0.050) (3.742,0.050) (3.825,0.049) (3.909,0.049) (3.993,0.049) (4.077,0.048) (4.161,0.048) (4.245,0.047) (4.329,0.047) (4.413,0.047) (4.497,0.046) (4.581,0.046) (4.664,0.045) (4.748,0.045) (4.832,0.044) (4.916,0.044) (5.000,0.044)};
+  \legend{{$x=1$},{$x=2$},{$x=3$}}
+\end{axis}
+\end{tikzpicture}
+\caption{Left: $\Prob[M(t)>x]=2[1-\Phi(x/\sqrt t)]$ (file \file{lec14\_6}); at $t=5$ the values are $0.655$, $0.371$, $0.180$.
+Right: the hitting-time density \eqref{ch11:eq-hitcdf} (file \file{lec14\_7}); the peak of $x=1$ is at $t=1/3$ with height
+$0.463$, and levels farther away are reached later, with a much more spread-out distribution
+\ts{24}{14}{31:35}\ts{24}{14}{33:44}.}\label{ch11:fig-max}
+\end{figure}
+
+\begin{intuition}[A path reaches everything, but takes an infinite mean time]
+Recurrence and infinite mean go together: Brownian motion in one dimension reaches every level with probability one,
+but the waiting time has the heavy tail $t^{-1/2}$. It is the continuous version of the simple random walk, which returns
+to $0$ a.s.\ while the expected return time is infinite (\cref{ch04:sec-ruin}, \cref{ch04:thm-ost}: optional stopping fails for $\tau_a$ because
+$B(\tau_a)=a\ne0=\E B(0)$ and the stopped process is not uniformly bounded).
+The scaling $\tau_a\eqd a^2\tau_1$ is diffusion again: time to travel $a$ grows like $a^2$.
+\end{intuition}
+
+\subsection{Reflected and absorbed Brownian motion}\label{ch11:sec-absorbed}
+Two modifications of $B$ appear in the lecture \ts{24}{14}{33:44}\ts{24}{14}{34:50}.
+
+\begin{definition}[Reflected and absorbed Brownian motion]\label{ch11:def-refabs}
+\emph{Reflected Brownian motion} at zero is $R(t)=|B(t)|$ (the path is folded onto the positive half line).
+\emph{Absorbed Brownian motion} started at $x>0$ is $A(t)=x+B(t)$ for $t\le\tau$ and $A(t)=0$ for $t>\tau$, where $\tau$ is
+the first hitting time of $0$.
+\end{definition}
+
+\begin{proposition}[Moments of $R$ and law of $A$]\label{ch11:prop-refabs}
+\leavevmode
+\begin{enumerate}[(i)]
+  \item $\E R(t)=\sqrt{2t/\pi}$ and $\Var R(t)=(1-2/\pi)\,t$.
+  \item The law of $A(t)$ has an atom at $0$ of mass $2[1-\Phi(x/\sqrt t)]$ (the probability of having been absorbed), and on $y>0$ the
+      density
+      \begin{equation}\label{ch11:eq-absorbed}
+      p_A(y,t\mid x)=p(y,t\mid x)-p(-y,t\mid x)=\frac1{\sqrt{2\pi t}}\Bigl[e^{-(y-x)^2/2t}-e^{-(y+x)^2/2t}\Bigr].
+      \end{equation}
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(i) $R(t)\eqd M(t)$ by \cref{ch11:prop-max}, so $\E R=\sqrt{2t/\pi}$; $\E R^2=\E B^2=t$ gives the variance.
+
+(ii) Absorption at $0$ from $x$ is the hitting of the level $-x$ by $B$ from $0$, so $\Prob[\tau\le t]=2[1-\Phi(x/\sqrt t)]$
+by \eqref{ch11:eq-hitcdf}. For $y>0$, $\Prob[x+B(t)\in\dd y,\ \tau\le t]$ is, by reflection in $0$, the density of a path ending at $-y$, that is
+$p(-y,t\mid x)$; subtracting this from the free density gives \eqref{ch11:eq-absorbed} (the \emph{method of images}, with an image
+charge of opposite sign at $-x$).
+\end{proof}
+Check: $\int_0^\infty p_A\dd y=\Phi(x/\sqrt t)-[1-\Phi(x/\sqrt t)]=1-2[1-\Phi(x/\sqrt t)]$, so density plus atom sum to $1$; and
+$\E A(t)=x$ for all $t$ (absorbed Brownian motion is the martingale $B(t\wedge\tau)$, the loss of mass to $0$ being
+compensated by the surviving paths). \emph{Not to be confused:} the slides use the word ``reflected'' both for the folded process $|B|$ and, in the section
+on the reflection principle, for the path reflected \emph{in a level after the hitting time}; only the second is used in \cref{ch11:lem-reflection}.
+
+\begin{finance}[A price that can go bankrupt]
+The lecture proposes absorbed Brownian motion as the price of an asset which is positive as long as the firm is viable, but stays at $0$
+once bankrupt \ts{24}{14}{34:50}. Structural credit models (Merton, Black--Cox; cf.\ \cref{ch:counterparty}) do exactly this: the
+probability of default before $t$ is a hitting probability, and the survival probability with $\sigma$-volatile assets started $x$ above the barrier
+is $2\Phi(x/(\sigma\sqrt t))-1$, a straightforward application of \eqref{ch11:eq-hitcdf}.
+\end{finance}
+
+
+% ==================================================================
+\section{Brownian motion with drift and the gambler's ruin problem}\label{ch11:sec-drift}
+
+\begin{definition}[Brownian motion with drift]\label{ch11:def-drift}
+$X(t)=\mu t+\sigma B(t)$ for a standard Brownian motion $B$, a \emph{drift} $\mu\in\R$ and a \emph{volatility} $\sigma>0$
+\ts{24}{14}{43:19}\ts{13}{17}{47:24}. $X$ has continuous paths, independent increments and
+$X(t)-X(s)\sim N(\mu(t-s),\sigma^2(t-s))$, so $\E X(t)=\mu t$ and $\Var X(t)=\sigma^2t$; it reduces to $B$ for $\mu=0,\sigma=1$.
+\end{definition}
+
+\begin{proposition}[Drift wins in the long run]\label{ch11:prop-drift}
+For every $\varepsilon>0$, with probability tending to one $(\mu-\varepsilon)t\le X(t)\le(\mu+\varepsilon)t$ as $t\to\infty$; indeed
+$X(t)/t\to\mu$ (almost surely). Yet at moderate times the noise $\sigma\sqrt t$ dominates the drift $\mu t$ as long as $t<(\sigma/\mu)^2$.
+\end{proposition}
+\begin{proof}
+$X(t)/t-\mu=\sigma B(t)/t$ has variance $\sigma^2/t\to0$ (convergence in probability; the almost sure version is the law of large numbers for $B$). The
+two terms $\mu t$ and $\sigma\sqrt t$ are equal at $t=(\sigma/\mu)^2$.
+\end{proof}
+The last remark of the proposition is the reason why drifts are so hard to estimate: for a stock with $\mu=10\%$ and $\sigma=30\%$ the time
+scale is $(\sigma/\mu)^2=9$ years, and for it the estimate $\hat\mu=X(T)/T$ has standard error $\sigma/\sqrt T$ (\cref{ch:volatility}).
+
+\paragraph{One-step analysis.} Look at the increment $\Delta X=X(t+\Delta t)-X(t)=\mu\Delta t+\sigma\Delta B$ with
+$\Delta B\sim N(0,\Delta t)$ independent of the past. Then
+\begin{equation}\label{ch11:eq-onestep}
+  \E\Delta X=\mu\,\Delta t,\qquad \E(\Delta X)^2=\sigma^2\Delta t+(\mu\Delta t)^2=\sigma^2\Delta t+o(\Delta t),\qquad
+  \E|\Delta X|^c=o(\Delta t)\ \ (c>2)
+\end{equation}
+\ts{24}{14}{44:20}\ts{24}{14}{45:27}\ts{24}{14}{46:33}\ts{24}{14}{47:36}: to order $\Delta t$, only the mean and the variance of the
+increment matter. If $f$ is twice differentiable, Taylor's formula and \eqref{ch11:eq-onestep} give
+\begin{equation}\label{ch11:eq-generator}
+  \E\bigl[f(x+\Delta X)\bigr]=f(x)+\Bigl(\mu f'(x)+\tfrac12\sigma^2f''(x)\Bigr)\Delta t+o(\Delta t),
+\end{equation}
+so $\mathcal Lf=\mu f'+\tfrac12\sigma^2f''$ is the \emph{generator} of the process. This expansion is why the lecture cares about
+the powers of the increment: the value of a derivative on an underlying $X$ is a function $f(X)$, and its dynamics are read
+from the Taylor series \ts{24}{14}{47:36}\ts{24}{14}{48:45}. It is the seed of It\^o's lemma (\cref{ch11:sec-gbm}).
+
+\subsection{Gambler's ruin for Brownian motion}\label{ch11:sec-ruin}
+Let $X$ be a Brownian motion with drift $\mu$ and volatility $\sigma$, started at $x\in(a,b)$, and let
+$\tau=\min\{u:X(u)=a\text{ or }b\}$. Find
+\[
+  u(x)=\Prob\bigl[X(\tau)=b\mid X(0)=x\bigr],
+\]
+the probability of reaching the upper level first. This generalises the random walk of \cref{ch04:sec-ruin} to continuous
+time and continuous state \ts{24}{14}{48:45}\ts{24}{14}{49:47}\ts{24}{14}{50:51}.
+
+\paragraph{Infinitesimal derivation (the lecture).} Wait a short time $\Delta t$ so small that hitting a level in
+the meantime is negligible. By the Markov property, $u(x)=\E\,u(x+\Delta X)$; expanding with \eqref{ch11:eq-generator},
+\begin{gather*}
+  u(x)=u(x)+\bigl(\mu u'(x)+\tfrac12\sigma^2u''(x)\bigr)\Delta t+o(\Delta t)\\
+  \Longrightarrow\ \mu\,u'(x)+\tfrac12\sigma^2u''(x)=0,\qquad u(a)=0,\ u(b)=1
+\end{gather*}
+\ts{24}{14}{51:55}\ts{24}{14}{52:59}\ts{24}{14}{54:04}\ts{24}{14}{55:16}. This is a first-order equation in $v=u'$: $v'/v=-2\mu/\sigma^2$, so $u'(x)=C\,e^{-2\mu x/\sigma^2}$ and
+\begin{equation}\label{ch11:eq-ruin}
+  u(x)=\frac{g(x)-g(a)}{g(b)-g(a)},\quad g(x)=e^{-2\mu x/\sigma^2}\ \ (\mu\ne0);\qquad
+  u(x)=\frac{x-a}{b-a}\ \ (\mu=0)
+\end{equation}
+\ts{24}{14}{56:16}\ts{24}{14}{57:18}\ts{24}{14}{58:18}\ts{24}{14}{59:20}. For $\mu=0$, $g(x)=x$ is the other solution of the equation
+(the general solution is $Ax+B$); with no drift, the probability of success is linear in the distance travelled, exactly as for the fair gambler
+(\cref{ch04:prop-ruin}).
+
+\paragraph{Rigorous derivation by a martingale.} The infinitesimal argument assumes that $u$ is twice differentiable, which
+one does not want to take for granted. The proof by optional stopping needs nothing of the kind. By
+\cref{ch11:prop-elem}(iii) with $\lambda=\theta\sigma$, the process $e^{\theta X(t)}=e^{\theta\mu t+\theta\sigma B(t)}$ is a martingale iff $\theta\mu=-\theta^2\sigma^2/2$, i.e.
+$\theta=-2\mu/\sigma^2$. Hence $M(t)=g(X(t))=e^{-2\mu X(t)/\sigma^2}$ is a martingale, exactly the continuous analogue of
+$r^{S_n}$ with $r=q/p$ of \cref{ch04:ex-m4}. The stopped martingale $M(t\wedge\tau)$ is bounded, and $\tau<\infty$ a.s., so
+optional stopping (\cref{ch04:thm-ost}(ii)) gives $g(x)=\E g(X(\tau))=u\,g(b)+(1-u)\,g(a)$, which is \eqref{ch11:eq-ruin}. It is also the exact limit
+of the discrete formula \cref{ch04:prop-biased}: for steps $\pm\sigma\sqrt h$ with $p=\tfrac12(1+\mu\sqrt h/\sigma)$, one has
+$r=q/p\approx e^{-2\mu\sqrt h/\sigma}$, and $r^{S_n}\to e^{-2\mu X/\sigma^2}$. A numerical check (not in the course): for
+$\mu=0.5$, $\sigma=1$, $a=0$, $b=3$, $x=1$ formula \eqref{ch11:eq-ruin} gives $u=0.66524$, and the exact ruin probability
+of the biased walk with $h=10^{-4}$ is $0.66524$.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.9\linewidth,height=5.6cm,xlabel={starting level $x$ ($a=0$, $b=1$, $\sigma=1$)},ylabel={$u(x)=\Prob[\text{hit }b\text{ before }a]$},
+  xmin=0,xmax=1,ymin=0,ymax=1.02,legend style={at={(0.5,1.03)},anchor=south,legend columns=5,font=\footnotesize},grid=major,grid style={black!10}]
+  \addplot[thick,color=thmcol,domain=0:1,samples=60] {(exp(-2*(-3)*x)-1)/(exp(-2*(-3))-1)};
+  \addplot[thick,color=fincol,domain=0:1,samples=60] {(exp(-2*(-1)*x)-1)/(exp(-2*(-1))-1)};
+  \addplot[thick,color=black!70,domain=0:1,samples=2] {x};
+  \addplot[thick,color=intcol,domain=0:1,samples=60] {(exp(-2*1*x)-1)/(exp(-2*1)-1)};
+  \addplot[thick,color=defcol,domain=0:1,samples=60] {(exp(-2*3*x)-1)/(exp(-2*3)-1)};
+  \legend{{$\mu=-3$},{$\mu=-1$},{$\mu=0$},{$\mu=1$},{$\mu=3$}}
+\end{axis}
+\end{tikzpicture}
+\caption{Probability of hitting $b=1$ before $a=0$ as a function of the starting point, for several drifts (the four panels of
+\file{lec14\_8} show $b=3$ and $b=1$ with $\mu=\pm(10^{-4},0.5,\dots,3)$). With no drift the probability is the straight line
+$x$; a positive drift bends the curve above it (the barrier $b$ is reached first from almost everywhere), a negative drift below it
+\ts{24}{14}{1:00:20}\ts{24}{14}{1:01:30}\ts{24}{14}{1:02:33}.}\label{ch11:fig-ruin}
+\end{figure}
+
+\begin{proposition}[Consequences of \eqref{ch11:eq-ruin}; not discussed in class]\label{ch11:prop-ruincons}
+\leavevmode
+\begin{enumerate}[(i)]
+  \item Symmetry: $u_\mu(x)+u_{-\mu}(a+b-x)=1$.
+  \item If $\mu>0$, the probability that $X$ ever falls to a level $d$ below its start is $e^{-2\mu d/\sigma^2}$,
+      so the running minimum of $X$ is exponentially distributed with rate $2\mu/\sigma^2$; if $\mu\le0$ every level below is
+      reached with probability one.
+  \item If $\mu=0$, $\E\tau=(x-a)(b-x)/\sigma^2$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(i) reflect the interval, $x\mapsto a+b-x$, which changes the sign of the drift and swaps the two barriers.
+
+(ii) Let $b\to\infty$ in
+$1-u=(g(b)-g(x))/(g(b)-g(a))$: for $\mu>0$, $g(b)\to0$ and the limit is $g(x)/g(a)=e^{-2\mu(x-a)/\sigma^2}$; for $\mu<0$, $g(b)\to\infty$ and the limit is $1$.
+
+(iii) $X(t)^2-\sigma^2t$ is a martingale (\cref{ch11:prop-elem}(iii)); optional stopping gives $\sigma^2\E\tau=\E X(\tau)^2-x^2
+=\frac{(b-x)a^2+(x-a)b^2}{b-a}-x^2=(x-a)(b-x)$.
+\end{proof}
+
+\begin{finance}[How likely is a losing streak? (numbers not from the course)]
+Take the parameters used in 2024 PS5 for a simulation, $\mu=0.30$ and $\sigma=0.40$, for the \emph{log} value of a strategy (the drift
+already includes any $-\sigma^2/2$ correction). The probability that its value ever falls by $0.2$ (about $18\%$ in level terms) below its running
+starting point, however long one waits, is $e^{-2\cdot0.30\cdot0.2/0.16}=e^{-0.75}=47\%$, even though the strategy has a positive expected return of
+$30\%$ per year. Positive drift protects in the long run but not from drawdowns: the minimum of the path is exponential with mean $\sigma^2/(2\mu)=0.27$.
+\end{finance}
+
+% ==================================================================
+\section{Geometric Brownian motion and the first look at It\^o's lemma}\label{ch11:sec-gbm}
+
+The price of a stock cannot be $S_0+\sigma B_t$: it would become negative. What is reasonable, the lecture argues, is that the
+\emph{percentage} change is normal, $\Delta S/S=\mu\Delta t+\sigma\Delta B$, written $\dd S_t=S_t(\mu\dd t+\sigma\dd B_t)$
+\ts{13}{17}{1:00:19}\ts{13}{17}{1:01:24}. The natural question, asked in the 2013 lecture, is whether the solution of $\dd S=S\dd B$ is $S_t=e^{B_t}$, as in classical calculus; the answer is no
+\ts{13}{17}{1:01:24}\ts{13}{17}{1:02:28}. Here is why.
+
+\paragraph{The Taylor argument.} Let $f$ be a smooth function (in the 2013 lecture a call payoff, $f(B_T)=(B_T-s_0)^+$, or the price of any derivative on the underlying)
+and $B$ a Brownian motion \ts{13}{17}{1:03:29}\ts{13}{17}{1:04:29}\ts{13}{17}{1:05:33}. If $B$ were differentiable, $\dd f(B_t)=f'(B_t)\frac{\dd B}{\dd t}\dd t$; it is not
+\ts{13}{17}{1:06:36}, so one keeps the increment $\dd B$ and writes Taylor's formula
+$f(B_{t+x})-f(B_t)=f'(B_t)\,\Delta B+\tfrac12f''(B_t)\,\Delta B^2+\dots$ with $\Delta B=B_{t+x}-B_t$
+\ts{13}{17}{1:07:39}\ts{13}{17}{1:08:44}\ts{13}{17}{1:09:46}\ts{13}{17}{1:10:48}. In calculus the term $\Delta B^2$ is negligible; here, by
+\eqref{ch11:eq-dB2}, $\Delta B^2\approx\Delta t$ is of the same order as the time step, so it cannot be dropped:
+\begin{equation}\label{ch11:eq-ito}
+  \dd f(B_t)=f'(B_t)\dd B_t+\tfrac12f''(B_t)\dd t\qquad\text{(It\^o's lemma, heuristic form)}
+\end{equation}
+\ts{13}{17}{1:11:55}\ts{13}{17}{1:13:01}\ts{13}{17}{1:15:12}. The lecturer's summary: if one thing is to be remembered it is \eqref{ch11:eq-ito}, if two, that $(\dd B)^2=\dd t$
+\ts{13}{17}{1:14:05}. Proofs and generalisations (functions of $t$ and $X$, stochastic integrals) are in \cref{ch:stochcalc}.
+
+\paragraph{Application to the exponential.} With $f(x)=e^{x}$, \eqref{ch11:eq-ito} gives $\dd e^{B_t}=e^{B_t}\dd B_t+\tfrac12e^{B_t}\dd t$: the
+process $e^{B}$ has a \emph{drift} $\tfrac12S\dd t$ that $\dd S=S\dd B$ does not have. Indeed $\E e^{B_t}=e^{t/2}$ (moment generating function of the normal), whereas
+$\dd S=S\dd B$ means that $S$ is a martingale with constant mean $S_0$; the same computation is the exponential martingale of
+\cref{ch11:prop-elem}(iii), and the correction $-\tfrac12\sigma^2t$ in the exponent is the same lognormal correction as in \cref{ch04:rem-logprice}.
+The solution of $\dd S=S(\mu\dd t+\sigma\dd B)$ is therefore
+\begin{equation}\label{ch11:eq-gbm}
+  S_t=S_0\exp\Bigl[\bigl(\mu-\tfrac12\sigma^2\bigr)t+\sigma B_t\Bigr],
+\end{equation}
+\emph{geometric Brownian motion} (GBM): $\log S_t$ is a Brownian motion with drift $\mu-\tfrac12\sigma^2$ and volatility $\sigma$, so $S_t$ is lognormal
+(\cref{ch03:sec-normal}) with
+\[
+  \E S_t=S_0e^{\mu t},\qquad \operatorname{median}(S_t)=S_0e^{(\mu-\sigma^2/2)t},\qquad \Var S_t=S_0^2e^{2\mu t}\bigl(e^{\sigma^2t}-1\bigr).
+\]
+
+\paragraph{The mechanism in discrete time (our check).} The discrete product of one-step relative changes,
+$\prod_i(1+\sigma\Delta_iB)$ over a grid of mesh $h$, has mean exactly $\prod(1+0)=1$ and equals
+$\exp\bigl(\sum_i\ln(1+\sigma\Delta_iB)\bigr)=\exp\bigl(\sigma B_t-\tfrac12\sigma^2\sum_i(\Delta_iB)^2+\dots\bigr)$; the sum of
+squares converges to $t$ by \cref{ch11:thm-qv}, so the product converges to $\exp(\sigma B_t-\tfrac12\sigma^2t)$: the extra
+factor $e^{-\sigma^2t/2}$ is the quadratic variation at work. In a simulation with $2\times10^5$ paths of $400$ $\pm\sqrt{h}$ steps ($t=1$, $\sigma=1$) the
+mean of the product is $1.005$, whereas the mean of $e^{B_1}$ is $1.656$ (theory: $1$ and $e^{1/2}=1.649$).
+
+\begin{finance}[Arithmetic versus geometric growth]
+With $\mu=8\%$ and $\sigma=20\%$ the expected value of an investment grows as $e^{0.08\cdot10}=2.23$ over ten years, but the median as
+$e^{(0.08-0.02)10}=1.82$, and the probability of ending below the initial value is $\Phi(-0.06\cdot\sqrt{10}/0.2)=17\%$. The gap between the mean and the typical
+path grows with $\sigma^2t$, exactly as for the multiplicative martingales of \cref{ch04:sec-mart} (volatility drag). GBM is the model of Black, Scholes and Merton
+(\cref{ch:bs}); Brownian motion with drift, on the other hand, is the model of the \emph{logarithm} of the price, which is why the
+gambler's-ruin formulas of \cref{ch11:sec-ruin} apply to log-prices and log-levels.
+\end{finance}
+
+% ==================================================================
+\section{Processes built from Brownian motion}\label{ch11:sec-variants}
+
+\subsection{The Brownian bridge and the empirical distribution function}\label{ch11:sec-bridge}
+\begin{definition}[Brownian bridge]\label{ch11:def-bridge}
+$X(t)=B(t)-tB(1)$, $0\le t\le1$ \ts{24}{14}{35:57}\ts{24}{14}{37:05}.
+\end{definition}
+The path is pinned at both ends: $X(0)=0=X(1)$, since it is $B$ minus the straight line from $0$ to $B(1)$ that it would have followed on average. It is a centred Gaussian
+process with
+\begin{equation}\label{ch11:eq-bridge}
+  \Var X(t)=t(1-t),\qquad \Cov(X(s),X(t))=\min(s,t)-st\quad(s,t\in[0,1]),
+\end{equation}
+from $\Cov(X(s),X(t))=s-st-st+st$ for $s\le t$. Since $\Cov(X(t),B(1))=t-t=0$ and the pair is jointly Gaussian, $X$ is independent of $B(1)$;
+consequently $X$ has the law of Brownian motion \emph{conditioned} to return to $0$ at time $1$ (the endpoint is
+irrelevant for the shape of the fluctuations). The variance is largest in the middle, $\tfrac14$ at $t=\tfrac12$.
+
+\paragraph{Where it comes from: the empirical distribution function.} Let $U_1,\dots,U_n$ be i.i.d.\ uniform on $(0,1)$ and
+$\hat F_n(t)=\#\{U_i\le t\}/n$. Each indicator $\ind\{U_i\le t\}$ is Bernoulli with mean $t$ and variance $t(1-t)$, so $\E\hat F_n(t)=t$ and
+$\Var\hat F_n(t)=t(1-t)/n$; by the central limit theorem
+$\sqrt n[\hat F_n(t)-t]\to N(0,t(1-t))$ \ts{24}{14}{38:05}\ts{24}{14}{39:08}\ts{24}{14}{40:09}. The whole process $\sqrt n[\hat F_n(t)-t]$ converges to
+the Brownian bridge (Donsker, 1952): variance $t(1-t)$ and covariance $\min(s,t)-st$ are those of \eqref{ch11:eq-bridge}, checked directly
+on the multinomial counts.
+
+\begin{finance}[Testing a return distribution: probability integral transform and Kolmogorov--Smirnov]
+If $Y_1,\dots,Y_n$ are i.i.d.\ with a \emph{continuous} cdf $F$, then $U_i=F(Y_i)$ are i.i.d.\ uniform (\cref{ch03:prop-pit}), so
+the statistic $D_n=\sup_y|\hat F_n(y)-F(y)|=\sup_t|\hat F_n^U(t)-t|$ has a distribution that does not depend on $F$: $\sqrt nD_n\to\sup_{t}|X(t)|$, whose law is
+$\Prob[\sup|X|\le x]=1-2\sum_{k\ge1}(-1)^{k-1}e^{-2k^2x^2}$ (Kolmogorov); the $5\%$ critical value is $1.358$.
+To test whether a set of returns is compatible with an assumed model, transform the data by the model's cdf and test uniformity
+\ts{24}{14}{41:10}\ts{24}{14}{42:14}\ts{24}{14}{43:19}. (If the parameters of $F$ are estimated from the same data, the critical values are smaller, as in the Lilliefors
+correction.) This is a model-selection tool; residual diagnostics of \cref{ch:timeseries} play the same role for time series.
+\end{finance}
+
+\subsection{Sampling at random times: Laplace increments}\label{ch11:sec-laplace}
+Observe $B$ at $t=0,1,2,\dots$: the increments are i.i.d.\ $N(0,1)$ (with drift and volatility, $N(\mu,\sigma^2)$)
+\ts{24}{14}{1:13:28}. Suppose instead the observation times are random, with i.i.d.\ exponential gaps $T\sim\mathrm{Exp}(\lambda)$ (rate $\lambda$)
+independent of $B$ \ts{24}{14}{1:14:35}. Then the increment $B(T)$ has density
+\begin{equation}\label{ch11:eq-laplace}
+  f(x)=\int_0^\infty\lambda e^{-\lambda t}\frac{e^{-x^2/2t}}{\sqrt{2\pi t}}\dd t=\sqrt{\tfrac\lambda2}\;e^{-\sqrt{2\lambda}\,|x|},
+\end{equation}
+the \emph{Laplace} (two-sided exponential) density, instead of a bell curve: a \emph{normal variance mixture} in
+the sense of \cref{ch03:prop-mixture}, $B(T)=\sqrt T\,Z$, with variance $\E T=1/\lambda$ and excess kurtosis $3\E T^2/(\E T)^2-3=3$ (checked by numerical integration of \eqref{ch11:eq-laplace} at two points). Its tails are heavier than the normal ones, and the
+lecture reports that a Laplace model fits S\&P~500 returns much better \ts{24}{14}{1:15:44}. The economic reading: the useful clock for prices
+is not calendar time but a random \emph{business time} (trades, information arrivals), and the process is a Brownian motion \emph{subordinated} to a
+random clock. Time-changed and stochastic-volatility models take this idea further (\cref{ch:volatility}).
+
+\subsection{Two-dimensional Brownian motion}\label{ch11:sec-2d}
+The lecture opens with the animation of a particle moving in the plane, where each coordinate takes independent Gaussian steps,
+no direction being preferred \ts{24}{14}{1:04}\ts{24}{14}{2:04}\ts{24}{14}{3:08}. Formally $\bm B(t)=(B_1(t),B_2(t))$ with independent standard Brownian motions has density
+$(2\pi t)^{-1}e^{-|\bm y|^2/2t}$, invariant under rotations; the distance $|\bm B(t)|$ has the Rayleigh law
+$\Prob[|\bm B(t)|<\varepsilon]=1-e^{-\varepsilon^2/(2t)}$ (for $t=\varepsilon=1$: $39.3\%$) and $\E|\bm B(t)|=\sqrt{\pi t/2}$.
+The path in the plane is fractal-looking and its two projections are the one-dimensional processes of the rest of the chapter (file \file{lec14\_2}, $2000$ steps).
+Correlated Brownian motions, obtained from independent ones by a matrix (\cref{ch:linalg}), are the basis of models with several risk factors.
+
+\subsection{Filtrations and adapted processes}\label{ch11:sec-adapted}
+Let $X$ be a stochastic process, for instance a price. The \emph{filtration} $\{\mathcal F_t\}$ generated by $X$ is the increasing family of $\sigma$-fields of
+events determined by $\{X(u),\,0\le u\le t\}$: $\mathcal F_t\subset\mathcal F_{t'}$ for $t<t'$; it is the information available at time $t$
+\ts{24}{14}{1:16:44}\ts{24}{14}{1:17:48}. A process $Y$ is \emph{adapted} to $X$ if $Y(t)$ depends only on $\{X(u),u\le t\}$, equivalently
+$\mathcal G_t\subset\mathcal F_t$ for the filtration $\mathcal G$ of $Y$: the transformation is not forward-looking. For example if $Y(t)$
+is the cash flow of a strategy that trades the security $X$, adaptedness says that one cannot trade on tomorrow's price
+\ts{24}{14}{1:17:48}\ts{24}{14}{1:18:55}. Adaptedness is what makes the gains from trading a martingale when $X$ is one: the continuous-time
+analogue of the martingale transform of \cref{ch04:thm-transform} (with constant-mean processes, martingales, ``applied again and again'' in the
+lecture \ts{24}{14}{1:18:55}\ts{24}{14}{1:19:59}) is the stochastic integral $\int Y\dd X$ of \cref{ch:stochcalc}, and the price of an option is a conditional
+expectation with respect to $\mathcal F_t$ (\cref{ch:bs}). All the martingale statements of \cref{ch11:prop-elem} hold with respect to the filtration of $B$.
+
+\subsection{L\'evy processes: Brownian motion and the Poisson process}\label{ch11:sec-levy}
+2024 PS5 opens with a general definition (Problems~1--2, \cref{ch11:ex-levy-bm,ch11:ex-levy-poisson}); the topic was not lectured on.
+
+\begin{definition}[L\'evy process]\label{ch11:def-levy}
+$\{L(t),\,t\ge0\}$ is a \emph{L\'evy process} if
+\begin{enumerate}[(i)]
+  \item $L(0)=0$;
+  \item stationary increments: $L(t)-L(s)\eqd L(t-s)$ for $s\le t$;
+  \item independent increments over disjoint intervals;
+  \item continuity in probability: $\lim_{s\to t}\Prob[|L(t)-L(s)|>\varepsilon]=0$ for all $\varepsilon>0$ and $t$.
+\end{enumerate}
+\end{definition}
+(The problem set indexes $t$ over all of $\R$; only $t\ge0$ is used.) It generalises Definition~\ref{ch11:def-bm}, which asks in
+addition that the increments be normal and the paths continuous: continuity in probability is much weaker (it does not forbid jumps
+at unpredictable times). Two examples are the subject of the problem set. \emph{Brownian motion with drift} (\cref{ch11:def-drift})
+is a L\'evy process: its increments are $N(\mu h,\sigma^2h)$. The \emph{Poisson process} $N$ with intensity $\lambda$ has
+independent increments with $N(t)-N(s)\sim\mathrm{Poisson}(\lambda(t-s))$; it is continuous in probability, since
+$\Prob[N(t)-N(s)\ge1]=1-e^{-\lambda(t-s)}\to0$, although \emph{every} path is a pure-jump staircase.
+The two are the extreme cases of the L\'evy--It\^o decomposition (not covered): every L\'evy process is the sum of a drift, a Brownian motion,
+and a superposition of jumps (compensated when small).
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\linewidth}{@{}l L L L@{}}
+\toprule
+& \textbf{paths} & \textbf{increment over $h$} & \textbf{quadratic variation on $[0,T]$}\\
+\midrule
+$X=\mu t+\sigma B$ & continuous, nowhere differentiable & $N(\mu h,\sigma^2h)$ & $\sigma^2T$, deterministic\\
+Poisson $N$, rate $\lambda$ & piecewise constant, unit jumps & $\mathrm{Poisson}(\lambda h)$ & $N(T)$ (each jump adds $1^2$), random\\
+\bottomrule
+\end{tabularx}
+\caption{Brownian motion with drift and the Poisson process, the two building blocks of jump--diffusion models.}\label{ch11:tab-levy}
+\end{table}
+
+\begin{intuition}[Two universal limits]
+Sums of many small independent increments give Brownian motion (\cref{ch11:thm-donsker}). Sums of many \emph{rare} unit
+increments give the Poisson process: a walk that steps up by $1$ with probability $\lambda/n$ at each of $n$ sub-intervals has
+$\mathrm{Bin}(n,\lambda/n)\to\mathrm{Poisson}(\lambda)$ increments (the law of small numbers). The compensated process
+$N(t)-\lambda t$ is a martingale with variance $\lambda t$, and $(N(t)-\lambda t)/\sqrt\lambda$ looks Brownian when the rate is large, a bridge between the two limits. In finance the two blocks together give the
+\emph{jump--diffusion} of Merton (1976): Brownian noise for the day-to-day movements, Poisson jumps for crashes, defaults and announcements.
+Realised variance (\cref{ch11:sec-paths}) measures both: the quadratic variation of the diffusive part plus the sum of the squared jumps.
+\end{intuition}
+
+% ==================================================================
+\section{Looking ahead and the two lectures compared}\label{ch11:sec-ahead}
+\begin{itemize}
+  \item $(\dd B)^2=\dd t$ and \eqref{ch11:eq-ito} are the beginning of \emph{stochastic calculus}: It\^o integrals $\int\theta\dd B$ for adapted $\theta$, It\^o's lemma for
+        $f(t,X_t)$, geometric Brownian motion as the solution of an SDE (\cref{ch:stochcalc,ch:sde}), Girsanov's theorem and risk-neutral pricing (\cref{ch:bs}).
+  \item The martingale $e^{\lambda B-\lambda^2t/2}$ and the gambler's-ruin martingale $e^{-2\mu X/\sigma^2}$ are the continuous-time versions
+        of \cref{ch04:ex-m4}; the reflection principle and hitting-time density are the working tools for barrier options and
+        structural credit models.
+  \item The diffusion equation \eqref{ch11:eq-heat} is the seed of the Black--Scholes PDE, the Fokker--Planck equation and the Feynman--Kac formula of the next chapters.
+  \item The Dickey--Fuller distribution of \cref{ch09:sec-df} is the law of $\int B\dd B/\int B^2\dd t$.
+\end{itemize}
+
+\begin{coursenote}[2013 and 2024 compared; problem-set overlap]
+Both years cover the same core: definition, random-walk limit, non-differentiability, reflection principle and the maximum, quadratic variation, drift. They differ
+in emphasis. \emph{2013} (C.~Lee) is rigorous about the definition (existence theorem, path space), proves non-differentiability by the maximum, and spends the second half of the lecture on
+\emph{quadratic variation as the reason for It\^o's lemma}, ending with the question $S_t=e^{B_t}$?; he does not treat the bridge,
+Laplace increments, reflected and absorbed Brownian motion, the hitting-time density, or gambler's ruin with drift. \emph{2024}
+(P.~Kempthorne) is more applied and computational: transition density and diffusion equation, the normalised random walk simulated
+for Bernoulli and Gaussian steps, path pairing for the reflection principle, hitting-time density,
+the bridge and the empirical distribution function, gambler's ruin by infinitesimal analysis, quadratic variation of log-prices, subordination and adapted processes; it
+stops before It\^o's lemma, which is in the next lecture (\cref{ch:stochcalc}). The quadratic-variation theorem is stated for arbitrary partitions in 2024 and proved for
+equal spacing in 2013; \cref{ch11:thm-qv} above proves it in general. Problem sets: 2024 PS4 Problem~1 is 2013 PS8 Problem~A-2 (same three parts, with $\sigma=2$ in part~(b)
+in 2024); 2013 PS8 Problem~B-1 (density and rotation invariance of a two-dimensional Brownian motion, and $\Prob[\bm B(t)\in D]$ for a disc $D$) belongs to \cref{ch:stochcalc}, together with the rest of
+PS8; \cref{ch11:sec-2d} gives the results it needs. 2024 PS4 Problems~3--4 (MLE for the geometric Brownian motion) are treated in \cref{ch:volatility}.
+\end{coursenote}
+
+% ==================================================================
+\begin{keyformulas}
+\begin{align*}
+&\text{Brownian motion:} && B(0)=0,\ B(t)-B(s)\sim N(0,t-s)\text{ independent}\\
+& && \Cov(B(s),B(t))=\min(s,t)\\
+&\text{Martingales:} && B(t),\quad B(t)^2-t,\quad e^{\lambda B(t)-\lambda^2t/2}\\
+&\text{Density:} && p(y,\tau\mid x)=\tfrac{1}{\sqrt{2\pi\sigma^2\tau}}e^{-(y-x)^2/(2\sigma^2\tau)}\\
+& && \partial_\tau p=\tfrac{\sigma^2}{2}\partial_y^2p\\
+&\text{Donsker:} && B_n(t)=S_{\lfloor nt\rfloor}/\sqrt n\ \Rightarrow\ B(t)\quad(\E X=0,\ \Var X=1)\\
+&\text{Scaling:} && \{B(ct)\}\eqd\{\sqrt c\,B(t)\}\\
+&\text{Paths:} && \text{continuous, nowhere differentiable; }\ \sum(\Delta B)^2\to T,\ \ (\dd B)^2=\dd t\\
+&\text{Maximum:} && \Prob[M(t)\ge a]=2\Prob[B(t)>a]=2[1-\Phi(a/\sqrt t)]\\
+&\text{Hitting time:} && f_{\tau_a}(t)=\tfrac{a}{\sqrt{2\pi}}t^{-3/2}e^{-a^2/(2t)},\quad \E\tau_a=\infty\\
+&\text{Reflected:} && \E|B(t)|=\sqrt{2t/\pi},\quad \Var|B(t)|=(1-\tfrac2\pi)t\\
+&\text{Absorbed at 0:} && p_A(y)=p(y,t\mid x)-p(-y,t\mid x)\\
+& && \Prob[A(t)=0]=2[1-\Phi(x/\sqrt t)]\\
+&\text{Bridge:} && X(t)=B(t)-tB(1),\quad \Cov(X(s),X(t))=\min(s,t)-st\\
+&\text{Drift:} && X=\mu t+\sigma B,\quad \mathcal Lf=\mu f'+\tfrac12\sigma^2f''\\
+&\text{Ruin:} && \Prob[X(\tau)=b\mid X(0)=x]=\tfrac{e^{-2\mu x/\sigma^2}-e^{-2\mu a/\sigma^2}}{e^{-2\mu b/\sigma^2}-e^{-2\mu a/\sigma^2}}\\
+& && \bigl(=\tfrac{x-a}{b-a}\text{ if }\mu=0\bigr)\\
+&\text{It\^o (heuristic):} && \dd f(B)=f'(B)\dd B+\tfrac12f''(B)\dd t\\
+&\text{GBM:} && S_t=S_0e^{(\mu-\sigma^2/2)t+\sigma B_t},\quad \E S_t=S_0e^{\mu t}\\
+&\text{Laplace:} && B(T),\ T\sim\mathrm{Exp}(\lambda):\ f(x)=\sqrt{\lambda/2}\,e^{-\sqrt{2\lambda}|x|}
+\end{align*}
+\end{keyformulas}
+
+% ==================================================================
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\subsection*{From the problem sets}
+\begin{exercise}[PS4 (2024), Problem 1; PS8 (2013), Problem A-2: conditional moments]\label{ch11:ex-cond}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Let $B(t)$ be a standard Brownian motion and $t>s\ge0$ fixed. Compute $\E[B(t)\mid B(s)]$ and $\Var[B(t)\mid B(s)]$.
+  \item Let $X(t)$ be a Brownian motion with drift $\mu$ and volatility $\sigma=2$ (the 2013 version has no volatility). Compute $\E[X(t)\mid X(s)]$ and $\Var[X(t)\mid X(s)]$.
+  \item For a standard Brownian motion and fixed reals $t>s>0$, compute $\E\bigl[\exp\bigl(\sigma(B(t)-B(s))\bigr)\bigr]$, for a real constant $\sigma$ (the multiplier of the increment inside the exponential).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS4 (2024), Problem 2: Brownian scaling]\label{ch11:ex-scaling}
+Let $B$ be a standard Brownian motion. Prove:
+\begin{enumerate}[(a)]
+  \item if $B(0)=0$, then for every $t>0$, $\{B(st),s\ge0\}\eqd\{t^{1/2}B(s),s\ge0\}$ as processes;
+  \item more precisely, the two families have the same finite-dimensional distributions: for $s_1<\dots<s_n$,
+      $(B(s_1t),\dots,B(s_nt))\eqd(t^{1/2}B(s_1),\dots,t^{1/2}B(s_n))$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS5 (2024), Problem 1: Brownian motion with drift as a L\'evy process]\label{ch11:ex-levy-bm}
+Let $W$ be a Brownian motion with drift $\mu\in\R$ and volatility $\sigma>0$.
+\begin{enumerate}[(a)]
+  \item Prove that $W$ is a L\'evy process in the sense of \cref{ch11:def-levy}.
+  \item Simulate the path of $W$ with $T=1$ year, $\mu=0.30$, $\sigma=0.40$ and $m=252$ increments, $t_i=iT/m$, and plot five simulated paths (the process values at the time increments).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS5 (2024), Problem 2: the Poisson process]\label{ch11:ex-levy-poisson}
+A stochastic process $\{N(t),t\ge0\}$ is a Poisson process of intensity (jump rate) $\lambda$ if for any $0=t_0<t_1<\dots<t_n$ the increments $N(t_k)-N(t_{k-1})$ are independent,
+and $N(t)-N(s)$ is Poisson with mean $\lambda(t-s)$ for all $0\le s<t$.
+\begin{enumerate}[(a)]
+  \item Prove that $N$ is a L\'evy process.
+  \item Simulate the path of a Poisson process with $T=1$ year, $\lambda=24$ events per year and $m=252$ increments, $t_i=iT/m$, and plot five simulated paths.
+\end{enumerate}
+\end{exercise}
+
+\subsection*{Additional exercises (not from the course)}
+\begin{exercise}[not from the course: time inversion]\label{ch11:ex-inversion}
+Prove that $W(t)=tB(1/t)$ ($t>0$), $W(0)=0$, is a standard Brownian motion (check that it is centred Gaussian with covariance $\min(s,t)$; for continuity at $0$ use
+$B(u)/u\to0$ as $u\to\infty$). Deduce that $B(t)/t\to0$ as $t\to\infty$ from the continuity of $W$ at $0$.
+\end{exercise}
+
+\begin{exercise}[not from the course: reflection and the minimum]\label{ch11:ex-refl}
+Let $m(t)=\min_{u\le t}B(u)$. Show $\Prob[m(t)\le-a]=2\Prob[B(t)<-a]$ and that $M(t)-B(t)\eqd M(t)\eqd|B(t)|$ at a fixed time $t$ (hint: use \cref{ch11:rem-joint} or the
+time-reversed path $B(t-u)-B(t)$). What is the probability that a driftless log price with $\sigma=25\%$ never falls below $-10\%$ during one year?
+\end{exercise}
+
+\begin{exercise}[not from the course: a hitting time with infinite mean]\label{ch11:ex-tau}
+Show $\Prob[\tau_a<\infty]=1$ and $\E\tau_a=\infty$ from \eqref{ch11:eq-hitcdf}. Why does optional stopping ($\E B(\tau_a)=0$)
+fail? Use $\tau_a\eqd a^2\tau_1$ to show that the median of $\tau_a$ scales like $a^2$; compute the median of $\tau_1$.
+\end{exercise}
+
+\begin{exercise}[not from the course: absorbed Brownian motion]\label{ch11:ex-abs}
+For absorbed Brownian motion $A$ started at $x>0$ (\cref{ch11:def-refabs}) show that \eqref{ch11:eq-absorbed} and the mass $2[1-\Phi(x/\sqrt t)]$ at $0$ sum to $1$, and that $\E A(t)=x$.
+Is $A(t)^2-t\wedge\tau$ a martingale?
+\end{exercise}
+
+\begin{exercise}[not from the course: exit time and ruin]\label{ch11:ex-exit}
+For $X=\mu t+\sigma B$ with $\mu\ne0$ compute $\E\tau$ for the exit time of $(a,b)$ (hint: the martingale $X(t)-\mu t$ and \eqref{ch11:eq-ruin}). Check that the limit $\mu\to0$ is $(x-a)(b-x)/\sigma^2$.
+\end{exercise}
+
+\begin{exercise}[not from the course: geometric Brownian motion]\label{ch11:ex-gbm}
+For $S_t$ in \eqref{ch11:eq-gbm} compute $\E S_t$, $\Var S_t$, and $\Prob[S_t<S_0]$. With $\mu=0.08$, $\sigma=0.2$ find the horizon at which the probability of a loss falls below $5\%$.
+Show that $\E e^{\lambda B(t)}=e^{\lambda^2t/2}$ and use it to explain why $e^{B}$ is not a martingale.
+\end{exercise}
+
+\begin{exercise}[not from the course: the Laplace mixture]\label{ch11:ex-laplace}
+Derive \eqref{ch11:eq-laplace} (hint: $\int_0^\infty t^{-1/2}e^{-\lambda t-x^2/2t}\dd t=\sqrt{\pi/\lambda}\,e^{-\sqrt{2\lambda}|x|}$), verify that the density integrates to one, and compute its variance and excess kurtosis.
+\end{exercise}

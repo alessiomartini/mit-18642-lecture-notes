@@ -1,0 +1,38 @@
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex.gz.busy
+*.dbt
+*.dvi
+*.ps
+*.pdf
+*.run.xml
+
+# Build folder (latexmk -outdir=build)
+build/
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/build.py
+!.vscode/*.code-snippets
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor temp files
+*~
+*.swp
+*.swo
+
+# Spell check
+cSpell.json

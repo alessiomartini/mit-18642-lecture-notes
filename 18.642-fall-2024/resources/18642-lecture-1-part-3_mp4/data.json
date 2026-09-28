@@ -1,0 +1,35 @@
+{
+  "body": "",
+  "content": "<p>This segment by Vasily Strela provides an explanation of interest rates, bonds, and their fundamental role in finance. It covers key concepts such as compound interest, discounting future cash flows, zero-coupon and coupon bonds, and the inverse relationship between bond prices and yields. The discussion also explores yield curves, their historical shapes, and how they can signal economic recessions, emphasizing the importance of understanding bond price sensitivities through measures like duration and convexity for effective fixed-income investing.</p>\n",
+  "content_type": "resource",
+  "draft": false,
+  "file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/18642-lecture-1-part-3_360p_16_9.mp4",
+  "file_size": 42210981,
+  "file_type": "video/mp4",
+  "image_metadata": {
+    "caption": "",
+    "credit": "",
+    "image-alt": ""
+  },
+  "iscjklanguage": false,
+  "learning_resource_types": [
+    "Lecture Videos"
+  ],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "resourcetype": "Video",
+  "title": "Lecture 1, Part III: Bond “Mathematics”",
+  "uid": "a03d0ed7-231a-4d1e-a7d2-6e812c64720b",
+  "video_files": {
+    "archive_url": "",
+    "video_captions_file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/1GIxB75tCxThFu_KysMDemDijwFPdEN14_transcript.webvtt",
+    "video_thumbnail_file": "https://img.youtube.com/vi/NZ3Mva95UsQ/default.jpg",
+    "video_transcript_file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/1GIxB75tCxThFu_KysMDemDijwFPdEN14_transcript.pdf"
+  },
+  "video_metadata": {
+    "source": "",
+    "video_speakers": "",
+    "video_tags": "18-642-topics-in-mathematics-with-applications-in-finance-fall-2024, compounding, convexity, coupon bond, discounting, duration, interest rate, yield, yield curve, zero-coupon bond",
+    "youtube_description": "MIT 18.642 Topics in Mathematics with Applications in Finance, Fall 2024\nInstructor: Vasily Strela\nView the complete course: https://ocw.mit.edu/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024\nYouTube Playlist: https://www.youtube.com/playlist?list=PLUl4u3cNGP601Q2jo-J_3raNCMMs6Jves\n\nThis segment by Vasily Strela provides an explanation of interest rates, bonds, and their fundamental role in finance. It covers key concepts such as compound interest, discounting future cash flows, zero-coupon and coupon bonds, and the inverse relationship between bond prices and yields. The discussion also explores yield curves, their historical shapes, and how they can signal economic recessions, emphasizing the importance of understanding bond price sensitivities through measures like duration and convexity for effective fixed-income investing.\n\nLicense: Creative Commons BY-NC-SA\nMore information at https://ocw.mit.edu/terms\nMore courses at https://ocw.mit.edu\nSupport OCW at http://ow.ly/a1If50zVRlQ\n\nWe encourage constructive comments and discussion on OCW’s YouTube and other social media channels. Personal attacks, hate speech, trolling, and inappropriate comments are not allowed and may be removed. More details at https://ocw.mit.edu/comments.",
+    "youtube_id": "NZ3Mva95UsQ"
+  }
+}

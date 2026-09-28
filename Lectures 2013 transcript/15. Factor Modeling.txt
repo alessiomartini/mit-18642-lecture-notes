@@ -1,0 +1,1327 @@
+0:00
+The following content is provided under a Creative Commons license. Your support will help MIT OpenCourseWare
+0:06
+continue to offer high quality educational resources for free. To make a donation or view additional materials
+0:13
+from hundreds of MIT courses, visit MIT OpenCourseWare at ocw.mit.edu.
+0:22
+PROFESSOR: Today's topic is factor modeling, and the subject here basically exploits multivariate analysis
+0:32
+in statistics to financial markets where our concern is
+0:37
+using factors to model returns and variances, covariances, correlations.
+0:44
+And with these models, there are two basic cases. There's one where the factors are observable.
+0:52
+Those can be macroeconomic factors. They can be fundamental factors on assets or securities
+0:59
+that might explain returns and covariances. A second class of models is where these factors
+1:06
+are hidden or latent. And statistical factor models are then
+1:11
+used to specify these models. In particular, there are two methodologies.
+1:17
+There's factor analysis and principal components analysis, which we'll get into some detail during the lecture.
+1:24
+So let's proceed to talk about the setup for a linear factor
+1:31
+model. We have m assets, or instruments, or indexes
+1:38
+whose values correspond to a multivariate stochastic process we're modeling.
+1:44
+And we have n time periods t. And with the factor model we model the t-th value
+1:52
+for the i-th object-- whether it's a stock price, futures
+1:58
+price, currency-- as a linear function of factors
+2:04
+f_1 through f_k. So there's basically like a state-space model
+2:10
+for the value of the stochastic process, as it depends on these underlying factors.
+2:16
+And the dependence is given by coefficients beta_1 through beta_k, which are depending upon i, the asset.
+2:27
+So we allow each asset, say if we're thinking of stocks, to depend on factors in different ways.
+2:34
+If a certain underlying factor changes in value, the beta corresponds to the impact of that underlying
+2:44
+factor. So we have common factors.
+2:49
+Now these common factors f, this is really going to be a nice model if the number of factors that we're
+2:58
+using is relatively small. So the number k of common factors
+3:05
+is generally very, very small relative to m. And if you think about modeling, say asset-- equity asset
+3:13
+returns in a market, there can be hundreds and thousands of securities. And so in terms of modeling those returns and covariances,
+3:22
+what we're trying to do is characterize those in terms of a modest number of underlying factors
+3:28
+which simplifies the problem greatly.
+3:33
+The vectors beta_i are termed the factor loadings of an asset.
+3:38
+And the epsilon_(i,t)'s are a specific factor of asset i,
+3:43
+period t. So in factor modeling, we talk about there being common factors affecting the dynamics of the system,
+3:53
+and the factor associated with particular cases
+3:59
+are the specific factors. So this setup is really very familiar.
+4:05
+It just looks like a standard sort of regression type model that we've seen before.
+4:11
+And so let's see how this can be set up as a set of cross-sectional regressions.
+4:18
+So now we're going to fix the period t, the time t,
+4:25
+and consider the m-variate x variable
+4:31
+as satisfying a regression model with intercept given by alphas.
+4:38
+And then the independent variables matrix is B, given by the coefficients of the factor loadings.
+4:48
+And then we have the residuals epsilon_t for the m assets.
+4:54
+So the cross-sectional terminology means we're fixing time and looking across all
+5:00
+the assets for one fixed time. And we're trying to explain how, say, the returns of assets
+5:09
+are varying depending upon the underlying factors. And so the-- well OK, what's random in this process?
+5:19
+Well certainly the residual term is considered to be random. That's basically going to be assumed
+5:26
+to be white noise with mean 0. There's going to be possibly a covariance matrix psi.
+5:35
+And it's going to be uncorrelated across different time cross sections.
+5:41
+Let's see if I can move the mouse, if this is what's causing the problem down here. So in this model we have the realizations on the underlying
+5:54
+factors being random variables. The returns on the assets depend on the underlying factors.
+5:59
+Those are going to be assumed to have some mean, mu_f, and some covariance matrix.
+6:07
+And basically the dimension of that covariance matrix omega_f is going to be k by k.
+6:13
+So in terms of modeling this problem, we go from an m by m system of covariances, correlations,
+6:22
+to focusing initially on an a k by k system of covariances
+6:27
+and correlations between the underlying factors. Psi is a diagonal matrix with the specific variances
+6:38
+of the underlying assets. So we have basically epsilon-- the covariance matrix
+6:50
+of the epsilons is a diagonal matrix, and the covariance matrix of f is given by this omega_f.
+6:59
+Well, with those specifications we can get the covariance for the overall vector
+7:09
+of the m-variate stochastic process. And we have this model here for the conditional moments.
+7:19
+Basically, the conditional expectation of the process given the underlying factors
+7:25
+is this linear model in terms of the underlying factors f. And the covariance matrix is the psi matrix, which is diagonal.
+7:34
+And the unconditional moments are
+7:42
+obtained by just taking the expectations of these. Well actually, the unconditional expectation of x is this.
+7:50
+The unconditional covariance of x is actually equal to the expectation
+7:56
+of this plus the variance of the conditional expectation,
+8:02
+or the covariance of the conditional expectation. So one of the formulas that's important to realize here
+8:08
+is that if we're considering the covariance of x_t, which is equal to covariance of B f_t plus epsilon_t, that's
+8:21
+equal to the covariance of B f_t plus the covariance
+8:27
+of epsilon_t plus twice the covariance
+8:35
+between this term and this, but those are uncorrelated. And so this is equal to B covariance of f_t B transpose
+8:47
+plus psi.
+8:54
+With m assets, how many parameters are in the covariance matrix if there's
+8:59
+no constraints on the covariance matrix? AUDIENCE: [INAUDIBLE].
+9:07
+PROFESSOR: How many parameters? Right. So this is sigma. So the number of parameters in sigma.
+9:15
+AUDIENCE: [INAUDIBLE]. PROFESSOR: m plus what?
+9:21
+AUDIENCE: [INAUDIBLE]. PROFESSOR: OK, this is a square matrix, m by m.
+9:29
+So there's possibly m squared, but it's symmetric. So we're double-counting off the diagonal.
+9:36
+So it's m times m plus 1 over 2.
+9:43
+How many parameters do we have with the factor model?
+9:52
+So if we think of a-- let's call this sigma star.
+9:57
+The number of parameters in sigma star is what?
+10:05
+Well, B is an m by k matrix.
+10:10
+This is m by k, so we have possibly m times k values.
+10:22
+The f_x is-- or the covariance of f_t
+10:39
+is the number of elements in the covariance matrix of f,
+10:45
+which is k by k. And then we have psi, which is a diagonal of dimension m.
+10:58
+So depending on how we structure things, we can have many, many fewer parameters in this factor model
+11:03
+than in the unconstrained case. And we're going to see that we can actually reduce this number in the covariance matrix of f
+11:12
+dramatically because of flexibility in choosing those factors.
+11:21
+Well let's also look at the interpretation of the factor
+11:27
+model as a series of time series regressions. You remember when we talked about multivariate regression
+11:35
+a few lectures ago, we talked about cross-sectional regressions and time series regressions,
+11:41
+and looking at the collection of all the regressions in a multivariate regression setting.
+11:47
+Here we can do the same thing. In contrast to the cross-sectional regression where we're fixing time and looking at all the assets,
+11:55
+here we're looking at fixing the asset i and the regression
+12:01
+over time for that single asset. So the values of x_i, ranging from time 1
+12:09
+up to time capital T, basically follows a regression model
+12:16
+that's equal to the intercept alpha_i plus this matrix F
+12:22
+times beta_i, where beta_i corresponds to the regression
+12:30
+parameters in this regression, but they are the factor corresponding to an asset i on the different k
+12:35
+factors. In this setting, the covariance matrix of the epsilon_i vector
+12:45
+is the diagonal matrix sigma squared times the identity.
+12:50
+And so this is the classic Gauss-Markov assumptions for a single linear regression model.
+12:58
+13:04
+Well, as we did previously, we can group together
+13:09
+all of these time series regressions for all the m assets together by simply putting them all together.
+13:19
+So we start off with x_i equal to basically F beta_i
+13:28
+plus epsilon_i. And we can basically consider x_1, x_2, up to x_n.
+13:39
+So we have a T by m matrix for the m assets.
+13:46
+And that's equal to a regression model given by basically
+13:56
+what's on the slides here. So basically, we're able to group everything together
+14:01
+and deal with everything all at once, which computationally is applied in fitting these.
+14:08
+14:16
+Let's look at the simplest example of a factor model.
+14:21
+This is the single-factor model of Sharpe. We went through the capital asset pricing model,
+14:27
+how returns on assets and stocks are basically--
+14:33
+the excess return on stock can be modeled in terms as a linear regression on the excess return
+14:39
+of the market. And the regression parameter beta_i corresponds to the level of risk associated with the asset.
+14:48
+And all we're doing in this model is,
+14:54
+by choosing different assets we're choosing assets with different levels of risk scaled by the beta_i.
+15:01
+And they may have returns that vary across assets given by alpha_i.
+15:08
+The covariance matrix of the assets
+15:16
+has-- the unconditional covariance matrix has this structure. It's basically equal to the variance of the market times
+15:25
+beta beta prime plus psi. And so that equation is really very simple.
+15:33
+It's really self-evident from what we've discussed, but let
+15:41
+me just highlight what it is. Sigma squared beta beta transposed plus psi.
+15:53
+And that's equal to sigma squared times basically a column vector of all the betas, beta_1 down
+15:58
+to beta_m times its transpose plus a diagonal matrix
+16:08
+with the psi. So this is really a very, very simple structure for the covariance.
+16:14
+And if you had wanted to apply this model to thousands of securities, it's basically no problem.
+16:20
+You can construct a covariance matrix. And if this were appropriate for a large collection
+16:26
+of securities, then the amount-- the reduction in terms of what you're estimating is enormous.
+16:35
+Rather than estimating each cross-correlation and covariance of all the assets,
+16:44
+the factor model tells us what those cross covariances are. So that's really where the power of the model comes in.
+16:54
+And in terms of why is this so useful, well in portfolio management one of the key drivers
+17:03
+of asset allocation is the covariance matrix of the assets. So if you have an effective model
+17:09
+for modeling the covariance, then that simplifies the portfolio allocation problem
+17:14
+because you can specify a covariance matrix that you are confident with.
+17:20
+And also in risk management, effective models
+17:28
+of risk management deal with, how do we anticipate what would happen if different scenarios
+17:37
+occur in the market? Well, the different scenarios that can occur can be associated with what's happening to underlying factors
+17:45
+that affect the system. And so we can consider risk management approaches
+17:51
+that vary these underlying factors, and look at how that has an impact on the covariance matrix
+17:57
+very directly.
+18:04
+Estimation of Sharpe's single index model. We went through before how we estimate
+18:11
+the alphas and the betas. In terms of estimating the sigmas--
+18:17
+the specific variances-- basically, that comes from the simple regression as well.
+18:23
+Basically, the sum of the squared estimated residuals divided by t minus 2.
+18:28
+Here we're assuming unbiasedness because we have two parameters estimated per model.
+18:34
+Then for the market portfolio, that basically
+18:40
+has a simple estimate as well. The psi hat matrix would just be the diagonal
+18:46
+of that-- the diagonal of the specific variances.
+18:53
+And then the unconditional covariance matrix is estimated by simply plugging in these parameter estimates.
+19:00
+So, very simple and effective if that single-factor
+19:08
+model is appropriate. Now needless to say, a single-factor model
+19:13
+doesn't characterize the structure of the covariances
+19:18
+and/or the returns typically. And so we want to consider more general models,
+19:26
+multi-factor models. And the first set of models we're going to talk about are common factor variables that can actually be observed.
+19:36
+Basically any factor that you can observe
+19:44
+is a potential candidate for being a relevant factor
+19:49
+in a linear factor model. The effectiveness of a potential factor is determined by fitting the model
+19:56
+and seeing how much contribution that factor makes to the explanation of the returns
+20:03
+and the covariance structure. Chen, Ross, and Roll wrote a classic paper in 1986.
+20:12
+Now Ross is actually here at MIT. And with their paper, they looked at modeling--
+20:30
+rather than looking at these factors directly, including those in the model, they looked at transforming these factors
+20:39
+into surprise factors. So rather than having interest rates just
+20:47
+as a simple factor directly plugged into the model, it would be the change in interest rates.
+20:54
+And additionally, not only just the change in interest rate, but the unanticipated change in interest
+20:59
+rates given market information. So their paper goes through modeling different
+21:07
+macroeconomic variables with vector autoregression models, and then using those to specify unanticipated changes
+21:17
+in these underlying factors. And so that's where the power comes in.
+21:22
+And that highlights how when you're applying these models, it does involve some creativity to get the most bang
+21:30
+for the buck with your models. And the idea they had of incorporating unanticipated
+21:36
+changes was really a very good one and is applied quite widely now.
+21:55
+Now with this setup, one basically--
+22:03
+if one has empirical data over times 1 through capital T,
+22:10
+then if one wants to specify these models, one has their observations on the x_i process.
+22:17
+You basically have observed all the returns historically. We also, because the factors are observable,
+22:24
+have the F matrix as a set of observed variables. So we can basically use those to estimate the beta_i's and also
+22:36
+estimate the variances of the residual terms with simple regression methods.
+22:44
+So implementing these is quite feasible,
+22:49
+and basically applies methods that we have from before. So what this slide now discusses is how we basically estimate
+23:01
+the underlying parameters. We need to be a little bit careful about the Gauss-Markov
+23:06
+assumptions. You'll remember that if we have a regression model where
+23:15
+the residual terms are uncorrelated and constant variance, then the simple linear regression
+23:22
+estimates are the best ones. If there is unequal variances of the residuals,
+23:32
+and maybe even covariances, then we need to use generalized least squares.
+23:40
+So the notes go through those computations and the formulas,
+23:46
+which are just simple extensions of our regression model theory that we had in previous lectures.
+23:53
+24:04
+Let me go through an example.
+24:11
+24:17
+With common factor variables that are using either fundamental or asset-specific attributes,
+24:25
+there's the approach of-- well, it's called the BARRA Approach. This is from Barr Rosenberg.
+24:33
+Actually, I have to say, he was one of the inspirations to me for going into statistical modeling and finance.
+24:41
+He was a professor at UC Berkeley who left academics very early to basically apply models in trade money.
+24:51
+As an anecdote, his current situation is a little different.
+24:57
+I'll let you look that up. But anyway, this approach basically
+25:04
+provided the BARRA Approach for factor modeling and risk
+25:09
+analysis, which is still used extensively today.
+25:15
+So with common factor variables using
+25:23
+asset-specific attributes-- in fact,
+25:28
+the factor realizations are unobserved
+25:33
+but are estimated in the application of these models.
+25:38
+So let's see how that goes. Oh, OK, this slide talks about the Fama-French approach, which
+25:50
+concerns-- OK, Fama and French, Fama of course we talked about him in the last lecture.
+25:56
+He got the Nobel Prize for his work in modeling asset price returns and market efficiency.
+26:05
+Fama and French found that there were some very important factors affecting
+26:11
+asset returns in equities. Basically, returns tended to vary depending
+26:18
+upon the size of firms. So if you consider small firms versus large firms,
+26:25
+small firms tended to have returns that were more similar to each other. Large firms tended to have returns that were more similar to each other.
+26:32
+So there's basically a big versus small factor that is operating in the market.
+26:38
+Sometimes the market prefers small stocks, sometimes it prefers large stocks. And similarly, there's another factor
+26:48
+which is value versus growth.
+26:54
+Basically, stocks that are considered good values are stocks which are cheap, basically, for what they have.
+27:02
+So you're basically getting a stock at a discount if you're getting a good value.
+27:08
+And value stocks can be measured by looking at the price to book equity. If that's low, then the price you're
+27:15
+paying for that equity in the firm is low, and it's cheap. And that compares with stocks for which
+27:24
+the price relative to the book value is very, very high. Why are people willing to pay a lot for stocks?
+27:32
+In that case, well it's because the growth prospects of those stocks is high, and there's an anticipation
+27:39
+basically that the current price is just reflecting a projection of how much growth potential there is.
+27:47
+Now the Fama French approach is for each of these factors to basically rank order all the stocks by this factor
+27:57
+and divide them up into quintiles. So say this is market cap.
+28:06
+We can divide up all the stocks in-- basically
+28:12
+consider a histogram, or whatever, of all the market caps of all the stocks in our universe.
+28:18
+And then divide it up into basically the bottom fifth,
+28:23
+the next fifth, and then-- it probably needs to go up-- the top fifth.
+28:29
+And the Fama-French approach says, well,
+28:35
+let's look at an equal-weighted average of the top fifth.
+28:41
+And basically, buy that and sell the bottom fifth.
+28:50
+And so that would be the big versus small market factor of Fama and French.
+28:57
+Now, if you look at their work, they actually do the bottom minus the top, because the value
+29:03
+tends to outperform the other. So they have a factor whose more positive values and associated more generally
+29:08
+with positive returns. But that factor can be applied and used
+29:14
+to correlate with individual asset returns as well.
+29:20
+29:26
+Now, with the BARRA Industry Factor-- this is just getting back to the BARRA Approach--
+29:35
+the simplest case of understanding the BARRA industry factor models is to consider looking at dividing stocks up
+29:42
+into different industry groups. So we might expect that, say oil stocks will
+29:56
+tend to move together and have greater variability
+30:02
+or common variability. And that could be very different from utility stocks, which
+30:10
+tend to actually be quite low-risk stocks.
+30:17
+Utility companies are companies which are very highly regulated. And the profitability of those firms
+30:26
+is basically overlooked by the regulators. They don't want the utilities to gouge consumers
+30:37
+and make too much profit from delivering power to customers. So utilities tend to have fairly low volatility
+30:46
+but very consistent returns, which are based on reasonable, from a regulatory standpoint,
+30:55
+levels of profitability for those companies. Well with an industry factor model, what we can do
+31:03
+is associate factor loadings, which basically
+31:08
+are loading each asset in terms of which industry group it's in.
+31:14
+So we actually know the beta values for these stocks,
+31:20
+but we don't know the underlying factor realizations for these stocks.
+31:26
+But in terms of the betas, with these factors we can basically get a well defined beta vectors and B
+31:34
+matrix for all the stocks. And the problem then is, how do we
+31:40
+specify the realization of the underlying factors? Well the realization of the underlying factors
+31:51
+basically is just estimated with a regression model.
+31:56
+And so if we have all of our assets x_i for different times
+32:06
+t, those would have a model given by factor realizations
+32:13
+corresponding to the k industry groups with known beta_(i,j)
+32:21
+values.
+32:29
+And the estimation of these, we basically
+32:34
+have a simple regression model where the realizations of the factor returns f_t
+32:43
+are given by essentially a regression coefficient in this regression, where we have the asset returns
+32:50
+x_t, the known factor loadings B, the unknown factor realizations f_t.
+32:58
+And just plugging into the regression, if we do it very simply we get this expression
+33:05
+for f hat t, which is the simple linear regression model
+33:10
+estimating those realizations. Now this particular estimate of the factor realizations
+33:20
+is assuming that the variability of the components of x
+33:29
+have the same variance. This is like the linear regression estimates under normal Gauss-Markov assumptions.
+33:36
+But basically the epsilon_i's will
+33:42
+vary across the different assets. The different assets will have different variabilities, different specific variances.
+33:48
+So that's actually going to be heteroscedasticity
+33:53
+in these models. So this particular vector of industry averages should actually be extended to accommodate for that.
+34:06
+So we have the estimation of the covariance matrix of the factors can then be estimated
+34:14
+using these estimates of the realizations. And our estimation of the residual covariance matrix
+34:21
+can then be estimated. So I guess an initial estimate of the covariance matrix sigma
+34:29
+hat is given by this known matrix B times our sample estimate of the factor realizations plus the diagonal
+34:39
+matrix C hat. And a second step in this process
+34:46
+can incorporate information about there being heteroscedasticity along the diagonal of the psi's
+34:53
+to adjust the regression estimates. So we basically get a refinement of the estimates
+35:00
+that does account for the non-constant variability. Now this property of heteroscedasticity verses
+35:13
+homoscedasticity in estimating the regression parameters,
+35:20
+it may seem like this is a nicety of the statistical theory that we just have to try and check,
+35:27
+but it's not too big a deal. But let me highlight where this issue comes up again and again.
+35:36
+With portfolio optimization, we went through last time--
+35:43
+for mean-variance optimization, we want to consider a weighting of assets that basically weights
+35:50
+the assets by the expected returns, pre-multiplied
+35:56
+by the inverse of the covariance matrix. And so we basically in portfolio allocation
+36:04
+want to allocate to assets with high return, but we're going to penalize those with high variance.
+36:10
+And so the impact of discounting values with high variability
+36:21
+arises in asset allocation. And then of course arises in statistical estimation.
+36:27
+Basically with signals with high noise, you want to normalize by the level of noise
+36:33
+before you incorporate the impact of that variable on the particular model.
+36:38
+36:45
+So here are just some notes about the inefficiency of estimates due to heteroscedasticity. We can apply generalized least squares.
+36:53
+A second bullet here is that factor realizations can be scaled to represent factor mimicking portfolios.
+37:00
+Now with the Fama-French factors,
+37:06
+where we have say big versus small stocks or value versus growth stocks, it would be
+37:11
+nice to know, well what's the real value of trading that factor?
+37:17
+If you were to have unit weight to trading that factor, would you make money or not?
+37:22
+Or under what periods would you make money? And the notion of factor mimicking portfolios
+37:31
+is important. Let's go back to the specification of the factor
+37:38
+realizations here. f hat t, the t-th realization of the factors, their k factors,
+37:48
+is given by essentially the regression estimate of those factors from the realizations of the asset
+37:54
+returns. And if we're doing this in the proper way, we'd be correcting for the heteroscedasticity.
+38:01
+Well this realization of the factor returns
+38:06
+is a weighted average or a weighted sum of the x_t.
+38:17
+So we have basically f_t is equal to a matrix times
+38:29
+x_t, where this is B B prime toe the minus one, B prime.
+38:39
+So our k-dimensional realizations-- let's see,
+38:49
+this is basically k by 1.
+38:57
+Each of these k factors is a weighted sum of these x's.
+39:04
+Now the x's, if these are returns on the underlying assets, then we can consider normalizing these factors.
+39:13
+Or basically normalizing this matrix here so that the row weights sum to 1, say, for a unit of capital.
+39:23
+So if we were to invest a net unit of one capital unit in these assets, then this factor realization
+39:32
+would give us the return on a portfolio of the assets
+39:38
+that is perfectly correlated with the factor realization. So factor mimicking portfolios can be defined that way.
+39:49
+And they have a good interpretation in terms of the realization of potential investments.
+39:57
+40:02
+So let's go back.
+40:18
+The next subject is statistical factor models. This is the case where we begin the analysis
+40:26
+with just our collection of outcomes for the process x_t.
+40:31
+So basically our time series of asset returns for m assets over T time units.
+40:40
+And we have no clue initially what the underlying factors are, but we hypothesize that there are factors that
+40:47
+do characterize the returns. And factor analysis and principal components analysis provide ways of uncovering those underlying factors
+40:57
+and defining them in terms of the data themselves.
+41:15
+So we'll first talk about factor analysis. Then we'll turn to principal components analysis.
+41:21
+Both of these methods are efforts to model the covariance matrix.
+41:29
+And the underlying covariance matrix for the assets x
+41:37
+can be estimated with sample data in terms of the sample covariance matrix. So here I've just written out in matrix form
+41:45
+how that would be computed. And so with this m by T matrix x, we basically
+41:57
+take that matrix, take out the means by computing
+42:03
+the means with multiplying by this matrix, and then take the sum of deviations
+42:10
+about the means for all the m assets individually and across each other,
+42:17
+and divide that by capital T.
+42:40
+Now, the setup for statistical factor models is exactly the same as before, except the only thing
+42:48
+that we observe is x_t. So we're hypothesizing a model where alpha is basically
+42:59
+a vector that is basically the vector of mean returns
+43:06
+of the individual assets. B is a matrix of factor loadings on k factors f_t.
+43:14
+And epsilon_t is white noise with mean 0, covariance matrix given by the diagonal.
+43:20
+So the setup here is the same basic setup as before, but we don't have the matrix B or the vector f_t.
+43:33
+Or, of course, alpha.
+43:39
+Now in this setup, it's important that there is an indeterminacy of this model,
+43:49
+because for any given specification of the matrix B
+43:57
+or the factors f, we can actually transform those
+44:04
+by a k by k invertible matrix H. So for a given
+44:09
+specification of this model, if we transform the underlying factor realizations f by the matrix H, which is k by k,
+44:19
+then if we transform the factor loadings B by H inverse,
+44:25
+we get the same model. So there is an indeterminacy here, or a-- OK,
+44:31
+there's an indeterminacy of these particular variables,
+44:37
+but there's basically flexibility in how we define the factor model.
+44:44
+So in trying to uncover a factor model with statistical factor analysis, there is some flexibility
+44:50
+in defining our factors. We can arbitrarily transform the factors
+44:57
+by an invertible transformation in the k space.
+45:15
+And I guess it's important to note that what changes when we do that transformation?
+45:22
+Well the linear function stays the same in terms of the covariance matrix of the underlying
+45:28
+factors. Well, if we have a covariance matrix for those underlying factors, we need to accommodate the matrix transformation
+45:36
+H in that. So that has an impact there. But one of the things we can do is
+45:44
+consider trying to define a matrix H, that
+45:49
+diagonalizes the factors. So in some settings, it's useful to consider factor models where you have uncorrelated factor components.
+46:00
+And it's possible to define linear factor models with uncorrelated factor components by a choice of H.
+46:09
+So with any linear factor model in fact, we can have uncorrelated factor components if that's useful.
+46:17
+So this first bullet highlights that point
+46:26
+that we can get orthonormal factors.
+46:32
+And we can also have zero mean factors by adjusting the data to incorporate
+46:41
+the mean of these factors. And if we make these particular assumptions,
+46:53
+then the model does simplify to just being the covariance matrix sigma_x is the factor
+47:02
+loadings B times its transpose plus a diagonal matrix.
+47:08
+And just to reiterate, the power of this is basically no matter how large m is, as m increases
+47:19
+the B matrix just increases by k for every increment in m.
+47:28
+And we also have an additional diagonal entry on the psi. So as we add more and more assets to our modeling,
+47:39
+the complexity basically doesn't increase very much.
+47:51
+With all of our statistical models, one of the questions is how do we specify the particular parameters?
+47:59
+Maximum likelihood estimation is the first thing to go through,
+48:05
+and with normal linear factor models
+48:12
+we have normal distributions for all the underlying random variables. So the residuals epsilon_t are independent
+48:19
+and identically distributed, multivariate normal dimension m with diagonal matrix psi given by the individual elements'
+48:30
+variances. f_t, the realization of the factors,
+48:36
+the k-dimensional factors can have mean 0, and just to have the identity covariance
+48:43
+we can scale them and make them uncorrelated. And then x_t will be normally distributed
+48:53
+with mean alpha and covariance matrix sigma_x given by the formulas in the previous slide.
+48:59
+With these assumptions, we can write down
+49:05
+the model likelihood. The model likelihood is the joint density
+49:10
+of our data given the unknown parameters.
+49:22
+And the standard setup actually for statistical factor modeling
+49:28
+is to assume independence over time. Now we know that there can be time series dependence.
+49:34
+We won't deal with that at this point. Let's just assume that they are independent across time.
+49:41
+Then we can consider this as simply the product of the conditional density of x_t given alpha and sigma,
+49:51
+which has this form. This form for the density function of a multivariate
+50:00
+normal should be very familiar to you at this point.
+50:05
+It's basically the extension of the univariate normal distribution to m-variate. So we have 1 over the square root of pi to the m power.
+50:14
+There are m components. And then we divide by the square root of the individual variance
+50:23
+or the determinant of the covariance matrix. And then the exponential of this term here,
+50:31
+which for the t-th case is a quadratic form in the x's.
+50:41
+So this multivariate normal x, we take off its mean and look at the quadratic form of that with the inverse
+50:48
+of its covariance matrix.
+50:57
+So there's the log-likelihood function. It reduces to this form here.
+51:06
+And maximum likelihood estimation methods can be applied to specify all the parameters of B and psi.
+51:16
+And there's an EM algorithm, which is applied in this case.
+51:23
+I think I may have highlighted it before, but the EM algorithm is a very powerful estimation methodology
+51:30
+for maximum likelihood in statistics. When one has very complicated models which
+51:40
+can be simplified-- well, models that are complicated by the fact that we have hidden variables-- basically
+51:47
+the hidden variables lead to very complex likelihood functions.
+51:54
+A simplification of the EM algorithm is that if we could observe some of the hidden variables,
+52:00
+then our likelihood functions are very simple and can be computed directly. And the EM algorithm alternates estimating
+52:10
+the hidden variables, assuming the hidden variables are known doing the simple estimates with the observed hidden variables,
+52:18
+and then estimating the hidden variables again, and just iterating that process again and again. And it converges.
+52:24
+And their paper demonstrates that this applies in many, many different application settings.
+52:29
+And it's just a very, very powerful estimation methodology that is applied here with statistical factor analysis.
+52:39
+I indicated that for now we could just assume independence
+52:45
+over time of the data points in computing its likelihood. You recall our discussion a couple of lectures back
+52:53
+about the state-space models, linear state-space models. Essentially, that linear state-space model framework
+53:00
+can be applied here as well to incorporate time dependence in the data as well.
+53:06
+So that simplification is not binding in terms of holding us
+53:16
+up in estimating these models.
+53:25
+Let me go back here, OK. So the maximum likelihood estimation process
+53:32
+will give us estimates of the B matrix and the psi matrix.
+53:37
+So applying this EM algorithm, a good computer
+53:43
+can actually get estimates of B and psi and the underlying
+53:51
+alpha, of course. Now from these we can estimate the factor realizations f_t.
+54:03
+And these can be estimated by simply this regression formula,
+54:11
+using our estimates for the factor loadings B hat, our estimates of alpha, we can actually
+54:17
+estimate the factor realizations. So with statistical factor analysis,
+54:24
+we use the EM algorithm to estimate the covariance matrix parameters. Then the next step, we can estimate the factor
+54:32
+realizations. So as the output from factor analysis,
+54:41
+we can work with these factor realizations. And those realizations or those estimates
+54:50
+of the realizations of the factors can then be used basically for risk modeling as well.
+55:00
+So we could do a statistical factor analysis of returns
+55:10
+in, say, the commodities markets.
+55:15
+And identify what factors are driving returns and covariances
+55:21
+in commodity markets. We can then get estimates of those underlying factors from the methodology.
+55:29
+We could then use those as inputs to other models. Certain stocks may depend on significant factors
+55:35
+in the commodity markets. And what they depend on, well we can use statistical modeling
+55:41
+to identify where the dependencies are. So getting these realizations of the statistical factors
+55:49
+is very useful, not only to understand what happened in the past with the process
+55:55
+and how these underlying factors vary, but you can also use those as inputs to other models.
+56:11
+Finally, let's see, there was a lot
+56:16
+of interest with statistical factor analysis on the interpretation of the underlying factors.
+56:23
+Of course, in terms of using any model,
+56:28
+it's once confidence rises when you have highly interpretable results.
+56:34
+One of the initial applications of statistical factor analysis was in measuring IQ.
+56:40
+And how many people here have taken an IQ test? Probably everybody or almost everybody?
+56:47
+Well actually if you want to work for some hedge funds, you'll have to take some IQ tests.
+56:54
+But basically in an IQ test there are 20, 30, 40 questions.
+57:00
+And they're trying to measure different aspects of your ability. And statistical factor analysis has
+57:09
+been used to try and understand what are the underlying dimensions of intelligence.
+57:14
+And one has the flexibility of considering
+57:21
+different transformations of any given set of estimated factors by this H matrix for transformation.
+57:30
+And so there has been work in statistical factor analysis to find rotations of the factor loadings
+57:38
+that make the factors more interpretable. So I just raise that as there's potential to get insight
+57:48
+into these underlying factors if that's appropriate. In the IQ setting, the effort was actually
+57:54
+to try and find what are interpretations of different dimensions of intelligence?
+57:59
+58:07
+We previously talked about factor mimicking portfolios. The same thing applies.
+58:13
+One final thing is with likelihood ratio tests,
+58:18
+one can test for whether the linear factor model is
+58:23
+a good description of the data. And so with likelihood ratio tests,
+58:29
+we compare the likelihood of the data where we fit our unknown parameters, the mean vector
+58:36
+alpha and covariance matrix sigma, without any constraints. And then we compare that to the likelihood function
+58:45
+under the factor model with, say, k factors. And the likelihood ratio tests are
+58:56
+computed by looking at twice the difference in log likelihoods. If you take an advanced course in statistics,
+59:04
+you'll see that basically this difference in the likelihood functions under many conditions is approximately a chi
+59:13
+squared random variable with degrees of freedom equal to the difference in parameters under the two models.
+59:20
+So that's why it's specified this way.
+59:25
+But anyway, one can test for the dimensionality of the factor model.
+59:33
+Before going into an example of factor modeling, I want to cover principal components analysis.
+59:39
+Actually, principal components analysis comes up in factor modeling, but it's also
+59:46
+a methodology that's appropriate for modeling multivariate data
+59:52
+and considering dimensionality reduction. You're dealing with data in very many dimensions.
+59:59
+You're wondering is there a simple characterization
+1:00:05
+of the multivariate structure that lies in a smaller dimensional space?
+1:00:10
+And principle components analysis gives us that. The theoretical framework for principal components analysis
+1:00:18
+is to consider an m-variate random variable. So this is like a single realization of asset returns
+1:00:27
+in a given time, which has some mean and covariance matrix sigma.
+1:00:34
+The principal components analysis is going to exploit the eigenvalues and eigenvectors
+1:00:41
+of the covariance matrix. Choongbum went through eigenvalues and singular value
+1:00:50
+decompositions. So here we basically have the eigenvalue/eigenvector
+1:00:55
+decomposition of our covariance matrix sigma, which is the scalar eigenvalues times the eigenvector
+1:01:04
+gamma_i times its transpose. So we actually are able to decompose our covariance matrix
+1:01:12
+with eigenvalues, eigenvectors. The principal component variables
+1:01:20
+are to consider taking away the mean from the random vector x,
+1:01:28
+alpha. And then consider the weighted average of those de-meaned x's
+1:01:35
+given by the i-th eigenvector. So these are going to be called the principal component
+1:01:42
+variables, where gamma_1 is the first one corresponding to the largest eigenvalue.
+1:01:48
+Gamma m is going to be the m-th, or last, corresponding to the smallest.
+1:01:59
+The properties of these principal component variables
+1:02:07
+is that they have mean 0, and their covariance matrix
+1:02:14
+is given by the diagonal matrix of eigenvalues. So the principal component variables
+1:02:21
+are a very simple sort of affine transformation of the original variable x.
+1:02:29
+We translate x to a new origin, basically to the 0 origin,
+1:02:38
+by subtracting the means off it. And then we multiply that de-meaned x value
+1:02:46
+by an orthogonal matrix gamma prime.
+1:02:54
+And what does that do? That simply rotates the coordinate axes.
+1:02:59
+So what we're doing is creating a new coordinate system for our data, which hasn't changed
+1:03:07
+the relative position of the data or the random variable at all in the space.
+1:03:14
+Basically, it just is using a new coordinate system with no change in the overall variability of what
+1:03:22
+we're working with.
+1:03:38
+In matrix form, we can express this principal component
+1:03:46
+variables p.
+1:03:51
+Let's consider partitioning p into the first k elements and the last m minus k elements p_2.
+1:03:59
+Then our original random vector x has this decomposition.
+1:04:05
+And we can think of this as being approximately
+1:04:13
+a linear factor model.
+1:04:19
+We can consider from principal components analysis essentially if p_1, the principle component variables,
+1:04:26
+correspond to our factors, then our linear factor model
+1:04:32
+would have B as given by gamma_1, F as given by p_1.
+1:04:37
+And our epsilon vector would be given by gamma_2 p_2. So the principal components decomposition
+1:04:45
+is almost a linear factor model. The only issue is this gamma_2 p_2 is an m-vector,
+1:04:59
+but it may not have a diagonal covariance matrix.
+1:05:06
+Under the linear factor model with a given set of factors k less than m, we always are assuming
+1:05:12
+that the residual vector has covariance matrix
+1:05:17
+equal to a diagonal. With a principal components analysis, that may or may not be true.
+1:05:25
+So this is like an approximate factor model, but that's why this is called principal components analysis.
+1:05:32
+It's not called principal factor analysis yet.
+1:05:45
+The empirical principal components analysis now. We've gone through just a description
+1:05:51
+of theoretical principal components, where if we have a mean vector alpha, covariance matrix sigma, how
+1:05:58
+we would define these principle component variables. If we just have sample data, then this slide
+1:06:05
+goes through the computations of the empirical principal components results. So all we're doing is substituting in estimates
+1:06:14
+of the means and covariance matrix, and computing the eigenvalue/eigenvector decomposition of that.
+1:06:21
+And we get sample principal component variables which are-- we basically compute x, the de-meaned vector,
+1:06:31
+or matrix of realizations and pre-multiply that by gamma hat
+1:06:38
+prime, which is the matrix of eigenvectors
+1:06:44
+corresponding to the eigenvalue/eigenvector decomposition of the sample covariance matrix.
+1:06:54
+This slide goes through the singular value decomposition.
+1:06:59
+You don't have to go through and compute variances, covariances to derive estimates of the principal component variables.
+1:07:08
+You can work simply with the singular value decomposition. I'll let you go through that on your own.
+1:07:15
+There's an alternate definition of the principal component variable though that's very important.
+1:07:27
+If we consider a linear combination
+1:07:32
+of the components of x, x_1 through x_m, given by w,
+1:07:40
+if we consider a linear combination of that which maximizes the variability of that linear combination
+1:07:48
+subject to the norm of the coefficients w equals 1,
+1:07:56
+then this is the first principal component variable. So if we have in two dimensions the x_1 and x_2,
+1:08:08
+if we have points that look like an ellipsoidal distribution,
+1:08:21
+this would correspond to having alpha 1 there, alpha 2 there,
+1:08:28
+a sort of degree of variability. The principal components analysis
+1:08:35
+says, let's shift to the origin being at (alpha_1, alpha_2).
+1:08:42
+And then let's rotate the axes to align with the eigenvectors.
+1:08:50
+Well the first principal component variable finds the dimension at which the coordinate axis at which
+1:09:02
+the variability is a maximum. And basically along this dimension here, this is where the variability
+1:09:11
+would be the maximum. And that's the first principal component variable. So this principal components analysis
+1:09:18
+is identifying essentially where's there the most variability in the data, where it's the most variability without doing any change
+1:09:28
+in the scaling of the data? All we're doing is shifting and rotating.
+1:09:33
+Then the second principal component variable is basically the direction which is orthogonal to the first, which has the maximum variance.
+1:09:42
+And continuing that process to define all m principal component variables.
+1:09:48
+1:09:56
+In principal components analysis, there's discussions of the total variability of the data and how well that's explained by principal components.
+1:10:05
+If we have a covariance matrix sigma, the total variance can be defined
+1:10:13
+and is defined as the sum of the diagonal entries. So it's the trace of a covariance matrix.
+1:10:21
+We'll call that the total variance of this multivariate x.
+1:10:27
+That is equal to the sum of the eigenvalues as well. So we have a decomposition of the total variability
+1:10:36
+into the variability of different principal component variables.
+1:10:42
+And the principal component variables themselves are uncorrelated.
+1:10:48
+You remember the covariance matrix of the principal component variables was the lambda, the diagonal matrix of eigenvalues.
+1:10:56
+So the off-diagonal entries are 0. So the principal component variables are uncorrelated, and have variability lambda_k,
+1:11:05
+and basically decompose the variability. So principal components analysis provides this very nice decomposition of the data
+1:11:14
+into different dimensions, with highest to lowest information content as given by the eigenvalues.
+1:11:22
+1:11:28
+I want to go through a case study
+1:11:34
+here of doing factor modeling with the U.S. Treasury yields.
+1:11:41
+I loaded in data into R, which ranged from the beginning
+1:11:49
+of 2000 to the end of May 2013.
+1:11:54
+And here are the yields on constant maturity U.S. Treasury securities ranging from 3 months, 6 months,
+1:12:01
+up to 20 years. So this is essentially the term structure of US Government [INAUDIBLE] of varying levels of risk.
+1:12:12
+1:12:18
+Here's a plot of [INAUDIBLE] over that period.
+1:12:25
+1:12:33
+So starting in the [INAUDIBLE], we can see this, the rather dramatic evolution of the term
+1:12:41
+structure over this entire period. If we wanted to have set any [INAUDIBLE].
+1:12:47
+1:12:52
+If we wanted to do a principal components analysis of this, well if we did the entire period we'd
+1:12:57
+be measuring variability of all kinds of things. When things go down, up, down.
+1:13:03
+What I've done in this note is just initially to look at the period from 2001 up through 2005.
+1:13:15
+So we have five years of data on basically the early part of this period that I want to focus on and do
+1:13:23
+a principal components analysis of the yields on this data.
+1:13:32
+So here's basically the series over that five year period.
+1:13:40
+Beginning of this analysis, this analysis
+1:13:47
+is on the actual yield changes. So just as we might be modeling say asset prices over time
+1:13:53
+and then doing an analysis of the changes, the returns, here we're looking at yield changes.
+1:14:00
+1:14:07
+So first, you can see there's-- basically, the average daily value for the different yield tenors ranging
+1:14:17
+from 3 months up to 20, those are actually all negative. That corresponds to the time series over that five year
+1:14:24
+period. Basically the time series were all at lower levels
+1:14:29
+from beginning to end on average. The daily volatility is the daily standard deviation.
+1:14:36
+Those vary from 0.0384 up to .0698
+1:14:42
+for-- is that the three year? And this is the standard deviation of daily yield
+1:14:49
+changes where 1 is like 1%.
+1:14:55
+And so basically it's between three and six basis
+1:15:02
+points a day are the variation in the yield changes. So that's something that's reasonable. When you look at the news or a newspaper
+1:15:10
+and see how interest rates change from one day to the next, it's generally a few basis points
+1:15:15
+from one day to the next. This next matrix is the correlation matrix
+1:15:26
+of the yield changes. If you look at this closely, which
+1:15:32
+you can when you download these results,
+1:15:38
+you'll see that near the diagonal the values are very high, like above 90% for correlation.
+1:15:47
+And as you move across, away from the diagonal, the correlations get lower and lower.
+1:15:53
+Mathematically that is what is happening.
+1:16:02
+We can look at these things graphically, which I always like to do. Here is just a graph, a bar chart of the yield changes
+1:16:11
+and the standard deviations of the yield changes, daily volatilities ranging from very short yields
+1:16:18
+to long-tenor yields, up to 20 years.
+1:16:25
+So there's variability there.
+1:16:35
+Here is a pairs plot of the data. So what I've done is just looked at basically
+1:16:45
+for every single tenor, this is say the 5 year, 7 year, 10 year, 20 year.
+1:16:53
+I basically plotted the yield changes of each of those against each other. We could do this with basically all nine different tenors,
+1:17:01
+and we'd have a very dense page of a pairs plot.
+1:17:08
+So I split it up into looking just at the top and bottom block diagonals.
+1:17:14
+But you can see basically how the correlation between these yield changes is very tight
+1:17:23
+and then gets less tight as you move further away. With the long tenors-- let's see,
+1:17:33
+the short tenors-- one, one more.
+1:17:39
+Here the short tenors, ranging from 3 year, 2 year, 1 year,
+1:17:44
+6 month, and so forth. So here you can see how it gets less and less correlated as you move away from a given tenor.
+1:17:50
+Well the principal components analysis
+1:17:58
+gives us-- if you conduct a principal components,
+1:18:11
+basically the standard output is first a table of how the variability of the series
+1:18:18
+is broken down across the different component variables. And so there's basically the importance
+1:18:24
+of components for each of the nine component variables where it's measured in terms of the relative squared
+1:18:36
+standard deviations of these variables relative to the sum. And the proportion of variance explained
+1:18:43
+by the first component variable is 0.849. So basically 85% of the total variability
+1:18:50
+is explained by the first principal component variable. Looking at the second row, second in, 0.0919,
+1:18:57
+that's the percentage of total variability explained by the second principal component variable.
+1:19:04
+So 9%. And then for third it's around 3%. And it just goes down closer to 0,
+1:19:20
+There's a scree plot for principal components analysis, which is just a plot of the variability
+1:19:26
+of the different principal component variables. So you can see whether the principal components
+1:19:34
+is explaining much variability in the first few components or not. Here there's a huge amount of variability
+1:19:41
+explained by the first principal component variable. I've plotted here the standard deviations
+1:19:47
+of the original yield changes in green, versus the standard deviations of the principal component
+1:19:52
+variables in blue. So we basically are modeling with principal component
+1:20:02
+variables most of the variability in the first few principal components. Now let's look at the interpretation
+1:20:08
+of the principal component variables. There's the loadings matrix, which is the gamma matrix for the principal components variables.
+1:20:16
+Looking at numbers is less informative for me
+1:20:25
+than looking at graphs. Here's a plot of the loadings on the different yield
+1:20:30
+changes for the first principal component variable. So the first principal component variable
+1:20:36
+is a weighted average of all the yield changes, giving greatest weight to the five year.
+1:20:44
+What's that? Well that's just a measure of a level shift in the yield curve.
+1:20:51
+It's like, what's the average yield change across the whole range? So that's what the first principal component
+1:20:57
+variable is measuring. The second principal component variable gives positive weight
+1:21:03
+to the long tenors, negative weight to the short tenors. So it's looking at the difference between the yield
+1:21:11
+changes on the long tenors verses the yield change on the short tenors. So that's looking at how the spread in yields is changing.
+1:21:19
+1:21:27
+Then the third principal component variable
+1:21:32
+has this structure. And this structure for the weights
+1:21:38
+is like a double difference. It's looking at the difference between the long tenor
+1:21:44
+and medium tenor, minus the medium tenor, minus the short tenor.
+1:21:50
+So that's giving us a measure of the curvature of the term structure and how that's changing over time.
+1:21:57
+So these principal component variables are measuring the level shift for the first, the spread for the second, and the curvature for the third.
+1:22:04
+With principal components analysis, many times I think people focus just
+1:22:11
+on the first few principal component variables and then say they're done. The last principle component variable, and the last few,
+1:22:19
+can be very, very interesting as well, because these are the variables of the original scales,
+1:22:27
+the linear combinations which have the least variability.
+1:22:33
+And if you look at the ninth principle component variable-- there were nine yield changes here-- it's basically looking at a weighted average of the 5
+1:22:43
+and 10 year minus the 7 year. So this is like the hedge of the 7 year yield with the 5 and 10
+1:22:53
+year. So that difference in yield change
+1:23:00
+is-- that combination of yield change is going to have the least variability.
+1:23:07
+The principal component variables have zero correlation. Here's just a pairs plot of the first three principal component
+1:23:14
+variables and the ninth. And you can see that those have been transformed to have zero correlations with each other.
+1:23:22
+One can plot the cumulative principal component variables
+1:23:31
+over time to see how the evolution of these underlying factors has changed over the time period.
+1:23:38
+And you'll recall that we talked about the first being the level shift. Basically from 2001 to 2005, the overall level of interest rates
+1:23:49
+went down and then went up. And this is captured by this first principal component variable accumulating from 0 down to minus 8, back up to 0.
+1:24:00
+1:24:06
+And the scale of this change from 0 to minus 8
+1:24:11
+is the amount of greatest variability. The second principal component variable
+1:24:19
+accumulates from 0 up to less than 6, back down to 0. So this is a measure of the spread
+1:24:27
+between long and short rates. So the spread increased, and then it decreased over the period.
+1:24:33
+1:24:39
+And then the curvature, it varies from 0 down to minus 1.5
+1:24:46
+back up to 0. So how the curvature changed over this entire period was much, much less, which is perhaps as it should be.
+1:24:57
+But these graphs indicate basically how these underlying factors evolved over the time period.
+1:25:03
+In the case note I go through and fit a statistical factor
+1:25:10
+analysis model to these same data and look at identifying the number of factors.
+1:25:16
+And also comparing the results over this five year period with the period from 2009 to 2013,
+1:25:24
+and comparing those different results. They are different, and so it really
+1:25:29
+matters over what period one specifies these models to. And fitting these models is really just a starting point
+1:25:37
+where you want to ultimately model the dynamics in these factors and their structural
+1:25:44
+relationships. So we'll finish there.

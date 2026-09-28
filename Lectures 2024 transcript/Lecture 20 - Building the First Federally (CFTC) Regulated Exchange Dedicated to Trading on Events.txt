@@ -1,0 +1,813 @@
+0:00
+[SQUEAKING] [RUSTLING] [CLICKING]
+0:05
+0:18
+PETER KEMPTHORNE: OK. Tarek has just joined us, I believe. TAREK MANSOUR: Hey, everyone.
+0:23
+PETER KEMPTHORNE: Hey, Tarek. Well, welcome. And just as a brief introduction,
+0:30
+I'm really very proud to introduce Tarek Mansour to everyone.
+0:36
+He graduated from MIT about six years ago or seven years ago,
+0:43
+and he was actually in this class. And so we're really very pleased that he
+0:50
+has come as a guest lecturer. And his background, he left-- when he left MIT,
+0:56
+he joined really the giants of Wall Street, Goldman Sachs,
+1:02
+Citadel, and Bridgewater. I'm sure most of you are very familiar with those names.
+1:08
+And three years ago he started Kalshi
+1:14
+with Luana Lopes Lara, another MIT student.
+1:21
+And I think it's been a phenomenal success, especially in the last month. So let me hand it over to Tarek to share his experiences
+1:31
+and details on Kalshi. TAREK MANSOUR: Well, first of all, thanks for having me,
+1:37
+Peter. Really, really excited to be back in the class. I know Lara did last year, and I think
+1:44
+I did the year before that. And maybe I'll talk a little bit about background,
+1:51
+leading-- the way I'm thinking about doing this is just, I'll talk a little about the story of Kalshi, how we decided to do it, what is the long term vision, what
+1:57
+we're trying to achieve. And then we'll do a little bit of Q&A, and then maybe we'll see how it goes from there.
+2:05
+PETER KEMPTHORNE: Excuse me, Tarek, just a quick question. Your video isn't on for us.
+2:11
+I don't know if you can turn it on. That would be great. TAREK MANSOUR: It should be on, but let me check.
+2:17
+It's on for me. It's on Zoom, so let me check. Let me double check. One second. PETER KEMPTHORNE: Oh, that's great.
+2:25
+We can see you now. TAREK MANSOUR: Oh, great. Great. Sorry about that. I think I'm in a little bit of a unstable Wi-Fi.
+2:35
+So yeah. Maybe I'll talk a little bit about my background. I really like coming back to this class
+2:43
+because a lot of the interest in financial markets and math,
+2:48
+I think, stem from the class. So I was born in California. I grew up in Lebanon. I think one of the things that I really
+2:57
+enjoyed doing in middle school and high school is, I actually really loved math. I really, really liked math, and I
+3:04
+think it felt like MIT was the right place to go if-- for someone who loves math, and so got into MIT.
+3:12
+And I think the thing I realized is one of the best applications of math is finance, to start
+3:18
+working in a number of-- whether it was sell side or buy side, so banks like Goldman Sachs.
+3:25
+I worked at Citadel. I worked at small prop shops.
+3:30
+And then the thing I realized is-- I would say, I realized two things. I mean, one, I like trading.
+3:37
+I really enjoy trading, but I realized I prefer building more. I like the notion of building new products
+3:45
+and building something new, but it's so tangible. And two, when I was at Goldman, I mean,
+3:53
+I think a lot of the thing that we've seen
+3:59
+is that financial instruments do get developed over time. They take a long period of time, but there is a lot of opportunities to basically develop new things.
+4:05
+And there's always needs for a lot of new things. One example in 2016 is that a lot of people were actually trying to get a hedge or an exposure to Brexit,
+4:13
+and they didn't really-- they weren't really the right instruments for that. People would use traditional financial instruments,
+4:18
+like stocks and options and others, to get that binary exposure that people were looking for.
+4:24
+And it was just not perfect. It was not. It was a proxy. It was indirect, and it was super expensive
+4:31
+because it was what we call over-the-counter, OTC traded. And so what we thought, and it was kind of really early
+4:38
+at the time was, like, well, what if we have a financial market? So we have a financial market for equities, so the price equities, one that prices credit,
+4:45
+like bonds and so on; one that prices commodities; and we have financial markets for currencies.
+4:51
+What if we had a financial market that prices basically any question about the future, any event that is in the horizon that is meaningful economically
+4:58
+or socially or culturally? And I think the thing that became very apparent
+5:03
+is, one, if such a market were to exist, it has the potential
+5:09
+to be the biggest financial market of all, mostly because it's just broader than anything else that
+5:15
+came before it. And two, there were a lot of regulatory issues
+5:21
+with that type of market. Basically, historically, the US has made these illegal or unregulated.
+5:27
+They haven't let anyone do it. And at the time we were very naive.
+5:33
+We thought, well, that sounds like a problem we can solve.
+5:38
+And we just got into it, so we decided to start a company. I didn't go back to Citadel, and so we just
+5:46
+decided to start Kalshi. And the premise is really like-- it's like, how about-- what if we build the first large-scale prediction market,
+5:53
+and we want to do it as a financial exchange, a regulated financial exchange so that this can become an asset class that's traded one day by the large hedge
+6:00
+funds and institutions and brokers and so on and so forth? And when we first started, it was tough.
+6:08
+Well, any company is really tough to start,
+6:14
+but I think this was particularly tough because we-- it was kind of a funny story, was we called pretty much every single securities/derivatives
+6:22
+lawyer in the country and asked them, hey, we're trying to do this. Can you help us?
+6:28
+And the answer was basically, everybody-- the range was either being laughed out of the room, all the way to,
+6:33
+hey, this is just not going to work. The CFTC and the regulators just never
+6:39
+wanted to do anything like this. And the reason we kept going is because none of the answers
+6:45
+are actually intellectually satisfying. There wasn't a clear answer. Like, OK, why? They're like, well, because of they could be manipulated.
+6:53
+I'm like, OK, but that's solvable, same way we solved the stock market. And then the other one is, well, it could be gambling.
+6:59
+It's like, well, why is it gambling and something like a grain future is not? I mean, some people are betting on grain futures.
+7:06
+And sure, some people are hedging on grain futures, but it's the same thing for Brexit. A lot of people are exposed to Brexit.
+7:11
+And we kept going. We basically got the company regulated.
+7:17
+We took three years, so we took two years and a half to three to basically get it regulated. And we basically launched the first legal exchange
+7:24
+or legal prediction market in the US after that. It took us a very long time. It was a very long journey.
+7:30
+But we got the exchange. We got the clearinghouse. Well, we got the exchange at the time, and we got up and running.
+7:36
+And I think Peter has seen all the journey of the company.
+7:42
+We started running and then we grew a lot.
+7:47
+And then we had a bunch of, I would say, issues and infighting between us and the federal government,
+7:55
+the CFTC, especially this prior administration, which was kind of really tough on financial-- financial services
+8:00
+and financial innovation. And the big thing that happened is they didn't let us list the election market, which we always
+8:06
+believe is one of the biggest markets of all basically.
+8:12
+We took a very long time to make that decision. It was a very tough one, but we ended up suing the federal government.
+8:18
+So we were really one of those first, I would say, examples of a regulated company suing its own regulator.
+8:26
+It's a very tough and painful decision to make at the time. Obviously, it was the right one now, looking back in retrospect.
+8:33
+And we won earlier this fall, and so that win was actually the first time in 100 years
+8:38
+that you can actually trade legally on the election in the US. And that opens up a lot of opportunities beyond the election because what the lawsuit was about is,
+8:46
+it's really expanding the universe of things that are considered financial instruments now.
+8:52
+And so where Kalshi is at now, we've grown a lot over the last few years but definitely
+8:58
+the last month. We've done over a billion of volume in the last month alone.
+9:06
+And now, as we think about our future expansion plans,
+9:12
+we're getting into a number of different categories, financial services, just basically like financial markets, sports.
+9:19
+We want to basically have a market for every single piece of news that's out there in the world. And we want to over time.
+9:24
+What we're doing is, we're integrating some of the large brokerages, where we're going to have--
+9:32
+people can come to kalshi.com to trade the asset. But also if you want to trade the asset from your own brokerage account, like see your 401(k) in your stocks,
+9:39
+you will be able to do that on Schwab, Robinhood, Fidelity, and so on. Let's talk a little bit about finishing the narrative arc,
+9:48
+and then I'll talk some of personal stuff, going from being a student to starting a company and so on. But one of the things that was interesting throughout
+9:57
+the journey is, a lot of what it basically ends up taking is just perseverance around--
+10:07
+basically perseverance towards the goal that you're trying to achieve.
+10:14
+I mentioned at the beginning that we were naive when we first started. And in retrospect, I think that was actually one of the best things that--
+10:21
+or I'd say one of the best tools that we had, actually being naive, because a lot of the people that--
+10:26
+if we knew how hard it would be, we probably just wouldn't have done it. And there's something to be said about when you climb a mountain,
+10:33
+people tell you, just look at the next step, one step at a time. Don't look at the summit, just because when you look
+10:40
+at the summit, you get tired. And I think there's a lot to be said. I think this applies to pretty much anything
+10:47
+meaningful in life. I think just doing anything meaningful basically requires a lot of perseverance.
+10:52
+The company has raised more than $100 million from a few investors, Sequoia, KKR, Schwab itself, YC,
+11:03
+and a bunch of others in Silicon Valley. And I think that's about it.
+11:09
+I think I covered most things. Peter, I was thinking we could do a little bit of Q&A, and then we can orient the conversation
+11:14
+to some of the places that the students want to hear about. PETER KEMPTHORNE: Yes. Great. Thank you, Tarek.
+11:20
+And let's see with questions. Just so Tarek can hear you, I'll hand you a microphone,
+11:26
+or we'll pass a microphone to you. STUDENT: One, two. OK. I don't know where you can see me from.
+11:33
+Yeah, this is really fascinating. I have a question, which is, what
+11:40
+is the difference between this and a betting market? To me it sounds the same, like you're betting on an event.
+11:47
+Because, surely, if someone wanted to hedge against Brexit, they could just go into a betting market
+11:53
+and bet a certain quantity of money on whether Brexit happens.
+12:00
+TAREK MANSOUR: I do think there's a lot of similarities. And I would say there's a lot of similarities between betting markets and any traditional financial markets,
+12:06
+a lot of people that are speculating or betting or gambling on a lot, really a lot of markets, including crypto and stocks and really anything.
+12:13
+But I think it's a bit more of a structural difference. First of all, this is an exchange.
+12:19
+People are trading against each other. There's no book. There's no bookie. There's no concept of bookie. And actually, any institution that
+12:24
+wants to hedge against Brexit would never do it on a betting market, just because the prices are set by the bookie.
+12:30
+They would do it probably with an investment bank, which is what they're doing right now. But the prices are kind of bad at the investment bank.
+12:36
+It's over the counter. You negotiate bilaterally with the investment bank instead of just basically doing it
+12:42
+on exchange, where there's other people that are independently pricing the events so that you can basically
+12:47
+know what the right price is to basically make the transaction at. I think there are a lot of similarities.
+12:53
+And frankly, I haven't-- we don't really discern them quite much. I think over time the two are converging,
+12:59
+and they're going to end up being one and the same. The fundamental difference, I would say, like from a regulatory or legal perspective,
+13:06
+but also like, why is it the financial instrument? is, are you trading on natural risks, or are you trading on artificial risks?
+13:13
+So when you go to a casino and you roll a dice, that's a risk that you're creating for the purpose of entertainment, whereas Brexit,
+13:21
+that's not a risk that you're creating for the purpose of entertainment. That's a risk that exists that some people have and they're
+13:27
+exposed to, and they may want to basically transfer it to someone else. And so that's of the delineation of why this is a financial market and why
+13:34
+having it on a financial market is appropriate.
+13:39
+But yeah, I mean, I think the two main differences, it is an exchange. We have an order book. People are trading it the same way
+13:44
+as a stock market, the same way they trade in a stock market. And then, two, it's risk that exists.
+13:49
+And so people can basically do what they want with that risk, whether they want to get exposed to it more by speculating, or they want to expose-- get exposed to it less by hedging.
+13:57
+It's a great question. STUDENT: Thanks. Can I just ask a quick follow up, which is-- and this has just come to my mind, so maybe
+14:03
+a silly question-- has there been any arbitrage opportunities between the betting markets and this exchange?
+14:11
+TAREK MANSOUR: Yeah, I mean, well, we're the only legal one in the US, so there's kind of-- I mean, in terms of--
+14:16
+there's more arbitrage between us and traditional financial assets. So with the election, for example, people were arbitrage.
+14:23
+A lot of hedge funds were arbitraging the election market with other assets like crypto or S&P and so on.
+14:33
+And that, we see a lot of that. STUDENT: OK. Yeah, that makes sense. That's fascinating. Thank you.
+14:38
+14:47
+TAREK MANSOUR: Steven, I don't know if you can give him-- I don't know if you can unmute yourself or--
+14:53
+oh, sorry. What's the question? STUDENT: Can you hear me? TAREK MANSOUR: Yep.
+14:59
+STUDENT: Yeah. I'm also interested in careers in trading as well,
+15:04
+and I find it fascinating as well. So it's good to hear that you were interested in that
+15:09
+and did that as a career. But I was just wondering, how did your experiences working
+15:15
+in trading help you to-- or if those skills helped you with what you pursued at Kalshi
+15:22
+or not? TAREK MANSOUR: I would say maybe a few things.
+15:30
+So one, I mean, it's always good to get first-hand exposure into how things are done in a market that you're trying to be-- trying to disrupt.
+15:40
+It's good. You have to have a reasonably good understanding of how things work. And the thing I'd say is, it's interesting.
+15:46
+If you stay in an industry for too long, it actually gets a bit harder to disrupt it.
+15:52
+You get too conditioned to how things are done, and maybe you get--
+15:58
+maybe it gets harder for you to become-- to have any degree of naivete, which I think
+16:04
+is not a very good thing. But I think some degree of experience is good so that you have a baseline understanding of what
+16:09
+your end customer-- how your end customer basically thinks about the world and how they use different products and adopt them.
+16:16
+The second thing I think is, I would say I learned a lot from the Citadel culture, maybe less from Goldman and some of the others,
+16:23
+but Citadel, I really enjoyed working at Citadel. I really like a lot of the aspects
+16:30
+of the culture and the way that things are done. And I would say, it was interesting because I think citadel had this ultimate version of, let's call
+16:42
+it performance-driven culture. And what I mean by that is, it's a full meritocracy.
+16:47
+It's very little management layers. Even if you're young, they will give you a lot of ability
+16:52
+to take risks and do big things. And they're uniquely fit to do that because in trading,
+16:59
+something that's very unique to trading is that you have a P&L. It's undeniable whether you're doing well versus not.
+17:06
+If you make money, you're doing well. If you're not, you're not. Whereas in tech and others, there's a lot of politics.
+17:13
+The boss likes you versus not. I mean, there's just a lot-- a lot of noise. And I think we try to bring that to the culture of the company
+17:20
+as much as we can. We're very flat as a company. We have a lot of people that are a few years out of college.
+17:26
+A lot of them are from MIT. They're running huge, huge chunks of the company already
+17:31
+and with teams and so on. And just because for us, it's very similar. If you do well, you basically grow
+17:36
+extremely fast within a few months within the company. And if not, then not. And that comes a bit from the trading culture, I would say.
+17:46
+STUDENT: OK. Yeah. That makes sense. Thank you.
+17:57
+JAKE XIA: I can field you a question. Hey, Tarek. Good to see you back in the class.
+18:03
+TAREK MANSOUR: Good seeing you. JAKE XIA: Good to see you. So can you talk a little bit about your margin
+18:08
+requirement and also maybe central clearing, I guess?
+18:14
+You have two parties taking the opposite side of a contract. I mean, the payout that says 100%,
+18:21
+they may have paid a percentage of that total payout.
+18:26
+When the market moves, do you require them to post the variation margin? How do you monitor that?
+18:34
+TAREK MANSOUR: Yeah. So we are fully cash collateralized right now, so what it means is people put the money up
+18:39
+front for their positions. And then we basically mark to market every day.
+18:45
+Actually, we mark to market on a real-time basis, so we do it in real time.
+18:50
+We are going to introduce leverage next year, I think, and that's going to be pretty interesting. We're thinking about what our margin model is going to be.
+18:57
+And maybe for the class, I'll explain. So in a lot of financial markets, you-- what people consider margin leverage is when you buy--
+19:05
+when hedge funds basically buy, let's say, interest rate futures or S&P future.
+19:13
+Let's say they want to buy like $1 million worth of S&P futures. They don't put up $1 million with the clearinghouse and the exchange.
+19:19
+They put up, let's say, $100,000 or $10,000, which would be 10%, 1% in margin.
+19:25
+And then as the thing moves over time, the clearinghouse asks you to-- if you made a little bit of money, the clearinghouse pays you.
+19:31
+And if you lost, the clearinghouse asks you to put up a bit more margin to cover your losses.
+19:36
+And it goes like that over time. Kalshi is a simpler model where we actually ask for 100% upfront.
+19:42
+We tell everyone, hey, give us all the money upfront so that there's no risk in the system, and you're always sure that anything you lose
+19:49
+is what you lose upfront. What you put up upfront, you cannot lose more than that. Over time, we're going to start introducing leverage, which
+19:56
+is, we don't take 100% upfront. And that's what Jake was asking about.
+20:01
+And I think it's a complicated-- that's a complicated thing because regulators are becoming very strict about how we do this. And we have to be very-- we need to make sure that nothing
+20:08
+like 2008 can happen again. And so there's a lot of requirements around how this needs to be done.
+20:15
+And so we expect to introduce maybe margin like end
+20:20
+of next year here potentially. And we'll see how that goes.
+20:26
+We do have some products where, for example, if there's a lot of strong correlation between two products, we return some collateral to the participant.
+20:33
+And we've already started doing some of that. But over time we'll do more and more. Yeah, it's a great question.
+20:39
+STUDENT: Yeah, so I have a question on how
+20:46
+the projections for the company have changed since the election. I assume there's a lot more volume going through Kalshi
+20:52
+during the election period. Have you guys been able to retain a lot of that trading volume, or did you see a huge falloff?
+20:58
+And how did just the election in general change where you see the company going?
+21:03
+TAREK MANSOUR: Yeah, I mean, I think the election, so it's obviously it's super huge. But it's interesting because our volume right now
+21:08
+is actually higher than it was in the days leading up to the election. And I think that's how exchanges work.
+21:14
+Once you acquire a lot, acquire and onboard and open accounts for customers, they kind of retain.
+21:19
+They stick. They do other products. Now we're seeing a lot of uptick in crypto. We're seeing a lot of upticks in our economics products.
+21:26
+We're seeing uptick on a lot of the politics, like who's going to be in the cabinet, who's going to-- there's all these questions about, what's
+21:32
+government going to look like in the next year? And then you have a lot of crazy categories like weather.
+21:37
+People come and are very active on daily weather markets and then entertainment markets and so on.
+21:43
+So we see a lot of opportunities across all these categories. And yeah, I mean, I don't think--
+21:49
+so it's not going to be the same levels that we've seen in the two days leading up to the election, but I think we're at a much higher level than what we
+21:57
+were prior to the election now. Think of it as a huge marketing moment for the company.
+22:04
+And that enabled the product to go mainstream.
+22:14
+VASILY STRELA: Hey, Tarek. It's Vasily. Yeah, good to see you in class. Yeah.
+22:20
+TAREK MANSOUR: Good seeing you. VASILY STRELA: Yeah. A question. So can you reveal what's the percentage
+22:27
+between institutional clients and individuals on Kalshi
+22:32
+at the moment? TAREK MANSOUR: Right now it's the breakdown of volume is 30, 40% institutional, and the rest is retail.
+22:40
+And I expect it to basically go towards 50/50 over time.
+22:50
+It's interesting. Institutions do a lot more volume, but you can charge them less; whereas retail,
+22:56
+like individual customers, they do less volume. They can be charged much more. And historically, people have seen
+23:03
+the business model of being kind of institutional first. The large exchanges like NASDAQ or CME, they're mostly institutional.
+23:11
+But I think it was kind of a strategic mistake, and I think they're waking up to it. They're realizing like, oh, God, people on Reddit and Twitter
+23:18
+and average people now hold a lot of the power. They can decide that a company like NVIDIA
+23:23
+is going to be worth a few trillion dollars. And that wasn't possible before. People are richer now.
+23:29
+People are more involved in the financial market, and they're less price-sensitive. And so you see companies like Coinbase
+23:35
+are doing incredibly well. And yes, they have much less. Coinbase's volume on a yearly basis is around, I think,
+23:41
+like $50 to $60 billion. CME'S volume is like a quadrillion.
+23:47
+It's just not even comparable. But Coinbase charges a lot more. They charge you a lot more per dollar traded.
+23:56
+And I think we see that same balance, and I think that it's interesting.
+24:02
+The thing that we see, and I see this trend continuing
+24:08
+in the next few years, especially with the Trump administration, there's
+24:14
+a very strong appetite for new-- new financial markets and new media.
+24:21
+There's a lot of distrust in the system, both in the Wall Street and financial markets but also media. People just don't really believe the pundits
+24:29
+and traditional authorities. And I think prediction markets are very uniquely suited to be
+24:35
+at the intersection of both. That's a retail-first market.
+24:41
+That's retail first, and then the institutions follow, rather than an institution first and then figure out how to get the retail to adopt essentially.
+24:49
+And we're seeing that. We're seeing that. VASILY STRELA: Right. Very interesting.
+24:54
+Thank you. TAREK MANSOUR: Steven. STUDENT: Yeah, I have a question about-- because you
+25:00
+said that you were trying to also get into sports as well. So I was wondering if you planned on offering--
+25:10
+or similar things to other sports books and stuff, like traditional bets, like money lines and stuff like that,
+25:17
+or would it be more of the work, more like a broader prediction-type sports bets?
+25:24
+25:30
+TAREK MANSOUR: That's a good question. Both basically is the way I put it. I think both.
+25:37
+The prediction stuff is the one that's more interesting because that's the one that people in news thinks about.
+25:43
+What are some of the big things that are going to happen in the next few months or years?
+25:48
+And then the money line is just very retentive. It's, like, people come back, and they do it over and over, and then they engage with the product
+25:55
+meaningfully in a very consistent way. So I think that, yeah, I think the answer is both. We have some regulatory work to do on that front,
+26:01
+but the next administration is going to be very favorable. I mean, Trump himself has been courting our markets a lot. He loves the market.
+26:06
+He loves the company. I think he's going to see a big shift from an administration
+26:12
+that was somewhat anti-financial innovation to an administration that is going to be very, very pro-financial innovation
+26:17
+and prediction markets specifically. STUDENT: OK. Yeah, that makes sense.
+26:23
+JAKE XIA: So Tarek, I'm throwing you another question. I don't know if you can talk about the revenue
+26:29
+of the company. Is the company profitable so far? The revenue model is from a commission model,
+26:36
+just to give students some idea how-- why the investors are interested in owning the company.
+26:44
+TAREK MANSOUR: The company can be profitable if you want to,
+26:51
+but we don't right now. And oftentimes, it's a little bit of a counterintuitive thing.
+26:57
+But I think increasing the growth at this stage is more important than profitability in a lot of cases.
+27:05
+And the reason why exchanges-- exchanges are very popular businesses.
+27:10
+They're very hard to set up. It's unbelievably hard to get an exchange up and running. It's just really, really difficult.
+27:15
+But when it's up and running and you have liquidity, it's actually one of the best form of businesses. It's some of the most profitable businesses
+27:20
+are exchanges actually. And so right now the strategy is basically hardcore expansion.
+27:28
+Just grow, grow, grow, grow. Go mainstream. Get people used to the asset. And we're making revenue, but it's
+27:34
+just like we're reinvesting it all into marketing and growth. And then over time, we're basically-- as we taper,
+27:39
+and as we get to even larger scale basically, turn on the profit machine. And the source of revenue is essentially,
+27:46
+like, we make money on trading fees, like CME or New York Stock Exchange.
+27:52
+You take a fee off every transaction. If you put $100 in cash, you take $1 to $2. And then on market making, so we have a separate arm,
+27:59
+a bit like Citadel market making, on this product. And they're already one of the prime market makers. They have competition, so they compete
+28:04
+a lot against SIG, which is one of our major partners. And then there's a few other prop shops or market making,
+28:10
+like hedge funds in the firm. And then, three, over time, right now we make it all free and open source,
+28:16
+but the data is very valuable. We have a lot of very valuable data about trends and where the world is going.
+28:22
+And there's a lot of demand to get the data. But for now, we're just making it open source,
+28:27
+so anyone can use it. Anyone can make use of it, so over time it can basically capture value in that as well.
+28:34
+JAKE XIA: Just a follow up on that. You mentioned Citadel, SIG, those market makers.
+28:41
+How do you incentivize them to come to Kalshi? And are there any requirements of how tight the bid offer
+28:51
+spread they need to make when they make market on certain contracts?
+28:56
+TAREK MANSOUR: Yeah. So, no, there are definitely requirements. So I'll give an example. In the election market, they had to be
+29:01
+$0.01 spread with $1 million on each side at least.
+29:07
+And it was funny because Jeff Yass, the founder of SIG, actually texted Elon and asked him
+29:12
+if he wanted to do a $100 million trade on Kalshi during the election.
+29:17
+But Elon was too concerned of conflict of interest and a bunch of things. And they could have done it with $0.01,
+29:23
+so the spreads were very, very tight. I'm saying this because they could have done-- they could do up to $100 million within like $0.01 slippage, which is really awesome.
+29:32
+And so, yes, there are requirements around spread.
+29:37
+I think the way we think about the ecosystem needs to be-- or the way that it's structured, you
+29:47
+give some incentives at the beginning of markets so that after that, you basically let it do. And the incentive's basically there. They're getting flow.
+29:52
+They're trading against a bunch of other people, and then they hope to make money market making and doing-- getting bid at spread essentially.
+29:59
+And so that's our sort of, I would say, the structure. And it's pretty common structure in the traditional markets.
+30:05
+I think your question is good because the stock exchanges, they do a lot of incentive because stocks--
+30:11
+there's a lot of stock markets. There's a lot of stock exchanges. They're very competitive with each other because of the way that the SEC has set up rules.
+30:16
+In the CFC world, there's not a lot of competition. It's actually very monopolistic in nature. Each one has their--
+30:22
+CME has their interest rate swaps and S&P. ICE has all the energy stuff, and I think we may be able--
+30:27
+I think it looks like we're going to be able to dominate anything that's event-related over time.
+30:32
+STUDENT: So I'm just intrigued as to how you've gone from just working in a company like Citadel, Goldman,
+30:39
+to just having this idea of this exchange and actually just being able to make it.
+30:45
+Because to me, it seems like even if I had an idea of, oh, this would be a great thing to turn into an exchange, just
+30:51
+the idea of actually making that happen seems really hard to achieve.
+30:57
+From the idea to actually getting it into a reasonable product, how did you--
+31:05
+what did you have to do? Did you just have to literally start emailing people in the industry, and then start working your way up?
+31:12
+How did that work? TAREK MANSOUR: Yeah. So yes, that's it.
+31:17
+I mean, that's literally it.
+31:24
+I'll say a few things about this because I thought about this a lot. So it was a tough decision to leave Citadel, like when I--
+31:33
+and I think, Peter, you and I had a conversation about this as well. I think at the time, we--
+31:38
+Citadel pays a lot of money.
+31:44
+Even as a first timer, it's crazy. And so I didn't come from a very privileged background, so I remember I had a conversation with my parents
+31:50
+like, hey, I wanted to start this company. They're like, oh, what is it about? I was like, oh, this thing called prediction market.
+31:55
+Obviously, they had no idea what I was talking about. And I was like, I mean, there's another problem. So it's illegal in the US now, and I want to do this.
+32:02
+And they're like, OK, and so you have to leave your job? I was like, yeah. And then they obviously got inflamed.
+32:08
+They were like, what are you talking about? These guys are paying all this money. Well, does that make any sense?
+32:13
+And I think the thing that pushed us to do it is, I think I kind of--
+32:19
+some people make decisions based on regret minimization. It's like, in 10 years, what path would I regret the most?
+32:25
+And I just thought I would regret if I hadn't done it. I just thought I would be very regretful if I didn't do this, or at least try or give it a shot.
+32:32
+And so I just had to do it. And then I really liked the idea. I just really love--
+32:38
+I love the idea of basically creating a market where you can price anything and making the world just smarter about the future.
+32:44
+So then, OK, what do we actually do?
+32:52
+The simplest way to describe what
+32:59
+it takes to build a company, so Mark Andreessen has this quote-- I forgot if it's Mark Andreessen or Ben Horowitz,
+33:04
+one of the two a16z guys-- about how when he talks about-- to a lot of CEOs,
+33:10
+he basically has this whole thing about all the pretty-- the good CEOs usually respond with, OK.
+33:16
+When he asked them, How did you do it? they say, it was a great strategy, great execution.
+33:23
+We had all these great decisions, blah, blah, blah, blah, blah, blah. And then he says, the absolute great CEOs, usually their answer
+33:30
+is, we didn't give up. We just pushed harder than anyone else.
+33:36
+And I think there's a lot of truth to that. I really do, because when you're young, people say,
+33:41
+well, when you're young, you have to wait and get experience to build a company. And there's pros and cons to both. When you're too experienced, I think
+33:47
+it's harder to be a little crazier and do bolder, crazier ideas. But when you're younger, you don't know much about anything,
+33:54
+really. You don't know how to manage people. You don't know how to raise money. You don't know anything.
+33:59
+And you just have to stumble. You just have to run and fall, and then stand up, and run
+34:06
+and fall again, and stand back. And then you do it enough times, and then you get used to falling. And then you getting used to falling is actually one of the best superpowers you can ever have.
+34:13
+Literally, I think the capacity to fall and stand back up,
+34:18
+I think is the single best determinant of the entrepreneurs that go furthest, really. And you can look at it even-- you
+34:24
+don't need to look at small private companies or big private companies. You can look at public massive large companies.
+34:31
+Just look at the stock price of Meta and Tesla, and see how it goes. It's just not straight to the right.
+34:36
+It goes to the shitter for a few years and goes back up, and then it repeats. And in every cycle, it goes higher than the prior cycle,
+34:45
+and they keep going. So I think that's really what it is. And when I think about my younger
+34:51
+self, what is the type of advice I would give? I think take more risks, and that's one of the things I learned a lot from my co-founder, Luana.
+34:58
+She's always been risk-loving. She never really, really worried about much.
+35:04
+I was more of a person that would think about optimizing my career, and what's the highest expected value path?
+35:12
+What I learned over time from the company and from her is, actually, you just need to take more risks.
+35:17
+Taking risks is a very good-- it's a very good way to live a life, because what's the worst case?
+35:23
+You fail and then you do it again.
+35:29
+I would say number two is, pick something and just stick with it. Just try to pick something.
+35:34
+If you don't know what it is yet, that's OK. Take a few years to figure that out. But once you feel like you really like and enjoy
+35:40
+working on something, you just pick something and just stick with it. Just go for it and have conviction.
+35:47
+And usually, the results, the results end up being pretty positive. It's a very, very tough road. I mean, Professor Kempthorne can tell you
+35:53
+about a lot of the stuff we had to go through to get here. It's a very tough road, but if you have conviction, you're excited about what you're working on,
+35:59
+I think you can get very, very far. STUDENT: That's great. So did you ever set in your mind essentially a stop-loss,
+36:05
+where you thought, right, well, if this person-- I've asked this many people; if this person says no, maybe it's
+36:11
+not actually possible? Or did you just never have that in your mind? You just kept going.
+36:24
+TAREK MANSOUR: Not really, basically. I mean, definitely not a people-driven thing. What I've learned is, also, a lot
+36:31
+is like, don't really listen to authority figures. You'd be surprised by the extent to which people just don't
+36:38
+really know what they're doing. And by people, I mean not average. I'm talking the President of the United States, the Supreme Court
+36:47
+Judge, Elon Musk, like Mark Zuckerberg. People don't really know what they're doing, really.
+36:54
+Everyone is figuring it out on the fly. And it's interesting because if anyone had the answer of whether
+37:01
+something is going to be a multi-billion dollar company-- sorry about the noise, by the way.
+37:07
+If anyone had the answer if anything was going to be a multi-billion dollar company, they would just do it.
+37:13
+Why didn't they just do it? So in a lot of cases, you cannot really get the answer from outside.
+37:19
+It's interesting. You really can't. You just have to have it inside you. And you may be wrong. That's a risk.
+37:24
+You may be wrong and you may fail. And it might suck, but that's the risk that you're taking.
+37:30
+But it has to come from within you. It's like, do you have conviction in this thing, and do you believe it can work one day? And if you do, then go for it.
+37:37
+STUDENT: That's amazing. Thank you so much. PETER KEMPTHORNE: So, Tarek, if I could just chime in there. I think what Tarek has is passion, persistence,
+37:51
+and energy. And knowing how hard he worked and how inspiring he was,
+38:00
+that inspiration led to significant investments from top people in finance.
+38:07
+And so I think it's a testament to those characteristics
+38:12
+he mentioned. Also, it's a great benefit to have a good partner.
+38:19
+And Luana Lopez Lara really, I think, is a great partner with Tarek.
+38:25
+And they've helped each other achieve this.
+38:31
+TAREK MANSOUR: Yeah. No, I appreciate it. I mean, maybe my last few parting words, unless there's any other questions, I mean, I think--
+38:37
+I was still at MIT. I don't know how many of you are sophomores, freshman, juniors,
+38:44
+seniors. But here's all the stuff I would tell myself if I was still at MIT.
+38:51
+I would take more classes like Peter's class and less classes that are purely theoretical and far removed from practical--
+39:00
+many practical things. I would probably study a little less
+39:05
+and have a little bit more fun. And I would worry a little bit less about the optimal career
+39:11
+paths and just explore what interests me more. It's crazy the extent to which a lot of these things
+39:18
+matter much less than you think. And a lot of life is just actually trying things out
+39:24
+and seeing what works and just making sure you're excited about the things that you're working on. But yeah, if you guys have any questions, reach me.
+39:31
+Just please don't share the email, but it's tarek@kalshi.com. My first name at the name of the company dot com.
+39:38
+Happy to help in any way, shape, or form. But yeah, you know, congrats to you guys making it to MIT
+39:43
+and hopefully making it out of MIT. And really excited to be here. Thank you for having me.
+39:49
+JAKE XIA: Tarek, before you go, I have to ask you this question. What was the most memorable thing
+39:55
+you learned from this class when you took it? And do you recall anything interesting
+40:02
+you heard from this class? Advice to the students? Yeah.
+40:10
+TAREK MANSOUR: I really liked that every mathematical concept had an application towards finance,
+40:16
+and I think that was a very palpable thing essentially. It was, a very, very palpable thing was, OK, well,
+40:24
+you're kind of learning this mathematical concept. It's pretty cool in and of itself. But then when you apply it to finance, you see there's actual real practicalities
+40:31
+to the whole thing. And I think that stuck with me. I think that because a lot of the other classes I was taking
+40:38
+was basically mostly pure math or kind of very removed from industry, whereas here, I remember
+40:43
+one of the projects we had to do was-- there was this paper we had to write.
+40:51
+And I think the one I wrote-- it's been a while. It's been like, I don't know now, like six years, seven years.
+40:57
+But the paper I had to write was, we were running some form of regression.
+41:02
+It was a complicated form of regression on-- now I remember.
+41:07
+I wrote a paper that was trying to use reinforcement learning to predict the stock market.
+41:14
+And it was, I think, our final paper of the class, and it was pretty hard.
+41:19
+I don't think our model worked, as you would expect, but it was really interesting just trying.
+41:25
+I think that was very useful after when I went into trading. People would be talking about Markov chains and how they wanted to apply them at Citadel,
+41:32
+and I had already done that in the class and had already applied them. And when I used it at Citadel, it
+41:39
+was like, holy shit, this guy's a genius. I'm like, you don't know anything. At MIT people do this every day.
+41:44
+And that was the next MIT guy, by the way, who's now-- you should Google him, Jon Tipermas He's one of the most successful portfolio
+41:50
+managers on Wall Street. He's a G. This desk is one of the best performing desks
+41:58
+at Citadel. The reports is that apparently they made $2 billion in 2022 alone, and they've been making more since then.
+42:05
+And they were impressed by some of the stuff that I learned in this class that I was applying on the desk.
+42:11
+I think this goes to the broader thing that I was mentioning. I think it's just good to be practical,
+42:16
+just very good to be practical. I get very, very smart, but also be practical because a lot of the world is. And you see it like--
+42:23
+like an example, the people that have run the largest companies, even the largest hedge funds,
+42:30
+are not exactly the smartest. Maybe Jim Simons is an exception, but they're not exactly the smartest. LTCM blew up, and those were the smartest guys.
+42:37
+A lot of the others, like Steve Cohen and some of the others,
+42:44
+they're pretty smart, but they're more well-rounded. They're just much more well-rounded than just being the best at math.
+42:50
+And I think there's a lot of learning to that.
+42:55
+JAKE XIA: Great. Thank you. TAREK MANSOUR: Well, great. Well, thanks. Thanks so much for having me, everyone.
+43:01
+And hopefully we'll catch up soon. PETER KEMPTHORNE: Great. Thank you very much, Tarek. VASILY STRELA: Thank you.
+43:07
+PETER KEMPTHORNE: But I think his comments
+43:13
+about basically having passion and persistence and energy,
+43:19
+you can really achieve many things and achieve your dreams.
+43:25
+So I do want to encourage you all to take stock of that.
+43:32
+And just as a general comment about my career, I started off in academics and then found consulting projects
+43:42
+to be very stimulating and engaging. And I decided to leave academics and start my own company,
+43:50
+and ended up starting a couple of hedge funds and then doing investment management for 20 years.
+43:58
+Then 10 years ago, I had the opportunity to come back to MIT
+44:03
+and teach, and I've been savoring that experience as well. So don't be afraid of changes in your life
+44:12
+and changing your paths. And taking risks leads to great opportunities.
+44:19
+So hopefully you'll all benefit from that kind of perspective.
+44:28
+All right.

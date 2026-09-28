@@ -1,0 +1,703 @@
+% !TEX root = ../main.tex
+\chapter{Stochastic Differential Equations}\label{ch:sde}
+
+\begin{sources}
+\small
+\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+\textbf{Lecture} & \textbf{Speaker} & \textbf{Content}\\
+\midrule
+2024 L25 (from 19:01) & P.~Kempthorne & The first 18 minutes (recap of It\^o's formula, geometric Brownian motion) are in \cref{ch:stochcalc}. Then: the Black--Scholes equation by hedging (slides 2--4, also \cref{ch:stochcalc,ch:bs}); the heat equation: linearity and superposition, the Dirac initial condition, general initial data, the indicator example, solution by similarity/invariance and by step functions (slides 5--12); SDEs: Lipschitz and growth conditions, existence and uniqueness, coefficient matching for geometric Brownian motion and its ``paradox'', the Ornstein--Uhlenbeck process and Vasicek's model, the product-process solution, systems of SDEs and the position--velocity example (slides 13--20); numerical methods listed on slide~21.\\
+2013 L21 & C.~Lee & The goal of an SDE and the existence/uniqueness theorem; coefficient matching for geometric Brownian motion and (by a product guess) for the Ornstein--Uhlenbeck process; numerical methods: finite differences for ODEs, Monte Carlo along a fixed Brownian path, the tree method; the heat equation, superposition, the Dirac delta and the Gaussian kernel, the link with the Black--Scholes equation.\\
+\bottomrule
+\end{tabularx}
+
+\smallskip
+\textbf{Files.} Slides \file{mit18\_642\_f24\_lec24.pdf} (21 slides, this is Lecture~25, not 24; slides 2--4 Black--Scholes, 5--12 heat equation, 13--20 SDEs, 21 numerical methods and references);
+2013 note \file{MIT18\_S096F13\_lecnote21.pdf} (7 pages).
+\textbf{Problem sets.} 2013 PS9 (\file{pset9.pdf}: Problems A-1, A-2, A-3; there is no Part~B), and Exercise~3.2 of \file{lecnote21}. 2024 has no problem set on this topic. The exercises are at the end of the chapter.
+\textbf{Additions of these notes} (marked as such where they occur): the proof of existence and uniqueness by Picard iteration, generators, the Feynman--Kac formula, the Fokker--Planck equation, the exact AR(1) sampling of the Ornstein--Uhlenbeck process, the Vasicek bond price, the Euler--Maruyama and Milstein convergence experiments, and the CIR process. The lectures state only that the Black--Scholes PDE and expectations are two faces of one object; the Feynman--Kac formula that proves it is here.
+\end{sources}
+
+\section*{Motivation}
+\Cref{ch:stochcalc} taught us to differentiate functions of Brownian motion. This chapter runs the calculus backwards, exactly as an ordinary differential equation is the reverse of differentiation: \emph{given} the local rules ``expected change per unit time $=\mu$, variance of the change per unit time $=\sigma^2$'', find the process. A stochastic differential equation (SDE) is the law of motion of a random quantity: a stock price, a short interest rate, the velocity of a particle in a fluid. Four questions organise the chapter.
+\begin{itemize}
+  \item \emph{Does a solution exist, and is it unique?} Yes under a Lipschitz and a growth condition (\cref{ch18:sec-exist}).
+  \item \emph{Can we solve it in closed form?} Rarely, but the two most important examples can: geometric Brownian motion, the model of a price, and the Ornstein--Uhlenbeck (Vasicek) process, the model of a mean-reverting quantity such as an interest rate (\cref{ch18:sec-cm,ch18:sec-ou}). Sampled at discrete times the Ornstein--Uhlenbeck process is exactly the AR(1) model of \cref{ch:timeseries}.
+  \item \emph{How does an SDE connect to partial differential equations?} Through the generator of the process: the Feynman--Kac formula turns a PDE into an expectation and back, and the Fokker--Planck equation is the PDE for the density (\cref{ch18:sec-fk}). Both lectures end with the simplest of these PDEs, the heat equation, which is the Black--Scholes equation in disguise (\cref{ch18:sec-heat}).
+  \item \emph{What if there is no closed form?} Simulate: the Euler--Maruyama scheme, Monte Carlo, trees (\cref{ch18:sec-num}).
+\end{itemize}
+For a physicist most of this is familiar under other names: an SDE with additive noise is a Langevin equation, the Ornstein--Uhlenbeck process is the velocity of a Brownian particle, and the Fokker--Planck equation and Feynman--Kac formula are the Schr\"odinger-type equation and the path integral of the same diffusion. We use It\^o's formula \eqref{ch17:eq-ito3} of \cref{ch:stochcalc} throughout.
+
+% ==================================================================
+\section{Stochastic differential equations: existence and uniqueness}\label{ch18:sec-exist}
+
+\subsection{The definition}
+Let $B$ be a standard Brownian motion and $\mu(t,x),\sigma(t,x)$ two given functions of time and space. The SDE
+\begin{equation}\label{ch18:eq-sde}
+  \dd X_t=\mu(t,X_t)\,\dd t+\sigma(t,X_t)\,\dd B_t,\qquad X_0=x_0
+\end{equation}
+\ts{24}{25}{1:04:34}\ts{13}{21}{0:00} is a \emph{shorthand for an integral equation}, exactly as in It\^o's formula. A \emph{solution} is a continuous adapted process $X$ such that for all $t\ge0$
+\begin{equation}\label{ch18:eq-sdeint}
+  X_t=x_0+\int_0^t\mu(s,X_s)\,\dd s+\int_0^t\sigma(s,X_s)\,\dd B_s ,
+\end{equation}
+the first integral being an ordinary (pathwise) integral and the second an It\^o integral (\cref{ch:stochcalc}). Note the difference with all of \cref{ch:stochcalc}: there the integrands were given adapted processes; here the integrand $\sigma(s,X_s)$ depends on the unknown $X$ itself, so the object to be found appears on both sides.
+\begin{intuition}[Reading an SDE]
+Over a short time $h$, \eqref{ch18:eq-sde} says $X_{t+h}-X_t\approx\mu(t,X_t)\,h+\sigma(t,X_t)\,(B_{t+h}-B_t)$: conditionally on the present the change is normal with mean $\mu h$ and variance $\sigma^2h$. So $\mu$ is the local drift (mean velocity) and $\sigma^2$ the local variance rate, the \emph{diffusion coefficient} of a physicist ($\sigma^2=2D$). In the language of \cref{ch:stochcalc} the equation is a Langevin equation $\dot X=\mu(t,X)+\sigma(t,X)\,\xi_t$ with white noise $\xi=\dot B$, in the It\^o convention: the noise multiplies $\sigma$ evaluated at the \emph{start} of each step.
+\end{intuition}
+The 2013 lecture stresses that this is the reverse of what had been done so far \ts{13}{21}{0:00}\ts{13}{21}{1:06}: before, a function was differentiated to obtain an equation; now the equation is given and the process has to be found by going backwards. Even for ordinary or partial differential equations one does not expect a closed form; what one \emph{can} always say is whether a solution exists.
+
+\subsection{Existence and uniqueness}
+\begin{theorem}[Existence and uniqueness]\label{ch18:thm-eu}
+Fix $T>0$ and suppose the coefficients of \eqref{ch18:eq-sde} satisfy, for some constant $K$ and all $t\in[0,T]$, $x,y\in\R$, the \emph{space-variable Lipschitz condition}
+\begin{equation}\label{ch18:eq-lip}
+  |\mu(t,x)-\mu(t,y)|^2+|\sigma(t,x)-\sigma(t,y)|^2\le K|x-y|^2
+\end{equation}
+and the \emph{spatial growth condition}
+\begin{equation}\label{ch18:eq-growth}
+  |\mu(t,x)|^2+|\sigma(t,x)|^2\le K\bigl(1+|x|^2\bigr).
+\end{equation}
+Then there is a continuous adapted solution $X$ on $[0,T]$ with $\sup_{0\le t\le T}\E X_t^2<\infty$. Moreover if $X$ and $Y$ are two continuous solutions with this $L^2$ bound, then $\Prob\bigl(X_t=Y_t\ \text{for all }t\in[0,T]\bigr)=1$.
+\end{theorem}
+\ts{24}{25}{1:04:34}\ts{24}{25}{1:05:34}\ts{24}{25}{1:06:36}\ts{13}{21}{2:13}\ts{13}{21}{3:18}\ts{13}{21}{4:27}
+Both lectures state the theorem without proof, refer to the literature (Steele; Oksendal), and comment on the hypotheses. The Lipschitz condition says that $\mu$ and $\sigma$ cannot change too fast when the space variable moves a little: at most linearly in the distance \ts{13}{21}{4:27}. The growth condition says that the coefficients cannot blow up too fast at infinity \ts{24}{25}{1:05:34}\ts{13}{21}{5:31}. ``Essentially unique'' means unique up to a null set: the two solutions have the same paths with probability one \ts{24}{25}{1:06:36}. The 2013 speaker adds the advice that matters in practice: do not worry about the technical conditions; \emph{a solution exists, but do not expect a closed form} \ts{13}{21}{5:31}.
+
+\begin{proof}[Sketch by Picard iteration (not given in class)]
+Put $X^{(0)}_t=x_0$ and $X^{(n+1)}_t=x_0+\int_0^t\mu(s,X^{(n)}_s)\dd s+\int_0^t\sigma(s,X^{(n)}_s)\dd B_s$. Using $(a+b)^2\le2a^2+2b^2$, Cauchy--Schwarz for the $\dd s$ integral, the It\^o isometry (\cref{ch17:thm-ito-int}) for the noise integral, and \eqref{ch18:eq-lip} (which contains the Lipschitz bound of $\mu$ and of $\sigma$ separately), the differences $\varphi_n(t)=\E|X^{(n+1)}_t-X^{(n)}_t|^2$ satisfy
+\[
+  \varphi_n(t)\le C\int_0^t\varphi_{n-1}(s)\,\dd s,\qquad C=2K(T+1),
+\]
+hence $\varphi_n(t)\le\varphi_0(T)(Ct)^n/n!$ by induction, and $\varphi_0(T)<\infty$ by \eqref{ch18:eq-growth}. The series $\sum_n\sqrt{\varphi_n}$ converges, so $X^{(n)}$ is Cauchy in $L^2$ uniformly in $t$; its limit solves \eqref{ch18:eq-sdeint}. (Continuity of paths needs Doob's maximal inequality; we skip it.) For uniqueness, if $X,Y$ are two $L^2$-bounded solutions then $D(t)=\E|X_t-Y_t|^2$ satisfies $D(t)\le C\int_0^tD(s)\,\dd s$; Gronwall's lemma gives $D\equiv0$, so $X_t=Y_t$ a.s.\ for each $t$, and by continuity for all $t$ simultaneously.
+\end{proof}
+The two conditions are \emph{sufficient, not necessary}, and each has its own job: the Lipschitz condition prevents non-uniqueness and the growth condition prevents explosion. Two ordinary differential equations (the case $\sigma=0$) show what goes wrong.
+\begin{example}[Why both conditions matter; not discussed in class]\label{ch18:ex-fail}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item $\dot x=x^2$, $x(0)=1$ has the solution $x(t)=1/(1-t)$, which explodes at $t=1$: $\mu(x)=x^2$ is locally Lipschitz but violates \eqref{ch18:eq-growth}.
+  \item $\dot x=3x^{2/3}$, $x(0)=0$ has the two solutions $x\equiv0$ and $x=t^3$: $x^{2/3}$ is not Lipschitz at $0$. The stochastic analogue is the SDE of PS9 Problem~A-2, $\dd X=\tfrac13X^{1/3}\dd t+X^{2/3}\dd B$ (real cube roots): with $X_0=a>0$ the process $X_t=(a^{1/3}+B_t/3)^3$ is a solution, and it is the only one \emph{until $X$ first hits $0$}, where the coefficients stop being Lipschitz. For $a=0$ both $X\equiv0$ and $X_t=(B_t/3)^3$ solve the equation (apply It\^o's formula to $f(B)=(B/3)^3$): uniqueness fails exactly where \eqref{ch18:eq-lip} fails.
+\end{enumerate}
+\end{example}
+Under only \emph{local} Lipschitz continuity one still has uniqueness and existence up to an explosion time. The solution of \eqref{ch18:eq-sde} under the conditions of \cref{ch18:thm-eu} is a \emph{Markov process} (quoted): given $X_t$, the future depends on the past only through the present, because the future noise is independent of $\mathcal F_t$. This is what makes the generator of \cref{ch18:sec-fk} meaningful.
+
+\begin{coursenote}[Misprints in the 2013 note, Theorem 1.1]
+\file{lecnote21} introduces the equation ``for given functions $a$ and $b$'' although the coefficients are called $\mu,\sigma$; writes the solution as ``$X(T)=\int_0^T\dots$'', omitting the initial value $x_0$ (it is \eqref{ch18:eq-sdeint} with $t=T$); and leaves the placeholder ``such that (L2 bound)'', which the 2024 slide 13 spells out as $\sup_{0\le t\le T}\E X_t^2<\infty$, as in \cref{ch18:thm-eu}.
+\end{coursenote}
+
+% ==================================================================
+\section{Solving by coefficient matching: geometric Brownian motion}\label{ch18:sec-cm}
+
+\subsection{The method}
+Both lectures show the one systematic recipe they have: \emph{guess that the solution is a function $X_t=f(t,B_t)$ of time and the driving Brownian motion}, differentiate by It\^o's formula \eqref{ch17:eq-ito2}, and match coefficients with the SDE \ts{24}{25}{1:07:37}\ts{13}{21}{6:34}. For $f\in C^{1,2}$,
+\[
+  \dd X_t=\Bigl(f_t+\tfrac12f_{xx}\Bigr)(t,B_t)\,\dd t+f_x(t,B_t)\,\dd B_t .
+\]
+Comparing with \eqref{ch18:eq-sde} (and using that $X_t=f(t,B_t)$) we need
+\begin{equation}\label{ch18:eq-match}
+  \mu\bigl(t,f\bigr)=f_t+\tfrac12f_{xx},\qquad \sigma\bigl(t,f\bigr)=f_x .
+\end{equation}
+These are two equations for \emph{one} unknown function, so the method can only work for special SDEs; the 2013 lecturer warns that it solves only a few SDEs and that most of the time it will not apply \ts{13}{21}{6:34}\ts{13}{21}{11:01}\ts{13}{21}{19:56}. It is a systematic way to \emph{guess}, and in the end the guess is verified by It\^o's formula.
+
+\begin{example}[Geometric Brownian motion]\label{ch18:ex-gbm}
+Let $\mu,\sigma>0$ be constants and $\dd X=\mu X\,\dd t+\sigma X\,\dd B$, $X_0=x_0>0$. Then \eqref{ch18:eq-match} reads $\mu f=f_t+\tfrac12f_{xx}$ and $\sigma f=f_x$. The second equation is an ODE in $x$: $f_x/f=\sigma$, so $f(t,x)=e^{\sigma x+g(t)}$ \ts{24}{25}{1:08:48}\ts{13}{21}{7:45}\ts{13}{21}{8:50}. Inserting in the first,
+\[
+  \mu f=g'(t)f+\tfrac12\sigma^2f\ \Longrightarrow\ g'(t)=\mu-\tfrac12\sigma^2,\qquad g(t)=\bigl(\mu-\tfrac12\sigma^2\bigr)t+c ,
+\]
+the factor $f$ dividing out \ts{24}{25}{1:09:56}\ts{24}{25}{1:11:00}\ts{13}{21}{9:55}. The initial condition $f(0,0)=x_0$ fixes $e^c=x_0$, hence
+\begin{equation}\label{ch18:eq-gbmsol}
+  X_t=x_0\exp\Bigl[\bigl(\mu-\tfrac12\sigma^2\bigr)t+\sigma B_t\Bigr].
+\end{equation}
+\end{example}
+This is the formula \eqref{ch17:eq-gbm} that \cref{ch:stochcalc} obtained from the logarithm; here the same answer comes from a different logic, and by \cref{ch18:thm-eu} it is \emph{the} solution: the coefficients $\mu x,\sigma x$ are Lipschitz and of linear growth. The 2013 lecturer is candid about the status of the method \ts{13}{21}{11:01}\ts{13}{21}{12:01}: we already knew the answer and merely fitted it; the point of the exercise is the algorithm, which works when one cannot guess $f$.
+
+\subsection{The lognormal law and the ``paradox''}
+By \eqref{ch18:eq-gbmsol}, $\ln X_t\sim N\bigl(\ln x_0+\mu_*t,\ \sigma^2t\bigr)$ with $\mu_*=\mu-\tfrac12\sigma^2$: $X_t$ is lognormal with $\E X_t=x_0e^{\mu t}$ (the $e^{-\sigma^2t/2}$ from the drift cancels $\E e^{\sigma B_t}=e^{\sigma^2t/2}$) \ts{24}{25}{1:11:00}. The details, the numerical example of the 2024 lecture ($\mu=0.3$, $\sigma=0.4$, half a year: $\E P_T/P_t=1.1618$, standard deviation $0.335\,P_t$) and the annualised return are in \cref{ch17:sec-gbmdist}.
+
+The lecture then points to a seeming paradox \ts{24}{25}{1:12:02}\ts{24}{25}{1:13:03}. Write $\ln X_t=\ln x_0+t\bigl(\mu_*+\sigma B_t/t\bigr)$. Since $B_t/t\to0$ almost surely (strong law of large numbers for Brownian motion),
+\begin{equation}\label{ch18:eq-paradox}
+  0<\mu<\tfrac12\sigma^2\ \Longrightarrow\ \E X_t=x_0e^{\mu t}\to\infty\quad\text{while}\quad X_t\to0\ \text{a.s.},\ \text{so }\Prob(X_t<c)\to1\ \ \forall c>0 .
+\end{equation}
+The expected price grows exponentially and yet every path goes to zero. The resolution is that the expectation of a lognormal is dominated by rare, extraordinarily large values. The typical (median) path grows like $x_0e^{\mu_*t}$, which is decreasing here. A numerical illustration ($\mu=5\%$, $\sigma=40\%$, so $\mu_*=-3\%$ per year; own computation):
+\begin{center}
+\small
+\begin{tabular}{@{}rrrr@{}}
+\toprule
+$t$ (years) & $\E X_t/x_0=e^{\mu t}$ & median $e^{\mu_*t}$ & $\Prob(X_t<x_0)$\\
+\midrule
+$10$ & $1.65$ & $0.74$ & $0.59$\\
+$100$ & $148$ & $0.050$ & $0.77$\\
+$1000$ & $5.2\times10^{21}$ & $9\times10^{-14}$ & $0.99$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The lecturer connects this with markets: some stocks do extraordinarily well and are noticed, others drift towards zero, and on average there is growth \ts{24}{25}{1:13:03}. (The critical case $\mu=\tfrac12\sigma^2$ is different again: $\ln X_t$ then has no drift and oscillates between $\pm\infty$.)
+\begin{intuition}[Ensemble average versus time average]
+A physicist would say that the multiplicative process is \emph{non-ergodic}: the ensemble average $\E X_t\propto e^{\mu t}$ and the growth rate of a single realisation, the time average $\lim\frac1t\ln X_t=\mu-\tfrac12\sigma^2$, differ. The gap $\tfrac12\sigma^2$ is the volatility drag, the It\^o correction of \cref{ch:stochcalc}: an investor who holds the asset for a long time experiences $\mu_*$, not $\mu$. (The same quantity, $\mu-\tfrac12\sigma^2$, is the growth rate the Kelly criterion maximises; not discussed in class.)
+\end{intuition}
+\begin{coursenote}[Erratum: the standard deviation of $\ln X_t$]
+Slide 15 writes the lognormal parameters as $\mu_*=(\mu-\sigma^2/2)t$ and $\sigma_*=\sigma t$, and the lecturer says aloud ``our standard deviation is $\sigma t$'' \ts{24}{25}{1:12:02}. The variance of $\sigma B_t$ is $\sigma^2t$, so the standard deviation is $\sigma_*=\sigma\sqrt t$ (equivalently the variance is $\sigma^2t$, as in the transcript at 7:23). The slide's claim about $\E X_t=x_0e^{\mu t}$ and the paradox are correct. The paradox needs $0<\mu<\sigma^2/2$: for $\mu\le0$ the mean does not grow, and there is nothing surprising in $X_t\to0$.
+\end{coursenote}
+
+% ==================================================================
+\section{Linear SDEs: the Ornstein--Uhlenbeck and Vasicek processes}\label{ch18:sec-ou}
+
+\subsection{The model}
+Geometric Brownian motion has no memory of a level: a price that has doubled has no reason to come back. Many quantities do have a preferred level (an interest rate, a credit spread, the velocity of a molecule). Replace the constant drift by a restoring force proportional to the distance from that level:
+
+\begin{definition}[Ornstein--Uhlenbeck process]\label{ch18:def-ou}
+For $\kappa>0$ (speed of mean reversion), $m\in\R$ (long-run level) and $\sigma>0$ the \emph{Ornstein--Uhlenbeck} (OU) process solves
+\begin{equation}\label{ch18:eq-ou}
+  \dd X_t=-\kappa\,(X_t-m)\,\dd t+\sigma\,\dd B_t,\qquad X_0=x_0 .
+\end{equation}
+\end{definition}
+\ts{24}{25}{1:14:09}\ts{24}{25}{1:15:12}\ts{13}{21}{13:16}\ts{13}{21}{14:18}
+The drift $-\kappa(X-m)$ is negative when $X>m$ and positive when $X<m$ (slide 16): a force that pulls $X$ back to $m$, proportional to the distance; the local variability $\sigma$ is constant, unlike geometric Brownian motion (\cref{ch18:ex-gbm}), where the noise scales with the level \ts{13}{21}{13:16}. The two lectures use different letters:
+\begin{center}
+\small
+\begin{tabular}{@{}l c c c c c@{}}
+\toprule
+ & speed & level & noise & source\\
+\midrule
+these notes, ch.~\ref{ch:timeseries} & $\kappa$ & $m$ ($\mu$) & $\sigma$ ($\sigma_0$) & \\
+2024 slides 16--18 & $\alpha$ & $\mu$ & $\sigma$ & \\
+2013 note and lecture (level $0$) & $\alpha$ & $0$ & $\sigma$ & \\
+2013 PS9 A-3, $\dd R=(\alpha-\beta R)\dd t+\sigma\dd B$ & $\beta$ & $\alpha/\beta$ & $\sigma$ & \\
+\bottomrule
+\end{tabular}
+\end{center}
+(The symbol $\mu$ is kept for the \emph{drift} of geometric Brownian motion, so the level of the OU process is called $m$ here; \cref{ch:timeseries} writes $\mu$ for it and $\sigma_0$ for the noise.)
+
+\begin{history}[From Brownian particles to interest rates]
+Uhlenbeck and Ornstein (1930) used this equation for the velocity $v$ of a Brownian particle: Langevin's equation $m_pv'=-\gamma v+\sqrt{2\gamma k_BT}\,\xi$ has the form \eqref{ch18:eq-ou} with $m=0$, $\kappa=\gamma/m_p$, $\sigma^2=2\gamma k_BT/m_p^2$; the stationary variance $\sigma^2/(2\kappa)=k_BT/m_p$ is the equipartition theorem. The lecture says the model was first used for the velocity of gas molecules whose average is $m$ \ts{24}{25}{1:14:09}\ts{13}{21}{14:18}. Vasicek (1977) used it for the short interest rate, with $m$ the target or equilibrium rate (for instance the rate targeted by the central bank) \ts{24}{25}{1:15:12}.
+
+\smallskip
+{\footnotesize\textbf{References.} P.~Langevin, \emph{C.~R.\ Acad.\ Sci.\ Paris} 146, 530 (1908);
+G.~E.~Uhlenbeck and L.~S.~Ornstein, ``On the theory of the Brownian motion'', \emph{Phys.\ Rev.}
+36, 823 (1930); O.~Vasicek, ``An equilibrium characterization of the term structure'',
+\emph{J.\ Financial Economics} 5, 177--188 (1977).}
+\end{history}
+
+\subsection{Solution by the product-process guess}
+Take first $m=0$, $\dd X=-\kappa X\,\dd t+\sigma\,\dd B$. Coefficient matching with $f(t,B_t)$ \emph{fails} here \ts{13}{21}{13:16}: \eqref{ch18:eq-match} would require $f_x=\sigma$, so $f=\sigma x+g(t)$, and then $\mu(t,f)=-\kappa(\sigma x+g)$ has to equal $g'$, which depends on $x$. The lectures change the ansatz to a \emph{product process}
+\begin{equation}\label{ch18:eq-product}
+  X_t=a(t)\Bigl(x_0+\int_0^tb(s)\,\dd B_s\Bigr),\qquad a(0)=1,
+\end{equation}
+with $a,b$ differentiable deterministic functions \ts{24}{25}{1:15:12}\ts{24}{25}{1:16:17}\ts{13}{21}{14:18}\ts{13}{21}{15:34}. (The 2013 lecturer admits that he cannot motivate the guess beyond experience \ts{13}{21}{15:34}; the reason it works is explained below.) Differentiate with the product rule (\cref{ch17:cor-product}):
+\[
+  \dd X_t=a'(t)\Bigl(x_0+\int_0^tb\,\dd B\Bigr)\dd t+a(t)\,b(t)\,\dd B_t=\frac{a'(t)}{a(t)}\,X_t\,\dd t+a(t)b(t)\,\dd B_t .
+\]
+There is \emph{no extra term}: $a$ is deterministic and of finite variation, so $\dd a\,\dd(\int b\,\dd B)=a'\,\dd t\,\dd B=0$; the 2013 lecturer makes this subtle point explicit, noting that once a process is written as an integral, differentiating it returns the integrand and nothing more \ts{13}{21}{16:37}\ts{13}{21}{17:42}. Matching with $\dd X=-\kappa X\,\dd t+\sigma\,\dd B$ gives
+\[
+  \frac{a'(t)}{a(t)}=-\kappa,\quad a(t)b(t)=\sigma\ \Longrightarrow\ a(t)=e^{-\kappa t},\quad b(t)=\sigma e^{\kappa t}
+\]
+\ts{24}{25}{1:17:17}\ts{13}{21}{18:42}. For a general level $m$ apply this to $Y=X-m$ (which has the same differential and $Y_0=x_0-m$).
+
+\begin{proposition}[Solution of the OU equation]\label{ch18:prop-ou}
+The solution of \eqref{ch18:eq-ou} is
+\begin{equation}\label{ch18:eq-ousol}
+  X_t=m+(x_0-m)\,e^{-\kappa t}+\sigma\int_0^te^{-\kappa(t-s)}\,\dd B_s .
+\end{equation}
+\end{proposition}
+The \emph{integrating factor} makes the same computation transparent (own remark). Since $e^{\kappa t}$ is deterministic, the product rule gives $\dd\bigl(e^{\kappa t}(X_t-m)\bigr)=e^{\kappa t}\bigl(\dd X_t+\kappa(X_t-m)\dd t\bigr)=\sigma e^{\kappa t}\dd B_t$, and integrating from $0$ to $t$ yields \eqref{ch18:eq-ousol}. This is the stochastic version of the method for a linear ODE $\dot x=-\kappa x+f(t)$, and it also solves the linear SDE with time-dependent coefficients $\dd X=(-\kappa(t)X+f(t))\dd t+\sigma(t)\dd B$ (the Hull--White extension) by replacing $e^{\kappa t}$ with $e^{\int_0^t\kappa}$. That this is a solution can also be checked directly; verifying the formula for the Vasicek form of the model is PS9 Problem~A-3 (\cref{ch18:ex-a3}).
+
+\subsection{Properties}
+The stochastic integral in \eqref{ch18:eq-ousol} has a deterministic integrand, so it is a Gaussian random variable with mean $0$ and, by the It\^o isometry, variance $\sigma^2\int_0^te^{-2\kappa(t-s)}\dd s$ (\cref{ch:stochcalc}). This gives:
+
+\begin{proposition}[Moments, law, stationarity]\label{ch18:prop-ouprop}
+Let $X$ solve \eqref{ch18:eq-ou}. Then $X$ is a Gaussian process and
+\begin{align}
+  \E X_t&=m+(x_0-m)e^{-\kappa t}\ \longrightarrow\ m, \label{ch18:eq-oumean}\\
+  \Var X_t&=\sigma^2\int_0^te^{-2\kappa(t-s)}\,\dd s=\frac{\sigma^2}{2\kappa}\bigl(1-e^{-2\kappa t}\bigr)\ \longrightarrow\ \frac{\sigma^2}{2\kappa}, \label{ch18:eq-ouvar}\\
+  \Cov(X_s,X_t)&=\frac{\sigma^2}{2\kappa}\Bigl(e^{-\kappa(t-s)}-e^{-\kappa(t+s)}\Bigr),\qquad 0\le s\le t. \label{ch18:eq-oucov}
+\end{align}
+As $t\to\infty$, $X_t\to N\bigl(m,\sigma^2/(2\kappa)\bigr)$. If $X_0\sim N(m,\sigma^2/(2\kappa))$ is independent of $B$, then $X_t\sim N(m,\sigma^2/(2\kappa))$ for all $t$: the process is strictly stationary, with autocorrelation $\rho(\tau)=e^{-\kappa|\tau|}$.
+\end{proposition}
+\begin{proof}
+\eqref{ch18:eq-oumean} and \eqref{ch18:eq-ouvar} were shown above (\ts{24}{25}{1:17:17}, slide 18). For the covariance, $s\le t$: $\Cov(X_s,X_t)=\sigma^2e^{-\kappa(t+s)}\E\bigl[\int_0^se^{\kappa u}\dd B_u\int_0^te^{\kappa u}\dd B_u\bigr]=\sigma^2e^{-\kappa(t+s)}\int_0^se^{2\kappa u}\dd u$, since the part of the second integral beyond $s$ is independent of the first, and this is \eqref{ch18:eq-oucov}. If $X_0$ is independent with variance $\sigma^2/(2\kappa)$, then $\Var X_t=e^{-2\kappa t}\sigma^2/(2\kappa)+\sigma^2(1-e^{-2\kappa t})/(2\kappa)=\sigma^2/(2\kappa)$ and the mean stays $m$; the covariance becomes $\frac{\sigma^2}{2\kappa}e^{-\kappa(t-s)}$, a function of $t-s$; a Gaussian process with stationary mean and covariance is strictly stationary.
+\end{proof}
+\ts{24}{25}{1:17:17}\ts{13}{21}{19:56}
+This is the point of slide 18 and of the transcript: unlike Brownian motion, whose variance grows like $t$, the OU process has a \emph{limiting distribution} with constant mean and variance; it is ergodic (time averages converge to the averages under the stationary law), so the long-run distribution does not depend on the starting point \ts{24}{25}{1:17:17}. The mean decays exponentially to $m$ with relaxation time $1/\kappa$; the \emph{half-life} of a deviation is $\ln2/\kappa$.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.95\linewidth,height=5.4cm,xlabel={$t$},xmin=0,xmax=3,ymin=-2.2,ymax=2.9,
+  legend style={at={(0.5,1.03)},anchor=south,legend columns=3,font=\footnotesize},grid=major,grid style={black!10}]
+  \addplot[very thick,color=defcol,domain=0:3,samples=60] {2*exp(-2*x)};
+  \addplot[dashed,thick,color=thmcol,domain=0:3,samples=60] {2*exp(-2*x)+2*sqrt((1-exp(-4*x))/4)};
+  \addplot[dashed,thick,color=thmcol,domain=0:3,samples=60,forget plot] {2*exp(-2*x)-2*sqrt((1-exp(-4*x))/4)};
+  \addplot[thin,color=black!55,forget plot] coordinates {(0,2.0) (0.05,1.817) (0.1,1.934) (0.15,2.01) (0.2,1.71) (0.25,1.484) (0.3,1.231) (0.35,1.235) (0.4,1.105) (0.45,1.159) (0.5,0.656) (0.55,0.927) (0.6,0.818) (0.65,0.885) (0.7,0.772) (0.75,0.618) (0.8,0.657) (0.85,0.77) (0.9,0.654) (0.95,0.559) (1.0,0.652) (1.05,0.405) (1.1,0.044) (1.15,0.124) (1.2,-0.031) (1.25,-0.437) (1.3,-0.568) (1.35,-0.614) (1.4,-0.809) (1.45,-1.05) (1.5,-0.942) (1.55,-0.662) (1.6,-0.648) (1.65,-0.745) (1.7,-0.592) (1.75,-0.383) (1.8,-0.411) (1.85,-0.256) (1.9,-0.009) (1.95,-0.052) (2.0,-0.221) (2.05,-0.126) (2.1,-0.061) (2.15,0.179) (2.2,-0.112) (2.25,-0.242) (2.3,-0.397) (2.35,-0.729) (2.4,-0.632) (2.45,-0.46) (2.5,-0.573) (2.55,-0.224) (2.6,-0.028) (2.65,0.109) (2.7,0.184) (2.75,0.37) (2.8,0.051) (2.85,0.177) (2.9,0.288) (2.95,-0.115) (3.0,-0.031)};
+  \addplot[thin,color=black!55,forget plot] coordinates {(0,2.0) (0.05,1.756) (0.1,1.756) (0.15,1.495) (0.2,1.349) (0.25,1.294) (0.3,0.984) (0.35,1.018) (0.4,0.899) (0.45,0.918) (0.5,0.719) (0.55,0.882) (0.6,0.927) (0.65,0.801) (0.7,0.859) (0.75,1.046) (0.8,1.327) (0.85,0.866) (0.9,0.972) (0.95,0.978) (1.0,0.865) (1.05,0.569) (1.1,0.782) (1.15,0.439) (1.2,0.518) (1.25,0.746) (1.3,0.334) (1.35,0.238) (1.4,-0.063) (1.45,-0.005) (1.5,0.318) (1.55,0.718) (1.6,0.271) (1.65,0.123) (1.7,0.261) (1.75,0.572) (1.8,0.608) (1.85,0.391) (1.9,0.417) (1.95,0.374) (2.0,0.295) (2.05,0.11) (2.1,0.182) (2.15,0.231) (2.2,0.189) (2.25,0.124) (2.3,-0.162) (2.35,-0.25) (2.4,0.031) (2.45,-0.013) (2.5,-0.318) (2.55,-0.004) (2.6,0.11) (2.65,0.548) (2.7,0.509) (2.75,0.362) (2.8,0.02) (2.85,0.3) (2.9,0.818) (2.95,0.566) (3.0,0.374)};
+  \addplot[thin,color=black!55,forget plot] coordinates {(0,2.0) (0.05,1.937) (0.1,1.576) (0.15,1.368) (0.2,1.163) (0.25,1.094) (0.3,1.223) (0.35,1.111) (0.4,1.201) (0.45,0.997) (0.5,0.972) (0.55,0.424) (0.6,0.075) (0.65,0.238) (0.7,0.089) (0.75,0.204) (0.8,0.3) (0.85,0.553) (0.9,0.673) (0.95,0.826) (1.0,0.723) (1.05,0.506) (1.1,0.302) (1.15,0.169) (1.2,-0.087) (1.25,-0.195) (1.3,-0.197) (1.35,-0.124) (1.4,-0.185) (1.45,-0.577) (1.5,-0.537) (1.55,-0.438) (1.6,-0.165) (1.65,-0.027) (1.7,-0.161) (1.75,-0.3) (1.8,0.157) (1.85,0.303) (1.9,0.664) (1.95,1.054) (2.0,0.78) (2.05,0.787) (2.1,0.81) (2.15,0.852) (2.2,0.886) (2.25,0.845) (2.3,0.802) (2.35,0.406) (2.4,0.332) (2.45,0.141) (2.5,0.154) (2.55,0.04) (2.6,0.168) (2.65,0.326) (2.7,0.361) (2.75,0.394) (2.8,0.376) (2.85,0.245) (2.9,0.187) (2.95,0.064) (3.0,0.14)};
+  \addplot[thin,color=black!55,forget plot] coordinates {(0,2.0) (0.05,1.813) (0.1,1.764) (0.15,1.313) (0.2,1.377) (0.25,1.084) (0.3,0.824) (0.35,0.704) (0.4,0.517) (0.45,0.53) (0.5,0.357) (0.55,0.095) (0.6,-0.094) (0.65,0.195) (0.7,0.185) (0.75,-0.081) (0.8,-0.071) (0.85,-0.396) (0.9,0.023) (0.95,-0.304) (1.0,-0.173) (1.05,-0.041) (1.1,-0.346) (1.15,-0.249) (1.2,-0.013) (1.25,0.088) (1.3,0.135) (1.35,0.324) (1.4,0.328) (1.45,0.368) (1.5,0.306) (1.55,0.411) (1.6,0.172) (1.65,0.324) (1.7,0.186) (1.75,-0.064) (1.8,0.02) (1.85,0.378) (1.9,0.547) (1.95,0.385) (2.0,0.497) (2.05,0.353) (2.1,0.293) (2.15,0.284) (2.2,-0.236) (2.25,-0.173) (2.3,-0.376) (2.35,-0.488) (2.4,-0.756) (2.45,-1.007) (2.5,-1.112) (2.55,-0.83) (2.6,-0.396) (2.65,-0.364) (2.7,-0.097) (2.75,-0.144) (2.8,-0.537) (2.85,-0.454) (2.9,-0.316) (2.95,-0.377) (3.0,-0.277)};
+  \legend{{mean $x_0e^{-\kappa t}$},{mean $\pm2$ s.d.}}
+\end{axis}
+\end{tikzpicture}
+\caption{Four exact simulated paths of the OU process ($\kappa=2$, $m=0$, $\sigma=1$, $x_0=2$; seed~11) with the mean and the band mean $\pm2$ standard deviations from \eqref{ch18:eq-oumean}--\eqref{ch18:eq-ouvar}. The paths are pulled to $m=0$ within a time of order $1/\kappa=0.5$ and then fluctuate with standard deviation $\sigma/\sqrt{2\kappa}=0.5$ around it; compare the growing fan of Brownian paths.}\label{ch18:fig-ou}
+\end{figure}
+
+\begin{finance}[Vasicek's model and its limits]\label{ch18:fin-vasicek}
+In Vasicek's model the short rate $R$ satisfies $\dd R=(\alpha-\beta R)\dd t+\sigma\dd B$: this is \eqref{ch18:eq-ou} with $\kappa=\beta$, $m=\alpha/\beta$, and \eqref{ch18:eq-ousol} is exactly the formula of PS9 Problem~A-3. Its virtues are tractability (Gaussian rates, closed-form bond prices, \cref{ch18:sec-fk}) and an economic story (rates return to an equilibrium level). Its defects: rates can become negative (the stationary law is normal; with $\sigma/\sqrt{2\kappa}=1\%$ around $m=4\%$ the probability is $\Phi(-4)\approx3\times10^{-5}$, but not zero), the volatility does not depend on the level, and a single factor cannot fit an arbitrary yield curve; the Hull--White extension makes $m$ a function of time to fit the curve, and \cref{ch18:sec-cir} gives a positive alternative (CIR). Historical mean reversion does not survive over decades: the level to which rates revert itself moves (\cref{ch:timeseries}).
+\end{finance}
+
+\subsection{Sampling an OU process: the exact AR(1)}\label{ch18:sec-ar1}
+\Cref{ch:timeseries} claims that the AR(1) is the discrete-time version of the OU process, with autoregressive coefficient $\phi=e^{-\kappa h}$ and noise variance $\sigma^2(1-e^{-2\kappa h})/(2\kappa)$. Here is the derivation (an addition of these notes).
+
+\begin{proposition}[Exact discretisation]\label{ch18:prop-ar1}
+Let $X$ solve \eqref{ch18:eq-ou} and $h>0$. For every $t\ge0$,
+\begin{equation}\label{ch18:eq-ar1}
+  X_{t+h}=m+\phi\,(X_t-m)+\varepsilon_{t+h},\qquad\phi=e^{-\kappa h},\qquad\varepsilon_{t+h}=\sigma\int_t^{t+h}e^{-\kappa(t+h-s)}\dd B_s,
+\end{equation}
+where $\varepsilon_{t+h}\sim N\bigl(0,\sigma_\varepsilon^2\bigr)$ with
+\begin{equation}\label{ch18:eq-ar1var}
+  \sigma_\varepsilon^2=\sigma^2\frac{1-e^{-2\kappa h}}{2\kappa}=\frac{\sigma^2}{2\kappa}\bigl(1-\phi^2\bigr),
+\end{equation}
+independent of $\mathcal F_t$. Hence $X_{ih}$, $i=0,1,2,\dots$, is \emph{exactly} the Gaussian AR(1) process $X_{i+1}-m=\phi(X_i-m)+\varepsilon_{i+1}$ with i.i.d.\ noise; its stationary variance is $\sigma_\varepsilon^2/(1-\phi^2)=\sigma^2/(2\kappa)$ and its autocorrelation $\phi^j=e^{-\kappa jh}$ is the sampled continuous autocorrelation.
+\end{proposition}
+\begin{proof}
+Apply the integrating factor on $[t,t+h]$ instead of $[0,t]$: $\dd(e^{\kappa u}(X_u-m))=\sigma e^{\kappa u}\dd B_u$, so $e^{\kappa(t+h)}(X_{t+h}-m)-e^{\kappa t}(X_t-m)=\sigma\int_t^{t+h}e^{\kappa u}\dd B_u$; multiply by $e^{-\kappa(t+h)}$ to get \eqref{ch18:eq-ar1}. The noise is a Gaussian Wiener integral of a deterministic function over $[t,t+h]$, so it is independent of $\mathcal F_t$ and normal with variance $\sigma^2\int_t^{t+h}e^{-2\kappa(t+h-s)}\dd s=\sigma^2(1-e^{-2\kappa h})/(2\kappa)$ by isometry. Since $1-\phi^2=1-e^{-2\kappa h}$, the stationary variance of the AR(1) is $\sigma_\varepsilon^2/(1-\phi^2)=\sigma^2/(2\kappa)$, the value of \eqref{ch18:eq-ouvar} at $t=\infty$, \emph{independent of $h$}, as it must be.
+\end{proof}
+The intercept of the AR(1) in the usual form $X_{i+1}=c+\phi X_i+\varepsilon$ is $c=m(1-\phi)$, and the half-life of a shock, $h\ln2/(-\ln\phi)=\ln2/\kappa$, is the one quoted in \cref{ch09:fin-vasicek}. Three practical consequences:
+\begin{itemize}
+  \item \emph{Estimation.} Fit an AR(1) to data sampled every $h$ (\cref{ch:timeseries}) and read off the continuous-time parameters: $\hat\kappa=-\ln\hat\phi/h$, $\hat m=\hat c/(1-\hat\phi)$, $\hat\sigma^2=2\hat\kappa\,\hat\sigma_\varepsilon^2/(1-\hat\phi^2)$. This needs $0<\hat\phi<1$: an AR(1) with $\phi\le0$ is not the sampling of any OU process (it would oscillate around the mean). Example: monthly data ($h=1/12$) with $\hat\phi=0.98$ gives $\hat\kappa=12\cdot0.0202=0.24$ per year, half-life $2.9$ years.
+  \item \emph{The exact scheme is preferable to Euler.} The Euler--Maruyama step $X_{i+1}=X_i-\kappa(X_i-m)h+\sigma\sqrt hZ$ is also an AR(1), but with $\phi_{\mathrm{E}}=1-\kappa h$ and $\sigma_\varepsilon^2=\sigma^2h$: both are the first-order Taylor expansions of \eqref{ch18:eq-ar1}--\eqref{ch18:eq-ar1var}, and its stationary variance is $\sigma^2/\bigl(\kappa(2-\kappa h)\bigr)$, not $\sigma^2/(2\kappa)$; the scheme is not even stable when $\kappa h>2$. With $\kappa=2$, $h=0.25$ (own computation): exact $\phi=0.607$, noise variance $0.158\,\sigma^2$, stationary variance $0.25\,\sigma^2$; Euler $\phi=0.5$, noise variance $0.25\,\sigma^2$, stationary variance $0.333\,\sigma^2$, a third too large.
+  \item \emph{Simulation.} Paths of the OU process on any grid are generated exactly (no discretisation error) by iterating \eqref{ch18:eq-ar1}; this was done for \cref{ch18:fig-ou}. The same holds for geometric Brownian motion, $X_{t+h}=X_t\exp((\mu-\sigma^2/2)h+\sigma\sqrt hZ)$; for most SDEs there is no such scheme (\cref{ch18:sec-num}).
+\end{itemize}
+
+% ==================================================================
+\section{Systems of SDEs; position and velocity}\label{ch18:sec-sys}
+
+Several quantities driven by several noises are described by a \emph{vector SDE} \ts{24}{25}{1:18:22}\ts{24}{25}{1:19:23}
+\begin{equation}\label{ch18:eq-vec}
+  \dd\bm X_t=\bm\mu(t,\bm X_t)\,\dd t+\sigma(t,\bm X_t)\,\dd\bm B_t,\qquad\bm X_0=\bm x_0,
+\end{equation}
+where $\bm X\in\R^m$, $\bm\mu$ is a vector of drifts $\mu_1,\dots,\mu_m$, $\bm B=(B^{(1)},\dots,B^{(m)})$ are \emph{independent} Brownian motions and $\sigma=[\sigma_{ij}]$ is an $m\times m$ matrix (slide 19). The noises in the components are correlated in general: the increments over $\dd t$ have covariance matrix $\sigma\sigma\T\,\dd t$, which is what the lecturer means by ``a covariance matrix reflecting how increments of the components are related'' \ts{24}{25}{1:18:22}. Existence and uniqueness hold under the same Lipschitz and growth conditions with $|\cdot|$ read as Euclidean and matrix norms (quoted).
+
+\subsection{Linear systems}
+When $\bm\mu=-A(\bm x-\bm m)$ and $\sigma=\Sigma$ are constant, the integrating factor $e^{At}$ solves the system exactly as in the scalar case (own extension):
+\begin{equation}\label{ch18:eq-vecou}
+  \bm X_t=\bm m+e^{-At}(\bm x_0-\bm m)+\int_0^te^{-A(t-s)}\Sigma\,\dd\bm B_s,\qquad
+  \Cov(\bm X_t)=\int_0^te^{-Au}\Sigma\Sigma\T e^{-A\T u}\dd u .
+\end{equation}
+The process is stationary in the limit iff all eigenvalues of $A$ have positive real part; the limiting covariance $C_\infty$ solves the Lyapunov equation $AC_\infty+C_\infty A\T=\Sigma\Sigma\T$ (scalar case: $C_\infty=\sigma^2/(2\kappa)$). Sampled every $h$ the process is \emph{exactly} the VAR(1) of \cref{ch:timeseries} (\cref{ch09:sec-var}), $\bm X_{i+1}-\bm m=\Phi(\bm X_i-\bm m)+\bm\varepsilon_{i+1}$ with $\Phi=e^{-Ah}$ and $\Cov(\bm\varepsilon)=\int_0^he^{-Au}\Sigma\Sigma\T e^{-A\T u}\dd u$; the stationarity condition of the VAR (eigenvalues of $\Phi$ inside the unit disc) is precisely $\operatorname{Re}\lambda(A)>0$.
+
+\subsection{The example of the slides: position and velocity}
+Slide 20 puts a mean-reverting velocity $V$ and the position $X$ it moves in one system \ts{24}{25}{1:19:23}:
+\begin{equation}\label{ch18:eq-posvel}
+  \dd X_t=V_t\,\dd t+\sigma_1\,\dd B^{(1)}_t,\qquad \dd V_t=-\kappa(V_t-m)\,\dd t+\sigma_2\,\dd B^{(2)}_t ,
+\end{equation}
+that is \eqref{ch18:eq-vec} with $\bm\mu=(v,-\kappa(v-m))$ and $\sigma=\operatorname{diag}(\sigma_1,\sigma_2)$. The velocity is an OU process, and the position is its running integral plus independent noise; the position itself is \emph{not} mean-reverting ($A=\begin{psmallmatrix}0&-1\\0&\kappa\end{psmallmatrix}$ has a zero eigenvalue). The slide only sets up the system; we compute its most instructive statistic (own computation). Take $m=0$, $\sigma_1=0$, $X_0=0$ and $V_0\sim N(0,\sigma^2/(2\kappa))$ stationary, $\sigma=\sigma_2$. Then $X_t=\int_0^tV_s\dd s$ and
+\begin{equation}\label{ch18:eq-posvar}
+  \Var X_t=2\int_0^t(t-s)\,C(s)\,\dd s=\frac{\sigma^2}{\kappa^2}\Bigl(t-\frac{1-e^{-\kappa t}}{\kappa}\Bigr),\qquad C(s)=\frac{\sigma^2}{2\kappa}e^{-\kappa s}.
+\end{equation}
+Two regimes: for $\kappa t\ll1$, $\Var X_t\approx\frac{\sigma^2}{2\kappa}t^2=\langle v^2\rangle t^2$ (\emph{ballistic} motion: the velocity has no time to change); for $\kappa t\gg1$, $\Var X_t\approx\frac{\sigma^2}{\kappa^2}t=2Dt$ with the diffusion coefficient $D=\int_0^\infty C(s)\dd s=\sigma^2/(2\kappa^2)$ (\emph{diffusive} motion, Einstein's law; this is the Green--Kubo formula). A Monte Carlo check with $\kappa=\sigma=1$, $t=3$ over $2\times10^5$ paths gives $2.046$ against the exact $2.050$ of \eqref{ch18:eq-posvar}. Independent position noise $\sigma_1$ simply adds $\sigma_1^2t$.
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{loglogaxis}[width=0.85\linewidth,height=5.2cm,xlabel={$t$},ylabel={$\Var X_t$},xmin=0.01,xmax=100,ymin=0.00003,ymax=200,
+  legend style={at={(0.5,1.03)},anchor=south,legend columns=3,font=\footnotesize},grid=major,grid style={black!10}]
+  \addplot[very thick,color=defcol,domain=0.01:100,samples=60] {x-(1-exp(-x))};
+  \addplot[dashed,thick,color=thmcol,domain=0.01:10,samples=20] {x*x/2};
+  \addplot[dashed,thick,color=intcol,domain=0.3:100,samples=20] {x};
+  \legend{{exact \eqref{ch18:eq-posvar}},{ballistic $t^2/2$},{diffusive $t$}}
+\end{loglogaxis}
+\end{tikzpicture}
+\caption{Variance of the position, \eqref{ch18:eq-posvar} with $\kappa=\sigma=1$: slope $2$ at short times, slope $1$ at long times, crossover at $t\sim1/\kappa$.}\label{ch18:fig-posvar}
+\end{figure}
+\begin{intuition}[How Brownian motion arises]
+Let $\kappa\to\infty$ with $\sigma^2/\kappa^2=2D$ fixed: the velocity forgets its past infinitely fast and $X_t\to\sqrt{2D}\,B_t$. Brownian motion is the overdamped limit of the position of a particle with a mean-reverting velocity, the description of \cref{ch11:int-physics}. In finance the same structure appears when a factor (say a trend, or a stochastic mean) drives an asset whose own noise is small.
+\end{intuition}
+\begin{finance}[Mean-reverting spreads; not discussed in class]
+A relative-value (``pairs'') trade models a spread $S_t=\ln P^1_t-\beta\ln P^2_t$ between two related assets as an OU process. Estimating the AR(1) coefficient of the sampled spread gives $\kappa$ and the half-life of \cref{ch18:sec-ar1}; the stationary standard deviation $\sigma/\sqrt{2\kappa}$ sets the scale of the signal (trade when $|S-m|$ exceeds a multiple of it). If $\hat\phi$ is close to $1$ the spread is indistinguishable from a random walk (unit root, \cref{ch:timeseries}) and the strategy has no edge: the OU model is only as good as the mean reversion is real.
+\end{finance}
+
+% ==================================================================
+\section{Generators, Feynman--Kac and the Kolmogorov equations}\label{ch18:sec-fk}
+
+This section is an addition of these notes: the lectures use the two facts below without proving them (2024 slides 2--3 derive the PDE by hedging \ts{24}{25}{24:16}; both years say that the Black--Scholes PDE is the heat equation, whose solution is the payoff integrated against a Gaussian \ts{24}{25}{32:40}\ts{13}{21}{54:18}, but neither proves the equivalence with an expectation), and \cref{ch:stochcalc,ch:bs} defer them to here.
+
+\subsection{The generator}
+For the diffusion \eqref{ch18:eq-sde} define the second-order differential operator
+\begin{equation}\label{ch18:eq-gen}
+  \mathcal L_tf(x)=\mu(t,x)\,f'(x)+\tfrac12\sigma^2(t,x)\,f''(x).
+\end{equation}
+It is the \emph{generator} of $X$ (the expansion \eqref{ch11:eq-generator} in \cref{ch:sp2} is the same statement at the level of one small step). It\^o's formula \eqref{ch17:eq-ito3} for $f(t,X_t)$ reads, in this notation,
+\begin{equation}\label{ch18:eq-dynkin}
+  f(t,X_t)=f(0,x_0)+\int_0^t\bigl(\partial_s+\mathcal L_s\bigr)f(s,X_s)\,\dd s+\int_0^t\sigma\,\partial_xf(s,X_s)\,\dd B_s .
+\end{equation}
+The last term is a martingale (under an integrability condition, \cref{ch17:thm-ito-int}); so $f(t,X_t)-\int_0^t(\partial_s+\mathcal L_s)f\,\dd s$ is a martingale. This is Dynkin's formula, and \cref{ch17:thm-pde} is its case $\mathcal L=\tfrac12\partial_x^2$: $f(t,B_t)$ is a martingale when $f_t+\tfrac12f_{xx}=0$. The generators of our examples:
+\[
+  \text{BM: }\tfrac12\partial_x^2;\qquad\text{GBM: }\mu x\,\partial_x+\tfrac12\sigma^2x^2\partial_x^2;\qquad\text{OU: }-\kappa(x-m)\,\partial_x+\tfrac12\sigma^2\partial_x^2 .
+\]
+
+\subsection{The Feynman--Kac formula}
+\begin{theorem}[Feynman--Kac]\label{ch18:thm-fk}
+Let $u\in C^{1,2}\bigl([0,T)\times\R\bigr)\cap C\bigl([0,T]\times\R\bigr)$ solve the terminal value problem
+\begin{equation}\label{ch18:eq-fkpde}
+  \frac{\partial u}{\partial t}+\mu(t,x)\frac{\partial u}{\partial x}+\tfrac12\sigma^2(t,x)\frac{\partial^2u}{\partial x^2}-r(t,x)\,u=0,\qquad u(T,x)=g(x),
+\end{equation}
+with $r$ continuous and bounded below, and assume $\E\int_t^T\bigl(e^{-\int_t^sr}\,\sigma\,u_x(s,X_s)\bigr)^2\dd s<\infty$. Then
+\begin{equation}\label{ch18:eq-fk}
+  u(t,x)=\E\Bigl[\exp\Bigl(-\int_t^Tr(s,X_s)\,\dd s\Bigr)\,g(X_T)\ \Bigm|\ X_t=x\Bigr],
+\end{equation}
+where $X$ solves \eqref{ch18:eq-sde} started at $x$ at time $t$.
+\end{theorem}
+\begin{proof}
+Fix $(t,x)$ and let $D_s=\exp\bigl(-\int_t^sr(v,X_v)\dd v\bigr)$, a process of finite variation with $\dd D_s=-r(s,X_s)D_s\,\dd s$. By the product rule (\cref{ch17:cor-product}; $\dd D\,\dd X=0$) and It\^o's formula \eqref{ch18:eq-dynkin},
+\[
+\begin{gathered}
+  \dd\bigl(D_su(s,X_s)\bigr)=D_s\Bigl[u_s+\mu u_x+\tfrac12\sigma^2u_{xx}-r\,u\Bigr](s,X_s)\,\dd s+D_s\,\sigma u_x(s,X_s)\,\dd B_s\\
+  =D_s\,\sigma u_x(s,X_s)\,\dd B_s ,
+\end{gathered}
+\]
+the bracket vanishing by \eqref{ch18:eq-fkpde}. Under the integrability assumption $D_su(s,X_s)$ is a martingale on $[t,T]$, hence $u(t,x)=\E[D_tu(t,X_t)]=\E[D_Tu(T,X_T)\mid X_t=x]=\E[D_Tg(X_T)\mid X_t=x]$.
+\end{proof}
+Read the formula in both directions: a PDE solved \emph{backwards} from the terminal condition $g$ is a conditional expectation of the payoff, discounted along the path; conversely every such expectation solves the PDE (under regularity conditions, quoted). Special cases:
+\begin{itemize}
+  \item $r=0$, $\mu=0$, $\sigma=1$: $u_t+\tfrac12u_{xx}=0$, $u(t,x)=\E\,g(x+B_{T-t})$: the backward heat equation of \cref{ch17:thm-pde}. With $\tau=T-t$ it is the heat equation of \cref{ch18:sec-heat}.
+  \item \emph{Black--Scholes.} Take for $X$ the price under the risk-neutral measure, $\dd S=rS\,\dd t+\sigma S\,\dd W$ (\cref{ch17:sec-girsanov}), a constant rate $r$ and $g$ the payoff. Then \eqref{ch18:eq-fkpde} is $u_t+rSu_S+\tfrac12\sigma^2S^2u_{SS}-ru=0$, the Black--Scholes equation \eqref{ch17:eq-bs} that slides 2--3 of the lecture derive by hedging \ts{24}{25}{24:16}, and \eqref{ch18:eq-fk} is the price $e^{-r(T-t)}\E_\Q[g(S_T)\mid S_t]$, the risk-neutral valuation of \cref{ch:bs} (\cref{ch15:eq-rnval}). Two proofs, one equation: the hedging argument shows that the price \emph{must} satisfy the PDE; Feynman--Kac shows that the risk-neutral expectation \emph{does}, and the PDE with its terminal condition has one solution. The real-world drift $\mu$ of $S$ disappears because the expectation is taken under $\Q$, where the drift is $r$ (Girsanov's theorem, \cref{ch17:thm-girsanov2}).
+\end{itemize}
+
+\begin{example}[Second moment of the OU process]\label{ch18:ex-fkou}
+Let $X$ be the OU process \eqref{ch18:eq-ou} and $g(x)=x^2$, $r=0$, $\tau=T-t$. From \eqref{ch18:eq-ousol}--\eqref{ch18:eq-ouvar}, $u(t,x)=\E[X_T^2\mid X_t=x]=\bigl(m+(x-m)e^{-\kappa\tau}\bigr)^2+\sigma^2\dfrac{1-e^{-2\kappa\tau}}{2\kappa}$. Feynman--Kac says this solves $u_t-\kappa(x-m)u_x+\tfrac12\sigma^2u_{xx}=0$ with $u(T,x)=x^2$; substituting confirms it (checked symbolically for these notes). Similarly for geometric Brownian motion $u=x^p\exp\bigl[(p\mu+\tfrac12p(p-1)\sigma^2)\tau\bigr]$ solves the PDE with $g=x^p$.
+\end{example}
+
+\begin{finance}[The Vasicek bond price]\label{ch18:fin-bond}
+A zero-coupon bond paying $1$ at $T$ has price $P(t,T)=\E_\Q\bigl[e^{-\int_t^TR_s\dd s}\mid R_t=r\bigr]$ (\cref{ch:rates}). By Feynman--Kac (with $\mu(r)=\kappa(\theta-r)$, the OU drift under $\Q$, and $r(t,x)=x$, $g=1$) it solves $P_t+\kappa(\theta-r)P_r+\tfrac12\sigma^2P_{rr}-rP=0$, $P(T,r)=1$. The affine ansatz $P=\exp\bigl[a(\tau)-b(\tau)r\bigr]$, $\tau=T-t$, gives $-a'+b'r-\kappa(\theta-r)b+\tfrac12\sigma^2b^2-r=0$ for all $r$, hence
+\[
+  b'=1-\kappa b,\quad a'=-\kappa\theta b+\tfrac12\sigma^2b^2,\quad a(0)=b(0)=0
+\]
+and, with $b=(1-e^{-\kappa\tau})/\kappa$,
+\begin{equation}\label{ch18:eq-vasbond}
+  P(t,T)=\exp\Bigl[-b(\tau)\,r+\bigl(b(\tau)-\tau\bigr)\Bigl(\theta-\frac{\sigma^2}{2\kappa^2}\Bigr)-\frac{\sigma^2b(\tau)^2}{4\kappa}\Bigr].
+\end{equation}
+The yield $-\ln P/\tau$ tends to $\theta-\sigma^2/(2\kappa^2)$ for long maturities, below the level $\theta$ by a convexity term. Example ($\Q$-parameters $\kappa=0.5$, $\theta=4\%$, $\sigma=1\%$, $r_0=3\%$, $\tau=5$): $P=0.8343$, yield $3.62\%$, long yield $3.98\%$; a Monte Carlo average of $e^{-\int R}$ over $2\times10^5$ exactly sampled paths gives $0.83429\pm0.00006$ (own computation; the formula is verified symbolically to satisfy the PDE). Under the real-world measure the drift is $\kappa(\theta_{\mathbb P}-r)$; with a constant market price of risk $\lambda$, Girsanov's theorem (\cref{ch17:thm-girsanov2}) replaces the level by $\theta=\theta_{\mathbb P}-\sigma\lambda/\kappa$ and leaves $\kappa,\sigma$ unchanged. This is a first example of the short-rate models of \cref{ch:hjm} (not discussed in class).
+\end{finance}
+
+\subsection{Transition densities: backward and forward equations}
+Let $p(s,x;t,y)$ be the density of $X_t$ given $X_s=x$. Feynman--Kac with $r=0$ and $g$ arbitrary says $u(s,x)=\E[g(X_t)\mid X_s=x]=\int g(y)p(s,x;t,y)\dd y$ solves $u_s+\mathcal L_su=0$; hence $p$ satisfies the \emph{Kolmogorov backward equation} in $(s,x)$. There is also an equation in the \emph{forward} variables $(t,y)$:
+
+\begin{proposition}[Fokker--Planck equation]\label{ch18:prop-fp}
+If the density $p(t,y)$ of $X_t$ is smooth and decays fast enough,
+\begin{equation}\label{ch18:eq-fp}
+  \frac{\partial p}{\partial t}=-\frac{\partial}{\partial y}\bigl[\mu(t,y)\,p\bigr]+\frac12\frac{\partial^2}{\partial y^2}\bigl[\sigma^2(t,y)\,p\bigr]=:\mathcal L_t^*p .
+\end{equation}
+\end{proposition}
+\begin{proof}
+For a smooth test function $g$ with compact support, taking expectations in \eqref{ch18:eq-dynkin} (the martingale term has mean zero) gives $\frac{\dd}{\dd t}\E\,g(X_t)=\E\,\mathcal L_tg(X_t)=\int\bigl(\mu g'+\tfrac12\sigma^2g''\bigr)p\,\dd y$. Integrating by parts once in the first term and twice in the second (no boundary terms) turns this into $\int g\,\mathcal L_t^*p\,\dd y$, while the left side is $\int g\,\partial_tp\,\dd y$. Since $g$ is arbitrary, \eqref{ch18:eq-fp} follows.
+\end{proof}
+The Fokker--Planck equation is a conservation law, $\partial_tp+\partial_yJ=0$ with probability current $J=\mu p-\tfrac12\partial_y(\sigma^2p)$: the drift transports probability and the noise diffuses it. It is the equation a physicist derives from the Langevin equation (Kramers--Moyal expansion), and it is the equation $u_t=\lambda u_{xx}$ of the two lectures, with $\lambda=\sigma^2/2$, when $\mu=0$ and $\sigma$ is constant. The backward equation is the adjoint of the forward one: it describes how the \emph{payoff} is smoothed, the forward one how the \emph{density} spreads. Examples:
+\begin{itemize}
+  \item The OU transition density is the Gaussian $N\bigl(m+(x-m)e^{-\kappa\tau},\sigma^2(1-e^{-2\kappa\tau})/(2\kappa)\bigr)$ (from \eqref{ch18:eq-ar1}); it satisfies \eqref{ch18:eq-fp} in $(\tau,y)$, $\partial_\tau p=\kappa\partial_y[(y-m)p]+\tfrac12\sigma^2\partial_y^2p$, and the backward equation in $(\tau,x)$ (checked symbolically for these notes).
+  \item Stationary solution: $\partial_tp=0$ and zero current, $\mu p=\tfrac12(\sigma^2p)'$; for OU, $p'/p=-2\kappa(y-m)/\sigma^2$, so $p_{\mathrm{st}}\propto e^{-\kappa(y-m)^2/\sigma^2}$, the normal law $N(m,\sigma^2/(2\kappa))$ of \cref{ch18:prop-ouprop}. In general, for a drift $-U'(y)$ and constant $\sigma$, $p_{\mathrm{st}}\propto e^{-2U(y)/\sigma^2}$: a Boltzmann distribution at effective temperature $\sigma^2/2$.
+  \item Geometric Brownian motion: the lognormal density of \cref{ch:bs} (\cref{ch15:eq-density}).
+\end{itemize}
+
+% ==================================================================
+\section{The heat equation}\label{ch18:sec-heat}
+
+The 2013 lecture ends and the 2024 lecture begins its second half with the simplest partial differential equation of all, the diffusion (heat) equation \ts{13}{21}{42:14}\ts{24}{25}{32:40}\ts{24}{25}{33:46}
+\begin{equation}\label{ch18:eq-heat}
+  \frac{\partial u}{\partial t}=\lambda\,\frac{\partial^2u}{\partial x^2},\qquad u(x,0)=u_0(x),\quad x\in\R,\ t>0 ,
+\end{equation}
+with $\lambda>0$ (2024 slide 5; the 2013 note takes $\lambda=1$). The reason to study it in a finance course is that the Black--Scholes equation \eqref{ch17:eq-bs} reduces to it by a change of variables \ts{13}{21}{43:17}\ts{13}{21}{54:18}\ts{24}{25}{32:40}, made explicit in \cref{ch15:sec-heat}: the payoff is the initial condition, and the price today is the payoff diffused for a time $T-t$. Its physical model is a long, thin, perfectly insulated bar, $u(x,t)$ the temperature at position $x$ \ts{24}{25}{36:58}\ts{13}{21}{43:17}. The heat equation of \cref{ch:sp2} (\cref{ch11:prop-heat}) is the same equation for the transition density of Brownian motion, and by the Fokker--Planck equation \eqref{ch18:eq-fp} $\lambda=\sigma^2/2$.
+
+\subsection{Superposition and the Gaussian kernel}
+\begin{itemize}
+  \item \emph{Linearity.} If $u_1,u_2$ solve \eqref{ch18:eq-heat}, so does $u_1+u_2$; more generally a superposition $\int_{-\infty}^\infty u_s(x,t)\,c(s)\,\dd s$ of solutions indexed by $s$ is a solution, if one may differentiate under the integral sign \ts{24}{25}{39:01}\ts{13}{21}{44:20}\ts{13}{21}{45:24}. The strategy: solve the ``easy'' initial value problems and superpose \ts{24}{25}{39:01}.
+  \item \emph{The easy problem: a Dirac delta.} Put all the heat at one point, $u(x,0)=\delta(x)$ ($\delta=0$ for $x\ne0$, $\int\delta=1$; Dirac's ``function'' that a physicist knows well, and that the lecturer introduces with a note on Dirac himself \ts{24}{25}{40:05}\ts{24}{25}{42:12}\ts{13}{21}{46:28}). Its solution is the Gaussian density with mean $0$ and variance $2\lambda t$,
+  \begin{equation}\label{ch18:eq-kernel}
+    u_\delta(x,t)=\frac1{\sqrt{4\pi\lambda t}}\,e^{-x^2/(4\lambda t)} ,
+  \end{equation}
+  which tends to $\delta$ as $t\to0$ \ts{24}{25}{34:54}\ts{24}{25}{40:05}\ts{13}{21}{47:38}\ts{13}{21}{49:59}. (For $\lambda=\tfrac12$ it is the standard $N(0,t)$ density of Brownian motion, slide 7; for $\lambda=1$ it is $\frac1{2\sqrt{\pi t}}e^{-x^2/4t}$, the 2013 note's Observation~2.) Direct substitution shows that it solves \eqref{ch18:eq-heat}: $\partial_tu_\delta=\lambda\partial_x^2u_\delta$ (checked symbolically).
+  \item \emph{General initial data.} Since $u_0(x)=\int\delta(x-s)\,u_0(s)\,\dd s$, superposing translated kernels gives
+  \begin{equation}\label{ch18:eq-conv}
+    u(x,t)=\int_{-\infty}^\infty u_\delta(x-s,t)\,u_0(s)\,\dd s=\E\Bigl[u_0\bigl(x+\sqrt{2\lambda}\,B_t\bigr)\Bigr]
+  \end{equation}
+  \ts{24}{25}{43:19}\ts{24}{25}{44:27}\ts{13}{21}{47:38}\ts{13}{21}{52:06}\ts{13}{21}{53:09}. For a ``reasonable'' $u_0$ (say bounded and continuous, or of moderate growth such as a call payoff, since the kernel has Gaussian tails) the derivatives $\partial_tu_\delta,\partial_x^2u_\delta$ are integrable and can be taken inside the integral, so $u$ solves the equation, and $u(x,t)\to u_0(x)$ as $t\to0$ \ts{24}{25}{45:27}\ts{24}{25}{46:29}\ts{24}{25}{47:31}\ts{13}{21}{52:06}. The 2013 remark that the integral ``need not be well defined'' for arbitrary $u_0$ is the statement that the class of admissible initial data must be restricted. The form on the right is the probabilistic reading: \emph{the solution at $(x,t)$ is the expectation of the initial datum at the random point reached by a Brownian particle started at $x$}. In the lecture's picture, heat is a cloud of particles released at one point, each moving as a Brownian motion, and their density is normal \ts{13}{21}{47:38}\ts{13}{21}{51:04}. This is Feynman--Kac (\cref{ch18:thm-fk}) for Brownian motion.
+\end{itemize}
+\begin{example}[Indicator of an interval]\label{ch18:ex-indicator}
+Let $u_0=\ind_{(a,b)}$ \ts{24}{25}{48:39}\ts{24}{25}{49:42}. Then by \eqref{ch18:eq-conv}, with $X_t=x+\sqrt{2\lambda}B_t\sim N(x,2\lambda t)$,
+\begin{equation}\label{ch18:eq-indic}
+  u(x,t)=\Prob\bigl(a<X_t<b\bigr)=\Phi\Bigl(\frac{b-x}{\sqrt{2\lambda t}}\Bigr)-\Phi\Bigl(\frac{a-x}{\sqrt{2\lambda t}}\Bigr)
+\end{equation}
+\ts{24}{25}{50:44}, slide 9 for $\lambda=\tfrac12$. \Cref{ch18:fig-heat} shows the initial box melting into a bell curve.
+\end{example}
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.85\linewidth,height=5.2cm,xlabel={$x$},ylabel={$u(x,t)$},xmin=-3,xmax=3,ymin=-0.03,ymax=1.08,
+  legend style={at={(0.5,1.03)},anchor=south,legend columns=4,font=\footnotesize},grid=major,grid style={black!10}]
+  \addplot[very thick,color=black!70,const plot,forget plot] coordinates {(-3,0) (-1,0) (-1,1) (1,1) (1,0) (3,0)};
+  \addplot[thick,color=defcol,smooth] coordinates {(-3.00,0.0000) (-2.75,0.0000) (-2.50,0.0000) (-2.25,0.0000) (-2.00,0.0000) (-1.75,0.0000) (-1.50,0.0002) (-1.25,0.0385) (-1.00,0.5000) (-0.75,0.9615) (-0.50,0.9998) (-0.25,1.0000) (0.00,1.0000) (0.25,1.0000) (0.50,0.9998) (0.75,0.9615) (1.00,0.5000) (1.25,0.0385) (1.50,0.0002) (1.75,0.0000) (2.00,0.0000) (2.25,0.0000) (2.50,0.0000) (2.75,0.0000) (3.00,0.0000)};
+  \addplot[thick,color=intcol,smooth] coordinates {(-3.00,0.0000) (-2.75,0.0002) (-2.50,0.0013) (-2.25,0.0062) (-2.00,0.0228) (-1.75,0.0668) (-1.50,0.1587) (-1.25,0.3085) (-1.00,0.5000) (-0.75,0.6912) (-0.50,0.8400) (-0.25,0.9270) (0.00,0.9545) (0.25,0.9270) (0.50,0.8400) (0.75,0.6912) (1.00,0.5000) (1.25,0.3085) (1.50,0.1587) (1.75,0.0668) (2.00,0.0228) (2.25,0.0062) (2.50,0.0013) (2.75,0.0002) (3.00,0.0000)};
+  \addplot[thick,color=thmcol,smooth] coordinates {(-3.00,0.0227) (-2.75,0.0400) (-2.50,0.0666) (-2.25,0.1051) (-2.00,0.1573) (-1.75,0.2236) (-1.50,0.3023) (-1.25,0.3891) (-1.00,0.4772) (-0.75,0.5586) (-0.50,0.6247) (-0.25,0.6677) (0.00,0.6827) (0.25,0.6677) (0.50,0.6247) (0.75,0.5586) (1.00,0.4772) (1.25,0.3891) (1.50,0.3023) (1.75,0.2236) (2.00,0.1573) (2.25,0.1051) (2.50,0.0666) (2.75,0.0400) (3.00,0.0227)};
+  \legend{{$t=0.02$},{$t=0.25$},{$t=1$}}
+\end{axis}
+\end{tikzpicture}
+\caption{Solution \eqref{ch18:eq-indic} of the heat equation with $\lambda=\tfrac12$ for $u_0=\ind_{(-1,1)}$ (thick black): at time $t$ the profile has width of order $\sqrt t$ and its maximum falls. Each curve is the probability that a Brownian particle started at $x$ is in $(-1,1)$ at time $t$.}\label{ch18:fig-heat}
+\end{figure}
+
+\subsection{Solution by similarity and invariance}
+The 2024 lecture derives the same solution without the kernel \ts{24}{25}{51:49}. Rescale time and space, $\tau=\alpha t$ and $y=\beta x$, and put $v(y,\tau)=u(x,t)$. The chain rule gives $u_t=\alpha v_\tau$, $u_x=\beta v_y$, $u_{xx}=\beta^2v_{yy}$, so \eqref{ch18:eq-heat} becomes $\alpha v_\tau=\lambda\beta^2v_{yy}$: for $\alpha=\beta^2$, $v_\tau=\lambda v_{yy}$, \emph{the same equation} \ts{24}{25}{52:53}\ts{24}{25}{53:54}\ts{24}{25}{54:58}. The heat equation is invariant under the scaling $t\to\alpha t$, $x\to\sqrt\alpha\,x$ (diffusive scaling). One then looks for solutions with the same invariance, $u(x,t)=u(\sqrt\alpha x,\alpha t)$ for all $\alpha$; taking $\alpha=1/t$,
+\[
+  u(x,t)=u\bigl(x/\sqrt t,1\bigr)=h\bigl(x/\sqrt t\bigr) ,
+\]
+a function of \emph{one} variable \ts{24}{25}{56:00}. Substituting $y=x/\sqrt t$ in \eqref{ch18:eq-heat}: $u_t=-\tfrac{y}{2t}h'(y)$ and $u_{xx}=h''(y)/t$, so $-\tfrac12yh'=\lambda h''$, i.e.\ $\dfrac{\dd}{\dd y}\ln h'(y)=-\dfrac{y}{2\lambda}$ \ts{24}{25}{57:04}. Integrating twice,
+\[
+  h'(y)=c\,e^{-y^2/(4\lambda)},\qquad h(y)=\Phi\Bigl(\frac y{\sqrt{2\lambda}}\Bigr)
+\]
+(a Gaussian density with variance $2\lambda$, whose antiderivative is the normal distribution function; the constants are fixed by $h(-\infty)=0$, $h(+\infty)=1$) \ts{24}{25}{58:08}. Hence
+\begin{equation}\label{ch18:eq-step}
+  u(x,t)=\Phi\Bigl(\frac{x}{\sqrt{2\lambda t}}\Bigr)\quad\longrightarrow\quad H(x)=\begin{cases}1&x>0\\ \tfrac12&x=0\\ 0&x<0\end{cases}\quad(t\to0),
+\end{equation}
+so it solves the heat equation with a \emph{step} initial condition \ts{24}{25}{59:14}\ts{24}{25}{1:00:22}. Translating, $\Phi\bigl((x-a)/\sqrt{2\lambda t}\bigr)$ has a step at $a$; the difference of two of them has the initial condition $\ind_{(a,b)}$ (with value $\tfrac12$ at the endpoints), which reproduces \eqref{ch18:eq-indic} \ts{24}{25}{1:01:25}\ts{24}{25}{1:02:28}\ts{24}{25}{1:03:32}. Every step function, and by limits every reasonable initial condition, is a combination of steps \ts{24}{25}{1:03:32}.
+\begin{remark}[The kernel is the derivative of the step solution]
+Since $\partial_x$ commutes with the equation, $\partial_xu$ solves it whenever $u$ does, and $\partial_xH=\delta$. Indeed $\partial_x\Phi\bigl(x/\sqrt{2\lambda t}\bigr)=u_\delta(x,t)$ of \eqref{ch18:eq-kernel}: the two derivations of the lecture (delta function, then similarity for the step) are one, in this way (own remark). The 2013 note leaves the derivation of \eqref{ch18:eq-kernel} as its Exercise~3.2, via $\xi=x/\sqrt t$ and $U(\xi)=t^{1/2}u(x,t)$ (\cref{ch18:ex-32}).
+\end{remark}
+\begin{coursenote}[2013 and 2024 on the heat equation; notation and misprints]
+2013 states the kernel and the superposition and asserts the link with Black--Scholes; the reduction is proposed as a final project \ts{13}{21}{54:18}\ts{13}{21}{55:22} (carried out in \cref{ch15:sec-heat}). 2024 derives the solution by similarity and adds the step-function construction. Normalisations differ: 2013 has $u_t=u_{xx}$ ($\lambda=1$), 2024 slide 5 has general $\lambda$ and slides 8--9 specialise to $\lambda=\tfrac12$, i.e.\ Brownian motion with unit variance rate. The 2013 note writes the initial condition sometimes as $u(0,x)$ and sometimes as $u_0(x,0)$; the arguments of $u$ appear in both orders ($u(x,t)$ and $u(0,x)$), which is only a notational slip. In the transcript of 2024 the argument of $\Phi$ is spoken as ``$y$ over $2\sqrt{2\lambda}$'' \ts{24}{25}{58:08}; the slide (and the calculation above) has $y/\sqrt{2\lambda}$.
+\end{coursenote}
+
+% ==================================================================
+\section{Numerical solution of SDEs}\label{ch18:sec-num}
+
+Most SDEs, like most PDEs, have no closed-form solution, and the closed-form methods above fail for most of them \ts{13}{21}{19:56}\ts{13}{21}{20:56}. Both lectures list the numerical options, finite-difference methods, Monte Carlo methods and tree methods (2024 slide 21, without detail); the 2013 lecture explains them \ts{13}{21}{20:56}.
+
+\subsection{Finite differences for an ODE}
+The idea of the finite-difference method is Taylor's formula on a grid. The lecture's example is $u'(x)=5u(x)+2$, $u(0)=0$, to be evaluated at $x=1$ \ts{13}{21}{22:04}. Chop $[0,1]$ into steps of size $h$ and use $u((i+1)h)\approx u(ih)+h\,u'(ih)=u(ih)+h\bigl(5u(ih)+2\bigr)$, which computes each value from the previous one \ts{13}{21}{23:07}\ts{13}{21}{24:12}\ts{13}{21}{25:16}. With $h=\tfrac12$: $u(\tfrac12)\approx1$, $u(1)\approx\tfrac92$ (the note's Example~2.1). The exact solution is $u=\tfrac25(e^{5x}-1)$, $u(1)=58.97$: with two steps the answer is off by a factor $13$, and it improves only as $h\to0$ (own computation of the scheme $u_n=\tfrac25[(1+5h)^n-1]$):
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+$h$ & $1/2$ & $1/10$ & $1/100$ & $1/1000$ & exact\\
+\midrule
+$u(1)$ & $4.50$ & $22.67$ & $52.20$ & $58.23$ & $58.97$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The error is proportional to $h$ (first order): this is the \emph{Euler method}, and the theorem quoted in the lecture is that for a reasonable equation the approximation converges to the true value as $h\to0$ \ts{13}{21}{25:16}. The same idea applies to functions of two variables on a grid, filled layer by layer from the boundary values \ts{13}{21}{26:18}. The lecture also warns about the cost/accuracy trade-off in choosing $h$ \ts{13}{21}{39:02}: a smaller $h$ gives a better answer and costs more time; and a grid fine enough for $X(1)$ may be too coarse for intermediate times close to $0$ where only a few steps have been taken.
+
+\subsection{Why it does not apply directly, and the fix: Monte Carlo along a fixed path}
+For the SDE \eqref{ch18:eq-sde} the analogue of $u'=f(u)$ has a random right-hand side: the point at time $2h$ could have been reached from many points at time $h$, and it is unknown which \ts{13}{21}{27:20}\ts{13}{21}{28:21}. The fix is to \emph{fix a Brownian path}: once a sample path $B$ is drawn, every increment $\Delta B_i=B_{(i+1)h}-B_{ih}$ is known and the same Taylor step can be used \ts{13}{21}{28:21}\ts{13}{21}{29:21}\ts{13}{21}{30:30}\ts{13}{21}{31:37}:
+\begin{equation}\label{ch18:eq-em}
+  X_{i+1}=X_i+\mu(t_i,X_i)\,h+\sigma(t_i,X_i)\,\Delta B_i,\qquad t_i=ih,\quad\Delta B_i=\sqrt h\,Z_i,\ Z_i\sim N(0,1)\ \text{i.i.d.}
+\end{equation}
+This is the \emph{Euler--Maruyama scheme}. Then repeat with many independent paths (the \emph{Monte Carlo simulation}): each gives one value $X_T^{(k)}$, and the empirical distribution of these values approximates the law of $X_T$ \ts{13}{21}{31:37}\ts{13}{21}{32:42}\ts{13}{21}{33:43}\ts{13}{21}{34:48}. Any intermediate time can be read off the same paths, subject to the accuracy remark above. The steps of the note, \emph{sample a path, solve along it, repeat}, are exactly this. (The obstacle is the underlying randomness of the Brownian motion; once a path is fixed it disappears \ts{13}{21}{33:43}.)
+
+\begin{definition}[Strong and weak convergence; not discussed in class]\label{ch18:def-conv}
+A scheme with step $h=T/n$ and output $X^h_T$ has \emph{strong order} $q$ if $\E|X_T-X^h_T|\le Ch^q$ (paths are close: the two are driven by the same $B$), and \emph{weak order} $w$ if $|\E f(X_T)-\E f(X^h_T)|\le Ch^w$ for smooth $f$ (laws are close).
+\end{definition}
+Euler--Maruyama has strong order $\tfrac12$ and weak order $1$ under the conditions of \cref{ch18:thm-eu} and smooth coefficients (quoted). The order $\tfrac12$ is the price of the noise: over one step the increment is of size $\sqrt h$. The \emph{Milstein} scheme adds the next term of the It\^o--Taylor expansion, $X_{i+1}=X_i+\mu h+\sigma\Delta B_i+\tfrac12\sigma\sigma'(\Delta B_i^2-h)$, and has strong order $1$ (the correction is $0$ when $\sigma$ is constant, so for OU Euler--Maruyama already has order $1$ in the strong sense). Finally the Monte Carlo error itself, of order $N^{-1/2}$ in the number $N$ of paths, adds to the discretisation error; the two should be balanced.
+
+\begin{casestudy}[Convergence of Euler--Maruyama for geometric Brownian motion]\label{ch18:cs-em}
+\emph{Goal.} Check the orders with a case where the exact solution \eqref{ch18:eq-gbmsol} is known. \emph{Set-up.} $\dd X=\mu X\dd t+\sigma X\dd B$, $\mu=0.3$, $\sigma=0.4$, $x_0=1$, $T=1$ (the parameters of the 2024 example), $N=2\times10^5$ Brownian paths generated on the finest grid ($n=256$) and coarsened by summing increments, so that all schemes and the exact solution see the \emph{same} path. Code (own; NumPy):
+\begin{lstlisting}[language=Python]
+import numpy as np
+rng = np.random.default_rng(1)
+mu, sg, T, N, nmax = 0.3, 0.4, 1.0, 200000, 256
+dW = rng.standard_normal((N, nmax)) * np.sqrt(T / nmax)
+for n in (4, 8, 16, 32, 64, 128, 256):
+    h = T / n
+    d = dW.reshape(N, n, nmax // n).sum(axis=2)     # coarse increments
+    X = np.ones(N); M = np.ones(N)
+    for i in range(n):
+        X = X * (1 + mu*h + sg*d[:, i])              # Euler-Maruyama
+        M = M * (1 + mu*h + sg*d[:, i] + 0.5*sg**2*(d[:, i]**2 - h))  # Milstein
+    exact = np.exp((mu - sg**2/2)*T + sg*d.sum(axis=1))
+    print(n, abs(X-exact).mean(), abs(M-exact).mean(), (1+mu*h)**n - np.exp(mu*T))
+\end{lstlisting}
+\emph{Result} (columns: steps $n$, strong error of Euler, strong error of Milstein, weak error of $\E X_T$, which is deterministic here: $\E X^h_T=(1+\mu h)^n$):
+\begin{center}
+\small
+\begin{tabular}{@{}rccc@{}}
+\toprule
+$n$ & Euler, $\E|X_T-X_T^h|$ & Milstein & $|\E X_T^h-\E X_T|$\\
+\midrule
+$4$ & $5.9\times10^{-2}$ & $3.3\times10^{-2}$ & $1.4\times10^{-2}$\\
+$16$ & $3.0\times10^{-2}$ & $8.7\times10^{-3}$ & $3.7\times10^{-3}$\\
+$64$ & $1.5\times10^{-2}$ & $2.2\times10^{-3}$ & $9.5\times10^{-4}$\\
+$256$ & $7.6\times10^{-3}$ & $5.5\times10^{-4}$ & $2.4\times10^{-4}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Halving $h$ divides the Euler strong error by $\sqrt2$ (fitted slopes $0.49$--$0.50$), the Milstein strong error and the weak error by $2$ (slopes $0.94$ rising to $1.00$): strong order $\tfrac12$ (Euler), $1$ (Milstein) and weak order $1$, as stated. The same run shows why the distinction matters for finance: for \emph{prices}, i.e.\ expectations, the weak order is what counts, and Euler is enough; for path-dependent hedging error one needs paths, i.e.\ strong convergence. \Cref{ch18:fig-em} plots the errors. \emph{Lesson.} A convergence experiment against a known solution is the way to validate a simulator before using it where no closed form exists.
+\end{casestudy}
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{loglogaxis}[width=0.85\linewidth,height=5.4cm,xlabel={step $h=T/n$},ylabel={error},xmin=0.003,xmax=0.3,ymin=0.0001,ymax=0.1,
+  legend style={at={(0.5,1.03)},anchor=south,legend columns=3,font=\footnotesize},grid=major,grid style={black!10}]
+  \addplot+[mark=*,thick,color=defcol] coordinates {(0.25,0.05936) (0.125,0.04236) (0.0625,0.03013) (0.03125,0.02141) (0.015625,0.01521) (0.0078125,0.01076) (0.00390625,0.0076)};
+  \addplot+[mark=square*,thick,color=thmcol] coordinates {(0.25,0.0326) (0.125,0.01699) (0.0625,0.00867) (0.03125,0.00438) (0.015625,0.0022) (0.0078125,0.0011) (0.00390625,0.00055)};
+  \addplot+[mark=triangle*,thick,color=intcol] coordinates {(0.25,0.01439) (0.125,0.007388) (0.0625,0.003744) (0.03125,0.001885) (0.015625,0.000946) (0.0078125,0.000474) (0.00390625,0.000237)};
+  \addplot[dashed,black!60,forget plot] coordinates {(0.004,0.0077) (0.25,0.0077*7.905)};
+  \legend{{Euler, strong},{Milstein, strong},{Euler, weak ($\E X_T$)}}
+\end{loglogaxis}
+\end{tikzpicture}
+\caption{Errors of \cref{ch18:cs-em} against the step size: Euler strong error (slope $\tfrac12$, the dashed line is a slope-$\tfrac12$ reference), Milstein strong error and the weak error of $\E X_T$ (both slope $1$).}\label{ch18:fig-em}
+\end{figure}
+
+\subsection{The tree method}
+\emph{Trees} use the other picture of Brownian motion, as the limit of a random walk (\cref{ch:sp2}, Donsker) \ts{13}{21}{34:48}\ts{13}{21}{35:50}: replace $\Delta B_i$ in \eqref{ch18:eq-em} by $\pm\sqrt h$ with probability $\tfrac12$ each. Then $X_T$ takes only finitely many values, and their probabilities are known exactly: after $n$ steps of a recombining tree the node with $j$ up-moves has probability $\binom nj2^{-n}$ (in the lecture's picture with $n=5$ steps, $1,5,10,10,5,1$ over $32$) \ts{13}{21}{36:54}. So one \emph{computes} the expectation instead of sampling it: no statistical error. For geometric Brownian motion the multiplicative form $X_{i+1}=X_i(1+\mu h\pm\sigma\sqrt h)$ does recombine, and \eqref{ch18:eq-em} is Euler--Maruyama with two-point increments. Example (own computation; payoff $(X_T-1)^+$, same parameters, exact value $x_0e^{\mu T}\Phi(d_1)-K\Phi(d_2)=0.41012$ with $d_1=[\ln(x_0/K)+(\mu+\sigma^2/2)T]/(\sigma\sqrt T)$, $d_2=d_1-\sigma\sqrt T$):
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+steps $n$ & $16$ & $64$ & $256$ & $1024$\\
+\midrule
+Euler-type tree $X(1+\mu h\pm\sigma\sqrt h)$, error & $-5.9\times10^{-3}$ & $-1.2\times10^{-3}$ & $-2.2\times10^{-4}$ & $-7.5\times10^{-5}$\\
+log-tree $x_0e^{(\mu-\sigma^2/2)T+\sigma\sqrt h(2j-n)}$, error & $-1.1\times10^{-3}$ & $4\times10^{-5}$ & $1.0\times10^{-4}$ & $5\times10^{-6}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The errors are not monotone for the second tree (the strike sits at a different place relative to the nodes as $n$ changes, a known feature of the binomial method for a kinked payoff) but tend to $0$ with $n$. The 2013 speaker adds that accuracy can be increased in two ways, with more possibilities at each step (a trinomial tree with steps $+1,0,-1$ also converges to Brownian motion) or with smaller time steps \ts{13}{21}{41:06}, and remarks that he does not know which of the methods is used in practice, but that Monte Carlo and trees seem the more important ones \ts{13}{21}{36:54}. A comment from the audience in the 2013 lecture gives the practical criterion \ts{13}{21}{40:02}\ts{13}{21}{41:06}: for \emph{path-independent} claims (the payoff depends on $X_T$ only, so its law suffices), Monte Carlo is natural; for \emph{path-dependent} problems, in particular early exercise (American options), a tree is preferable because at every node one can condition on the situation reached and compare exercise value with continuation value.
+\begin{finance}[Pricing by simulation and by PDE]
+Monte Carlo pricing is Feynman--Kac \eqref{ch18:eq-fk} evaluated by simulation: simulate $S$ under the risk-neutral dynamics $\dd S=rS\dd t+\sigma S\dd W$ (\cref{ch17:sec-girsanov}), average the discounted payoff $e^{-rT}g(S_T)$ over $N$ paths, with standard error $O(N^{-1/2})$ independent of dimension. This is the method of choice for high-dimensional or path-dependent payoffs; PDE methods (finite differences, \cref{ch18:sec-heat,ch:bs}) and trees are faster in one or two dimensions and handle early exercise naturally; the cost of a grid grows exponentially with dimension. Which drift to simulate is the point of \cref{ch18:sec-fk}: the risk-free rate $r$, not the real-world $\mu$ (which matters for risk management and backtests, \cref{ch:var}).
+\end{finance}
+
+% ==================================================================
+\section{Beyond the lectures: square-root and other diffusions}\label{ch18:sec-cir}
+
+The two examples solved in class have linear coefficients, hence Lipschitz. Two extensions show what changes when they are not (an addition of these notes; none of this is in the lectures).
+
+\paragraph{The CIR process.} The Cox--Ingersoll--Ross model $\dd X=\kappa(\theta-X)\,\dd t+\sigma\sqrt X\,\dd B$ is a mean-reverting process whose noise vanishes at $0$, so it stays nonnegative: the natural model of a positive interest rate or a variance (the Heston model of \cref{ch:volatility} uses it for the variance). The coefficient $\sigma\sqrt x$ is not Lipschitz at $0$, so \cref{ch18:thm-eu} does not apply, but $x\mapsto\sqrt x$ is H\"older-$\tfrac12$ and the Yamada--Watanabe theorem (quoted) still gives a unique solution. Boundary behaviour is governed by the \emph{Feller condition}: if $2\kappa\theta\ge\sigma^2$ the process never reaches $0$; otherwise it hits $0$ and is reflected. The linear drift makes the moments tractable: by Dynkin's formula \eqref{ch18:eq-dynkin}, $\dd\E X_t=\kappa(\theta-\E X_t)\dd t$, so
+\[
+  \E X_t=\theta+(x_0-\theta)e^{-\kappa t},\qquad
+  \Var X_t=x_0\frac{\sigma^2}{\kappa}\bigl(e^{-\kappa t}-e^{-2\kappa t}\bigr)+\theta\frac{\sigma^2}{2\kappa}\bigl(1-e^{-\kappa t}\bigr)^2
+\]
+(the variance from the second-moment equation $\tfrac{\dd}{\dd t}\E X^2=(2\kappa\theta+\sigma^2)\E X-2\kappa\E X^2$). Unlike OU the law is not normal: $X_t$ is $c$ times a noncentral $\chi^2$ variable with $d=4\kappa\theta/\sigma^2$ degrees of freedom, $c=\sigma^2(1-e^{-\kappa t})/(4\kappa)$ and noncentrality $x_0e^{-\kappa t}/c$, which allows exact sampling. Check ($\kappa=1.5$, $\theta=0.04$, $\sigma=0.2$, $x_0=0.09$, $t=1$; Feller ratio $2\kappa\theta/\sigma^2=3$): the formulas give mean $0.05116$ and variance $7.379\times10^{-4}$; $2\times10^6$ exact samples give $0.05114$ and $7.375\times10^{-4}$ (own computation). The Euler scheme \eqref{ch18:eq-em} may produce negative values, for which $\sqrt X$ is undefined; the standard cure is to truncate ($\sqrt{X^+}$), and the exact sampler above avoids the issue. In the same family, the squared radius $|\bm B|^2$ of an $n$-dimensional Brownian motion (\cref{ch17:sec-multi}) satisfies $\dd Z=n\,\dd t+2\sqrt Z\,\dd W$, a CIR process without mean reversion (the squared Bessel process).
+
+\paragraph{Other state-dependent volatilities.} The choice $\sigma(x)=\sigma x^{\beta}$ (CEV) interpolates between a normal model ($\beta=0$, the OU/Bachelier world) and geometric Brownian motion ($\beta=1$); local- and stochastic-volatility models, in which $\sigma$ is a function of the price or itself a diffusion, lead to SDEs that must be treated numerically (\cref{ch:volatility}). The theory of this chapter (existence, generator, Feynman--Kac, Fokker--Planck, Euler--Maruyama) applies to all of them.
+
+% ==================================================================
+\section{The two lectures compared, errata}\label{ch18:sec-compare}
+
+\begin{coursenote}[2013 and 2024 compared]
+\emph{Common:} existence and uniqueness under the Lipschitz and growth conditions (stated without proof); coefficient matching for geometric Brownian motion; the Ornstein--Uhlenbeck process solved by the product-process guess $a(t)(x_0+\int b\,\dd B)$; the heat equation solved by superposition of Gaussians, with the link to Black--Scholes. \emph{Only in 2013:} the goal of an SDE as the reverse of differentiation; finite differences for ODEs with the example $u'=5u+2$, the fixed-path Monte Carlo idea, the tree method with its binomial weights, the comments on trinomial trees and path dependence; the Dirac delta and Gaussian kernel as \emph{given} (derivation left as Exercise~3.2). \emph{Only in 2024:} the Black--Scholes equation by hedging (slides 2--4; the 2013 counterpart is a different lecture), the $L^2$ bound in the theorem, the lognormal ``paradox'' of geometric Brownian motion, the properties of the OU process (limit law, stationary start, the case $m\ne0$), Vasicek's model, systems of SDEs and the position--velocity example, the derivation of the heat solution by similarity/invariance and step functions; the numerical methods are only listed (slide 21). Neither year mentions the Feynman--Kac formula, Girsanov's theorem for SDEs, the CIR process or the Euler--Maruyama order of convergence.
+\end{coursenote}
+
+\begin{coursenote}[Errata and misprints]
+\begin{itemize}
+  \item 2024 slide 15: $\sigma_*=\sigma t$ should be $\sigma\sqrt t$ (\cref{ch18:sec-cm}).
+  \item \file{lecnote21}, Theorem 1.1 and the paragraph before it: ``for given functions $a$ and $b$'' should be $\mu,\sigma$; the integral equation lacks $x_0$; ``(L2 bound)'' is a placeholder for $\sup_t\E X_t^2<\infty$; ``Lipshictz'' is spelled so in both the note and slide 13.
+  \item \file{lecnote21}, \S2.2 says that for a known path $B_t$ ``the equation now becomes a PDE''; for a fixed path it is a recursion in one variable (an ODE-type finite-difference step), as \eqref{ch18:eq-em} shows; the tree and Monte Carlo descriptions write the equation as $\dd f(t,B_t)=g\,\dd B+h\,\dd t$, which is the form of a function of Brownian motion rather than of a general SDE.
+  \item The 2013 transcript's remark that OU has ``a drift term \dots\ minus exponential'' at 13:16 is a slip: the drift is \emph{linear}, $-\kappa X$; the exponentials appear only in the solution.
+  \item In the 2024 transcript $\Phi\bigl(y/2\sqrt{2\lambda}\bigr)$ is spoken; the slide has $\Phi(y/\sqrt{2\lambda})$, which is right (\cref{ch18:sec-heat}).
+  \item PS9 Problem A-1(c): see the note after \cref{ch18:ex-a1}. Everything else in the slides (Black--Scholes derivation, heat kernel, OU moments) was re-derived above and found correct; the numerics of this chapter were checked in Python and, where indicated, symbolically.
+\end{itemize}
+\end{coursenote}
+
+% ==================================================================
+\begin{keyformulas}
+\begin{align*}
+&\text{SDE:} && \dd X=\mu(t,X)\dd t+\sigma(t,X)\dd B,\quad X_t=x_0+\textstyle\int_0^t\mu\,\dd s+\int_0^t\sigma\,\dd B\\
+&\text{Existence, uniqueness:} && |\mu(x)-\mu(y)|^2+|\sigma(x)-\sigma(y)|^2\le K|x-y|^2,\\
+& && |\mu|^2+|\sigma|^2\le K(1+|x|^2)\ \Rightarrow\ \exists!\ \text{solution},\ \sup_t\E X_t^2<\infty\\
+&\text{Coefficient matching:} && X=f(t,B):\ \mu(t,f)=f_t+\tfrac12f_{xx},\quad\sigma(t,f)=f_x\\
+&\text{GBM:} && \dd X=\mu X\dd t+\sigma X\dd B\ \Rightarrow\ X_t=x_0e^{(\mu-\sigma^2/2)t+\sigma B_t},\quad\E X_t=x_0e^{\mu t}\\
+& && \mu<\tfrac12\sigma^2:\ X_t\to0\ \text{a.s.};\quad\text{std.\ dev.\ of }\ln X_t=\sigma\sqrt t\\
+&\text{OU:} && \dd X=-\kappa(X-m)\dd t+\sigma\dd B\ \Rightarrow\ X_t=m+(x_0-m)e^{-\kappa t}+\sigma\textstyle\int_0^te^{-\kappa(t-s)}\dd B_s\\
+& && \E X_t=m+(x_0-m)e^{-\kappa t},\quad\Var X_t=\tfrac{\sigma^2}{2\kappa}(1-e^{-2\kappa t}),\quad X_\infty\sim N\bigl(m,\tfrac{\sigma^2}{2\kappa}\bigr)\\
+& && \Cov(X_s,X_t)\to\tfrac{\sigma^2}{2\kappa}e^{-\kappa|t-s|}\ (\text{stationary}),\quad\text{half-life }\ln2/\kappa\\
+&\text{Exact AR(1):} && X_{t+h}-m=\phi(X_t-m)+\varepsilon,\quad\phi=e^{-\kappa h},\quad\Var\varepsilon=\tfrac{\sigma^2}{2\kappa}(1-\phi^2)\\
+& && \hat\kappa=-\ln\hat\phi/h,\quad\hat\sigma^2=2\hat\kappa\hat\sigma_\varepsilon^2/(1-\hat\phi^2)\\
+&\text{Vector OU:} && \bm X_t=\bm m+e^{-At}(\bm x_0-\bm m)+\textstyle\int_0^te^{-A(t-s)}\Sigma\dd\bm B_s,\\
+& && \quad\Phi=e^{-Ah}\\
+&\text{Generator:} && \mathcal L=\mu\partial_x+\tfrac12\sigma^2\partial_x^2,\quad\dd f=(\partial_t+\mathcal L)f\dd t+\sigma f_x\dd B\\
+&\text{Feynman--Kac:} && u_t+\mathcal Lu-ru=0,\ u(T,\cdot)=g\ \Longleftrightarrow\ u=\E\bigl[e^{-\int_t^Tr}\,g(X_T)\mid X_t=x\bigr]\\
+&\text{Fokker--Planck:} && \partial_tp=-\partial_y(\mu p)+\tfrac12\partial_y^2(\sigma^2p),\quad p_{\mathrm{st}}\propto e^{-2U/\sigma^2}\ (\mu=-U')\\
+&\text{Vasicek bond:} && P=e^{-br+(b-\tau)(\theta-\sigma^2/2\kappa^2)},\\
+& && \quad{}-\sigma^2b^2/4\kappa,\quad b=\tfrac{1-e^{-\kappa\tau}}\kappa\\
+&\text{Heat equation:} && u_t=\lambda u_{xx}\ \Rightarrow\ u=\textstyle\int\frac{e^{-(x-s)^2/4\lambda t}}{\sqrt{4\pi\lambda t}}u_0(s)\dd s,\\
+& && u=\E\,u_0(x+\sqrt{2\lambda}B_t)\\
+& && u_0=\ind_{(a,b)}:\ u=\Phi\bigl(\tfrac{b-x}{\sqrt{2\lambda t}}\bigr)\\
+& && \quad{}-\Phi\bigl(\tfrac{a-x}{\sqrt{2\lambda t}}\bigr)\\
+&\text{Euler--Maruyama:} && X_{i+1}=X_i+\mu h+\sigma\sqrt hZ_i;\ \text{strong order }\tfrac12,\ \text{weak order }1\\
+&\text{Milstein:} && +\tfrac12\sigma\sigma'(\Delta B_i^2-h);\ \text{strong order }1
+\end{align*}
+\end{keyformulas}
+
+% ==================================================================
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\subsection*{From 2013 Problem Set 9 (stochastic differential equations)}
+The problem set (\file{pset9.pdf}, due 12/5/13, ``no need to turn in'') has only Part~A, which ``straightforwardly follows from the definition''. There is no 2024 problem set on this topic.
+
+\begin{exercise}[PS9 (2013), Problem A-1: verify solutions]\label{ch18:ex-a1}
+Verify that the given process solves the given SDE (use It\^o's formula, \cref{ch:stochcalc}).
+\begin{enumerate}[(a)]
+  \item $X_t=\exp(B_t)$ solves $\dd X_t=\tfrac12X_t\,\dd t+X_t\,\dd B_t$.
+  \item $X_t=B_t/(1+t)$ solves $\dd X_t=-\frac1{1+t}X_t\,\dd t+\frac1{1+t}\,\dd B_t$.
+  \item $X_t=\sin B_t$ solves $\dd X_t=-\tfrac12X_t\,\dd t+\sqrt{1-X_t^2}\,\dd B_t$.
+\end{enumerate}
+\end{exercise}
+\begin{coursenote}[Erratum in Problem A-1(c)]
+It\^o's formula gives $\dd\sin B_t=-\tfrac12\sin B_t\,\dd t+\cos B_t\,\dd B_t$, and $\sqrt{1-\sin^2B_t}=|\cos B_t|$, which equals $\cos B_t$ only while $\cos B_t\ge0$, i.e.\ up to the first time $|B|$ reaches $\pi/2$. The stated equation therefore holds until that time; afterwards it holds only in law, with $\dd\widetilde B_t=\operatorname{sgn}(\cos B_t)\dd B_t$ (again a Brownian motion, by L\'evy's characterisation). The verification asked in the problem is exactly the computation above.
+\end{coursenote}
+
+\begin{exercise}[PS9 (2013), Problem A-2: a cube-root SDE]\label{ch18:ex-a2}
+Let $a>0$ and $\dd X_t=\tfrac13X_t^{1/3}\dd t+X_t^{2/3}\dd B_t$, $X_0=a$. Show that $X_t=\bigl(a^{1/3}+\tfrac13B_t\bigr)^3$, $t\ge0$, solves it. (Where do the conditions of \cref{ch18:thm-eu} fail? See \cref{ch18:ex-fail}.)
+\end{exercise}
+
+\begin{exercise}[PS9 (2013), Problem A-3: the Vasicek model]\label{ch18:ex-a3}
+(Vasicek interest-rate model.) Prove that $R(t)=e^{-\beta t}R(0)+\frac\alpha\beta\bigl(1-e^{-\beta t}\bigr)+\sigma e^{-\beta t}\int_0^te^{\beta s}\dd B_s$ solves the SDE $\dd R(t)=(\alpha-\beta R(t))\,\dd t+\sigma\,\dd B_t$.
+\end{exercise}
+
+\subsection*{From the 2013 lecture note}
+\begin{exercise}[\file{lecnote21}, Exercise 3.2: derivation of the heat kernel]\label{ch18:ex-32}
+Derive $u_\delta(x,t)=\frac1{2\sqrt{\pi t}}e^{-x^2/(4t)}$, the solution of $u_t=u_{xx}$ with $u(x,0)=\delta(x)$, by using the variable $\xi=x/\sqrt t$ and the function $U(\xi)=t^{1/2}u(x,t)$, and restating the heat equation as an ODE for $U$.
+\end{exercise}
+
+\subsection*{Additional exercises (not from the course)}
+\begin{exercise}[not from the course: OU covariance and estimation]\label{ch18:ex-ou}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Derive \eqref{ch18:eq-oucov} and check it against \eqref{ch18:eq-ouvar} at $s=t$.
+  \item Show that the OU process is the only stationary Gaussian Markov process with continuous paths, up to parameters (hint: $\rho(\tau)$ must satisfy $\rho(\tau+\tau')=\rho(\tau)\rho(\tau')$).
+  \item Daily data ($h=1/252$) of a spread give an AR(1) fit with $\hat\phi=0.995$ and residual standard deviation $0.02$. Compute $\hat\kappa$, the half-life in days and the stationary standard deviation of the spread.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: exact versus Euler for OU]\label{ch18:ex-euler}
+Find the stationary variance of the Euler--Maruyama chain $X_{i+1}=X_i-\kappa(X_i-m)h+\sigma\sqrt hZ_i$ and compare it with $\sigma^2/(2\kappa)$. For which $h$ is the chain stationary? By what factor is the variance wrong for $\kappa h=0.5$? Write a short program that simulates both schemes and compares the empirical variance.
+\end{exercise}
+
+\begin{exercise}[not from the course: Feynman--Kac]\label{ch18:ex-fk}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item For geometric Brownian motion $\dd S=rS\dd t+\sigma S\dd W$ and payoff $g(S)=S^p$ compute $u(t,S)=e^{-r\tau}\E[S_T^p\mid S_t=S]$ and verify \eqref{ch18:eq-fkpde}.
+  \item Check that $u=S$ (the stock) and $u=e^{-r\tau}$ (a bond) solve the Black--Scholes equation, and explain in words what this says.
+  \item For the OU process solve $u_t-\kappa(x-m)u_x+\tfrac12\sigma^2u_{xx}=0$, $u(T,x)=x$, with the ansatz $u=A(\tau)x+B(\tau)$ and compare with the mean \eqref{ch18:eq-oumean}.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: Fokker--Planck]\label{ch18:ex-fp}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item For $\dd X=-U'(X)\dd t+\sigma\dd B$ with $U(x)=\tfrac14x^4-\tfrac12x^2$ (double well) find the stationary density and show it is normalisable.
+  \item Derive the Fokker--Planck equation of geometric Brownian motion and check that the lognormal density solves it.
+  \item For $\sigma^2=0.5$ compute the ratio of the stationary density at a well bottom $x=1$ to that at the barrier top $x=0$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: position and velocity]\label{ch18:ex-posvel}
+For the system \eqref{ch18:eq-posvel} with $m=0$, $\sigma_1=0$:
+\begin{enumerate}[(a)]
+  \item derive \eqref{ch18:eq-posvar} without assuming stationarity of $V_0$, taking $V_0=v_0$ deterministic;
+  \item show that the diffusion coefficient in the long-time limit is $D=\sigma^2/(2\kappa^2)$ and relate it to $\gamma$ and $T$ in the physical parametrisation of the intuition box in \cref{ch18:sec-ou};
+  \item show that $X_t$ converges in law to $\sqrt{2D}\,B_t$ in the limit $\kappa\to\infty$ with $\sigma^2/\kappa^2=2D$ fixed.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: Vasicek bond]\label{ch18:ex-vasbond}
+Derive the ODEs for $a(\tau),b(\tau)$ in \cref{ch18:fin-bond}, solve them and confirm \eqref{ch18:eq-vasbond}. Compute the yield curve for $\tau=1,2,5,10,30$ years for $\kappa=0.5$, $\theta=4\%$, $\sigma=1\%$, $r_0=3\%$. Show that the yield is a decreasing function of $\sigma$ at long maturities and interpret it.
+\end{exercise}
+
+\begin{exercise}[not from the course: convergence experiment]\label{ch18:ex-conv}
+Repeat \cref{ch18:cs-em} for the OU process (where the exact solution is \eqref{ch18:eq-ar1}) and for the SDE $\dd X=\sin X\,\dd t+\cos X\,\dd B$ (no closed form: use a very fine Euler solution as reference). Fit the strong and weak orders of Euler--Maruyama and Milstein. Why does Milstein give no improvement for OU?
+\end{exercise}
+
+\begin{exercise}[not from the course: CIR moments]\label{ch18:ex-cir}
+Derive the moment equations of the CIR process from Dynkin's formula and solve for $\E X_t$. Verify the stationary mean $\theta$ and variance $\theta\sigma^2/(2\kappa)$, and check the Feller condition for a short-rate CIR model with $\kappa=0.3$, $\theta=3\%$, $\sigma=0.1$.
+\end{exercise}

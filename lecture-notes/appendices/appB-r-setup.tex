@@ -1,0 +1,119 @@
+% !TEX root = ../main.tex
+\chapter{R and RStudio Setup}\label{app:rsetup}
+
+Several case studies in both courses are distributed as runnable R code rather than only as PDF
+write-ups: the 2013 case studies (\cref{ch:regression}) ship as plain \file{.r} scripts, and the 2024
+case studies (\cref{ch:markets,ch:linalg,ch:volatility}) ship as RStudio projects with R Markdown
+(\file{.Rmd}) files. This appendix collects, from the actual install scripts and instruction files
+found in the course materials, what is needed to run them and which chapter each file belongs to. It
+is a practical reference, not a tutorial on R itself.
+
+\section{2013 case studies: plain R scripts}
+
+The 18.S096 (2013) case studies used in \cref{ch:regression} come with a small family of files whose
+names are hash-prefixed in \file{static\_resources/} (the hash is omitted below, as in
+\cref{app:materials}): a library-install script, one or two data/plotting scripts per case study, and
+a plain-text instructions file.
+
+\begin{coursenote}[Install script pattern]
+\file{fm\_casestudy\_0\_InstallOrLoadLibraries.r} (used for Case Study 1) and
+\file{fm\_casestudy\_0\_InstallOrLoadLibraries Case\_Study\_2.r} (Case Study 2) both follow the same
+pattern: a boolean flag \texttt{ind.install0} guards a block of \texttt{install.packages(...)} calls,
+followed by \texttt{library(...)} calls that load the same packages. Set \texttt{ind.install0 <- TRUE}
+the first time the script runs on a machine (or to update the packages), then switch it back to
+\texttt{FALSE} on later runs so the script only loads what is already installed. The packages required
+are:
+\begin{center}
+\texttt{quantmod}, \texttt{tseries}, \texttt{vars}, \texttt{fxregime}, \texttt{moments},
+\texttt{rugarch}, \texttt{xts}
+\end{center}
+(\texttt{xts} appears only in the Case Study 1 variant of the install script, and only in its
+\texttt{install.packages} block, not among the \texttt{library} calls; the Case Study 2 variant installs and
+loads the other six.)
+\end{coursenote}
+
+The two \file{R\_Rstudio\_Instructions\_CaseStudy1/2.txt} files give the following steps (paraphrased;
+both files agree except for the file lists in step 2):
+\begin{enumerate}[1.]
+\item Install R and RStudio (\url{http://www.r-project.org/} and
+  \url{http://www.rstudio.com/ide/download/desktop}).
+\item Create a project directory (e.g.\ \file{fm\_casestudy1} or \file{fm\_casestudy2}) and copy into
+  it the case study's \file{.r} script files (for Case Study 2, also the \file{fred\_fxrates.txt} data
+  file).
+\item In RStudio: Project $\to$ Create Project $\to$ Create Project from Existing Directory, and select
+  that directory.
+\item Open the script files, listed in the lower-right Files pane, in the order given by the
+  instructions file.
+\item Source (or run with Ctrl+Enter) the install/load script first, with \texttt{ind.install0 <-
+  TRUE} on the very first run; then source the data-download/plotting script; then the case study's
+  \texttt{\_rcode.r} script, which reproduces the R commands shown in the case study's PDF.
+\item Restart RStudio between steps if prompted (e.g.\ after installing packages), answering \texttt{n}
+  to "save workspace" -- the scripts reload the data explicitly and do not rely on a saved
+  \file{.RData} workspace.
+\end{enumerate}
+
+\begin{center}\footnotesize
+\begin{tabular}{@{}p{0.3\linewidth}p{0.62\linewidth}@{}}
+\toprule
+\textbf{Case study} & \textbf{Files} \\
+\midrule
+Case Study 1 (regression, FX \& rates) & \file{fm\_casestudy\_0\_InstallOrLoadLibraries.r},
+  \file{fm\_casestudy\_1\_0.r}, \file{fm\_casestudy\_1\_rcode.r} \\
+Case Study 2 (FX regime) & \file{fm\_casestudy\_0\_InstallOrLoadLibraries Case\_Study\_2.r},
+  \file{fm\_casestudy\_fx\_1.r}, \file{fm\_casestudy\_2\_rcode.r} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Both case studies are used in \cref{ch:regression}; see \cref{app:materials} for the exact
+correspondence with the PDF write-ups (\file{CaseStudy1.pdf}, \file{CaseStudy2.pdf}).
+
+\section{2024 case studies: RStudio projects}
+
+The 18.642 (2024) case studies distribute a full RStudio project per case study (a \file{.Rproj} file,
+one or more \file{.Rmd} files, and any data the case study needs as an \file{.RData} or \file{.csv}
+file), rather than loose scripts. Opening the \file{.Rproj} file in RStudio sets the working directory
+and loads the project automatically; there is no separate install-libraries script in these archives,
+so the required packages must be installed with \texttt{install.packages(...)} once, before knitting
+the \file{.Rmd} file, if not already present.
+
+\begin{center}\footnotesize
+\begin{tabular}{@{}p{0.36\linewidth}p{0.13\linewidth}p{0.42\linewidth}@{}}
+\toprule
+\textbf{Archive / project} & \textbf{Used in} & \textbf{R packages (\texttt{library(...)})} \\
+\midrule
+\texttt{\small mit18\_642\_f24\_\allowbreak rstudio.zip} (\file{FM\_Intro1.Rmd}) & \cref{ch:markets} &
+  \texttt{tidyquant}, \texttt{tidyverse}, \texttt{ggplot2} \\
+\texttt{\small mit18\_642\_f24\_\allowbreak equal\_weighted\_\allowbreak portfolios.zip} & \cref{ch:linalg} &
+  \texttt{tidyquant}, \texttt{tidyverse}, \texttt{ggplot2} \\
+\texttt{\small mit18\_642\_f24\_\allowbreak etf\_casestudy.zip} & \cref{ch:regression} &
+  \texttt{tidyquant}, \texttt{tidyverse}, \texttt{car}, \texttt{broom} \\
+\texttt{\small mit18\_642\_f24\_\allowbreak rstudio\_pset5.zip} (ARKK/S\&P 500 volatility) & \cref{ch:volatility} &
+  \texttt{tidyquant}, \texttt{tidyverse}, \texttt{fpp2}, \texttt{ggfortify}, \texttt{glmnet} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+(This is the union of \texttt{library(...)} calls actually found across the \file{.Rmd} files in these
+four archives; a given \file{.Rmd} may only use a subset of the packages listed for its row. No
+combined install script for the 2024 material was found in the static resources -- unlike the 2013
+scripts, package installation here is left implicit and must be done once per package with
+\texttt{install.packages("<name>")} before the first knit.)
+
+\begin{coursenote}
+Two of these are financial-data packages worth calling out: \texttt{tidyquant} and
+\texttt{quantmod} both pull historical price/rate series from the internet (typically Yahoo Finance or
+FRED), so an internet connection is needed the first time a script or \file{.Rmd} runs, even though the
+2013 scripts also cache the result in an \file{.RData} workspace for later offline reruns.
+\end{coursenote}
+
+\section{Try it yourself}
+
+\begin{itemize}
+\item Run \file{FM\_Intro1.Rmd} (\cref{ch:markets}) end to end in RStudio with "Knit" once the
+  packages above are installed, and compare the output to \file{FM\_Intro1.pdf} in the same archive.
+\item Change \texttt{ind.install0} back and forth in
+  \texttt{\small fm\_casestudy\_0\_\allowbreak InstallOrLoadLibraries.r} and confirm that with it set
+  to \texttt{FALSE} the script still runs (using the already-installed packages) but skips the
+  \texttt{install.packages} calls.
+\end{itemize}

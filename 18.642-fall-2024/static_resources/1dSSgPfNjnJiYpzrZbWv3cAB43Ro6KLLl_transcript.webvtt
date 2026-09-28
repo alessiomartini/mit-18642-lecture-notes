@@ -1,0 +1,2270 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:00.972 align:middle line:90%
+[SQUEAKING]
+
+00:00:00.972 --> 00:00:01.944 align:middle line:90%
+[RUSTLING]
+
+00:00:01.944 --> 00:00:12.460 align:middle line:90%
+[CLICKING]
+
+00:00:12.460 --> 00:00:14.760 align:middle line:84%
+JAKE XIA: So in my part
+of the first lecture,
+
+00:00:14.760 --> 00:00:18.560 align:middle line:84%
+I will, before I get
+into the introduction
+
+00:00:18.560 --> 00:00:23.580 align:middle line:84%
+of some financial concepts
+and investment strategies,
+
+00:00:23.580 --> 00:00:26.240 align:middle line:84%
+give you some basics
+on the background
+
+00:00:26.240 --> 00:00:28.480 align:middle line:90%
+information for this class.
+
+00:00:28.480 --> 00:00:31.920 align:middle line:84%
+I will tell you three
+things first before that.
+
+00:00:31.920 --> 00:00:34.760 align:middle line:84%
+First is a bit of
+introduction of myself.
+
+00:00:34.760 --> 00:00:39.340 align:middle line:84%
+Second, I tell you how this
+class was actually formed,
+
+00:00:39.340 --> 00:00:44.000 align:middle line:84%
+why we had this idea, why we
+decided to have this class.
+
+00:00:44.000 --> 00:00:48.160 align:middle line:84%
+Third is, before you
+actually do the assignment 0,
+
+00:00:48.160 --> 00:00:50.440 align:middle line:84%
+submit your
+information, I'm going
+
+00:00:50.440 --> 00:00:52.540 align:middle line:84%
+to survey the
+class a little bit,
+
+00:00:52.540 --> 00:00:56.160 align:middle line:84%
+just get some idea
+of your background,
+
+00:00:56.160 --> 00:00:59.500 align:middle line:84%
+of the knowledge of
+financial markets and math,
+
+00:00:59.500 --> 00:01:03.890 align:middle line:84%
+so we know what level
+we should target you at.
+
+00:01:03.890 --> 00:01:09.930 align:middle line:84%
+So first of all, me, so my
+connection with MIT, as Vasili
+
+00:01:09.930 --> 00:01:12.010 align:middle line:90%
+said, also quite similar.
+
+00:01:12.010 --> 00:01:16.130 align:middle line:84%
+So I have a PhD from Core
+6, electrical engineering
+
+00:01:16.130 --> 00:01:18.010 align:middle line:90%
+and computer science.
+
+00:01:18.010 --> 00:01:21.530 align:middle line:84%
+And I worked in the
+engineering field
+
+00:01:21.530 --> 00:01:26.130 align:middle line:84%
+as a researcher for a
+few years, then switched
+
+00:01:26.130 --> 00:01:29.210 align:middle line:90%
+to Wall Street as a quant.
+
+00:01:29.210 --> 00:01:34.210 align:middle line:84%
+Quant means using mathematics,
+building trading models.
+
+00:01:34.210 --> 00:01:37.690 align:middle line:84%
+Back then, I joined
+Salomon Brothers.
+
+00:01:37.690 --> 00:01:40.830 align:middle line:84%
+So that tells you about
+my age because probably--
+
+00:01:40.830 --> 00:01:44.250 align:middle line:84%
+how many of you have heard
+about Salomon Brothers?
+
+00:01:44.250 --> 00:01:45.190 align:middle line:90%
+Oh, good for you.
+
+00:01:45.190 --> 00:01:48.650 align:middle line:90%
+It's now part of Citigroup.
+
+00:01:48.650 --> 00:01:51.330 align:middle line:84%
+But Salomon Brothers,
+back then, was the pioneer
+
+00:01:51.330 --> 00:01:54.770 align:middle line:84%
+of using quantitative
+trading strategies
+
+00:01:54.770 --> 00:01:58.410 align:middle line:84%
+and also hiring
+mathematicians, of doing
+
+00:01:58.410 --> 00:02:01.530 align:middle line:84%
+those so-called
+arbitrage models,
+
+00:02:01.530 --> 00:02:06.930 align:middle line:84%
+finding one stock or
+bond versus another,
+
+00:02:06.930 --> 00:02:12.130 align:middle line:84%
+basically finding
+relative value.
+
+00:02:12.130 --> 00:02:15.570 align:middle line:84%
+So I worked there for a
+couple of years as a quant.
+
+00:02:15.570 --> 00:02:20.570 align:middle line:84%
+Then Morgan Stanley recruited
+me away to be a trader.
+
+00:02:20.570 --> 00:02:24.650 align:middle line:84%
+I ended up staying there
+for over 17 years, worked
+
+00:02:24.650 --> 00:02:29.790 align:middle line:84%
+as various trading and trading
+management roles globally,
+
+00:02:29.790 --> 00:02:32.450 align:middle line:90%
+got sent around the globe.
+
+00:02:32.450 --> 00:02:37.530 align:middle line:84%
+That's where I
+worked with Vasili.
+
+00:02:37.530 --> 00:02:43.770 align:middle line:84%
+And in 2013-- that was the
+year when we first recorded
+
+00:02:43.770 --> 00:02:47.890 align:middle line:84%
+our OpenCourseWare
+video for this class--
+
+00:02:47.890 --> 00:02:52.010 align:middle line:84%
+I actually switched my
+job from Morgan Stanley
+
+00:02:52.010 --> 00:02:55.010 align:middle line:84%
+to Harvard Management
+Company, which
+
+00:02:55.010 --> 00:03:00.260 align:middle line:84%
+is the entity that manages
+Harvard University's endowment.
+
+00:03:00.260 --> 00:03:03.820 align:middle line:84%
+I joined as the
+chief risk officer
+
+00:03:03.820 --> 00:03:08.540 align:middle line:84%
+to oversee risk management
+and also capital allocation.
+
+00:03:08.540 --> 00:03:15.460 align:middle line:84%
+That's when, back then, we had
+many internal fund managers
+
+00:03:15.460 --> 00:03:17.900 align:middle line:90%
+doing various strategies.
+
+00:03:17.900 --> 00:03:23.040 align:middle line:84%
+We, since then, changed our
+model, about 7 years ago,
+
+00:03:23.040 --> 00:03:28.140 align:middle line:84%
+7 or 8 years ago, to focus on
+investing with external funds.
+
+00:03:28.140 --> 00:03:32.800 align:middle line:84%
+I subsequently also
+switched my focus full time,
+
+00:03:32.800 --> 00:03:36.100 align:middle line:84%
+focusing on
+investing and finding
+
+00:03:36.100 --> 00:03:38.500 align:middle line:90%
+the right funds and managers.
+
+00:03:38.500 --> 00:03:40.480 align:middle line:84%
+I'll tell you a bit
+more about that.
+
+00:03:40.480 --> 00:03:43.300 align:middle line:90%
+But I will save that for later.
+
+00:03:43.300 --> 00:03:46.580 align:middle line:90%
+So that's basically about me.
+
+00:03:46.580 --> 00:03:49.220 align:middle line:84%
+So I'll tell you a
+bit about the class.
+
+00:03:49.220 --> 00:03:57.070 align:middle line:84%
+So back, I want to say, maybe
+14 or 15 years ago, when
+
+00:03:57.070 --> 00:04:00.170 align:middle line:84%
+Vasili and I were working
+together at Morgan Stanley,
+
+00:04:00.170 --> 00:04:04.710 align:middle line:84%
+we came to MIT to
+recruit quite often.
+
+00:04:04.710 --> 00:04:07.290 align:middle line:84%
+And Vasili was from
+the math department.
+
+00:04:07.290 --> 00:04:09.310 align:middle line:90%
+I was from Core 6.
+
+00:04:09.310 --> 00:04:14.030 align:middle line:84%
+So we met a lot of
+really bright students
+
+00:04:14.030 --> 00:04:16.149 align:middle line:90%
+with quantitative background.
+
+00:04:16.149 --> 00:04:19.589 align:middle line:84%
+But they don't really
+know much about finance.
+
+00:04:19.589 --> 00:04:23.110 align:middle line:84%
+And they ask many
+good questions.
+
+00:04:23.110 --> 00:04:25.750 align:middle line:84%
+So we just felt like,
+in a half an hour
+
+00:04:25.750 --> 00:04:30.710 align:middle line:84%
+or one hour interview time slot,
+it's simply not enough for us
+
+00:04:30.710 --> 00:04:34.510 align:middle line:84%
+to answer all the questions
+or get to know the students.
+
+00:04:34.510 --> 00:04:36.590 align:middle line:84%
+So we figured maybe
+the best way is
+
+00:04:36.590 --> 00:04:41.310 align:middle line:84%
+to have a seminar to tell
+the students more about how
+
+00:04:41.310 --> 00:04:44.670 align:middle line:90%
+math is used in finance.
+
+00:04:44.670 --> 00:04:49.110 align:middle line:84%
+So one seminar lecture actually
+got expanded to the whole term.
+
+00:04:49.110 --> 00:04:52.950 align:middle line:84%
+And so we invited
+different practitioners
+
+00:04:52.950 --> 00:04:57.570 align:middle line:84%
+talking about how methods being
+applied in different fields,
+
+00:04:57.570 --> 00:05:01.630 align:middle line:84%
+solving different problems
+that the class actually
+
+00:05:01.630 --> 00:05:03.550 align:middle line:90%
+got very popular.
+
+00:05:03.550 --> 00:05:05.430 align:middle line:84%
+I mean, one of
+the first classes,
+
+00:05:05.430 --> 00:05:07.990 align:middle line:84%
+we've got students sit
+on the floor everywhere.
+
+00:05:07.990 --> 00:05:11.470 align:middle line:84%
+They want to know
+about should they
+
+00:05:11.470 --> 00:05:15.230 align:middle line:84%
+pursue a career in
+quantitative finance?
+
+00:05:15.230 --> 00:05:19.870 align:middle line:84%
+So the math department
+was very supportive.
+
+00:05:19.870 --> 00:05:23.910 align:middle line:84%
+And so we teamed up with
+Peter the following year
+
+00:05:23.910 --> 00:05:27.590 align:middle line:84%
+to offer half of the
+lectures in actually math
+
+00:05:27.590 --> 00:05:31.030 align:middle line:84%
+to fill up all the
+background knowledge,
+
+00:05:31.030 --> 00:05:35.750 align:middle line:84%
+and then kept the half
+of the class talking
+
+00:05:35.750 --> 00:05:38.190 align:middle line:90%
+about application cases.
+
+00:05:38.190 --> 00:05:42.150 align:middle line:84%
+We even had field trips taking
+all the students to New York,
+
+00:05:42.150 --> 00:05:45.710 align:middle line:84%
+touring the trading
+floor of Morgan Stanley.
+
+00:05:45.710 --> 00:05:47.590 align:middle line:90%
+We did that for a few years.
+
+00:05:47.590 --> 00:05:51.650 align:middle line:90%
+And we had various fun.
+
+00:05:51.650 --> 00:05:55.180 align:middle line:84%
+And some students really
+ended up working in New York.
+
+00:05:55.180 --> 00:05:59.440 align:middle line:84%
+Some of them are still
+there in various jobs.
+
+00:05:59.440 --> 00:06:02.680 align:middle line:84%
+So that's how this
+class came about.
+
+00:06:02.680 --> 00:06:06.000 align:middle line:84%
+So let me turn the
+table around, asking you
+
+00:06:06.000 --> 00:06:07.680 align:middle line:90%
+a few quick questions.
+
+00:06:07.680 --> 00:06:09.100 align:middle line:84%
+You don't have to
+state your name.
+
+00:06:09.100 --> 00:06:10.060 align:middle line:90%
+Just raise your hands.
+
+00:06:10.060 --> 00:06:10.840 align:middle line:90%
+It's fine.
+
+00:06:10.840 --> 00:06:14.680 align:middle line:84%
+How many of you have watched
+our OpenCourseWare recording
+
+00:06:14.680 --> 00:06:17.480 align:middle line:90%
+from 2013?
+
+00:06:17.480 --> 00:06:18.340 align:middle line:90%
+Oh, great.
+
+00:06:18.340 --> 00:06:20.980 align:middle line:90%
+Yeah, I see five or six hands.
+
+00:06:20.980 --> 00:06:25.320 align:middle line:84%
+So you knew something
+about this class.
+
+00:06:25.320 --> 00:06:29.960 align:middle line:84%
+How many of you have
+done internship jobs
+
+00:06:29.960 --> 00:06:33.560 align:middle line:90%
+at the financial firm?
+
+00:06:33.560 --> 00:06:34.480 align:middle line:90%
+A third.
+
+00:06:34.480 --> 00:06:36.080 align:middle line:90%
+OK.
+
+00:06:36.080 --> 00:06:39.480 align:middle line:90%
+How many of you are math majors?
+
+00:06:39.480 --> 00:06:40.840 align:middle line:90%
+Most of you.
+
+00:06:40.840 --> 00:06:44.360 align:middle line:84%
+How many of you are
+graduate students?
+
+00:06:44.360 --> 00:06:46.160 align:middle line:90%
+OK, a few.
+
+00:06:46.160 --> 00:06:48.700 align:middle line:84%
+How many of you actually
+are outside MIT?
+
+00:06:48.700 --> 00:06:50.360 align:middle line:90%
+Because we have-- OK, great.
+
+00:06:50.360 --> 00:06:52.640 align:middle line:84%
+I want to welcome
+all the students that
+
+00:06:52.640 --> 00:06:57.050 align:middle line:84%
+came from cross registration
+or sit-in from other schools.
+
+00:06:57.050 --> 00:07:00.670 align:middle line:84%
+We always have a few
+from other schools.
+
+00:07:00.670 --> 00:07:02.110 align:middle line:90%
+So you're very welcome.
+
+00:07:02.110 --> 00:07:06.190 align:middle line:84%
+If you're unfamiliar with
+some of the MIT systems,
+
+00:07:06.190 --> 00:07:10.130 align:middle line:84%
+please feel free
+to seek for help.
+
+00:07:10.130 --> 00:07:13.110 align:middle line:84%
+So that's all about
+the introduction.
+
+00:07:13.110 --> 00:07:17.570 align:middle line:84%
+So let me get into the actual
+content for this lecture.
+
+00:07:17.570 --> 00:07:20.850 align:middle line:84%
+So as I said, the purpose
+of this first lecture
+
+00:07:20.850 --> 00:07:22.710 align:middle line:84%
+is to give you some
+background information.
+
+00:07:22.710 --> 00:07:27.080 align:middle line:84%
+I realize some of you already
+have done intern jobs.
+
+00:07:27.080 --> 00:07:29.210 align:middle line:90%
+So you know quite a bit.
+
+00:07:29.210 --> 00:07:34.010 align:middle line:84%
+But I want to also be
+sensitive to the students who
+
+00:07:34.010 --> 00:07:38.690 align:middle line:84%
+have actually not done
+the internship positions.
+
+00:07:38.690 --> 00:07:41.370 align:middle line:84%
+And I can give you
+some basic knowledge.
+
+00:07:41.370 --> 00:07:44.530 align:middle line:90%
+And I give you one example.
+
+00:07:44.530 --> 00:07:49.632 align:middle line:84%
+One of the first years when we
+had this class, so there were
+
+00:07:49.632 --> 00:07:51.090 align:middle line:84%
+some students didn't
+even know what
+
+00:07:51.090 --> 00:07:53.920 align:middle line:90%
+a stock is, what a stock was.
+
+00:07:53.920 --> 00:07:58.700 align:middle line:84%
+So you shouldn't feel bad
+if you have no knowledge
+
+00:07:58.700 --> 00:08:00.660 align:middle line:90%
+about the financial markets.
+
+00:08:00.660 --> 00:08:04.260 align:middle line:84%
+We will make sure you
+have plenty of knowledge
+
+00:08:04.260 --> 00:08:07.630 align:middle line:84%
+when you finish the
+class in December.
+
+00:08:07.630 --> 00:08:11.200 align:middle line:90%
+
+
+00:08:11.200 --> 00:08:17.580 align:middle line:84%
+So what is finance or
+financial markets about?
+
+00:08:17.580 --> 00:08:23.900 align:middle line:84%
+It's really about-- there
+is a market of exchanges
+
+00:08:23.900 --> 00:08:25.660 align:middle line:90%
+in the original form.
+
+00:08:25.660 --> 00:08:31.220 align:middle line:84%
+People come to the market, at
+the village, exchanging goods.
+
+00:08:31.220 --> 00:08:32.919 align:middle line:90%
+You have something.
+
+00:08:32.919 --> 00:08:34.080 align:middle line:90%
+I don't have something.
+
+00:08:34.080 --> 00:08:35.299 align:middle line:90%
+I need something.
+
+00:08:35.299 --> 00:08:37.260 align:middle line:90%
+So let's exchange.
+
+00:08:37.260 --> 00:08:42.980 align:middle line:84%
+So the Stock Exchange was
+formed with the same idea.
+
+00:08:42.980 --> 00:08:47.460 align:middle line:84%
+So some buyers want to
+own equity of a company.
+
+00:08:47.460 --> 00:08:49.300 align:middle line:90%
+I'll explain what equity is.
+
+00:08:49.300 --> 00:08:54.420 align:middle line:84%
+Equity is basically ownership
+of a company, meaning stocks.
+
+00:08:54.420 --> 00:08:58.700 align:middle line:84%
+And they centralize
+all the trading
+
+00:08:58.700 --> 00:09:02.340 align:middle line:84%
+of these stocks at
+a particular place.
+
+00:09:02.340 --> 00:09:03.820 align:middle line:90%
+These are exchanges.
+
+00:09:03.820 --> 00:09:06.540 align:middle line:84%
+Many cities, large
+financial centers,
+
+00:09:06.540 --> 00:09:09.740 align:middle line:90%
+have different exchanges.
+
+00:09:09.740 --> 00:09:14.100 align:middle line:84%
+And in the last few decades,
+that also has changed.
+
+00:09:14.100 --> 00:09:16.940 align:middle line:90%
+It's no longer that centralized.
+
+00:09:16.940 --> 00:09:21.700 align:middle line:84%
+So people do a lot of
+over-the-counter, OTC, trading.
+
+00:09:21.700 --> 00:09:25.400 align:middle line:84%
+So it's trade by appointment,
+trade by arrangement,
+
+00:09:25.400 --> 00:09:26.800 align:middle line:90%
+trade by contract.
+
+00:09:26.800 --> 00:09:30.860 align:middle line:84%
+So you don't have to go
+to a centralized exchange
+
+00:09:30.860 --> 00:09:34.180 align:middle line:90%
+to finish a trade.
+
+00:09:34.180 --> 00:09:38.580 align:middle line:84%
+Or there are electronic
+communication networks, or ECNs.
+
+00:09:38.580 --> 00:09:41.340 align:middle line:84%
+You can do that
+simply electronically.
+
+00:09:41.340 --> 00:09:45.980 align:middle line:84%
+I mean, they also act as
+distributed exchanges.
+
+00:09:45.980 --> 00:09:51.430 align:middle line:84%
+So these are the major
+platforms of markets.
+
+00:09:51.430 --> 00:09:54.070 align:middle line:84%
+So what are the products
+people actually are
+
+00:09:54.070 --> 00:09:56.670 align:middle line:90%
+trading or exchanging hands?
+
+00:09:56.670 --> 00:09:59.710 align:middle line:90%
+First is simply money.
+
+00:09:59.710 --> 00:10:02.250 align:middle line:90%
+So Peter mentioned Bitcoin.
+
+00:10:02.250 --> 00:10:05.470 align:middle line:84%
+Bitcoin is actually kind
+of a form of money--
+
+00:10:05.470 --> 00:10:09.550 align:middle line:84%
+not the fiat form,
+but different forms.
+
+00:10:09.550 --> 00:10:17.150 align:middle line:84%
+But originally, gold, or metal,
+or paper money, or coins,
+
+00:10:17.150 --> 00:10:22.470 align:middle line:84%
+but now different currencies
+issued by different governments.
+
+00:10:22.470 --> 00:10:29.190 align:middle line:84%
+Those were basically the first
+way of-- first essential product
+
+00:10:29.190 --> 00:10:31.550 align:middle line:90%
+to trade with.
+
+00:10:31.550 --> 00:10:35.810 align:middle line:84%
+Then you always hear
+about the stock market.
+
+00:10:35.810 --> 00:10:39.450 align:middle line:84%
+Stock market represents
+ownership of companies.
+
+00:10:39.450 --> 00:10:46.350 align:middle line:84%
+Peter mentioned NVIDIA stock
+going up rapidly because people
+
+00:10:46.350 --> 00:10:50.280 align:middle line:84%
+bet on AI applications,
+the demand for GPU chips,
+
+00:10:50.280 --> 00:10:52.760 align:middle line:90%
+and so on, data centers.
+
+00:10:52.760 --> 00:10:57.480 align:middle line:84%
+So to get ownership of a
+company, you buy stocks.
+
+00:10:57.480 --> 00:11:01.920 align:middle line:84%
+I mean, also, you can
+buy equity indices,
+
+00:11:01.920 --> 00:11:05.080 align:middle line:90%
+meaning a basket of stocks.
+
+00:11:05.080 --> 00:11:10.030 align:middle line:84%
+So you probably have
+heard of S&P 500.
+
+00:11:10.030 --> 00:11:16.600 align:middle line:84%
+So Standard & Poor's 500
+is essentially five largest
+
+00:11:16.600 --> 00:11:20.600 align:middle line:90%
+companies here.
+
+00:11:20.600 --> 00:11:25.400 align:middle line:84%
+So you can get exposure not
+to just simply one company,
+
+00:11:25.400 --> 00:11:29.880 align:middle line:84%
+you can get exposure to many
+of them at the same time.
+
+00:11:29.880 --> 00:11:33.080 align:middle line:90%
+These are the ideas of index.
+
+00:11:33.080 --> 00:11:40.120 align:middle line:84%
+Or they can have different
+forms of that traded in ETF,
+
+00:11:40.120 --> 00:11:43.920 align:middle line:84%
+exchange traded funds,
+also representing often
+
+00:11:43.920 --> 00:11:47.480 align:middle line:90%
+a basket of different stocks.
+
+00:11:47.480 --> 00:11:53.440 align:middle line:84%
+And there are also
+two tiers of markets.
+
+00:11:53.440 --> 00:11:59.000 align:middle line:84%
+So the exchange traded stocks
+is called the listed stocks.
+
+00:11:59.000 --> 00:12:01.080 align:middle line:84%
+So they have to go
+through a process called
+
+00:12:01.080 --> 00:12:07.870 align:middle line:84%
+IPO, initial public offering, to
+become listed on the exchange.
+
+00:12:07.870 --> 00:12:10.440 align:middle line:90%
+
+
+00:12:10.440 --> 00:12:13.840 align:middle line:84%
+But that's called
+the primary process
+
+00:12:13.840 --> 00:12:18.160 align:middle line:84%
+to go from a private company
+to become a public company,
+
+00:12:18.160 --> 00:12:20.680 align:middle line:90%
+have stocks freely traded.
+
+00:12:20.680 --> 00:12:22.380 align:middle line:84%
+There are also
+private companies,
+
+00:12:22.380 --> 00:12:23.760 align:middle line:90%
+which I'll get into later.
+
+00:12:23.760 --> 00:12:27.160 align:middle line:84%
+But after it
+becomes listed, it's
+
+00:12:27.160 --> 00:12:29.260 align:middle line:90%
+traded by many other people.
+
+00:12:29.260 --> 00:12:31.480 align:middle line:84%
+So it's called the
+secondary market.
+
+00:12:31.480 --> 00:12:36.000 align:middle line:84%
+So after primary, getting
+listed, it's a secondary market.
+
+00:12:36.000 --> 00:12:40.960 align:middle line:84%
+So besides the large
+category of equity market,
+
+00:12:40.960 --> 00:12:45.880 align:middle line:84%
+there's also a big category of
+bond or fixed income market.
+
+00:12:45.880 --> 00:12:48.250 align:middle line:90%
+So bond is essentially a loan.
+
+00:12:48.250 --> 00:12:50.370 align:middle line:90%
+It's a securitized loan.
+
+00:12:50.370 --> 00:12:53.410 align:middle line:84%
+So it becomes
+listed and tradable.
+
+00:12:53.410 --> 00:12:58.890 align:middle line:84%
+So the most commonly known
+bond is the US Treasury bond.
+
+00:12:58.890 --> 00:13:05.250 align:middle line:84%
+US government borrows money
+from the investors, us
+
+00:13:05.250 --> 00:13:07.490 align:middle line:90%
+or institutions.
+
+00:13:07.490 --> 00:13:11.450 align:middle line:84%
+They pay interest
+periodically, either quarterly
+
+00:13:11.450 --> 00:13:13.130 align:middle line:90%
+or semiannually.
+
+00:13:13.130 --> 00:13:17.490 align:middle line:84%
+And so the bond issuer
+has an obligation
+
+00:13:17.490 --> 00:13:22.730 align:middle line:84%
+to pay back the whole principal
+amount, or the notional amount,
+
+00:13:22.730 --> 00:13:24.970 align:middle line:90%
+at the end of the maturity.
+
+00:13:24.970 --> 00:13:28.610 align:middle line:84%
+But they can also
+default on that payment,
+
+00:13:28.610 --> 00:13:31.410 align:middle line:84%
+on both the principal
+or the interest.
+
+00:13:31.410 --> 00:13:36.930 align:middle line:84%
+So bond has a credit risk,
+meaning that the issuer may not
+
+00:13:36.930 --> 00:13:38.730 align:middle line:90%
+always pay back.
+
+00:13:38.730 --> 00:13:44.850 align:middle line:84%
+So that involves the exposure
+of the credit of the issuer.
+
+00:13:44.850 --> 00:13:50.780 align:middle line:84%
+So that's basically related to
+a whole bunch of credit related
+
+00:13:50.780 --> 00:13:52.300 align:middle line:90%
+products.
+
+00:13:52.300 --> 00:13:58.540 align:middle line:84%
+And 2008, global
+financial crisis
+
+00:13:58.540 --> 00:14:02.060 align:middle line:84%
+is really a credit
+crisis because that
+
+00:14:02.060 --> 00:14:05.540 align:middle line:90%
+started in the mortgage market.
+
+00:14:05.540 --> 00:14:09.140 align:middle line:84%
+People borrowed money to buy
+houses, but couldn't pay back.
+
+00:14:09.140 --> 00:14:12.660 align:middle line:84%
+And also, these mortgages were
+restructuring the different kind
+
+00:14:12.660 --> 00:14:14.860 align:middle line:90%
+of derivative products.
+
+00:14:14.860 --> 00:14:18.060 align:middle line:90%
+And we'll get into that later.
+
+00:14:18.060 --> 00:14:22.160 align:middle line:84%
+So related to bonds, there's
+an interest rate curve,
+
+00:14:22.160 --> 00:14:24.910 align:middle line:90%
+which is also very important.
+
+00:14:24.910 --> 00:14:28.140 align:middle line:84%
+It depends on
+maturity of the bonds.
+
+00:14:28.140 --> 00:14:33.540 align:middle line:84%
+The interest payment, or the
+coupon, is actually different.
+
+00:14:33.540 --> 00:14:36.220 align:middle line:84%
+If you only borrow
+for three months,
+
+00:14:36.220 --> 00:14:38.060 align:middle line:90%
+you pay certain interest.
+
+00:14:38.060 --> 00:14:41.660 align:middle line:84%
+You borrow for 30 years, you
+pay another interest rate
+
+00:14:41.660 --> 00:14:42.340 align:middle line:90%
+every year.
+
+00:14:42.340 --> 00:14:46.540 align:middle line:84%
+It depends on the curve
+shape of the interest rate,
+
+00:14:46.540 --> 00:14:50.620 align:middle line:84%
+as well as the supply demand
+and the many other factors.
+
+00:14:50.620 --> 00:14:55.660 align:middle line:84%
+The Federal Reserve bank, which
+is the policy bank of the United
+
+00:14:55.660 --> 00:14:59.060 align:middle line:84%
+States, is
+responsible of setting
+
+00:14:59.060 --> 00:15:03.220 align:middle line:84%
+the short term, the
+front-end interest rate
+
+00:15:03.220 --> 00:15:07.300 align:middle line:84%
+to affect the whole
+interest rate curve.
+
+00:15:07.300 --> 00:15:09.286 align:middle line:84%
+I mean, right now,
+as many of you know,
+
+00:15:09.286 --> 00:15:12.420 align:middle line:84%
+the interest rate curve
+is actually inverted.
+
+00:15:12.420 --> 00:15:16.820 align:middle line:84%
+The front-end interest rate is
+higher than the longer maturity,
+
+00:15:16.820 --> 00:15:19.660 align:middle line:90%
+which is not often the case.
+
+00:15:19.660 --> 00:15:23.140 align:middle line:90%
+We can also get into that later.
+
+00:15:23.140 --> 00:15:30.180 align:middle line:84%
+So related to interest rates,
+there are real estate products,
+
+00:15:30.180 --> 00:15:35.260 align:middle line:84%
+as I mentioned, mortgage
+and asset backed securities.
+
+00:15:35.260 --> 00:15:38.060 align:middle line:84%
+And another whole
+category is commodities.
+
+00:15:38.060 --> 00:15:39.540 align:middle line:90%
+I mentioned gold.
+
+00:15:39.540 --> 00:15:41.700 align:middle line:90%
+But there's also crude oil--
+
+00:15:41.700 --> 00:15:43.870 align:middle line:84%
+Peter's example of the
+futures dipping down
+
+00:15:43.870 --> 00:15:48.710 align:middle line:84%
+below $0 and
+agricultural products.
+
+00:15:48.710 --> 00:15:54.090 align:middle line:84%
+Now, we're in the era of
+electrifying everything.
+
+00:15:54.090 --> 00:16:01.950 align:middle line:84%
+Electric vehicles uses a lot of
+copper or lithium for batteries.
+
+00:16:01.950 --> 00:16:06.950 align:middle line:84%
+So those commodities are
+trading rapidly higher
+
+00:16:06.950 --> 00:16:10.390 align:middle line:90%
+and also follows the cycle.
+
+00:16:10.390 --> 00:16:14.690 align:middle line:84%
+So I'm just giving you some
+ideas of the basic products.
+
+00:16:14.690 --> 00:16:17.170 align:middle line:84%
+But on top of all
+these products,
+
+00:16:17.170 --> 00:16:20.290 align:middle line:84%
+you can also have
+derivative products,
+
+00:16:20.290 --> 00:16:26.670 align:middle line:84%
+meaning you can derive
+other contracts of trading.
+
+00:16:26.670 --> 00:16:28.330 align:middle line:90%
+So you can have options.
+
+00:16:28.330 --> 00:16:30.830 align:middle line:84%
+So I don't just buy
+the stock, I want
+
+00:16:30.830 --> 00:16:34.510 align:middle line:84%
+to buy the right to own
+the stock in the future.
+
+00:16:34.510 --> 00:16:36.210 align:middle line:90%
+That is the option.
+
+00:16:36.210 --> 00:16:39.270 align:middle line:84%
+So it's the right, but
+not the obligation.
+
+00:16:39.270 --> 00:16:41.330 align:middle line:84%
+I can also say, I don't
+want to buy it now.
+
+00:16:41.330 --> 00:16:43.800 align:middle line:84%
+I just want to buy
+it a year from now.
+
+00:16:43.800 --> 00:16:46.240 align:middle line:90%
+So that's a forward contract.
+
+00:16:46.240 --> 00:16:50.080 align:middle line:84%
+So I just want to buy
+the stock index futures,
+
+00:16:50.080 --> 00:16:54.480 align:middle line:84%
+which is a very liquid
+and standardized contract.
+
+00:16:54.480 --> 00:16:56.988 align:middle line:84%
+So you can also say,
+I want to do a swap.
+
+00:16:56.988 --> 00:16:58.280 align:middle line:90%
+I don't want really buy things.
+
+00:16:58.280 --> 00:17:00.540 align:middle line:84%
+I want to say I buy
+it from you now.
+
+00:17:00.540 --> 00:17:03.200 align:middle line:84%
+But a month later, I
+sell it back to you.
+
+00:17:03.200 --> 00:17:05.640 align:middle line:90%
+So it's a swap contract.
+
+00:17:05.640 --> 00:17:07.880 align:middle line:84%
+And so there are
+many different ways
+
+00:17:07.880 --> 00:17:13.819 align:middle line:84%
+of structuring a product for
+different purposes and needs.
+
+00:17:13.819 --> 00:17:17.740 align:middle line:84%
+So once you actually
+land on a job like that,
+
+00:17:17.740 --> 00:17:19.099 align:middle line:90%
+you become an expert.
+
+00:17:19.099 --> 00:17:21.960 align:middle line:90%
+Your math will be very useful.
+
+00:17:21.960 --> 00:17:26.760 align:middle line:84%
+So who are the
+players in the market?
+
+00:17:26.760 --> 00:17:31.320 align:middle line:84%
+So typically, they are the
+banks you deposit money with--
+
+00:17:31.320 --> 00:17:34.120 align:middle line:90%
+Bank of America, Chase.
+
+00:17:34.120 --> 00:17:35.500 align:middle line:90%
+They take deposits.
+
+00:17:35.500 --> 00:17:39.520 align:middle line:84%
+They also lend out the
+money to home builders
+
+00:17:39.520 --> 00:17:42.680 align:middle line:90%
+or other commercial projects.
+
+00:17:42.680 --> 00:17:45.140 align:middle line:84%
+They are the investment
+banks where you interview.
+
+00:17:45.140 --> 00:17:47.840 align:middle line:90%
+They come to MIT to recruit--
+
+00:17:47.840 --> 00:17:51.140 align:middle line:84%
+so the Morgan Stanley's, the
+Goldman Sachs, and others,
+
+00:17:51.140 --> 00:17:52.880 align:middle line:90%
+JP Morgan's.
+
+00:17:52.880 --> 00:17:55.800 align:middle line:84%
+JP Morgan was actually
+a commercial bank.
+
+00:17:55.800 --> 00:18:03.240 align:middle line:84%
+But since the termination of
+Glass-Steagall law in 1999,
+
+00:18:03.240 --> 00:18:07.200 align:middle line:84%
+they turned themselves into an
+investment bank-- they turned
+
+00:18:07.200 --> 00:18:11.160 align:middle line:84%
+themselves back into investment
+bank because, many years ago,
+
+00:18:11.160 --> 00:18:16.670 align:middle line:84%
+before 1930, Morgan Stanley
+and JP Morgan were one company.
+
+00:18:16.670 --> 00:18:19.560 align:middle line:90%
+
+
+00:18:19.560 --> 00:18:25.160 align:middle line:84%
+So they have essentially three
+main divisions in the investment
+
+00:18:25.160 --> 00:18:26.640 align:middle line:90%
+banking business.
+
+00:18:26.640 --> 00:18:28.320 align:middle line:90%
+One is called equity.
+
+00:18:28.320 --> 00:18:30.520 align:middle line:84%
+So when you go
+interview, if you're
+
+00:18:30.520 --> 00:18:32.420 align:middle line:84%
+interviewing with the
+equity department,
+
+00:18:32.420 --> 00:18:36.600 align:middle line:84%
+you should know that
+that's to do with stocks.
+
+00:18:36.600 --> 00:18:40.360 align:middle line:84%
+When you're interviewing with
+the fixed income department,
+
+00:18:40.360 --> 00:18:43.250 align:middle line:84%
+you're going to deal
+with bonds, interest rate
+
+00:18:43.250 --> 00:18:47.330 align:middle line:84%
+curves, currencies,
+possibly commodities,
+
+00:18:47.330 --> 00:18:49.130 align:middle line:90%
+and other derivatives.
+
+00:18:49.130 --> 00:18:52.930 align:middle line:84%
+You can also join the so-called
+IBD, investment banking
+
+00:18:52.930 --> 00:18:56.930 align:middle line:84%
+division, which is more
+about corporate finance
+
+00:18:56.930 --> 00:19:01.130 align:middle line:84%
+or raising money, taking a
+company from private to be
+
+00:19:01.130 --> 00:19:04.610 align:middle line:84%
+a listed, public
+company or issuing
+
+00:19:04.610 --> 00:19:06.510 align:middle line:90%
+bonds or some other ways.
+
+00:19:06.510 --> 00:19:12.970 align:middle line:84%
+So they are doing more services,
+and the client relationship
+
+00:19:12.970 --> 00:19:20.050 align:middle line:84%
+planning, and other type of
+investment banking services.
+
+00:19:20.050 --> 00:19:23.710 align:middle line:84%
+So beyond the investment
+banking business of these banks,
+
+00:19:23.710 --> 00:19:26.770 align:middle line:84%
+they usually have asset
+management division.
+
+00:19:26.770 --> 00:19:32.850 align:middle line:84%
+So they produce products,
+such as funds, mutual funds,
+
+00:19:32.850 --> 00:19:36.930 align:middle line:84%
+or other type of
+higher return funds.
+
+00:19:36.930 --> 00:19:40.520 align:middle line:84%
+They also provide wealth
+management services,
+
+00:19:40.520 --> 00:19:45.260 align:middle line:84%
+helping the individual
+or wealthy families
+
+00:19:45.260 --> 00:19:49.140 align:middle line:90%
+to manage their wealth.
+
+00:19:49.140 --> 00:19:53.460 align:middle line:84%
+So outside the banks,
+there are hedge funds.
+
+00:19:53.460 --> 00:19:56.500 align:middle line:84%
+So some of the internships
+must be with some hedge funds.
+
+00:19:56.500 --> 00:20:00.020 align:middle line:84%
+Hedge funds are essentially
+trading entities.
+
+00:20:00.020 --> 00:20:04.420 align:middle line:84%
+So they use their capital
+or the investor's capital
+
+00:20:04.420 --> 00:20:06.443 align:middle line:90%
+to try to generate returns.
+
+00:20:06.443 --> 00:20:07.860 align:middle line:84%
+So by the way, at
+the end of this,
+
+00:20:07.860 --> 00:20:12.700 align:middle line:84%
+I'm going to assign a game to
+all of you, which is related
+
+00:20:12.700 --> 00:20:16.700 align:middle line:90%
+to investing and trading
+
+00:20:16.700 --> 00:20:19.020 align:middle line:84%
+So retail investors,
+so they just
+
+00:20:19.020 --> 00:20:20.800 align:middle line:84%
+simply open a
+brokerage account--
+
+00:20:20.800 --> 00:20:26.100 align:middle line:84%
+and you probably have and
+your parents have-- and trade.
+
+00:20:26.100 --> 00:20:29.100 align:middle line:90%
+Central banks, they involve--
+
+00:20:29.100 --> 00:20:31.660 align:middle line:84%
+they're guiding the
+markets, usually
+
+00:20:31.660 --> 00:20:35.780 align:middle line:84%
+providing liquidity, or
+intervening the currencies,
+
+00:20:35.780 --> 00:20:36.320 align:middle line:90%
+or whatever.
+
+00:20:36.320 --> 00:20:38.430 align:middle line:90%
+They are policy driven.
+
+00:20:38.430 --> 00:20:39.910 align:middle line:90%
+There are corporates.
+
+00:20:39.910 --> 00:20:42.730 align:middle line:84%
+So corporates come in
+mostly for hedging purposes.
+
+00:20:42.730 --> 00:20:49.110 align:middle line:84%
+They want to reduce the exposure
+from the exports or imports.
+
+00:20:49.110 --> 00:20:51.590 align:middle line:84%
+What is the objective
+of all these players
+
+00:20:51.590 --> 00:20:55.230 align:middle line:90%
+involved in the markets?
+
+00:20:55.230 --> 00:20:59.870 align:middle line:84%
+In one sentence, they
+try to maximize the gain
+
+00:20:59.870 --> 00:21:03.910 align:middle line:90%
+while minimizing the losses.
+
+00:21:03.910 --> 00:21:06.590 align:middle line:84%
+Because financial
+markets are uncertain--
+
+00:21:06.590 --> 00:21:10.350 align:middle line:84%
+so you don't know, when
+you initiate a trade,
+
+00:21:10.350 --> 00:21:14.510 align:middle line:84%
+you will end up making
+money or losing money.
+
+00:21:14.510 --> 00:21:17.390 align:middle line:90%
+So investors have the money.
+
+00:21:17.390 --> 00:21:19.950 align:middle line:90%
+They are seeking returns.
+
+00:21:19.950 --> 00:21:25.430 align:middle line:84%
+The borrowers-- or you can
+think about them as managers.
+
+00:21:25.430 --> 00:21:27.390 align:middle line:90%
+They actually need the money.
+
+00:21:27.390 --> 00:21:30.070 align:middle line:90%
+They can take the risk
+
+00:21:30.070 --> 00:21:32.550 align:middle line:84%
+So the trade between the
+lender and the borrower
+
+00:21:32.550 --> 00:21:34.470 align:middle line:84%
+is essentially the
+main driving force
+
+00:21:34.470 --> 00:21:36.830 align:middle line:84%
+of all the financial
+relationships.
+
+00:21:36.830 --> 00:21:39.590 align:middle line:84%
+You can always pair
+them up this way.
+
+00:21:39.590 --> 00:21:43.630 align:middle line:84%
+And another example I'll
+just quickly mention-- you've
+
+00:21:43.630 --> 00:21:46.990 align:middle line:84%
+probably heard the
+terms LP versus GP.
+
+00:21:46.990 --> 00:21:48.770 align:middle line:90%
+LP means limited partners.
+
+00:21:48.770 --> 00:21:51.390 align:middle line:90%
+GP means general partners.
+
+00:21:51.390 --> 00:21:56.470 align:middle line:84%
+Or in simple words,
+it's the investor
+
+00:21:56.470 --> 00:21:58.350 align:middle line:90%
+versus hedge fund manager.
+
+00:21:58.350 --> 00:22:00.270 align:middle line:90%
+It's that relationship.
+
+00:22:00.270 --> 00:22:03.850 align:middle line:84%
+If you one day want
+to raise a hedge fund,
+
+00:22:03.850 --> 00:22:05.890 align:middle line:84%
+you need to deal
+with your investors.
+
+00:22:05.890 --> 00:22:10.670 align:middle line:84%
+So you need to sort out
+these kind of relationships.
+
+00:22:10.670 --> 00:22:17.230 align:middle line:84%
+So the trader types we can
+categorize into the three.
+
+00:22:17.230 --> 00:22:19.150 align:middle line:84%
+One is the hedgers,
+like corporates.
+
+00:22:19.150 --> 00:22:21.150 align:middle line:90%
+They want to reduce risk.
+
+00:22:21.150 --> 00:22:22.890 align:middle line:84%
+And the second is
+the market maker.
+
+00:22:22.890 --> 00:22:26.610 align:middle line:84%
+Like a lot of the
+bank trading desks,
+
+00:22:26.610 --> 00:22:31.270 align:middle line:84%
+they make a buying price,
+a selling price, or bid,
+
+00:22:31.270 --> 00:22:32.910 align:middle line:90%
+or an offer.
+
+00:22:32.910 --> 00:22:37.600 align:middle line:84%
+Their objective is to earn that
+spread, but not to take risk.
+
+00:22:37.600 --> 00:22:40.140 align:middle line:84%
+Every time, they try
+to earn that spread,
+
+00:22:40.140 --> 00:22:43.240 align:middle line:84%
+then quickly flatten
+out the position.
+
+00:22:43.240 --> 00:22:46.080 align:middle line:84%
+The last category
+are the risk seekers,
+
+00:22:46.080 --> 00:22:49.680 align:middle line:84%
+the proprietary traders,
+or the fund managers.
+
+00:22:49.680 --> 00:22:55.320 align:middle line:84%
+So they use their own
+capital to initiate risk.
+
+00:22:55.320 --> 00:23:01.160 align:middle line:84%
+And hopefully, they are
+betting right to make a return.
+
+00:23:01.160 --> 00:23:04.360 align:middle line:84%
+So how is this all
+related to math?
+
+00:23:04.360 --> 00:23:07.440 align:middle line:84%
+Why do you need to
+know all these things?
+
+00:23:07.440 --> 00:23:09.560 align:middle line:84%
+I assume you're in
+this class because you
+
+00:23:09.560 --> 00:23:13.720 align:middle line:84%
+have some interest of
+finding out how math can be
+
+00:23:13.720 --> 00:23:17.480 align:middle line:90%
+used in the financial markets.
+
+00:23:17.480 --> 00:23:20.960 align:middle line:84%
+So the math is used also in
+the three different ways.
+
+00:23:20.960 --> 00:23:25.320 align:middle line:84%
+One is to come up
+with a pricing model,
+
+00:23:25.320 --> 00:23:28.340 align:middle line:84%
+because these instruments,
+especially the derivatives,
+
+00:23:28.340 --> 00:23:32.160 align:middle line:84%
+the options, the
+forwards, the swaps
+
+00:23:32.160 --> 00:23:35.490 align:middle line:90%
+is actually quite complicated.
+
+00:23:35.490 --> 00:23:38.430 align:middle line:84%
+In one of the guest lectures
+later on in the term,
+
+00:23:38.430 --> 00:23:40.690 align:middle line:90%
+you will hear from John Hall.
+
+00:23:40.690 --> 00:23:47.450 align:middle line:84%
+He wrote a textbook many years
+ago on how to price options.
+
+00:23:47.450 --> 00:23:53.690 align:middle line:84%
+Vasili and I probably
+were, back then,
+
+00:23:53.690 --> 00:23:57.650 align:middle line:84%
+hungry readers of those
+books to figure out
+
+00:23:57.650 --> 00:24:00.530 align:middle line:84%
+how differential
+equations can be used.
+
+00:24:00.530 --> 00:24:03.130 align:middle line:84%
+I mean, he was a
+pioneer in this field.
+
+00:24:03.130 --> 00:24:10.010 align:middle line:84%
+And MIT actually is was at
+the frontier of all these
+
+00:24:10.010 --> 00:24:13.010 align:middle line:90%
+innovations back in the '70s.
+
+00:24:13.010 --> 00:24:15.650 align:middle line:84%
+So you probably heard
+the Nobel Prize given
+
+00:24:15.650 --> 00:24:19.770 align:middle line:84%
+in the '90s to the
+Black-Scholes-Merton model.
+
+00:24:19.770 --> 00:24:25.450 align:middle line:84%
+So that was a model using
+mathematics to price options.
+
+00:24:25.450 --> 00:24:31.730 align:middle line:84%
+So they won an economic price,
+Nobel Prize in economics.
+
+00:24:31.730 --> 00:24:34.010 align:middle line:84%
+So that's the
+pricing model side.
+
+00:24:34.010 --> 00:24:36.570 align:middle line:84%
+The second part is
+also very important.
+
+00:24:36.570 --> 00:24:38.530 align:middle line:90%
+It's risk management.
+
+00:24:38.530 --> 00:24:44.290 align:middle line:84%
+I mean, when you take on the
+risk, take on a position,
+
+00:24:44.290 --> 00:24:45.930 align:middle line:84%
+the first question
+you have to decide
+
+00:24:45.930 --> 00:24:49.370 align:middle line:84%
+is how big the
+position should be.
+
+00:24:49.370 --> 00:24:51.690 align:middle line:84%
+So you have a certain
+amount of money.
+
+00:24:51.690 --> 00:24:55.690 align:middle line:84%
+Do you want to put all in
+all your chips on one stock?
+
+00:24:55.690 --> 00:25:00.370 align:middle line:84%
+Or do you want diversify, put
+them into different stocks?
+
+00:25:00.370 --> 00:25:04.810 align:middle line:84%
+Once you put your investment in,
+when do you change your mind?
+
+00:25:04.810 --> 00:25:06.170 align:middle line:90%
+When do you sell?
+
+00:25:06.170 --> 00:25:07.350 align:middle line:90%
+When do you take profit?
+
+00:25:07.350 --> 00:25:09.770 align:middle line:90%
+When do you cut loss?
+
+00:25:09.770 --> 00:25:13.170 align:middle line:90%
+So all the things--
+
+00:25:13.170 --> 00:25:16.450 align:middle line:84%
+your greed, your
+emotions-- will drive you.
+
+00:25:16.450 --> 00:25:22.570 align:middle line:84%
+On one hand, your fear will also
+drive you in other situations.
+
+00:25:22.570 --> 00:25:26.410 align:middle line:84%
+So risk management is actually
+a very quantitative process.
+
+00:25:26.410 --> 00:25:31.490 align:middle line:84%
+You should let math
+speak for that process.
+
+00:25:31.490 --> 00:25:33.740 align:middle line:84%
+The last one is, I
+think, most people
+
+00:25:33.740 --> 00:25:37.420 align:middle line:84%
+are interested in, especially
+sitting in your seats.
+
+00:25:37.420 --> 00:25:42.900 align:middle line:84%
+If you can make a trading
+strategy, perpetual money making
+
+00:25:42.900 --> 00:25:46.900 align:middle line:84%
+machine, using some kind
+of a hidden mathematics,
+
+00:25:46.900 --> 00:25:48.200 align:middle line:90%
+wouldn't that be so cool?
+
+00:25:48.200 --> 00:25:52.800 align:middle line:84%
+You just go to the beach and let
+the machine make money for you.
+
+00:25:52.800 --> 00:25:56.700 align:middle line:84%
+I mean, that's the dream of
+many quantitative managers.
+
+00:25:56.700 --> 00:26:00.300 align:middle line:84%
+And I would say some of
+them are very successful.
+
+00:26:00.300 --> 00:26:02.780 align:middle line:84%
+Some of the funds
+out there, they
+
+00:26:02.780 --> 00:26:06.700 align:middle line:84%
+have achieved amazing
+outcomes using mathematics.
+
+00:26:06.700 --> 00:26:09.820 align:middle line:84%
+But the problem is, once
+they found those secrets,
+
+00:26:09.820 --> 00:26:12.220 align:middle line:90%
+they would never disclose it.
+
+00:26:12.220 --> 00:26:15.540 align:middle line:84%
+And if you join them, they
+will ask you to sign a lifetime
+
+00:26:15.540 --> 00:26:19.100 align:middle line:84%
+non-compete, meaning,
+when you leave the shop,
+
+00:26:19.100 --> 00:26:21.840 align:middle line:84%
+you cannot say a word
+of what you learned.
+
+00:26:21.840 --> 00:26:22.720 align:middle line:90%
+Yeah, go ahead.
+
+00:26:22.720 --> 00:26:24.553 align:middle line:84%
+STUDENT: If you sign a
+lifetime non-compete,
+
+00:26:24.553 --> 00:26:25.970 align:middle line:84%
+don't they have
+to pay settlements
+
+00:26:25.970 --> 00:26:27.360 align:middle line:90%
+when they fire you ultimately?
+
+00:26:27.360 --> 00:26:27.943 align:middle line:90%
+JAKE XIA: Yes.
+
+00:26:27.943 --> 00:26:28.980 align:middle line:90%
+STUDENT: For a lifetime?
+
+00:26:28.980 --> 00:26:31.000 align:middle line:84%
+JAKE XIA: Not a
+lifetime, unfortunately.
+
+00:26:31.000 --> 00:26:33.890 align:middle line:84%
+Yeah, so we're not going
+to get into that for this.
+
+00:26:33.890 --> 00:26:36.960 align:middle line:84%
+Yeah, but first step, you
+have to find those secrets.
+
+00:26:36.960 --> 00:26:41.870 align:middle line:90%
+
+
+00:26:41.870 --> 00:26:43.770 align:middle line:84%
+So how do you find
+those secrets?
+
+00:26:43.770 --> 00:26:47.470 align:middle line:84%
+So people say, OK, why don't
+you just look at the data,
+
+00:26:47.470 --> 00:26:52.150 align:middle line:84%
+learn from the historical
+patterns, then extrapolate them?
+
+00:26:52.150 --> 00:26:57.870 align:middle line:84%
+The efficient market theory
+says that's not possible.
+
+00:26:57.870 --> 00:27:02.090 align:middle line:84%
+If there is such thing in $100
+bills lying on the ground,
+
+00:27:02.090 --> 00:27:05.590 align:middle line:84%
+they will already have been
+picked up a long time ago.
+
+00:27:05.590 --> 00:27:10.510 align:middle line:84%
+Why would that secret be
+waiting for you to uncover?
+
+00:27:10.510 --> 00:27:13.310 align:middle line:84%
+There are many smart
+people before you.
+
+00:27:13.310 --> 00:27:15.430 align:middle line:84%
+The behavioral
+finance theory says,
+
+00:27:15.430 --> 00:27:19.750 align:middle line:84%
+oh, wait a second, because
+people are not totally rational.
+
+00:27:19.750 --> 00:27:22.810 align:middle line:84%
+Under certain situations,
+we're not thinking rationally.
+
+00:27:22.810 --> 00:27:25.830 align:middle line:84%
+That's why we're providing
+these opportunities for others
+
+00:27:25.830 --> 00:27:27.590 align:middle line:90%
+to explore.
+
+00:27:27.590 --> 00:27:29.280 align:middle line:90%
+Is this a zero sum game?
+
+00:27:29.280 --> 00:27:32.510 align:middle line:90%
+
+
+00:27:32.510 --> 00:27:37.710 align:middle line:84%
+So I'm getting into now
+investment strategies.
+
+00:27:37.710 --> 00:27:40.830 align:middle line:84%
+I'm not, of course, telling
+you all the secrets.
+
+00:27:40.830 --> 00:27:44.070 align:middle line:84%
+But I'm laying all
+the steps for you
+
+00:27:44.070 --> 00:27:46.990 align:middle line:84%
+to think about what
+you should focus on.
+
+00:27:46.990 --> 00:27:49.950 align:middle line:84%
+So firstly, you
+should focus on, do
+
+00:27:49.950 --> 00:27:51.370 align:middle line:90%
+you want to do this by yourself?
+
+00:27:51.370 --> 00:27:53.830 align:middle line:84%
+Or do you want to hire other
+people to do it for you?
+
+00:27:53.830 --> 00:27:57.910 align:middle line:84%
+So this is the direct versus
+investing in other people's
+
+00:27:57.910 --> 00:28:01.110 align:middle line:90%
+funds or fund of funds.
+
+00:28:01.110 --> 00:28:04.850 align:middle line:84%
+Do you want to focus on
+publicly traded markets?
+
+00:28:04.850 --> 00:28:08.710 align:middle line:84%
+As I said, all these things--
+stocks, bonds, currencies.
+
+00:28:08.710 --> 00:28:12.610 align:middle line:84%
+Or you probably interviewed
+or heard venture capital,
+
+00:28:12.610 --> 00:28:17.150 align:middle line:84%
+private equity, buyouts, real
+estate funds, natural resource
+
+00:28:17.150 --> 00:28:18.030 align:middle line:90%
+funds.
+
+00:28:18.030 --> 00:28:20.290 align:middle line:84%
+I mean, they're
+not so transparent.
+
+00:28:20.290 --> 00:28:23.550 align:middle line:84%
+But they seem to make
+a lot of returns, too.
+
+00:28:23.550 --> 00:28:24.490 align:middle line:90%
+You need to pick.
+
+00:28:24.490 --> 00:28:28.270 align:middle line:84%
+These are two very
+different markets.
+
+00:28:28.270 --> 00:28:31.440 align:middle line:90%
+Also, passive versus active.
+
+00:28:31.440 --> 00:28:36.040 align:middle line:84%
+Do you want to do the stock
+picking, selecting the stocks?
+
+00:28:36.040 --> 00:28:38.920 align:middle line:84%
+Or do you just want
+to buy the index?
+
+00:28:38.920 --> 00:28:41.840 align:middle line:84%
+Buying S&P 500 in
+the last 10 years
+
+00:28:41.840 --> 00:28:44.680 align:middle line:84%
+would have done very
+well and beating
+
+00:28:44.680 --> 00:28:47.640 align:middle line:90%
+most of the fund managers.
+
+00:28:47.640 --> 00:28:52.970 align:middle line:84%
+So why shouldn't you
+just do the passive?
+
+00:28:52.970 --> 00:28:56.000 align:middle line:90%
+
+
+00:28:56.000 --> 00:28:59.280 align:middle line:84%
+Also, systematic
+versus discretionary.
+
+00:28:59.280 --> 00:29:00.920 align:middle line:84%
+Do you want to make
+decisions based
+
+00:29:00.920 --> 00:29:04.840 align:middle line:84%
+on some systematic or
+quantitative rules or models?
+
+00:29:04.840 --> 00:29:08.320 align:middle line:84%
+Or every time, do you want to
+make a decision by yourself
+
+00:29:08.320 --> 00:29:11.920 align:middle line:90%
+using your human brain?
+
+00:29:11.920 --> 00:29:16.720 align:middle line:84%
+Do you even you want to follow
+the quantitative model using
+
+00:29:16.720 --> 00:29:18.120 align:middle line:90%
+math?
+
+00:29:18.120 --> 00:29:21.680 align:middle line:84%
+Do you want to look for
+statistical patterns
+
+00:29:21.680 --> 00:29:25.320 align:middle line:84%
+or some deterministic
+relationships?
+
+00:29:25.320 --> 00:29:29.210 align:middle line:84%
+Deterministic relationships,
+like a lot of physics.
+
+00:29:29.210 --> 00:29:34.450 align:middle line:84%
+If A plus B, you will get
+C But in statistics, you
+
+00:29:34.450 --> 00:29:38.130 align:middle line:84%
+will have a probability
+of getting C.
+
+00:29:38.130 --> 00:29:43.170 align:middle line:84%
+So I would say, nowadays,
+finding deterministic arbitrage
+
+00:29:43.170 --> 00:29:46.090 align:middle line:84%
+or trading strategies
+is very hard.
+
+00:29:46.090 --> 00:29:50.330 align:middle line:84%
+Those $100 bills have
+definitely been picked up.
+
+00:29:50.330 --> 00:29:53.690 align:middle line:84%
+But sometimes,
+they still show up.
+
+00:29:53.690 --> 00:29:59.210 align:middle line:84%
+Do you want to train
+following or mean reversion?
+
+00:29:59.210 --> 00:30:03.010 align:middle line:84%
+That means, when market goes
+up, do you want to buy more?
+
+00:30:03.010 --> 00:30:04.990 align:middle line:84%
+Or market goes up,
+do you want to sell?
+
+00:30:04.990 --> 00:30:10.210 align:middle line:84%
+You play the contrarian
+or you buy the dip.
+
+00:30:10.210 --> 00:30:14.690 align:middle line:84%
+Do you want to focus on short
+term or you focus on long term?
+
+00:30:14.690 --> 00:30:17.170 align:middle line:84%
+Short term, you're
+trading very fast
+
+00:30:17.170 --> 00:30:19.630 align:middle line:90%
+and you're trading the liquid.
+
+00:30:19.630 --> 00:30:22.050 align:middle line:90%
+You can change your mind easily.
+
+00:30:22.050 --> 00:30:26.030 align:middle line:84%
+Or you make your
+decisions very slowly.
+
+00:30:26.030 --> 00:30:27.700 align:middle line:90%
+You take your time.
+
+00:30:27.700 --> 00:30:32.180 align:middle line:84%
+I mean, the start up companies
+you invest with your venture
+
+00:30:32.180 --> 00:30:35.300 align:middle line:84%
+capital may take 10 years to
+find out if it's successful
+
+00:30:35.300 --> 00:30:37.860 align:middle line:90%
+or not.
+
+00:30:37.860 --> 00:30:41.420 align:middle line:84%
+Do you want to be a Warren
+Buffett, like value investor?
+
+00:30:41.420 --> 00:30:44.420 align:middle line:84%
+You look at the
+current price should
+
+00:30:44.420 --> 00:30:47.340 align:middle line:90%
+be much lower than its value.
+
+00:30:47.340 --> 00:30:50.500 align:middle line:84%
+Or you focus on the
+growth of the company.
+
+00:30:50.500 --> 00:30:54.740 align:middle line:84%
+You project NVIDIA'S future
+income for the next 10 years.
+
+00:30:54.740 --> 00:30:57.740 align:middle line:84%
+As long as the
+future value is going
+
+00:30:57.740 --> 00:31:03.060 align:middle line:84%
+to be greater than the current
+value, you can invest in it.
+
+00:31:03.060 --> 00:31:05.280 align:middle line:84%
+I would say, in
+the last few years,
+
+00:31:05.280 --> 00:31:06.820 align:middle line:84%
+more and more
+people are focusing
+
+00:31:06.820 --> 00:31:09.300 align:middle line:90%
+on growth rather than value.
+
+00:31:09.300 --> 00:31:11.460 align:middle line:90%
+You need to figure out why.
+
+00:31:11.460 --> 00:31:16.040 align:middle line:90%
+And history versus future.
+
+00:31:16.040 --> 00:31:18.980 align:middle line:84%
+Do you believe history
+will repeat itself,
+
+00:31:18.980 --> 00:31:21.780 align:middle line:90%
+so you follow the patterns?
+
+00:31:21.780 --> 00:31:28.700 align:middle line:84%
+Or you actually don't simply
+extrapolate into the future.
+
+00:31:28.700 --> 00:31:32.540 align:middle line:84%
+The key is you need to
+understand your own objectives.
+
+00:31:32.540 --> 00:31:35.680 align:middle line:84%
+So your objective is
+to maximize your gain
+
+00:31:35.680 --> 00:31:38.460 align:middle line:90%
+versus minimizing your loss.
+
+00:31:38.460 --> 00:31:42.540 align:middle line:90%
+But that's not all of it.
+
+00:31:42.540 --> 00:31:48.180 align:middle line:84%
+You need to understand
+why do you need the money.
+
+00:31:48.180 --> 00:31:49.700 align:middle line:90%
+What's it for?
+
+00:31:49.700 --> 00:31:52.340 align:middle line:90%
+How much can you afford to lose?
+
+00:31:52.340 --> 00:31:55.900 align:middle line:84%
+How much are you going
+to spend every year?
+
+00:31:55.900 --> 00:32:01.300 align:middle line:84%
+And your life horizon of
+income versus spending, this
+
+00:32:01.300 --> 00:32:03.860 align:middle line:84%
+is a whole set of
+investment objectives
+
+00:32:03.860 --> 00:32:06.220 align:middle line:84%
+you need to understand
+about yourself.
+
+00:32:06.220 --> 00:32:10.380 align:middle line:84%
+Then you need to pick
+an area you're the best.
+
+00:32:10.380 --> 00:32:13.420 align:middle line:84%
+You have an edge over
+the rest of the market.
+
+00:32:13.420 --> 00:32:16.000 align:middle line:84%
+You need to understand
+why you should make money.
+
+00:32:16.000 --> 00:32:18.380 align:middle line:84%
+Other people should
+give you the money.
+
+00:32:18.380 --> 00:32:21.880 align:middle line:84%
+And you need to find a
+suitable strategy for you.
+
+00:32:21.880 --> 00:32:26.210 align:middle line:84%
+Ultimately, if math
+is your strength,
+
+00:32:26.210 --> 00:32:28.570 align:middle line:90%
+you need to make math your edge.
+
+00:32:28.570 --> 00:32:31.190 align:middle line:90%
+
+
+00:32:31.190 --> 00:32:31.830 align:middle line:90%
+OK.
+
+00:32:31.830 --> 00:32:36.470 align:middle line:84%
+For that, I'm going to quickly
+talk about the trading game.
+
+00:32:36.470 --> 00:32:38.990 align:middle line:90%
+Then I will pass on to Vasili.
+
+00:32:38.990 --> 00:32:43.870 align:middle line:84%
+So this game is about, for
+every single one of you,
+
+00:32:43.870 --> 00:32:50.470 align:middle line:84%
+to pick a stock or ETF, exchange
+traded funds, just traded
+
+00:32:50.470 --> 00:32:55.090 align:middle line:84%
+like stock, or bonds,
+or whatever only to buy.
+
+00:32:55.090 --> 00:32:57.050 align:middle line:84%
+So I know some of you
+are more sophisticated.
+
+00:32:57.050 --> 00:32:58.230 align:middle line:90%
+So can I short?
+
+00:32:58.230 --> 00:33:04.150 align:middle line:84%
+If you want to go short, you
+buy the short-related ETF.
+
+00:33:04.150 --> 00:33:06.590 align:middle line:90%
+So pick one stock.
+
+00:33:06.590 --> 00:33:09.210 align:middle line:84%
+You are hypothetically
+given $10,000.
+
+00:33:09.210 --> 00:33:11.650 align:middle line:84%
+Everyone has $10,000,
+each one of you.
+
+00:33:11.650 --> 00:33:14.350 align:middle line:90%
+
+
+00:33:14.350 --> 00:33:15.650 align:middle line:90%
+You need to let us know.
+
+00:33:15.650 --> 00:33:17.990 align:middle line:90%
+Email us your selection.
+
+00:33:17.990 --> 00:33:19.950 align:middle line:90%
+You pick only one thing.
+
+00:33:19.950 --> 00:33:23.390 align:middle line:84%
+You let us know
+before September 14.
+
+00:33:23.390 --> 00:33:25.900 align:middle line:84%
+And we're going to give you
+the slide on the website.
+
+00:33:25.900 --> 00:33:27.480 align:middle line:90%
+So don't worry.
+
+00:33:27.480 --> 00:33:33.440 align:middle line:84%
+The price you buy is at the
+close of Friday of September 13.
+
+00:33:33.440 --> 00:33:35.720 align:middle line:84%
+The price you sell
+is automatically
+
+00:33:35.720 --> 00:33:41.600 align:middle line:84%
+set on Friday, November 15,
+so about a two-month period.
+
+00:33:41.600 --> 00:33:44.840 align:middle line:84%
+So you need to track on the
+spreadsheet how many shares you
+
+00:33:44.840 --> 00:33:45.620 align:middle line:90%
+have bought.
+
+00:33:45.620 --> 00:33:47.880 align:middle line:90%
+That's easy. $10,000, right?
+
+00:33:47.880 --> 00:33:53.360 align:middle line:84%
+You just convert into shares
+divided by per share price.
+
+00:33:53.360 --> 00:33:58.220 align:middle line:84%
+And your daily profit and
+loss in dollar and percentage,
+
+00:33:58.220 --> 00:34:02.540 align:middle line:84%
+that gives you a practice of
+how to track your position.
+
+00:34:02.540 --> 00:34:06.360 align:middle line:84%
+Every day, there's a
+P&L, profit and loss.
+
+00:34:06.360 --> 00:34:09.239 align:middle line:84%
+At the end of the
+close on November 15,
+
+00:34:09.239 --> 00:34:13.120 align:middle line:84%
+calculate the total
+loss or profit.
+
+00:34:13.120 --> 00:34:16.800 align:middle line:84%
+And also, I want you to do
+one calculation to sum up
+
+00:34:16.800 --> 00:34:21.760 align:middle line:84%
+all the daily gains
+on one side, called G,
+
+00:34:21.760 --> 00:34:26.800 align:middle line:84%
+and sum up all the daily losses,
+called L, in dollar terms.
+
+00:34:26.800 --> 00:34:30.719 align:middle line:84%
+So G minus L should be
+your net profit and loss.
+
+00:34:30.719 --> 00:34:34.199 align:middle line:84%
+But I want you to calculate
+that ratio, G minus L divided
+
+00:34:34.199 --> 00:34:37.600 align:middle line:84%
+by G plus L. That gives you
+the quality of your trading
+
+00:34:37.600 --> 00:34:40.320 align:middle line:90%
+strategy.
+
+00:34:40.320 --> 00:34:43.840 align:middle line:84%
+A bonus-- you are given a
+one-time chance to change
+
+00:34:43.840 --> 00:34:47.560 align:middle line:90%
+your mind on October 11 close.
+
+00:34:47.560 --> 00:34:49.260 align:middle line:90%
+You email us your decision.
+
+00:34:49.260 --> 00:34:52.880 align:middle line:84%
+If you want to switch
+before October 12,
+
+00:34:52.880 --> 00:34:56.080 align:middle line:84%
+you can switch to
+one other position.
+
+00:34:56.080 --> 00:34:57.580 align:middle line:90%
+You can decide to not switch.
+
+00:34:57.580 --> 00:35:01.440 align:middle line:84%
+But when you switch, you carry
+the balance, whatever is left.
+
+00:35:01.440 --> 00:35:06.300 align:middle line:84%
+Your $10,000, maybe $1,000
+left or become $50,000,
+
+00:35:06.300 --> 00:35:09.000 align:middle line:84%
+whatever roll into
+a new position.
+
+00:35:09.000 --> 00:35:12.680 align:middle line:84%
+So at the end of the term, we
+will announce the top three
+
+00:35:12.680 --> 00:35:13.920 align:middle line:90%
+leaders.
+
+00:35:13.920 --> 00:35:17.330 align:middle line:84%
+OK, for that, I'll
+pass it on to Vasili.
+
+00:35:17.330 --> 00:35:23.000 align:middle line:90%

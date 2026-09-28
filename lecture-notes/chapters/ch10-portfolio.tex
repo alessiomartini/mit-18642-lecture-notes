@@ -1,0 +1,1501 @@
+% !TEX root = ../main.tex
+\chapter{Portfolio Theory and Portfolio Management}\label{ch:portfolio}
+
+\begin{sources}
+\small
+\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+\textbf{Lecture} & \textbf{Speaker} & \textbf{Content}\\
+\midrule
+2013 L14 & P.~Kempthorne & Markowitz mean--variance analysis (two assets, then $m$ assets with Lagrange multipliers); the risk-free asset, the market portfolio, Tobin's separation theorem and the capital market line; von Neumann--Morgenstern utility; portfolio constraints (long-only, holding, turnover, benchmark, tracking error, factor, integer); estimation of means and covariances; alternative risk measures (MAD, semi-variance, VaR, CVaR, coherent measures, skewness and kurtosis). Live demonstration of Case Study~6 (simulation and sector ETFs).\\
+2013 L16 & J.~Xia & Blackboard lecture: goals of portfolio management, the return--volatility map of asset classes, portfolio theory through special cases of two assets, Sharpe ratio, beta, the Kelly formula, the 60/40 portfolio, risk parity and leverage, the ``free lunch'' of rebalancing, crowd synchronisation (Millennium Bridge, metronomes) and the limits of the theory. Long question session.\\
+2024 L13 & J.~Xia & The same programme in a slide version with new material from the speaker's own research: the endowment model, the loss of meaning of volatility as risk, the gain--loss ratio $(G-L)/(G+L)$ for sizing, a feedback model of crowd behaviour and the origin of power laws. Questions on taxes, expected versus worst loss, stop losses.\\
+\bottomrule
+\end{tabularx}
+
+\smallskip
+\textbf{Files.} 2024 slides \file{mit18_642_f24_lec13.pdf} (38 pages). 2013 slides \file{MIT18_S096F13_lecnote14.pdf}
+(34 pages) and \file{lecnote16.pdf} (2 pages: only the outline, the lecture was given on the blackboard);
+2013 Case Study~6 \file{CaseStudy6.pdf} (portfolio theory with US sector ETFs, 14 pages); the R output
+\file{Smltn_TwoAst.pdf} (simulation of two-asset portfolios, 6 pages) and the four sector-ETF output files
+\file{ETF_pridA_15.pdf}, \file{ETF_pridA_30.pdf} (2009--2013, maximum allocation $15\%$ and $30\%$),
+\file{ETF_pridB_15.pdf}, \file{ETF_pridB_30.pdf} (2003--2006); the names ``periodA'' and ``periodB'' are those of
+the case study text.
+\textbf{Problem sets.} 2013 PS6 Problems~3--5 (two-asset and $m$-asset minimum-variance portfolios,
+equicorrelation); Problems~1--2 of the same set are time series (\cref{ch:timeseries}). The exercises are at the
+end of the chapter.
+\textbf{Not covered or not available.} The R code that produced the case-study output is not in the download (only
+its printed output), so the numbers of \cref{ch10:sec-case} are quoted, and checked by an independent computation
+from the printed input tables. The video shown by the speaker in both years and the 2013 blackboard are not in the
+notes; \file{lecnote16} contains only the outline of the lecture. The second half of 2013 L14 mentions ``sector
+market-neutral models'' with no data (\cref{ch10:sec-case}).
+\end{sources}
+
+\section*{Motivation}
+Every investor faces the same question: given a list of things one could hold, how much of each? The 2013 and 2024
+lectures answer it twice. Kempthorne (2013 L14) gives the mathematical theory that earned Harry Markowitz a Nobel
+prize: describe a portfolio by its expected return and its variance, and find the portfolios that offer the
+largest return for a given variance. The theory is a piece of applied linear algebra (\cref{ch:linalg}): a
+quadratic form to be minimised under linear constraints, solved with Lagrange multipliers, whose solution is
+governed by the inverse covariance matrix $\Sigma^{-1}$. Xia (2013 L16, 2024 L13), who has managed money for
+a bank and for the Harvard endowment, then asks what survives in practice: the inputs are estimated with large
+errors, volatility is a poor measure of risk, and markets are populated by agents who react to each other.
+
+The chapter follows this arc.
+\begin{itemize}
+  \item \cref{ch10:sec-problem}: the objectives, constraints and horizon that define a portfolio problem.
+  \item \cref{ch10:sec-two,ch10:sec-mvo,ch10:sec-rf}: Markowitz theory for two assets, for $m$ assets, and with a
+        riskless asset (efficient frontier, tangency portfolio, capital market line), with complete derivations;
+        \cref{ch10:sec-capm} links it to beta and the CAPM (\cref{ch03:thm-capm}).
+  \item \cref{ch10:sec-rebal,ch10:sec-rp}: diversification, rebalancing, leverage and risk parity.
+  \item \cref{ch10:sec-utility,ch10:sec-kelly}: utility theory as the foundation of mean--variance analysis, and
+        sizing by the Kelly criterion and by Xia's gain--loss ratio.
+  \item \cref{ch10:sec-constr,ch10:sec-est,ch10:sec-risk}: constraints, estimation error, and other risk measures.
+  \item \cref{ch10:sec-crowd}: the ``beyond Markowitz'' ideas of the 2024 lecture (crowds, power laws).
+  \item \cref{ch10:sec-case}: the 2013 case study and the notes on sources and errata.
+\end{itemize}
+\emph{Notation.} The slides call the vector of expected returns $\bm\alpha$; here it is $\bm\mu$, to keep
+$\alpha$ for the regression intercept of \cref{def:alphabeta}. Vectors are columns, $\bm 1=(1,\dots,1)\T$,
+$\Sigma$ is the (positive definite) covariance matrix of the returns $\bm R$ of $m$ risky assets and
+$\sigma_i^2=\Sigma_{ii}$.
+
+% ==================================================================
+\section{The portfolio construction problem}\label{ch10:sec-problem}
+
+Both Xia lectures start with the same exercise: each student writes on a sheet the composition of a
+hypothetical portfolio (\$10{,}000 in 2024; in 2013 anything from a \$1{,}000 saving to a fund's start-up capital), in percent, in five minutes and
+without being told the goal \ts{24}{13}{3:14}\ts{13}{16}{3:10}. The answers become data for the rest of the hour.
+In 2024 they were mostly index funds (S\&P~500, QQQ), Treasuries and cash, one option strategy, no cryptocurrency
+(in 2021 the class had picked Dogecoin) \ts{24}{13}{9:26}\ts{24}{13}{11:35}; in 2013 they ranged from bonds and
+S\&P index funds to timberland, rare coins and lottery tickets \ts{13}{16}{10:16}\ts{13}{16}{11:16}.
+
+\subsection{Objective, loss tolerance, horizon}
+Before choosing what to hold one must say what the portfolio is \emph{for}. The considerations listed by Xia are:
+\begin{itemize}
+  \item a \emph{return objective} (10\%, 50\%, 100\%?) and a \emph{time horizon}, which he deliberately left out
+        of the exercise \ts{24}{13}{4:15}\ts{24}{13}{18:01};
+  \item a \emph{loss tolerance}: how much of \$10{,}000 can be lost before one stops, and drawdown limits
+        \ts{24}{13}{15:54};
+  \item an \emph{edge}: why should this investment beat the alternatives \ts{24}{13}{5:17};
+  \item \emph{constraints}: liquidity and spending needs, exclusions (fossil fuels, tobacco), inflation, absolute
+        versus relative returns against a benchmark (the excess return being the \emph{alpha} of
+        \cref{def:alphabeta}) \ts{24}{13}{14:48}\ts{24}{13}{16:56};
+  \item \emph{asset--liability matching}: after 2008 many asset owners learned that when the portfolio draws down
+        the liabilities dominate the balance sheet and spending must be cut \ts{24}{13}{18:01};
+  \item \emph{peer pressure and career risk}: managers are compared quarter to quarter although the owner's
+        horizon is long \ts{24}{13}{19:01}.
+\end{itemize}
+The 2013 version adds the individual's life cycle: income peaks around age 50, spending follows a different
+curve, and the portfolio must bridge the gap; the same question is asked of a pension fund, an endowment and a
+trading desk (how much capital to allocate to each trader, or to each of 30 strategies in a new hedge fund)
+\ts{13}{16}{14:32}\ts{13}{16}{17:43}.
+In 2024 the objective is written (slide~7) as $\max R/\sigma$ subject to constraints \ts{24}{13}{14:48}.
+
+\subsection{Layers of decisions and the risk--return map}
+The slides separate three layers \ts{24}{13}{7:22}: choice of \emph{markets and instruments};
+\emph{data, signals, models, factors, predictions and strategies}; and finally \emph{sizing, capital allocation,
+portfolio construction, optimisation and risk management}. Only the last is the topic of this chapter. It comes
+down to comparing investments through their return and their risk, first taken to be the volatility
+\ts{24}{13}{8:25}. On the map with volatility on the horizontal axis (2024 slide~6, 2013 blackboard),
+cash sits on the vertical axis with zero volatility and a positive return (over 4\% in October 2024,
+\ts{24}{13}{11:35}); bonds have a little more of both, stocks more, an index fund less volatility than a single stock,
+commodities more, private equity and venture capital (illiquid, with a wide range of outcomes) are far up to the
+right \ts{24}{13}{12:39}\ts{24}{13}{13:44}\ts{13}{16}{24:06}. Two extremes anchor the picture: a lottery ticket has a
+return near $-100\%$ and a small volatility, and the fair coin flip has zero return and $100\%$ volatility
+\ts{13}{16}{23:02}. A rational investor discards every point that has another point above and to the left of
+it, which is the idea of the efficient frontier \ts{13}{16}{26:13}\ts{13}{16}{27:18}.
+
+\begin{finance}[The endowment model]
+A university endowment is a perpetual portfolio. It spends about $5\%$ of its value each year, and inflation is
+about $3\%$, so the nominal return target is about $8\%$ (more precisely $1.05\times1.03-1\approx8.2\%$),
+over horizons ``longer than ten years'' \ts{24}{13}{21:07}\ts{24}{13}{22:12}. The slide adds that liquidity
+must cover $30$--$40\%$ of the annual operating budget, and Xia says that roughly $40\%$ of a university's budget is now
+paid from endowment spending, as research grants shrink \ts{24}{13}{22:12}. An $8\%$ target is not easy to obtain
+consistently when bonds yield little, so endowments hold a long list of strategies \ts{24}{13}{23:15}: cash,
+government and corporate bonds and credit, macro and relative-value hedge funds, quantitative funds (trend
+following/CTA, statistical arbitrage), long/short equity, multi-manager platforms, private equity, real estate and
+natural resources, and newer assets (crypto, intellectual property, legal claims). The ``endowment model'' is
+characterised by external rather than internal managers, public and private markets, generalists and specialists,
+absolute and relative returns, mostly active management with some passive beta, and peer comparison
+\ts{24}{13}{25:20}\ts{24}{13}{26:27}. Its central skill is manager selection (``can you predict fund performance,
+luck or skill?''). Endowments are tax-exempt, so taxes are ignored; a family office would tilt to
+private equity to defer realised gains \ts{24}{13}{1:13:53}\ts{24}{13}{1:14:54}.
+\end{finance}
+
+\subsection{The classic problem}
+Assume the objectives and the loss tolerance are given and that one can predict the return, volatility and
+correlation matrix of every investment. What fraction should go into each? The classic problem is to maximise the
+portfolio return and minimise its risk \ts{24}{13}{27:30}. Three observations of the lecture frame the rest of
+the chapter \ts{24}{13}{28:30}\ts{24}{13}{29:35}. First, the problem is one of \emph{sizing} at every level: for asset
+classes it is asset allocation, and because ten to fifteen classes make optimisation hard, practitioners often
+reduce them to three to five \emph{risk factors} (equity, bonds, inflation, currency, credit; see
+\cref{ch:pca}). Second, risk management is the same problem seen from the other side, with the added concerns of
+concentration, illiquidity and unwanted risks. Third, everything depends on predictions (``capital market
+assumptions'') which are unreliable (\cref{ch10:sec-est}).
+
+% ==================================================================
+\section{Two assets: diversification and the feasible set}\label{ch10:sec-two}
+
+Consider two risky assets with returns $R_1,R_2$, expected returns $\mu_1,\mu_2$, volatilities
+$\sigma_1,\sigma_2$ and correlation $\rho$, and the fully invested portfolios with weights $(1-w,w)$, $0\le w\le1$
+(no short sales) \ts{13}{14}{5:21}\ts{24}{13}{30:39}:
+\begin{gather}\label{ch10:eq-two}
+  R_w=(1-w)R_1+wR_2,\qquad \mu_w=(1-w)\mu_1+w\mu_2,\notag\\
+  \sigma_w^2=(1-w)^2\sigma_1^2+w^2\sigma_2^2+2w(1-w)\rho\sigma_1\sigma_2 .
+\end{gather}
+The \emph{feasible set} is the curve $\{(\sigma_w,\mu_w):0\le w\le1\}$ in the volatility--return plane
+\ts{13}{14}{7:28}. Since $\mu_w$ is affine in $w$ and $\sigma_w^2$ is quadratic, $\sigma_w^2$ is a quadratic
+function of $\mu_w$: the curve is one branch of a hyperbola (a parabola in the $(\mu,\sigma^2)$ plane)
+\ts{13}{14}{27:32}. Its shape is governed by $\rho$, illustrated by the special cases of both Xia lectures.
+
+\begin{itemize}
+  \item $\rho=1$: $\sigma_w=(1-w)\sigma_1+w\sigma_2$ is linear in $w$, hence so is $\mu$ as a function of $\sigma$:
+        a straight segment between the two assets and no diversification gain
+        \ts{24}{13}{31:39}\ts{13}{16}{34:34}.
+  \item $\rho=-1$: $\sigma_w=|(1-w)\sigma_1-w\sigma_2|$, two segments meeting on the return axis at
+        $w=\sigma_1/(\sigma_1+\sigma_2)$, where the portfolio has \emph{zero} variance
+        \ts{24}{13}{32:39}\ts{13}{14}{17:06}. A portfolio without risk must earn the riskless rate, otherwise
+        there is arbitrage; hedges of a security by a future exploit exactly this \ts{13}{14}{18:06}\ts{13}{14}{19:06}.
+  \item $\rho=0$: the curve bends to the left of the straight line, and the variance cannot be reduced to zero.
+  \item $\sigma_1=0$ (asset~1 is cash with return $r_0$): $\sigma_w=w\sigma_2$ and
+        $\mu_w=r_0+(\mu_2-r_0)\sigma_w/\sigma_2$, a straight line with slope $(\mu_2-r_0)/\sigma_2$, the
+        \emph{capital allocation line} of \cref{ch10:sec-rf} \ts{24}{13}{33:41}\ts{24}{13}{34:45}\ts{13}{16}{35:37}.
+\end{itemize}
+
+\begin{proposition}[Minimum-variance portfolio of two assets]\label{ch10:prop-two}
+Let $\sigma_1^2+\sigma_2^2-2\rho\sigma_1\sigma_2>0$ (that is, not $\rho=1$ with $\sigma_1=\sigma_2$). The variance
+\eqref{ch10:eq-two} is minimised over $w\in\R$ at
+\[
+  w^*=\frac{\sigma_1^2-\rho\sigma_1\sigma_2}{\sigma_1^2+\sigma_2^2-2\rho\sigma_1\sigma_2},\qquad
+  \sigma^{*2}=\frac{\sigma_1^2\sigma_2^2(1-\rho^2)}{\sigma_1^2+\sigma_2^2-2\rho\sigma_1\sigma_2}.
+\]
+The weight $w^*$ lies in $[0,1]$ (the minimum is attained by a long-only portfolio) iff
+$\rho\le\min(\sigma_1/\sigma_2,\sigma_2/\sigma_1)$; otherwise the minimum over $[0,1]$ is at the endpoint with smaller
+volatility. If $\sigma_1=\sigma_2=\sigma$ then $w^*=\tfrac12$ and $\sigma^{*2}=\sigma^2(1+\rho)/2$.
+\end{proposition}
+\begin{proof}
+Differentiating \eqref{ch10:eq-two}: $\tfrac12\,\dd\sigma_w^2/\dd w=-(1-w)\sigma_1^2+w\sigma_2^2+(1-2w)\rho\sigma_1\sigma_2$,
+which vanishes at $w^*$; the second derivative $\sigma_1^2+\sigma_2^2-2\rho\sigma_1\sigma_2$ is positive, so this is the
+global minimum. Substituting gives $\sigma^{*2}$ (use $1-w^*=(\sigma_2^2-\rho\sigma_1\sigma_2)/(\dots)$).
+The numerator of $w^*$ is $\ge0$ iff $\rho\le\sigma_1/\sigma_2$, and that of $1-w^*$ is $\ge0$ iff
+$\rho\le\sigma_2/\sigma_1$.
+\end{proof}
+For $\rho=0$ the formula gives $w^*=\dfrac{1/\sigma_2^2}{1/\sigma_1^2+1/\sigma_2^2}$: the assets are weighted
+\emph{inversely to their variances}, as computed by Kempthorne on the board \ts{13}{14}{12:52}\ts{13}{14}{13:54}
+(Exercise~\ref{ch10:ex-ps6-3} extends it).
+Two consequences of \cref{ch10:prop-two} explain the pictures of the lectures.
+\begin{itemize}
+  \item Adding a little of the riskier
+      asset~2 to asset~1 \emph{reduces} the variance as long as $\rho<\sigma_1/\sigma_2$
+      (the derivative of $\sigma_w^2$ at $w=0$ is $2\sigma_1(\rho\sigma_2-\sigma_1)$, negative iff $\rho<\sigma_1/\sigma_2$). Even for $\rho=0$ diversification lowers the risk and, when asset~2 has the higher return,
+      also \emph{raises} the return: every portfolio to the left of the minimum-variance point is dominated
+      \ts{13}{14}{14:57}\ts{13}{14}{15:59}. For $\rho$ larger than the ratio of volatilities the minimum is the safer asset alone.
+  \item The equal-volatility, zero-correlation case gives $\sigma^*=\sigma/\sqrt2$: ``a significant reduction of
+      the risk by half-and-half'' \ts{13}{16}{31:31}\ts{13}{16}{33:33}; for three such assets it is $\sigma/\sqrt3$
+      \ts{13}{16}{41:28}, and for $m$ assets $\sigma/\sqrt m$ (Exercise~\ref{ch10:ex-ps6-4}).
+\end{itemize}
+
+\begin{example}[The two assets of the 2013 simulation]\label{ch10:ex-two}
+Take $\mu=(0.15,0.25)$, $\sigma=(0.20,0.30)$, the values printed in the plots of Case Study~6
+(\cref{ch10:sec-case} explains why these are not the values read out in class). Then $\sigma_1/\sigma_2=2/3$ and
+\begin{center}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+$\rho$ & $-1$ & $-0.4$ & $0$ & $0.4$ & $0.8$ & $1$\\
+\midrule
+$w^*$ (asset~2) & 0.400 & 0.360 & 0.308 & 0.195 & $-0.235$ & $-2$\\
+$\sigma^*$ (long-only) & 0 & 0.130 & 0.166 & 0.192 & 0.200 & 0.200\\
+$\mu^*$ (long-only) & 0.190 & 0.186 & 0.181 & 0.170 & 0.150 & 0.150\\
+\bottomrule
+\end{tabular}
+\end{center}
+For $\rho=0.8>2/3$ and $\rho=1$ the unconstrained $w^*$ is negative (a short position in asset~2), and the
+long-only minimum is asset~1 alone. This is why in the last panel of \file{Smltn_TwoAst} (correlation $0.8$) the
+minimum-variance portfolio (cyan curve) coincides with asset~1. All values were computed from
+\cref{ch10:prop-two}.
+\end{example}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.86\linewidth,height=6.6cm,xlabel={volatility $\sigma_w$},ylabel={expected return $\mu_w$},
+  xmin=-0.005,xmax=0.36,ymin=0.135,ymax=0.265,xtick={0,0.1,0.2,0.3},scaled ticks=false,/pgf/number format/fixed,grid=major,grid style={black!10},
+  legend style={font=\footnotesize,at={(0.5,1.03)},anchor=south,legend columns=5},
+  tick label style={font=\small},label style={font=\small}]
+  \addplot[thick,thmcol] coordinates {(0.2,0.15) (0,0.19) (0.3,0.25)};
+  \addplot[thick,cscol] coordinates {(0.2000,0.1500) (0.1845,0.1550) (0.1702,0.1600) (0.1575,0.1650) (0.1467,0.1700) (0.1383,0.1750) (0.1327,0.1800) (0.1304,0.1850) (0.1315,0.1900) (0.1358,0.1950) (0.1432,0.2000) (0.1531,0.2050) (0.1652,0.2100) (0.1789,0.2150) (0.1940,0.2200) (0.2101,0.2250) (0.2270,0.2300) (0.2446,0.2350) (0.2626,0.2400) (0.2811,0.2450) (0.3000,0.2500)};
+  \addplot[thick,intcol] coordinates {(0.2000,0.1500) (0.1906,0.1550) (0.1825,0.1600) (0.1759,0.1650) (0.1709,0.1700) (0.1677,0.1750) (0.1664,0.1800) (0.1671,0.1850) (0.1697,0.1900) (0.1741,0.1950) (0.1803,0.2000) (0.1879,0.2050) (0.1970,0.2100) (0.2072,0.2150) (0.2184,0.2200) (0.2305,0.2250) (0.2433,0.2300) (0.2568,0.2350) (0.2707,0.2400) (0.2852,0.2450) (0.3000,0.2500)};
+  \addplot[thick,fincol] coordinates {(0.2000,0.1500) (0.1965,0.1550) (0.1940,0.1600) (0.1925,0.1650) (0.1920,0.1700) (0.1927,0.1750) (0.1944,0.1800) (0.1971,0.1850) (0.2008,0.1900) (0.2054,0.1950) (0.2110,0.2000) (0.2173,0.2050) (0.2243,0.2100) (0.2320,0.2150) (0.2404,0.2200) (0.2492,0.2250) (0.2586,0.2300) (0.2684,0.2350) (0.2786,0.2400) (0.2891,0.2450) (0.3000,0.2500)};
+  \addplot[thick,defcol] coordinates {(0.2,0.15) (0.3,0.25)};
+  \legend{$\rho=-1$,$\rho=-0.4$,$\rho=0$,$\rho=0.4$,$\rho=1$}
+  \addplot[only marks,mark=*,mark size=2pt,black,forget plot] coordinates {(0.2,0.15) (0.3,0.25)};
+  \node[font=\footnotesize,anchor=east] at (axis cs:0.19,0.150) {asset 1};
+  \node[font=\footnotesize,anchor=west] at (axis cs:0.305,0.25) {asset 2};
+  \addplot[only marks,mark=square*,mark size=2pt,intcol,forget plot] coordinates {(0.1664,0.1808)};
+  \draw[->,intcol] (axis cs:0.235,0.163) -- (axis cs:0.170,0.1790);
+  \node[font=\footnotesize,anchor=west,intcol] at (axis cs:0.235,0.160) {min.\ variance, $\rho=0$};
+\end{axis}
+\end{tikzpicture}
+\caption{Feasible set of the portfolios $(1-w)R_1+wR_2$, $0\le w\le1$, for $\mu=(0.15,0.25)$, $\sigma=(0.20,0.30)$
+and several correlations (\cref{ch10:ex-two}; compare slides~15--16 of \file{lec13} and the top-right panels of
+\file{Smltn_TwoAst}). For $\rho=-1$ the curve reaches the return axis. The lower part of each curve, below the
+minimum-variance point, is dominated.}\label{ch10:fig-two}
+\end{figure}
+
+\begin{intuition}[Correlation as an angle]
+Write $\sigma_w^2=|(1-w)\bm r_1+w\bm r_2|^2$ with vectors $\bm r_1,\bm r_2$ of lengths $\sigma_1,\sigma_2$ and
+angle $\theta$, $\cos\theta=\rho$: the volatility of a portfolio is the \emph{length} of a weighted sum of two
+vectors. Perfect correlation means parallel vectors (lengths add), $\rho=-1$ antiparallel (lengths cancel), and $\rho=0$
+orthogonal (Pythagoras, $\sigma_w^2=(1-w)^2\sigma_1^2+w^2\sigma_2^2$). Diversification is the triangle inequality
+being strict. The minimum-variance portfolio is the foot of the perpendicular from the origin to the segment
+joining the tips of the two vectors.
+\end{intuition}
+
+
+% ==================================================================
+\section{Markowitz mean--variance optimisation}\label{ch10:sec-mvo}
+
+Now let there be $m$ risky assets with return vector $\bm R$, $\E\bm R=\bm\mu$, $\Cov\bm R=\Sigma$ (positive
+definite) in a \emph{single period}. A portfolio is a vector $\bm w$ of fractions of the wealth invested in each
+asset, $\bm w\T\bm 1=1$ (one unit of capital). Its return $R_{\bm w}=\bm w\T\bm R$ has
+\begin{equation}\label{ch10:eq-mv}
+  \mu_{\bm w}=\bm w\T\bm\mu,\qquad \sigma_{\bm w}^2=\bm w\T\Sigma\bm w
+\end{equation}
+(\cref{ch03:prop-portvar}) \ts{13}{14}{3:11}\ts{13}{14}{4:16}. Investors prefer higher $\mu_{\bm w}$ and lower
+$\sigma^2_{\bm w}$, so portfolios are compared through the pair $(\mu_{\bm w},\sigma_{\bm w}^2)$
+\ts{13}{14}{23:14}. Markowitz's idea (1952) is to pose this as a convex optimisation problem.
+
+\begin{definition}[Markowitz problem I]\label{ch10:def-markowitz}
+For a target return $\mu_0$, choose $\bm w\in\R^m$ (short positions allowed) to
+\[
+  \text{minimise } \tfrac12\bm w\T\Sigma\bm w\quad\text{subject to}\quad \bm w\T\bm\mu=\mu_0,\ \ \bm w\T\bm 1=1 .
+\]
+\end{definition}
+The factor $\frac12$ only simplifies the derivatives \ts{13}{14}{24:14}. The objective is strictly convex ($\Sigma\succ0$)
+and the constraints are linear, so a stationary point of the Lagrangian is the unique global minimum
+\ts{13}{14}{25:20}.
+
+\begin{theorem}[Efficient portfolios without a riskless asset]\label{ch10:thm-mvo}
+Put
+\[
+  a=\bm\mu\T\Sigma^{-1}\bm\mu,\qquad b=\bm\mu\T\Sigma^{-1}\bm 1,\qquad c=\bm 1\T\Sigma^{-1}\bm 1,\qquad
+  \Delta=ac-b^2 .
+\]
+If $\bm\mu$ is not a multiple of $\bm 1$ then $\Delta>0$ and problem~I has the unique solution
+\begin{equation}\label{ch10:eq-w0}
+  \bm w_0=\lambda_1\Sigma^{-1}\bm\mu+\lambda_2\Sigma^{-1}\bm 1,\qquad
+  \begin{pmatrix}\lambda_1\\ \lambda_2\end{pmatrix}=\begin{pmatrix}a&b\\ b&c\end{pmatrix}^{-1}\begin{pmatrix}\mu_0\\ 1\end{pmatrix}
+  =\frac1\Delta\begin{pmatrix}c\mu_0-b\\ a-b\mu_0\end{pmatrix},
+\end{equation}
+whose variance is
+\begin{equation}\label{ch10:eq-frontier}
+  \sigma_0^2=\bm w_0\T\Sigma\bm w_0=\frac{c\mu_0^2-2b\mu_0+a}{\Delta}
+  =\frac1c+\frac{c}{\Delta}\Bigl(\mu_0-\frac bc\Bigr)^2 .
+\end{equation}
+\end{theorem}
+\begin{proof}
+The Lagrangian is $L=\frac12\bm w\T\Sigma\bm w+\lambda_1(\mu_0-\bm w\T\bm\mu)+\lambda_2(1-\bm w\T\bm 1)$
+\ts{13}{14}{24:14}. Setting $\partial L/\partial\bm w=\Sigma\bm w-\lambda_1\bm\mu-\lambda_2\bm 1=\bm 0$ gives
+$\bm w=\lambda_1\Sigma^{-1}\bm\mu+\lambda_2\Sigma^{-1}\bm 1$. Substituting in the two constraints gives the linear
+system $\mu_0=a\lambda_1+b\lambda_2$, $1=b\lambda_1+c\lambda_2$, that is \eqref{ch10:eq-w0} \ts{13}{14}{26:26}.
+The matrix $\begin{psmallmatrix}a&b\\b&c\end{psmallmatrix}$ is the Gram matrix of $\bm\mu,\bm 1$ for the inner
+product $\langle\bm x,\bm y\rangle=\bm x\T\Sigma^{-1}\bm y$; its determinant $\Delta$ is positive by the strict
+Cauchy--Schwarz inequality, because $\bm\mu$ and $\bm 1$ are linearly independent. Finally
+$\sigma_0^2=\bm w_0\T\Sigma\bm w_0=\lambda_1\bm w_0\T\bm\mu+\lambda_2\bm w_0\T\bm 1=\lambda_1\mu_0+\lambda_2$, which
+equals \eqref{ch10:eq-frontier}; completing the square in $\mu_0$ gives the second form.
+\end{proof}
+
+Thus $\sigma_0^2$ is a parabola in the target return \ts{13}{14}{27:32}: the smallest variance obtainable
+with mean $\mu_0$, and the set of all pairs $(\sigma_0,\mu_0)$ is a hyperbola in the volatility--return plane.
+
+\begin{corollary}[Global minimum-variance portfolio and the frontier]\label{ch10:cor-gmv}
+The parabola \eqref{ch10:eq-frontier} is smallest at $\mu_0=b/c$, where
+\[
+  \bm w_g=\frac{\Sigma^{-1}\bm 1}{\bm 1\T\Sigma^{-1}\bm 1},\qquad \sigma_g^2=\frac1c,\qquad \mu_g=\frac bc .
+\]
+The \emph{efficient frontier} is the upper branch $\mu_0\ge b/c$ (portfolios below it are dominated by the
+portfolio with the same variance and larger return); the whole curve is a hyperbola with asymptotes
+$\mu=b/c\pm\sqrt{\Delta/c}\,\sigma$. Along the efficient branch $\mu$ is an increasing concave function of $\sigma$, and no portfolio lies to the left of the hyperbola.
+\end{corollary}
+
+\subsection{The three equivalent problems}
+The slides pose the same optimisation in three ways (slide~7) \ts{13}{14}{28:36}\ts{13}{14}{29:42}:
+\begin{itemize}
+  \item \textbf{Problem I}: minimise the variance for a given mean $\mu_0$;
+  \item \textbf{Problem II}: maximise $\bm w\T\bm\mu$ for a given variance $\sigma_0^2$, with $\bm w\T\bm 1=1$;
+  \item \textbf{Problem III}: for a risk-aversion parameter $\lambda\ge0$ maximise
+        $\bm w\T\bm\mu-\frac\lambda2\bm w\T\Sigma\bm w$ with $\bm w\T\bm 1=1$.
+\end{itemize}
+All three have the same first-order conditions, and the \emph{efficient frontier} is the trace of the solutions
+when $\mu_0$ (I), $\sigma_0^2$ (II) or $\lambda$ (III) varies. Problem~III can be solved in one line, and it shows the
+structure of the frontier. The condition $\bm\mu-\lambda\Sigma\bm w-\gamma\bm 1=\bm 0$ (with multiplier $\gamma$
+for the budget) gives $\bm w=\lambda^{-1}\Sigma^{-1}(\bm\mu-\gamma\bm 1)$, and $\bm 1\T\bm w=1$ fixes $\gamma=(b-\lambda)/c$:
+\begin{equation}\label{ch10:eq-twofund}
+  \bm w(\lambda)=\bm w_g+\frac1\lambda\,\bm v,\qquad \bm v=\Sigma^{-1}\Bigl(\bm\mu-\frac bc\bm 1\Bigr),\qquad
+  \bm 1\T\bm v=0 .
+\end{equation}
+Every efficient portfolio is the minimum-variance portfolio plus a multiple $1/\lambda$ of one fixed
+\emph{zero-cost} (long/short) portfolio $\bm v$. Hence $\mu=b/c+(a-b^2/c)/\lambda$ and
+$\sigma^2=1/c+(a-b^2/c)/\lambda^2$, since $\bm v\T\Sigma\bm v=a-b^2/c$ and $\bm w_g\T\Sigma\bm v=0$; eliminating $\lambda$
+recovers \eqref{ch10:eq-frontier}. Consequently any two distinct efficient portfolios span the whole frontier (the
+\emph{two-fund theorem}, not stated in class). The risk aversion $\lambda$ is the Arrow--Pratt index of
+\cref{ch10:sec-utility}: a very risk-averse investor ($\lambda\to\infty$) holds $\bm w_g$.
+
+\begin{example}[Nine sector ETFs, unconstrained (computed from the rounded case-study inputs)]\label{ch10:ex-etf-unc}
+Take the annualised means, volatilities and correlations of the nine SPDR sector ETFs for 2009--2013 printed in
+Case Study~6 (\cref{ch10:tab-etf}). Then $a=3.44$, $b=11.44$, $c=88.04$, $\Delta=171.9$. The global minimum-variance
+portfolio has $\sigma_g=1/\sqrt c=10.7\%$ and $\mu_g=b/c=13.0\%$, better in volatility than every single ETF
+(the lowest is consumer staples, $12\%$, but its mean is $15\%$), and the asymptotic slope is
+$\sqrt{\Delta/c}=1.40$. But the weights, in the order XLB, XLV, XLP, XLY, XLE, XLF, XLI, XLK, XLU, are
+\[
+  \bm w_g\approx(0.09,\ 0.14,\ 0.94,\ -0.17,\ -0.15,\ -0.02,\ -0.27,\ 0.26,\ 0.18),
+\]
+with $94\%$ in consumer staples and a $27\%$ short position in industrials: an unconstrained optimum is not
+what an investor would hold. This is the reason for the constraints of \cref{ch10:sec-constr}.
+\end{example}
+
+% ==================================================================
+\section{A riskless asset: tangency portfolio and capital market line}\label{ch10:sec-rf}
+
+Add a riskless asset $0$ with constant return $R_0\equiv r_0$ (zero variance, uncorrelated with everything)
+\ts{13}{14}{31:55}. The investor puts $\bm w$ in the risky assets and $1-\bm w\T\bm 1$ in the riskless one, which
+may be negative (borrowing at $r_0$). There is no budget constraint left on $\bm w$, and
+\begin{equation}\label{ch10:eq-mvrf}
+  \mu_{\bm w}=\bm w\T\bm\mu+(1-\bm w\T\bm 1)r_0=r_0+\bm w\T(\bm\mu-r_0\bm 1),\qquad \sigma_{\bm w}^2=\bm w\T\Sigma\bm w .
+\end{equation}
+\emph{Geometric picture.} Two assets are enough: combining the riskless asset with a risky portfolio~$P$ gives the
+line through $(0,r_0)$ and $(\sigma_P,\mu_P)$; the higher the slope, the better. The best line is the tangent to
+the efficient frontier of the risky assets \ts{24}{13}{35:50}\ts{13}{14}{33:01}, which lies above the frontier
+because we can now hold a fraction of a risky portfolio in cash \ts{13}{14}{35:05}. The mathematics confirms it.
+
+\begin{theorem}[Optimal portfolios with a riskless asset; Tobin separation]\label{ch10:thm-tobin}
+Let $\bm\eta=\bm\mu-r_0\bm 1$ (excess returns) and $d^2=\bm\eta\T\Sigma^{-1}\bm\eta=a-2r_0b+r_0^2c$. The problem
+$\min\frac12\bm w\T\Sigma\bm w$ subject to $\mu_{\bm w}=\mu_0$ has the solution
+\begin{equation}\label{ch10:eq-rfsol}
+  \bm w_0=\lambda_1\Sigma^{-1}\bm\eta,\qquad \lambda_1=\frac{\mu_0-r_0}{d^2},\qquad
+  \sigma_0=\frac{|\mu_0-r_0|}{d}.
+\end{equation}
+Assume $\bm 1\T\Sigma^{-1}\bm\eta=b-r_0c>0$ (i.e.\ $r_0<\mu_g$) and define the \emph{market (tangency) portfolio}
+\begin{equation}\label{ch10:eq-market}
+  \bm w_M=\frac{\Sigma^{-1}\bm\eta}{\bm 1\T\Sigma^{-1}\bm\eta},\qquad
+  \mu_M=\frac{a-r_0b}{b-r_0c},\qquad \sigma_M=\frac{d}{b-r_0c}.
+\end{equation}
+Then every optimal portfolio with $\mu_0>r_0$ invests in the risky assets in the proportions of $\bm w_M$: it holds
+the fraction
+\begin{equation}\label{ch10:eq-wm}
+  m_{\bm w}=\bm w_0\T\bm 1=\frac{\mu_0-r_0}{\mu_M-r_0}
+\end{equation}
+of its wealth in $\bm w_M$ and $1-m_{\bm w}$ in the riskless asset \ts{13}{14}{41:30}\ts{13}{14}{42:31}.
+Its return and risk are $\mu_P=r_0+m_{\bm w}(\mu_M-r_0)$ and $\sigma_P=m_{\bm w}\sigma_M$.
+\end{theorem}
+\begin{proof}
+The Lagrangian $L=\frac12\bm w\T\Sigma\bm w+\lambda_1[(\mu_0-r_0)-\bm w\T\bm\eta]$ gives
+$\Sigma\bm w=\lambda_1\bm\eta$, i.e.\ $\bm w=\lambda_1\Sigma^{-1}\bm\eta$, and the constraint
+$\bm w\T\bm\eta=\mu_0-r_0$ gives $\lambda_1d^2=\mu_0-r_0$ \ts{13}{14}{35:05}\ts{13}{14}{36:08}. The variance is
+$\lambda_1^2\bm\eta\T\Sigma^{-1}\bm\eta=\lambda_1^2d^2=(\mu_0-r_0)^2/d^2$. Since $\bm w_0=\lambda_1(b-r_0c)\bm w_M$,
+the risky weights are proportional to $\bm w_M$ with total weight $m_{\bm w}=\lambda_1(b-r_0c)$; \eqref{ch10:eq-market}
+follows from $\mu_M=\bm w_M\T\bm\mu$, $\sigma_M^2=\bm\eta\T\Sigma^{-1}\bm\eta/(\bm 1\T\Sigma^{-1}\bm\eta)^2$, and
+$\mu_M-r_0=d^2/(b-r_0c)$ gives \eqref{ch10:eq-wm}.
+\end{proof}
+
+\begin{corollary}[Capital market line and price of risk]\label{ch10:cor-cml}
+The optimal portfolios lie on the half-line, the \emph{capital market line} (CML)
+\begin{equation}\label{ch10:eq-cml}
+  \mu_P=r_0+\frac{\mu_M-r_0}{\sigma_M}\,\sigma_P,\qquad \sigma_P\ge0,
+\end{equation}
+which is tangent to the efficient frontier at $M$. Its slope $(\mu_M-r_0)/\sigma_M=d$ is the \emph{Sharpe ratio} of
+the market portfolio, the ``market price of risk'': the compensation per unit of volatility. Investors of all risk
+appetites hold the \emph{same} risky portfolio and differ only in how much of it (Tobin, 1958)
+\ts{13}{14}{43:42}\ts{13}{14}{44:47}. If borrowing at $r_0$ is possible, $m_{\bm w}>1$ (i.e.\ $\mu_0>\mu_M$) gives points of the CML
+beyond $M$, a \emph{leveraged} market portfolio \ts{13}{14}{46:52}.
+\end{corollary}
+
+\begin{definition}[Sharpe ratio]
+For a portfolio with return $R_P$, the Sharpe ratio is $\mathrm{SR}_P=(\mu_P-r_0)/\sigma_P$
+\ts{24}{13}{36:54}\ts{13}{16}{44:21}.
+\end{definition}
+
+\begin{proposition}[The tangency portfolio maximises the Sharpe ratio]\label{ch10:prop-sharpe}
+For every risky portfolio $\bm w\neq\bm 0$, $(\bm w\T\bm\eta)/\sqrt{\bm w\T\Sigma\bm w}\le d$, with equality iff $\bm w$
+is a positive multiple of $\Sigma^{-1}\bm\eta$, i.e.\ of $\bm w_M$. The Sharpe ratio does not change when a portfolio
+is mixed with the riskless asset or levered at rate $r_0$.
+\end{proposition}
+\begin{proof}
+Cauchy--Schwarz for the inner product defined by $\Sigma$:
+\[(\bm w\T\bm\eta)^2=\bigl(\bm w\T\Sigma\cdot\Sigma^{-1}\bm\eta\bigr)^2
+\le(\bm w\T\Sigma\bm w)(\bm\eta\T\Sigma^{-1}\bm\eta).\] Scaling $\bm w\to t\bm w$ multiplies $\mu-r_0$ and $\sigma$ by $t$.
+\end{proof}
+
+The last statement is the answer to Xia's question in 2013 (``when you lever up, does the Sharpe ratio change?''):
+with $w_1=-1$ in cash and $w_2=2$ in the risky asset the volatility is $2\sigma_2$ and the excess return
+$2(R_2-R_1)$, so the ratio $(R_2-R_1)/\sigma_2$ is the same at every point of the line
+\ts{13}{16}{56:12}\ts{13}{16}{57:16}\ts{13}{16}{1:01:28}; the 2024 slide~18 draws the same picture,
+$\sigma=2\sigma_p$, $R=2R_p-R_f$ \ts{24}{13}{38:56}. Leverage moves the investor along the line, it does not improve it.
+
+\begin{example}[Two assets and a riskless rate]\label{ch10:ex-tobin}
+Take $\bm\mu=(0.15,0.25)$, $\Sigma=\mathrm{diag}(0.04,0.09)$ (uncorrelated assets of \cref{ch10:ex-two}) and
+$r_0=0.05$. Then $\bm\eta=(0.10,0.20)$, $\Sigma^{-1}\bm\eta=(2.5,\ 2.22)$, $\bm w_M=(0.529,\ 0.471)$,
+$\mu_M=19.7\%$, $\sigma_M=17.6\%$ and $d=\sqrt{0.10^2/0.04+0.20^2/0.09}=0.833$; the individual Sharpe ratios are only
+$0.50$ and $0.67$. An investor who wants $\mu_0=12\%$ puts $(0.12-0.05)/(0.197-0.05)=47.6\%$ of the wealth in $M$ and
+$52.4\%$ in cash; one who wants $\mu_0=20\%$ borrows $2\%$ of the wealth. \sloppy Twice levered ($m_{\bm w}=2$) gives
+$\mu=34.4\%$ at $\sigma=35.3\%$, still on the line (\cref{ch10:fig-cml}).
+\end{example}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.86\linewidth,height=7cm,xlabel={volatility $\sigma$},ylabel={expected return $\mu$},
+  xmin=0,xmax=0.45,ymin=0,ymax=0.40,xtick={0,0.1,0.2,0.3,0.4},scaled ticks=false,/pgf/number format/fixed,grid=major,grid style={black!10},
+  tick label style={font=\small},label style={font=\small}]
+  \addplot[thick,defcol,dashed] coordinates {(0.3672,0.0900) (0.3354,0.1000) (0.3046,0.1100) (0.2751,0.1200) (0.2474,0.1300) (0.2220,0.1400) (0.2000,0.1500) (0.1825,0.1600) (0.1709,0.1700) (0.1664,0.1808)};
+  \addplot[very thick,defcol] coordinates {(0.1664,0.1808) (0.1697,0.1900) (0.1803,0.2000) (0.1970,0.2100) (0.2184,0.2200) (0.2433,0.2300) (0.2707,0.2400) (0.3000,0.2500) (0.3306,0.2600) (0.3622,0.2700) (0.3946,0.2800) (0.4276,0.2900) (0.4610,0.3000)};
+  \addplot[thick,thmcol] coordinates {(0,0.05) (0.40,0.3833)} node[pos=0.22,above,sloped,font=\footnotesize]{CML, slope $0.833$};
+  \addplot[only marks,mark=*,mark size=2.2pt,thmcol] coordinates {(0.17647,0.19706) (0,0.05) (0.3529,0.3441)};
+  \addplot[only marks,mark=square*,mark size=2pt,black] coordinates {(0.1664,0.1808) (0.2,0.15) (0.3,0.25)};
+  \node[font=\footnotesize,anchor=east,thmcol] at (axis cs:0.168,0.225) {$M$};
+  \node[font=\footnotesize,anchor=south west,thmcol] at (axis cs:0.005,0.055) {$r_0$};
+  \node[font=\footnotesize,anchor=north west,thmcol] at (axis cs:0.36,0.335) {leveraged};
+  \node[font=\footnotesize,anchor=south west] at (axis cs:0.203,0.153) {asset 1};
+  \node[font=\footnotesize,anchor=north west] at (axis cs:0.305,0.245) {asset 2};
+  \node[font=\footnotesize,anchor=east] at (axis cs:0.150,0.225) {min.\ variance};\draw[->] (axis cs:0.120,0.215) -- (axis cs:0.1640,0.1830);
+    \node[font=\footnotesize,defcol,anchor=east] at (axis cs:0.445,0.19) {frontier (solid: efficient)};
+\end{axis}
+\end{tikzpicture}
+\caption{Frontier of the two assets of \cref{ch10:ex-two} for $\rho=0$ with short sales allowed (upper branch solid,
+dominated branch dashed) and the capital market line of \cref{ch10:ex-tobin} with $r_0=5\%$, tangent at $M$.
+Points on the CML beyond $M$ are levered.}\label{ch10:fig-cml}
+\end{figure}
+
+\begin{intuition}[Why one fund is enough]
+The direction $\Sigma^{-1}\bm\eta$ solves the \emph{normal equations} $\Sigma\bm w=\bm\eta$, the same form as
+$X\T X\hat{\bm\beta}=X\T\bm y$ of \cref{ch:regression}: it is the portfolio whose covariances with the assets are
+proportional to their excess returns, which is exactly the CAPM relation \eqref{ch10:eq-sml} of
+\cref{ch10:sec-capm}. Once the best ``direction'' in asset space is fixed, scaling it up or down is only a question of
+appetite, like rescaling a normal mode; the riskless asset supplies the one extra degree of freedom (the
+length) that the fully invested constraint of \cref{ch10:sec-mvo} did not leave.
+\end{intuition}
+
+\begin{coursenote}[Naming and the case $r_0>\mu_g$]
+Kempthorne calls $\bm w_M$ ``the market portfolio'' because it is the \emph{fully invested} optimal
+portfolio in the sense of $\bm w_M\T\bm 1=1$ \ts{13}{14}{39:15}; the same portfolio is called the ``tangency portfolio''
+elsewhere. That it coincides with the cap-weighted market of all assets is a statement of \emph{equilibrium}
+(Sharpe 1964, Lintner 1965), proved in \cref{ch03:thm-capm} and used in \cref{ch10:sec-capm}; here it is only the
+name of a solution. The slides implicitly assume $b-r_0c>0$; if instead $r_0>\mu_g$ the tangency to the frontier
+touches the lower, dominated branch and $\bm w_M$ has a negative Sharpe ratio; the optimal portfolio for $\mu_0>r_0$
+is then $-\bm w_M$ scaled (short the ``market''), which is unrealistic and signals an unreasonable $r_0$. The
+slides also assume that the borrowing and lending rates coincide; with a higher borrowing rate the CML has a
+kink at $M$ and only the segment up to $M$ is tangent to the frontier (not discussed in class).
+The key papers listed on slide~16 of \file{lecnote14} are Markowitz (1952), Tobin (1958), Sharpe (1964),
+Lintner (1965) and Fama (1970) \ts{13}{14}{47:54}; Kempthorne remarks that virtually all of them have a Nobel prize,
+and that Fama had been awarded it two weeks earlier \ts{13}{14}{48:55}.
+\end{coursenote}
+
+% ==================================================================
+\section{Beta, the security market line and the CAPM}\label{ch10:sec-capm}
+
+The mean--variance solution also contains the CAPM, by a route different from the expected-utility derivation of
+\cref{ch03:sec-capm}. This derivation is not given in either lecture, but it explains the slides on
+$\alpha,\beta$ (2024 slide~17, 2013 L16).
+\begin{proposition}[Security market line from the tangency portfolio]\label{ch10:prop-sml}
+Let $M$ be the tangency portfolio \eqref{ch10:eq-market}. For every asset $i$ (and every portfolio),
+\begin{equation}\label{ch10:eq-sml}
+  \mu_i-r_0=\beta_i(\mu_M-r_0),\qquad \beta_i=\frac{\Cov(R_i,R_M)}{\sigma_M^2}.
+\end{equation}
+\end{proposition}
+\begin{proof}
+By definition $\Sigma\bm w_M=\bm\eta/(\bm 1\T\Sigma^{-1}\bm\eta)$, i.e.\ $\Cov(R_i,R_M)=[\Sigma\bm w_M]_i=
+\eta_i\,\kappa$ with $\kappa=1/(\bm 1\T\Sigma^{-1}\bm\eta)$. Multiplying by $w_{M,i}$ and summing gives
+$\sigma_M^2=\kappa(\mu_M-r_0)$, hence $\eta_i=\Cov(R_i,R_M)/\kappa=\Cov(R_i,R_M)(\mu_M-r_0)/\sigma_M^2$.
+\end{proof}
+Under the assumptions of Sharpe and Lintner every investor holds $M$, so $M$ is the market portfolio of all risky
+assets and \eqref{ch10:eq-sml} is the CAPM (\cref{ch03:thm-capm}). The regression of $R_i-r_0$ on the market
+excess return has slope $\beta_i$ and, by \eqref{ch10:eq-sml}, zero intercept: in the language of \cref{def:alphabeta}
+\[
+  R_P-r_0=\alpha+\beta\,(R_{BM}-r_0)+\varepsilon,\qquad \beta=\frac{\Cov(R_P,R_{BM})}{\sigma_{BM}^2}=\rho\,\frac{\sigma_P}{\sigma_{BM}}
+\]
+(2024 slide~17 \ts{24}{13}{37:54}), where a nonzero $\alpha$ measures a departure from the security market line, and
+$\sigma_P^2=\beta^2\sigma_{BM}^2+\sigma_\varepsilon^2$ splits the risk into a systematic and an idiosyncratic part
+(regression, \cref{ch05:capm}). In the two-asset special case of the lectures (riskless asset plus one risky
+asset $2$, $\sigma_P=w_2\sigma_2$) the correlation with asset~2 is $1$ and $\beta=\sigma_P/\sigma_2=w_2$
+\ts{13}{16}{1:02:34}\ts{13}{16}{1:03:38}: the 60/40 investor asked how much equity beta the portfolio has needs the
+same computation with both assets (\cref{ch10:sec-rp}).
+
+\begin{finance}[Alpha, beta and the Sharpe ratio in practice]
+Beta is cheap to buy (an index fund); alpha is what a manager is paid for, and the Sharpe ratio $\mathrm{SR}$
+measures return per unit of total risk while the \emph{information ratio} $\alpha/\sigma_\varepsilon$ measures
+skill per unit of active risk (not discussed in class). A portfolio manager benchmarked to an index is judged on
+$\alpha$ and on the tracking error (\cref{ch10:sec-constr}); a fund with a high Sharpe ratio can be levered to
+any desired volatility, so Sharpe ratios are the fair basis for comparing funds of different volatilities.
+\end{finance}
+
+
+% ==================================================================
+\section{Diversification and rebalancing: the ``free lunch''}\label{ch10:sec-rebal}
+
+\subsection{How much can diversification remove?}
+For the equally weighted portfolio of $n$ assets, with $\bar\sigma^2$ the average variance and $\bar c$ the average
+pairwise covariance,
+\begin{equation}\label{ch10:eq-ew}
+  \Var(R_{\rm ew})=\frac1{n^2}\Bigl(\sum_i\sigma_i^2+\sum_{i\ne j}\Sigma_{ij}\Bigr)=\frac{\bar\sigma^2}n+\Bigl(1-\frac1n\Bigr)\bar c .
+\end{equation}
+The first term (idiosyncratic risk) vanishes like $1/n$, the second does not: what survives is the average
+covariance, the \emph{systematic} risk that no diversification removes (\cref{ch07:ex-equi} for the spectral
+version). For uncorrelated assets of equal volatility, $\sigma/\sqrt n$; Exercises~\ref{ch10:ex-ps6-4} and
+\ref{ch10:ex-ps6-5} ask for the minimum-variance portfolios in the uncorrelated, equicorrelated and general cases.
+
+\subsection{Rebalancing}
+Xia's second illustration of diversification in both years is a two-year, two-asset example
+\ts{24}{13}{40:00}\ts{13}{16}{52:00}. Asset~1 doubles in year~1 and halves in year~2; asset~2 halves and then doubles.
+Alone, each asset ends where it started (return $0$). Start with $50\%$ in each \ts{24}{13}{41:06}.
+\begin{itemize}
+  \item Year~1: $0.5\cdot(+100\%)+0.5\cdot(-50\%)=+25\%$, so the value is $1.25$, of which
+        $1.00$ ($80\%$) is now asset~1 and $0.25$ ($20\%$) asset~2 \ts{24}{13}{42:13}.
+  \item \emph{Without rebalancing}, year~2 gives $0.8\cdot(-50\%)+0.2\cdot(+100\%)=-20\%$, and the two-year return is
+        $1.25\times0.8-1=0$: no gain from a diversified portfolio of perfectly negatively correlated assets.
+  \item \emph{With rebalancing} to $50/50$ at the end of year~1 (sell $0.375$ of asset~1, buy asset~2: $0.625$ each),
+        year~2 gives $0.5\cdot(-50\%)+0.5\cdot(+100\%)=+25\%$: two years at $+25\%$, total $1.25^2=1.5625$
+        \ts{24}{13}{42:13}\ts{13}{16}{54:05}\ts{13}{16}{55:08}.
+\end{itemize}
+Rebalanced, the portfolio has \emph{zero} volatility and a steady $25\%$ return, ``a straight line''.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.62\linewidth,height=5.2cm,xlabel={year},ylabel={value of \$1},xmin=-0.1,xmax=2.1,ymin=0.3,ymax=2.2,
+  xtick={0,1,2},grid=major,grid style={black!10},legend style={font=\footnotesize,at={(0.5,1.03)},anchor=south,legend columns=2},
+  tick label style={font=\small},label style={font=\small}]
+  \addplot[thick,defcol,mark=*] coordinates {(0,1) (1,2) (2,1)};
+  \addplot[thick,intcol,mark=*] coordinates {(0,1) (1,0.5) (2,1)};
+  \addplot[thick,thmcol,mark=square*,dashed] coordinates {(0,1) (1,1.25) (2,1.0)};
+  \addplot[very thick,cscol,mark=square*] coordinates {(0,1) (1,1.25) (2,1.5625)};
+  \legend{asset 1,asset 2,50/50 no rebalancing,50/50 rebalanced}
+\end{axis}
+\end{tikzpicture}
+\caption{The two-year example of Xia (2024 slide~20, 2013 L16): each asset ends at $1$, the buy-and-hold $50/50$
+portfolio also, the rebalanced one at $1.5625$.}\label{ch10:fig-rebal}
+\end{figure}
+
+Two objections are discussed in class \ts{24}{13}{43:16}\ts{24}{13}{44:18}. Is this not a bet on mean reversion,
+losing money in a trend? Yes: rebalancing sells the winner and buys the loser, which pays when returns alternate
+and loses when they trend (the case of \cref{sec:ewport}, where daily rebalancing to equal weights was not obviously
+better). The rule of thumb is therefore \emph{consistency of views}: the equal weights expressed the belief that the
+two assets have the same distribution and the same risk; unless the view has changed, letting the weights drift
+means holding a non-equal portfolio by accident. ``The only free lunch is diversification, but you have to
+rebalance to eat it.''
+
+\begin{proposition}[Excess growth of a constant mix; not discussed in class]\label{ch10:prop-growth}
+Let asset $i$ follow a geometric Brownian motion with $\dd S_i/S_i=\mu_i\dd t+\sigma_i\dd W_i$ and
+$\Cov(\dd W_i,\dd W_j)=\rho_{ij}\dd t$. Asset $i$ alone grows at the logarithmic rate $\mu_i-\frac12\sigma_i^2$.
+A portfolio rebalanced \emph{continuously} to the weights $\bm w$ has
+\begin{equation}\label{ch10:eq-growth}
+  g(\bm w)=\bm w\T\bm\mu-\tfrac12\bm w\T\Sigma\bm w,\qquad
+  g(\bm w)-\sum_iw_i\bigl(\mu_i-\tfrac12\sigma_i^2\bigr)=\tfrac12\Bigl(\sum_iw_i\sigma_i^2-\bm w\T\Sigma\bm w\Bigr)\ge0 .
+\end{equation}
+\end{proposition}
+\begin{proof}
+The wealth $V$ of the constant mix satisfies $\dd V/V=\bm w\T\bm\mu\dd t+\bm w\T\bm\sigma\dd\bm W$ (its return is
+$\bm w\T$ times the vector of returns, \cref{ch:stochcalc}), so by It\^o's formula
+$\dd\log V=(\bm w\T\bm\mu-\tfrac12\bm w\T\Sigma\bm w)\dd t+\dots$. The inequality is $\Var(\sum_iw_iR_i)\le\sum_iw_i\Var R_i$,
+i.e.\ convexity of the variance.
+\end{proof}
+The gain is the ``volatility harvesting'' or ``diversification return''. Two uncorrelated assets with $\sigma=20\%$
+and the same $\mu$, kept at $50/50$, grow at $\mu-1\%$ per year, while each alone grows at $\mu-2\%$: the
+rebalanced portfolio gains $\sigma^2/4=1\%$ per year over the average of its components. The example above is the
+extreme case: $\rho=-1$, growth rates of $0\%$ for each asset, $25\%$ for the mix.
+
+% ==================================================================
+\section{Leverage, the 60/40 portfolio and risk parity}\label{ch10:sec-rp}
+
+Two-asset portfolios are important in practice, because managers are often benchmarked to a mix of equities and
+bonds, the most famous being the \emph{60/40} portfolio: $60\%$ in equities and $40\%$ in bonds. Any fund is still
+compared with it \ts{13}{16}{41:28}\ts{13}{16}{42:34}\ts{13}{16}{47:42}.
+
+\subsection{Weights are not risks}
+Equities are much more volatile than bonds, so a $60/40$ portfolio is really an equity portfolio in risk terms.
+The idea of \emph{risk parity} (the name was coined in 2005 by Edward Qian, as Xia recalls) is to allocate
+\emph{risk} rather than capital: equal risk from each component, instead of weights by market value
+\ts{13}{16}{49:54}\ts{13}{16}{50:55}\ts{24}{13}{38:56}. Before 2000, Xia recalls, a passive $60/40$ was the norm; the
+2000 equity peak and bond rally and the 2008 crash, when government bonds rallied while equities fell, made
+investors question it \ts{13}{16}{48:48}\ts{13}{16}{49:54}. To define the risk contribution of an asset one
+needs a decomposition of $\sigma_P=\sqrt{\bm w\T\Sigma\bm w}$; it comes from Euler's theorem, since $\sigma_P$ is
+homogeneous of degree one in $\bm w$.
+
+\begin{definition}[Risk contributions]\label{ch10:def-rc}
+The \emph{risk contribution} of asset $i$ to a portfolio $\bm w$ is
+\[
+  \mathrm{RC}_i=w_i\frac{\partial\sigma_P}{\partial w_i}=\frac{w_i(\Sigma\bm w)_i}{\sigma_P}=\frac{w_i\Cov(R_i,R_P)}{\sigma_P},
+  \qquad \sum_i\mathrm{RC}_i=\sigma_P .
+\]
+A portfolio has \emph{equal risk contributions} (risk parity, ERC) if $\mathrm{RC}_i=\mathrm{RC}_j$ for all $i,j$, that is
+$w_i(\Sigma\bm w)_i=$ const.
+\end{definition}
+The identity $\sum_i\mathrm{RC}_i=\sigma_P$ is Euler's theorem, or simply $\sum_iw_i(\Sigma\bm w)_i=\bm w\T\Sigma\bm w=\sigma_P^2$.
+
+\begin{proposition}[Risk parity for two assets and for equal correlations]\label{ch10:prop-rp}
+\leavevmode
+\begin{enumerate}[(i)]
+  \item For two assets with volatilities $\sigma_1,\sigma_2$ and \emph{any} correlation $\rho>-1$ the risk-parity
+      weights are $w_1:w_2=1/\sigma_1:1/\sigma_2$ (inverse volatility).
+  \item The same holds for $m$ assets with equal
+      pairwise correlations, whatever the volatilities.
+  \item If, in addition, all assets have the \emph{same Sharpe
+      ratio}, this risk-parity portfolio is the tangency portfolio $\bm w_M$ of \cref{ch10:thm-tobin}.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(i) If $w_1\sigma_1=w_2\sigma_2=:\kappa$ then $w_1(\Sigma\bm w)_1=w_1(w_1\sigma_1^2+w_2\rho\sigma_1\sigma_2)=\kappa^2(1+\rho)$ and
+likewise for asset~2.
+
+(ii) With $\Sigma=D C D$, $D=\diag(\sigma_i)$, $C=(1-\rho)I+\rho\bm 1\bm 1\T$, and
+$w_i=\kappa/\sigma_i$, i.e.\ $D\bm w=\kappa\bm 1$: $w_i(\Sigma\bm w)_i=w_i\sigma_i(C D\bm w)_i=\kappa^2(C\bm 1)_i=\kappa^2(1+(m-1)\rho)$,
+independent of $i$.
+
+(iii) $\mu_i-r_0=s\sigma_i$ gives $\bm\eta=sD\bm 1$ and $\Sigma^{-1}\bm\eta=sD^{-1}C^{-1}\bm 1=
+s\,D^{-1}\bm 1/(1+(m-1)\rho)$, proportional to $1/\sigma_i$.
+\end{proof}
+
+\begin{example}[60/40 versus risk parity, hypothetical numbers]\label{ch10:ex-rp}
+Let equities have volatility $15\%$ and bonds $5\%$, uncorrelated, and let both have a Sharpe ratio of $0.3$
+(excess returns $4.5\%$ and $1.5\%$). These numbers are \emph{not} from the course; they are chosen so that the
+volatility ratio is $3$, which reproduces the $25/75$ equity/bond risk-parity split quoted in class
+\ts{13}{16}{59:21}. Then:
+\begin{center}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+portfolio (eq./bond) & $\sigma_P$ & excess ret. & Sharpe & eq.\ risk & bond risk\\
+\midrule
+$60/40$ & $9.2\%$ & $3.3\%$ & $0.358$ & $95.3\%$ & $4.7\%$\\
+risk parity $25/75$ & $5.3\%$ & $2.25\%$ & $0.424$ & $50\%$ & $50\%$\\
+risk parity levered $1.74\times$ & $9.2\%$ & $3.9\%$ & $0.424$ & $50\%$ & $50\%$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The $60/40$ portfolio takes $95\%$ of its risk from equities. Risk parity has a higher Sharpe ratio (here it is
+the tangency portfolio by \cref{ch10:prop-rp}(iii), $0.3\sqrt2=0.424$) but a lower return; to get it back, one
+\emph{levers} it: borrowing $74\%$ of the capital at the riskless rate brings the volatility up to that of the $60/40$
+portfolio and the excess return to $3.9\%$ against $3.3\%$
+\ts{13}{16}{56:12}\ts{13}{16}{59:21}\ts{24}{13}{40:00}. Values computed with the formulas above.
+\end{example}
+That is the ``levered risk parity'' of 2024 slide~19: a levered bond allocation to achieve an equal risk
+contribution from equities and bonds, so that the leverage is what buys back the return. Because Sharpe ratios
+are invariant to leverage (\cref{ch10:prop-sharpe}), the gain comes from choosing the point of maximal Sharpe ratio.
+
+\begin{finance}[Limits of risk parity]
+Risk parity uses \emph{no return forecasts}, only volatilities and correlations; this is attractive because,
+a remark from the audience (apparently by Kempthorne, whom the transcript does not name) put it, returns cannot be
+estimated accurately even with more data, whereas volatilities can (\cref{ch10:sec-est}) \ts{13}{16}{1:25:00}. But it does depend on a forecast of volatility from history: asked why risk-parity
+funds lost heavily in May--June 2013, Xia explained that they overweight low-volatility bonds, which sold off when
+the Fed chairman announced the tapering of quantitative easing \ts{13}{16}{1:14:26}. He then asked whether this
+episode proves the approach wrong, or the 2008 crisis proves it right, and concluded that the evidence is
+inconclusive: one is ``driving while looking in the rear-view mirror''
+\ts{13}{16}{1:15:30}. Leverage carries liquidity risk, not treated in the lecture \ts{13}{16}{59:21}.
+\end{finance}
+
+\begin{intuition}[Leverage and beta]
+Levering a portfolio by a factor $\ell$ multiplies its beta to every factor, and its volatility, by $\ell$, and
+the excess return by $\ell$: the Sharpe ratio is unchanged, like the direction of a vector when it is rescaled.
+For $\sigma_P=w_2\sigma_2$ in the two-asset special case, $\beta=\sigma_P/\sigma_2$
+\ts{13}{16}{1:03:38}: ``a higher volatility of the portfolio means a higher beta to the risky asset''.
+\end{intuition}
+
+% ==================================================================
+\section{Utility theory: why mean and variance?}\label{ch10:sec-utility}
+
+Markowitz reduces a portfolio to its mean and variance. When is that legitimate? Kempthorne's answer is the
+\emph{von Neumann--Morgenstern theory} of decisions under uncertainty: a rational agent has a utility function
+$u$ of wealth and chooses the portfolio $P$ maximising the \emph{expected utility} $\E[u(W)]$ of the terminal
+wealth $W=W_0(1+R_P)$ \ts{13}{14}{48:55}\ts{13}{14}{50:00}\ts{13}{14}{51:01}. Sensible preferences give
+$u'>0$ (more is better) and $u''<0$ (decreasing marginal utility, risk aversion) \ts{13}{14}{52:01}. The
+Arrow--Pratt coefficients are
+\begin{align*}
+  \lambda_A(W)&=-\frac{u''(W)}{u'(W)}\quad\text{(absolute risk aversion)},\\
+  \lambda_R(W)&=-\frac{W\,u''(W)}{u'(W)}\quad\text{(relative)}.
+\end{align*}
+(Slide~19 of \file{lecnote14}; the same $\lambda_A$ appears in \cref{ch03:sec-capm}, where the CARA case is treated.)
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}llccl@{}}
+\toprule
+& $u(W)$ & $\lambda_A(W)$ & $\lambda_R(W)$ & remark\\
+\midrule
+linear & $a+bW$, $b>0$ & $0$ & $0$ & risk neutral\\
+quadratic & $W-\frac12\lambda W^2$, $W<1/\lambda$ & $\dfrac\lambda{1-\lambda W}$ & $\dfrac{\lambda W}{1-\lambda W}$ & mean--variance is exact\\
+exponential & $1-e^{-\lambda W}$ & $\lambda$ & $\lambda W$ & CARA\\
+power & $W^{1-\lambda}$, $0<\lambda<1$ & $\lambda/W$ & $\lambda$ & CRRA\\
+logarithmic & $\ln W$ & $1/W$ & $1$ & CRRA, Kelly\\
+\bottomrule
+\end{tabular}
+\caption{The utility functions of slide~20 of \file{lecnote14} \ts{13}{14}{54:08}, with their risk-aversion coefficients (computed here).
+Quadratic utility has \emph{increasing} absolute risk aversion and is not increasing beyond $W=1/\lambda$.}\label{ch10:tab-utility}
+\end{table}
+
+\subsection{From expected utility to mean--variance}
+\begin{proposition}[Three routes to mean--variance analysis]\label{ch10:prop-mv-utility}
+\leavevmode
+\begin{enumerate}[(i)]
+  \item For any smooth $u$, expanding around $w_*=\E W$ gives to second order
+      $\E u(W)\approx u(w_*)+\tfrac12u''(w_*)\Var W$, i.e.\ up to a positive factor and a constant,
+      $\E W-\frac12\lambda_A(w_*)\Var W$ \ts{13}{14}{53:06}\ts{13}{14}{54:08}.
+  \item For quadratic utility the expected utility is exactly $\mu_W-\frac\lambda2(\mu_W^2+\sigma_W^2)$, a function of the mean
+      and variance of $W$ alone \ts{13}{14}{55:09}.
+  \item If $W\sim N(\mu_W,\sigma_W^2)$, for \emph{any} increasing concave $u$, $\E u(W)$ is increasing in $\mu_W$ and
+      decreasing in $\sigma_W^2$, so that only the pair $(\mu_W,\sigma_W)$ matters and the efficient frontier is the set of
+      candidates for the optimum; for exponential utility, $\E u(W)=1-\exp\{-\lambda(\mu_W-\frac\lambda2\sigma_W^2)\}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(i) Taylor's formula at $w_*$, with $\E(W-w_*)=0$: the first-order term drops, and $u''=-\lambda_Au'$.
+
+(ii) Compute
+$\E[W-\frac\lambda2W^2]$.
+
+(iii) Write $\E u(W)=\int u(x)\varphi(x;\mu_W,\sigma_W^2)\dd x$; the Gaussian density satisfies the
+heat equation $\partial_{\sigma^2}\varphi=\frac12\partial_x^2\varphi$ and $\partial_\mu\varphi=-\partial_x\varphi$, so
+integrating by parts, $\partial_{\sigma^2}\E u=\frac12\E u''(W)<0$ and $\partial_\mu\E u=\E u'(W)>0$. For the exponential,
+use the moment generating function of the normal (\cref{ch03:eq-normalmgf}).
+\end{proof}
+\begin{intuition}[Variance as the heat-equation time]
+For a Gaussian, the variance plays the role of the time in the diffusion equation: $\E u(W)$ is $u$ smoothed by
+a Gaussian of width $\sigma_W$, and smoothing a concave function can only lower its value.
+\end{intuition}
+So mean--variance analysis is the right thing to do if the utility is quadratic, \emph{or} if returns are Gaussian
+(Kempthorne, 2013: ``the imagination that returns are Gaussian''), at least to first orders otherwise
+\ts{13}{14}{55:09}\ts{13}{14}{56:11}. With exponential utility and normal returns, wealth
+$W=W_0(1+\bm w\T\bm R)$ has certainty equivalent $W_0\bigl(1+\bm w\T\bm\mu-\frac\lambda2\bm w\T\Sigma\bm w\bigr)$ with
+$\lambda=\lambda_AW_0$, exactly \emph{problem III} of \cref{ch10:sec-mvo}; with a riskless asset the solution is
+$\bm w=\lambda^{-1}\Sigma^{-1}\bm\eta$, i.e.\ the fraction $m_{\bm w}=(\mu_M-r_0)/(\lambda\sigma_M^2)$ of the wealth in the
+market portfolio (from \cref{ch10:thm-tobin}): the risk aversion fixes only \emph{how much}, in accord with
+Tobin's separation.
+
+\subsection{Higher moments}
+When returns are not Gaussian one goes on in the Taylor series (slides 32--33 of \file{lecnote14})
+\ts{13}{14}{56:11}:
+\[
+  \E u(W)=u(w_*)+\tfrac12u''(w_*)\Var W+\tfrac1{3!}u'''(w_*)\,m_3+\tfrac1{4!}u^{(4)}(w_*)\,m_4+\cdots,\qquad m_k=\E(W-w_*)^k,
+\]
+with $m_3$ and $m_4$ the third and fourth central moments (the slides call them ``Skew'' and ``Kurtosis''). For
+the utilities of \cref{ch10:tab-utility} (exponential, power, log) $u'''>0$ and $u^{(4)}<0$: investors like positive
+skewness and dislike large fourth moments. The corresponding optimisation
+$\max\ \E R_P-\lambda_1\Var R_P+\lambda_2m_3-\lambda_3m_4$ subject to $\bm 1\T\bm w=1$ has no closed form; the slides mention
+multi-objective methods and \emph{polynomial goal programming}, and warn that skewness and kurtosis are hard
+to estimate (they are sensitive to outliers and need large samples).
+
+% ==================================================================
+\section{Sizing: the Kelly criterion and the gain--loss ratio}\label{ch10:sec-kelly}
+
+\subsection{Kelly}
+The \emph{Kelly formula} is mentioned by Xia and, at the end of the lecture, by Kempthorne \ts{13}{16}{45:21}\ts{13}{16}{1:26:07}. Consider repeated
+independent bets in which a stake gains $g$ per unit staked with probability $p$ and loses $l$ per unit with
+probability $q=1-p$. Betting a fraction $f$ of the wealth each time multiplies the wealth by $1+fg$ or $1-fl$, and by the
+law of large numbers (\cref{ch03:sec-limits}) $\frac1n\log W_n\to G(f)=p\log(1+fg)+q\log(1-fl)$ almost surely. The
+fraction that maximises the long-run growth rate is
+\begin{equation}\label{ch10:eq-kelly}
+  f^*=\frac pl-\frac qg=\frac{pg-ql}{gl},
+\end{equation}
+since $G'(f)=pg/(1+fg)-ql/(1-fl)=0$ gives $pg(1-fl)=ql(1+fg)$, i.e.\ $f\,gl(p+q)=pg-ql$. For an even-money bet
+($g=l=1$), $f^*=p-q=2p-1$: with probability $\frac12$ one bets nothing, with $p=1$ everything, and with $p=0$ one bets
+everything \emph{on the other side}, as Xia says \ts{13}{16}{45:21}\ts{13}{16}{46:23}. It is expected-log utility
+(\cref{ch10:tab-utility}), the ``Kelly criterion'' of Kelly, Shannon and Thorp, criticised by Samuelson in the
+debate recalled in the case of \cref{ch03:sec-capm} and in \emph{Fortune's Formula}; the co-lecturer, speaking from the audience,
+stresses that, unlike the single-period theory of this chapter, it deals with \emph{multi-period} investment
+\ts{13}{16}{1:26:07}\ts{13}{16}{1:27:08}. For one asset with Gaussian excess return $\mu$ and variance
+$\sigma^2$ per period the growth rate of a fraction $f$ is $r_0+f\mu-\frac12f^2\sigma^2$
+(\cref{ch10:prop-growth}), maximised at $f^*=\mu/\sigma^2$, the Sharpe ratio divided by the volatility
+(not discussed in class); Kelly is problem III with $\lambda=1$.
+
+\subsection{Xia's gain--loss ratio}
+Xia argues that volatility is a poor risk measure because it is symmetric; a long out-of-the-money call
+\emph{wants} high volatility, a short option position wants low volatility \ts{24}{13}{47:28}, and the Sharpe ratio
+inherits the flaw; the Sortino ratio separates the downside but does not tell how much to invest
+\ts{24}{13}{48:30}. He proposes to summarise the distribution of the profit and loss $R$ of an investment
+(per period, or of the terminal outcome) by the \emph{expected gain} and \emph{expected loss}, both positive numbers,
+\[
+  G=\E[R^+],\qquad L=\E[R^-],\qquad \text{so}\qquad G-L=\E R,\quad G+L=\E|R| ,
+\]
+and to rank investments by the ratio
+\begin{equation}\label{ch10:eq-gl}
+  \frac{G-L}{G+L}=1-\frac{2L}{G+L}=\frac{\E R}{\E|R|}\in[-1,1],
+\end{equation}
+which he interprets directly as a position size (2024 slide~24) \ts{24}{13}{48:30}\ts{24}{13}{49:33}. In the
+$(L,G)$ plane every investment is a point; the $45^\circ$ line is $G=L$ (zero expected return) and the
+ratio is the slope of the ray from the origin: one wants points far above the diagonal
+(slide~24: ``$G\gg L$'') and maximises $G$ for given $L$, which replaces the volatility budget by a
+\emph{loss} budget \ts{24}{13}{50:37}\ts{24}{13}{51:37}. For a discrete payoff, $G$ and $L$ are sums of probability
+times payoff over winning and losing outcomes; in the continuous case they are integrals of the payoff against the
+density over $R>0$ and $R<0$, or against a target return other than $0$ \ts{24}{13}{50:37}. Estimation needs only
+``half distributions'', no more work than a mean and a standard deviation \ts{24}{13}{52:41}\ts{24}{13}{53:47};
+the gain and loss of a combination of two investments depends on how they move together and is found by
+Monte Carlo simulation of the joint distribution \ts{24}{13}{54:54}. The \emph{2024 Investment Game} of \cref{ex:game}
+is the empirical version: for the chosen stock, sum the daily gains and losses over two months and compute
+$(G-L)/(G+L)$; picking a very volatile stock raises $G-L$ but also the denominator, so the ratio ranks
+investments of different volatilities on a common scale \ts{24}{13}{51:37}.
+
+\begin{proposition}[Properties of the ratio \eqref{ch10:eq-gl}; not proved in class]\label{ch10:prop-gl}
+\leavevmode
+\begin{enumerate}[(i)]
+  \item For an even-money bet ($R=\pm1$ with probabilities $p,q$) the ratio is $p-q$, the Kelly fraction \eqref{ch10:eq-kelly};
+      for $g\neq l$ the two differ (for $g=2$, $l=1$, $p=\frac12$: Kelly $f^*=0.25$, ratio $=1/3$). So ``the same as Kelly
+      for binary bets'' (slide~24) holds for even-money bets, or as an approximation.
+  \item If $R\sim N(m,s^2)$ the ratio equals $S/h(S)$ with $S=m/s$ and $h(S)=2\varphi(S)+S(2\Phi(S)-1)$, an increasing function
+      of the Sharpe ratio: for symmetric returns it gives the same ranking as the Sharpe ratio.
+  \item For skewed payoffs the two rankings differ: $R\equiv2$ w.p.\ $\frac12$ and $0$ w.p.\ $\frac12$ has mean $1$ and standard deviation $1$,
+      so does $N(1,1)$, and the ratios are $1$ (never a loss) and $0.857$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(i) $G=p$, $L=q$, $G+L=1$. For the Kelly value use \eqref{ch10:eq-kelly}.
+
+(ii) For $R=m+sZ$,
+$\E|R|=s\bigl[2\varphi(S)+S(2\Phi(S)-1)\bigr]$ (fold the normal), and $h'(S)=2\Phi(S)-1$, so
+$(S/h)'=(h-Sh')/h^2=2\varphi(S)/h^2>0$.
+
+(iii) $G=1$, $L=0$; for $N(1,1)$, $h(1)=1.1666$ and $1/h(1)=0.857$.
+\end{proof}
+
+% ==================================================================
+
+
+\section{Portfolio constraints}\label{ch10:sec-constr}
+
+Real portfolios are subject to constraints, which Kempthorne lists (slides 22--25 of \file{lecnote14})
+\ts{13}{14}{57:16}\ts{13}{14}{58:20}. With $\bm w$ the target portfolio, $\bm w_0$ the current one, $\bm x=\bm w-\bm w_0$ the
+trade and $\bm w_B$ a benchmark portfolio:
+\begin{itemize}
+  \item \textbf{Long-only}: $w_j\ge0$. \textbf{Holding constraints}: $L_j\le w_j\le U_j$, for instance a cap
+        on each position; in a medium-frequency equity strategy, a position must not exceed a day's trading
+        volume, or it could not be liquidated \ts{13}{14}{58:20}.
+  \item \textbf{Turnover}: $|x_j|\le U_j$ for each asset and $\sum_j|x_j|\le U_*$ overall, because one cannot
+        trade arbitrarily much in one period.
+  \item \textbf{Benchmark exposure}: $\sum_i|w_i-w_{B,i}|\le U_B$, to remain close to an index (S\&P~500,
+        NASDAQ-100, Russell) while trying to beat it \ts{13}{14}{59:30}.
+  \item \textbf{Tracking error}: $\mathrm{TE}_P=R_P-R_B=(\bm w-\bm w_B)\T\bm R$, so
+        $\Var(\mathrm{TE}_P)=(\bm w-\bm w_B)\T\Sigma(\bm w-\bm w_B)\le\bar\sigma^2_{\mathrm{TE}}$
+        \ts{13}{14}{1:00:31}.
+  \item \textbf{Factor constraints}: for a factor model $R_{i,t}=\alpha_i+\sum_k\beta_{i,k}f_{k,t}+\epsilon_{i,t}$
+        (\cref{ch07:sec-lfm}), the exposure to factor $k$ is $\sum_i\beta_{i,k}w_i$ and one imposes
+        $|\sum_i\beta_{i,k}w_i|\le U_k$; many strategies \emph{neutralise} all exposures, $\sum_i\beta_{i,k}w_i=0$
+        \ts{13}{14}{1:01:33}\ts{13}{14}{1:02:33}.
+  \item \textbf{Minimum transaction or holding size} and \textbf{integer constraints}: equities trade in round lots
+        and one share of a stock worth several hundred dollars is a significant amount compared with one of a
+        \$50 stock, which matters for small portfolios but not for large ones \ts{13}{14}{1:02:33}\ts{13}{14}{1:03:33}.
+\end{itemize}
+Constraints of the first four types are linear or quadratic in $\bm w$: slide~25 writes general linear constraints
+$A_w\bm w\le\bm u_w$, $A_x\bm x\le\bm u_x$, $A_B(\bm w-\bm w_B)\le\bm u_B$ and quadratic ones $\bm w\T Q_w\bm w\le q_w$,
+$\bm x\T Q_x\bm x\le q_x$, $(\bm w-\bm w_B)\T Q_B(\bm w-\bm w_B)\le q_B$. The optimisation is then the same as before with
+additional Lagrange multipliers, that is a \emph{convex quadratic programme} \ts{13}{14}{1:03:33}. Integer constraints make
+it non-convex.
+
+\begin{proposition}[Structure of the constrained solution; not discussed in class]\label{ch10:prop-constr}
+Consider the problem I with additional linear inequality constraints.
+\begin{enumerate}[(i)]
+  \item The optimal value $\sigma_0^2(\mu_0)$ is
+      never smaller than the unconstrained one \eqref{ch10:eq-frontier}, and it increases as constraints are added or tightened.
+  \item The Karush--Kuhn--Tucker conditions with a fixed set of active constraints are \emph{linear} in
+      $(\bm w,\text{multipliers})$ and in $\mu_0$; therefore the optimal weights are piecewise affine in the target return
+      $\mu_0$, and the pieces end when a new constraint becomes active or a multiplier changes sign.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(i) A smaller feasible set has a larger minimum.
+
+(ii) With the active constraints imposed as equalities,
+the first-order conditions are the linear system of \cref{ch10:thm-mvo} enlarged by the active rows, whose
+solution is affine in the right-hand side $(\mu_0,1,\text{bounds})$; strict convexity makes it unique.
+\end{proof}
+That is exactly what the plots of the case study show (\cref{ch10:sec-case}): weights that grow along straight
+lines in the target return, kinks when a weight reaches its cap, and new assets entering. Below the first
+kink (only the constraints $w_j\ge0$ active) the solution is a \emph{scaled} fixed portfolio: ``they enter in the same
+proportion'', the de-levered tangency portfolio of \cref{ch10:thm-tobin} computed on the assets that enter, i.e.\ the
+\emph{long-only} tangency portfolio, not the unconstrained one, which has short positions (Case Study~6, and Kempthorne
+\ts{13}{14}{1:09:02}).
+
+\begin{finance}[Benchmarked management]
+A manager measured against an index does not solve problem~I but the same quadratic problem in the \emph{active
+weights} $\bm x_B=\bm w-\bm w_B$: maximise $\bm x_B\T\bm\mu-\frac\lambda2\bm x_B\T\Sigma\bm x_B$, the tracking-error
+variance being the risk. The efficient frontier is then drawn in the plane (tracking error, active return), and its
+slope is the information ratio. Factor-neutrality constraints remove market, sector or style bets so that the
+return is pure stock selection.
+\end{finance}
+
+% ==================================================================
+\section{Estimation error and the fragility of the optimiser}\label{ch10:sec-est}
+
+Everything above takes $\bm\mu$ and $\Sigma$ as known, ``the problem where we assume basically certainty''
+\ts{13}{14}{2:07}. In practice they are estimated, and the estimates are noisy \ts{13}{14}{20:08}. Xia's first
+objection to modern portfolio theory is exactly that: the capital market assumptions of return,
+volatility and correlation are not reliable, and the mean--variance solution is very sensitive to them, is
+``unstable'' and has ``unlimited'' solutions unless bounded by artificial constraints
+\ts{24}{13}{45:22}\ts{24}{13}{46:27}.
+
+\subsection{How noisy is a sample mean?}
+Suppose returns are i.i.d.\ Gaussian with annual mean $\mu$ and volatility $\sigma$ and are observed for $T$ years, at any
+frequency. The sample mean has standard error $\sigma/\sqrt T$ \emph{independent of the sampling frequency}, since only
+the total time span matters, whereas the sample volatility, computed from $n$ increments, has relative standard error
+$1/\sqrt{2n}$ (\cref{ch03:sec-limits}, \cref{ch:volatility}). For 500 weekly returns ($T=9.6$ years, $n=500$):
+\begin{center}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+& true value & standard error & sample values in \file{Smltn_TwoAst}\\
+\midrule
+mean of asset 1 & $15\%$ & $\sigma_1/\sqrt T=6.4\%$ & $0.085$--$0.21$\\
+mean of asset 2 & $25\%$ & $\sigma_2/\sqrt T=9.7\%$ & $0.177$--$0.343$\\
+vol.\ of asset 1 & $20\%$ & $3.2\%$ of itself ($0.6\%$) & $0.191$--$0.200$\\
+vol.\ of asset 2 & $30\%$ & $3.2\%$ of itself ($0.9\%$) & $0.287$--$0.291$\\
+\bottomrule
+\end{tabular}
+\end{center}
+This is what Kempthorne shows by simulation: sample means may be far from the population values while volatilities
+and correlations are estimated much better \ts{13}{14}{21:08}\ts{13}{14}{22:11}, and what the audience remark of
+2013 L16 says about returns versus volatilities \ts{13}{16}{1:25:00}. In finance ``more data'' means longer periods
+(the mean does not improve by sampling faster), while regime changes limit how far back one can go: the choice of
+the estimation period is itself an issue \ts{13}{14}{1:20:06}. With the five-year sector-ETF sample of
+Case Study~6 the mean of a sector with $\sigma=20\%$ has a standard error of $9\%$, larger than most differences
+between the sector means ($10\%$ to $24\%$).
+
+\subsection{What the optimiser does with the errors}
+Because $\bm w\propto\Sigma^{-1}\bm\eta$ and highly correlated assets make $\Sigma$ nearly singular, errors in
+the means are amplified in the weights. On the rounded nine-ETF inputs of \cref{ch10:tab-etf} (computed here), the
+tangency portfolio for $r_0=0$ is extremely leveraged, and \emph{very small changes of the means, of one
+percentage point per asset}, change it a lot:
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}lrrrrrrrrrr@{}}
+\toprule
+weights & XLB & XLV & XLP & XLY & XLE & XLF & XLI & XLK & XLU & $\sum|\Delta w|$\\
+\midrule
+base means & $-0.32$ & $0.59$ & $0.58$ & $1.49$ & $-0.06$ & $-0.36$ & $-0.45$ & $-0.10$ & $-0.35$ & \\
+XLY mean $+1$ pp & $-0.34$ & $0.63$ & $0.53$ & $1.73$ & $-0.05$ & $-0.39$ & $-0.54$ & $-0.18$ & $-0.38$ & $0.58$\\
+$\pm1$ pp draw A & $-0.32$ & $0.75$ & $0.28$ & $1.19$ & $-0.09$ & $-0.35$ & $-0.29$ & $0.07$ & $-0.24$ & $1.24$\\
+$\pm1$ pp draw B & $-0.57$ & $0.68$ & $0.42$ & $2.07$ & $-0.05$ & $-0.55$ & $-0.19$ & $-0.33$ & $-0.48$ & $1.91$\\
+\bottomrule
+\end{tabular}
+\end{center}
+(Draw A is $+,+,-,-,+,+,+,+,+$ pp and draw B $-,-,-,+,-,-,+,-,-$ pp for XLB to XLU; the weights sum to $1$.) For comparison,
+the sum of absolute weights is $4.3$: a $\pm1$pp error in each mean, well inside the statistical
+error, moves $29\%$ and $44\%$ of that gross exposure (draws A and B). In this respect the caps of \cref{ch10:sec-constr} act as
+regularisation, ``artificial constraints'' that bound the solutions \ts{24}{13}{45:22}. The minimum-variance portfolio
+$\bm w_g$ does not use $\bm\mu$ at all, which is why it is popular.
+
+\subsection{Remedies}
+The slides list the standard alternatives \ts{13}{14}{1:20:06} (slide~27 of \file{lecnote14}): the sample means and
+covariance are the least-squares, unbiased and, under Gaussian assumptions, maximum likelihood estimates, but
+one may instead use \emph{exponentially weighted moving averages} (\cref{ch:volatility}), \emph{dynamic factor
+models}, and optimisation with a simple model for $\Sigma$, notably Sharpe's \emph{single-index model}
+$R_i=\alpha_i+\beta_iR_m+\epsilon_i$ (with uncorrelated $\epsilon_i$), which gives $\Sigma=\sigma_m^2\bm\beta\bm\beta\T+
+\diag(\sigma^2_{\epsilon,i})$, or the \emph{constant correlation model}, $\Sigma_{ij}=\bar\rho\sigma_i\sigma_j$. A factor model
+estimates $2m+1$ parameters instead of $m(m+1)/2$ (for $m=500$ stocks, $1001$ instead of $125{,}250$), and ``results in
+more precise inputs to the optimisation'' \ts{13}{14}{1:20:06}; see \cref{ch07:sec-lfm,ch:regularized} (shrinkage,
+regularised risk models) and \cref{ch05:sec-shrink}. The returns are the weak point: forecasting them is the actual
+job of an active manager, as an audience member observed in 2013 \ts{13}{16}{1:22:59}\ts{13}{16}{1:24:00}.
+
+\begin{finance}[Why the frontier is estimated with errors: ``error maximisation'']
+An optimiser puts most weight on the assets whose estimated means are too high and whose estimated variances are too
+low, which is precisely where estimation errors are largest: the out-of-sample performance of the
+mean--variance solution is typically worse than the in-sample frontier suggests (not discussed in class).
+\end{finance}
+
+% ==================================================================
+\section{Other risk measures}\label{ch10:sec-risk}
+
+Volatility is only one measure of risk, and Kempthorne closes 2013 L14 by showing how the machinery extends
+\ts{13}{14}{1:20:06}\ts{13}{14}{1:21:13} (slides 29--33). Let $R_P=\bm w\T\bm R$.
+\begin{itemize}
+  \item \textbf{Mean absolute deviation}, $\mathrm{MAD}=\E|\bm w\T(\bm R-\bm\mu)|$, leads to a linear programme with linear or
+        quadratic constraints. Where the variance is the natural scale for Gaussian returns, MAD is natural for
+        heavier-tailed, e.g.\ exponential (Laplace), returns \ts{13}{14}{1:21:13}.
+  \item \textbf{Semi-variance}, $\E[\min(R_P-\E R_P,0)^2]$, the downside variance, introduced by Markowitz himself:
+        it controls downside rather than upside risk \ts{13}{14}{1:21:13}. Its square root, relative to a target,
+        is the denominator of the Sortino ratio \ts{24}{13}{48:30}.
+  \item \textbf{Value at risk}, $\mathrm{VaR}_{1-\epsilon}(R_P)=\min\{r:\Prob(R_P\le-r)\le\epsilon\}$ with $\epsilon=0.05,0.01,0.001$,
+        popularised by JP~Morgan's RiskMetrics \ts{13}{14}{1:22:18}. It is standard for cash instruments (stocks, bonds) but,
+        as Kempthorne says, for derivatives with nonlinear payoffs ``things get complicated'' \ts{13}{14}{1:24:25}.
+  \item \textbf{Conditional VaR} (expected shortfall), $\mathrm{CVaR}_{1-\epsilon}(R_P)=\E[-R_P\mid-R_P\ge\mathrm{VaR}_{1-\epsilon}(R_P)]$, the average
+        loss beyond the VaR, which is where VaR is silent; expected to enter bank regulation
+        \ts{13}{14}{1:23:22}. The optimisation of CVaR is a linear programme (Rockafellar and Uryasev, 2000, cited on the slide).
+\end{itemize}
+Definitions with the loss convention, the coherence axioms and the estimation of VaR and ES are in
+\cref{ch08:sec-riskmeasures,ch:var}; here only the portfolio-theory consequences are needed.
+
+\begin{proposition}[VaR is not subadditive; variance is not monotone; not stated in class]\label{ch10:prop-var}
+Two independent positions each lose $100$ with probability $4\%$ and otherwise $0$. At the $95\%$ level,
+$\mathrm{VaR}=0$ for each (the loss occurs with probability $4\%<5\%$), but for the portfolio of both
+$\Prob(\text{loss}>0)=1-0.96^2=7.84\%>5\%$, so $\mathrm{VaR}_{95\%}=100>0+0$: diversification \emph{increases} VaR.
+The expected shortfalls are $80$ for each and $103.2$ for the portfolio ($\le160$), as CVaR is subadditive. Likewise
+the variance violates monotonicity: $R=0$ and $R'\in\{0,1\}$ with probability $\frac12$ each satisfy $R\le R'$ but
+$\Var R=0<\Var R'=\frac14$, whereas monotonicity requires $s(R)\ge s(R')$.
+\end{proposition}
+\noindent (Checked by direct computation: $\mathrm{ES}_{95\%}(\text{portfolio})=(0.16\%\cdot200+4.84\%\cdot100)/5\%=103.2$.)
+
+\begin{coursenote}[Erratum: translation invariance on slide~31 of \file{lecnote14}]
+The slide, written for \emph{returns}, defines a coherent measure by: monotonicity ($R_P\le R_{P'}$ w.p.~1 $\Rightarrow s(R_P)\ge s(R_{P'})$),
+subadditivity, positive homogeneity, and ``translational invariance $s(R_P+a)\le s(R_P)-a$''. The standard axiom
+(Artzner--Delbaen--Eber--Heath 1999) is an \emph{equality}, $s(R_P+a)=s(R_P)-a$: adding a sure gain $a$ lowers the risk by
+exactly $a$ (in the loss convention of \cref{ch08:def-coherent}, $\rho(L+a)=\rho(L)+a$). The slide's ``coherent'' verdicts
+(variance not, VaR not, CVaR yes) are correct \ts{13}{14}{1:24:25}.
+\end{coursenote}
+
+\begin{finance}[Expected loss, worst loss, stop losses, drawdowns]
+Asked for the best risk measure, Xia answers the \emph{expected loss} $L$, arguing that gains and losses are
+usually not symmetric; one should also know the worst case but cannot size a portfolio on it (one would never invest) \ts{24}{13}{1:14:54}\ts{24}{13}{1:15:58}. Stop losses on trading platforms are set tighter than the
+expected loss (cut the position by half after a small loss, another half after the next), which gives the
+trader an asymmetric, option-like payoff and forces a distribution of the trades that fits it; and hedge-fund managers,
+who take a share of profits but not of the losses, hold ``a free call option'' on the fund
+\ts{24}{13}{1:16:58}\ts{24}{13}{1:18:00}\ts{24}{13}{1:19:01}. The loss tolerance of \cref{ch10:sec-problem} is often expressed as a
+\emph{maximum drawdown} $\max_{s\le t}\bigl(\max_{u\le s}V_u-V_s\bigr)/\max_{u\le s}V_u$, the largest peak-to-trough fall of
+the portfolio value $V$ (not defined in class; see the drawdowns of the concentrated portfolio in \cref{sec:ewport}).
+\end{finance}
+
+% ==================================================================
+\section{Beyond Markowitz: crowds and power laws (2024)}\label{ch10:sec-crowd}
+
+In 2024 Xia devotes the second half of the lecture to three ideas from his own research (slides marked
+``sections 4--7 highlight my research work''): the loss of meaning of volatility as risk (\cref{ch10:sec-kelly}), the
+unpredictability of markets because of \emph{crowd behaviour}, and the origin of \emph{power-law} distributions.
+They are not tested, and are heuristic, but they answer his ``MPT issue number 2'': how do we predict the future from
+the past \ts{24}{13}{54:54}? The scientific method (observe, quantify, extract a pattern, build a model, predict,
+repeat and calibrate, control) applies to physics and engineering, but in finance the historical patterns may not
+be repeatable because humans adapt and herd \ts{24}{13}{56:01}\ts{24}{13}{57:01}. In 2013 the same point was
+made with videos and no formulas: a bridge whose walkers synchronise their steps, and a bank of metronomes on a
+moving plate that synchronise \ts{13}{16}{1:05:51}\ts{13}{16}{1:08:02}; in 2024 with a video of birds
+\ts{24}{13}{58:03} and the London Millennium Bridge \ts{24}{13}{59:05}. The lesson for portfolio management: an
+investor who finds the ``optimal'' strategy finds that everyone else implements it too, and the collective system
+is not optimal but fragile; individual managers also have an incentive to herd, since underperforming the peers is
+punished more than being wrong with the crowd (career risk)
+\ts{13}{16}{1:10:12}\ts{13}{16}{1:16:33}\ts{13}{16}{1:17:37}. Participants change the market they are trying to optimise \ts{13}{16}{1:12:19}.
+
+\subsection{A feedback model of crowd behaviour}
+Slide~28 (drawn on slide~34 with heterogeneous agents) describes the interaction loop of $N$ agents, an external force
+$E$ and an observation $O$ (the price) \ts{24}{13}{1:00:05}:
+\begin{equation}\label{ch10:eq-crowd}
+  \dd S_i=C_i\dd E+B_i\dd O+\varepsilon_i,\qquad \dd O=\sum_{i=1}^NA_i\dd S_i ,
+\end{equation}
+where $S_i$ is the action of agent $i$, $A_i$ its power (influence on the observation), $C_i$ its response to the
+external force, $B_i$ its \emph{reactive function} (how strongly it reacts to the observation) and $\varepsilon_i$
+noise. In the rational state $B_i$ takes low values $\{B_L\}$; when $\dd O$ moves a lot, agents switch to a reactive
+state with high values $\{B_H\}$, and $N_H$ counts them \ts{24}{13}{1:01:08}. The \emph{order parameter}
+\[
+  R(t)=\frac{\bigl|\sum_i\dd S_i(t)\bigr|}{\sum_i|\dd S_i(t)|}\in[0,1]
+\]
+is $1$ if all agents act in the same direction (synchronised) and near $0$ if they are not \ts{24}{13}{1:01:08}.
+The slides plot $R$ against $N_H/N$ (rising steeply from $\approx0.1$ at $N_H=0$ to $1$ at $N_H=N$) and against the noise
+amplitude (falling from $1$ to near $0$: noise desynchronises, as in coupled oscillators)
+\ts{24}{13}{1:02:15}, and a simulated ``bubble'': an external force that rises, then falls and oscillates makes the
+number of reactive agents rise and fall and the observation follow; if the force stays high forever, all agents end up
+reactive and the observation explodes, a \emph{tipping point} when $A\times B_{\max}>1$ (slide~30)
+\ts{24}{13}{1:03:21}\ts{24}{13}{1:04:28}.
+
+\begin{proposition}[Mean-field reading of the tipping point; my derivation, not shown in class]\label{ch10:prop-tipping}
+Suppose all agents react with the same $B_i=B$. Substituting the first equation of \eqref{ch10:eq-crowd} into the second,
+\begin{align*}
+  \dd O&=\sum_iA_iC_i\dd E+B\Bigl(\sum_iA_i\Bigr)\dd O+\sum_iA_i\varepsilon_i,\quad\text{so}\\
+  \dd O&=\frac{N}{1-\bar A B},\quad N=\sum_iA_iC_i\dd E+\sum_iA_i\varepsilon_i,\quad \bar A=\sum_iA_i .
+\end{align*}
+The response of the price to any external push or noise is amplified by the factor $1/(1-\bar AB)$, which is finite
+and positive iff $\bar AB<1$ and diverges as $\bar AB\to1$: with $\bar A B\ge1$ the loop gain exceeds $1$ and the
+feedback is unstable. The switch from $B_L$ to $B_H$ (a higher $B$ when many agents are reactive) moves the system
+towards the threshold, which is the tipping point of slide~30.
+\end{proposition}
+\noindent This is the analogue of the gain of a linear amplifier with positive feedback (Barkhausen criterion), or of the
+critical coupling of a mean-field ferromagnet, $\chi=1/(1-J\bar A)$, the susceptibility diverging at the critical
+temperature. The lecture presents the mechanism qualitatively; the numerical scenarios on the slides are simulations
+whose parameters are not given.
+
+\subsection{Power laws}
+Why are wealth, city sizes, venture-capital returns or viral posts so unequal, unlike heights?
+\ts{24}{13}{1:05:33}\ts{24}{13}{1:06:33}. The $80$--$20$ rule, the Matthew effect and ``winner takes all'' describe distributions
+that are \emph{scale-free}: the top $20\%$ of the people own $80\%$ of the wealth, and within them again the top $20\%$
+own $80\%$, and so on. In symbols $p(bx)=g(b)p(x)$ for all $b>0$ holds (with smooth $p$) iff $p$ is a power law, $p(x)=Cx^{-a}$
+(with $g(b)=b^{-a}$; the ``only if'' is the standard functional-equation argument, $p(bx)=g(b)p(x)$ forces $g(bb')=g(b)g(b')$) \ts{24}{13}{1:05:33}.
+The three usual descriptions are related as follows (slide~33) \ts{24}{13}{1:09:39}\ts{24}{13}{1:10:39}:
+\begin{align*}
+  \text{Pareto (tail):}&\quad \Prob[X>x]\sim x^{-k}, & \text{Zipf (rank $r$):}&\quad \E[x_{(r)}]\sim r^{-b},\\
+  \text{density:}&\quad f(x)=Cx^{-a}, & a&=1+k=1+\frac1b .
+\end{align*}
+(Differentiating the tail gives $a=1+k$; the $r$-th largest of $N$ satisfies $r/N=\Prob[X>x_{(r)}]$, so $x_{(r)}\sim r^{-1/k}$ and $b=1/k$.)
+A Gaussian has no such structure; heights are Gaussian because they are set once, whereas in social
+phenomena ``the rich get richer'': agents have \emph{different powers} $A(i,t)$ and gain power by betting in the
+right direction of the observation, so the power of the crowd concentrates in a few ``super agents'' (governments and central banks, the Fed being the example named in class; in the old days, some hedge funds) whose actions dominate the system
+\ts{24}{13}{1:08:38}\ts{24}{13}{1:10:39}\ts{24}{13}{1:12:49}. He also mentions entropy and stability of such systems as a topic
+``beyond the scope''.
+
+\begin{example}[The $80$--$20$ rule and the Pareto exponent]\label{ch10:ex-pareto}
+If wealth has the tail $\Prob[X>x]=(x_m/x)^k$ with $k>1$, the top fraction $q$ of the population holds the fraction
+$q^{1-1/k}$ of the total wealth (integrate $x$ over the tail). The $80$--$20$ rule, $0.2^{1-1/k}=0.8$, gives
+$k=\ln5/\ln4=1.161$, $a=2.16$, $b=0.861$; and the top $20\%$ of the top $20\%$ hold $80\%$ of the $80\%$, i.e.\ $64\%$ of all
+wealth (top $4\%$), the self-similarity of the lecture. Note $k$ close to $1$: the mean is barely finite
+(for $k\le1$ it is infinite).
+\end{example}
+
+\begin{finance}[What the crowd material means for practice]
+Xia's conclusions of the 2024 lecture (slide~35) \ts{24}{13}{1:11:45}: portfolio management is about \emph{sizing}; clarify
+objectives and know the loss tolerance; diversification helps but requires rebalancing; volatility is not risk and the
+Sharpe ratio captures neither skewness nor sizing (use the gain--loss ratio); capital market assumptions are
+not reliable; crowd behaviour can push markets to extremes; watch the powerful super agents; understand the key drivers of the
+portfolio. The 2013 version ends similarly: ``solving the problem'' is not done, since \emph{when you participate
+in the market you change the market}, and quantitative finance ``is not like solving physics problems''
+\ts{13}{16}{1:11:12}\ts{13}{16}{1:12:19}. A questioner asked whether this is game theory; Xia agreed that it has
+a lot to do with it, but that the markets have no clearly defined rules \ts{13}{16}{1:13:22}. Whether a
+computer can beat a human in investment, he ``cannot confidently say it will not happen''; a colleague added that
+managers also manage people \ts{13}{16}{1:18:37}.
+\end{finance}
+
+
+% ==================================================================
+\section{Case study: simulation and US sector ETFs (2013 Case Study~6)}\label{ch10:sec-case}
+
+\begin{casestudy}[\file{CaseStudy6.pdf}, \file{Smltn_TwoAst.pdf}, \file{ETF_prid*.pdf}]
+\textbf{Goal.} Kempthorne's live demonstration of the theory in R \ts{13}{14}{8:32}\ts{13}{14}{1:04:54}:
+\begin{itemize}
+  \item the feasible set of two
+      assets for several correlations;
+  \item mean--variance optimal portfolios of the nine US sector ETFs, with a riskless
+      asset, with the constraint that no asset exceeds $30\%$ or $15\%$ of the capital.
+\end{itemize}
+
+\textbf{Part 1: two-asset simulation.} Two Gaussian assets with $\mu=(0.15,0.25)$, $\sigma=(0.20,0.30)$ (see the erratum
+below), 500 weekly returns simulated for $\rho=-0.8,-0.4,0,0.4,0.8$. Each page of \file{Smltn_TwoAst} has four
+panels: cumulative returns of the two assets (blue: asset~2, green: asset~1); the feasible set of
+\cref{ch10:sec-two}; the scatter plot of the weekly returns; and the same cumulative returns with the cumulative return
+of the minimum-variance portfolio (cyan) \ts{13}{14}{8:32}\ts{13}{14}{10:44}. In the PDF as distributed only the two asset
+points are drawn in the second panel and the scatter panel is blank, so the curves of \cref{ch10:fig-two} were recomputed.
+The sample statistics printed above the panels are:
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+$\rho$ & $-0.8$ & $-0.4$ & $0$ & $0.4$ & $0.8$\\
+\midrule
+sample means & $0.115,\ 0.341$ & $0.144,\ 0.343$ & $0.183,\ 0.334$ & $0.210,\ 0.321$ & $0.085,\ 0.177$\\
+sample vols & $0.191,\ 0.291$ & $0.194,\ 0.291$ & $0.200,\ 0.289$ & $0.200,\ 0.287$ & $0.196,\ 0.287$\\
+sample corr.\ & $-0.784$ & $-0.359$ & $0.031$ & $0.395$ & $0.791$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Sample volatilities and correlations are close to the population values; the sample means are off by about one
+standard error (\cref{ch10:sec-est}); for $\rho=0.8$ both are well below the population values ($0.085$ and $0.177$ against $0.15$ and $0.25$), an unlucky
+draw, and the cumulative-return curves of the last panel look very different from the others. Lessons observed live: with
+$\rho\le0.4$ the minimum-variance portfolio has a return and a volatility better than asset~1 alone; with
+$\rho=-1$ the variance would be zero \ts{13}{14}{11:47}\ts{13}{14}{17:06}; every portfolio to the left of the minimum-variance point is
+suboptimal \ts{13}{14}{14:57}.
+
+\textbf{Part 2: nine sector ETFs.} The SPDR sector funds XLB (materials), XLV (health care), XLP (consumer staples),
+XLY (consumer discretionary), XLE (energy), XLF (financials), XLI (industrials), XLK (technology) and XLU (utilities), for two
+periods: 2009--2013 (``periodA'', up to a week before the lecture; $251$ observations on the time axis, i.e.\ weekly
+data over about $4.8$ years, an inference: the frequency is not stated) and 2003--2006 (``periodB'', $209$ observations).
+\cref{ch10:tab-etf} gives the annualised return and volatility of each. The correlations are high, with the
+average pairwise correlation $0.74$ in 2009--2013 (range $0.57$--$0.93$) and $0.55$ in 2003--2006 (range
+$0.16$--$0.85$): there is much less diversification available in the aftermath of the crisis.
+
+\textbf{Method.} For a grid of $101$ target returns (``target return index'' in the plots) the R script minimises the variance
+of a portfolio of the nine ETFs and the riskless asset (return $\approx0$: the frontier of plot~4 starts at the origin),
+subject to full investment, $w_j\ge0$ and $w_j\le30\%$ or $15\%$. It prints the allocations for three target volatilities and
+draws six plots: \emph{1}~risk--return scatter with the riskless asset; \emph{2}~optimal allocations versus target
+return (lines); \emph{3}~the same as a stacked bar chart (dark red at the top is cash); \emph{4}~the efficient frontier over
+the ETFs; \emph{5}~the frontier with the target portfolio for a $10\%$ volatility (circle); \emph{6}~cumulative returns of the
+ETFs with that optimal portfolio in bold blue \ts{13}{14}{1:04:54}--\ts{13}{14}{1:11:11}.
+\end{casestudy}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+& & \multicolumn{2}{c}{2009--2013} & \multicolumn{2}{c}{2003--2006}\\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+ETF & sector & return & vol. & return & vol.\\
+\midrule
+XLB & materials & 0.16 & 0.24 & 0.16 & 0.18\\
+XLV & health care & 0.17 & 0.15 & 0.07 & 0.12\\
+XLP & consumer staples & 0.15 & 0.12 & 0.08 & 0.09\\
+XLY & consumer discretionary & 0.24 & 0.21 & 0.14 & 0.14\\
+XLE & energy & 0.15 & 0.25 & 0.26 & 0.20\\
+XLF & financials & 0.13 & 0.33 & 0.15 & 0.13\\
+XLI & industrials & 0.18 & 0.23 & 0.15 & 0.14\\
+XLK & technology & 0.18 & 0.19 & 0.12 & 0.18\\
+XLU & utilities & 0.10 & 0.16 & 0.19 & 0.13\\
+\bottomrule
+\end{tabular}
+\caption{Annualised return and volatility of the nine sector ETFs printed in \file{CaseStudy6}. (The correlation
+matrices are printed there as well; the computations of \cref{ch10:ex-etf-unc} and of this section use them.)}\label{ch10:tab-etf}
+\end{table}
+
+\paragraph{Results (2009--2013).} With a $30\%$ cap and a target volatility of $9.9\%$ the printed optimum is XLV $15.7\%$,
+XLP $30\%$, XLY $22.6\%$, cash $31.7\%$, for a return of $12.4\%$; for a target volatility of $15.3\%$ it is fully
+invested: XLV $30\%$, XLP $22.7\%$, XLY $30\%$, XLK $17.3\%$, for a return of $18.7\%$; for $0.9\%$ volatility it
+holds $93.5\%$ in cash. The comments of the case study, confirmed by the plots \ts{13}{14}{1:07:59}--\ts{13}{14}{1:11:11}:
+\begin{itemize}
+  \item As the target return rises from zero only XLY, XLP and XLV enter, in \emph{fixed proportions} (the de-levered
+        long-only tangency portfolio, \cref{ch10:prop-constr}; the unconstrained one of \cref{ch10:sec-est} is very
+        different); allocations grow linearly (plot~2).
+  \item The cap binds first for consumer staples; XLY and XLV are increased; when all three are at $30\%$ technology
+        (higher return) enters and the allocations to XLY and XLP fall to make room. No allocation is ever given to financials.
+  \item In the efficient frontier of plot~4, every ETF except consumer discretionary is dominated by an optimal
+        portfolio, and the frontier shows the CML-like straight segment up to the first kink.
+  \item With a $15\%$ cap the constraints bind sooner: XLV, XLP, XLY, XLK, then XLU and XLI, and finally XLB; the frontier is
+        \emph{below} the $30\%$ one (\cref{ch10:prop-constr}(i)), because to reach a higher return one has to
+        hold assets with a lower return per unit of risk \ts{13}{14}{1:12:14}\ts{13}{14}{1:14:24}.
+  \item In 2003--2006 the optimal portfolios are completely different: utilities, energy, financials, consumer
+        staples and industrials, XLU being the first to hit the cap, and technology never enters ($15\%$ cap:
+        XLP, XLY, XLE, XLF, XLI, XLU at the cap, XLB in addition at the top). The ranking of sectors in one period says
+        little about the next.
+\end{itemize}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.9\linewidth,height=7.4cm,xlabel={volatility},ylabel={expected return},
+  xmin=0.05,xmax=0.36,ymin=0.04,ymax=0.32,xtick={0.1,0.15,0.2,0.25,0.3,0.35},scaled ticks=false,/pgf/number format/fixed,grid=major,grid style={black!10},
+  legend style={font=\footnotesize,at={(0.5,1.03)},anchor=south,legend columns=3},
+  tick label style={font=\small},label style={font=\small}]
+  \addplot[thick,thmcol,dashed] coordinates {(0.05,0.0927) (0.16,0.297)};
+  \addplot[very thick,defcol] coordinates {(0.005,0.0065) (0.02,0.0258) (0.04,0.0516) (0.06,0.0774) (0.08,0.1030) (0.10,0.1281) (0.12,0.1530) (0.13,0.1654) (0.14,0.1767) (0.15,0.1867) (0.16,0.1911)};
+  \addplot[very thick,intcol] coordinates {(0.005,0.0065) (0.02,0.0258) (0.04,0.0515) (0.06,0.0765) (0.08,0.0991) (0.10,0.1183) (0.12,0.1350) (0.13,0.1433) (0.14,0.1514) (0.15,0.1590) (0.16,0.1664)};
+  \legend{unconstrained CML (Sharpe $1.85$),cap $30\%$,cap $15\%$}
+  \addplot[only marks,mark=*,mark size=1.8pt,black,forget plot] coordinates {(0.24,0.16) (0.15,0.17) (0.12,0.15) (0.21,0.24) (0.25,0.15) (0.33,0.13) (0.23,0.18) (0.19,0.18) (0.16,0.10)};
+  \node[font=\scriptsize,anchor=north east] at (axis cs:0.236,0.157) {XLB};
+  \node[font=\scriptsize,anchor=south east,fill=white,fill opacity=0.8,inner sep=1pt] at (axis cs:0.146,0.173) {XLV};
+  \node[font=\scriptsize,anchor=north west] at (axis cs:0.123,0.146) {XLP};
+  \node[font=\scriptsize,anchor=south] at (axis cs:0.21,0.243) {XLY};
+  \node[font=\scriptsize,anchor=north] at (axis cs:0.25,0.147) {XLE};
+  \node[font=\scriptsize,anchor=north] at (axis cs:0.33,0.127) {XLF};
+  \node[font=\scriptsize,anchor=south west] at (axis cs:0.226,0.185) {XLI};
+  \node[font=\scriptsize,anchor=south] at (axis cs:0.19,0.183) {XLK};
+  \node[font=\scriptsize,anchor=north] at (axis cs:0.16,0.097) {XLU};
+\end{axis}
+\end{tikzpicture}
+\caption{Nine sector ETFs, 2009--2013 (inputs of \cref{ch10:tab-etf} and the printed correlations; the risk-free rate is
+taken to be $0$). Dots: individual ETFs. Blue and green: efficient frontier with cash and long-only positions capped at $30\%$
+and $15\%$ (plots~4 of \file{ETF_pridA_30} and \file{ETF_pridA_15}, recomputed here). The dashed line is the
+CML of the \emph{unconstrained} problem, with a Sharpe ratio of $1.85$, reached only with large short positions
+(\cref{ch10:sec-est}).}\label{ch10:fig-etf}
+\end{figure}
+
+\begin{coursenote}[Independent check of the case study]
+The R code is not available, so the printed allocations were re-derived from the printed means, volatilities and
+correlations (all rounded to two decimals) by maximising the return at a given volatility, with $r_0=0$,
+$w_j\in[0,c]$ and full investment or less, with a general-purpose solver. At a target volatility of $15.3\%$ ($30\%$ cap) it gives XLV $30\%$, XLP $22.9\%$, XLY $30\%$,
+XLK $17.1\%$ and a return of $18.8\%$ (printed: $30$, $22.7$, $30$, $17.3$, $18.7$); at $9.9\%$ it gives XLV $21.8\%$, XLP $30\%$, XLY $18.7\%$,
+cash $29.5\%$ and $12.7\%$ (printed: $15.7$, $30$, $22.6$, $31.7$, $12.4$). The sets of assets, the order in which the caps bind
+and the frontiers agree with the printed ones; the few percentage points of difference in XLV and XLY
+come from the rounding of the inputs (a half-point change in a mean moves weights by several points), a small illustration of the sensitivity of \cref{ch10:sec-est}. For the $15\%$ cap at $9.9\%$ volatility the recomputation gives XLV, XLP, XLY, XLK at $15\%$,
+XLU $3.6\%$, XLI $1.6\%$, cash $34.8\%$ (printed: XLU $6.9\%$, cash $33.1\%$, return $11.7\%$ in both).
+\end{coursenote}
+
+\begin{finance}[Sector market-neutral models and diversification]
+In the second demonstration of 2013 L14 Kempthorne replaces the ETFs by hedge-fund style strategies: multi-factor pricing
+models trading long/short, market-neutral, within each of the nine sectors, over five years
+\ts{13}{14}{1:15:29}\ts{13}{14}{1:16:33}. Their total returns are modest ($20$--$60\%$ over five years) but they are
+\emph{little correlated} with each other, so the optimiser gets a large benefit from combining them; the model for the utilities sector
+receives the largest weight, then industrials and energy, and a target volatility of $10\%$ is reached \ts{13}{14}{1:17:35}\ts{13}{14}{1:18:36}.
+The data behind the plots are not in the files, so only this qualitative description is given. The lesson is the one
+of \cref{ch10:sec-two}: low correlation makes the frontier bend to the left, and diversification is worth most for
+uncorrelated bets.
+\end{finance}
+
+% ==================================================================
+\section{Notes on the sources, differences between the years and errata}\label{ch10:sec-notes}
+
+\begin{coursenote}[2013 versus 2024]
+The 2013 lectures are split: Kempthorne gives the mathematics (his lecture has a full derivation, a case study,
+utility theory, constraints and risk measures), Xia the practice. The 2024 lecture has only Xia, and it is a
+different lecture from his 2013 one. It keeps the special cases of two assets (slides 14--20; Xia says he skips the mathematics that he covered in earlier years \ts{24}{13}{40:00}) and the rebalancing example, and it adds: the endowment model, MPT
+issue~1 (volatility as risk) with the gain--loss ratio, MPT issue~2 (predicting the future) with the crowd model, and
+power laws. It drops the Kelly formula, the beta discussion and the Millennium Bridge \emph{and} metronome videos of 2013 (2024 shows
+a video of birds and mentions the bridge). The 2024 slides point to the 2013 video of Xia's lecture as
+``one of the top five most viewed courses'' of OpenCourseWare \ts{24}{13}{1:06}. What Kempthorne derives (Markowitz problem, tangency
+portfolio, Tobin, utility, constraints, risk measures) is not covered in 2024 by anyone: the derivations of this chapter
+follow \file{lecnote14}.
+\end{coursenote}
+
+\begin{coursenote}[Erratum: parameters of the two-asset simulation]
+Kempthorne says at the start of the demonstration that asset~1 has mean $15\%$ and volatility $25\%$, asset~2 mean $20\%$ and
+volatility $30\%$ \ts{13}{14}{5:21}, and page~2 of \file{CaseStudy6} prints the same numbers (with typos:
+``$E(R_1)=0.20=\alpha_2$'' and ``$\sqrt{\Var R_1}=0.30=\sigma_2$'' should refer to $R_2$, and ``$\sigma_w^2=\Var(R_2)$'' should be
+$\Var(R_w)$). But the plots of \file{Smltn_TwoAst} are titled ``mean returns $0.15,0.25$, asset volatilities $0.20,0.30$'',
+Kempthorne himself reads ``mean returns $15\%$, $25\%$, volatility $20$ to $30$'' when he shows them \ts{13}{14}{10:44}, and the
+sample statistics ($0.19$--$0.20$ and $0.29$ for the volatilities, cumulative return $\approx3.3$ for asset~2, i.e.\ about $0.34$ per year over $9.6$ years) fit
+these values, not the printed ones. This chapter uses the values of the plots.
+\end{coursenote}
+
+\begin{coursenote}[Errata and remarks on \file{CaseStudy6}]
+\begin{itemize}
+  \item Section~2.3 refers to ``Plot~4 in the two files \file{ETF_S_1_periodA_30.pdf} and \file{ETF_S_1_periodA_30.pdf}'': the second
+      should be the $15\%$ file (\file{ETF_pridA_15}); the case study cites the file names of the original R output
+      (\texttt{ETFS\_1\_periodA\_30}), which differ from the OCW names \file{ETF_pridA_30}.
+  \item Section~3.3 (2003--2006, $15\%$ cap) says both ``technology
+      never enters the optimal allocation'' and ``the allocations to XLK increase until its limit is reached'': the second
+      bullet is copied from Section~2.3; the printed table has XLK at $0.000$ throughout.
+  \item The bars of plot~3 use very
+      similar colours for consumer discretionary and energy (both green) and the line plots repeat colours (XLB and XLU are both
+      black in the first plot of each file), so the ETFs are identified through the tables.
+\end{itemize}
+\end{coursenote}
+
+\begin{coursenote}[Slides and lectures: small corrections]
+\begin{itemize}
+  \item \file{lecnote14}, slide~19 writes $\E u(W)\propto\E[W-\frac12\lambda(W-w_*)^2]\approx\E W-\frac12\lambda\Var W$: the
+      $\propto$ hides an additive constant and the positive factor $u'(w_*)$; the content is that of \cref{ch10:prop-mv-utility}(i).
+  \item Slide~31, translation invariance: see the erratum in \cref{ch10:sec-risk}.
+  \item Slide~24 of \file{lec13} asserts the ratio $(G-L)/(G+L)$ is ``the same as
+      the Kelly criterion for binary bets'': true only for even-money bets (\cref{ch10:prop-gl}(i)).
+  \item In 2013 L16 Xia says that after year~1 the winning
+      asset ``becomes 75'' when rebalancing: the correct amounts are $62.5$ in each asset (\cref{ch10:sec-rebal}); the 2024 slide has it right.
+  \item The transcript of 2013 L14 says Fama ``was just awarded, what, two weeks ago'': the 2013 economics prize
+      (Fama, Hansen, Shiller) was announced on 14 October 2013, ten days before the lecture of 24 October (the case-study date).
+  \item In 2013 L16 two remarks made ``from the audience'' (about estimating returns versus volatility, and about the Kelly criterion, Shannon and Samuelson)
+      are by a co-lecturer, in all likelihood Kempthorne; the transcript does not identify the speaker.
+  \item \file{lecnote16} contains only the outline (five items: portfolio construction, portfolio theory in special cases, risk parity, limitations, what we learned): Xia used a single slide and the blackboard, so 2013 L16
+      has no formulas apart from those reconstructed here from the transcript and from the 2024 slides.
+\end{itemize}
+\end{coursenote}
+
+% ==================================================================
+\begin{keyformulas}
+\begin{align*}
+&\text{Portfolio:} && \mu_{\bm w}=\bm w\T\bm\mu,\quad \sigma_{\bm w}^2=\bm w\T\Sigma\bm w,\quad \bm w\T\bm 1=1\\
+&\text{Two assets:} && \sigma_w^2=(1-w)^2\sigma_1^2+w^2\sigma_2^2+2w(1-w)\rho\sigma_1\sigma_2\\
+& && w^*=\tfrac{\sigma_1^2-\rho\sigma_1\sigma_2}{\sigma_1^2+\sigma_2^2-2\rho\sigma_1\sigma_2},\quad
+  \sigma^{*2}=\tfrac{\sigma_1^2\sigma_2^2(1-\rho^2)}{\sigma_1^2+\sigma_2^2-2\rho\sigma_1\sigma_2}\\
+&\text{Constants:} && a=\bm\mu\T\Sigma^{-1}\bm\mu,\ b=\bm\mu\T\Sigma^{-1}\bm 1,\ c=\bm 1\T\Sigma^{-1}\bm 1,\ \Delta=ac-b^2\\
+&\text{Optimal weights:} && \bm w_0=\lambda_1\Sigma^{-1}\bm\mu+\lambda_2\Sigma^{-1}\bm 1,\quad
+  (\lambda_1,\lambda_2)=\tfrac1\Delta(c\mu_0-b,\ a-b\mu_0)\\
+&\text{Frontier:} && \sigma_0^2=\tfrac{c\mu_0^2-2b\mu_0+a}\Delta=\tfrac1c+\tfrac c\Delta(\mu_0-\tfrac bc)^2\\
+&\text{Min.\ variance:} && \bm w_g=\tfrac{\Sigma^{-1}\bm 1}c,\quad\sigma_g^2=\tfrac1c,\quad \mu_g=\tfrac bc\\
+&\text{Risk aversion:} && \bm w(\lambda)=\bm w_g+\tfrac1\lambda\Sigma^{-1}(\bm\mu-\tfrac bc\bm 1)\\
+&\text{With riskless asset:} && \bm w_0=\tfrac{\mu_0-r_0}{d^2}\Sigma^{-1}\bm\eta,\quad \bm\eta=\bm\mu-r_0\bm 1,\quad d^2=\bm\eta\T\Sigma^{-1}\bm\eta\\
+&\text{Tangency portfolio:} && \bm w_M=\tfrac{\Sigma^{-1}\bm\eta}{\bm 1\T\Sigma^{-1}\bm\eta},\quad \mu_M-r_0=\tfrac{d^2}{b-r_0c},\quad
+  \sigma_M=\tfrac d{b-r_0c}\\
+&\text{Tobin, CML:} && m_{\bm w}=\tfrac{\mu_0-r_0}{\mu_M-r_0},\quad \mu_P=r_0+\tfrac{\mu_M-r_0}{\sigma_M}\sigma_P\\
+&\text{Sharpe ratio:} && \mathrm{SR}=\tfrac{\mu_P-r_0}{\sigma_P}\le d\ \text{(max.\ at }\bm w_M),\ \text{leverage-invariant}\\
+&\text{SML:} && \mu_i-r_0=\beta_i(\mu_M-r_0),\quad \beta_i=\tfrac{\Cov(R_i,R_M)}{\sigma_M^2}=\rho_{iM}\tfrac{\sigma_i}{\sigma_M}\\
+&\text{Equal weights:} && \Var R_{\rm ew}=\tfrac{\bar\sigma^2}n+(1-\tfrac1n)\bar c\\
+&\text{Constant mix:} && g(\bm w)=\bm w\T\bm\mu-\tfrac12\bm w\T\Sigma\bm w\ \ (\text{log growth})\\
+&\text{Risk contribution:} && \mathrm{RC}_i=\tfrac{w_i(\Sigma\bm w)_i}{\sigma_P},\ \textstyle\sum_i\mathrm{RC}_i=\sigma_P;\ \text{2 assets: }w_i\propto1/\sigma_i\\
+&\text{Utility:} && \lambda_A=-\tfrac{u''}{u'},\ \lambda_R=-\tfrac{Wu''}{u'};\quad \E u\approx u(w_*)+\tfrac12u''\Var W;\\
+& && \text{CARA+normal: CE}=\mu_W-\tfrac\lambda2\sigma_W^2\\
+&\text{Kelly:} && f^*=\tfrac pl-\tfrac qg;\ \ \text{Gaussian: }f^*=\tfrac{\mu}{\sigma^2}\\
+&\text{Gain--loss ratio:} && \tfrac{G-L}{G+L}=\tfrac{\E R}{\E|R|}\in[-1,1],\ G=\E R^+,\ L=\E R^-\\
+&\text{Constraints:} && \mathrm{TE}^2=(\bm w-\bm w_B)\T\Sigma(\bm w-\bm w_B),\ \ \textstyle\sum_i\beta_{ik}w_i=0\\
+&\text{Estimation:} && \mathrm{se}(\hat\mu)=\tfrac\sigma{\sqrt T},\quad \tfrac{\mathrm{se}(\hat\sigma)}\sigma\approx\tfrac1{\sqrt{2n}}\\
+&\text{Crowd loop:} && \dd O=\tfrac{\sum A_iC_i\dd E+\sum A_i\varepsilon_i}{1-\bar AB}\ \ (\text{mean field})\\
+&\text{Power law:} && \Prob[X>x]\sim x^{-k},\ f\sim x^{-a},\ a=1+k=1+\tfrac1b
+\end{align*}
+\end{keyformulas}
+
+% ==================================================================
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\subsection*{From 2013 Problem Set 6 (Problems 3--5; Problems 1--2 are in \cref{ch:timeseries})}
+In all three problems the portfolio $\bm w$ is fully invested, $\sum_jw_j=1$, with no short sales, $w_j\ge0$.
+
+\begin{exercise}[PS6 (2013), Problem 3: two risky assets]\label{ch10:ex-ps6-3}
+Two assets with returns $\bm R=(R_1,R_2)\T$, means $(\alpha_1,\alpha_2)$, covariance
+$\Sigma=\begin{psmallmatrix}\sigma_1^2&\rho\sigma_1\sigma_2\\ \rho\sigma_1\sigma_2&\sigma_2^2\end{psmallmatrix}$ and a portfolio
+$R_{\bm w}=w_1R_1+w_2R_2$.
+\begin{enumerate}[(a)]
+  \item Prove that $\Var(R_{\bm w})\le\max(\sigma_1^2,\sigma_2^2)$ for every such portfolio.
+  \item For $\sigma_1=\sigma_2$ and $\rho=0$ find the minimum-variance portfolio $\bm w^*$ and its variance.
+  \item For $\sigma_1=\sigma_2$ and arbitrary $\rho$ find $\bm w^*$ and $\Var(R_{\bm w^*})$, and graph the minimal variance as a function of
+      $\rho\in[-1,1]$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS6 (2013), Problem 4: $m>2$ assets, equal volatilities]\label{ch10:ex-ps6-4}
+Now $m>2$ assets with covariance matrix $\Sigma=(\rho_{ij}\sigma_i\sigma_j)$.
+\begin{enumerate}[(a)]
+  \item Prove that $\Var(R_{\bm w})\le\max_j\sigma_j^2$ for every long-only fully invested portfolio.
+  \item If $\sigma_1=\dots=\sigma_m$ and all $\rho_{ij}=0$ ($i\neq j$), find the minimum-variance portfolio, express its variance as a function
+      of $m$ and find its limit as $m\to\infty$.
+  \item If $\sigma_1=\dots=\sigma_m$ and $\rho_{ij}\equiv\rho$ for all $i\neq j$ (\emph{equicorrelation}): first show that
+      $\rho\ge-1/(m-1)$ (hint: $\bm 1$ is an eigenvector of $\Sigma$; compute its eigenvalue and impose that $\Sigma$ be positive
+      semi-definite). Then find the minimum-variance portfolio and its variance, graph the variance as a function of $\rho\in[-\frac1{m-1},1]$,
+      find the limit as $m\to\infty$ and compare it with (b), commenting on the ability to diversify away risk by adding equicorrelated assets.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS6 (2013), Problem 5: unequal variances and the general case]\label{ch10:ex-ps6-5}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item For $m=2$, $\sigma_1\neq\sigma_2$ and $\rho=0$, find the minimum-variance portfolio and its variance.
+  \item For $m>2$ and $\Sigma=\diag(\sigma_1^2,\dots,\sigma_m^2)$ (arbitrary variances, zero correlations) find the minimum-variance
+      portfolio and its variance, and express the variance in terms of $m$ and $\tilde\sigma^2=\bigl(\frac1m\sum_j\sigma_j^{-2}\bigr)^{-1}$.
+  \item For $m>2$ and an arbitrary positive definite $\Sigma$, find the minimum-variance portfolio and its variance.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[2024 Investment Game and the gain--loss ratio (ungraded)]\label{ch10:ex-game}
+The 2024 lecture (slide~36) repeats the game of \cref{ex:game}: $\$10{,}000$ in one stock or ETF from the close of 13~September to the
+close of 15~November, one optional switch on 11~October, and the final calculation of $G$, $L$ and $(G-L)/(G+L)$ from the daily
+profits and losses. Carry it out on a two-month window of your choice (for example for the sector ETFs of \cref{ch10:tab-etf}), compute the
+Sharpe ratio of the same daily P\&L, and compare the ranking of two investments by the two measures; see \cref{ch10:prop-gl}.
+\end{exercise}
+
+\subsection*{Extra exercises (not from the course)}
+
+\begin{exercise}[not from the course: risk parity]
+Two assets have volatilities $16\%$ and $6\%$ and correlation $0.3$.
+\begin{enumerate}[(a)]
+  \item Find the risk-parity weights and check that the risk
+      contributions of \cref{ch10:def-rc} are equal.
+  \item What fraction of the risk of the $60/40$ portfolio comes from the first asset?
+  \item By what factor must the
+      risk-parity portfolio be levered to have the volatility of the $60/40$ portfolio?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: the frontier]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Verify that $\bm w_g$ of \cref{ch10:cor-gmv} minimises $\bm w\T\Sigma\bm w$ under $\bm w\T\bm 1=1$ and that the frontier
+      \eqref{ch10:eq-frontier} has asymptotes $\mu=b/c\pm\sqrt{\Delta/c}\,\sigma$.
+  \item Show that the difference of two efficient portfolios is proportional to $\bm v$ of
+      \eqref{ch10:eq-twofund} and deduce the two-fund theorem.
+  \item Show that, if $r_0<\mu_g$, the tangency portfolio maximises the
+      Sharpe ratio over the fully invested portfolios, and find the tangency point of the line through $(0,r_0)$ with the hyperbola.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: CARA utility]
+An investor with $u(W)=1-e^{-AW}$ and initial wealth $W_0$ can invest in $m$ assets with normal returns and in a riskless asset. Show that the
+optimal amounts invested in the risky assets are $A^{-1}\Sigma^{-1}\bm\eta$ (in dollars) and identify the fraction of the wealth held in the
+tangency portfolio.
+\end{exercise}
+
+\begin{exercise}[not from the course: Kelly]
+A bet wins $g=2$ per unit staked with probability $p=0.6$ and loses $l=1$ otherwise.
+\begin{enumerate}[(a)]
+  \item Compute the Kelly fraction and the
+      optimal growth rate $G(f^*)$.
+  \item What growth rate does the half-Kelly fraction $f^*/2$ give, as a percentage of $G(f^*)$?
+  \item Show that for small edges
+      half-Kelly gives $3/4$ of the optimal growth rate.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: gain--loss ratio]
+Investment~A pays $+3$ with probability $0.4$ and $-1$ with probability $0.6$. Investment~B pays $+1$ or $-1$
+with probability $0.5$ each plus a fixed $0.3$. Compute for each the mean, the standard deviation, the Sharpe ratio, and
+$(G-L)/(G+L)$; comment on the difference in rankings and on the Kelly fractions.
+\end{exercise}
+
+\begin{exercise}[not from the course: VaR and CVaR]
+Modify \cref{ch10:prop-var} to three independent positions with default probability $3\%$ and loss $100$: compute the
+$95\%$ VaR and expected shortfall of one position and of the portfolio of three, and check subadditivity of ES.
+\end{exercise}
+
+\begin{exercise}[not from the course: rebalancing]
+Two independent assets have geometric Brownian motions with $\sigma_1=30\%$, $\sigma_2=10\%$ and the same $\mu$. Using
+\cref{ch10:prop-growth}, find the constant-mix weight that maximises the log growth rate and the value of the ``excess growth'' at
+that weight. Compare with equal weights.
+\end{exercise}
+
+\begin{exercise}[not from the course: crowd model and power laws]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item In \cref{ch10:prop-tipping}, take $N$ agents with $A_i=A/N$ and $B_i\in\{B_L,B_H\}$, a fraction $x$ in the reactive state; write the loop
+      gain and find the critical $x$ for the tipping point.
+  \item For a Pareto tail $\Prob[X>x]=(x_m/x)^k$, $k>1$, prove that the top fraction $q$
+      holds $q^{1-1/k}$ of the total, and compute $k$ for a ``$90$--$10$'' rule.
+\end{enumerate}
+\end{exercise}

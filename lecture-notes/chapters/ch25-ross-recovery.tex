@@ -1,0 +1,426 @@
+% !TEX root = ../main.tex
+\chapter{The Ross Recovery Theorem}\label{ch:ross}
+
+\begin{sources}
+\small
+\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+\textbf{Lecture} & \textbf{Speaker} & \textbf{Content}\\
+\midrule
+2013 L25 & P.~Carr (Morgan Stanley), with J.~Yu & Guest lecture ``Can We Recover?'': Arrow--Debreu
+security prices and market beliefs; Ross's Recovery Theorem for finite-state Markov chains via the
+Perron--Frobenius theorem; a preference-free re-derivation using a change of numeraire (Long's numeraire
+portfolio) for a time-homogeneous diffusion on a bounded state space; successes and failures for
+unbounded state spaces (Black--Scholes fails, Cox--Ingersoll--Ross succeeds).\\
+\bottomrule
+\end{tabularx}
+
+\smallskip
+\textbf{Files.} \file{lecnote25} (50 slides, S.~Ross's collaborators P.~Carr and J.~Yu, Morgan Stanley).
+There is no 2024 counterpart: the topic is not in the 2024 syllabus.
+\textbf{Problem sets.} None (guest lecture, no associated problem-set questions in either year).
+\textbf{Not covered / not published.} The slides' Part~I (conditioning and path-dependent
+Arrow--Debreu prices, multi-period Markovian consistency) is background that the lecture itself
+skipped over quickly (``I'm going to skip these slides''); it is summarised briefly below for
+completeness but not derived in full. Ross's original paper (\emph{The Recovery Theorem}, published in
+the \emph{Journal of Finance} in 2015, then only forthcoming) is not itself a course file; statements
+attributed to it are as quoted or paraphrased on the slides and in the lecture.
+\end{sources}
+
+\section*{Motivation}
+Every derivative price already encodes a probability measure: the \emph{risk-neutral} measure $\Q$ of
+\cref{sec:oneperiod}, under which discounted prices are martingales. But $\Q$ is famously not the market's
+actual view of the future --- it is contaminated by risk aversion, so that, say, the risk-neutral chance of
+a market crash is typically far larger than anyone's honest assessment of its physical probability. For
+decades the going wisdom was that untangling the two required an extra ingredient that no one could agree
+on: a representative investor's risk-aversion parameter, supplied from outside the data. Ross's 2011
+insight was that a single structural assumption on how risk aversion enters --- \emph{transition
+independence} of the pricing kernel --- is enough to pin down the real-world probabilities uniquely, with
+no free parameter to calibrate, provided the underlying is a finite-state, time-homogeneous Markov chain
+and the matrix of state prices is positive. The mechanism is one this course has already built:
+\cref{sec:pf}'s Perron--Frobenius theorem, applied to the matrix of Arrow--Debreu prices instead of a
+Markov transition matrix. This chapter states the assumptions precisely, proves the recovery theorem in
+full using \cref{thm:pf}, verifies the construction on an explicit numerical example, and closes Part~II of
+these notes with a look at what happens (and what is still open) beyond the finite-state setting.
+
+% ==================================================================
+\section{Three probability measures: \texorpdfstring{$P$, $\Q$, $R$}{P, Q, R}}\label{ch25:sec-pqr}
+
+Fix a single source of uncertainty $X$ (an index level, a short rate, an exchange rate) and consider
+Arrow--Debreu (AD) securities written on it: a claim paying \$1 if $X$ lands in a given state and nothing
+otherwise, i.e.\ exactly the state prices $\psi_i$ of \cref{def:onepmodel}, now indexed by both the
+\emph{current} state and the terminal state \ts{13}{25}{12:49}. Three probability measures matter here
+\ts{13}{25}{5:22}:
+\begin{itemize}
+  \item $P$, the \emph{physical} (objective, ``God's-eye'') probability measure: the true frequency with
+        which $X$ visits each state. No one observes $P$ directly.
+  \item $\Q$, the \emph{risk-neutral} measure of \cref{thm:ftap}: it exists under no arbitrage and
+        satisfies $A_0=\beta\,\E_\Q[\bm C_T]$ for every replicable claim, but it is not a measure of frequency
+        --- it is a repackaging of AD prices, normalised to integrate to one, and under it every asset grows
+        at the risk-free rate \ts{13}{25}{9:37}.
+  \item $R$, the \emph{recovered} (or \emph{natural}) measure: what one gets by trying to strip $\Q$ of its
+        risk-aversion and time-value-of-money content and recover a measure of actual frequencies. Ross
+        calls this the market's ``natural probabilities''. $R$ need not equal $P$ --- the market can be
+        wrong (2005 mortgage-backed pricing being Carr's stock example) --- so $R$ is honestly only the
+        market's \emph{belief} about $P$; a believer in market efficiency is free to set $R=P$
+        \ts{13}{25}{10:40}.
+\end{itemize}
+
+\begin{intuition}[Why $\Q$ is not a frequency]
+A risk-neutral probability of $40\%$ for ``the index is up'' means only that a security paying \$1 in that
+event costs \$0.40 today, i.e.\ it is a \emph{price}, not a count of outcomes. Two effects separate this
+price from the true chance of the event: discounting (a sure \$1 tomorrow is worth less than \$1 today,
+even with no uncertainty at all) and risk aversion (a payoff arriving exactly when the rest of one's wealth
+is doing badly is worth more per dollar than one arriving in good times, so its price is inflated relative
+to its frequency). Recovering $R$ from $\Q$ means undoing both effects \ts{13}{25}{42:38}.
+\end{intuition}
+
+% ==================================================================
+\section{The pricing matrix and the pricing kernel}\label{ch25:sec-kernel}
+
+Let $X$ be a Markov chain on a finite state space $\{1,\dots,n\}$, and write $A(x,y)>0$ for the price, at
+state $x$ today, of an AD security paying \$1 if $X$ is at state $y$ one period later \ts{13}{25}{40:28}.
+Collecting these into a matrix $A\in\R^{n\times n}$, no-arbitrage consistency across horizons forces $X$'s
+one-step transition structure under $A$ to be genuinely Markovian and, if desired, time-homogeneous, i.e.\
+$A$ does not depend on calendar time (\emph{Appendix, Part~I of the slides}, sketched only: with three
+dates $0,1,2$, path-dependent AD prices $A_{jk|i}$ factor as $A_{jk|i}=A_{ji}\cdot A_{k|ji}$, and Markov
+means the one-step-ahead conditional price $A_{k|ji}=A_{k|j}$ does not depend on the earlier state $i$
+\ts{13}{25}{39:23}).
+
+\begin{coursenote}[Notation clash with \cref{ch:linalg}]
+The letter $A$ here denotes the $n\times n$ matrix of \emph{one-step Arrow--Debreu prices between states of
+a single Markov chain}, following Ross's and Carr's notation; it is unrelated to the $m\times n$ payoff
+matrix $A$ of \cref{def:onepmodel} (assets in columns, states in rows). Both are conventional in their
+respective sources and are kept as in the lecture material.
+\end{coursenote}
+
+Write $p(x,y)$ for the (unknown) \emph{natural} one-step transition probabilities under $R$: $p(x,y)\ge0$,
+$\sum_yp(x,y)=1$ for every $x$. The \emph{pricing kernel} is the entrywise ratio
+\begin{equation}\label{ch25:eq-kernel}
+  \varphi(x,y) \;=\; \frac{A(x,y)}{p(x,y)},
+\end{equation}
+capturing exactly the two contaminating effects: time value of money and risk aversion
+\ts{13}{25}{47:03}. If interest rates were zero and investors risk-neutral, $\varphi\equiv1$ and $A=p$;
+in general $\varphi$ is an unknown positive function of two variables, and the $n^2$ equations \eqref{ch25:eq-kernel} involve
+$2n^2-n$ unknowns (the $n^2$ values of $\varphi$ and the $n^2-n$ free entries of $p$, whose rows sum to one),
+far too many to pin down $p$ --- this is why decontamination was thought hopeless before Ross
+\ts{13}{25}{47:03}\ts{13}{25}{58:40}.
+
+\begin{definition}[Transition independence, Ross's assumption]\label{ch25:def-ti}
+The pricing kernel is \emph{transition-independent} if it factors as
+\begin{equation}\label{ch25:eq-ti}
+  \varphi(x,y) \;=\; \delta\,\frac{z(y)}{z(x)}, \qquad x,y=1,\dots,n,
+\end{equation}
+for some scalar $\delta>0$ and some function $z:\{1,\dots,n\}\to(0,\infty)$.
+\end{definition}
+
+In a world with a representative agent and additively time-separable utility, $z(x)=U'(c(x))$ (marginal
+utility of consumption at state $x$) and $\delta$ is the subjective discount factor, so that
+$\varphi(x,y)=\delta\,U'(c(y))/U'(c(x))$: risk aversion enters only through how marginal utility differs
+\emph{between} the two states, not through the path or timing otherwise \ts{13}{25}{49:10}. Carr's
+restatement, avoiding the representative-agent language, is purely dimension-counting
+(\cref{ch25:rem-dof}); either reading is the same assumption \eqref{ch25:eq-ti}.
+
+\begin{remark}[Degrees of freedom]\label{ch25:rem-dof}
+Without \eqref{ch25:eq-ti}, $\varphi$ has $n^2$ free values. Assumption~\eqref{ch25:eq-ti} reduces this to
+$n+1$: the $n$ values $z(1),\dots,z(n)$ (only their ratios matter, so really $n-1$ free numbers) plus
+$\delta$. For $n=10$ this is a drop from $100$ to $11$ unknowns, which is what makes identification from
+$A$ alone possible \ts{13}{25}{59:42}.
+\end{remark}
+
+% ==================================================================
+\section{The Recovery Theorem}\label{ch25:sec-thm}
+
+\begin{theorem}[Ross's Recovery Theorem]\label{ch25:thm-ross}
+Let $A\in\R^{n\times n}$ be a matrix of one-step AD prices for a time-homogeneous Markov chain, with all
+entries $A(x,y)>0$. Under transition independence \eqref{ch25:eq-ti}, there is a unique triple $(\delta,z,p)$
+with $\delta>0$, $z\in\R^n$, $z>0$ (up to an overall positive scale factor, which cancels out of $p$ and
+$\varphi$), and $p$ a row-stochastic matrix with $p(x,y)>0$, consistent with \eqref{ch25:eq-kernel}--%
+\eqref{ch25:eq-ti} and the given $A$. Explicitly, $\delta$ is the Perron--Frobenius eigenvalue of $A$,
+$w(x)=1/z(x)$ is (up to scale) its positive eigenvector, and
+\begin{equation}\label{ch25:eq-precover}
+  p(x,y) \;=\; \frac{1}{\delta}\,A(x,y)\,\frac{w(y)}{w(x)}, \qquad x,y=1,\dots,n.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Write $D_z=\diag(z(1),\dots,z(n))$. Assumption \eqref{ch25:eq-ti} in \eqref{ch25:eq-kernel} reads
+$A(x,y)=\delta\,p(x,y)\,z(y)/z(x)$, i.e.\ $z(x)A(x,y)=\delta\,p(x,y)z(y)$, or in matrix form
+\begin{equation}\label{ch25:eq-matrixform}
+  D_zA \;=\; \delta\,p\,D_z .
+\end{equation}
+Let $w=D_z^{-1}\bm1=(1/z(1),\dots,1/z(n))\T$, where $\bm1=(1,\dots,1)\T$. Multiply \eqref{ch25:eq-matrixform}
+on the right by $w=D_z^{-1}\bm1$:
+\[
+  D_zAw \;=\; \delta\,p\,D_zD_z^{-1}\bm1 \;=\; \delta\,p\,\bm1 \;=\; \delta\bm1,
+\]
+using that $p$ is row-stochastic ($p\bm1=\bm1$). Multiplying through by $D_z^{-1}$,
+\begin{equation}\label{ch25:eq-eigen}
+  Aw \;=\; \delta\,D_z^{-1}\bm1 \;=\; \delta\,w .
+\end{equation}
+So $w$ is an eigenvector of $A$ with eigenvalue $\delta$, and $w>0$ because $z>0$.
+
+\emph{Existence and uniqueness of $(\delta,w)$.} $A$ has all entries strictly positive, so
+\cref{thm:pf} (Perron--Frobenius, proved in \cref{ch:linalg}) applies directly: $A$ has a real eigenvalue
+$\lambda_0>0$ strictly larger in modulus than every other eigenvalue, with a positive eigenvector unique up
+to positive scaling, and no other eigenvalue has a positive eigenvector (every other eigenvector has entries
+of mixed sign or is complex). Equation~\eqref{ch25:eq-eigen} exhibits $w>0$ as a positive eigenvector of
+$A$, so by \cref{thm:pf}(iii) it must be \emph{the} Perron eigenvector, unique up to scale, and $\delta$
+must be \emph{the} Perron eigenvalue $\lambda_0$: no other pair $(\delta',w')$ with $w'>0$ solving
+\eqref{ch25:eq-eigen} can exist. This proves $\delta$ and $z=1/w$ (up to the same overall scale) are unique.
+
+\emph{Recovering $p$.} Solve \eqref{ch25:eq-matrixform} for $p$: $p=\delta^{-1}D_zAD_z^{-1}$, i.e.\ entrywise
+$p(x,y)=\delta^{-1}z(x)A(x,y)/z(y)=\delta^{-1}A(x,y)w(y)/w(x)$, which is \eqref{ch25:eq-precover}. Positivity
+$p(x,y)>0$ is immediate from $A,w,\delta>0$. Row-stochasticity is automatic and does not need to be imposed
+separately: by \eqref{ch25:eq-eigen},
+\[
+\begin{gathered}
+  \sum_{y=1}^np(x,y) \;=\; \frac{1}{\delta\,w(x)}\sum_{y=1}^nA(x,y)w(y) \;=\; \frac{(Aw)(x)}{\delta\,w(x)} \\
+  \;=\; \frac{\delta\,w(x)}{\delta\,w(x)} \;=\; 1,
+\end{gathered}
+\]
+for every $x$. Since $(\delta,w)$ are the unique Perron data of $A$, $p$ in \eqref{ch25:eq-precover} is the
+unique matrix consistent with \eqref{ch25:eq-ti} and the given $A$.
+\end{proof}
+
+\begin{coursenote}[What the lecture actually showed]
+Carr states Ross's Theorem~1 essentially verbatim (``if the pricing matrix $A$ is positive or irreducible,
+then there exists a unique solution... via the Perron--Frobenius theorem'') but says explicitly that he has
+no slide on \emph{how} the $n+1$ unknowns are actually computed, referring the audience to Ross's paper
+\ts{13}{25}{1:01:49}. The derivation above (via \eqref{ch25:eq-matrixform}--\eqref{ch25:eq-eigen}) is a
+reconstruction, not shown on the slides or in the transcript, built from the definitions Carr does give
+(the pricing kernel \eqref{ch25:eq-kernel}, transition independence \eqref{ch25:eq-ti}, and the explicit
+statement that Perron--Frobenius is the tool used). The theorem also holds, with $|\lambda|\le\delta$ rather
+than strict inequality, for \emph{irreducible non-negative} $A$ (some $A(x,y)$ may vanish): this is the
+version of \cref{thm:pf} noted in \cref{ch:linalg} as the one needed for Markov chains, and it is the
+version Ross actually states.
+\end{coursenote}
+
+\begin{finance}[Reading the recovered kernel]
+Once $p$ is known, \eqref{ch25:eq-ti} gives back the pricing kernel itself,
+$\varphi(x,y)=\delta\,z(y)/z(x)=\delta\,w(x)/w(y)$, fully decontaminated: $\delta$ is the (state-independent)
+discount factor and $w(x)/w(y)$ isolates the risk-aversion premium of moving from $x$ to $y$. If the recovered marginal utility
+$z=1/w$ is decreasing in the state index (i.e.\ $w$ is increasing) when the index orders states from
+``bad'' to ``good'', a transition into a worse state costs relatively more than a fair bet on its recovered
+probability alone would suggest --- exactly the insurance-value story of \cref{ch25:sec-pqr}. Unlike the
+one-period model of \cref{ch:linalg}, where \emph{any} positive $\bm\psi$ with $A_0=\bm\psi\T A$ is an
+admissible state-price vector when the market is incomplete, here positivity of the whole matrix $A$ plus
+\eqref{ch25:eq-ti} is what removes all the remaining freedom in one step, without ever specifying a utility
+function numerically.
+\end{finance}
+
+% ==================================================================
+\section{Worked example and numerical verification}\label{ch25:sec-example}
+
+\begin{example}[Recovering a 3-state chain]\label{ch25:ex-3state}
+Take three states (say, three ranges of a 1-year index return: down, flat, up) with the ``true'' natural
+transition matrix
+\[
+  p = \begin{pmatrix} 0.6 & 0.3 & 0.1 \\ 0.2 & 0.5 & 0.3 \\ 0.1 & 0.4 & 0.5 \end{pmatrix},
+\]
+a discount factor $\delta=0.97$, and marginal utilities $z=(1.0,\,1.6,\,2.5)$ (higher in the ``up'' state,
+i.e.\ increasing marginal utility of consumption in the better state --- an unusual but not excluded case,
+matching Ross's remark that the recovered kernel could be increasing in $y$ \ts{13}{25}{55:28}). By
+\eqref{ch25:eq-ti}--\eqref{ch25:eq-kernel}, the (only observable, in this thought experiment) AD price
+matrix is
+\[
+  A(x,y) = \delta\, p(x,y)\, \frac{z(y)}{z(x)}
+  = \begin{pmatrix} 0.5820 & 0.4656 & 0.2425 \\ 0.1213 & 0.4850 & 0.4547 \\ 0.0388 & 0.2483 & 0.4850 \end{pmatrix}.
+\]
+Given only $A$, \cref{ch25:thm-ross} recovers $\delta$ as its Perron eigenvalue and $w=1/z$ as its Perron
+eigenvector (fixing the scale by, say, $w(1)=1$); \eqref{ch25:eq-precover} then reconstructs $p$ exactly,
+with no knowledge of $z$, $\delta$, or $p$ used in the recovery step itself.
+\end{example}
+
+\begin{casestudy}[Numerical check, Python]
+The following reconstructs \cref{ch25:ex-3state}: build $A$ from $(p,\delta,z)$, forget $(p,\delta,z)$, and
+recover them from $A$ alone via \texttt{numpy.linalg.eig}.
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+P = np.array([[0.6, 0.3, 0.1],
+              [0.2, 0.5, 0.3],
+              [0.1, 0.4, 0.5]])
+delta, z = 0.97, np.array([1.0, 1.6, 2.5])
+A = delta * P * (z[None, :] / z[:, None])     # build the AD price matrix
+
+eigvals, eigvecs = np.linalg.eig(A)           # forget P, delta, z; recover them
+i = np.argmax(eigvals.real)                   # Perron eigenvalue = largest one
+lam0, w = eigvals[i].real, np.abs(eigvecs[:, i].real)
+w /= w[0]                                     # fix the free positive scale
+
+P_recovered = (1 / lam0) * A * (w[None, :] / w[:, None])
+print(lam0, w)                 # -> 0.97, [1.0, 0.625, 0.4] = 1/z (up to scale)
+print(np.max(np.abs(P_recovered - P)))         # -> ~4e-16
+\end{lstlisting}
+The recovered eigenvalue is $\lambda_0=0.97=\delta$ to machine precision, the eigenvector is
+$w=(1,\,0.625,\,0.4)=1/z$ up to the chosen scale, and $P_{\mathrm{recovered}}$ matches the true $p$ to
+within $4\times10^{-16}$ (floating-point roundoff): \cref{ch25:eq-precover} reproduces the natural
+transition matrix exactly from the price matrix alone.
+\end{casestudy}
+
+\begin{intuition}[Why positivity of $A$ is doing all the work]
+Nothing in the recovery step uses probabilistic reasoning about $p$ directly; it is pure linear algebra on
+$A$. The only place probability enters is in guaranteeing, via no-arbitrage, that $A$ is a matrix of
+strictly positive prices in the first place, and in the modelling assumption \eqref{ch25:eq-ti} that
+restricts what $A$ can look like. Once both hold, the Perron eigenvector is forced to be positive and simple
+by \cref{thm:pf}, and positivity of the reconstructed $p$ and its automatic row-sum-one property follow for
+free --- there is no need to separately check that the answer is a sensible probability matrix.
+\end{intuition}
+
+% ==================================================================
+\section{Beyond finite-state chains: change of numeraire}\label{ch25:sec-diffusion}
+
+Ross's own proof works in the finite-state, discrete-time setting above. Carr and Yu's contribution is a
+preference-free re-derivation, avoiding the representative-agent language, that extends the same conclusion
+to a continuous-state diffusion. The key substitute for the discrete pricing kernel is a change of
+numeraire.
+
+\begin{definition}[Numeraire, numeraire portfolio]\label{ch25:def-numeraire}
+A \emph{numeraire} is a self-financing portfolio whose value is strictly positive at all times (a swap can
+be zero or negative, hence disqualified; a stock or a money market account qualifies, as long as it never
+hits zero) \ts{13}{25}{25:20}. Long (1990) showed that, given no arbitrage among a money market account and
+$n$ risky assets, there is always a self-financing portfolio of them, of value $L_t>0$, the \emph{numeraire
+portfolio}, such that every relative price $S^i_t/L_t$ is an $R$-martingale --- i.e.\ expressing P\&L in
+units of $L$ turns the (unobservable) natural measure $R$ into the measure under which discounted prices
+behave like ordinary risk-neutral martingales \ts{13}{25}{1:16:14}. The same object is also called the
+\emph{growth-optimal portfolio} (Kelly, 1956: over an infinite horizon it has the largest mean growth rate
+among all portfolios, at the price of being quite risky along the way) or the \emph{natural numeraire}
+\ts{13}{25}{19:04}.
+\end{definition}
+
+Assume $X$ is a univariate, time-homogeneous diffusion under $\Q$,
+\[
+  dX_t = b^\Q(X_t)\,dt + a(X_t)\,dW_t,
+\]
+on a \emph{bounded} state space $(\ell,u)$, driving the short rate $r_t=r(X_t)$ and the value of $n$ risky
+assets, all with known $\Q$-coefficients; and that the numeraire portfolio's value is a function
+$L_t=L(X_t,t)$ solving $dL_t/L_t=r(X_t)\,dt+\sigma_L(X_t)\,dW_t$ for an unknown volatility function
+$\sigma_L$ \ts{13}{25}{1:17:17}. Self-financing forces $L$ to solve the pricing PDE
+$\partial_tL+\tfrac12a^2\partial_x^2L+b^\Q\partial_xL=rL$; writing $\sigma_L(x)=a(x)\,\partial_x\ln L(x,t)$
+(from It\^o's formula) and separating variables $L(x,t)=\pi(x)e^{\lambda t}$ turns this PDE into a
+\emph{regular Sturm--Liouville problem}
+\begin{equation}\label{ch25:eq-sl}
+  \frac{a^2(x)}{2}\pi''(x) + b^\Q(x)\pi'(x) - r(x)\pi(x) \;=\; -\lambda\,\pi(x), \qquad x\in(\ell,u),
+\end{equation}
+with separated boundary conditions at $\ell,u$ \ts{13}{25}{1:25:39}.
+
+\begin{finance}[Sturm--Liouville as the continuum Perron--Frobenius]
+Equation~\eqref{ch25:eq-sl} is the exact continuous-state analogue of the eigenvalue problem
+\eqref{ch25:eq-eigen}: Sturm--Liouville theory guarantees a smallest eigenvalue $\lambda_0$, strictly below
+every other eigenvalue, with an associated eigenfunction $\pi_0(x)>0$ everywhere and unique up to positive
+scaling, while every other eigenfunction changes sign at least once \ts{13}{25}{1:26:40} --- precisely the
+conclusions (i)--(iii) of \cref{thm:pf} carried over from finitely many states to a continuum of them. Once
+$\pi_0$ and $\lambda_0$ are known (numerically, in general), $L(x,t)=\pi_0(x)e^{\lambda_0t}$ is known up to
+scale, hence so is $\sigma_L(x)=a(x)\,\partial_x\ln\pi_0(x)$, and Girsanov's theorem then gives the $R$-drift
+of $X$ as $b^\Q(x)+a(x)\sigma_L(x)=b^\Q(x)+a^2(x)\,\partial_x\ln\pi_0(x)$ and the $R$-dynamics of every asset in the set \ts{13}{25}{1:19:23}.
+This is the ``$11$ unknowns'' of \cref{ch25:rem-dof} replaced by one unknown function $\pi_0$ and one
+unknown scalar $\lambda_0$.
+\end{finance}
+
+\begin{coursenote}[Boundedness is essential, and still an open problem beyond it]
+The construction needs $X$'s state space to be an interval $(\ell,u)$ with $\ell,u$ finite (Carr is candid
+that some economists object to bounding, say, the S\&P~500 above, and that he personally has no problem
+with a bound of \$20 trillion \ts{13}{25}{27:29}). For an \emph{unbounded} state space the argument needs a
+Hilbert-space (square-integrability) version of Sturm--Liouville theory, and it does not always go through:
+it \emph{fails} for the standard geometric Brownian motion of Black--Scholes (so the natural measure of a
+stock price cannot be recovered this way from stock option prices under these assumptions), but it
+\emph{succeeds} for the Cox--Ingersoll--Ross short-rate model, recovering an R-dynamics that is again CIR
+but with a higher mean-reversion speed. More generally it succeeds for affine diffusions (Linetsky and a
+student, cited but not derived in the lecture). At the time of the 2013 lecture, necessary and sufficient
+conditions for recovery on an unbounded state space were an open research question
+\ts{13}{25}{1:27:41}.
+\end{coursenote}
+
+% ==================================================================
+\begin{keyformulas}
+\begin{align*}
+&\text{Pricing kernel:} && \varphi(x,y)=A(x,y)/p(x,y)\\
+&\text{Transition independence:} && \varphi(x,y)=\delta\,z(y)/z(x)\iff D_zA=\delta\,p\,D_z\\
+&\text{Recovery ($w=1/z$):} && Aw=\delta w \ \text{(Perron eigenpair of }A\text{, \cref{thm:pf})}\\
+&\text{Recovered transitions:} && p(x,y)=\delta^{-1}A(x,y)\,w(y)/w(x),\quad\textstyle\sum_yp(x,y)=1\\
+&\text{Diffusion analogue:} && \tfrac12a^2\pi''+b^\Q\pi'-r\pi=-\lambda\pi\ \text{(Sturm--Liouville)}\\
+  &&& \sigma_L(x)=a(x)\partial_x\ln\pi_0(x),\quad b^R(x)=b^\Q(x)+a(x)\sigma_L(x)
+\end{align*}
+\end{keyformulas}
+
+% ==================================================================
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[Recovering a 2-state chain by hand (not from the course)]\label{ch25:ex-x-2state}
+Let $A=\bigl(\begin{smallmatrix}0.45&0.30\\0.20&0.40\end{smallmatrix}\bigr)$.
+\begin{enumerate}[(a)]
+  \item Find the Perron eigenvalue
+      $\delta$ and a positive eigenvector $w$ of $A$ by solving the $2\times2$ characteristic equation directly
+      (no software).
+  \item Use \eqref{ch25:eq-precover} to recover $p$, and check it is row-stochastic.
+  \item Recover
+      $z=1/w$ up to scale and the pricing kernel $\varphi(x,y)=\delta z(y)/z(x)$; is $\varphi$ larger for a
+      transition into state 1 or state 2? Which state carries the ``insurance'' premium?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Recovery is not just normalising rows (not from the course)]\label{ch25:ex-x-notnorm}
+For the $A$ of \cref{ch25:ex-x-2state}, compute the naive row-normalisation
+$\hat p(x,y)=A(x,y)/\sum_zA(x,z)$.
+\begin{enumerate}[(a)]
+  \item Verify $\hat p\ne p$ from \cref{ch25:ex-x-2state}(b).
+  \item Explain, in
+      terms of \eqref{ch25:eq-matrixform}, why row-normalising $A$ recovers the natural probabilities only in the
+      special case $z\equiv\mathrm{const}$ (no risk aversion), and identify what $\hat p$ actually equals in
+      general (a $\Q$-like object, not $R$).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Sensitivity of the recovered kernel (not from the course)]\label{ch25:ex-x-sensitivity}
+Using the Python code of \cref{ch25:ex-3state}, perturb one entry of $A$ (e.g.\ multiply $A(1,3)$ by $1.05$)
+while leaving the others fixed, keeping $A$ positive.
+\begin{enumerate}[(a)]
+  \item Recompute $\delta$, $w$ and $p$; by how much does
+      each change relative to the unperturbed values?
+  \item Which entries of $p$ are most sensitive to a change in
+      $A(1,3)$, and does this match the intuition that Perron--Frobenius data depend on the \emph{whole} matrix,
+      not just one entry?
+  \item Repeat with a $5\times5$ random positive matrix and comment on whether the recovered
+      $p$ remains close to row-stochastic under floating-point rounding alone.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Irreducible but not positive (not from the course)]\label{ch25:ex-x-irreducible}
+Let $A=\bigl(\begin{smallmatrix}0&0.5&0.3\\0.4&0&0.6\\0.2&0.4&0\end{smallmatrix}\bigr)$ (zero diagonal, but
+irreducible: every state reachable from every other in finitely many steps).
+\begin{enumerate}[(a)]
+  \item Check numerically that $A$
+      still has a positive Perron eigenvector, consistent with the irreducible case of \cref{thm:pf} mentioned in
+      \cref{ch:linalg}.
+  \item Recover $p$ via \eqref{ch25:eq-precover} and check it is a valid (row-stochastic,
+      non-negative) transition matrix with some zero entries.
+  \item Explain financially what $A(x,x)=0$ means (no
+      one-period AD security paying off in the same state you start in) and why this does not break recovery.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[From the Sturm--Liouville problem to the discrete one (not from the course)]\label{ch25:ex-x-discretize}
+Discretise \eqref{ch25:eq-sl} on a grid $x_1<\dots<x_n$ in $(\ell,u)$ using centred differences for
+$\pi''(x_i)\approx(\pi_{i+1}-2\pi_i+\pi_{i-1})/h^2$ and $\pi'(x_i)\approx(\pi_{i+1}-\pi_{i-1})/(2h)$, with
+absorbing (Dirichlet) boundary conditions $\pi_0=\pi_{n+1}=0$.
+\begin{enumerate}[(a)]
+  \item Write the resulting eigenvalue problem as
+      $M\bm\pi=-\lambda\bm\pi$ for an explicit tridiagonal $M$ in terms of $a(x_i)$, $b^\Q(x_i)$, $r(x_i)$, $h$.
+  \item For constant $a,b^\Q,r$, compute $M$'s eigenvalues in closed form and identify the smallest one and its
+      eigenvector's sign pattern; check it matches \cref{thm:pf}'s conclusion that only the extremal eigenvalue
+      has an everywhere-positive eigenvector.
+  \item Implement this in Python for $a=0.2$, $b^\Q(x)=0.1(0.05-x)$,
+      $r(x)=0.03$, on $(\ell,u)=(-0.1,0.2)$ with $n=50$ grid points, and plot $\pi_0$; is it unimodal?
+\end{enumerate}
+\end{exercise}
+
+\begin{remark}[End of Part~II]
+This closes Part~II of these notes. The recovery theorem was a fitting last stop: it leans on nearly every
+tool built up along the way --- state prices and no-arbitrage (\cref{ch:linalg}), the risk-neutral measure
+(\cref{ch:bs}), Markov chains and Perron--Frobenius (\cref{ch:linalg} again), and, in its diffusion form,
+stochastic calculus and PDEs (\cref{ch:stochcalc,ch:sde}). The appendices that follow are practical rather
+than mathematical: how to run the course's \textsf{R} material, and the logistics of both years of the
+course.
+\end{remark}

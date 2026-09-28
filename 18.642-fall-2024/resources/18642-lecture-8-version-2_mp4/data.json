@@ -1,0 +1,35 @@
+{
+  "body": "",
+  "content": "<p>This lecture provides a comprehensive overview of linear regression modeling, focusing on ordinary least squares (OLS) estimation, its mathematical formulation, and statistical properties. It discusses the derivation of the least squares estimator, the interpretation of the Hat matrix as a projection, the distributional assumptions under the normal linear model, inference using t- and F-tests, and model diagnostics including residual analysis and influence measures, concluding with extensions to generalized least squares for correlated errors.</p>\n",
+  "content_type": "resource",
+  "draft": false,
+  "file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/18642-lecture-8-version-2_360p_16_9.mp4",
+  "file_size": 155575233,
+  "file_type": "video/mp4",
+  "image_metadata": {
+    "caption": "",
+    "credit": "",
+    "image-alt": ""
+  },
+  "iscjklanguage": false,
+  "learning_resource_types": [
+    "Lecture Videos"
+  ],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "resourcetype": "Video",
+  "title": "Lecture 8: Regression Analysis (cont.)",
+  "uid": "5a140d92-fffb-400f-8b07-10993afb8431",
+  "video_files": {
+    "archive_url": "",
+    "video_captions_file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/1d7HgmpFIQ47uwKAX5dWVPSzpIvjhV6Mh_transcript.webvtt",
+    "video_thumbnail_file": "https://img.youtube.com/vi/cMF_c2WNPyU/default.jpg",
+    "video_transcript_file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/1d7HgmpFIQ47uwKAX5dWVPSzpIvjhV6Mh_transcript.pdf"
+  },
+  "video_metadata": {
+    "source": "",
+    "video_speakers": "",
+    "video_tags": "18-642-topics-in-mathematics-with-applications-in-finance-fall-2024, f test, generalized least squares, hat matrix, linear regression, model parameters, moment generating function, normal distribution, ordinary least squares, projection matrix, regression diagnostics, residuals, t distribution",
+    "youtube_description": "MIT 18.642 Topics in Mathematics with Applications in Finance, Fall 2024\nInstructor: Peter Kempthorne\nView the complete course: https://ocw.mit.edu/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024\nYouTube Playlist: https://www.youtube.com/playlist?list=PLUl4u3cNGP601Q2jo-J_3raNCMMs6Jves\n\nThis lecture provides a comprehensive overview of linear regression modeling, focusing on ordinary least squares (OLS) estimation, its mathematical formulation, and statistical properties. It discusses the derivation of the least squares estimator, the interpretation of the Hat matrix as a projection, the distributional assumptions under the normal linear model, inference using t- and F-tests, and model diagnostics including residual analysis and influence measures, concluding with extensions to generalized least squares for correlated errors.\n\nLicense: Creative Commons BY-NC-SA\nMore information at https://ocw.mit.edu/terms\nMore courses at https://ocw.mit.edu\nSupport OCW at http://ow.ly/a1If50zVRlQ\n\nWe encourage constructive comments and discussion on OCW’s YouTube and other social media channels. Personal attacks, hate speech, trolling, and inappropriate comments are not allowed and may be removed. More details at https://ocw.mit.edu/comments.",
+    "youtube_id": "cMF_c2WNPyU"
+  }
+}

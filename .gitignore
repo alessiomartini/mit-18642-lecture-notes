@@ -1,0 +1,7 @@
+# Generated / local only (LaTeX artefacts are ignored in lecture-notes/.gitignore)
+build/
+.history/
+__pycache__/
+*.pyc
+Thumbs.db
+.DS_Store

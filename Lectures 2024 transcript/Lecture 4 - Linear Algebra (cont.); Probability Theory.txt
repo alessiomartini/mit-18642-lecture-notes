@@ -1,0 +1,1232 @@
+0:00
+[SQUEAKING] [RUSTLING] [CLICKING]
+0:05
+0:12
+PETER KEMPTHORNE: All right. I guess we'll get started. Let's see. I wanted to just finish up some discussion of topics
+0:20
+from linear algebra that we didn't get to the last math lecture.
+0:27
+And to begin with, I think we did cover this topic of eigenvalues and eigenvectors.
+0:35
+These linear algebra concepts turn out to be very, very useful in a number
+0:42
+of different applications. But when we have an eigenvalue and eigenvector pair, then,
+0:53
+for a matrix A that has an eigenvector V,
+0:58
+then the matrix-vector product is simply a rescaling
+1:05
+of that same vector. So matrix multiplication, when we use eigen--
+1:12
+or matrix-vector multiplication when we use eigenvectors is very simple. We're just rescaling the input.
+1:18
+And in order to solve for eigenvalues and eigenvectors,
+1:25
+one can solve this equation where the two are equal.
+1:31
+And when we solve this equation, we
+1:39
+want the roots of the determinant equation to equal 0.
+1:46
+This means that these are the eigenvalues which
+1:52
+make this matrix factor, A minus I lambda, non-invertible.
+1:59
+So with a matrix, if that matrix has a determinant that is--
+2:06
+or if that matrix is invertible, then the determinant
+2:11
+of the matrix is nonzero, and the inverse is actually functions of different determinant cofactors.
+2:19
+So in order for v to not be 0, which would be the case if this matrix were invertible,
+2:27
+we must have the lambda satisfying this equation. And this system of equations is a polynomial in lambda,
+2:38
+or at least, the determinant equaling 0 corresponds to a polynomial in lambda equaling 0.
+2:46
+So these things can be solved very directly.
+2:51
+Actually, in R, you can actually compute the roots of any polynomial very easily.
+2:56
+And then, once we've solved for our root lambda, then we can solve the equations for what the v
+3:03
+vector is that satisfies that. Now, let me put this in here.
+3:10
+3:15
+It turns out that if we have independent eigenvectors, then
+3:24
+we can-- linearly independent eigenvectors-- then we can comprise those as columns of a matrix S.
+3:36
+And the matrix A multiplied by this S matrix
+3:41
+will simply be the matrix of multiples of the eigenvectors,
+3:47
+so S lambda. Lambda is a diagonal matrix. And the inverse matrix of S will exist
+3:57
+so long as we have independent eigenvectors. And so this equation here can be used
+4:06
+to obtain A is S lambda S inverse. Alternatively, S inverse A S is equal to lambda.
+4:14
+So these eigenvectors, when comprising a matrix,
+4:21
+allow us to diagonalize a matrix A.
+4:28
+Now, let's see. All right, so eigenvalues, eigenvectors,
+4:36
+can come into play when we have equations for Kalman filters.
+4:41
+If our matrix A is transforming states at time t minus 1
+4:48
+into states at time t, and the dynamics of this process
+4:53
+proceed regularly over time increments given by t, then we simply have, the t-th transition from state 0
+5:03
+is given by the t-th power of A. And we can actually get explicit solutions, then,
+5:12
+which end up giving us--
+5:17
+let's see. At least, if our eigenvectors, v1 through vn,
+5:23
+are linearly independent, then, if we have an initial condition,
+5:30
+u0, we can express that initial condition as a linear combination of the eigenvectors.
+5:37
+And then we can represent the transition over t periods
+5:43
+to have this form. And it ends up just being a sum of multiples
+5:49
+of the eigenvectors, with the coefficients being
+5:54
+powers of the eigenvalues. So in looking at this mathematically,
+6:00
+one can see that if the eigenvalues, lambda 1 to lambda
+6:07
+n, are smaller than 1 in magnitude, then
+6:13
+this limiting state transition goes to a zero vector.
+6:21
+If one of the eigenvalues is equal to 1,
+6:30
+then this term here won't change with each transition,
+6:35
+and so we'll have a limiting value of the state that corresponds to a multiple of the first eigenvector.
+6:41
+And so what's interesting to anticipate is that there will be different kinds of problems
+6:48
+we work with where the eigenvalues may actually be such
+6:56
+that the largest eigenvalue is equal to 1, and the other eigenvalues are smaller than 1 in magnitude.
+7:04
+And so we can get nice analytic representations for the transition of the states.
+7:11
+All right. Well, from linear algebra courses,
+7:16
+you probably remember that if we have a symmetric real matrix--
+7:22
+so if this matrix here is n by n, and it's symmetric,
+7:30
+and it's real, then all of the eigenvalues of this matrix
+7:37
+are real as well. And if we have two distinct eigenvalues,
+7:47
+then the eigenvectors corresponding to those two eigenvalues are orthogonal to each other.
+7:57
+So if we have A v1 equals lambda 1 v1,
+8:04
+and A v2 is equal to lambda 2 v2,
+8:10
+then it turns out that v1 dot v2 is equal to 0.
+8:19
+And this is useful.
+8:26
+At least, if we're-- with linear algebra, we often want to represent multidimensional vectors in terms of some basis.
+8:39
+And so, if we think of our matrix A equaling a vector a1,
+8:48
+a2, up to a n, if the matrix A has full rank,
+8:59
+then these columns of A are linearly independent.
+9:06
+And we could use these column vectors
+9:11
+as a basis for the n-dimensional space. So if the rank of A is equal to n,
+9:23
+then the collection of aj's, j equaling 1 to n, forms a basis.
+9:30
+And if we have a matrix A that maybe is symmetric,
+9:42
+but has eigenvalues that are all distinct, then we actually could have--
+9:50
+so if A is symmetric, and all the eigenvalues are distinct,
+10:02
+then the collection of eigenvectors, vj,
+10:09
+j equaling 1 to n, this would correspond to an orthogonal basis.
+10:18
+And so, when representing n vectors, it's convenient to represent them in a coordinate system that
+10:29
+has orthogonal axes in it. Now, what's interesting is that when A is symmetric and real,
+10:43
+all the eigenvalues are real. It turns out that there exists an orthogonal set
+10:52
+of eigenvectors in that general case.
+10:57
+So that can be very useful. All right.
+11:03
+Well, a very important linear algebra result
+11:09
+is the singular value decomposition. And let me just ask, how many people here have covered
+11:17
+singular value decompositions? Just about everybody, OK. So who would like to explain to me what--
+11:24
+or explain to the class what a singular value decomposition is?
+11:34
+So let me write this, maybe, as the singular value
+11:40
+decomposition in my notation. So who would like to explain what this is?
+11:48
+Anybody? Yes? AUDIENCE: Expresses the matrix A as a sum
+11:55
+of orthogonal [INAUDIBLE] matrices. PETER KEMPTHORNE: So u is such that u transpose
+12:04
+u is equal to, say, the identity that has orthogonal columns.
+12:11
+V is the same thing. And D is a diagonal.
+12:17
+And so what's important is that any matrix
+12:28
+can be expressed as a factor of a V transpose,
+12:37
+which is an orthogonal matrix, that will transform coordinate
+12:42
+axes to new axes that are orthogonal in the same space. And then D is a diagonal matrix down to d--
+12:53
+well, I'll write dr-- where we basically are stretching and squeezing axes.
+13:02
+And then u simply has columns that define a new basis or a new vector space.
+13:10
+And we're taking sums of those. So it's interesting to represent any matrix
+13:18
+as this operator, which will do an orthogonal transformation
+13:26
+of axes, stretch and squeeze in that transformed space, and then use those to multiply new coordinate vectors, u.
+13:37
+Now, if we take any--
+13:44
+let's say, here, an m by n matrix, A--
+13:53
+and it's often the case that we have maybe m cases
+13:58
+in a data set and n variables. And so this corresponds to a data matrix
+14:06
+for an analysis of some data.
+14:11
+If we take A transpose A, then this is a symmetric real matrix.
+14:17
+And so this actually can be diagonalized to V D squared V
+14:31
+transpose, where I'm representing
+14:37
+the eigenvalues as the squared D values
+14:43
+and the eigenvectors as columns of V.
+14:49
+And so one can construct this, do
+14:54
+the eigenvalue-eigenvector decomposition here. And then we can take the matrix A, premultiplied by V, and--
+15:04
+or not premultiply-- postmultiply it by V,
+15:10
+and postmultiply it by D inverse. And this will basically be our U matrix.
+15:18
+Now, all of this is a bit casual with my notation.
+15:25
+The number of nonzero diagonal entries
+15:30
+here can be limited to the rank count of the matrix A.
+15:39
+And so that's the way it can play out.
+15:45
+So we basically have nonzero eigenvalues of A transpose A. There will be r,
+15:53
+the rank, nonzero eigenvalues. We can define the orthogonal, orthonormal eigenvectors
+16:02
+corresponding to those. And then, if we want to expand the orthonormal basis
+16:11
+of the first r eigenvectors to be an n-dimensional basis,
+16:18
+although they essentially aren't used, and so that gives us our singular value decomposition.
+16:29
+And it turns out that in dealing with data in a matrix,
+16:39
+the singular value decomposition allows us to reduce dimensionality.
+16:45
+Perhaps there's variation in the data values that is limited to a subspace of rank 2 or 3.
+16:56
+And so we can identify and specify that subspace
+17:02
+easily with the singular value decompositions. All right.
+17:08
+Let's see. So in these notes, I refer to reduced SVD.
+17:16
+What's rather interesting as a decomposition of the matrix A
+17:22
+is that it's a sum of r terms, where r is the rank of the matrix.
+17:29
+And those r terms are the products of the column vectors of u times the column vector transpose
+17:40
+of v, respectively, with the singular value,
+17:46
+sigma 1 through sigma r. So it provides a nice way of thinking of a matrix.
+17:55
+It's simply a sum of rank 1 terms.
+18:02
+OK. Let's see. These lecture notes on linear algebra finishes
+18:07
+with the Perron-Frobenius theorem. And this theorem relates to matrices
+18:16
+that are square with strictly positive elements.
+18:22
+And so, with such matrices, the theorem
+18:28
+states that there is an eigenvalue, a real eigenvalue,
+18:33
+lambda 0, that is bigger in magnitude than any other eigenvalues.
+18:41
+And corresponding to this eigenvalue, lambda 0,
+18:47
+we can define an eigenvector v, which has elements
+18:54
+that are all positive as well. And this lambda 0 eigenvalue, the largest one,
+19:04
+is alone in terms of, all other eigenvalues
+19:10
+are smaller in magnitude. And this result turns out to be very useful in working
+19:19
+with positive matrices. The notes here go through the proof of that.
+19:24
+I guess they're included here, if we wanted to get into technical proofs of linear algebra.
+19:33
+And I don't want to do that. Let's see. I finished these notes with just some mention of different news
+19:40
+sources that you should consider exploring in finance.
+19:48
+Well, there's Yahoo Finance, which is where we can easily collect price data.
+19:57
+But you should know that the Wall Street Journal is--
+20:03
+you can get a free subscription with that through your Kerberos password-- or ID, rather.
+20:11
+So that's very useful. And then there are a number of other sites that you may find useful.
+20:17
+Now, let's see.
+20:23
+In our very first lecture, I indicated
+20:30
+how we could use RStudio to collect data, plot time series of different stocks
+20:37
+or other assets. And in this lecture 2, I distributed this workspace,
+20:44
+which has R scripts and output for looking at portfolios
+20:55
+of stocks and considering equal-weighted portfolios with different components in the equal weights.
+21:03
+And so if you go to the Rstudio Cloud project--
+21:21
+so with RStudio Cloud, or maybe it's Cloud Rstudio,
+21:34
+one can upload different R programs in this project.
+21:44
+And so has anyone in the class yet used RStudio Cloud for any of the examples?
+21:54
+I'd like everyone to at least be capable of doing that. And I'd like proof that it actually
+22:01
+works with students doing it. So it would be great for some of you to consider that.
+22:07
+What's nice about this environment is that I can give you an R program.
+22:15
+And it should run just by saying Run. You don't have to install anything.
+22:21
+And with this output, there was one program called Script_SP500.
+22:32
+And there's a table of contents for this R script, which
+22:38
+says it loads libraries, then collects stock prices, and then saves the workspace.
+22:43
+So the commands are all very simple in here.
+22:50
+And then, with the Equal Weighted Portfolios script,
+22:57
+it actually loads libraries and loads the data set of stock prices that was just downloaded
+23:06
+in the other program. And it loads the data in.
+23:12
+Then, in processing the data, I--
+23:20
+consider investing a portfolio by equally weighting allocations
+23:31
+to different stocks in the S&P 500 index. And so, if one does this, these simple R commands create
+23:40
+the value of such a portfolio, where, in fact,
+23:47
+as indicated here, it's investing $1,000
+23:52
+at the beginning of 2019. And as an alternative to just equally weighting across the S&P
+24:01
+500 stocks, I looked at the Amazon, Apple, NVIDIA--
+24:08
+or no, Netflix and Google. These were actually the really hot stocks about four or five years ago.
+24:14
+And basically, look at equal weighting of all these. And so here's how the investment, equal
+24:24
+weighted at the beginning of the period, resulted towards the end. So there are some interesting features one can see.
+24:33
+If one happened to be good at identifying stocks to invest in,
+24:39
+you can do much better than the average S&P 500.
+24:45
+There can be greater risk by investing in a smaller number of stocks because you're not
+24:52
+so diversified. And so you can see how the red graph of values
+25:03
+decreases rather dramatically at some points in the time period.
+25:08
+And if one looks at what happened to the $250 invested
+25:15
+in each of those four stocks, this is what happened over this, whatever
+25:21
+it is, five-year period, or almost five-year period. And this raises some interesting issues for us,
+25:29
+which is, when considering portfolio construction, maybe
+25:37
+equally weighting allocations across some assets is a good thing to start with.
+25:42
+But what happens over time?
+25:48
+Well, in this case, Apple outgrew the other allocations
+25:55
+substantially. And so the degree of diversification in the portfolio
+26:01
+is getting lower because we have a greater concentration in that one stock. So what we'd like to do, perhaps,
+26:09
+is to rebalance the portfolio.
+26:15
+And different approaches to rebalancing portfolios
+26:21
+can be considered. Now, if we were to consider rebalancing
+26:31
+every day the investments in these four stocks, then would
+26:40
+you think that's a really good way to rebalance, to do it very, very frequently?
+26:46
+And why or why not? Yes?
+26:51
+AUDIENCE: Well, if you do it too frequently, then variances like 2022 can affect it.
+26:57
+It won't be very good for the big picture. PETER KEMPTHORNE: Yeah. If you rebalance too quickly, then you're
+27:06
+taking funds away from winners and giving those to losers.
+27:12
+And so you're equalizing allocations in a way that doesn't benefit from short-term trends
+27:22
+or strengths in different assets. So that extreme is probably not something you want to do.
+27:33
+One thing that's rather interesting is just how, if you do not do any rebalancing,
+27:40
+then the portfolios become rather undiversified.
+27:47
+And so the risk level is actually probably increasing
+27:52
+over time here. So one way of rebalancing portfolios is trying to maintain a certain risk level for the portfolio.
+28:01
+And such an objective would require periodic rebalancing.
+28:08
+OK. Well, let's move on, then, to the topic of probability theory.
+28:26
+And so what I want to do in this note is to just give you
+28:31
+a quick overview-- basically, a review of probability
+28:38
+concepts that you probably are very familiar with. And so, with probability theory, it's
+28:47
+customary to distinguish between discrete-valued random variables
+28:54
+and continuous ones. And so, with discrete-valued random variables,
+29:00
+those can be just events occurring or not, like a default of a counterparty, or maybe
+29:08
+the Federal Open Market Committee deciding on a Fed funds rate.
+29:14
+In thinking of individual stocks and their dynamics intraday,
+29:25
+one can think of different orders for a stock to buy or sell coming in at random
+29:33
+and wondering what side those would be on-- also, perhaps, the sheer size of the next market order.
+29:42
+Now, it used to be that these were always discrete outcomes.
+29:49
+Like, share size, it turns out you can actually now invest fractional shares in different stocks.
+29:55
+So the market's become more rich in that way.
+30:02
+But, importantly, we do want to distinguish between discrete outcomes that have probabilities
+30:10
+with respective outcomes, versus continuous random variables, where we're thinking of values that
+30:19
+could take on any value in some interval or range. And so, in thinking about the values of assets,
+30:28
+we can think of the value being in a continuous range. Also, timing of events is an important random variable
+30:41
+that is continuous as well. So one might consider, what is the waiting
+30:48
+time to the next market order for Apple stock?
+30:55
+Mixed variables can arise where we think of a stock having some value, where it's generally
+31:05
+a positive value, but it could go bankrupt, in which case there would perhaps be some discrete probability
+31:12
+of bankruptcy for a stock. Now, with probability models, we use probability mass functions
+31:23
+for discrete variables and probability densities for continuous.
+31:29
+And so we use calculus to calculate continuous probabilities in different intervals.
+31:37
+And, importantly, the cumulative distribution function
+31:42
+is a very important tool.
+31:48
+So if we write F sub x of-- let me write c-- is equal to the probability that the random variable x
+31:56
+is less than or equal to c, as a function of c, this value is going to be no smaller than 0 and no larger
+32:13
+than 1. And it will be monotone increasing in c.
+32:21
+And distributions will be uniquely specified by specifying their cumulative distribution
+32:29
+function. So these are very simple concepts.
+32:34
+There are expectations in moments.
+32:43
+One just-- I'll just call this an anecdote--
+32:50
+if x is continuous random variable,
+32:57
+and we define y equal to f of x, so we consider the probability
+33:06
+integral transform of the random variable x,
+33:13
+what is the distribution of y?
+33:36
+OK. AUDIENCE: Uniform. PETER KEMPTHORNE: Yeah, it's uniform. AUDIENCE: On 0.
+33:41
+It's uniform on 0. PETER KEMPTHORNE: So what's really neat is that a monotone transform
+33:51
+of the random variable x, whatever x is, so long as we know what the distribution is,
+33:57
+transforms that to a uniform. And so this is true regardless of what F
+34:04
+is, so long as F is continuous. And that property can turn out to be very, very useful.
+34:12
+One issue could be, oh, suppose you have a random sample of data
+34:20
+from some distribution, or you think it's from some distribution. Is the sample consistent with that distribution or not?
+34:28
+Well, if you did this probability integral transform, it should lead to a uniform distribution, which may or may
+34:37
+not be realized. So anyway, that turns out to be quite useful.
+34:43
+Now, we have expectations and moments of random variables.
+34:51
+Basically, the mean of random variables, the probability-weighted outcome,
+34:56
+we can generalize the mean to looking at, which is the first moment, to consider
+35:03
+the probability-weighted average of the k-th power, where k is an integer.
+35:09
+And the variance of random variables is a useful measure of uncertainty
+35:17
+about the mean value. And there's a nice formula for the variance, which
+35:25
+is the squared distance from the mean in terms of the average squared minus the square of the average.
+35:34
+So these are useful formulas that may be useful at certain times.
+35:42
+Now in terms of measuring uncertainty about outcomes, instead of the variance,
+35:51
+taking the square root of the variance is useful because its scale is the same as the original units.
+36:01
+Most people don't think in terms of squared units with any problem.
+36:07
+And so, instead of dealing with the variance directly, we'll commonly take the square root
+36:15
+of that to have the same units as our original variable, x. Now, with the skewness and kurtosis,
+36:26
+we're looking at measures of the shape of the distribution.
+36:33
+And with skewness, as you might anticipate, that detects asymmetry in a distribution.
+36:42
+And so, something that's nice to think about is, if we have a random variable x, where the expected value of x
+36:55
+is equal to mu, and the square root of the variance is sigma,
+37:04
+if we take z equal to x minus mu over sigma,
+37:12
+this is a standardization of the random variable.
+37:18
+The expected value of z will equal 0. And the variance of z will equal 1,
+37:29
+as will the square root of the variance. And for the skewness, which I use--
+37:36
+I guess it's a gamma-- gamma is equal to the expected value of z cubed.
+37:43
+And the kurtosis is equal to the expected value of z to the 4th.
+37:51
+So the skewness and kurtosis parameters of a distribution
+37:59
+can measure asymmetry. At least, if the cubed value has more weight
+38:05
+on the positive end than the negative end, it'll be skewed to the right.
+38:11
+And with the kappa, we're looking at z to the 4th.
+38:18
+So we're looking at, basically, how heavy are the tails? And for a Gaussian distribution, kappa
+38:32
+is equal to 3 for a normal, 0, 1, or any normal.
+38:39
+And gamma is equal to 0. So anyway, so these other parameters
+38:47
+are useful for characterizing distributions that are not Gaussian--
+38:53
+non-Gaussian in terms of, perhaps, skewness or heavier tails.
+39:01
+All right. Well, let's just review Gaussian distributions.
+39:08
+I hope this formula for the density of a Gaussian
+39:14
+is very familiar to everyone here. We basically have, the density function is equal to 1 over root
+39:29
+2 pi sigma e to the minus 1/2 x minus mu over sigma squared.
+39:38
+And so the mean is mu. The variance is sigma squared.
+39:45
+And the density function is symmetrical, with a maximum at the mean, mu.
+39:52
+And the points of inflection are actually at plus and minus sigma.
+39:59
+So if we think of just trying to draw a normal density function,
+40:09
+then the peak is at the mean. And the point of inflection where the second derivative is
+40:19
+0, it goes from negative second derivative to a positive second derivative.
+40:26
+That distance is sigma, symmetrically.
+40:31
+All right.
+40:36
+So let's take a look at the normal bell curve.
+40:41
+68% lies within 1 standard deviation. So this is whatever--
+40:49
+AP Statistics, you learn these facts. If we go to 2 standard deviations from the mean,
+40:55
+that's 95%. And 3 standard deviations is 99.7%.
+41:01
+So these models are-- normal models have these properties
+41:08
+of how likely different variations are in standard deviation units.
+41:16
+Well, in finance, we'd like to exploit, perhaps,
+41:22
+Gaussian distributions for modeling prices. And with a normal density curve, it actually
+41:34
+applies to x values that can be arbitrarily large, negative or positive.
+41:40
+It's an unbounded distribution in terms of potential outcomes.
+41:46
+And so one way of dealing with that with, say, prices
+41:51
+is to consider taking the log of prices
+41:57
+and thinking of that being a normal distribution. And so that construction corresponds
+42:05
+to a lognormal distribution. And so if we have a random variable x that's normal,
+42:14
+and then we take the exponential of that normal, then we say that the y variable is lognormal,
+42:23
+with the parameters mu and sigma squared corresponding to the log scale.
+42:28
+Now, what will be very interesting
+42:35
+in subsequent lectures is when we talk about stochastic processes that can be
+42:45
+applied in financial markets. There's an important stochastic process
+42:51
+called Brownian motion, which many of you
+42:57
+probably have some familiarity with. And with a Brownian motion process,
+43:03
+the increments of the process over time periods
+43:11
+has a distribution that's normally distributed.
+43:16
+And as the length of the increment of time increases,
+43:22
+both the mean and variance of the outcome changes.
+43:28
+And so this Brownian motion process is a very, very interesting process
+43:35
+that is intimately related to Gaussian distribution.
+43:40
+So we'll get there in a few lectures. Now, one of the useful tools we have in probability theory
+43:51
+is being able to derive the distributions of transformations
+43:58
+of random variables. So with the lognormal, we have a normal distribution.
+44:04
+We maybe take the exponential of that normal outcome. And we'd like to be able to write down
+44:10
+the density of that distribution and compute different features. Well, we can think of, say, a random variable x being
+44:23
+transformed to y with a function g. And then we can consider a function h, which
+44:33
+is the inverse function of g. And as examples, if g is e to the x,
+44:43
+then h is the log function. And with change of variables, if we have the CDF of x, then
+44:55
+the CDF of y is equal to the CDF of x
+45:02
+evaluated at the inverse of y on the x scale. So this equation here is a simple logical statement
+45:13
+that everyone here, I think, would agree is valid. And so, if this function relating the distribution
+45:23
+functions is true, if we take the derivative of the CDF
+45:30
+function of y, we get the density.
+45:36
+And then we just have to apply the chain rule on the right-hand side, the density of x
+45:45
+evaluated at h of y. But then we also need to have the chain rule for h in there.
+45:52
+So with this formula, it's all familiar.
+46:04
+But if we have f of x is equal to the integral minus
+46:11
+infinity to x of f of t dt, then the derivative
+46:21
+of f evaluated at x turns out to be equal to f
+46:27
+of t evaluated at t equal to x.
+46:33
+So the cumulative integral has a derivative equal to the argument of the integral.
+46:39
+So this is easy. And we can use this to get the density function
+46:44
+for a lognormal distribution. And here's the density of the lognormal distribution.
+46:56
+It has the same form as the Gaussian density, plugging in log y for x.
+47:05
+But then we need to multiply that by the chain rules,
+47:11
+or the derivative of h, with respect to y, which is 1 over y.
+47:18
+So here's the lognormal distribution. And as an example, I chose a mean log value of 0.2
+47:28
+and a SD on the log scale of 0.4.
+47:33
+And as you work with different distributions, you may have--
+47:38
+not suggestions, but you may find
+47:45
+it useful to consider specific parameter values. Here, I'm thinking that if one has a--
+47:56
+if we think of, say, x of 0 equaling 1
+48:02
+and x of 1 being distributed as a lognormal,
+48:09
+with mu equal to 0.2 and sigma equal to 0.4, then this lognormal distribution can
+48:20
+correspond to a one-year period where, on the log scale,
+48:28
+we expect a mean change on the log scale to be 0.2,
+48:35
+and with standard deviation of 0.4. So this would potentially be relevant for an asset
+48:47
+and looking at its percentage change on the log scale over 1 year, with an annualized
+48:53
+return of about 20% and annualized standard deviation of 0.4.
+48:58
+Well, if we draw vertical lines in this distribution
+49:04
+space, or sample space, of the lognormal-- here, I've just drawn symmetrical percentiles--
+49:12
+25th and 75th percentiles, and then the 5th and 95th
+49:18
+percentiles in red. And it's obvious that it's asymmetrical.
+49:24
+And what's useful, actually, with different distributions
+49:34
+is being able to calculate quantities of interest in finance. And so here's a nice example of a financial computation, where
+49:48
+we consider a call option to buy an asset at some terminal time,
+49:54
+capital T. And the strike price is going to be at price K.
+50:01
+And so if we think of X being the random variable of what
+50:09
+the time T price is, then the payoff is going to be equal to X minus K, the value minus the strike
+50:22
+price, if that's positive, or it won't be worth anything.
+50:28
+So if we have, at time T--
+50:33
+if we were to draw here as a function, P sub T--
+50:40
+or sorry, X, I guess-- and there's a strike price here, then
+50:47
+we would have the 0 value up to K. And then we'd have X minus K be giving this option payoff.
+50:58
+Now, you'll hear Vasiliy and Jake talk about the hockey stick
+51:05
+payoff function of options. And so this is what that comes from.
+51:11
+Now, what's interesting to know is this theorem here
+51:18
+says that if we have a density function little f,
+51:24
+with CDF capital F, for the outcome at time capital T,
+51:30
+then the expected value of this payoff
+51:37
+is equal to this integral from the strike to infinity of 1 minus F of x.
+51:45
+And the proof of this is done by considering
+51:55
+a finite upper limit, M, capital M, and then integrating by parts
+52:02
+and getting a formula here. So it's an interesting result that if we
+52:11
+know the terminal time T random price of an asset,
+52:22
+then a call option on that terminal value
+52:28
+will have this expected value. So those of you who actually have some advanced probability
+52:39
+coursework may notice that when you are looking at the expected
+52:52
+value of a positive random variable, you can sometimes express that as an integral
+52:58
+of the complementary probability of exceeding that value.
+53:06
+And so that result ends up being applicable here in a very nice way.
+53:14
+Now, with a normal distribution for X, we get this formula coming out for that call option.
+53:22
+And if we have a lognormal, we get
+53:27
+this different result. So knowing the distribution affects what the option price is.
+53:36
+Now, in probability theory, we make
+53:42
+use of moment-generating functions, which, I guess, when I first learned of these, I thought, well,
+53:48
+nice tool, but I don't really care. At least, it's a highly technical tool to use.
+53:56
+However, it turns out these are incredibly useful,
+54:01
+moment-generating functions. And the definition of the moment-generating function
+54:07
+is given by looking at just the expected value of e to the tx.
+54:18
+And we can expand this argument in a Taylor series, which
+54:31
+is done on the first line there, and just take the expectation.
+54:37
+Now, something that we should be questioning, perhaps,
+54:46
+is, do moment-generating functions always exist?
+54:52
+And by that, I mean, do we get a finite-valued function, mx of t,
+54:59
+for all random variables?
+55:16
+OK. AUDIENCE: No?
+55:21
+Sorry. AUDIENCE: No, that's fine. No, that's fine. That's fine. AUDIENCE: Yeah.
+55:26
+No, no, no, that's-- yeah. PETER KEMPTHORNE: The moment-generating function doesn't have to exist.
+55:34
+And the moment-generating function won't exist if this exponential function has too much weight.
+55:42
+So that integral is infinite. And an example where it is infinite
+55:47
+is a Cauchy distribution. A Cauchy distribution doesn't have finite mean or variance.
+55:57
+But what's interesting is that-- this is called the moment-generating function.
+56:05
+There's a characteristic function--
+56:13
+characteristic function-- that turns out
+56:19
+to be equal to e to the itx, where i here is
+56:28
+the square root of negative 1. And if you know a little bit about complex numbers,
+56:37
+this turns out to be equal to the cosine of tx plus i times the sine of tx.
+56:46
+And it turns out that these characteristic functions always exist and can be used almost the same way
+56:55
+a moment-generating function can be used when it exists. So the fact that it doesn't always exist
+57:02
+shouldn't worry us because we can generalize to characteristic functions. But what's important is that if we have two random variables
+57:14
+that have identical moment-generating functions, then those distributions are equal for the two
+57:25
+random variables. So we have identical distributions if their moment-generating functions are equal.
+57:31
+And if we consider a sequence of random variables,
+57:37
+and the moment-generating functions that
+57:43
+can be thought of as a sequence converges to a function that's
+57:48
+a moment-generating function of some distribution, then we have that the sequence of random variables, Xs,
+57:56
+converges to that distribution as well. So these are nice properties that
+58:03
+allow us to understand limits of random variables
+58:10
+and what the distributions are of limits. Now, with moment-generating functions,
+58:21
+this slide here discusses-- well, it introduces you to the moment-generating function
+58:28
+for the normal distribution with mean mu and variance sigma squared.
+58:34
+And with the special case of mu equals 0 and sigma equaling 1--
+58:43
+for a normal, 0, 1, if we look at the expected value of e
+58:53
+to the tx, it's equal to the integral of e to the tx times e
+59:02
+to the minus 1/2 x squared over root 2 pi dx.
+59:10
+So this is simply the formula for e to the tz, I guess.
+59:21
+Well, if we look at this exponential here,
+59:26
+we can write this as e to the minus 1/2 x minus--
+59:32
+59:40
+let's see-- x minus t over 2 squared.
+59:49
+That gives us x squared minus--
+59:57
+oh, no, just x minus t squared.
+1:00:05
+Is this right? I basically want to take 1/2 x squared plus tx and write this
+1:00:23
+as minus 1/2 of x minus t squared minus t squared over 2.
+1:00:40
+Is that right? I want a plus right there.
+1:00:46
+So this exponent of the exponential
+1:00:51
+here can be rewritten as this exponent times that.
+1:01:05
+So this is equal to the integral from minus infinity to infinity, 1 over root 2 pi, e to the minus 1/2, x minus t squared,
+1:01:16
+and then plus t squared over 2 dx.
+1:01:23
+And so this exponential factor with t squared can be taken out.
+1:01:34
+And this integral here is simply going to equal 1. So we are able to find the moment-generating function
+1:01:42
+for the standard normal very easily. It's equal to e to the 1/2 t squared.
+1:01:49
+Now, if we think about transforming a random variable,
+1:01:55
+such as X, with a linear function-- basically,
+1:02:01
+rescale X by sigma and add a mu-- then the moment-generating function
+1:02:07
+of that transformation of X to Y can be written out.
+1:02:14
+And it's equal to the exponential of t mu times the moment-generating function of X
+1:02:19
+evaluated at t sigma instead. So knowing what the X moment-generating function is,
+1:02:29
+we basically get this function coming out for the moment-generating function of a normal.
+1:02:36
+Now, this moment-generating function
+1:02:42
+is, in fact, the expected value of a lognormal random variable.
+1:02:51
+At least, if we set t equal to 1,
+1:02:56
+it's the expected value of a lognormal. And if we take t equal to 2, it's
+1:03:04
+equal to the square of a lognormal distribution. So we can use the moment-generating function
+1:03:12
+for the normal to calculate moments of a lognormal distribution. And that'll be an exercise in the next homework.
+1:03:19
+OK.
+1:03:25
+All right, so linear transformations--
+1:03:31
+basically, linear transformations don't change the skewness of distributions.
+1:03:40
+And the kurtosis can-- well, it might affect the kurtosis.
+1:03:47
+All right. Well, let's move on to considerations of more than one random variable and the concept of two
+1:03:55
+random variables being independent. In probability theory, we say two random variables
+1:04:02
+are independent if the joint probability of the random variables, X lying in a set A
+1:04:16
+and Y lying in a set B, if that joint probability
+1:04:21
+of both occurring is equal to just the product of each occurring alone.
+1:04:27
+And so we have, for densities or probability mass functions,
+1:04:36
+we have this property of the joint density function factoring into the product of the marginal densities of each
+1:04:44
+of the random variables. And it works for a continuous or discrete distributions as well.
+1:04:52
+So independence means that, basically, knowing one variable
+1:04:59
+doesn't give us any insight on the value of the other variable. Now, we can compute covariances between two random variables
+1:05:11
+and correlations. And so, with a covariance between two random variables,
+1:05:27
+this is a generalization of the variance for one variable.
+1:05:32
+But this is the probability-weighted average of x minus--
+1:05:38
+I'll write here mu x times y minus mu y.
+1:05:43
+And the correlation statistic corresponds
+1:05:53
+to dividing this covariance by the product
+1:06:05
+of sigma x and sigma y, the square root of the variances.
+1:06:11
+And it turns out that this also can be written as x minus mu x over sigma x times y minus mu y
+1:06:26
+over sigma y. And so the standardization of the random variables
+1:06:33
+to have mean 0 and standard deviation 1 can be made.
+1:06:40
+And then the expected product of those standardized values is the correlation statistic, or the correlation parameter.
+1:06:48
+Importantly, zero correlation doesn't imply independence.
+1:06:58
+But zero correlation does mean that the dependence--
+1:07:07
+does suggest that there's no linear dependence between the two variables.
+1:07:13
+Now, when we consider generalizing from two random variables to many,
+1:07:18
+then we can think of working with random vectors. And with, say, little n being the count
+1:07:29
+of different random variables, we can have notation of mu j
+1:07:36
+for the means or expectations of each, and sigma i, j corresponding to the covariance between Xi and Xj
+1:07:46
+for sigma i, j. And we can then represent--
+1:07:51
+the expected vector of x values is equal to a mu vector.
+1:07:59
+And we can represent the covariances between the elements in terms of an n-by-n matrix, sigma.
+1:08:09
+And so what's important to realize here is that if we have an x vector and a mu vector,
+1:08:25
+so x is equal to x1 down to xn, and mu
+1:08:31
+is equal to mu 1 down to mu n, then
+1:08:39
+we define the covariance matrix of x to be the expected value of x minus the mu vector times x
+1:08:53
+minus the mu vector transpose. And so this is an n-by-1.
+1:08:58
+This is a 1-by-n transpose. And so we get an n-by-n matrix, where
+1:09:07
+we take expectations element by element in that array.
+1:09:13
+So this is a nice way of representing the covariance matrix.
+1:09:19
+And what's useful in particular is, well,
+1:09:24
+if we think of Xs maybe representing returns on different assets, with means mu,
+1:09:32
+and the covariance matrix tells us how much variability there is
+1:09:38
+in each of the Xi's, but also the correlation structure across
+1:09:43
+the n Xs, then if we consider, say,
+1:09:50
+a linear combination of the Xs given by a vector A of constants, then this linear combination of the Xs can
+1:10:02
+actually represent maybe a portfolio of holdings across
+1:10:10
+different assets given by the Xi's. And what we'd like to be able to do is model the mean value of Y and its variance.
+1:10:21
+The mean value is very simply the linear combination
+1:10:26
+of the component means times the a coefficients. And when we go to calculate the variance of Y,
+1:10:35
+if you go through each step here, each equation here is doing something slightly important.
+1:10:43
+We're basically substituting in A transpose X for Y at the beginning and a transpose mu for the expected value.
+1:10:50
+Then we are able to pull out the constant vector, a transpose,
+1:10:58
+in the front of the expectation, and actually in the back of the expectation.
+1:11:04
+So these coefficient vectors are constants and can be pulled out of the expectation computations.
+1:11:13
+And then this middle term here is simply the covariance matrix of X. So we have that the variance of Y
+1:11:22
+is simply the sum, double sum, over all pairs of coefficients,
+1:11:27
+ai, aj, multiplied by the covariance terms between i
+1:11:33
+and j. So this is the formula for the variance of Y.
+1:11:46
+I'm not sure if we go into this in the next slide. But if the covariance of Xi and Xj is equal to 0--
+1:11:57
+so if this is equal to 0 for all i not equal to j,
+1:12:03
+then this variance expression simplifies a lot.
+1:12:09
+And if, say, aij-- sorry, ai is equal to aj is equal to 1 over n,
+1:12:24
+then the sum of the ai's is equal to 1.
+1:12:35
+And the sum of the ai squareds is equal to what?
+1:12:45
+AUDIENCE: 1?
+1:12:50
+PETER KEMPTHORNE: No. No, this is not equal to 1. It's going to be less than 1.
+1:12:55
+1:13:01
+AUDIENCE: 1 over n. PETER KEMPTHORNE: 1 over n, right. It's n, n times 1 over n.
+1:13:09
+So it's-- sorry, n times 1 over n squared. So the variance of an equal weighted average of the Xs
+1:13:21
+will have variance that's 1 over n times the variance of each of the Xs.
+1:13:27
+So this is where diversification can be useful in terms of reducing variability.
+1:13:36
+And in the very special case where we have, say, zero correlated assets and, I guess,
+1:13:49
+equal weighted variances of the Xs,
+1:13:54
+then we can reduce the variability by the factor n,
+1:14:01
+or multiplying by the factor 1 over n.
+1:14:07
+Well, this leads us to introducing you
+1:14:12
+to principal components analysis. And with principal components analysis,
+1:14:27
+we consider an m-variate vector x--
+1:14:34
+1:14:40
+so we consider an x vector that's m by 1, which has an expected value equal to an alpha vector,
+1:14:56
+and a covariance matrix, which is m by m,
+1:15:03
+equal to sigma matrix. And this covariance matrix is a real matrix that is symmetric.
+1:15:18
+Therefore, it's going to have real eigenvalues.
+1:15:23
+And it's also going to have nonnegative eigenvalues
+1:15:32
+because the covariance matrix is positive semidefinite.
+1:15:41
+And so sigma is positive semidefinite.
+1:15:52
+The definition of positive semidefinite is that for all a vectors, a transpose sigma
+1:16:02
+a is greater than or equal to 0.
+1:16:09
+And this is actually the variance
+1:16:14
+of a transpose x, this product of the covariance matrix
+1:16:27
+times the transpose of an a vector and that. So the fact that the variance of the linear combination
+1:16:35
+of the x's is strictly nonnegative
+1:16:41
+gives us this result here, which means that the sigma matrix is
+1:16:47
+positive semidefinite. And we can basically list the eigenvalues to be lambda 1
+1:16:59
+through lambda m. Those could be all different.
+1:17:04
+Some of them will be nonzero, so long as there's no--
+1:17:10
+so long as the covariance matrix has some positive rank.
+1:17:19
+And so, with this framework, where we have the covariance matrix, sigma, having eigenvalues,
+1:17:29
+lambda i, and corresponding eigenvectors, gamma sub i,
+1:17:39
+we can normalize the eigenvectors, gamma i, to be of unit length.
+1:17:47
+So gamma i transpose gamma i is equal to 1. And we can also define the gammas
+1:17:54
+to be orthogonal to each other. Then principal components defines new variables by saying,
+1:18:08
+we take our vector x. We transpose it to x minus alpha.
+1:18:17
+So we're looking at deviations from the mean values, component by component.
+1:18:23
+And then we take each of those, and we multiply them,
+1:18:34
+or look at the dot product of gamma i dot x minus alpha.
+1:18:39
+And we call this the coefficient of the i-th principal component
+1:18:51
+variables. And these principal component variables
+1:18:57
+are very neat because their average or mean
+1:19:06
+value is equal to 0.
+1:19:12
+But the covariance matrix between the p's is--
+1:19:17
+[ALARM RINGING] It's time to finish the lecture here.
+1:19:25
+The covariance matrix is the diagonal matrix lambda.
+1:19:31
+So we basically have transformed our original x vector
+1:19:38
+into new coordinates, which have mean 0,
+1:19:46
+are uncorrelated with each other, and have variability that decreases, basically,
+1:19:53
+with i, if we rank the principal components, eigenvectors, lambda
+1:20:00
+1, to be bigger than-- or basically, to be ordered from lambda 1 to lambda m.
+1:20:07
+So we have an orthogonal basis for our data in this case. And I guess we'll finish there for today.
+1:20:17
+But on Thursday, we'll finish these notes up. And what you'll be able to see is
+1:20:25
+how we can try to represent an x vector as a sum of terms.
+1:20:34
+And maybe the sum of terms corresponds to using just a small number of the principal component
+1:20:42
+variables. So when we have multidimensional vectors that
+1:20:47
+have variability that is limited to a smaller
+1:20:52
+number of dimensions, we can characterize those smaller number of dimensions nicely with principal components
+1:21:00
+and obtain useful models. And these kinds of models underlie multifactor models
+1:21:08
+often in modeling asset returns and financial markets.
+1:21:14
+So we'll finish there for today, and thank you.
+1:21:19

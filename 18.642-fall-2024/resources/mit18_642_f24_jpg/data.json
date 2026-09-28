@@ -1,0 +1,42 @@
+{
+  "body": "",
+  "content": "",
+  "content_type": "resource",
+  "draft": false,
+  "file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/mit18_642_f24.jpg",
+  "file_size": 334878,
+  "file_type": "image/jpeg",
+  "gdrive_url": "",
+  "image_metadata": {
+    "caption": "A random walk (martingale) with IID Bernoulli steps (+1, −1) over 10,000 steps. (Image courtesy of Dr. Peter Kempthorne.)",
+    "credit": "",
+    "image-alt": "Multiple colored lines represent different random walk trajectories."
+  },
+  "iscjklanguage": false,
+  "learning_resource_types": [],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "resourcetype": "Image",
+  "title": "mit18_642_f24.jpg",
+  "uid": "4ae73d5f-a236-4cf1-b7f2-5511e0ceecfd",
+  "video_files": {
+    "archive_url": "",
+    "video_captions_file": "",
+    "video_captions_resource": {
+      "content": "",
+      "website": "topics-in-mathematics-with-applications-in-finance"
+    },
+    "video_thumbnail_file": "",
+    "video_transcript_file": "",
+    "video_transcript_resource": {
+      "content": "",
+      "website": "topics-in-mathematics-with-applications-in-finance"
+    }
+  },
+  "video_metadata": {
+    "source": "",
+    "video_speakers": "",
+    "video_tags": "",
+    "youtube_description": "",
+    "youtube_id": ""
+  }
+}

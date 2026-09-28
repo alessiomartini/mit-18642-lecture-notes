@@ -1,0 +1,1463 @@
+0:00
+The following content is provided under a Creative Commons license. Your support will help MIT OpenCourseWare
+0:06
+continue to offer high quality educational resources for free. To make a donation or view additional materials
+0:13
+from hundreds of MIT courses, visit MIT OpenCourseWare at ocw.mit.edu.
+0:25
+PETER CARR: So, I welcome comments or questions at any point during this talk. We have an hour and a half, and I have only 50 slides.
+0:31
+So we should be OK. So, this is joint work with Jiming Yu,
+0:38
+who's a colleague of mine in my group at Morgan Stanley. I head up the global market modeling team at Morgan Stanley.
+0:43
+It's a group of about 70 PhDs, mostly, spread around the world.
+0:49
+There's about 30 of us in New York, some in London, quite a few Budapest, and a few in Beijing.
+0:57
+The title of this talk is Can We Recover? And it's meant as a triple entendre.
+1:04
+So, it could refer to either the systemic risk arising from the credit crisis, or the main result in a recent paper
+1:14
+by a professor here at MIT named Steve Ross in the Sloan School, or it could actually be the academic and practitioner
+1:23
+reaction to this result. So, it's really about two and three.
+1:30
+So, it's not about can we recover from the crisis.
+1:38
+There's a professor at Sloan School named Stephen Ross. And he's very well-known in academic finance.
+1:46
+Your professor was kind enough to mention that I won Financial Engineer of the Year. And that was two years ago.
+1:53
+I was like the 20th winner. He was the second winner.
+2:01
+The first winner was another MIT professor, Bob Merton. So anyway, he wrote a paper a couple years ago,
+2:12
+and it's only now about to be published. So this is like typical in academic circles.
+2:17
+It takes a long time for a paper to come out. And this paper is coming out in Journal of Finance.
+2:25
+That's what JF stands for. And Journal of Finance is the main journal
+2:30
+for the academic finance community. And the title of the paper is The Recovery Theorem.
+2:38
+And that's also the title of the theorem one in his paper. And that theorem one we'll go over.
+2:44
+And it gives a sufficient set of conditions under which, what Professor Ross calls "natural probabilities,"
+2:53
+at a point in time can be determined from-- OK mathematically, from exact knowledge
+3:00
+of Arrow-Debreu security prices, which you probably don't know what they are. But less mathematically, we'll just
+3:06
+say from market prices of derivatives. OK, so derivatives you've heard of,
+3:12
+I'm sure-- things like options, for example, on stocks or stock indices, could be on currencies.
+3:20
+So, imagine that you look at Bloomberg. Bloomberg publishes a whole bunch of prices.
+3:25
+And the idea is that you take this information,
+3:31
+and from it you're learning what the market believes are the probabilities concerning the future.
+3:38
+And so, if the option is on S&P 500 stock index,
+3:43
+then you're learning from options prices what the market believes are the likelihoods
+3:49
+of various possible levels for the S&P 500.
+4:03
+So, we take this information on Bloomberg and, truth be told,
+4:09
+we use it along with some assumptions to extract these implied market probabilities.
+4:17
+So, I want to tell you what those assumptions are. And so, the actual output of this analysis
+4:26
+is a probability transition matrix. Or, if you do it in continuous time,
+4:32
+you'd call it a-- in continuous state space, you'd call it a transition probability density function.
+4:40
+So the key word there is "transition." And what transition means is you're
+4:46
+getting not only the probabilities going from, say, the current S&P level to any one of several levels,
+4:55
+but even the probabilities of going from some other level than we're presently at today
+5:02
+to that range of levels. You could say, for example, the market believes that given that we're here now
+5:09
+with S&P at, say, 1,500, that the probability of more
+5:15
+than doubling is one half, for example--
+5:22
+which would be really high. But you know, I'm just picking numbers randomly here.
+5:28
+And you can even say that if S&P were to drop instantaneously
+5:33
+to half its level, that the probability of more than doubling from there is, say, one-third.
+5:40
+So, you can answer questions like that. That's The output of this type of thinking.
+5:47
+So there'll be three probability measures
+5:56
+that we can be thinking about. And we'll call them P, Q, and R. And I'd like to tell you what each of them means.
+6:03
+So P stands for physical probability measures. So the P is for physical.
+6:08
+And think of that as the actual objective reality of future states for, say, S&P 500.
+6:21
+So let's say God knows that, for example, the probability
+6:28
+that S&P is up by the end of the year is one half. And we, unfortunately, not being God, don't know that.
+6:37
+But let's say the philosophy is that. There is some sort of true probability of S&P
+6:42
+being up at the end of the year. And let's say I used a half.
+6:49
+Maybe it's 60%. If it is 60%, then the probability of S&P being down at the end of the year is 40%.
+6:57
+And the point is P is meant to indicate
+7:07
+the frequencies with which S&P 500 in my example takes on various values.
+7:14
+Now, there's another probability measure that people in derivatives spend a lot of time working with.
+7:19
+And that's called risk-neutral probability measure, and it's often denoted by a letter Q.
+7:25
+So we'll denote it by Q. And the concept of a risk-neutral probability measure
+7:30
+was also actually proposed by Steve Ross many years ago. And it's called risk neutral because when you're
+7:47
+working with it, if you think about how fast prices
+7:53
+appreciate over time, then they grow randomly. But on average, under this risk-neutral measure Q,
+8:02
+the grow at the same rate as your bank balance would grow.
+8:08
+So your bank balance, let's say, nowadays is growing at best at the rate of 1%.
+8:14
+And when you look at how fast, historically, stocks
+8:20
+have grown, it's actually much higher, on average, than 1%.
+8:26
+It's more like about 9%. So we would call the difference between 9% and 1%--
+8:33
+we call that 8% differential risk premium. And let me just pretend there's no dividends
+8:42
+to keep life simple when I say this. So now, this risk-neutral measure
+8:52
+is kind of a fictitious probability measure in the sense that it's not describing the actual probabilities or frequencies
+8:59
+of transitions, it's more a device, or a tool, or a trick that's handy.
+9:07
+And one of its properties that causes it to earn the name risk-neutral probability measure is that when you look at how
+9:15
+fast, say, S&P grows on average under this risk-neutral probability measure Q, it would be growing nowadays at 1%--
+9:25
+so the same as your bank balance is growing at.
+9:31
+So the word risk-neutral is meant to indicate that the growth rate under this measure
+9:37
+is consistent with investors in the economy being risk-neutral,
+9:43
+meaning that they require no premium for bearing risk.
+9:52
+Now there's a third probability measure that we're going to be talking about today that actually you
+9:58
+won't find any literature on. And we're going to call it R. It seems like a natural letter
+10:05
+to pick, having already gone through P and Q. And you can think of the R as standing
+10:14
+for recovered probability measure. And it's going to be the probability measure that we get from market prices as I was talking about earlier.
+10:23
+And the operational meaning of this R measure
+10:31
+is it's capturing the market's beliefs regarding the future. But we allow for the possibility that the market could be wrong.
+10:40
+So we're applying this to say houses and housing prices in, say, 2005-- it may well
+10:48
+be that if we looked at Bloomberg and got prices of mortgage-backed securities,
+10:54
+that we would extract an R probability measure that says housing prices are going to continue
+11:01
+on their incessant upward trajectory. And, you know, we're going to keep growing at the rate of, say, 15% a year
+11:10
+each year for the next 10 years, or something like that. So, that could be what the market's beliefs were back
+11:17
+in 2005. And we know now that those beliefs were wrong, if that was what the market was inferring.
+11:24
+So, I want to allow for at least the theoretical possibility that the market could be wrong.
+11:30
+And so, that's why I'm drawing a distinction, let's say, between the R probability measure that captures the market's beliefs and the P probability
+11:37
+measure that captures physical reality. So now, there's a lot of people in finance who simply cannot
+11:45
+accept the possibility that the market could be wrong. And for those people-- the sort of true believers
+11:51
+in market efficiency-- they are free to set R to P every time they see an R. But I want
+11:57
+to allow for the possibility that what we recover is not physical probabilities, but simply the market beliefs.
+12:03
+12:11
+And anyway, it's kind of semantics. It's good semantics if the probability measure we recover
+12:16
+is the one Ross said we should get. R stands for Ross.
+12:24
+So Ross calls the probability measure that we recover-- he calls them natural probability measures. And well, let's say, that suggests
+12:32
+that the risk-neutral probability measures are unnatural, which I think is fair actually.
+12:38
+Because when you hear the word probability, you tend to think about frequencies with which events occur.
+12:44
+And the risk-neutral probability measures do not give you the frequencies with which events occur.
+12:49
+What the risk-neutral probability measures give you is instead prices of so-called Arrow-Debreu
+12:57
+securities. So, let me give you a sense of what that means. So say I tell you that the risk-neutral probability of S&P
+13:06
+500 being up at the end of the year is 40%.
+13:13
+Then how should you interpret that? Well, you should simply interpret it as this. Imagine that you can agree now to buy
+13:21
+a security that pays $1 just if S&P 500 is up
+13:27
+at the end of the year. And usually when you and I buy things,
+13:33
+we buy them in a spot market. So we pay now for things.
+13:38
+But sometimes your credit is good, and you can actually agree now to pay later.
+13:45
+So, we're going to be thinking that you're agreeing now to pay later some fixed amount in return
+13:51
+for the security that's going to pay $1 just if S&P 500 is up
+13:56
+at the end of the year. And if I tell you that the risk-neutral probability of S&P
+14:02
+500 being up by the end of the year is $0.40,
+14:08
+what that means financially is that you agree now to pay $0.40 at the end of the year for the security.
+14:15
+14:23
+So, you can imagine there'd be another security that pays $1 just if S&P 500 is down by the end of the year.
+14:33
+And the only possible price that that security could have
+14:41
+in an arbitrage-free world would be $0.60. Because if you were to buy both securities,
+14:49
+then you get paid a total of $0.40 and $0.60. So you're agreeing now to pay $1 at the end of the year.
+14:56
+And then having both securities, either S&P is up, or S&P is down. And so, you collect $1 from one of them and not the other.
+15:05
+So if, for example, the one paying if S&P is up cost $0.40,
+15:13
+while the one paying if S&P is down only cost $0.50, then there would be an arbitrage,
+15:18
+which we would buy both securities, agree now to pay $0.90. And then get $1 for sure at the end of the period.
+15:25
+So we'd be up $0.10 by the end of the year. Question-- AUDIENCE: These are similar to digital options? PETER CARR: Yes.
+15:31
+It's more than similar. They are digital options. Yeah.
+15:37
+So, that's right. So, that's another term, which I'll actually use on the next slide. So, that's exactly right.
+15:43
+So, digital options is just too good a term. So economists, in order to obfuscate and look smart,
+15:49
+call them Arrow-Debreu securities.
+15:59
+So, continuing with the obfuscation, I want to tell you about a world with a representative agent.
+16:05
+So, economists are fond of trying
+16:12
+to formally model the market.
+16:19
+You read the newspaper. Every day, you'll read something like market thought that stocks were no longer a good investment.
+16:27
+So there was a sell-off. Market is a nice, short word to capture
+16:34
+what people are thinking. And so economists, rather than say the market, will say there's a world where the representative agent--
+16:40
+So this representative agent is a fictitious investor who has all the mathematical properties that we
+16:51
+give an investor, such as utility, function, and an endowment, and so on.
+16:57
+And what makes this particular investor a representative agent is that this agent sort of
+17:04
+finds that current prices are such that it's optimal to hold exactly what's available in the amount that
+17:16
+is available. So if what's on offer is, let's say, some Google shares,
+17:28
+and some Apple shares, and some IBM shares. And if we take the total market cap of Google,
+17:36
+total market cap of Apple, total market cap of IBM, and, let's say, Apple's biggest.
+17:43
+I don't actually know whether Google's bigger or IBM, but let's say it's Google, and then IBM.
+17:50
+So let's just say Apple's biggest, then Google, then IBM. Well, this investor would actually find that it's optimal for him to have
+17:57
+most of his money in Apple, second most of his money in Google, third most amount of his money in IBM, that's the representative agent.
+18:04
+So, he's acting in the way the whole economy is acting.
+18:10
+Well, I've been working in Wall Street now since 1996.
+18:19
+I have yet to hear a trader tell me about a representative agent.
+18:24
+Anyway, so although I understand what the words mean, and even the math, I wanted to present this material in a way
+18:32
+that, let's say, at least quantitative traders could understand it.
+18:38
+So I tried to get away from representative agents and present these ideas in the language
+18:45
+that at least quants on Wall Street are familiar with.
+18:56
+So, I won't be talking about a representative agent, and I will be talking instead about something that's probably
+19:04
+not too familiar to you, but at least quants have heard of. And that would be something called numeraire portfolio.
+19:11
+And it also goes by other names. Another name is growth optimal portfolio.
+19:17
+And it even has a third name, which is called natural numeraire. And these are three different phrases
+19:22
+that all describe the same mathematical object. And this mathematical object is a portfolio-- and more
+19:32
+precisely, it's the value of a portfolio that has some nice properties.
+19:38
+So the growth optimal portfolio indicates one of its properties.
+19:44
+This portfolio has a very nice property, which is that in the long run-- meaning
+19:51
+over an infinite horizon-- the growth rate of this portfolio
+19:57
+is, first of all, random. But second, if you take the mean of that random growth rate,
+20:04
+that mean is actually the largest possible among all portfolios.
+20:11
+So, starting with Kelly in 1956, this particular portfolio
+20:16
+with the largest mean growth rate over an infinite horizon
+20:21
+receives a lot of attention. It's actually quite humorous, some of this attention
+20:27
+that it's received. So, Kelly was a physicist who worked at Bell Labs. And he was actually a colleague of Shannon's at Bell Labs.
+20:41
+So Shannon did his seminal work at Bell Labs, but actually came here after that.
+20:46
+And his ideas really caught on-- and especially, I'd say,
+20:57
+started the field of information science, we'll call it-- whatever.
+21:03
+But Kelly was applying these ideas to finance. And certain financial economists were less than enthused
+21:10
+about the application information of theory to finance.
+21:16
+So, in particular, there was a financial economist here named Paul Samuelson who championed, I guess,
+21:23
+the opposition to this Kelly criterion it's called.
+21:30
+And so, I'll just tell you a short story.
+21:35
+AUDIENCE: Excuse me. PETER CARR: Yeah. AUDIENCE: If I could just interject-- PETER CARR: Yeah, sure. AUDIENCE: We had mentioned in an earlier class
+21:41
+the book Fortune's Formula. And this book goes into a lot of background and storytelling
+21:47
+about this whole era and exchanges. PETER CARR: That's true. It's a fantastic book.
+21:53
+I read it. I loved it. Especially if you're at MIT, you should definitely read this book.
+21:59
+It talks about a lot of MIT professors, some of whom are still here, like Bob Merton.
+22:04
+It's a quick, easy read.
+22:10
+You don't even have to have a background in finance to really enjoy it.
+22:16
+So you can read about the story I'm going to tell you now in that book.
+22:21
+So the story is Samuelson grew a little tired, I guess, with trying to explain to these dumb information theorists
+22:27
+that this Kelly criterion was not so great. So he published an article in a journal
+22:33
+called Journal of Banking and Finance-- that's actually a finance journal-- where he explained
+22:38
+why it wasn't necessarily such a good idea to hold this portfolio.
+22:44
+And in this article, every word he used was of one syllable,
+22:50
+except the very last word of the article, where he managed to say that he has-- I can't even
+22:59
+do it in one syllable-- OK, so just ignore my multi-syllabic words.
+23:04
+But anyway, he says, I have managed to write an article with all words with just one syllable,
+23:15
+except for this last syllable-- OK, I lost it-- sorry.
+23:20
+But anyway, the last word in his thing was syllable itself, which is multi-syllabic-- or whatever.
+23:27
+So anyway, it was kind of insane. So, let's move on. So this talk-- it has six parts.
+23:35
+And we have an hour to go. So let's say we'll try to spend 10 minutes on each. AUDIENCE: [INAUDIBLE]
+23:47
+PETER CARR: Yes. Well, that's a good question.
+23:52
+So, it does have risk, first of all. It does have a lot of risk.
+24:00
+It's not the riskiest, though. So some risk does not carry with it expected return.
+24:11
+And so that's why it's not the riskiest-- but it's risky.
+24:16
+So Samuelson's objections were precisely what you're getting at, that this is a fairly risky strategy.
+24:23
+So, I'm glad you brought that up.
+24:30
+OK. So there's six parts to the talk. I'm going to go over what Arrow-Debreu security prices are-- so again, they're digital options prices--
+24:38
+and their connection to market beliefs. I'll talk about this Ross recovery theorem.
+24:43
+So in Ross's paper, which you can get on SSRN,
+24:48
+he does everything in a setting that's called finite state
+24:54
+Markov chains. And so that's mathematically simpler than what we use in practice.
+25:01
+And I totally agree that when you try and introduce something, you do it in the simplest mathematical setting.
+25:08
+So now that he's done that, I wanted to do it in a more familiar setting, which
+25:14
+is a diffusion setting. A diffusion has an uncountably infinite number of states.
+25:20
+And I still want to keep things as simple as possible while going beyond finite state Markov chains. So I work in a univariate diffusion setting.
+25:27
+So there's only one source of uncertainty, which is the same as in Ross. And our technique is to get these results.
+25:37
+It's based on something called change of numeraire. So numeraire is a technical term, actually,
+25:42
+that describes an asset whose value is always positive. So there are securities whose values can have either sign.
+25:55
+So, swaps are a classical example. So a swap is a security which at inception has zero value,
+26:03
+actually. And then the moment after inception, the world changes, and the swap value either becomes positive
+26:09
+or becomes negative. So a swap would not be eligible to be
+26:16
+a numeraire because of that property that its value is real. On the other hand, if you take a stock,
+26:24
+its price is always positive-- well, that's debatable actually-- so let's say let's not do stock.
+26:37
+Let's do a treasury bond. A treasury bond-- US Treasury bond-- its price
+26:43
+is always positive. The reason I want to shy away from stocks is because we take Lehman Brothers stock, for example.
+26:51
+It's price was positive, then became zero. And actually, because Lehman's price
+26:56
+became zero, Lehman's share you could not be a numeraire.
+27:01
+So when I say that the numeraire value has to be positive, I mean strictly positive.
+27:09
+And so anyway, there's this literature about how to change numeraire, how to go from one asset with positive value
+27:15
+to another asset with positive value. And it's useful for understanding
+27:20
+how this Ross recovery works. So, we apply it when we have a so-called time-homogeneous
+27:29
+diffusion-- and I'll tell you what that means-- over a bounded state space. So bounded state space means that the set
+27:37
+of values that the diffusion can take is in some finite interval.
+27:44
+So if you're thinking about the uncertainty being, for example, S&P 500, then the natural lower bound for S&P 500
+27:53
+would be zero. And you have to accept that there's a finite upper bound in order to apply our results.
+28:01
+Now you know, personally, I have no problem saying the S&P 500 is bounded above by 20 trillion.
+28:08
+OK, but some economists have actually said this is ridiculous.
+28:14
+and challenged my work, and stuff like that for that assumption.
+28:20
+So, because of those challenges. I have actually been trying to extend our work to an unbounded state space, where, let's say,
+28:28
+the largest possible value for S&P 500 would be infinity. And I've found, actually, that it's not that easy.
+28:37
+And so sometimes, I can make it work, and sometimes I cannot.
+28:42
+So, when we get there, I'll explain some examples that work and some examples that don't. So this last section is kind of incomplete, this sixth section.
+28:50
+And so, basically, I've got examples that fail, examples that succeed. But I don't have a general theory.
+28:57
+So there'll be different assumptions in different parts of the talk. But within a section, there's only one set
+29:03
+of assumptions operating, AUDIENCE: Excuse me. PETER CARR: Yeah. AUDIENCE: [INAUDIBLE] the value of anything is [INAUDIBLE].
+29:11
+[INTERPOSING VOICES] PETER CARR: That's been my response too.
+29:16
+So the universe is bounded. And it's growing, but it's bounded.
+29:23
+So, I agree. You know, I'm on your side on this. I'm just telling you what I've been told.
+29:29
+Yeah. So, I'm working on it anyway, just so they can shut up. But, anyway--
+29:34
+AUDIENCE: Actually, I have some comments on the issue of the numeraire. You'll tell me how connected this
+29:40
+is-- but with the Kelly criterion, one of the origins of that is if you have a gambling
+29:48
+opportunity where it's favorable, how much of your bankroll should you bet on that gamble?
+29:55
+And basically, the Kelly criterion tells you what proportion of your bankroll
+30:01
+you should invest at all times. You should never bet everything. And if you do bet everything, you lose everything,
+30:08
+and you're done. So, the issue with the numeraire portfolio and never
+30:14
+being able to go down to zero, in the sense that you can never go bankrupt.
+30:19
+And so, assumptions of being able to always rebalance your portfolio--
+30:27
+PETER CARR: So, just give you a flavor of what this numeraire portfolio is--
+30:34
+you're betting a constant fraction of your wealth in every security.
+30:40
+So let's just keep it simple. There's only two securities. One is risky, and the other's riskless.
+30:46
+And so you might be betting putting 40% of your wealth in the risky one, and 60% then in the riskless one.
+30:55
+And that's when you start. So you have $100, and you put $40 in the risky one, and $60 in the riskless one.
+31:03
+And then, time moves forward. And let's say the price of the risky one changes.
+31:12
+Then when you revalue using the new price, it's unlikely that 40% of your wealth is in the risky one.
+31:23
+So in fact, if the price went up of the risky one, you'll have more than 40% of your wealth in that risky one.
+31:30
+So you need to sell some of that risky one. And then the money you get, you put into the riskless one.
+31:36
+And so, every time the price changes,
+31:41
+you need to trade, theoretically, in order to maintain a constant fraction of 40% of your wealth invested
+31:49
+in this risky asset.
+31:55
+So we assume zero transactions cost when we do this analysis.
+32:00
+Because there are positive transactions cost. One should take that into account.
+32:06
+And there is literature on how to do that.
+32:12
+So, I won't be formally entertaining transactions cost in this talk. There's work here at MIT, actually, on doing that.
+32:21
+32:27
+For the question of how should you invest, it feels like it's a complication that won't change
+32:34
+anything qualitative about-- it'd definitely change how frequently you trade, but it wouldn't, let's say,
+32:43
+it's unclear how it would change your initial investment across bets.
+32:52
+So, let's begin with part one. So we have the digital options, or also called binary options.
+32:58
+That's another term. And they trade, actually, in FX markets-- so foreign exchange.
+33:06
+And they pay one unit of some currencies, so say dollar-- If an event comes true.
+33:15
+So it might be that you're looking at dollar/euro. And if by the end of the year, dollar/euro exceeds 2,
+33:22
+then you get $1. Otherwise, you get $0.
+33:28
+So there would be a price in the FX markets. And it would be a spot price typically-- so meaning
+33:34
+you have to pay now for it. Let's let A, for arrow, be the price today of such a security.
+33:46
+And the subscripts on A are j given i. So, the idea is that you can think of yourself
+33:54
+as in a finite-state setting. There's various discrete levels of say, dollar/euro that we have that can be possible today.
+34:03
+And there's also various discrete levels for dollar/euro by the end of the year. And i indicates the state we're in.
+34:10
+So maybe dollar euro is $2 per euro right now.
+34:16
+And j indicates the state we can go to. Maybe we can go to $3 per euro.
+34:22
+34:29
+So in my example, A_(3|2) would be the price of an Arrow-Debreu security, given that the current dollar euro exchange rate is $2
+34:39
+per euro, and it pays $1 just if dollar/euro transitions from $2
+34:45
+per euro to $3 per euro.
+34:58
+So the idea is we have discrete states.
+35:04
+And let's say these are values that are possible at the end of the year.
+35:11
+And the example I just went through-- you're getting $1 just if it's $3 per euro at the end of the year.
+35:20
+So the height of that vertical line is one.
+35:29
+Now, I'll just comment that this is a slightly exotic option, in the sense that--
+35:39
+let's call it exotic. It's slightly exotic. So in contrast with exotics, there's this term "vanilla."
+35:46
+OK, and it actually indicates a flavor of ice cream.
+35:52
+So, we have this terminology which you get used to after awhile. And you can't understand when you talk to a man on the street
+35:57
+why they don't understand what a vanilla option is. So a vanilla option is a payoff that looks like this--
+36:09
+so it's a hockey stick payoff. And that's the payoff from a call option.
+36:15
+And it turns that there is a portfolio involving options
+36:21
+at three different strikes that can perfectly replicate the payoff to this Arrow-Debreu security.
+36:28
+And so, here is a payoff from a single option struck at two.
+36:33
+And I'll just say that if I had changed the strike
+36:40
+to, say, be three, then it would look like that.
+36:48
+Now, you can combine options in your portfolio. So you could, for example, buy a call struck at two.
+36:55
+And then you can furthermore sell two calls struck at three.
+37:00
+So if you sell, on top of that, two calls struck at three, you end up creating a portfolio that goes like this.
+37:05
+And so, they can go negative in value.
+37:13
+So if you not only buy one call struck at two,
+37:19
+sell two calls struck at three, but furthermore, buy one call struck at four, then you
+37:26
+end up with this payoff, which the payoff is called a butterfly spread payoff. Because the picture is meant to remind you of a butterfly.
+37:33
+And notice that if the only possible values for the FX rate
+37:42
+were $1 per euro or $2 per euro, or $3 or $4, or $5, if that were the world.
+37:48
+Then notice that when you formed that portfolio,
+37:53
+the only positive payoff you can get from it is $1 just if dollar euros at 3.
+37:58
+You can synthesize a Arrow-Debreu security
+38:05
+using a butterfly spread. So, this was pointed out many years ago.
+38:11
+So even if the FX market were, let's say,
+38:17
+not directly giving us the prices of digital options, we could from vanilla options extract the implicit price
+38:24
+of a digital.
+38:32
+And what you would learn from vanilla options is what the market is charging for the digital, given
+38:42
+that, let's say, we're presently at $2 per euro. And what you would not learn from these options
+38:51
+prices is what the price of the security will be should we today have the exchange rate
+39:00
+change to some other value.
+39:05
+However, you can make assumptions as have what the options prices will be
+39:10
+were today's exchange rate different.
+39:16
+So, that's commonly done in practice. So a common assumption, for example,
+39:23
+is that the probability of transitioning from two to three-- so moving up by half-- so you're moving up
+39:35
+by half of two to three-- is the same if you were at any other level.
+39:41
+So for example, if you were at four, then the probability of going to six
+39:46
+would be whatever the probability is of going from two to three. Because if you're at four, the probability of going up
+39:52
+by half of four to six-- that's the assumption. OK, so that's called sticky delta,
+39:59
+and it's a common assumption. So if you make that assumption, then you can take the information at just today's level.
+40:08
+And like, let's say, you know all the digitals from two,
+40:13
+and you can make that assumption. Let's say the probability of a given percentage change
+40:22
+is invariant to the starting level. And then you can, from that, figure out
+40:28
+what the probability of going from four-- a different level than we're at today-- is to all these different levels.
+40:33
+So you can go from a vector bit of information that the market is giving you to a matrix.
+40:40
+And that matrix is called transition matrix. And so, we're going to, in this talk,
+40:49
+assume that somebody's made such an assumption. And so, you actually know this matrix.
+40:55
+So you actually know, as a starting point, what the prices are of these Arrow-Debreu securities
+41:02
+or binary options starting from any level and going to any level.
+41:18
+I think in order to get through my whole talk,
+41:24
+I'm going to skip these slides. Because they're kind of like just being very precise about what some terms mean
+41:32
+that aren't going to be that important for the overall story. So OK, let's go to this slide.
+41:41
+So we think of there being just a single source of uncertainty
+41:47
+X, which could be dollar/euro. And we imagine that we have this matrix of Arrow-Debreu security
+41:54
+prices. We know every number in this matrix. And we ask what does the market believe about transitions
+42:04
+from any place to any place? What does the market believe is the frequency
+42:10
+of these transitions? Now, suppose that the number that's indicating the price of the Arrow-Debreu security going
+42:18
+from two to three-- suppose that number is, say, 0.1.
+42:24
+Now what does it mean? It just means that you pay $0.10 today for security paying $1
+42:30
+just if you go from two to three. That's all it means. Now you can ask what is the frequency with which you
+42:38
+go from two to three? It need not be 10%.
+42:44
+There's at least two reasons why the $0.10 price could differ
+42:50
+from the probability of going from where you are to where you get paid.
+42:56
+One such reason is simply time value of money. So if you were to buy all these Arrow-Debreu securities,
+43:04
+the one paying off-- one for every state, you'll find that the total cost is less than 1,
+43:13
+even though the payoff, for sure, is one from the portfolio.
+43:18
+And that's simply because of the time value of money. So when you put $1 in the bank today,
+43:24
+you actually get more than $1 back when you pull out at the end of the year.
+43:29
+And if you do the inverse problem-- how much do you have to put in the bank
+43:36
+today in order to have $1 at the end of the year? It might be $0.95.
+43:44
+So that's called time value of money. And so, just the fact that you have to pay now for the Arrow-Debreu security.
+43:49
+And you only get paid off at the end of the year. That causes this price of $0.10 to be lower.
+44:03
+So that's just discounting for time. The interest rates are positive. So that's one effect.
+44:09
+Now there's another effect, which is called risk aversion.
+44:15
+So risk aversion is the thought that even if the interest rate
+44:25
+was 0, to abstract away from the effect I just described,
+44:31
+that it still may be the case that a $0.10 price paid
+44:37
+for an Arrow-Debreu security transitioning from two to three is different from the probability of such
+44:43
+a transition, the real-world probability of such a transition. Because, for example, it may be quite desirable to get money
+44:55
+in that state, in which case $0.10 is over the real-world
+45:01
+probability. Or it could be the opposite that maybe it's not desirable to get
+45:06
+money in that state, in which case $0.10 is under the real-world probability.
+45:14
+So give you a more concrete example--
+45:23
+let's say something that is maybe a little closer to home is-- let's say this is S&P 500, and I
+45:31
+know the values are very different than the numbers I've indicated here-- but let's just forget about the actual numbers.
+45:37
+So the point is let's suppose that it's equally likely,
+45:43
+in terms of true probabilities, to go from two to three as it is to go from two to one.
+45:49
+So we have two Arrow-Debreu securities. One struck at one. The other struck at three.
+45:55
+And I'm telling you that it's equally likely that you go up by one as it is to go down by one.
+46:02
+Now you can ask the question does it necessarily mean that the prices of these securities that pay $1
+46:09
+are the same? And the answer is no, not necessarily. And actually, the sort of standard thinking
+46:15
+in financial academic circles is that for S&P 500,
+46:20
+it would cost more to buy this Arrow-Debreu security than it would cost to buy that one, even though everyone
+46:28
+agrees that it's equally likely to get paid from each of them. And the reason that it's thought to cost more
+46:36
+to buy this one than it is to buy that one is because this one has an insurance value.
+46:42
+So the thinking is that on average, people are long the stocks in the stock market, and that that
+46:49
+means that they're really upset when the stocks fall. And so they really like this one that
+46:54
+ends up paying should the stock market fall from two to one, whereas this one, while it's nice to get money,
+47:03
+let's say you're already fairly wealthy from the fact that you're owning stocks and the stock market went up.
+47:09
+So you'll pay a positive amount for this security, but not as much as you pay for this one.
+47:15
+So that's called risk aversion.
+47:20
+So what we want to do is go from the prices that
+47:27
+are contaminated, let's say, by time value of money effects and by risk aversion effects.
+47:32
+And we want to cleanse them of that contamination and try to extract what the market believes
+47:39
+are the frequencies of the future states.
+47:45
+So I'll tell you that this was thought to be impossible before the Ross paper, and in fact,
+47:50
+without making assumptions, it is impossible. So all Ross did is make some assumptions that
+47:56
+are thought to be fairly mild by some, including me.
+48:01
+And so he essentially, in essence, showed the power of some assumptions.
+48:07
+That's one way of thinking about it.
+48:15
+So again, let's denote by R the recovered probability measure which will tell us the market
+48:21
+beliefs about the frequencies future state. And we don't know R when we start.
+48:28
+What we do know is these Arrow-Debreu security prices, I'm assuming. And we'll denote those by A for Arrow.
+48:34
+So what Ross's paper does is it says, you know A.
+48:42
+And if you're willing to make the following assumptions, then you'll know R. So what are the assumptions? Well, before I tell you assumptions,
+48:48
+I have to tell you some terminology so that you understand the assumptions. So he'll work with a pricing matrix A, which we've actually
+48:58
+been going through. So that's the Arrow-Debreu security prices index by starting state and final state, which
+49:05
+we'll call x is starting state, y is final state. Then there'll be the desired output
+49:10
+from this analysis, which he calls natural probability transition matrix. So these are the markets beliefs for every starting value
+49:19
+x and for every final value y. And then there'll be something called pricing kernel,
+49:25
+which is literally the ratio of these Arrow-Debreu security prices to these output natural probabilities.
+49:35
+So, if you want to get an understanding of what this pricing kernel is, you can think of it
+49:40
+as an attempt to capture the effects
+49:46
+from time value of money and from risk aversion. So think of it as a normalization.
+49:53
+You start with A, and A is actually affected by three things. It's affected by the unknown real world
+50:00
+probabilities-- or at least markets beliefs of them. A is also affected by a second thing,
+50:06
+which is time value of money. And A is affected by a third thing, which is risk aversion. So if we take A and divide by P, then we're
+50:15
+normalizing for the first effect, the frequencies. And so we're left with just the combined effect
+50:23
+from time value of money and from risk aversion.
+50:28
+And so, let's say, if interest rate were zero and people
+50:34
+were risk neutral, then we would actually expect A to equal P.
+50:40
+And so this ratio would be just constant.
+50:48
+So Ross talks about a world with a representative investor. And essentially, this is an assumption-- this equation
+51:01
+you're seeing here.
+51:06
+It's an assumption on the form that a function of two variables takes. So phi, first of all, is a positive function.
+51:14
+So phi is positive, as opposed to-- so phi cannot take negative values because both A and P are positive.
+51:21
+And phi is a function of two variables-- x and y.
+51:27
+And what this assumption is doing is it's saying, well, let's put structure on this function phi
+51:33
+because it'll help us to find it if we put the structure. So this is the first key assumption actually--
+51:39
+that the function of two variables x and y actually has the form on the right, which, for a moment,
+51:47
+just ignore the delta for a moment. And then you can see that what you have on the right if you ignore delta, if you think of delta as one,
+51:54
+is you have a function of y. And then you have the same function of x. So it's written in a convoluted way with this U prime, and c,
+52:02
+and all that stuff. But if delta's one, then you have a fraction whose numerator is a function of y and whose denominator
+52:09
+is the same function, but of x.
+52:17
+In essence, what that does is it reduces the dimensionality of the thing we're searching for by a lot.
+52:23
+So we started by searching for a function phi of two variables. And we, by this assumption, reduced the search
+52:29
+to a function of one variable, which is, say, the function in the numerator, which is the same as the function in the denominator.
+52:35
+So, now let's bring back delta.
+52:41
+And delta's a scalar here, and it's a positive scalar. And so we need to search for that as well.
+52:47
+So in the end, we reduce the search to a function of one variable and a scalar delta.
+52:54
+So the economic meaning of, first of all, the function of one variable is--
+53:01
+it's called marginal utility. And it's meant to indicate how much happiness you
+53:07
+get from each additional unit of consumption. So it's the typical-- what we think
+53:14
+it looks like as a function of c-- U prime as a function of c
+53:22
+is thought to typically look like that. So it's positive, meaning every unit of consumption makes you happy.
+53:27
+And it's actually declining, meaning the first unit of consumption makes you real happy.
+53:34
+Then the next unit of consumption still brings some happiness, but not as much, and so on.
+53:41
+So that's the kind of function we're looking for. U prime as a function of c.
+53:46
+He won't actually find U prime as a function of c. He'll find the composition of U prime with a function c of y.
+53:56
+54:01
+Keep that in mind. Then, there's that delta. And that's, again, a positive scalar.
+54:10
+And it's meant to capture time value of money. And so, that's like the y is the state at the end of the period.
+54:21
+And x is the state at the beginning of the period. And so, that's why delta's associated with the numerator, not the denominator.
+54:27
+So delta would be a number like 0.9. And that indicates how much discount you give to,
+54:35
+let's say happiness received in the future, rather than now.
+54:42
+Now, here's a quote from Ross's paper that is his Theorem 1.
+54:50
+That's called the recovery theorem. And the only thing is I changed the letters
+54:56
+to conform with the letters I'm using, rather than the ones he used. And that's because his choice of letters
+55:01
+is completely unnatural to me and most people. So I don't even want to tell you what he used.
+55:10
+So anyway, whereas I tried to choose letters that make sense. So I used A for Debreu--
+55:20
+So anyway, he says, you have a world with a representative agent. So that's actually this restriction
+55:28
+that we talked about on the last slide. And then he says, if the pricing matrix-- which
+55:34
+is the Arrow-Debreu security prices-- is positive-- which means that all entries in it are strictly above zero-- or irreducible--
+55:43
+which means that some entries have zeros, with the rest being positive, and there's
+55:48
+some structure, which we need not get into where the zeros are-- then there exists a unique solution
+55:56
+of the problem of finding P, which P is actually
+56:01
+market beliefs. And I've been calling that R often. So anyway, I slipped a bit there and called it P.
+56:08
+So anyway, that's market beliefs about the frequencies of future states.
+56:13
+He'll also get as an output the delta, which is the positive scalar telling you the market's time
+56:19
+value of money. And finally, this pricing kernel phi, which is the ratio of A to P. So,
+56:35
+what you're supposed to realize, even though he didn't say it, is that as a result-- well, OK.
+56:42
+So he did say it actually. You're finding P. I think that's the main thing.
+56:49
+He's actually saying, if you make these assumptions, surprisingly, there's only one possible real world or market
+57:03
+beliefs that are consistent with the data and the assumptions made.
+57:12
+To give you a sense of what the importance of this result is-- so prior to his paper-- I mean,
+57:19
+people have been interested in trying to infer from market prices what the market believes.
+57:25
+But they always thought that you had to supply some parameters that capture market risk aversion.
+57:34
+So for example, common approach is to assume that you have a representative investor.
+57:40
+And that they have a particular type of utility function called constant relative risk aversion.
+57:46
+And there's a parameter in that utility function. And you had to specify the numerical value that parameter takes before you could learn the market's beliefs from prices.
+57:57
+And no one ever felt very comfortable specifying that parameter. So what Ross essentially did is he managed to essentially do
+58:10
+the identification non-parametrically, where you don't have to supply any parameters.
+58:17
+And so you essentially just have to buy his assumptions.
+58:25
+You don't have to do any work to actually go from market prices
+58:31
+to market's beliefs.
+58:40
+OK, so let's skip these remarks. Yeah. AUDIENCE: Can you elaborate on the fact
+58:49
+that risk aversion does enter in?
+58:55
+PETER CARR: Yeah. So the exact statement is you don't have to supply a parameter that describes
+59:02
+the amount of the market's risk aversion. Rather you have to accept this assumption--
+59:11
+and I'll show you-- this assumption about the structure of phi.
+59:16
+OK, so if you just accept that this function of two variables doesn't have the full amount of degrees of freedom
+59:26
+that an arbitrary function two variables has, it has a reduced number of degrees of freedom implicit on the right-hand side.
+59:33
+So remembering that x is actually just a vector of finite length and so is y,
+59:42
+then think of the left-hand side as having degrees of freedom n squared. And on the right-hand side, you're
+59:49
+looking for the numerator function is just a vector of length n.
+59:56
+And the denominator function is the same function, so the same vector.
+1:00:01
+And then there's also this delta. So let's say on the left-hand side, you're describing something that without restriction is
+1:00:09
+of order n squared. So let's say n is 10, so it has 100 degrees of freedom. And on the right-hand side, you're
+1:00:15
+describing a vector of length 10 along with a scalar-- so 11 degrees of freedom.
+1:00:21
+So you have to accept that you're willing to before you place any restriction,
+1:00:26
+it's 100 degrees of freedom. Now you make your restriction. It's 11. You have to accept that. And if you do, then he'll tell you the 11 entries.
+1:00:39
+That's it. So you don't have to supply anything. So I haven't told you how we'll find them.
+1:00:45
+That's probably what you're asking-- how the hell will you get to 11? OK, so I haven't shown you that. Yes? AUDIENCE: Just really quickly, the c change
+1:00:52
+as a function of time and spot price? PETER CARR: c is not a function of time,
+1:00:58
+to answer your question. And then, the argument of c could be a price.
+1:01:08
+It's allowed to be a price. OK? So, that's how you should think of it.
+1:01:16
+So there's a lot of time homogeneity in everything he does here. So he'll never let anything depend on time, actually,
+1:01:24
+to answer your question.
+1:01:31
+So, I still haven't shown you how he did it.
+1:01:36
+He uses Perron-Frobenius theorem. I don't actually have slides on how you actually
+1:01:43
+calculate the 11 entries. So I think I just have to refer you to the paper.
+1:01:49
+But he relies on something called Perron-Frobenius theorem. And I'm going to show you how we-- my co-author
+1:02:00
+and I-- actually calculate the analog
+1:02:08
+of that 11-dimensional unknown. So we're going to work in a continuous setting, where
+1:02:16
+instead of looking for a vector and a scalar, we're going to look for a function, and a scalar,
+1:02:22
+and a function of one variable.
+1:02:28
+So you'll get a sense of how to do it from ours. And essentially, if you discretize what we do, you'll get what he did.
+1:02:34
+Let's forget these remarks, and let's forget these.
+1:02:41
+And so now, we'll get into some theory about changing numeraire.
+1:02:46
+So this is a backdrop to how my co-author and I proceed.
+1:02:53
+1:02:59
+So again, a numeraire is a portfolio whose value is always strictly positive.
+1:03:04
+And there is a well-developed theory in derivatives pricing about how to change the numeraire.
+1:03:11
+We're going to use that theory to understand what Ross did.
+1:03:20
+So we start with an economy with a so-called money market account.
+1:03:25
+And so that's a theoretical construct that's pretty familiar to most of us, and it's a bank account.
+1:03:34
+So we're going to be working now in continuous time. So imagine that time, which is continuous, is on this axis.
+1:03:41
+And then we're sitting here today, and we put some money into the bank. And being poor, we only put $1 in.
+1:03:49
+So then we ask, looking forward, how will this money in our bank
+1:03:55
+change? Well, they do still pay a positive interest rate,
+1:04:01
+and it's awfully small, but it's positive. And so it'll go up. And they change the rate actually.
+1:04:08
+So now, maybe it's 0.5%, but next week, Chase might decide to give you 1%, in which case it goes up faster.
+1:04:15
+And then they might the week after give you 2%, it goes up faster. Then they might go back to 0.5%. So that's one possible path for your money market account
+1:04:24
+balance. And we don't know the future. We know how much we're getting over this first little bit
+1:04:30
+of time. But they could actually decide to pay less over the second period, and then the third, or something
+1:04:37
+like that. OK, so it's increasing and it's random. So that's the money market account balance.
+1:04:42
+It's considered as an increasing, random process.
+1:04:48
+And actually, there's nothing in the math that requires it to be increasing if some really cheap bank--
+1:04:55
+like Bank of America tried this actually-- charge a negative rate. Then it would actually go down with a negative rate.
+1:05:03
+But it wouldn't go negative. So it's still counts as a numeraire.
+1:05:09
+So anyway, that's allowed, as an aside.
+1:05:14
+OK, so we've got this money market account. So the growth rate is called r, and that's just real-valued.
+1:05:23
+And then we also have risky asset. So we'll have a total of n risky assets.
+1:05:29
+And then we're going to say there's no arbitrage between the n risky assets and the one money market
+1:05:35
+account.
+1:05:43
+The idea is that we look at Bloomberg's prices for these n plus 1 assets, we're able to extract
+1:05:49
+the Arrow-Debreu security prices. That's the idea.
+1:05:55
+What I'm assuming is that what we're extracting is consistent with the idea that the uncertainty that's
+1:06:04
+driving everything here is a diffusion, meaning that the uncertainty has sample paths that are continuous,
+1:06:15
+but they're allowed to be fairly jagged. So diffusions actually have continuous but non-differentiable sample paths.
+1:06:22
+And we're going to assume that. So this is a common assumption. This basically got its start here at MIT.
+1:06:32
+And diffusions were first used in a finance context
+1:06:37
+back in 1965 when both Samuelson and McKean were here. So McKean is a probabilist.
+1:06:43
+He's now at NYU where I teach, and he's still active. And diffusions are widely used.
+1:06:52
+So they really got a big boost in 1973 when Black-Scholes and Merton, who were all here,
+1:06:58
+used the diffusion to describe the price of a stock underlying an option. And since then, they've just been used extensively
+1:07:06
+in finance. So Merton, who's here, really, I'd say,
+1:07:12
+pioneered the use of them in finance.
+1:07:29
+So there's this uncertainty X is probably mysterious to you, hence the name X.
+1:07:37
+So it's like, you get to choose what it is, is kind of the idea. So this is theory.
+1:07:42
+And it's not trying to be overly specific so that you can apply it in different contexts.
+1:07:50
+But you'd like to know at least some examples, I'm sure. So one example would be X is the level of S&P 500.
+1:07:56
+A different example would be X is actually an interest rate.
+1:08:02
+So let's say the benchmark 30 year yield.
+1:08:08
+X could instead be a shorter-term interest rate, something called OIS-- overnight index swap-- is
+1:08:18
+a possible choice for x.
+1:08:23
+When I apply Ross's stuff, that's how I choose X, as a short-term interest rate.
+1:08:32
+In general, let's say I developed a theory that says the short-rate of some function of X.
+1:08:38
+And when I actually apply it, the function is the identity map.
+1:08:51
+The mathematics says that if there's no arbitrage,
+1:08:56
+then there exists-- as we're assuming-- then there exists this so-called risk-neutral probability
+1:09:02
+measure that I talked about earlier and denoted by Q. It's related but not equal to the Arrow-Debreu security
+1:09:09
+prices. So if you were to just imagine that instead
+1:09:14
+of buying these Arrow-Debreu security prices in a spot market, if you instead bought them in a forward market
+1:09:20
+where you actually pay when they mature, then those Arrow-Debreu security prices in the forward market
+1:09:27
+would be Q. So Q and A are really close. So the measure A need not integrate to one,
+1:09:36
+and that's just due to the time value of money, and that's because you're paying in the spot market. If you're actually paying in the forward market,
+1:09:41
+then you don't have to worry about time value of money. And so then, the measure Q does integrate to one. So that's why we call it a probability measure.
+1:09:48
+Under this probability measure Q,
+1:09:55
+the expected return on all assets is the risk-free rate. So that's what that actually says, although you're probably
+1:10:02
+not seeing that this is literally the expected return-- well more precisely, it's expected price change.
+1:10:08
+So the expected price change is-- what that means is expected price change is the risk-free rate times the price.
+1:10:13
+That's what that says. So if you divide both sides by the spot price when it's positive, then you'll get the expected return
+1:10:21
+is equal to risk-free rate. And we're doing things in continuous time here. So we're working with diffusions.
+1:10:27
+And you may or may not have been introduced to diffusions at this stage in your mathematical career.
+1:10:33
+But mathematically, one way to describe diffusion is via the infinitesimal generator.
+1:10:39
+So this is a differential operator that's first order in time, second order in space.
+1:10:46
+And let's just say this is formally how mathematicians think about this type of thing.
+1:10:53
+What I've drawn here is a single sample path of diffusion. There's definitely possibility of other sample paths.
+1:10:58
+These actually are an infinite number of paths. But they're all continuous and nowhere differentiable.
+1:11:04
+1:11:22
+I want to just kind of give you a flavor of how you change numeraires. So we started with the numeraire being the money
+1:11:29
+market account-- this guy. And the idea is we're going to switch to a different numeraire.
+1:11:39
+What we're mainly interested in figuring out is what are the drifts of assets when we measure their values
+1:11:58
+in a different numeraire. So I've kind of given you a sense of what this is about.
+1:12:04
+So you could hold IBM, and every time you get a gain,
+1:12:11
+you could put that gain in your local bank-- Chase-- and see how fast your bank balance grows
+1:12:18
+as you're putting all your gains in IBM in the bank. And you'll get a certain growth rate from that strategy.
+1:12:28
+Now, you could try a different strategy where you take your gains from IBM. And you actually ship them off over to a British bank, which
+1:12:36
+is denominated in pounds, and see how fast that bank balance grows.
+1:12:41
+And there's no reason that the two bank balances-- the American one and the British one-- need to grow at the same rate.
+1:12:48
+Because they're denominated in different currencies. So we're basically interested to know,
+1:12:55
+given that we know how fast, let's say, the American bank balance would grow, we want to know how fast the British bank
+1:13:01
+balance would grow. And what affects the growth rate of the British bank balance
+1:13:07
+is the covariance, actually, between the dollar/pound exchange rate and IBM.
+1:13:15
+So remember, we're investing in IBM and we're putting gains in either an American bank or a British bank.
+1:13:22
+So IBM stock prices in dollars. And so there's no issues with putting IBM's gains
+1:13:28
+in an American bank. But there's actually a subtle effect that happens when you put IBM's gains in a British bank, which
+1:13:35
+the subtle effect is there's this random exchange rate dollars per pound. And suppose that there's some correlation, for whatever
+1:13:43
+reason, between dollars per pound and IBM.
+1:13:49
+So suppose the correlation's the following form-- every time IBM goes up, the dollar
+1:13:54
+gets weaker against the pound. So in other words, what happens is IBM goes up, you go hooray,
+1:14:01
+I'm rich. I got all these dollars. I'm going to go put them in a British bank account.
+1:14:07
+But suppose, unluckily for you, every time IBM goes up,
+1:14:16
+the dollar weakens against the pound. And so, you cannot buy so many pounds as a result.
+1:14:25
+So contrast that with the opposite situation where when IBM goes up, the dollar strengthens as opposed
+1:14:31
+to weakens. Then you can buy lots and lots of pounds with your IBM gains.
+1:14:37
+So the correlation between the dollar pound exchange rate and IBM affects how fast your British bank
+1:14:44
+balance would grow. And that's actually like the key point.
+1:14:57
+So this would be well-known to anybody-- especially an FX client.
+1:15:05
+So what we're actually going to do
+1:15:12
+is find a numeraire such that the growth rate of the balance in that numeraire
+1:15:21
+is actually the real-world drift of the underlying. So the idea is let's say that I told you
+1:15:30
+at the beginning of this talk that historically stocks grow at 9% on average.
+1:15:38
+Our starting point here in this part of the talk is that we're starting from this risk-neutral measure Q, which,
+1:15:45
+by definition, is the property that stocks would grow only at 1%.
+1:15:52
+So what we're actually going to do is go find some numeraire which will be correlated
+1:16:00
+with the stocks, such that when we put our stock
+1:16:08
+gains in that numeraire, we end up growing at 9%, rather than 1%.
+1:16:14
+1:16:20
+That's the way we think about things. And the key is to find that numeraire that
+1:16:28
+has that property. I'm going to go fast now-- there's
+1:16:33
+a paper by John Long where he shows that that numeraire that
+1:16:40
+converts a risk-free growth rate into the real-world growth rate always exists.
+1:16:46
+And he gave it a name, and he called it numeraire portfolio. It has another name-- growth optimal portfolio-- that Kelly was talking about.
+1:16:52
+1:17:03
+So there's a reference if you're interested in following up on this material.
+1:17:09
+So the theory says that there always
+1:17:17
+exists this numeraire called John Long's numeraire portfolio, such that if you park your gains in this numeraire, you end up growing
+1:17:25
+at the real-world drift. And so, let's say all we got to do
+1:17:31
+to find that real-world drift is go find this special numeraire.
+1:17:39
+So this part of the talk is about making some assumptions that lead to an identification of that particular numeraire--
+1:17:48
+John Long's numeraire.
+1:17:54
+We're going to continue to work with diffusions. And now we're going to also impose time homogeneity
+1:18:03
+like Ross was doing. So let's say when I was just talking about numeraire, I was allowing time inhomogeneity.
+1:18:09
+But now we're going to go time homogeneous.
+1:18:14
+I haven't really been introducing the notation, but a(x, t) is the diffusion coefficient of the state
+1:18:19
+variable x. And now it's just being assumed to be a function of x only. So b^Q(x, t) was the drift coefficient of x.
+1:18:27
+And now it's a function of x only. r(x, t) was the function linking the short interest rate
+1:18:32
+to the state variable x. And now, it's a function of x only. And finally, sigma_L(x, t) was the volatility of John
+1:18:40
+Long's numeraire portfolio. And again, that's a function of x only.
+1:18:45
+So anyway, another assumption that we're going to impose now in order to determine uniquely what
+1:18:51
+this numeraire portfolio value is is to require that the diffusion that's driving everything
+1:18:57
+live in a bounded interval. So essentially, the sample paths all
+1:19:04
+have to be bounded below by some constant, which could be negative, and have to be
+1:19:09
+bounded above by some constant, which again could be negative.
+1:19:17
+We make all those assumptions, and we move on. And so in the end, what have we been assuming?
+1:19:23
+So we're assuming that there's a single source of uncertainty X. And that it's a time-homogeneous diffusion.
+1:19:28
+So that's this middle equation here. And so that says changes in X have a predictable part,
+1:19:34
+which is b^Q(X) dt. And they have an unpredictable part, which is a of X dW.
+1:19:40
+So W there is standard Brownian motion. And since I'm big on mnemonics, you
+1:19:46
+might ask why does W stand for standard Brownian motion? And that's because W actually stands
+1:19:52
+for Wiener process-- Norbert Wiener being an MIT mathematician.
+1:20:00
+And the W is a standard notation for this kind of thing.
+1:20:07
+As an aside, when Bob Merton was here working out all this stuff for the first time in the late '60s,
+1:20:14
+he knew the standard notation for standard Brownian motion was W. But it turns out in finance, the standard notation for wealth is also W.
+1:20:22
+And he wanted to work on stochastic wealth dynamics. And so he had to choose should I use the letter W for wealth,
+1:20:28
+or should I use the letter W for Wiener process? And he chose W for wealth, which meant he had to pick a different letter for Wiener process.
+1:20:35
+And so he actually chose the letter Z. And you'll have to ask him why he chose
+1:20:42
+that letter, because it doesn't stand for anything as far as I know, except that actually the sample paths of a Wiener
+1:20:48
+process look very jagged, so if you turn your head, you might be able to see a Z.
+1:20:59
+So another assumption is that we're going to restrict the possible dynamics of the numeraire
+1:21:04
+portfolio's value. So we're going to let L denote the value of this numeraire portfolio.
+1:21:10
+And the mnemonic here is that John Long invented this concept, so we're calling it L for Long.
+1:21:17
+Now it's unfortunate that the inventor of this concept was named Long, actually. Because in finance, the word "long" indicates
+1:21:24
+that for a security with a non-negative payoff,
+1:21:30
+if you're long, then you're going to be receiving that payoff. As you pay money now, you're going to receive that payoff.
+1:21:36
+It's the opposite of short, where if you're short a security with a non-negative payoff, then actually you get money now and you have
+1:21:43
+to deliver that payoff later. So as it happens, this numeraire portfolio
+1:21:51
+has multiple positions in it. And the signs of the positions are allowed to be real-- so positives and negatives.
+1:21:59
+So it's kind of a misnomer. I say Long's numeraire portfolio, and everyone thinks the positions in them
+1:22:05
+are all positive. It's not true-- so they're real-valued.
+1:22:12
+The kind of problem here is that we've put the structure on the value L, John Long's
+1:22:18
+numeraire portfolio, namely that L is a continuous process,
+1:22:32
+but it's not quite a diffusion in itself. The only thing you can say is that the pair X and L
+1:22:41
+are a bivariate diffusion. If you bring this L over to the side, you can see the coefficients for dL depend on L and X--
+1:22:50
+and same thing with the volatility part. So anyway, we place the structure.
+1:22:56
+And the idea is that we know, from looking at Bloomberg,
+1:23:02
+what the risk-neutral drift of X is-- that's b^Q(X). We know that function.
+1:23:08
+We know what the diffusion coefficient of X is. That's the function A of X. We know what the risk-neutral drift of L
+1:23:14
+is-- that's that function r of X. But we don't know the volatility of John Long's
+1:23:20
+numeraire portfolio. That's the function sigma_L of X. And if only we could find it, we would actually
+1:23:27
+know how to determine the real-world drift. And remember I was saying if IBM and you could
+1:23:38
+put an American bank account, and let's say there was certain growth rate there.
+1:23:44
+And then if instead you were putting those gains in a British bank account, you'd achieve a different growth rate.
+1:23:50
+And I was stressing that the correlation of dollar/pound
+1:23:58
+with IBM was important for determining that growth rate. And I stand by that.
+1:24:03
+When you're in a one-factor world, that correlation can only be one. And so that's what's happening here.
+1:24:09
+We're in a one-factor world, and that correlation is one. And the other thing that affects the growth rate, though,
+1:24:18
+of your British bank account balance is actually the volatility of the exchange rate.
+1:24:23
+So what actually matters is the covariance between the British exchange rate and IBM.
+1:24:30
+That covariance depends on both the correlation and the volatility of the FX rate.
+1:24:39
+So you can think of the FX rate as here John Long's numeraire portfolio. And so that sigma_L is sort of the key.
+1:24:46
+It's like we've set things up so we know the correlation, but we still don't know the covariance.
+1:24:51
+And that's what's actually relevant. So as soon as we get the sigma_L, we'll know the covariance.
+1:24:58
+So we'll be in shape. So we got to find that volatility function sigma_L.
+1:25:05
+And now I know many of you have classes, so I'm going to have to start moving. AUDIENCE: Now, Peter, people will have access
+1:25:11
+to these slides afterwards. And so, I'm just seeing you've got another 15 slides left. PETER CARR: Yes, well actually, you'll
+1:25:18
+be glad to know that five of those are disclaimers.
+1:25:23
+If I could move along-- AUDIENCE: But the point is to what-- PETER CARR: The key is towards the end.
+1:25:28
+Yes, absolutely. We're very close. OK. So I'll be done in two minutes.
+1:25:34
+So basically, where we are now is we're going to make one more assumption that the value of John Long's numeraire portfolio
+1:25:39
+is a function of X and D. OK then, let's say we've made all our assumptions. And where it goes is that the assumptions
+1:25:46
+imply that this value function splits into an unknown positive function of x, and an unknown positive function of time.
+1:25:53
+And when you kind of further analyze, you find that the unknown function of time
+1:26:00
+is an exponential function of time. And the unknown function of x solves an ordinary differential
+1:26:06
+equation of this kind. So this is called a Sturm-Liouville problem.
+1:26:13
+And it turns out that Sturm and Liouville were the only mathematicians I've mentioned in this talk who
+1:26:18
+were not at MIT. And they actually solved this problem.
+1:26:24
+And one of the things they show is that when you're searching for functions pi and scalars
+1:26:31
+lambda that solve this problem, there's only one solution that delivers you a positive function pi.
+1:26:40
+And so this is how you get uniqueness. Remember I was saying back with 11--
+1:26:47
+so we're searching for like a 10-vector and a scalar. Now the 10 vector is a function. And that function is pi, and the scalar's lambda.
+1:26:56
+So the point is is that the math implies there's a unique solution to the problem. So we learn the volatility of the numeraire portfolio
+1:27:02
+in the end. And then we learn the drifts of everything you want to know under the market's beliefs.
+1:27:08
+So that's the gist of it. So then there's been work on trying to extend
+1:27:13
+to unbounded intervals. And basically, in the famous Black-Scholes model,
+1:27:19
+this effort fails, whereas in the less famous but still important Cox-Ingersoll-Ross model, this effort succeeds.
+1:27:28
+So the sort of punchline is that when it comes to unbounded state space, the theory's open.
+1:27:36
+So if there's a grad student in the room who wants a good dissertation problem, this is it. OK.
+1:27:41
+So that's all I wanted to say today. Thanks.

@@ -1,0 +1,1415 @@
+% !TEX root = ../main.tex
+\chapter{Regression Analysis}\label{ch:regression}
+
+\begin{sources}
+\small
+\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+\textbf{Lecture} & \textbf{Speaker} & \textbf{Content}\\
+\midrule
+2024 L6 (from 1:07:22) & P.~Kempthorne & Multiple linear regression: set-up, polynomial, Fourier and autoregressive fits of the high-yield spread, the steps of model fitting, assumptions on the errors.\\
+2024 L8 & P.~Kempthorne & OLS, hat matrix and geometry; normal linear model via moment-generating functions; $t$ and $F$ tests; prostate-cancer example (standardised covariates, $R^2$, diagnostics); Gauss--Markov; GLS.\\
+2024 L11 & P.~Kempthorne & Recap, $t^2=F$, GLS, maximum likelihood, M-estimators (robust, quantile), ridge, principal-components regression, lasso; ETF case study; CAPM regressions (GE, all S\&P~500 stocks) and tests for a change of regime.\\
+2013 L6 & P.~Kempthorne & The same theory: OLS, Gauss--Markov with proof, GLS, distribution theory via MGFs and the QR decomposition, maximum likelihood.\\
+\bottomrule
+\end{tabularx}
+
+\smallskip
+\textbf{Files.} Slides \file{mit18_642_f24_lec06_1.pdf} (used in L6, L8 and L11);
+\file{mit18_642_f24_lec06_2.pdf} and \file{mit18_642_f24_lec06_3.pdf} (polynomial and Fourier fits
+of the high-yield spread); \file{mit18_642_f24_lec06_4.pdf}, the knitted \file{ETF_Casestudy.rmd}
+of \file{mit18_642_f24_etf_casestudy.zip} (which also contains \file{ETF_Casestudy_XLB.rmd/.pdf},
+\file{spyders_symbols_labels.csv}, \file{casestudy_1_0_etfs.RData}); note \emph{Hypothesis Testing in
+Regression Analysis} \file{mit18_642_f24_lec08.pdf}; 2013 notes \file{MIT18_S096F13_lecnote6.pdf};
+2013 Case Study~1 \file{CaseStudy1.pdf} with \file{fm_casestudy_1_0.r} and
+\file{fm_casestudy_1_rcode.r}; 2013 Case Study~2 \file{CaseStudy2.pdf} with
+\file{fm_casestudy_2_rcode.r}, \file{fm_casestudy_fx_1.r} and \file{fred_fxrates.txt}. Installation
+scripts and R instructions are described in \cref{app:rsetup}.
+\textbf{Problem sets.} 2013 PS3 (all problems). Least squares via the SVD (2013 PS1, B-4) is in
+\cref{ch:linalg}.
+\textbf{Not published.} The note on CAPM regressions for all S\&P~500 stocks shown in 2024 L11; only
+its GE part is in \file{lec08} (see \cref{ch05:capm}).
+\end{sources}
+
+\section*{Motivation}
+Linear regression is the most used statistical tool in finance: every beta, hedge ratio, factor
+exposure, CAPM test or ``is this strategy's alpha real?'' question is a regression. The mathematics
+has two layers, and this chapter develops both:
+\begin{itemize}
+  \item \emph{Geometry} (no probability): least squares is the orthogonal projection of the data
+        vector $\bm y\in\R^n$ on the column space of the design matrix $X$ (\cref{ch05:sec-ols}).
+        This is linear algebra from \cref{ch:linalg}.
+  \item \emph{Statistics}: under assumptions on the errors, the projection has optimality
+        properties (Gauss--Markov, \cref{ch05:sec-gm}) and known sampling distributions
+        (\cref{ch05:sec-normal}), which give $t$ and $F$ tests (\cref{ch05:sec-tests}), including
+        tests for a change of regime (\cref{ch05:sec-chow}).
+\end{itemize}
+The rest is about what to do when the assumptions fail: diagnostics (\cref{ch05:sec-diag}), robust
+and quantile estimators (\cref{ch05:sec-mle}), and shrinkage (\cref{ch05:sec-shrink}). The course's
+message, repeated in every lecture, is methodological: propose a model, fit it, \emph{check the
+assumptions}, revise \ts{24}{6}{1:18:03}. The case studies (sector ETFs, CAPM for GE and the S\&P~500,
+the Chinese yuan) show what this looks like on real data.
+
+% ------------------------------------------------------------------
+\section{The linear regression model}\label{ch05:sec-model}
+
+\paragraph{Data and goals.} We observe $n$ cases $i=1,\dots,n$; for each, a \emph{response}
+(dependent variable) $y_i$ and $p$ \emph{explanatory} (independent) variables
+$\bm x_i=(x_{i,1},\dots,x_{i,p})\T$ \ts{24}{6}{1:07:22}. In finance $y_i$ may be a stock return and
+$\bm x_i$ market or macroeconomic factors \ts{13}{6}{2:04}. The goals are prediction, causal inference
+(which factors really drive $y$?), approximation of an unknown function, and the discovery or validation
+of functional relationships \ts{24}{6}{1:08:24}.
+
+\begin{definition}[Linear model]\label{ch05:def-linmodel}
+The \emph{general linear model} specifies the conditional distribution of $y_i$ given $\bm x_i$ as
+\[
+  y_i = \hat y_i + \varepsilon_i,\qquad \hat y_i=\beta_1x_{i,1}+\beta_2x_{i,2}+\dots+\beta_px_{i,p},
+\]
+with regression parameters $\bm\beta=(\beta_1,\dots,\beta_p)\T$ constant over the cases and a residual
+(error) $\varepsilon_i$ varying over the cases. In matrix form
+\[
+  \bm y = X\bm\beta+\bm\varepsilon,\qquad
+  \bm y=\begin{pmatrix}y_1\\ \vdots\\ y_n\end{pmatrix},\quad
+  X=\begin{pmatrix}x_{1,1}&\cdots&x_{1,p}\\ \vdots&\ddots&\vdots\\ x_{n,1}&\cdots&x_{n,p}\end{pmatrix}\in\R^{n\times p}:
+\]
+cases are rows, variables are columns \ts{13}{6}{29:24}. An intercept is included by taking a first
+column of ones.
+\end{definition}
+
+\begin{coursenote}[Erratum in the slides]
+Slides 3 and 7 of \file{lec06_1} (and the 2013 notes) write the last term as $\beta_{i,p}x_{i,p}$: it must
+be $\beta_px_{i,p}$, since the parameters do not depend on the case; Kempthorne corrects this in class
+\ts{24}{6}{1:09:30}. In the same slides the bottom-right entry of $X$ is printed $x_{p,n}$ instead of
+$x_{n,p}$.
+\end{coursenote}
+
+\paragraph{``Linear'' means linear in $\bm\beta$.} The columns of $X$ can be any functions of the
+underlying variables \ts{24}{6}{1:10:32} \ts{13}{6}{6:19}:
+\begin{itemize}
+  \item polynomials, $x_{i,j}=x_i^{\,j}$ (a truncated Taylor expansion);
+  \item Fourier terms, $x_{i,j}=\sin(jx_i)$ or $\cos(jx_i)$, for cyclical behaviour;
+  \item time-series regressions, where $i$ indexes time and the regressors include lagged values
+        $y_{i-1},y_{i-2},\dots$ of the response (autoregressions, \cref{ch:timeseries}) \ts{13}{6}{7:24}.
+\end{itemize}
+What matters is that $\hat y_i$ is linear in the parameters; this is what makes the estimation a problem
+of linear algebra.
+
+\begin{casestudy}[High-yield spread: polynomial, Fourier and autoregressive fits (\file{lec06_2}, \file{lec06_3})]
+\textbf{Data.} Daily \emph{high-yield spread} 2010--2017: Moody's Baa corporate yield minus the 10-year US
+Treasury yield \ts{24}{6}{1:11:33}. It is always positive (about 2--3.6 percentage points): lower-rated
+borrowers pay more than the Treasury.
+
+\textbf{Method.} Regress the spread on powers of time (constant, linear, \dots, 8th-order polynomial;
+\file{lec06_2}) and on Fourier terms with 1 to 4 cycles over the sample (\file{lec06_3}).
+
+\textbf{Results.} Higher orders follow the two big waves (peaks around 2012 and early 2016) better and
+better, but the polynomials swing wildly at the ends of the sample, and nobody believes the spread
+\emph{is} an 8th-order polynomial in calendar time \ts{24}{6}{1:12:37}. In class a third model was shown
+(not in the files): the \emph{autoregression} of today's spread on yesterday's, whose fit is almost
+indistinguishable from the data, with $R^2=0.995$ \ts{24}{6}{1:13:44} \ts{24}{6}{1:14:47}.
+
+\textbf{Lesson.} A good in-sample fit is not a model. Deterministic functions of time only describe the
+past; the autoregression exploits \emph{persistence} (tomorrow's spread is close to today's), which is
+what is actually predictable. (In \file{lec06_3} the legend colours do not match the curves: the
+1-cycle fit is drawn in blue, not green.)
+\end{casestudy}
+
+\paragraph{Steps for fitting a model} \ts{24}{6}{1:14:47} \ts{13}{6}{8:24}.
+\begin{enumerate}[1.]
+  \item Propose a model: the response and its \emph{scale} (e.g.\ log prices, so that errors are
+        percentage moves \ts{13}{6}{9:25}), the explanatory variables (including functions of them), and
+        assumptions on the distribution of $\bm\varepsilon$.
+  \item Define a criterion for judging estimators (least squares, maximum likelihood, robust, Bayes,
+        methods for missing data) \ts{13}{6}{23:07}.
+  \item Characterise the best estimator under that criterion and compute it.
+  \item Check the assumptions of step 1: residual analysis (the errors $\varepsilon_i$ are unobservable, the
+        residuals $\hat\varepsilon_i=y_i-\hat y_i$ are their proxies), influence diagnostics, outlier detection
+        \ts{13}{6}{26:16}.
+  \item If necessary modify the model and/or the assumptions and go back to step 1.
+\end{enumerate}
+Step 5 is where the work is on hard problems: the model should be tailored to the process, not the
+other way round \ts{13}{6}{12:31}.
+
+\begin{definition}[Assumptions on the errors]\label{ch05:def-assumptions}
+In increasing generality \ts{24}{6}{1:15:54} \ts{13}{6}{14:38}:
+\begin{itemize}
+  \item \emph{Normal linear model}: $\varepsilon_1,\dots,\varepsilon_n$ i.i.d.\ $N(0,\sigma^2)$.
+  \item \emph{Gauss--Markov}: $\E[\bm\varepsilon]=\bm 0$ and $\Cov(\bm\varepsilon)=\sigma^2I_n$, i.e.\ zero mean,
+        constant variance (homoscedastic), uncorrelated. Uncorrelated is weaker than independent
+        \ts{13}{6}{15:40}.
+  \item \emph{Generalised Gauss--Markov}: $\E[\bm\varepsilon]=\bm 0$, $\Cov(\bm\varepsilon)=\sigma^2\Sigma$ with a general
+        positive definite $\Sigma$ (correlated and/or heteroscedastic errors).
+  \item \emph{Non-Gaussian} errors: Laplace, Pareto, or \emph{contaminated normal}: a fraction $1-\delta$ of the
+        $\varepsilon_i$ i.i.d.\ $N(0,\sigma^2)$ and a fraction $\delta$ from some contaminating distribution.
+\end{itemize}
+\end{definition}
+Correlated residuals arise naturally when a straight line is fitted to a curved relationship
+(residuals are systematically above, then below the line) or when unobserved factors persist in time
+\ts{13}{6}{20:58}. Generalised Gauss--Markov is the typical situation of time-series regressions, and
+heavy-tailed errors that of asset returns \ts{24}{6}{1:16:57}.
+
+\begin{intuition}[A physicist's reading]
+This is curve fitting with error bars. Least squares with equal error bars is $\chi^2$ minimisation;
+Generalised Gauss--Markov is the case of a full covariance matrix of the measurements; the five steps are
+the usual loop ``model, fit, look at the residuals (pulls), improve the model''. The one difference from a
+lab: in finance there is no repeated experiment, and the ``error bars'' themselves must be estimated from
+the same data.
+\end{intuition}
+
+% ------------------------------------------------------------------
+\section{Ordinary least squares and its geometry}\label{ch05:sec-ols}
+
+\subsection{Normal equations}
+The \emph{least-squares criterion} is \ts{24}{8}{1:06} \ts{24}{8}{3:07}
+\[
+  Q(\bm\beta)=\sum_{i=1}^n\bigl(y_i-\bm x_i\T\bm\beta\bigr)^2=(\bm y-X\bm\beta)\T(\bm y-X\bm\beta)=\|\bm y-X\bm\beta\|^2,
+\]
+and the \emph{ordinary least-squares} (OLS) estimate $\hat{\bm\beta}$ minimises it. Differentiating,
+\[
+  \frac{\partial Q}{\partial\beta_j}=\sum_{i=1}^n2(-x_{i,j})\bigl(y_i-\bm x_i\T\bm\beta\bigr)=-2X_{[j]}\T(\bm y-X\bm\beta),
+  \qquad
+  \frac{\partial Q}{\partial\bm\beta}=-2X\T(\bm y-X\bm\beta),
+\]
+where $X_{[j]}$ is the $j$-th column of $X$ \ts{13}{6}{33:40}. The Hessian is
+$\partial^2Q/\partial\bm\beta\,\partial\bm\beta\T=2X\T X$, positive semi-definite since
+$\bm v\T X\T X\bm v=\|X\bm v\|^2\ge0$: $Q$ is convex, so every stationary point is a global minimum
+\ts{24}{8}{5:16} \ts{13}{6}{32:34}. Setting the gradient to zero gives the \emph{normal equations}
+\begin{equation}\label{ch05:eq-normal}
+  X\T(\bm y-X\hat{\bm\beta})=\bm 0\iff X\T X\hat{\bm\beta}=X\T\bm y
+  \quad\Longrightarrow\quad \hat{\bm\beta}=(X\T X)^{-1}X\T\bm y .
+\end{equation}
+$X\T X$ is invertible iff $X\bm v=\bm 0\Rightarrow\bm v=\bm 0$, i.e.\ iff $X$ has \emph{full column rank} $p$
+\ts{24}{8}{7:33}: no explanatory variable may be a linear combination of the others \ts{13}{6}{37:50}.
+Without full rank $\hat{\bm\beta}$ is not unique, but the fitted values are (see below), which is enough
+for pure prediction \ts{13}{6}{37:50}.
+
+\begin{remark}
+Kempthorne jokes that there is nothing ``normal'' about the normal equations \ts{24}{8}{7:33}. A useful
+way to remember the name: \eqref{ch05:eq-normal} says that the residual vector is \emph{normal}
+(perpendicular) to every column of $X$.
+\end{remark}
+
+\subsection{The hat matrix}
+The fitted values are $\hat{\bm y}=X\hat{\bm\beta}=H\bm y$ with the $n\times n$ \emph{hat matrix}
+\ts{24}{8}{8:36} \ts{13}{6}{39:58}
+\[
+  H=X(X\T X)^{-1}X\T ,
+\]
+and the residuals are $\hat{\bm\varepsilon}=\bm y-\hat{\bm y}=(I_n-H)\bm y$.
+
+\begin{proposition}[Properties of the hat matrix]\label{ch05:prop-hat}
+Let $X\in\R^{n\times p}$ have full column rank.
+\begin{enumerate}[(i)]
+  \item $H\T=H$ and $H^2=H$; the same holds for $I_n-H$.
+  \item $H$ is the orthogonal projection onto $\operatorname{col}(X)$, and $I_n-H$ the orthogonal projection
+        onto $\operatorname{col}(X)^\perp$.
+  \item $\tr H=\rank H=p$ and $\tr(I_n-H)=n-p$.
+  \item $X\T\hat{\bm\varepsilon}=\bm 0$, hence $\hat{\bm\varepsilon}\perp\hat{\bm y}$ and
+        $\|\bm y\|^2=\|\hat{\bm y}\|^2+\|\hat{\bm\varepsilon}\|^2$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(i) $H\T=X[(X\T X)^{-1}]\T X\T=H$ because $X\T X$ is symmetric;
+\[H^2=X(X\T X)^{-1}(X\T X)(X\T X)^{-1}X\T=H\]
+\ts{24}{8}{10:41}; $(I-H)^2=I-2H+H^2=I-H$ \ts{24}{8}{11:45}.
+
+(ii) If $\bm v=X\bm a\in\operatorname{col}(X)$ then $H\bm v=X(X\T X)^{-1}X\T X\bm a=\bm v$; if $\bm w\perp\operatorname{col}(X)$ then
+$X\T\bm w=\bm 0$ and $H\bm w=\bm 0$. Since $\R^n=\operatorname{col}(X)\oplus\operatorname{col}(X)^\perp$, $H$ is the orthogonal
+projection, and $I-H$ the complementary one.
+
+(iii) $\tr H=\tr\bigl((X\T X)^{-1}X\T X\bigr)=\tr I_p=p$, using $\tr(AB)=\tr(BA)$; for a projection, trace = rank.
+
+(iv) is \eqref{ch05:eq-normal}; then $\hat{\bm y}\T\hat{\bm\varepsilon}=\hat{\bm\beta}\T X\T\hat{\bm\varepsilon}=0$ and Pythagoras
+\ts{24}{8}{14:54}.
+\end{proof}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=1.05,>=Stealth]
+  \fill[defcol!8] (0,0) -- (6.4,0) -- (8.2,2.3) -- (1.8,2.3) -- cycle;
+  \draw[defcol!60] (0,0) -- (6.4,0) -- (8.2,2.3) -- (1.8,2.3) -- cycle;
+  \node[defcol,anchor=west] at (6.55,0.35) {$\operatorname{col}(X)$};
+  \coordinate (O) at (1.2,0.6);
+  \coordinate (Yh) at (5.0,1.4);
+  \coordinate (Y) at (5.0,4.3);
+  \draw[->,thick,black!60] (O) -- (3.4,0.6) node[below,black]{\small $X_{[1]}$};
+  \draw[->,thick,black!60] (O) -- (2.3,1.85) node[left,black]{\small $X_{[2]}$};
+  \draw[->,very thick,intcol] (O) -- (Y) node[above]{$\bm y$};
+  \draw[->,very thick,defcol] (O) -- (Yh) node[below right]{$\hat{\bm y}=H\bm y$};
+  \draw[->,very thick,thmcol] (Yh) -- (Y) node[midway,right]{$\hat{\bm\varepsilon}=(I-H)\bm y$};
+  \draw[black!70] (5.0,1.7) -- (4.707,1.638) -- (4.707,1.338);
+  \fill (O) circle (1.2pt) node[below left]{\small $\bm 0$};
+\end{tikzpicture}
+\caption{Least squares in $\R^n$: $\hat{\bm y}$ is the orthogonal projection of $\bm y$ on the column space of
+$X$ (spanned here by two columns), and the residual is perpendicular to it
+\ts{24}{8}{13:50} \ts{13}{6}{42:08}.}\label{ch05:fig-geometry}
+\end{figure}
+
+\begin{intuition}[Two pictures of the same fit]
+In the usual scatter plot we look at $n$ points in $\R^{p}$ and a fitted hyperplane. In
+\cref{ch05:fig-geometry} we look at \emph{one} point $\bm y$ in $\R^n$ (one axis per case) and a
+$p$-dimensional subspace: least squares drops the perpendicular \ts{13}{6}{42:08}. The second picture is
+the one in which all the distribution theory below becomes transparent: the residual lives in an
+$(n-p)$-dimensional space, which is why ``$n-p$ degrees of freedom'' appear everywhere.
+\end{intuition}
+
+\subsection{\texorpdfstring{$R^2$}{R-squared}}
+Assume from now on that $X$ contains a column of ones (an intercept). Then $\bm 1\T\hat{\bm\varepsilon}=0$ by
+\eqref{ch05:eq-normal}: residuals sum to zero and $\bar{\hat y}=\bar y$. Subtracting $\bar y\bm 1$ (which lies in
+$\operatorname{col}(X)$) from both sides of Pythagoras gives the \emph{analysis of variance}
+\[
+  \underbrace{\sum_i(y_i-\bar y)^2}_{\text{TSS}}=\underbrace{\sum_i(\hat y_i-\bar y)^2}_{\text{ESS}}
+  +\underbrace{\sum_i\hat\varepsilon_i^2}_{\text{RSS}} .
+\]
+
+\begin{definition}[Coefficient of determination]\label{ch05:def-r2}
+$R^2=\text{ESS}/\text{TSS}=1-\text{RSS}/\text{TSS}$ (``multiple $R$-squared''), and the \emph{adjusted}
+$R^2_{\text{adj}}=1-\dfrac{\text{RSS}/(n-p)}{\text{TSS}/(n-1)}$, which penalises the number of parameters.
+\end{definition}
+
+\begin{proposition}\label{ch05:prop-r2corr}
+With an intercept, $R^2=\Corr(\bm y,\hat{\bm y})^2$, the squared sample correlation between observed and fitted
+values \ts{24}{8}{59:31} \ts{24}{8}{1:00:31}.
+\end{proposition}
+\begin{proof}
+Let $\tilde{\bm y}=\bm y-\bar y\bm 1$ and $\tilde{\hat{\bm y}}=\hat{\bm y}-\bar y\bm 1$. Since $\hat{\bm\varepsilon}\perp\hat{\bm y}$ and
+$\hat{\bm\varepsilon}\perp\bm 1$, $\tilde{\bm y}\T\tilde{\hat{\bm y}}=(\tilde{\hat{\bm y}}+\hat{\bm\varepsilon})\T\tilde{\hat{\bm y}}=\|\tilde{\hat{\bm y}}\|^2$, so
+$\Corr^2=\|\tilde{\hat{\bm y}}\|^4/(\|\tilde{\bm y}\|^2\|\tilde{\hat{\bm y}}\|^2)=\text{ESS}/\text{TSS}$.
+\end{proof}
+For simple regression ($p=2$, one slope) this is the familiar squared correlation of $x$ and $y$, and
+$\hat\beta_1=\sum_i(x_i-\bar x)(y_i-\bar y)/\sum_i(x_i-\bar x)^2=\widehat{\Cov}(x,y)/\widehat{\Var}(x)$, the beta
+of \cref{def:alphabeta}. It is worth calibrating the eye: the daily CAPM regression of GE on the market in
+\cref{ch05:capm} has $R^2=0.30$, a clearly visible but very noisy linear cloud \ts{24}{11}{59:45}.
+
+\subsection{The QR decomposition}\label{ch05:sec-qr}
+Numerically one never inverts $X\T X$. The 2013 lecture \ts{13}{6}{1:08:26} uses the QR decomposition
+\[
+  X=QR,\qquad Q\in\R^{n\times p},\ Q\T Q=I_p,\qquad R\in\R^{p\times p}\ \text{upper triangular},
+\]
+obtained by Gram--Schmidt on the columns of $X$ \ts{13}{6}{1:09:26}. Column by column,
+$X_{[1]}=Q_{[1]}r_{11}$, $X_{[2]}=Q_{[1]}r_{12}+Q_{[2]}r_{22}$, \dots, so
+\[\begin{gathered}
+  r_{11}=\|X_{[1]}\|,\quad Q_{[1]}=\frac{X_{[1]}}{r_{11}};\\
+  r_{12}=Q_{[1]}\T X_{[2]},\quad r_{22}=\|X_{[2]}-r_{12}Q_{[1]}\|,\quad Q_{[2]}=\frac{X_{[2]}-r_{12}Q_{[1]}}{r_{22}};\ \dots
+  \end{gathered}\]
+(each column is orthogonalised against the previous ones) \ts{13}{6}{1:10:32}. Plugging $X=QR$ into the OLS
+formulas \ts{13}{6}{1:11:35} \ts{13}{6}{1:13:41}:
+\[
+  \hat{\bm\beta}=R^{-1}Q\T\bm y,\qquad \Cov(\hat{\bm\beta})=\sigma^2(X\T X)^{-1}=\sigma^2R^{-1}(R^{-1})\T,\qquad H=QQ\T .
+\]
+$\hat{\bm\beta}$ is computed by back-substitution in $R\hat{\bm\beta}=Q\T\bm y$. The advantage (not stressed in
+class): the condition number of $X\T X$ is the square of that of $X$, so forming $X\T X$ loses twice as many
+digits when the regressors are nearly collinear. R's \texttt{lm()} works through a QR decomposition (the
+\texttt{qr} component of a fitted \texttt{lm} object). The SVD route of 2013 PS1 B-4 (\cref{ch:linalg}) is
+the most stable of all and is the one used for ridge and PC regression in \cref{ch05:sec-shrink}.
+
+\subsection{Reparametrisation and standardised covariates}\label{ch05:sec-standard}
+If $X'=XG$ with $G\in\R^{p\times p}$ invertible, then $\operatorname{col}(X')=\operatorname{col}(X)$, so $H$, $\hat{\bm y}$ and
+$\hat{\bm\varepsilon}$ are unchanged and the new parameter is $\bm\beta'=G^{-1}\bm\beta$ (2013 PS3, \cref{ch05:ex-ps3-1de}).
+The important special case is \emph{standardisation} \ts{24}{8}{54:05}: replace each covariate by its
+$z$-score $(X_{[j]}-\bar x_j\bm 1)/s_j$. Then
+\begin{itemize}
+  \item fitted values, residuals, $R^2$, $F$ statistic, and the $t$ statistics and $p$-values of the slopes are
+        identical \ts{24}{8}{57:24};
+  \item the slope coefficient becomes $s_j\beta_j$: the effect on $y$ of a \emph{one-standard-deviation} move
+        of $x_j$, which makes coefficients of variables in different units comparable \ts{24}{8}{58:27};
+  \item the intercept changes meaning: it becomes $\bar y$, the prediction at the average covariate.
+\end{itemize}
+In the prostate example of \cref{ch05:sec-diag} the coefficient of \texttt{lcavol} goes from $0.5435$ to
+$0.6080$ (its training-sample standard deviation is $1.119$) and that of \texttt{svi} from $0.877$ to
+$0.349$, while the $t$ values stay $5.206$ and $2.949$.
+
+% ------------------------------------------------------------------
+\section{The Gauss--Markov theorem}\label{ch05:sec-gm}
+
+\begin{definition}[Gauss--Markov assumptions]
+The data $(\bm y,X)$ follow a linear model satisfying the Gauss--Markov assumptions if $\bm y$ is an
+observation of a random vector $\bm Y$ with \ts{24}{8}{1:11:00} \ts{13}{6}{45:22}
+\[
+  \E(\bm Y\mid X,\bm\beta)=X\bm\beta,\qquad \Cov(\bm Y\mid X,\bm\beta)=\sigma^2I_n\quad(\sigma^2>0),
+\]
+equivalently $\bm Y=X\bm\beta+\bm\varepsilon$ with $\E[\bm\varepsilon]=\bm 0$, $\Cov(\bm\varepsilon)=\sigma^2I_n$. Everything is conditional
+on $X$, which is treated as fixed.
+\end{definition}
+
+For a random vector $\bm Y$ with mean $\bm\mu$ and covariance $\Sigma$ and a constant matrix $A$,
+\[
+  \E[A\bm Y]=A\bm\mu,\qquad \Cov(A\bm Y)=A\,\Sigma\,A\T
+\]
+\ts{13}{6}{1:12:37}. With $A=(X\T X)^{-1}X\T$ this gives, under Gauss--Markov,
+\begin{equation}\label{ch05:eq-covbeta}
+  \E[\hat{\bm\beta}]=(X\T X)^{-1}X\T X\bm\beta=\bm\beta,\qquad
+  \Cov(\hat{\bm\beta})=\sigma^2(X\T X)^{-1}X\T X(X\T X)^{-1}=\sigma^2(X\T X)^{-1}.
+\end{equation}
+
+\begin{theorem}[Gauss--Markov]\label{ch05:thm-gm}
+For known constants $c_1,\dots,c_{p+1}$ let $\theta=c_1\beta_1+\dots+c_p\beta_p+c_{p+1}$ and
+$\hat\theta=c_1\hat\beta_1+\dots+c_p\hat\beta_p+c_{p+1}$ with the OLS estimates. Then $\hat\theta$ is
+\begin{enumerate}[(i)]
+  \item unbiased;
+  \item linear in $\bm y$, $\hat\theta=\sum_ib_iy_i$ with constants $b_i$ depending on $X$ only.
+\end{enumerate}
+Under the Gauss--Markov assumptions it has the smallest variance among \emph{all} linear unbiased estimators
+of $\theta$: it is the \emph{best linear unbiased estimator} (BLUE) \ts{24}{8}{1:12:05} \ts{13}{6}{46:25}.
+\end{theorem}
+\begin{proof}
+(2013 notes) \ts{13}{6}{51:42}. Without loss of generality $c_{p+1}=0$; write $\bm c=(c_1,\dots,c_p)\T$. Then
+$\hat\theta=\bm c\T\hat{\bm\beta}=\bm c\T(X\T X)^{-1}X\T\bm y\equiv\bm d\T\bm y$ with $\bm d=X(X\T X)^{-1}\bm c\in\operatorname{col}(X)$, and
+$\E\hat\theta=\bm c\T\bm\beta$ by \eqref{ch05:eq-covbeta}. Let $\tilde\theta=\bm b\T\bm y$ be any linear unbiased estimator and
+$\bm f=\bm b-\bm d$, so $\tilde\theta=\hat\theta+\bm f\T\bm y$. Unbiasedness of both gives
+$0=\E[\bm f\T\bm y]=\bm f\T X\bm\beta$ for \emph{all} $\bm\beta\in\R^p$, hence $X\T\bm f=\bm 0$: $\bm f\perp\operatorname{col}(X)$, in particular
+$\bm f\perp\bm d$. Therefore
+\[
+  \Var(\tilde\theta)=\Var(\bm d\T\bm y)+\Var(\bm f\T\bm y)+2\Cov(\bm d\T\bm y,\bm f\T\bm y)
+  =\Var(\hat\theta)+\sigma^2\|\bm f\|^2+2\sigma^2\bm d\T\bm f\ \ge\ \Var(\hat\theta),
+\]
+with equality iff $\bm f=\bm 0$ \ts{13}{6}{53:43}.
+\end{proof}
+
+\begin{coursenote}[Erratum in the 2013 proof]
+Slide 17 of \file{lecnote6} writes $0=\E(\bm f\T\bm y)=\bm d\T\E(\bm y)=\bm f\T(X\bm\beta)$; the middle term should be
+$\bm f\T\E(\bm y)$. The key point, easy to miss, is that unbiasedness must hold \emph{for every} $\bm\beta$, which is
+what forces $\bm f\perp\operatorname{col}(X)$.
+\end{coursenote}
+
+\paragraph{Remarks.}
+\begin{itemize}
+  \item The theorem is very general \ts{24}{8}{1:13:07}: with $\bm c=\bm x_0$ it says that $\bm x_0\T\hat{\bm\beta}$ is the best
+        linear unbiased estimate of the mean response at a new point $\bm x_0$; with $\bm c=\bm x_1-\bm x_2$, of the
+        difference of mean responses of two cases. Since it holds for every $\bm c$, it is equivalent to the
+        matrix statement $\Cov(\tilde{\bm\beta})-\Cov(\hat{\bm\beta})\succeq0$ for every linear unbiased $\tilde{\bm\beta}$.
+  \item No normality is needed. Econometrics texts call this the BLUE property of OLS \ts{13}{6}{54:45}.
+  \item ``Best'' only among \emph{linear unbiased} estimators. A biased estimator (ridge,
+        \cref{ch05:sec-shrink}) or a non-linear one (robust M-estimators, \cref{ch05:sec-mle}) can have a smaller
+        mean squared error, especially with heavy-tailed errors.
+\end{itemize}
+
+\paragraph{Design: where to put the $x$'s} \ts{24}{8}{27:37}. $\Var(\hat\beta_j)=\sigma^2C_{jj}$ with
+$C_{jj}=[(X\T X)^{-1}]_{jj}$. If we control $X$ (an experiment), we should make $C_{jj}$ small. If $X\T X$ is
+diagonal, $C_{jj}=1/\|X_{[j]}\|^2$: the longer the column, the more precise the estimate \ts{24}{8}{29:50}. For a
+straight line $y=\beta_0+\beta_1x$,
+\[
+  \Var(\hat\beta_1)=\frac{\sigma^2}{\sum_i(x_i-\bar x)^2}:
+\]
+points far from $\bar x$ pin the slope down \ts{24}{8}{30:55}. In general the precision is governed by the
+eigenvalues of $X\T X$ (optimal experimental design) \ts{24}{8}{31:59}.
+
+\begin{intuition}[Lever arms]
+A physicist measuring a spring constant spreads the loads over the widest possible range: an error
+$\delta y$ at a point at distance $d$ from the centroid tilts the line by $\delta y/d$. The same ``lever arm'' will
+reappear as the \emph{leverage} $H_{ii}$ of a case (\cref{ch05:sec-diag}): the points that pin the line down are
+also the ones that can pull it away.
+\end{intuition}
+
+% ------------------------------------------------------------------
+\section{Generalised least squares}\label{ch05:sec-gls}
+Suppose now $\bm Y=X\bm\beta+\bm\varepsilon$ with $\E[\bm\varepsilon]=\bm 0$ and $\Cov(\bm\varepsilon)=\sigma^2\Sigma$, where $\sigma^2$ is an unknown scale
+and $\Sigma$ is a \emph{known} $n\times n$ positive definite matrix giving the relative variances and the
+correlations of the observations \ts{24}{8}{1:13:07} \ts{13}{6}{54:45}. By the spectral theorem
+(\cref{thm:spectral}) $\Sigma=U\Lambda U\T$ has the symmetric positive definite inverse square root
+$\Sigma^{-1/2}=U\Lambda^{-1/2}U\T$. Transform the data \ts{24}{8}{1:15:23} \ts{13}{6}{55:47}:
+\[\begin{gathered}
+  \bm Y^*=\Sigma^{-1/2}\bm Y,\quad X^*=\Sigma^{-1/2}X,\quad \bm\varepsilon^*=\Sigma^{-1/2}\bm\varepsilon:\\
+  \bm Y^*=X^*\bm\beta+\bm\varepsilon^*,\quad \Cov(\bm\varepsilon^*)=\sigma^2\Sigma^{-1/2}\Sigma\Sigma^{-1/2}=\sigma^2I_n .
+\end{gathered}\]
+The transformed model satisfies Gauss--Markov with the \emph{same} $\bm\beta$, so by \cref{ch05:thm-gm} the BLUE is
+OLS on the starred data:
+\begin{equation}\label{ch05:eq-gls}
+  \hat{\bm\beta}_{\text{GLS}}=\bigl(X^{*\mathsf T}X^*\bigr)^{-1}X^{*\mathsf T}\bm Y^*=\bigl(X\T\Sigma^{-1}X\bigr)^{-1}X\T\Sigma^{-1}\bm Y,
+  \qquad \Cov(\hat{\bm\beta}_{\text{GLS}})=\sigma^2\bigl(X\T\Sigma^{-1}X\bigr)^{-1}.
+\end{equation}
+Equivalently $\hat{\bm\beta}_{\text{GLS}}$ minimises the Mahalanobis-type criterion $(\bm y-X\bm\beta)\T\Sigma^{-1}(\bm y-X\bm\beta)$. If
+$\Sigma=\diag(\sigma_1^2,\dots,\sigma_n^2)$ this is \emph{weighted least squares} with weights $1/\sigma_i^2$: noisy cases are
+down-weighted \ts{24}{8}{1:16:24} \ts{13}{6}{57:55}. The main source of non-diagonal $\Sigma$ in finance is time
+dependence: errors at nearby dates are more correlated than errors far apart \ts{24}{8}{1:14:15}; e.g.\ AR(1)
+errors have $\Sigma_{ij}\propto\rho^{|i-j|}$ (\cref{ch:timeseries}).
+
+\begin{intuition}[Whitening]
+$\chi^2=\bm r\T C^{-1}\bm r$ with the covariance matrix $C$ of correlated measurements is exactly the GLS criterion.
+Multiplying by $\Sigma^{-1/2}$ ``whitens'' the noise: in the new coordinates the noise is isotropic and the plain
+Euclidean projection of \cref{ch05:fig-geometry} is optimal again.
+\end{intuition}
+
+\begin{remark}[Not discussed in class]
+If the errors are correlated but OLS is used anyway, $\hat{\bm\beta}$ is still unbiased, but it is no longer best and its
+true covariance is the ``sandwich'' $\sigma^2(X\T X)^{-1}X\T\Sigma X(X\T X)^{-1}$, not $\sigma^2(X\T X)^{-1}$: the standard
+errors printed by \texttt{lm()} are wrong. In practice $\Sigma$ is unknown; it is estimated (feasible GLS) or the
+standard errors are corrected (heteroscedasticity- and autocorrelation-consistent errors).
+\end{remark}
+
+% ------------------------------------------------------------------
+\section{The normal linear model: distribution theory}\label{ch05:sec-normal}
+
+\subsection{Multivariate normal vectors via MGFs}
+For an $n$-variate random vector $\bm Y$ the moment-generating function is $M_{\bm Y}(\bm t)=\E[e^{\bm t\T\bm Y}]$,
+$\bm t\in\R^n$ \ts{24}{8}{21:10}. In the normal linear model the $Y_i$ are independent $N(\mu_i,\sigma^2)$ with
+$\bm\mu=X\bm\beta$ (independent but not identically distributed \ts{13}{6}{57:55}), so the expectation of the product
+factorises \ts{24}{8}{22:13} \ts{13}{6}{1:02:09}:
+\[
+  M_{\bm Y}(\bm t)=\prod_{i=1}^n\E[e^{t_iY_i}]=\prod_{i=1}^ne^{t_i\mu_i+\frac12t_i^2\sigma^2}
+  =\exp\Bigl(\bm t\T\bm\mu+\tfrac12\bm t\T\Sigma\bm t\Bigr),\qquad \Sigma=\sigma^2I_n .
+\]
+
+\begin{definition}[Multivariate normal]\label{ch05:def-mvn}
+$\bm Y\sim N_n(\bm\mu,\Sigma)$, with $\bm\mu\in\R^n$ and $\Sigma$ symmetric positive semi-definite, if
+$M_{\bm Y}(\bm t)=\exp(\bm t\T\bm\mu+\frac12\bm t\T\Sigma\bm t)$ for all $\bm t$. Then $\E\bm Y=\bm\mu$ and $\Cov\bm Y=\Sigma$; if
+$\Sigma\succ0$ the density is $(2\pi)^{-n/2}(\det\Sigma)^{-1/2}\exp\bigl(-\frac12(\bm y-\bm\mu)\T\Sigma^{-1}(\bm y-\bm\mu)\bigr)$. Since an MGF
+finite around $\bm 0$ determines the distribution, recognising this form is enough to identify a normal vector.
+\end{definition}
+
+\begin{coursenote}[Vocabulary]
+In the 2024 L8 video Kempthorne often says ``multinomial'' \ts{24}{8}{20:07}: he means \emph{multinormal},
+i.e.\ multivariate normal. Nothing in this chapter involves the multinomial distribution.
+\end{coursenote}
+
+\begin{proposition}[Linear maps of normal vectors]\label{ch05:prop-linmap}
+If $\bm Y\sim N_n(\bm\mu,\Sigma)$ and $A\in\R^{m\times n}$ then $\bm Z=A\bm Y\sim N_m(A\bm\mu,A\Sigma A\T)$ \ts{24}{8}{31:59}
+\ts{13}{6}{1:14:49}. In particular every sub-vector, and every component, is normal; and two jointly normal
+sub-vectors with zero cross-covariance are independent.
+\end{proposition}
+\begin{proof}
+$M_{\bm Z}(\bm\tau)=\E[e^{\bm\tau\T A\bm Y}]=M_{\bm Y}(A\T\bm\tau)=\exp\bigl(\bm\tau\T A\bm\mu+\frac12\bm\tau\T A\Sigma A\T\bm\tau\bigr)$. For a component take
+$A=\bm e_j\T$ \ts{13}{6}{1:07:25}. If $\bm Z=(\bm Z_1,\bm Z_2)$ is normal with $\Cov(\bm Z_1,\bm Z_2)=0$, the quadratic form in the
+exponent splits and the joint MGF is the product $M_{\bm Z_1}(\bm\tau_1)M_{\bm Z_2}(\bm\tau_2)$, which characterises
+independence \ts{24}{8}{37:20}.
+\end{proof}
+Applying this with $A=(X\T X)^{-1}X\T$ \ts{24}{8}{24:21}: $\bm t=A\T\bm\tau=X(X\T X)^{-1}\bm\tau$ gives $\bm t\T\bm\mu=\bm\tau\T\bm\beta$ and
+$\bm t\T(\sigma^2I)\bm t=\bm\tau\T\sigma^2(X\T X)^{-1}\bm\tau$, so $\hat{\bm\beta}\sim N_p(\bm\beta,\sigma^2(X\T X)^{-1})$ and
+$\hat\beta_j\sim N(\beta_j,\sigma^2C_{jj})$ \ts{24}{8}{26:31} \ts{13}{6}{1:04:19}.
+
+\begin{coursenote}[Errata in the MGF slides]
+\begin{itemize}
+  \item Slide 17 of \file{lec06_1}: the MGF of $\hat\beta_1$ is obtained with $\bm\tau=t(1,0,\dots,0)\T$, not $t(1,0,\dots,1)\T$.
+  \item Slides 14--16 write the exponent as $\bm t\T\bm u+\dots$: $\bm u$ is the mean vector $\bm\mu$.
+  \item Slide 18 (``Theorem*'') assumes $\rank A=m\le n$. The result holds for every $A$ if degenerate normals
+        (singular $\Sigma$, no density) are allowed, as in \cref{ch05:def-mvn}; this is needed right away, because the
+        stacked matrix $\bigl(\begin{smallmatrix}(X\T X)^{-1}X\T\\ I-H\end{smallmatrix}\bigr)$ used for independence has $n+p$
+        rows but rank $n$, and $\Cov(\hat{\bm\varepsilon})$ is singular.
+\end{itemize}
+\end{coursenote}
+
+\subsection{The fundamental theorem}
+\begin{definition}[$\chi^2$, $t$ and $F$ distributions]
+If $Z_1,\dots,Z_\nu$ are i.i.d.\ $N(0,1)$, $\sum_kZ_k^2\sim\chi^2_\nu$ \ts{13}{6}{1:16:57}. If $Z\sim N(0,1)$ and
+$V\sim\chi^2_\nu$ are independent, $Z/\sqrt{V/\nu}\sim t_\nu$ (Student) \ts{24}{8}{38:21}. If $V_1\sim\chi^2_{\nu_1}$ and
+$V_2\sim\chi^2_{\nu_2}$ are independent, $(V_1/\nu_1)/(V_2/\nu_2)\sim F_{\nu_1,\nu_2}$ \ts{24}{8}{45:38}. Note $t_\nu^2\sim F_{1,\nu}$.
+\end{definition}
+
+\begin{theorem}[Normal linear regression]\label{ch05:thm-normal}
+Let $\bm y=X\bm\beta+\bm\varepsilon$ with $X\in\R^{n\times p}$ of rank $p$ and $\bm\varepsilon\sim N_n(\bm 0,\sigma^2I_n)$. Then
+\ts{24}{8}{33:00} \ts{13}{6}{1:15:54}:
+\begin{enumerate}[(i)]
+  \item $\hat{\bm\beta}=(X\T X)^{-1}X\T\bm y\sim N_p\bigl(\bm\beta,\sigma^2(X\T X)^{-1}\bigr)$;
+  \item $\hat{\bm\varepsilon}=(I_n-H)\bm y\sim N_n\bigl(\bm 0,\sigma^2(I_n-H)\bigr)$, a degenerate normal: $X\T\hat{\bm\varepsilon}=\bm 0$ identically
+        \ts{24}{8}{34:06};
+  \item $\hat{\bm\beta}$ and $\hat{\bm\varepsilon}$ are independent;
+  \item $\text{RSS}=\hat{\bm\varepsilon}\T\hat{\bm\varepsilon}\sim\sigma^2\chi^2_{n-p}$; hence $\hat\sigma^2=\text{RSS}/(n-p)$ is unbiased;
+  \item for each $j$,
+        \begin{equation}\label{ch05:eq-tstat}
+          \hat t_j=\frac{\hat\beta_j-\beta_j}{\hat\sigma\sqrt{C_{jj}}}\sim t_{n-p},\qquad C_{jj}=\bigl[(X\T X)^{-1}\bigr]_{jj}.
+        \end{equation}
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(i) was shown above.
+
+(ii) $\Cov\bigl((I-H)\bm y\bigr)=\sigma^2(I-H)(I-H)\T=\sigma^2(I-H)$ and $(I-H)X\bm\beta=\bm 0$.
+
+(iii) $\hat{\bm\beta}$ and $\hat{\bm\varepsilon}$ are jointly normal (both linear in $\bm y$) with
+$\Cov(\hat{\bm\beta},\hat{\bm\varepsilon})=(X\T X)^{-1}X\T(\sigma^2I)(I-H)=\sigma^2(X\T X)^{-1}(X\T-X\T H)=0$ because $X\T H=X\T$; apply
+\cref{ch05:prop-linmap} (this is the ``joint MGF = product of MGFs'' argument of the 2024 slides).
+
+(iv) Following the 2013 notes \ts{13}{6}{1:16:57}: let $X=QR$ and complete the columns of $Q$ to an orthonormal
+basis of $\R^n$ by $W\in\R^{n\times(n-p)}$ (continue Gram--Schmidt on $[X\,|\,I_n]$). Then
+$A=\bigl(\begin{smallmatrix}Q\T\\ W\T\end{smallmatrix}\bigr)$ is orthogonal and
+\[
+  \bm z=A\bm y=\begin{pmatrix}\bm z_Q\\ \bm z_W\end{pmatrix}\sim N_n\!\left(\begin{pmatrix}Q\T QR\bm\beta\\ W\T QR\bm\beta\end{pmatrix},\sigma^2AA\T\right)
+  =N_n\!\left(\begin{pmatrix}R\bm\beta\\ \bm 0_{n-p}\end{pmatrix},\sigma^2I_n\right).
+\]
+So $\bm z_Q\sim N_p(R\bm\beta,\sigma^2I_p)$ and $\bm z_W\sim N_{n-p}(\bm 0,\sigma^2I_{n-p})$ are independent. Now
+$\hat{\bm\beta}=R^{-1}Q\T\bm y=R^{-1}\bm z_Q$, and since $QQ\T+WW\T=A\T A=I_n$,
+$\hat{\bm\varepsilon}=(I-QQ\T)\bm y=WW\T\bm y=W\bm z_W$. Hence $\text{RSS}=\|W\bm z_W\|^2=\|\bm z_W\|^2$ is $\sigma^2$ times a sum of $n-p$
+independent squared standard normals. (This also re-proves (iii): $\hat{\bm\beta}$ and $\hat{\bm\varepsilon}$ are functions of the
+independent blocks $\bm z_Q$ and $\bm z_W$.)
+
+(v) $(\hat\beta_j-\beta_j)/(\sigma\sqrt{C_{jj}})\sim N(0,1)$ by (i), independent of $\text{RSS}/\sigma^2\sim\chi^2_{n-p}$ by (iii)--(iv);
+dividing, $\sigma$ cancels and the ratio is \eqref{ch05:eq-tstat}.
+\end{proof}
+
+The unbiasedness of $\hat\sigma^2$ does not need normality \ts{24}{8}{36:15}: under Gauss--Markov,
+$\E[\hat{\bm\varepsilon}\T\hat{\bm\varepsilon}]=\tr\Cov(\hat{\bm\varepsilon})=\sigma^2\tr(I_n-H)=\sigma^2(n-p)$ by \cref{ch05:prop-hat}(iii). The
+$n-p$ appears because the residuals satisfy $p$ exact linear constraints $X\T\hat{\bm\varepsilon}=\bm 0$: there are not $n$
+independent error terms \ts{24}{8}{35:14}.
+
+\begin{coursenote}[Erratum: the missing square root]
+Slide 20 of \file{lec06_1} and slide 34 of \file{lecnote6} write the denominator of $\hat t_j$ as
+$\hat\sigma\,C_{j,j}$. It must be $\hat\sigma\sqrt{C_{jj}}$, the estimated standard deviation of $\hat\beta_j$; Kempthorne
+corrects it at the start of L11 \ts{24}{11}{3:16}. Also, slide 38 of \file{lecnote6} writes
+$\hat{\bm\beta}=(X\T X)^{-1}X\bm y$ for $(X\T X)^{-1}X\T\bm y$.
+\end{coursenote}
+
+\begin{intuition}[Why Student's $t$ has fat tails]
+In $\hat t_j$ the unknown $\sigma$ is replaced by the random $\hat\sigma$. When $\hat\sigma$ happens to be small, $|\hat t_j|$ is
+large; the denominator fluctuates around $1$ (in units of $\sigma$) and this mixing over scales fattens the tails
+\ts{24}{8}{40:28}. W.~S.~Gosset, a statistician at the Guinness brewery, noticed that standardised means of
+quality samples of size four were far more variable than $N(0,1)$ predicted; the brewery did not let him
+publish under his name, hence ``Student'' \ts{24}{8}{41:29} \ts{24}{8}{42:29}. For $n-p\gtrsim30$ the
+difference from the normal is small; with $n-p=63$ (prostate example) the two-sided 5\% critical value is
+$2.00$ instead of $1.96$.
+\end{intuition}
+
+\begin{intuition}[Degrees of freedom, geometrically]
+$\text{RSS}/\sigma^2$ is the squared length of a standard Gaussian vector projected on an $(n-p)$-dimensional subspace:
+fitting $p$ parameters ``uses up'' $p$ dimensions. The familiar $1/(n-1)$ in the sample variance is the case
+$p=1$ (projection on $\bm 1$), and $\chi^2/\mathrm{ndf}$ in a fit is $\hat\sigma^2/\sigma^2$.
+\end{intuition}
+
+A $(1-\alpha)$ confidence interval for $\beta_j$ follows immediately:
+$\hat\beta_j\pm t_{n-p,1-\alpha/2}\,\hat\sigma\sqrt{C_{jj}}$, where $\hat\sigma\sqrt{C_{jj}}$ is the \emph{standard error}
+$\mathrm{se}(\hat\beta_j)$ printed by R.
+
+% ------------------------------------------------------------------
+\section{Maximum likelihood and M-estimation}\label{ch05:sec-mle}
+
+\subsection{Maximum likelihood in the normal model}
+The \emph{likelihood} is the joint density of the data seen as a function of the unknown parameters,
+$L(\bm\beta,\sigma^2)=p(\bm y\mid X,\bm\beta,\sigma^2)$; maximum likelihood (ML) estimates make the observed data ``most
+likely'' \ts{24}{11}{10:53} \ts{13}{6}{1:20:05}. For the normal linear model
+\[
+  L(\bm\beta,\sigma^2)=\prod_{i=1}^n\frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(y_i-\bm x_i\T\bm\beta)^2}{2\sigma^2}},\qquad
+  \log L=-\frac n2\log(2\pi\sigma^2)-\frac{1}{2\sigma^2}Q(\bm\beta)
+\]
+\ts{24}{11}{13:02}. Maximise in two steps: $\bm\beta$ enters only through $-Q(\bm\beta)$, so $\hat{\bm\beta}_{\text{ML}}=\hat{\bm\beta}_{\text{OLS}}$
+for every $\sigma^2$; then $\partial\log L/\partial\sigma^2=-\frac{n}{2\sigma^2}+\frac{Q(\hat{\bm\beta})}{2\sigma^4}=0$ gives
+\[
+  \hat\sigma^2_{\text{ML}}=\frac{\text{RSS}}{n},\qquad \E\hat\sigma^2_{\text{ML}}=\frac{n-p}{n}\sigma^2\quad\text{(biased)}
+\]
+\ts{24}{11}{14:08}. So least squares is also ``doing something decent'' from the likelihood point of view when the
+errors are Gaussian \ts{13}{6}{1:21:11}. ML estimators are asymptotically optimal (smallest variance as
+$n\to\infty$) for any correctly specified model \ts{24}{11}{11:58}: if the error density were known and non-Gaussian,
+ML would use it.
+
+\subsection{Generalised M-estimators}
+\begin{definition}[Generalised M-estimator]\label{ch05:def-mest}
+For data $(\bm y,X)$ and the model $y_i=\bm x_i\T\bm\beta+\varepsilon_i$, choose $\hat{\bm\beta}$ to minimise
+$Q(\bm\beta)=\sum_{i=1}^nh(y_i,\bm x_i,\bm\beta,\sigma^2)$ \ts{24}{11}{15:14}. The function $h$ defines the estimator:
+\begin{enumerate}[(i)]
+  \item least squares: $h=(y_i-\bm x_i\T\bm\beta)^2$;
+  \item least absolute deviations (``MAD''): $h=|y_i-\bm x_i\T\bm\beta|$;
+  \item maximum likelihood: $h=-\log p(y_i\mid\bm\beta,\bm x_i,\sigma^2)$ (so Laplace errors give LAD);
+  \item robust M-estimator: $h=\chi(y_i-\bm x_i\T\bm\beta)$ with $\chi$ even and increasing on $(0,\infty)$;
+  \item quantile estimator, for fixed $\tau\in(0,1)$: $h=\rho_\tau(y_i-\bm x_i\T\bm\beta)$ with the \emph{check loss}
+        \[
+          \rho_\tau(u)=\begin{cases}\tau\,|u|,&u\ge0,\\(1-\tau)\,|u|,&u<0.\end{cases}
+        \]
+\end{enumerate}
+\end{definition}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.62\linewidth,height=5.2cm,xmin=-2.5,xmax=2.5,ymin=0,ymax=2.6,
+  axis lines=middle,xlabel={$u$},ylabel={$h(u)$},samples=101,
+  legend style={font=\scriptsize,at={(1.02,1)},anchor=north west,draw=none},
+  every axis x label/.style={at={(current axis.right of origin)},anchor=west},
+  every axis y label/.style={at={(current axis.above origin)},anchor=south}]
+  \addplot[thick,black!60,dashed,domain=-2.3:2.3]{x^2/2};
+  \addlegendentry{$u^2/2$ (least squares)}
+  \addplot[thick,defcol,domain=-2.4:2.4]{abs(x)};
+  \addlegendentry{$|u|$ (LAD)}
+  \addplot[thick,intcol,domain=-2.4:2.4]{(abs(x)<=1)*x^2/2+(abs(x)>1)*(abs(x)-0.5)};
+  \addlegendentry{Huber, $c=1$}
+  \addplot[very thick,thmcol,domain=-2.4:2.4]{(x>=0)*0.9*x+(x<0)*(-0.1)*x};
+  \addlegendentry{$\rho_{0.9}$ (quantile)}
+\end{axis}
+\end{tikzpicture}
+\caption{Loss functions of M-estimators. Quadratic loss lets large residuals dominate; LAD and Huber grow
+linearly; the check loss $\rho_{0.9}$ penalises positive residuals nine times more than negative ones, so the fit
+is pushed up to the 90th percentile.}\label{ch05:fig-losses}
+\end{figure}
+
+Robust estimators were designed for the contaminated-normal situation: normal errors most of the time, with a
+small fraction of gross errors \ts{24}{11}{17:30}. When the error distribution is unknown they protect the fit
+from a few extreme cases, which in finance means crash days. A standard example (not detailed in class) is
+Huber's loss, quadratic for $|u|\le c$ and linear beyond.
+
+\begin{proposition}[The check loss estimates quantiles]\label{ch05:prop-quantile}
+Let $y_1,\dots,y_n\in\R$ and $f(c)=\sum_i\rho_\tau(y_i-c)$. Then $f$ is convex and piecewise linear, and $c$ minimises $f$ iff
+\[
+  \#\{i:y_i<c\}\le\tau n\le\#\{i:y_i\le c\},
+\]
+i.e.\ iff $c$ is a sample $\tau$-quantile. For $\tau=\frac12$ this is the median, and $\rho_{1/2}=\frac12|u|$, so
+$\tau=\frac12$ gives LAD \ts{24}{11}{18:37}.
+\end{proposition}
+\begin{proof}
+Each term is convex in $c$. The right derivative of $\rho_\tau(y_i-c)$ is $-\tau$ if $y_i>c$ and $1-\tau$ if $y_i\le c$,
+so $f'_+(c)=-\tau\,\#\{y_i>c\}+(1-\tau)\,\#\{y_i\le c\}=\#\{y_i\le c\}-\tau n$; similarly $f'_-(c)=\#\{y_i<c\}-\tau n$. A convex
+function is minimised exactly where $f'_-(c)\le0\le f'_+(c)$.
+\end{proof}
+With $c$ replaced by $\bm x_i\T\bm\beta$, the minimiser estimates the conditional $\tau$-quantile of $y$ given $\bm x$
+(quantile regression): for $\tau=0.9$, the upper decile of outcomes \ts{24}{11}{19:41}. The objective is convex
+(``a bowl with straight edges'') but not differentiable, so there are no normal equations to solve; one moves
+downhill using one-sided derivatives, or solves a linear programme \ts{24}{11}{20:41} \ts{24}{11}{21:42}.
+
+\begin{finance}[Heavy tails in practice]
+In the GE CAPM regression of \cref{ch05:capm} the histogram of residuals is compared with two normal fits
+\ts{24}{11}{1:00:53}: the ML fit (sample mean and standard deviation) and a robust one, whose scale is
+estimated from the interquartile range ($\hat\sigma_{\text{rob}}=\mathrm{IQR}/1.349$, since the IQR of $N(0,\sigma^2)$ is
+$1.349\sigma$) \ts{24}{11}{1:03:05}. The ML curve is too wide in the centre and too thin in the tails. A sharper
+check uses \emph{fitted percentiles} $u_i=\Phi\bigl((\hat\varepsilon_i-\hat\mu)/\hat\sigma\bigr)$, which should be uniform on $(0,1)$ if the
+model is right (probability integral transform) \ts{24}{11}{1:04:09}: with the ML scale they pile up near
+$0.5$, with the robust scale they are uniform except in the extreme 1\% on each side
+\ts{24}{11}{1:05:11}. Quantile regression is the natural tool for Value-at-Risk (\cref{ch:var}).
+\end{finance}
+
+% ------------------------------------------------------------------
+\section{Hypothesis testing}\label{ch05:sec-tests}
+
+\subsection{Individual coefficients}
+To test $H_0:\beta_j=b$ against $H_1:\beta_j\ne b$ use $\hat t=(\hat\beta_j-b)/\mathrm{se}(\hat\beta_j)$, which is $t_{n-p}$
+under $H_0$ by \eqref{ch05:eq-tstat}; reject when $|\hat t|>c$ for a critical value $c$ \ts{24}{11}{5:26}. The
+\emph{$p$-value} is the probability, computed under $H_0$, of a statistic at least as extreme as the one observed,
+$P(|T_{n-p}|\ge|\hat t|)$ \ts{24}{8}{49:56}. The coefficient table of R's \texttt{summary(lm(\dots))} has columns
+Estimate ($\hat\beta_j$), Std.\ Error ($\hat\sigma\sqrt{C_{jj}}$), $t$ value (test of $b=0$: the ``signal-to-noise
+ratio'') and \texttt{Pr(>|t|)} \ts{24}{8}{48:48}. Conventionally $p<0.05$ is ``significant'' and $p<0.01$
+``highly significant''. The case $b=0$ asks whether variable $j$ can be dropped from the model
+\ts{24}{11}{5:26}.
+
+\begin{example}[Is GE's beta equal to one? (\file{lec08}, section 1)]\label{ch05:ex-gebeta}
+Daily excess returns of GE on the market excess return, $n=1676$ days (2017--2023): $\hat\alpha=-0.00054$ (se
+$0.00051$, $p=0.285$), $\hat\beta=1.0830$ (se $0.0400$), $R^2=0.304$, $\hat\sigma=0.0207$. Testing $\beta=0$ is pointless
+(a stock is obviously correlated with the market, $t=27.1$); the interesting null is $\beta=1$, ``same systematic
+risk as the market'' \ts{24}{11}{59:45}:
+\[
+  \hat t=\frac{1.0830-1}{0.0400}=2.075,\qquad p=P(|T_{1674}|\ge2.075)=0.038,
+\]
+so GE's beta is (just) significantly above one at the 5\% level \ts{24}{11}{1:07:25}.
+\end{example}
+
+\begin{coursenote}[Errata in \file{lec08}, section 1]
+On page 3 both hypotheses are labelled $H_0$; the alternative is $H_1:\beta_j\neq0$. On page 4,
+``$(\hat\beta_2-\beta_2)\sim N(\beta_2,sd(\hat\beta_2))$'' should read $\hat\beta_2-\beta_2\sim N\bigl(0,sd(\hat\beta_2)^2\bigr)$, i.e.\
+$\hat\beta_2\sim N(\beta_2,sd^2)$.
+\end{coursenote}
+
+\subsection{Nested models and the \texorpdfstring{$F$}{F} test}
+\begin{lemma}[Quadratic forms of normal vectors]\label{ch05:lem-proj}
+Let $\bm Y\sim N_n(\bm\mu,\sigma^2I_n)$ and let $P_1,P_2$ be orthogonal projections of ranks $r_1,r_2$ with $P_1P_2=0$ and
+$P_1\bm\mu=P_2\bm\mu=\bm 0$. Then $\bm Y\T P_k\bm Y/\sigma^2\sim\chi^2_{r_k}$ ($k=1,2$), and the two quadratic forms are independent.
+\end{lemma}
+\begin{proof}
+Write $P_k=U_kU_k\T$ with $U_k\in\R^{n\times r_k}$ having orthonormal columns (spectral theorem: the eigenvalues of a
+projection are $0$ and $1$). Then $U_k\T\bm Y\sim N_{r_k}(U_k\T\bm\mu,\sigma^2I)$ with $U_k\T\bm\mu=U_k\T P_k\bm\mu=\bm 0$, and
+$\bm Y\T P_k\bm Y=\|U_k\T\bm Y\|^2$. Moreover $U_1\T U_2=U_1\T(P_1P_2)U_2=0$, so $\Cov(U_1\T\bm Y,U_2\T\bm Y)=\sigma^2U_1\T U_2=0$ and
+the two Gaussian vectors are independent (\cref{ch05:prop-linmap}).
+\end{proof}
+
+\begin{theorem}[$F$ test of a linear hypothesis]\label{ch05:thm-F}
+In the normal linear model let $A\in\R^{q\times p}$ have rank $q$ and consider $H_0:A\bm\beta=\bm 0$. Let RSS be the
+residual sum of squares of the unconstrained fit and $\text{RSS}_0$ that of the least-squares fit under the
+constraint. Under $H_0$
+\[
+  F=\frac{(\text{RSS}_0-\text{RSS})/q}{\text{RSS}/(n-p)}\sim F_{q,\,n-p}.
+\]
+The most common case is $A=[0\ I_q]$: $H_0:\beta_{k+1}=\dots=\beta_p=0$ with $k=p-q$, i.e.\ the \emph{sub-model} using
+only the first $k$ columns of $X$ is adequate \ts{24}{8}{43:35} \ts{24}{11}{6:33}.
+\end{theorem}
+\begin{proof}
+The constrained fitted values range over $L_0=\{X\bm\beta:A\bm\beta=\bm 0\}$, a subspace of $\operatorname{col}(X)$ of dimension $p-q$
+($X$ is injective). The constrained least-squares fit is the projection $H_0\bm y$ on $L_0$, so
+$\text{RSS}_0=\bm y\T(I-H_0)\bm y$ and $\text{RSS}_0-\text{RSS}=\bm y\T(H-H_0)\bm y$. Since $L_0\subset\operatorname{col}(X)$, $HH_0=H_0H=H_0$; hence
+$H-H_0$ is the orthogonal projection on $\operatorname{col}(X)\ominus L_0$ (rank $q$) and $(I-H)(H-H_0)=0$. Under $H_0$,
+$\bm\mu=X\bm\beta\in L_0$, so $(H-H_0)\bm\mu=(I-H)\bm\mu=\bm 0$. By \cref{ch05:lem-proj}, $(\text{RSS}_0-\text{RSS})/\sigma^2\sim\chi^2_q$ and
+$\text{RSS}/\sigma^2\sim\chi^2_{n-p}$ independently, and the ratio of the two over their degrees of freedom is $F_{q,n-p}$.
+\end{proof}
+Both numerator and denominator estimate $\sigma^2$ when $H_0$ is true \ts{24}{11}{6:33}; under the alternative the
+numerator is inflated by $\|(H-H_0)\bm\mu\|^2/q$, so large $F$ is evidence against $H_0$ \ts{24}{8}{44:36}. An affine
+hypothesis $A\bm\beta=\bm b$ reduces to this one by subtracting $X\bm\beta_b$ (any $\bm\beta_b$ with $A\bm\beta_b=\bm b$) from $\bm y$.
+
+\begin{coursenote}[Erratum: denominator degrees of freedom]
+Slide 20 of \file{lec06_1} gives $df_2=n-k$ for the sub-model $F$ test. It is $df_2=n-p$, the residual degrees of
+freedom of the \emph{full} model, as in \file{lec08} (section 2) and in the formula on the same slide.
+\end{coursenote}
+
+\begin{proposition}[Wald form; $t^2=F$]\label{ch05:prop-wald}
+For $H_0:A\bm\beta=\bm b$,
+\[
+  \text{RSS}_0-\text{RSS}=(A\hat{\bm\beta}-\bm b)\T\bigl[A(X\T X)^{-1}A\T\bigr]^{-1}(A\hat{\bm\beta}-\bm b).
+\]
+In particular, for a single coefficient ($A=\bm e_j\T$, $q=1$) $\text{RSS}_0-\text{RSS}=(\hat\beta_j-b)^2/C_{jj}$ and the $F$ statistic
+equals $\hat t^{\,2}$ \ts{24}{11}{7:39}.
+\end{proposition}
+\begin{proof}
+Minimising $\|\bm y-X\bm\beta\|^2$ subject to $A\bm\beta=\bm b$ with a Lagrange multiplier gives
+$\hat{\bm\beta}_0=\hat{\bm\beta}-(X\T X)^{-1}A\T M^{-1}(A\hat{\bm\beta}-\bm b)$, $M=A(X\T X)^{-1}A\T$. As $X(\hat{\bm\beta}-\hat{\bm\beta}_0)\in\operatorname{col}(X)\perp\hat{\bm\varepsilon}$,
+Pythagoras gives $\text{RSS}_0=\text{RSS}+(\hat{\bm\beta}-\hat{\bm\beta}_0)\T X\T X(\hat{\bm\beta}-\hat{\bm\beta}_0)$, and substituting,
+$(\hat{\bm\beta}-\hat{\bm\beta}_0)\T X\T X(\hat{\bm\beta}-\hat{\bm\beta}_0)=(A\hat{\bm\beta}-\bm b)\T M^{-1}(A\hat{\bm\beta}-\bm b)$. For $q=1$, dividing by $\hat\sigma^2$ gives
+$(\hat\beta_j-b)^2/(\hat\sigma^2C_{jj})=\hat t^{\,2}$.
+\end{proof}
+R's \texttt{car::linearHypothesis()} implements tests of linear hypotheses in this $F$ form \ts{24}{11}{1:08:29}.
+For GE (\cref{ch05:ex-gebeta}) it gives $F=4.304=2.075^2$ ($p=0.038$) for $\beta=1$ and $F=1.144=1.070^2$ ($p=0.285$) for
+$\alpha=0$: the same tests as the $t$ statistics.
+
+\paragraph{Overall $F$ and ANOVA.} With an intercept, the test that all $p-1$ slopes vanish has
+$\text{RSS}_0=\text{TSS}$, so
+\[
+  F=\frac{R^2/(p-1)}{(1-R^2)/(n-p)} .
+\]
+This is the last line of \texttt{summary.lm}: $F=13.4$ on $(8,63)$ degrees of freedom for the prostate data
+($R^2=0.630$) and $F=271.9$ on $(4,607)$ for the ETF regression of \cref{ch05:sec-cases} ($R^2=0.642$). Adding
+blocks of variables one at a time and recording the drop in RSS gives the sequential \emph{analysis-of-variance
+table}, derived through the QR decomposition in 2013 PS3 (\cref{ch05:ex-ps3-3cd}).
+
+\begin{finance}[Statistical versus practical significance; multiple testing]
+With thousands of daily observations, tiny effects become ``significant'': in the ETF case study a principal
+component explaining $0.6\%$ of the variance of the response has $p=0.052$ \ts{24}{11}{45:48}. Conversely, when the
+same test is run on hundreds of stocks (is $\alpha=0$ for each S\&P~500 stock?), about 5\% of them will be
+significant at the 5\% level even if every null is true \ts{24}{11}{1:16:47}. A handful of significant alphas is
+therefore no evidence against the CAPM, and ``the best of 500 back-tests'' is not a strategy.
+\end{finance}
+
+% ------------------------------------------------------------------
+\section{Testing for a change of regime}\label{ch05:sec-chow}
+Regressions on time series are fitted over long samples, but the relationship may change: a firm changes business,
+a currency changes its peg. \file{lec08} (section 3) shows how to test whether a regression is the same in two
+periods \ts{24}{11}{1:09:33}.
+
+\paragraph{Set-up.} Order the $n$ cases in time; period A is $i=1,\dots,n_A$, period B the remaining
+$n_B=n-n_A$. Partition $\bm y=(\bm y_A,\bm y_B)$, $X=\bigl(\begin{smallmatrix}X_A\\X_B\end{smallmatrix}\bigr)$ and allow different parameters:
+\[
+  \bm y_A=X_A\bm\beta+\bm\varepsilon_A,\qquad \bm y_B=X_B\bm\gamma+\bm\varepsilon_B,\qquad \bm\varepsilon_A,\bm\varepsilon_B\ \text{independent},\ N(\bm 0,\sigma^2I),
+\]
+with $H_0:\bm\gamma=\bm\beta$ (no change) against $H_1:\bm\gamma\neq\bm\beta$ \ts{24}{11}{1:10:37}.
+
+\paragraph{Approach 1: separate regressions.} In block form the unconstrained model is
+\[
+  \begin{pmatrix}\bm y_A\\ \bm y_B\end{pmatrix}=\begin{pmatrix}X_A&0\\0&X_B\end{pmatrix}\begin{pmatrix}\bm\beta\\ \bm\gamma\end{pmatrix}+\bm\varepsilon .
+\]
+The normal equations decouple, so $\hat{\bm\beta}=(X_A\T X_A)^{-1}X_A\T\bm y_A$, $\hat{\bm\gamma}=(X_B\T X_B)^{-1}X_B\T\bm y_B$ (separate OLS fits)
+and $\text{RSS}=\text{RSS}_A+\text{RSS}_B$, with $n-2p$ residual degrees of freedom. The constrained model is the pooled regression
+$\bm y=X\bm\beta+\bm\varepsilon$ with residual sum $\text{RSS}_0$. By \cref{ch05:thm-F} ($q=p$ constraints $\bm\gamma-\bm\beta=\bm 0$, $2p$ parameters)
+\begin{equation}\label{ch05:eq-chow}
+  F=\frac{(\text{RSS}_0-\text{RSS}_A-\text{RSS}_B)/p}{(\text{RSS}_A+\text{RSS}_B)/(n-2p)}\sim F_{p,\,n-2p}\quad\text{under }H_0 .
+\end{equation}
+In econometrics this is the \emph{Chow test} (the name is not used in the course).
+
+\paragraph{Approach 2: parametrise the change} \ts{24}{11}{1:11:39}. Let $\bm\delta=\bm\gamma-\bm\beta$. Then
+\[
+  \begin{pmatrix}\bm y_A\\ \bm y_B\end{pmatrix}=\begin{pmatrix}X_A&0\\X_B&X_B\end{pmatrix}\begin{pmatrix}\bm\beta\\ \bm\delta\end{pmatrix}+\bm\varepsilon,\qquad H_0:\bm\delta=\bm 0 .
+\]
+The new design is the old one times $G=\bigl(\begin{smallmatrix}I&0\\-I&I\end{smallmatrix}\bigr)$ acting on the parameters, so it has the
+same column space: same fit, same RSS, same $F$ (\cref{ch05:sec-standard}). The advantage is that the individual
+$t$ statistics of $\hat{\bm\delta}$ tell \emph{which} coefficients changed. In R this is the model with interactions
+between the regressors and a period indicator, \texttt{y $\sim$ x * ind.periodB}.
+
+\begin{coursenote}[Erratum in \file{lec08}, section 3.1]
+The $F$ statistic of Approach~1 is printed with denominator $\text{RSS}/(n-p)$. The unconstrained model has $2p$ parameters,
+so it must be $\text{RSS}/(n-2p)$ as in \eqref{ch05:eq-chow}; the text right below the formula (and section 3.2) correctly
+states $df_2=n-2p$.
+\end{coursenote}
+
+\begin{casestudy}[Did GE's CAPM change? (\file{lec08}, section 4)]
+\textbf{Choosing the split.} Fit the CAPM regression of \cref{ch05:ex-gebeta} to 2017--2023 and plot the cumulative
+sum of the residuals standardised to equal variance, $\hat\varepsilon_i/\sqrt{1-H_{ii}}$ (\cref{ch05:sec-diag}). Under the model
+this should wander like a driftless random walk; instead it falls steadily to a minimum at 2018-12-27 and then
+rises \ts{24}{11}{1:12:44}. Period A: up to 2018-12-27 (500 days); period B: after.
+
+\textbf{Fit with interactions} (\texttt{Ra.RF $\sim$ Mkt.RF * ind.periodB}, $n=1676$):
+
+\smallskip
+\centering\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+ & Estimate & Std.\ error & $t$\\
+\midrule
+intercept ($\alpha_A$) & $-0.00288$ & $0.00092$ & $-3.13$\\
+\texttt{Mkt.RF} ($\beta_A$) & $0.774$ & $0.110$ & $7.02$\\
+\texttt{ind.periodB} ($\delta_\alpha$) & $0.00334$ & $0.00110$ & $3.04$\\
+\texttt{Mkt.RF:ind.periodB} ($\delta_\beta$) & $0.354$ & $0.118$ & $2.99$\\
+\bottomrule
+\end{tabular}
+
+\smallskip
+\raggedright
+So $\hat\alpha_B=0.00046$ and $\hat\beta_B=1.128$: the alpha turns from negative to (slightly) positive and the beta rises
+from $0.77$ to $1.13$ \ts{24}{11}{1:13:44}. The $F$ test of $\delta_\alpha=\delta_\beta=0$ (\texttt{anova(lmfit0, lmfit0a)} or
+\texttt{linearHypothesis}): RSS drops from $0.71819$ to $0.71020$,
+$F=\frac{0.0079821/2}{0.71020/1672}=9.40$ on $(2,1672)$ degrees of freedom, $p=8.8\times10^{-5}$.
+
+\textbf{Lesson.} CAPM parameters are not constant over long periods; practitioners estimate them on
+\emph{rolling windows}, which raises the question of the window length \ts{24}{11}{1:13:44}.
+\end{casestudy}
+
+\begin{coursenote}[Choosing the break from the data (not discussed in class)]
+Here the break date was chosen \emph{after} looking at the cumulative residuals, i.e.\ at the most favourable point
+for rejection. The $F_{2,1672}$ distribution assumes the date is fixed in advance, so the reported $p$-value is too
+optimistic. With an unknown break date one uses the supremum of the $F$ statistics over candidate dates (Andrews'
+sup-$F$ test) or CUSUM tests, which formalise exactly the cumulative-residual plot used above. The
+conclusion for GE would very likely survive, given $p\approx10^{-4}$.
+\end{coursenote}
+
+\paragraph{Open issues} (\file{lec08}, section 5). The test assumes i.i.d.\ normal errors with the same variance in
+both periods. If the variances differ, fit the two periods separately by maximum likelihood and use a
+generalised likelihood-ratio test instead of $F$. If the errors are dependent (check with the Durbin--Watson,
+Ljung--Box, turning-point, difference-sign or McLeod--Li tests), time-series models are needed
+(\cref{ch:timeseries}). If they are non-normal, large-sample theory still makes $\hat{\bm\beta}$ approximately normal and
+$F$ tests are replaced by $\chi^2$ tests.
+
+\begin{casestudy}[Exchange-rate regimes of the Chinese yuan (2013 Case Study 2)]
+\textbf{Question.} The yuan (CNY) was pegged to the US dollar until July 2005; China then announced a managed float
+against an undisclosed \emph{basket} of currencies, with daily moves up to 0.3\%. What is the implicit basket, does it
+change, and how fast does the yuan move against it?
+
+\textbf{Data and method.} \file{fm_casestudy_fx_1.r} downloads from FRED the daily dollar exchange rates listed in
+\file{fred_fxrates.txt} (23 currencies plus trade-weighted dollar indices, 1999--2013).
+\file{fm_casestudy_2_rcode.r} re-expresses eight of them in Swiss francs (a stable numeraire outside the basket), so
+that the dollar itself becomes a regressor, and regresses daily log changes of CNY/SFR on those of USD, JPY, EUR,
+GBP, KRW, MYR and THB against the franc (the Frankel--Wei regression).
+
+\textbf{Results.}
+\begin{itemize}
+  \item 2001 -- June 2005: coefficient on USD $1.000$ (se $0.0005$, $t=1839$), all others insignificant,
+        $R^2=0.9999$: a perfect dollar peg.
+  \item July--December 2005: USD $0.19$ (not significant), Korean won $0.18$ ($t=4.9$), Malaysian ringgit $0.75$
+        ($t=5.1$), $R^2=0.949$: the peg is gone.
+  \item 2006--2013, year by year: USD weight $0.87$--$0.97$ ($t$ from 25 to 97), with small, changing, sometimes
+        significant weights on MYR, KRW, EUR, GBP or THB; $R^2$ between $0.93$ and $0.998$.
+  \item The intercept is a daily drift against the implied basket; annualised as $(1+\hat\alpha)^{252}-1$ it is negative in
+        almost every year ($-2.9\%$ in 2006, $-6.1\%$ in 2007, $-7.3\%$ in 2008, $+0.2\%$ in 2009, then $-0.5\%$ to $-4.8\%$):
+        fewer yuan per franc than the basket implies, i.e.\ a steady managed \emph{appreciation} of the yuan.
+  \item Diagnostics for 2012: no heteroscedasticity, but residual tails heavier than normal.
+\end{itemize}
+\textbf{Lesson.} A regression coefficient can identify an exchange-rate regime, and fitting it period by period reveals
+regime changes; the structural break of July 2005 is visible at a glance. \file{fm_casestudy_fx_1.r} also loads the R
+package \texttt{fxregime}, which implements this regression together with formal tests for changes of regime.
+\end{casestudy}
+
+% ------------------------------------------------------------------
+\section{Regression diagnostics}\label{ch05:sec-diag}
+Step 4 of the modelling loop. By \cref{ch05:thm-normal}(ii) the residuals are correlated and have unequal variances,
+$\Var(\hat\varepsilon_i)=\sigma^2(1-H_{ii})$, even when the errors are i.i.d.\ \ts{24}{8}{1:01:33}. Diagnostics correct for this.
+
+\paragraph{Leverage.} $H_{ii}$ is the \emph{leverage} of case $i$. Since $\hat y_i=\sum_jH_{ij}y_j$, $\partial\hat y_i/\partial y_i=H_{ii}$: the
+fraction of its own fitted value that a case dictates (2013 PS3). From $H=H^2=H\T$,
+$H_{ii}=\sum_jH_{ij}^2\ge H_{ii}^2$, so $0\le H_{ii}\le1$; with an intercept $H_{ii}\ge1/n$, and $\sum_iH_{ii}=p$, so the average is
+$p/n$ \ts{24}{8}{1:05:44}. If $H_{ii}=1$ the fitted line passes through the point: that case alone determines its
+fit \ts{24}{8}{1:04:44}. With an intercept,
+\[
+  H_{ii}=\frac1n+(\bm x_i-\bar{\bm x})\T(\mathcal X\T\mathcal X)^{-1}(\bm x_i-\bar{\bm x}),
+\]
+where $\mathcal X$ is the matrix of centred covariates (2013 PS3, \cref{ch05:ex-ps3-1de}): leverage grows with the
+Mahalanobis distance of $\bm x_i$ from the centroid of the covariates (dividing by $n-1$ turns $\mathcal X\T\mathcal X$ into the sample
+covariance matrix). High leverage is a property of the $x$'s only. R's \texttt{influence.measures()} flags cases with
+$H_{ii}>3p/n$.
+
+\paragraph{Residuals.} The \emph{standardised} residual (R: \texttt{rstandard}) is
+$r_i=\hat\varepsilon_i/(\hat\sigma\sqrt{1-H_{ii}})$; the \emph{studentised} (deleted) residual (R: \texttt{rstudent}, or
+\texttt{studres} in \texttt{MASS}) uses the estimate $\hat\sigma_{(i)}$ computed without case $i$,
+$t_i=\hat\varepsilon_i/(\hat\sigma_{(i)}\sqrt{1-H_{ii}})$, and has exactly a $t_{n-p-1}$ distribution under the normal model, which makes
+outliers easy to judge \ts{24}{8}{1:02:36}.
+
+\begin{proposition}[Case deletion]\label{ch05:prop-deletion}
+Let $\hat{\bm\beta}_{(i)}$, $\hat{\bm y}_{(i)}=X\hat{\bm\beta}_{(i)}$ and $\hat\sigma^2_{(i)}$ be computed with case $i$ deleted. Then
+\[
+  \hat{\bm\beta}_{(i)}=\hat{\bm\beta}-\frac{(X\T X)^{-1}\bm x_i\hat\varepsilon_i}{1-H_{ii}},\qquad
+  \hat\sigma^2_{(i)}=\hat\sigma^2+\frac{1}{n-p-1}\Bigl(\hat\sigma^2-\frac{\hat\varepsilon_i^2}{1-H_{ii}}\Bigr),
+\]
+and \emph{Cook's distance} is
+\[
+  CD_i=\frac{\|\hat{\bm y}-\hat{\bm y}_{(i)}\|^2}{p\,\hat\sigma^2}=\frac{\hat\varepsilon_i^2}{p\,\hat\sigma^2}\,\frac{H_{ii}}{(1-H_{ii})^2}
+  =\frac{r_i^2}{p}\,\frac{H_{ii}}{1-H_{ii}} .
+\]
+\end{proposition}
+The proofs, via the Sherman--Morrison--Woodbury formula (deleting a row is a rank-one update of $X\T X$), are 2013 PS3
+Problem~2 (\cref{ch05:ex-ps3-2a,ch05:ex-ps3-2bd}). Nothing needs to be refitted: all leave-one-out quantities come
+from one fit. The last form of $CD_i$ says \emph{influence = outlyingness $\times$ leverage}: a large residual at a
+low-leverage point, or a high-leverage point on the line, is harmless; both together move the fit. Since
+$\|\hat{\bm y}-\hat{\bm y}_{(i)}\|^2=(\hat{\bm\beta}-\hat{\bm\beta}_{(i)})\T X\T X(\hat{\bm\beta}-\hat{\bm\beta}_{(i)})$, $CD_i$ measures how far $\hat{\bm\beta}$ moves in the metric of
+its own confidence ellipsoid: values comparable with the median of $F_{p,n-p}$ (about $1$) are large
+\ts{24}{8}{1:06:44} \ts{24}{8}{1:07:46}.
+
+\paragraph{Graphical tools} \ts{24}{8}{1:08:51}. In R (\texttt{stats} and
+\texttt{car}):
+\begin{center}
+\small
+\begin{tabularx}{\linewidth}{@{}l L@{}}
+\toprule
+\texttt{plot(fit)} & residuals vs fitted (flat band), normal Q--Q,
+scale--location ($\sqrt{|r_i|}$ vs fitted), residuals vs leverage
+with Cook contours\\
+\texttt{influence.measures()} & leave-one-out stats: DFBETAS,
+DFFITS, COVRATIO, Cook's distance, hat values\\
+\texttt{qqPlot()} & Q--Q plot of studentised residuals against
+$t$ quantiles, with confidence band \ts{24}{8}{1:03:44}\\
+\texttt{influencePlot()} & studentised residuals vs hat values,
+bubble size $\propto$ Cook's distance\\
+\texttt{residualPlots()} & residuals vs each regressor; curvature
+test = $t$ test of added squared term; Tukey test = same with
+$\hat y^2$ \ts{24}{8}{1:09:53}\\
+\texttt{leveragePlots()} & added-variable plots: effect of each
+regressor after adjusting for others\\
+\texttt{durbinWatsonTest()} & autocorrelation of residuals
+(time-ordered data)\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{casestudy}[Prostate cancer data (\file{lec06_1}, slides 21--33)]
+\textbf{Data.} Not financial, deliberately: the \texttt{prostate} data of the \texttt{faraway} package (used in Hastie,
+Tibshirani and Friedman's \emph{Elements of Statistical Learning}), 97 patients, response \texttt{lpsa} (log PSA), eight
+covariates (log cancer volume \texttt{lcavol}, log prostate weight, age, \dots, seminal vesicle invasion \texttt{svi}).
+A random 75\% training sample ($n=72$, \texttt{set.seed(1)}) is used. The experience transfers: only the variable
+names change from one regression problem to another \ts{24}{8}{46:42}.
+
+\textbf{Fit} ($p=9$ with intercept): $R^2=0.630$, $R^2_{\text{adj}}=0.583$, $\hat\sigma=0.724$ on 63 degrees of freedom,
+$F=13.4$. Significant: \texttt{lcavol} ($t=5.21$) and \texttt{svi} ($t=2.95$); \texttt{lweight} borderline ($p=0.07$). The pairs
+plot already shows the strong \texttt{lpsa}--\texttt{lcavol} relation \ts{24}{8}{48:48}. Standardising the covariates
+leaves every $t$ value unchanged (\cref{ch05:sec-standard}) \ts{24}{8}{57:24}.
+
+\textbf{Diagnostics.} Studentised residuals: unimodal, symmetric, within the Q--Q band except case 39 ($-3.06$). Hat
+values: cases 32 ($0.41$) and 74 ($0.33$) exceed $3p/n=0.375$ or come close, against an average $p/n=0.125$. Cook's
+distances of the flagged cases are only $0.07$--$0.13$. Curvature tests: none significant (smallest $p=0.10$ for
+\texttt{svi}; Tukey test $p=0.69$) \ts{24}{8}{1:09:53}.
+
+\textbf{Lesson.} A satisfactory model: no curvature, no dominant case; the scale--location plot hints at mild
+non-constancy of the variance.
+\end{casestudy}
+
+% ------------------------------------------------------------------
+\section{Shrinkage and principal-components regression}\label{ch05:sec-shrink}
+When regressors are many or strongly correlated (the four index ETFs below have pairwise correlations
+$0.77$--$0.95$), $X\T X$ is ill-conditioned and $\Cov(\hat{\bm\beta})=\sigma^2(X\T X)^{-1}$ is huge in some directions. Three
+remedies, all expressed through the SVD, were presented in L11.
+
+\paragraph{Standardisation first} \ts{24}{11}{23:47}. Centre $\bm y$ and the columns of $X$ and scale the columns to unit
+variance; the intercept is then estimated by $\bar y$. Otherwise a penalty on $\|\bm\beta\|$ would depend on the units:
+measuring a covariate in cents instead of dollars would make its coefficient 100 times smaller and almost free
+\ts{24}{11}{24:49}. Below $X$ is the standardised $n\times p$ matrix (no intercept column) with thin SVD
+$X=UDV\T$, $U\T U=I_p$, $V$ orthogonal, $D=\diag(d_1\ge\dots\ge d_p)$ (\cref{thm:svd}), and $c_j=\bm u_j\T\bm y$.
+
+\begin{coursenote}[Erratum and notation in the ridge slides]
+Slide 41 of \file{lec06_1} rescales the columns by ``$S^{-1/2}X$'' with $S=\frac1n\diag(X\T X)$: since $S$ is $p\times p$ this must be
+$XS^{-1/2}$ (multiplication on the right scales columns). On the same slide $H^*=I_n-\frac1n\bm 1\bm 1\T$ is the
+\emph{centring} matrix, not the hat matrix.
+\end{coursenote}
+
+\subsection{Ridge regression}
+\begin{definition}[Ridge]
+For a complexity parameter $\lambda\ge0$ \ts{24}{11}{22:46},
+\[
+  \hat{\bm\beta}^{\text{ridge}}=\arg\min_{\bm\beta}\Bigl(\|\bm y-X\bm\beta\|^2+\lambda\|\bm\beta\|^2\Bigr)=(X\T X+\lambda I_p)^{-1}X\T\bm y .
+\]
+\end{definition}
+The gradient condition is $-2X\T(\bm y-X\bm\beta)+2\lambda\bm\beta=\bm 0$; $X\T X+\lambda I$ is invertible for every $\lambda>0$ even when $X$ is
+rank-deficient. The estimate is linear in $\bm y$ and equals OLS for $\lambda=0$. With the SVD
+\ts{24}{11}{28:04}:
+\[
+  \hat{\bm\beta}^{\text{ridge}}=V(D^2+\lambda I)^{-1}DU\T\bm y,\qquad
+  \hat{\bm y}^{\text{ridge}}=UD(D^2+\lambda I)^{-1}DU\T\bm y=\sum_{j=1}^p\frac{d_j^2}{d_j^2+\lambda}\,c_j\,\bm u_j ,
+\]
+whereas $\hat{\bm y}^{\text{LS}}=UU\T\bm y=\sum_jc_j\bm u_j$. Ridge shrinks the component of the fit along $\bm u_j$ by the factor
+$d_j^2/(d_j^2+\lambda)$: little along the directions in which the regressors vary a lot (large $d_j$, the leading principal
+components), much along the directions of little variation \ts{24}{11}{29:04}. It is biased,
+$\E\hat{\bm\beta}^{\text{ridge}}=(X\T X+\lambda I)^{-1}X\T X\bm\beta$, but has smaller variance; $\lambda$ is chosen by cross-validation
+(\texttt{cv.glmnet} in the case study).
+
+\begin{proposition}[Ridge as a Bayes estimate]\label{ch05:prop-ridgebayes}
+In the normal linear model with prior $\bm\beta\sim N_p(\bm 0,\tau^2I_p)$, the posterior mode (which, the posterior being Gaussian,
+is also its mean) is $\hat{\bm\beta}^{\text{ridge}}$ with $\lambda=\sigma^2/\tau^2$ \ts{24}{11}{25:52}.
+\end{proposition}
+\begin{proof}
+The posterior density is proportional to likelihood $\times$ prior,
+\[\exp\bigl(-\|\bm y-X\bm\beta\|^2/(2\sigma^2)\bigr)\exp\bigl(-\|\bm\beta\|^2/(2\tau^2)\bigr);\]
+maximising it means minimising $\|\bm y-X\bm\beta\|^2+(\sigma^2/\tau^2)\|\bm\beta\|^2$.
+\end{proof}
+The isotropic prior says that a priori no direction of $\R^p$ is preferred \ts{24}{11}{26:58}; a strong prior (small
+$\tau$, large $\lambda$) pulls all coefficients towards zero.
+
+\subsection{Principal-components regression}
+The principal components of the (centred) regressors are $\bm z_j=X\bm v_j$, where $\bm v_j$ are the eigenvectors of the
+sample covariance $S=\frac1nX\T X=\frac1nVD^2V\T$ \ts{24}{11}{30:05}. They are orthogonal, $\bm z_j=d_j\bm u_j$, with sample
+variance $d_j^2/n$, and $\bm z_1$ is the unit-norm combination of the columns of $X$ with the largest variance
+(\cref{ch:pca}). \emph{PC regression} fixes $m\le p$ and regresses $\bm y$ on $Z_m=[\bm z_1\cdots\bm z_m]=U_mD_m$
+\ts{24}{11}{31:05}:
+\[
+  \hat{\bm\gamma}=(Z_m\T Z_m)^{-1}Z_m\T\bm y,\quad \hat\gamma_j=\frac{\bm z_j\T\bm y}{d_j^2},\qquad
+  \hat{\bm\beta}^{\text{pc}}=V_m\hat{\bm\gamma},\qquad \hat{\bm y}^{\text{pc}}=U_mU_m\T\bm y=\sum_{j=1}^mc_j\bm u_j .
+\]
+Orthogonality makes each $\hat\gamma_j$ a separate simple regression, and
+\[\Cov(\hat{\bm\beta}^{\text{pc}})=\sigma^2V_mD_m^{-2}V_m\T\preceq\sigma^2VD^{-2}V\T=\Cov(\hat{\bm\beta}):\]
+variance is reduced by dropping the noisiest
+directions \ts{24}{11}{32:13}.
+
+\paragraph{Comparison} \ts{24}{11}{33:19}. The three fits use the same building blocks $c_j\bm u_j$:
+\[
+  \hat{\bm y}^{\text{LS}}=\sum_{j=1}^pc_j\bm u_j,\qquad
+  \hat{\bm y}^{\text{ridge}}=\sum_{j=1}^p\frac{d_j^2}{d_j^2+\lambda}c_j\bm u_j,\qquad
+  \hat{\bm y}^{\text{pc}}=\sum_{j=1}^mc_j\bm u_j .
+\]
+Least squares keeps all, ridge shrinks smoothly, PC regression keeps the first $m$ and discards the rest.
+
+\begin{intuition}[Spectral filters]
+This is the classic regularisation of an ill-posed inverse problem: ridge is Tikhonov regularisation (a smooth
+filter $d^2/(d^2+\lambda)$ on the singular values), PC regression is the truncated SVD (a sharp cut-off). Both trade a
+little bias for a large reduction of the noise amplified by small singular values.
+\end{intuition}
+
+A caveat, visible in the ETF case study \ts{24}{11}{46:50}: the principal components are ranked by how much the
+\emph{regressors} vary, not by how much they explain $\bm y$. A low-variance component can be an important predictor,
+so keeping ``the first $m$'' may throw away the useful direction.
+
+\subsection{The lasso}
+\begin{definition}[Lasso]
+\[
+  \hat{\bm\beta}^{\text{lasso}}=\arg\min_{\bm\beta}\Bigl(\|\bm y-X\bm\beta\|^2+\lambda\sum_{j=1}^p|\beta_j|\Bigr),
+\]
+equivalently: minimise $\|\bm y-X\bm\beta\|^2$ subject to $\|\bm\beta\|_1\le t$ \ts{24}{11}{33:19}. The constraint binds only for
+$t<t_0=\|\hat{\bm\beta}^{\text{LS}}\|_1$; the \emph{regularisation path} is $\hat{\bm\beta}^{\text{lasso}}$ as a function of $\lambda\ge0$ (or of
+$t\in[0,t_0]$).
+\end{definition}
+The $L_1$ ball is a diamond (a cross-polytope in $\R^p$) with corners on the axes. The elliptical contours of
+$\|\bm y-X\bm\beta\|^2$, centred at $\hat{\bm\beta}^{\text{LS}}$, typically first touch it at a corner, where some coefficients are exactly
+zero \ts{24}{11}{35:28} (\cref{ch05:fig-ridgelasso}). The lasso therefore does \emph{variable selection}: as $\lambda$ grows,
+variables leave the model one after the other \ts{24}{11}{36:31}. There is no closed form; the path is computed by
+coordinate descent (\texttt{glmnet}).
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=0.95]
+  \begin{scope}
+    \draw[->,black!60] (-1.6,0) -- (2.8,0) node[right,black]{\small $\beta_1$};
+    \draw[->,black!60] (0,-1.5) -- (0,4.3) node[above,black]{\small $\beta_2$};
+    \fill[intcol!25] (0,0) circle (1);
+    \draw[intcol!80!black,thick] (0,0) circle (1);
+    \foreach \s in {2.093,1.35,0.6}
+      \draw[thmcol,rotate around={-50:(0.6,2.2)}] (0.6,2.2) ellipse ({\s} and {0.5*\s});
+    \fill[thmcol] (0.6,2.2) circle (1.5pt) node[right]{\small $\hat{\bm\beta}^{\text{LS}}$};
+    \fill[black] (0.562,0.827) circle (1.8pt);
+    \node[anchor=north west,font=\small] at (0.62,0.78) {$\hat{\bm\beta}^{\text{ridge}}$};
+    \node[font=\small] at (0.6,-1.25) {ridge: $\beta_1^2+\beta_2^2\le t^2$};
+  \end{scope}
+  \begin{scope}[xshift=6.3cm]
+    \draw[->,black!60] (-1.6,0) -- (2.8,0) node[right,black]{\small $\beta_1$};
+    \draw[->,black!60] (0,-1.5) -- (0,4.3) node[above,black]{\small $\beta_2$};
+    \fill[defcol!25] (1,0) -- (0,1) -- (-1,0) -- (0,-1) -- cycle;
+    \draw[defcol,thick] (1,0) -- (0,1) -- (-1,0) -- (0,-1) -- cycle;
+    \foreach \s in {2.519,1.6,0.7}
+      \draw[thmcol,rotate around={-50:(0.6,2.2)}] (0.6,2.2) ellipse ({\s} and {0.5*\s});
+    \fill[thmcol] (0.6,2.2) circle (1.5pt) node[right]{\small $\hat{\bm\beta}^{\text{LS}}$};
+    \fill[black] (0,1) circle (1.8pt);
+    \node[anchor=east,font=\small] at (-0.08,1.18) {$\hat{\bm\beta}^{\text{lasso}}$};
+    \node[font=\small] at (0.6,-1.25) {lasso: $|\beta_1|+|\beta_2|\le t$};
+  \end{scope}
+\end{tikzpicture}
+\caption{Constrained forms of ridge and lasso (same least-squares contours, $t=1$). The solution is where the smallest
+contour touches the constraint region: a generic point of the circle for ridge, the corner $\beta_1=0$ of the diamond for
+the lasso \ts{24}{11}{34:22}. (Contours computed for a quadratic form with axis ratio $2{:}1$.)}\label{ch05:fig-ridgelasso}
+\end{figure}
+
+\begin{remark}[Orthonormal design; not discussed in class]
+If $X\T X=I_p$, then $\|\bm y-X\bm\beta\|^2=\|\bm y-X\hat{\bm\beta}\|^2+\|\bm\beta-\hat{\bm\beta}\|^2$ with $\hat{\bm\beta}=X\T\bm y$, and both problems decouple:
+\[
+  \hat\beta^{\text{ridge}}_j=\frac{\hat\beta_j}{1+\lambda},\qquad
+  \hat\beta^{\text{lasso}}_j=\operatorname{sign}(\hat\beta_j)\bigl(|\hat\beta_j|-\lambda/2\bigr)_+ .
+\]
+Ridge rescales every coefficient; the lasso subtracts a constant and sets the small ones to exactly zero
+(``soft thresholding'').
+\end{remark}
+
+Regularised models reappear in the 2013 lecture on regularised pricing and risk models (\cref{ch:regularized}), in
+machine learning (\cref{ch:ml}), and PCA in \cref{ch:pca}.
+
+% ------------------------------------------------------------------
+\section{Case studies}\label{ch05:sec-cases}
+
+\subsection{Sector ETFs regressed on index ETFs}
+\begin{casestudy}[ETF case study (\file{lec06_4} = \file{ETF_Casestudy.pdf}, sector XLP)]
+\textbf{Data.} Adjusted daily prices from Yahoo (2000-01-03 to 2024-09-19) of the 13 SPDR ETFs listed in
+\file{spyders_symbols_labels.csv}: four index ETFs (SPY: S\&P~500, MDY: mid-caps, QQQ: Nasdaq-100, DIA: Dow Jones) and
+nine sector ETFs (XLB materials, XLV health care, XLP consumer staples, XLY consumer discretionary, XLE energy, XLF
+financials, XLI industrials, XLK technology, XLU utilities). Converted to weekly log returns (1289 weeks; saved in
+\file{casestudy_1_0_etfs.RData}); the analysis uses 2013--2024 ($n=612$ weeks). Response: XLP (annualised mean 10.0\%,
+volatility 13.7\%, against 13.7\% and 16.1\% for SPY).
+
+\textbf{OLS} \ts{24}{11}{42:42}: $\hat y=0.0002+1.007\,\text{SPY}-0.368\,\text{MDY}-0.314\,\text{QQQ}+0.400\,\text{DIA}$, all
+slopes with $|t|>4.3$; $R^2=0.642$, $\hat\sigma=0.0114$ (weekly), $F=271.9$. The mixed signs are a symptom of the collinear
+regressors (index correlations $0.77$--$0.95$): XLP loads positively on the market but less on its growth and mid-cap
+parts. Diagnostics: influential weeks 2016-11-11 (studentised residual $-4.8$), 2020-03-06 ($+4.4$), 2022-05-20
+($-5.8$); the COVID week 2020-03-20 has hat value $0.135$ against $p/n=0.008$. The curvature tests are all significant
+at 5\% ($p\approx0.02$--$0.04$): some non-linearity in the market response.
+
+\textbf{$z$-scores.} Regressing on standardised index returns reproduces every $t$ value and $R^2$; only the scale of the
+coefficients and the intercept change.
+
+\textbf{PCA of the regressors} \ts{24}{11}{43:42}: the four standardised index returns have PC variances in proportions
+$90.9\%$, $6.5\%$, $2.3\%$, $0.3\%$ (cumulative $97.4\%$ with two, $99.7\%$ with three). PC1 has equal loadings
+($0.48$--$0.52$, the ``market''), PC2 contrasts QQQ ($+0.79$) with MDY and DIA.
+
+\textbf{PC regressions} \ts{24}{11}{44:48}: simple regressions of XLP on each PC have $R^2=0.545$, $0.006$ ($p=0.052$),
+$0.079$ and $0.012$. Their sum is $0.642$, the $R^2$ of the full regression, because the PCs are orthogonal
+(\cref{ch05:ex-r2orth}). The third component, with only 2.3\% of the regressor variance, explains 13 times more of
+XLP than the second: dropping it (PC123 would keep it, but a ``first two'' rule would not) changes the answer. Using PCs 1--3
+gives coefficients very different from OLS; using the PCs with $|t|>\sqrt2$ (all four here) reproduces OLS exactly
+\ts{24}{11}{51:03} \ts{24}{11}{52:04}.
+
+\textbf{Ridge and lasso} (\texttt{glmnet}, $\lambda$ by 10-fold cross-validation over $10^{-5}$--$10^{3}$)
+\ts{24}{11}{47:55}: coefficient traces shrink to zero, not monotonically for ridge; along the lasso path the third
+variable (QQQ) leaves first, then MDY, then DIA \ts{24}{11}{50:01}. With the CV-optimal $\lambda$ both fits are
+almost identical to OLS ($R^2=0.6417$ ridge, $0.6417$ lasso vs $0.6418$): with $n=612$ and 4 regressors there is little
+to regularise \ts{24}{11}{51:03}.
+
+\textbf{XLB version} (\file{ETF_Casestudy_XLB.pdf}, materials): $R^2=0.805$, loadings SPY $0.85$, MDY $0.50$, QQQ
+$-0.38$, DIA not significant ($t=0.43$); PC1 alone gives $R^2=0.73$. The week 2020-03-20 is now very influential (Cook's
+distance $0.99$), and all curvature tests are highly significant ($p<0.001$).
+
+\textbf{Remark on the code.} Cumulative returns are plotted as $\prod_t(1+r_t)$ although $r_t$ are log returns; the correct
+growth factor is $\exp(\sum_tr_t)$. The difference (about $-r_t^2/2$ per week) only affects the plots.
+\end{casestudy}
+
+\begin{finance}[Why regress a sector on the indices?]
+The fitted coefficients are a \emph{hedge}: holding XLP and shorting $1.007$ SPY, $-0.368$ MDY, \dots\ leaves (in
+sample) only the residual, i.e.\ the sector-specific part of the return, with most of the market risk removed
+\ts{24}{11}{40:39}. The same regression, run with a hedge fund's returns as the response and liquid instruments as
+regressors, is the basis of \emph{hedge-fund replication}: if most of a fund's return is explained by tradable factors,
+those can be bought cheaply \ts{24}{11}{41:39}. (Regressing an index on its sectors would instead give $R^2\approx1$, as
+noted by a student \ts{24}{11}{39:39}.)
+\end{finance}
+
+\subsection{CAPM regressions}\label{ch05:capm}
+The CAPM (Sharpe 1964, Lintner 1965; theory in \cref{ch:portfolio}) states that in an efficient market in which all
+investors hold mean--variance efficient portfolios and can borrow and lend at the risk-free rate $r_f$,
+\[
+  \E[R_j]=r_f+\beta_j\bigl(\E[R_M]-r_f\bigr),\qquad \beta_j=\frac{\Cov(R_j,R_M)}{\Var(R_M)},
+\]
+where $R_M$ is the return of the market portfolio \ts{24}{11}{54:12}. With excess returns $R^*_{j,t}=R_{j,t}-r_{f,t}$ and
+$R^*_{M,t}$ observed over time, fit
+\[
+  R^*_{j,t}=\alpha_j+\beta_jR^*_{M,t}+\varepsilon_{j,t},\qquad \varepsilon_{j,t}\ \text{white noise},
+\]
+the alpha--beta regression of \cref{def:alphabeta} \ts{24}{11}{55:18}. Taking expectations, the CAPM holds iff
+$\alpha_j=0$ \ts{24}{11}{56:27}. Two natural tests: $\alpha_j=0$ (is the asset efficiently priced?) and $\beta_j=1$ (does it carry
+more or less systematic risk than the market?) \ts{24}{11}{1:06:14}.
+
+\begin{casestudy}[CAPM and macro factors for GE and XOM, 2000--2013 (2013 Case Study 1)]
+\textbf{Data.} \file{fm_casestudy_1_0.r} downloads daily prices of BAC, GE, JDSU, XOM and the S\&P~500 (Yahoo) and from FRED
+the constant-maturity Treasury yields (3 months, 1, 5, 10 years), Moody's Aaa and Baa yields and the WTI oil price, for
+2000-01-03 to 2013-05-31 (3373 days). \file{fm_casestudy_1_rcode.r} computes daily log returns and the daily risk-free
+return $\log\bigl(1+r_{3M}\,\Delta t/360\bigr)$ with $\Delta t$ the number of calendar days since the previous close (money-market
+convention).
+
+\textbf{GE:} $\hat\alpha=-0.00013$ ($t=-0.56$), $\hat\beta=1.184$ ($t=66.6$), $R^2=0.568$: consistent with CAPM, with more market risk
+than average. Influence: 129 of 3372 days exceed the leverage threshold; the plot of hat values over time shows they are
+concentrated in the 2008 crisis, when market moves were extreme.
+
+\textbf{Adding oil} (daily log change of WTI): for GE the oil coefficient is $-0.034$ ($t=-3.6$): GE falls when oil rises. For
+XOM, simple CAPM $\hat\beta=0.830$, $R^2=0.451$ (lower than GE: an oil company tracks the market less); with oil,
+$\hat\beta=0.782$ and oil coefficient $+0.132$ ($t=16.1$), $R^2$ up to $0.491$. The high-leverage days are those with extreme
+market or oil moves, far from the centre of the $(R^*_M,\text{oil})$ scatter (the Mahalanobis interpretation of 2013
+PS3).
+
+\textbf{Lesson.} The market factor explains half of a large stock's daily variance; a second factor can be highly
+significant while adding little $R^2$.
+\end{casestudy}
+
+\begin{casestudy}[CAPM for GE and for the S\&P~500 stocks (2024 L11)]
+\textbf{GE 2017--2023} (\file{lec08}; excess return \texttt{Ra.RF} regressed on the market excess return
+\texttt{Mkt.RF} of the Fama--French data): see \cref{ch05:ex-gebeta} and the regime test of \cref{ch05:sec-chow}. The residuals
+are clearly non-normal \ts{24}{11}{1:00:53}; see the box on heavy tails in \cref{ch05:sec-mle}.
+
+\textbf{All S\&P~500 stocks} (note shown in class, not published) \ts{24}{11}{1:14:45}: the same regression for the
+380--400 constituents with a long enough history, grouped by sector. $R^2$ ranges over $(0,1)$, typically above $0.2$.
+Alphas vary by sector (positive for construction and computer technology, negative for conglomerates)
+\ts{24}{11}{1:15:47}, but the $p$-values of $\alpha_j=0$ are above $0.05$ for all but a handful of stocks, roughly the 5\%
+expected by chance: the CAPM is not rejected stock by stock \ts{24}{11}{1:16:47}. Higher betas tend to go with higher
+alphas \ts{24}{11}{1:17:53}. Betas are strongly sector-dependent: consumer staples lowest (the ten lowest betas, $0.37$
+down to $0.18$, are mostly staples), technology and consumer discretionary highest \ts{24}{11}{1:18:59}. The largest
+significant alpha, ENPH (energy), is $0.003$ per day, i.e.\ $(1.003)^{252}-1\approx113\%$ per year
+\ts{24}{11}{1:20:01} \ts{24}{11}{1:21:10}.
+
+\textbf{Next step.} Multi-factor models with the Fama--French factors, already downloaded with the data
+\ts{24}{11}{1:22:11} (\cref{ch:pca}).
+\end{casestudy}
+
+\begin{finance}[Using alpha and beta]
+Beta is the hedge ratio against the index and the measure of systematic risk that the CAPM says is rewarded;
+alpha is the part of the return not explained by market exposure (\cref{def:alphabeta}). In practice betas are estimated
+on rolling windows (\cref{ch05:sec-chow}) and often shrunk towards $1$, e.g.\ the widely quoted ``adjusted beta''
+$\frac23\hat\beta+\frac13$ (not discussed in class): the same bias--variance trade as ridge regression, with the prior
+centred at the market beta.
+\end{finance}
+
+% ------------------------------------------------------------------
+\section{Differences between the 2013 and 2024 lectures}
+\begin{coursenote}[2013 L6 vs 2024 L6, L8, L11]
+The core (OLS, hat matrix, Gauss--Markov, GLS, normal distribution theory, ML, M-estimators) is the same material in
+both years, with nearly identical slides. \textbf{2013} spends one lecture on it and adds the QR decomposition and
+the full proofs of the Gauss--Markov and distribution theorems \ts{13}{6}{1:08:26}; its case studies are the CAPM with
+oil (Case Study~1) and the yuan regimes (Case Study~2). \textbf{2024} spreads the topic over parts of three lectures and
+adds real-data diagnostics (prostate data), hypothesis testing and regime-change tests (\file{lec08}), ridge, PC and lasso
+regression, the ETF case study and the S\&P~500 CAPM study. The 2013 lecture ran out of time before M-estimation
+\ts{13}{6}{1:21:11}; it is covered in the notes and in 2024 L11.
+\end{coursenote}
+
+% ------------------------------------------------------------------
+\begin{keyformulas}
+\begin{align*}
+&\text{OLS:} && \hat{\bm\beta}=(X\T X)^{-1}X\T\bm y=R^{-1}Q\T\bm y,\\
+  &&& H=X(X\T X)^{-1}X\T=QQ\T,\quad \hat{\bm\varepsilon}=(I-H)\bm y\\
+&\text{Geometry:} && H^2=H=H\T,\ \tr H=p,\\
+  &&& X\T\hat{\bm\varepsilon}=\bm 0,\ \text{TSS}=\text{ESS}+\text{RSS},\ R^2=\Corr(\bm y,\hat{\bm y})^2\\
+&\text{Gauss--Markov:} && \E\hat{\bm\beta}=\bm\beta,\ \Cov\hat{\bm\beta}=\sigma^2(X\T X)^{-1};\\
+  &&& \bm c\T\hat{\bm\beta}\ \text{is BLUE}\\
+&\text{GLS:} && \hat{\bm\beta}_{\text{GLS}}=(X\T\Sigma^{-1}X)^{-1}X\T\Sigma^{-1}\bm y,\\
+  &&& \Cov=\sigma^2(X\T\Sigma^{-1}X)^{-1}\\
+&\text{Normal model:} && \hat{\bm\beta}\sim N_p(\bm\beta,\sigma^2(X\T X)^{-1})\\
+  &&& \perp\!\!\!\perp\text{RSS}\sim\sigma^2\chi^2_{n-p},\ \hat\sigma^2=\tfrac{\text{RSS}}{n-p}\\
+&t\text{ test:} && \hat t_j=(\hat\beta_j-b)/(\hat\sigma\sqrt{C_{jj}})\sim t_{n-p},\quad C_{jj}=[(X\T X)^{-1}]_{jj}\\
+&F\text{ test:} && F=\tfrac{(\text{RSS}_0-\text{RSS})/q}{\text{RSS}/(n-p)}\sim F_{q,n-p}\\
+&&& \text{RSS}_0-\text{RSS}=(A\hat{\bm\beta}-\bm b)\T[A(X\T X)^{-1}A\T]^{-1}(A\hat{\bm\beta}-\bm b)\\
+&\text{Chow test:} && F=\tfrac{(\text{RSS}_0-\text{RSS}_A-\text{RSS}_B)/p}{(\text{RSS}_A+\text{RSS}_B)/(n-2p)}\\
+  &&& \sim F_{p,n-2p}\\
+&\text{ML:} && \hat{\bm\beta}_{\text{ML}}=\hat{\bm\beta},\quad \hat\sigma^2_{\text{ML}}=\text{RSS}/n\\
+&\text{Diagnostics:} && \Var\hat\varepsilon_i=\sigma^2(1-H_{ii}),\ \ CD_i=\tfrac{r_i^2}{p}\tfrac{H_{ii}}{1-H_{ii}},\\
+  &&& \hat{\bm\beta}_{(i)}=\hat{\bm\beta}-\tfrac{(X\T X)^{-1}\bm x_i\hat\varepsilon_i}{1-H_{ii}}\\
+&\text{Shrinkage:} && \hat{\bm y}^{\text{ridge}}=\textstyle\sum_j\frac{d_j^2}{d_j^2+\lambda}c_j\bm u_j,\\
+  &&& \hat{\bm y}^{\text{pc}}=\sum_{j\le m}c_j\bm u_j,\\
+  &&& \lambda=\sigma^2/\tau^2\ \text{(Bayes)}\\
+&\text{CAPM:} && R^*_{j,t}=\alpha_j+\beta_jR^*_{M,t}+\varepsilon_{j,t},\quad H_0:\alpha_j=0
+\end{align*}
+\end{keyformulas}
+
+% ------------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\subsection*{From 2013 Problem Set 3}
+Throughout, $\bm y=X\bm\beta+\bm\varepsilon$ with $X\in\R^{n\times p}$ of full rank $p\le n$, $\hat{\bm\beta}=(X\T X)^{-1}X\T\bm y$, $H=X(X\T X)^{-1}X\T$,
+$\hat{\bm\varepsilon}=(I_n-H)\bm y$.
+
+\begin{exercise}[PS3 (2013), Problem 1(a)--(c): the hat matrix]\label{ch05:ex-ps3-1ac}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Prove that $H$ is a projection matrix: $H\T=H$ and $H^2=H$.
+  \item The diagonal element $H_{ii}$ is the \emph{leverage} of case $i$. Show that $\partial\hat y_i/\partial y_i=H_{ii}$.
+  \item Show that the average of the $H_{ii}$ is $p/n$. \emph{Hint:} $\tr(AB)=\tr(BA)$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS3 (2013), Problem 1(d)--(e): invariance and leverage]\label{ch05:ex-ps3-1de}
+(d) Prove that $H$ is unchanged if $X$ is replaced by $X'=XG$ for any invertible $p\times p$ matrix $G$.
+(e) Let $X$ be $n\times(p+1)$ with a first column of ones and $p$ covariates, and let $G$ be the identity except for the first
+row, which is $(1,-\bar x_1,\dots,-\bar x_p)$, with $\bar x_j=\frac1n\sum_ix_{i,j}$. By (d) the models with $X$ and $X'=XG$ have the
+same fitted values and residuals.
+\begin{itemize}
+  \item If $\bm\beta=(\beta_0,\dots,\beta_p)\T$ is the parameter for $X$, show that $\bm\beta'=G^{-1}\bm\beta$ is the parameter for $X'$; find
+        $G^{-1}$ and the elements of $\bm\beta'$ explicitly.
+  \item Show that $X'^{\mathsf T}X'=\bigl(\begin{smallmatrix}n&\bm 0_p\T\\ \bm 0_p&\mathcal X\T\mathcal X\end{smallmatrix}\bigr)$, where $\mathcal X$ has entries $x_{i,j}-\bar x_j$.
+  \item Prove $H_{ij}=\frac1n+(\bm x_i-\bar{\bm x})\T[\mathcal X\T\mathcal X]^{-1}(\bm x_j-\bar{\bm x})$, where $\bm x_i=(x_{i,1},\dots,x_{i,p})\T$. Hence the
+        leverage $H_{ii}$ increases with the (squared) Mahalanobis distance between $\bm x_i$ and $\bar{\bm x}$.
+\end{itemize}
+\end{exercise}
+
+\begin{exercise}[PS3 (2013), Problem 2(a): Sherman--Morrison--Woodbury]\label{ch05:ex-ps3-2a}
+Let $A$ be a $p\times p$ symmetric matrix of rank $p$ and $a,b$ two $q\times p$ matrices of rank $q<p$. Prove that, whenever the
+inverses exist,
+\[
+  (A+a\T b)^{-1}=A^{-1}-A^{-1}a\T\bigl(I_q+bA^{-1}a\T\bigr)^{-1}bA^{-1}.
+\]
+\end{exercise}
+
+\begin{exercise}[PS3 (2013), Problem 2(b)--(d): case-deletion influence]\label{ch05:ex-ps3-2bd}
+(b) Using Sherman--Morrison--Woodbury, show that the least-squares estimate with case $i$ deleted is
+$\hat{\bm\beta}_{(i)}=\hat{\bm\beta}-(X\T X)^{-1}\bm x_i\hat\varepsilon_i/(1-H_{ii})$, where $\bm x_i\T$ is the $i$-th row of $X$ and $\hat\varepsilon_i=y_i-\bm x_i\T\hat{\bm\beta}$.
+(c) Cook's distance is $CD_i=\|\hat{\bm y}-\hat{\bm y}_{(i)}\|^2/(p\hat\sigma^2)$ with $\hat{\bm y}_{(i)}=X\hat{\bm\beta}_{(i)}$. Show that
+$CD_i=\dfrac{\hat\varepsilon_i^2}{p\hat\sigma^2}\cdot\dfrac{H_{ii}}{(1-H_{ii})^2}$.
+(d) Let $\hat\sigma^2_{(i)}$ be the unbiased estimate of $\sigma^2$ with case $i$ deleted. Show that
+$\hat\sigma^2_{(i)}=\hat\sigma^2+\frac{1}{n-p-1}\bigl(\hat\sigma^2-\frac{\hat\varepsilon_i^2}{1-H_{ii}}\bigr)$.
+\end{exercise}
+
+\begin{exercise}[PS3 (2013), Problem 3(a)--(b): constrained least squares via QR]\label{ch05:ex-ps3-3ab}
+Consider $H_0:\beta_{k+1}=\dots=\beta_p=0$. Let $X_I=[X_{[1]}\cdots X_{[k]}]$, $\hat{\bm\beta}_I=(X_I\T X_I)^{-1}X_I\T\bm y$ and
+$\hat{\bm\beta}_0=(\hat{\bm\beta}_I,\bm 0_{p-k})$.
+\begin{enumerate}[(a)]
+  \item Show that $\hat{\bm\beta}_0$ minimises $(\bm y-X\bm\beta)\T(\bm y-X\bm\beta)$ subject to $\beta_j=0$ for $j>k$.
+  \item With $X=QR$, show that $X_I=Q_IR_I$ where $Q_I$ is the first $k$ columns of $Q$ and $R_I$ the upper-left $k\times k$ block of $R$;
+      verify $\hat{\bm\beta}_I=R_I^{-1}Q_I\T\bm y$ and $\hat{\bm y}_I=H_I\bm y$ with $H_I=Q_IQ_I\T$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS3 (2013), Problem 3(c)--(d): sequential ANOVA]\label{ch05:ex-ps3-3cd}
+Let $A=\bigl(\begin{smallmatrix}Q\T\\ W\T\end{smallmatrix}\bigr)$ be orthogonal as in the proof of \cref{ch05:thm-normal} and $\bm z=A\bm y=(z_1,\dots,z_n)\T$.
+(c) Prove that $\bm y\T\bm y=\sum_{i=1}^nz_i^2$, $\hat{\bm y}\T\hat{\bm y}=\sum_{i=1}^pz_i^2$, $\hat{\bm\varepsilon}\T\hat{\bm\varepsilon}=\sum_{i=p+1}^nz_i^2$, and for the constrained model
+$\hat{\bm y}_I\T\hat{\bm y}_I=\sum_{i=1}^kz_i^2$, $\hat{\bm\varepsilon}_I\T\hat{\bm\varepsilon}_I=\sum_{i=k+1}^nz_i^2$.
+(d) Using $\bm z_Q\sim N_p(R\bm\beta,\sigma^2I_p)$ independent of $\bm z_W\sim N_{n-p}(\bm 0,\sigma^2I_{n-p})$, deduce that
+$SS_{\text{ERROR}}=\hat{\bm\varepsilon}\T\hat{\bm\varepsilon}\sim\sigma^2\chi^2_{n-p}$; that under $H_0$
+$SS_{\text{REG}(k+1,\dots,p\mid1,\dots,k)}=\hat{\bm y}\T\hat{\bm y}-\hat{\bm y}_I\T\hat{\bm y}_I=\sum_{i=k+1}^pz_i^2\sim\sigma^2\chi^2_{p-k}$, independent of
+$SS_{\text{ERROR}}$; and that $\hat F=\dfrac{SS_{\text{REG}}/(p-k)}{SS_{\text{ERROR}}/(n-p)}\sim F_{p-k,\,n-p}$. Arrange the results in the ANOVA
+table with rows ``regression on $1,\dots,k$'' ($\hat{\bm y}_I\T\hat{\bm y}_I$, $k$ d.f.), ``regression on $k+1,\dots,p$ adjusting for
+$1,\dots,k$'' ($p-k$ d.f., mean square $MS_0$, $\hat F=MS_0/MS_{\text{Error}}$), ``error'' ($n-p$ d.f.) and ``total'' ($\bm y\T\bm y$,
+$n$ d.f.).
+\end{exercise}
+
+\subsection*{Additional exercises}
+
+\begin{exercise}[not from the course: $t^2=F$ on real numbers]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item From \cref{ch05:prop-wald}, show directly that for $H_0:\beta_j=b$ the $F$ statistic equals $\hat t^{\,2}$.
+  \item Using only the
+      GE output of \cref{ch05:ex-gebeta} (estimate, standard error, $n-p=1674$, RSS $=0.71819$), reproduce the RSS $0.72003$ of the
+      model constrained by $\beta=1$ printed by \texttt{linearHypothesis}.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: $R^2$ with orthogonal regressors]\label{ch05:ex-r2orth}
+Let $\bm z_1,\dots,\bm z_m$ be centred and mutually orthogonal, and regress $\bm y$ on $\bm 1,\bm z_1,\dots,\bm z_m$.
+\begin{enumerate}[(a)]
+  \item Show that the multiple
+      $R^2$ equals the sum of the $R^2$'s of the $m$ simple regressions of $\bm y$ on $\bm 1,\bm z_j$, and that each slope is the same in the
+      simple and in the multiple regression.
+  \item Check this on the ETF numbers ($0.545+0.006+0.079+0.012$ vs $0.642$) and
+      explain why the order of the principal components by variance says nothing about their $R^2$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: the Chow test]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Show that the residual sum of squares of the block-diagonal design $\bigl(\begin{smallmatrix}X_A&0\\0&X_B\end{smallmatrix}\bigr)$ is
+      $\text{RSS}_A+\text{RSS}_B$.
+  \item Show that $\bigl(\begin{smallmatrix}X_A&0\\X_B&X_B\end{smallmatrix}\bigr)$ has the same column space, and relate the two
+      parameter vectors.
+  \item For GE, compute $\hat\alpha_B$, $\hat\beta_B$ and the $F$ statistic from the numbers in the case study of
+      \cref{ch05:sec-chow}. Why can you not obtain the standard error of $\hat\beta_B$ from that table alone?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: quantile regression as maximum likelihood]
+Show that minimising $\sum_i\rho_\tau(y_i-\bm x_i\T\bm\beta)$ is maximum likelihood for errors with the \emph{asymmetric Laplace} density
+$f(u)=\frac{\tau(1-\tau)}{s}\exp\bigl(-\rho_\tau(u)/s\bigr)$, and check that $f$ is a density whose $\tau$-quantile is $0$. Which estimator of
+\cref{ch05:def-mest} is ML for Laplace errors?
+\end{exercise}
+
+\begin{exercise}[not from the course: ridge as augmented least squares]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Show that $\hat{\bm\beta}^{\text{ridge}}$ is the OLS estimate for the augmented data $\tilde{\bm y}=(\bm y,\bm 0_p)$,
+      $\tilde X=\bigl(\begin{smallmatrix}X\\ \sqrt\lambda I_p\end{smallmatrix}\bigr)$.
+  \item Using the SVD, show that $\|\hat{\bm\beta}^{\text{ridge}}\|$ decreases in $\lambda$ and compute
+      $\Cov(\hat{\bm\beta}^{\text{ridge}})$ under Gauss--Markov.
+  \item Show that ridge has smaller variance than OLS in every direction:
+      $\Cov(\hat{\bm\beta})-\Cov(\hat{\bm\beta}^{\text{ridge}})\succeq0$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: optimal design of a line fit]
+For $y=\beta_0+\beta_1x+\varepsilon$ under Gauss--Markov with $n$ even and $x_i\in[-1,1]$ at your choice:
+\begin{enumerate}[(a)]
+  \item derive
+      $\hat\beta_1=S_{xy}/S_{xx}$ and $\Var(\hat\beta_1)=\sigma^2/S_{xx}$ with $S_{xx}=\sum_i(x_i-\bar x)^2$;
+  \item find the design minimising
+      $\Var(\hat\beta_1)$ and compute the leverages $H_{ii}$ for it;
+  \item explain why this design cannot detect curvature, and how the
+      curvature test of \texttt{residualPlots()} would behave.
+\end{enumerate}
+\end{exercise}

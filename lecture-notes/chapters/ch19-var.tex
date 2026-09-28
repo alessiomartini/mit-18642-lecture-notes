@@ -1,0 +1,519 @@
+% !TEX root = ../main.tex
+\chapter{Value at Risk Models}\label{ch:var}
+
+\begin{sources}
+\small
+\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+\textbf{Lecture} & \textbf{Speaker} & \textbf{Content}\\
+\midrule
+2013 L7 & K.~Abbott (Morgan Stanley, Firm Risk Management) & What a risk-management group is for; one-asset VaR as a $1\%$ order statistic; returns instead of levels; the normal multipliers $2.33$ and $1.645$; fat tails; fixed-income positions through the PV01; covariance and correlation, portfolio VaR as $\bm x\T\Sigma\bm x$ (variance--covariance method); data and weighting choices; Monte Carlo VaR through the eigen-decomposition of the covariance matrix (the ``Gaussian copula''). Historical simulation, marginal VaR and back-testing are on the slides only: Abbott announced that he would skip historical simulation.\\
+\bottomrule
+\end{tabularx}
+
+\smallskip
+\textbf{Files.} Slides \file{MIT18_S096F13_lecnote7.pdf} (115 pages, about 100 distinct slides).
+\textbf{Problem sets.} None. Abbott mentions a homework on plotting distributions that he usually sets before this lecture; it is not among the course files. (The $t$ distribution that a student asks about \ts{13}{7}{26:29} belongs to \cref{ch:volatility}, where the 2013 problem set on volatility is treated.)
+\textbf{Overlap with other chapters.} Coherent risk measures, VaR and expected shortfall, the normal formulas, the square-root-of-time rule, the estimation of VaR by historical simulation and back-testing with the binomial test are in \cref{ch08:sec-riskmeasures} (from the 2024 lecture); VaR with GARCH and $t$ innovations and the estimation of volatility are in \cref{ch13:sec-var,ch:volatility}. This chapter does not repeat them; it treats what the 2013 lecture adds: the \emph{three methodologies} (variance--covariance, historical simulation, Monte Carlo) side by side, the practitioner's choices behind each, decompositions of VaR by position, non-linear positions, and the practice of back-testing and stress testing. Sections or paragraphs marked ``(not discussed in class)'' are our additions.
+\end{sources}
+
+\section*{Motivation}
+A trading firm holds thousands of positions and must be able to answer, every morning and in a few numbers, ``how much can we lose tomorrow?'' Ken Abbott, who helped set up the risk group of a large bank in the mid-1980s and later became the operating officer of firm risk management at Morgan Stanley, describes the job of risk management as making sure that management knows the risk profile of the firm, protecting it from unacceptable concentrations of risk, and ensuring ``no surprises'' \ts{13}{7}{2:05}. He uses two analogies: a \emph{spotlight}, which points at any risk one wants to look at, and a \emph{colouring book}, in which one then decides whether what is lit is good, bad, too big or too small \ts{13}{7}{5:22}. The second half of the job is communication: the chairman is often not a quant, so a complex idea has to be told in plain prose and simple pictures \ts{13}{7}{3:11}.
+
+Value at risk (VaR) is the number that came out of this need. The methods are elementary statistics dressed in linear algebra:
+\begin{itemize}
+  \item a VaR is an \emph{order statistic} of the distribution of tomorrow's profit and loss (\cref{ch19:sec-one});
+  \item positions in bonds are mapped to yield sensitivities before they enter (\cref{ch19:sec-fi});
+  \item under normality the portfolio VaR is $z\sqrt{\bm x\T\Sigma\bm x}$, the \emph{variance--covariance} method (\cref{ch19:sec-vc});
+  \item the same order statistic can be read off historical data (\emph{historical simulation}, \cref{ch19:sec-hs}) or off simulated data drawn with the covariance structure of the past (\emph{Monte Carlo}, \cref{ch19:sec-mc});
+  \item all three approximate the P\&L of non-linear positions (\cref{ch19:sec-nl}), and all three are checked against realised P\&L by \emph{back-testing} and completed by stress tests (\cref{ch19:sec-bt}).
+\end{itemize}
+The physicist will recognise most of the mathematics: a quadratic form in a covariance matrix, a diagonalisation, a random-number generator. What is new is the vocabulary and the long list of practical choices, each of which changes the number. Abbott's recurring warning is that whenever a modelling assumption moves the answer materially, ``sirens should go off'' \ts{13}{7}{57:48}.
+
+% ==================================================================
+\section{One asset: VaR as an order statistic}\label{ch19:sec-one}
+Throughout, VaR is measured on the \emph{loss} $L=-\Delta P$ over a horizon that in this lecture is one day, as in \cref{ch08:def-vares}: for a level $\beta$ (typically $99\%$ or $95\%$), $\mathrm{VaR}_\beta$ is the loss that is exceeded with probability $1-\beta$.
+Abbott states it in words: the worst $1\%$ of the possible outcomes \ts{13}{7}{9:34}. The object is an \emph{order statistic}, ``the maximum or the minimum of a set of observations'' in the words of the professor \ts{13}{7}{8:29}, here an intermediate one: the value below which a fraction $1-\beta$ of the ordered outcomes lies. Order statistics have a large literature, so once VaR is recognised as one, its distribution and its estimation error are known \ts{13}{7}{9:34}, as \cref{ch19:sec-hs} will use.
+
+\subsection{Returns, not levels}
+The starting point is a time series of prices, say the Mexican IPC stock index over 1995--96 (slide~7). Prices are close to a random walk (\cref{ch:sp1}): the best forecast of tomorrow's level is today's level, the series is not stationary, and a histogram of \emph{levels} is a meaningless multimodal blob that depends on where the walk happened to wander \ts{13}{7}{12:48}\ts{13}{7}{16:00}. The histogram of one-day \emph{returns} (percentage changes, log changes or, in some markets, absolute changes) is unimodal and roughly symmetric, with the familiar bell shape (slides 8--9) \ts{13}{7}{16:00}. This is the whole reason for working with returns: they are the increments of the walk, approximately stationary with a mean and a variance that do not drift, and it is for them that a distributional assumption can be made. It is the same step from a Brownian motion to its increments that the physicist takes when computing a diffusion coefficient.
+
+\begin{proposition}[One-asset variance method]\label{ch19:prop-one}
+Let a position of value $V$ have a one-day return $r\sim N(0,\sigma^2)$. Then for $\beta\in(0,1)$
+\[
+  \mathrm{VaR}_\beta=z_\beta\,\sigma\,V,\qquad z_\beta=\Phi^{-1}(\beta),
+\]
+with $z_{0.99}=2.326$ and $z_{0.95}=1.645$. The recipe is: collect prices, compute returns, estimate the variance $\hat\sigma^2=\frac1{n-1}\sum_i(r_i-\bar r)^2$, take the square root, multiply by $z_\beta V$ (slide~14) \ts{13}{7}{30:40}.
+\end{proposition}
+\begin{proof}
+$L=-Vr\sim N(0,\sigma^2V^2)$ and $\Prob(L\le z_\beta\sigma V)=\Phi(z_\beta)=\beta$. This is \cref{ch08:prop-normal} with $\mu=0$; the mean is dropped because for a one-day horizon it is small against $\sigma$.
+\end{proof}
+The multipliers are \emph{one-sided}: the $99\%$ VaR leaves $1\%$ in a single tail, hence $2.33$ and not the $1.96$ of a two-sided $95\%$ confidence interval, which leaves $2.5\%$ in each tail \ts{13}{7}{10:38}\ts{13}{7}{21:16}. A student asks about short positions; in this model the answer is that the same number serves for a long or a short position because the density is symmetric, but ``getting your signs right'' is one of Abbott's recurrent themes \ts{13}{7}{24:21}. He also uses the normal quantile as a heuristic on real, skewed data: ``what is a two or three standard-deviation move?'' means something to a manager even when the empirical distribution is lopsided \ts{13}{7}{24:21}.
+
+\begin{example}[Mexican IPC, slides 12--13]\label{ch19:ex-ipc}
+The variance of the daily IPC returns from January 1995 to December 1996 is $0.000324$, so $\hat\sigma=0.018012=1.8012\%$. Then $2.33\times1.8012\%=4.1968\%$ (with $z_{0.99}=2.3263$ one gets $4.190\%$): on a position of MXP~$100$ the loss exceeds MXP~$4.2$ only about $1\%$ of the days \ts{13}{7}{22:18}\ts{13}{7}{23:19}.
+In fact the IPC lost more than $4.2\%$ on $8$ days of the sample, ``about $1.5\%$'' of the days, which Abbott reads as a sign of fat tails: large moves are more likely than the normal law implies \ts{13}{7}{26:29}\ts{13}{7}{27:32}.
+\end{example}
+\begin{remark}[Eight exceptions are not evidence of fat tails; our computation]\label{ch19:rem-eight}
+The sample has about $520$ daily returns (the $8$ exceedances are $1.5\%$ of about $530$). If the normal VaR were exactly right, the number of exceedances would be $\mathrm{Bin}(520,0.01)$ with mean $5.2$ and standard deviation $2.3$, and $\Prob(N\ge8)=15\%$. The likelihood-ratio test of \cref{ch19:sec-bt} gives $p=0.25$. The data are compatible with the normal model at the $99\%$ level: eight exceedances against five are noise. The heavy tails of index returns are real (they are visible in the higher-frequency data of \cref{ch:volatility}), but this count does not show it, which is a small lesson in the very point Abbott stresses next.
+\end{remark}
+
+\subsection{Everything is estimated with error}
+``Every time you estimate something you estimate it with error'' \ts{13}{7}{17:01}: the \emph{risk is $10$} means it is neither $10\,000$ nor $0$ \ts{13}{7}{18:03}. The sample variance follows a chi-squared law: for i.i.d.\ normal returns $(n-1)\hat\sigma^2/\sigma^2\sim\chi^2_{n-1}$ \ts{13}{7}{19:07} (\cref{ch03:sec-chisq}). Hence it cannot be negative, has a long right tail, and by \cref{ch13:sec-sample} the relative standard error of $\hat\sigma$ is $1/\sqrt{2(n-1)}$: $3.1\%$ for the $520$ observations above, $4.5\%$ for one year of data ($n=252$). The VaR multiplies $\hat\sigma$, so it inherits this error before any model error. Abbott distinguishes the \emph{standard deviation} of a data set from the \emph{standard error} of an estimate \ts{13}{7}{20:10}. The empirical quantile has a larger error still (\cref{ch19:prop-quantile}).
+
+\begin{coursenote}[Spoken claim on the frequency of large moves]\label{ch19:cn-sigma}
+Warning against extrapolating the normal law, Abbott says that a three-standard-deviation move occurs ``once every $10\,000$ observations'' \ts{13}{7}{25:25}. For a normal variable $\Prob(|Z|>3)=0.27\%$, i.e.\ one day in $370$ (one in $741$ for one tail), while $\Prob(|Z|>4)=6.3\times10^{-5}$ is one in $15\,800$ (one in $31\,600$ for one tail). The figure quoted lies between the two, and is presumably meant for four standard deviations or for a mixture of both. The remark about eight standard deviations is right in substance: $\Prob(|Z|>8)=1.2\times10^{-15}$, one day in $8\times10^{14}$, about $3\times10^{12}$ years of daily data. Under a normal model such a move ``does not happen'', so when it happens it is the model that has failed, not the market that was unlucky.
+\end{coursenote}
+
+\begin{finance}[Clean your data]\label{ch19:fin-data}
+``Step 2b: graph your data'' \ts{13}{7}{29:37}. Everybody's data contain errors, missing values, stale quotes, and Abbott's rule is that one may be fired for incompetence but not for using someone else's bad data. Sources named on the slides are the Federal Reserve (the H.15 series for yields and H.10 for exchange rates, free and going back decades), Bloomberg (the cleanest in his experience, precisely because every user reports errors) and commercial vendors (slide~46) \ts{13}{7}{51:31}\ts{13}{7}{52:37}. The same applies to software: he tells the story of a programmer who claimed that a matrix square root multiplied by itself reproduced the covariance matrix ``to $16$ decimals'', when the code was in fact passing a float to a fixed-point variable \ts{13}{7}{43:13}. The other 2013 case studies (\cref{ch:regression,ch:timeseries}) do the same first step in R.
+\end{finance}
+
+% ==================================================================
+\section{Bonds: from yield changes to price changes}\label{ch19:sec-fi}
+Equities, currencies and commodities are quoted in prices, and the previous section applies directly. The time series available for bonds are \emph{yields} (slide~16) \ts{13}{7}{31:42}. To turn a yield move into a money move one needs the slope of the price--yield curve at the current yield: a ``poor man's Jacobian'', in Abbott's words, valid for small moves because the curve is non-linear and one uses its tangent \ts{13}{7}{31:42}\ts{13}{7}{32:44}.
+
+\begin{definition}[PV01 (DV01, PVBP)]
+The \emph{PV01} of a position is the change of its value for a rise of the yield by one basis point ($1\,\mathrm{bp}=0.01\%$). Its sign is negative for a long bond. For a bond of price $P$ and modified duration $D$ (\cref{prop:duration}), $\mathrm{PV01}\approx-D\,P\times10^{-4}$.
+\end{definition}
+If $\sigma_{\mathrm{bp}}$ denotes the standard deviation of the daily yield change in basis points, the P\&L of the position is $\approx\mathrm{PV01}\cdot\Delta y_{\mathrm{bp}}$ and the variance method of \cref{ch19:prop-one} gives
+\begin{equation}\label{ch19:eq-fi}
+  \mathrm{VaR}_\beta=z_\beta\,\bigl|\mathrm{PV01}\bigr|\,\sigma_{\mathrm{bp}} .
+\end{equation}
+Abbott's slides express the yield volatility as the volatility $\sigma_y$ of the \emph{relative} changes $\Delta y/y$ (which is the ``percentage change'' of a yield): then $\sigma_{\mathrm{bp}}=100\,y_{\%}\,\sigma_y$ with $y_\%$ the yield in percent. Slide~17 writes this as position $\times$ PV01 $\times$ close $\times\ \sigma_{\mathrm{yield}}\times2.33\times100$ \ts{13}{7}{33:48}. For equities, currencies and commodities the analogue is position $\times\ \sigma_{\mathrm{price}}\times2.33$.
+
+\begin{example}[USD 100 of a 10-year Treasury, slides 18--22]\label{ch19:ex-ust}
+The bond has coupon $4.644\%$ (semi-annual), ten years to maturity and yield equal to the coupon, so that its price is $100$ (slide~21). Repricing at $4.654\%$ gives $99.920765$, hence $\mathrm{PV01}=-0.07923$ per $100$ (slide~19; our recomputation gives $-0.079235$). The volatility of the relative changes of the yield is $1.312\%$ per day. The daily yield volatility is therefore $4.644\times100\times0.01312=6.09\,\mathrm{bp}$, and
+\[
+  \mathrm{VaR}_{99\%}=2.33\times0.07923\times6.093=1.1248\ \text{per }100\text{ of face value}
+\]
+(slide~22: $1.12479$). The $99\%$ one-day loss is thus $1.12\%$ of the position: a daily yield volatility of $6.1$~bp times a duration of $7.9$ years is $0.48\%$ of price, and $2.33\times0.48\%=1.12\%$.
+\end{example}
+
+\begin{coursenote}[Erratum: slides 18--22, the ten-year example]\label{ch19:cn-slide22}
+\begin{itemize}
+  \item Slide~22 writes $\mathrm{VaR}=-.07923\times0.04644\times.01312\times2.33\times100=1.12479$. With the yield entered as $0.04644$ the product is $0.011248$, not $1.12479$: the factor $100$ that converts percent points of yield to basis points has to be $10^4$ if the yield is a fraction, or the ``close'' has to be entered in percent ($4.644$), as the value $1.12479$ shows and as slide~17 requires.
+  \item Slide~21 says that yield and coupon should be divided by $100$ and writes ``$4.644\%=.0644$''; it should read $.04644$.
+  \item The volatility on slide~18 is for the period ``since $1/1/03$'' and the DV01 is computed ``at the $12/31/96$ yield'', while the Excel extract of slide~21 uses the date $12/27/2006$: the dates are inconsistent (presumably $1/1/03$ to $12/27/06$, and $12/31/06$).
+  \item The cell labelled ``Duration @ Yield=Coupon'' (slide~21) is $7.9273$; that is the \emph{modified} duration, which is what the spreadsheet function returns. The Macaulay duration of this bond is $8.111$ years, and $8.111/(1+0.04644/2)=7.927$. The definition on slide~20 (``weighted average time to cash flows'') is that of the Macaulay duration.
+\end{itemize}
+\end{coursenote}
+
+\begin{finance}[PV01, duration and units]\label{ch19:fin-pv01}
+Duration is the (present-value weighted) average time of the cash flows, measured in years; the PV01 is a money amount per basis point per unit of face value. A duration of $7.9$ years means a PV01 of about $\$790$ per $\$1$~million of face value, ``roughly the same digits but different units'' \ts{13}{7}{33:48}\ts{13}{7}{34:51}. Bond traders think in PV01, insurance companies and portfolio managers who must match long-dated liabilities think in duration \ts{13}{7}{34:51}. ``Be careful of the units: this is one of the easiest errors to make'' (slide~20) is the most repeated sentence of the lecture. The market quotes yields, so risk is quoted per basis point: nobody computes $(702-701)/702$ in his head \ts{13}{7}{34:51}. See \cref{sec:duration} and, for delta ladders by maturity bucket, \cref{ch06:sec-risk}.
+\end{finance}
+
+\paragraph{Credit spread.} For a corporate or asset-backed bond the yield is a risk-free rate plus a credit spread (slide~24: $6\%=4.5\%+1.5\%$ in Abbott's example). One separates the interest-rate PV01 from the spread PV01 (CSPV01) and treats the two as different risk factors with their own volatilities and correlations; slide~23 states that the two coincide when the recovery rate is zero and are otherwise different, and lists calculated spreads, CDS and asset-swap spreads as sources \ts{13}{7}{36:52}\ts{13}{7}{37:56}. At spreads of $1\,000$--$1\,500$ bp the spread is mainly a default probability, and models of default, loss given default and recovery take over from the smooth sensitivity used here.
+
+% ==================================================================
+\section{The variance--covariance method}\label{ch19:sec-vc}
+\subsection{Covariance, correlation and the quadratic form}
+For two assets with returns $a,b$ the sample covariance is $\hat\sigma_{ab}=\frac1{n-1}\sum_i(a_i-\bar a)(b_i-\bar b)$ (slide~25) and the correlation is $\hat\rho_{ab}=\hat\sigma_{ab}/(\hat\sigma_a\hat\sigma_b)$. Covariance says by how much and in which direction $b$ moves when $a$ moves away from its mean; it is not unit-free (measure the fertiliser in tons or in ounces and it changes), whereas correlation is a pure number in $[-1,1]$, ``an index of linearity'' \ts{13}{7}{39:01}. If the covariances are known the correlations follow; the converse needs the variances too: $\Sigma=D\,R\,D$ with $D=\diag(\sigma_1,\dots,\sigma_n)$ and $R$ the correlation matrix \ts{13}{7}{41:07}. Both matrices are symmetric; $\Sigma$ has the variances on the diagonal (the covariance of a variable with itself) and $R$ has ones. Abbott convinces himself of $\Var(a+b)=\Var a+\Var b+2\Cov(a,b)$ on a spreadsheet: for the numbers of slide~27, $0.333059+0.469281+2\times0.349660=1.501660$, equal to the variance of $a+b$ computed directly \ts{13}{7}{42:10}. (This is an algebraic identity of the sample covariance, as $\mathrm{Cov}$ is bilinear, so the check tests the spreadsheet rather than the statistics, which is the point of checking.)
+
+\subsection{Portfolio VaR}
+With several assets one writes the variance of a combination with $x$ units of $a$ and $y$ units of $b$ as $x^2\Var a+y^2\Var b+2xy\Cov(a,b)$ and so on for three, four, $n$ assets (slides 31--32), a pattern that becomes unmanageable ``very fast'' unless one uses matrices \ts{13}{7}{45:18}\ts{13}{7}{46:22}. Sum all the entries of the covariance matrix and one gets the variance of the portfolio holding one unit of each asset (slides 35--36); the general statement is \cref{ch03:prop-portvar}.
+
+\begin{proposition}[Variance--covariance (delta-normal) VaR]\label{ch19:prop-vc}
+Let $\bm x\in\R^n$ be the \emph{position vector}, $x_i$ being the P\&L of the portfolio per unit return of risk factor $i$ (in money units; for a bond it is the PV01 and the factor is the yield change in basis points), and let the vector of one-day factor changes $\bm r$ be $N(\bm 0,\Sigma)$. Then $\Delta P=\bm x\T\bm r\sim N(0,\sigma_P^2)$ with
+\[
+  \sigma_P^2=\bm x\T\Sigma\bm x=\sum_{i,j}x_ix_j\Sigma_{ij},\qquad
+  \mathrm{VaR}_\beta=z_\beta\sqrt{\bm x\T\Sigma\bm x}\ \ts{13}{7}{47:22}.
+\]
+Consequently $\mathrm{VaR}_\beta\le z_\beta\sum_i|x_i|\sqrt{\Sigma_{ii}}$, the sum of the stand-alone VaRs, with equality iff the P\&L contributions $x_ir_i$ are pairwise perfectly positively correlated.
+\end{proposition}
+\begin{proof}
+A linear combination of jointly normal variables is normal with variance $\bm x\T\Sigma\bm x$ (\cref{ch03:prop-portvar,ch03:prop-mvn}); the level follows as in \cref{ch19:prop-one}. The bound is the Cauchy--Schwarz inequality, $|\Sigma_{ij}|\le\sqrt{\Sigma_{ii}\Sigma_{jj}}$, applied to each term: $\bm x\T\Sigma\bm x\le\bigl(\sum_i|x_i|\sqrt{\Sigma_{ii}}\bigr)^2$.
+\end{proof}
+Written with the correlation matrix, $\sigma_P^2=\bm y\T R\bm y$ with $y_i=x_i\sigma_i$ the stand-alone one-standard-deviation P\&L of factor $i$: the standard deviations add in quadrature, corrected by the correlations. The physicist's reading: $\sigma_P$ is the length of $\bm x$ in the metric $\Sigma$; uncorrelated risks add like independent errors, perfectly correlated risks add like lengths, and negative correlations cancel.
+
+\begin{example}[Three currencies, slides 35--42]\label{ch19:ex-fx}
+Take positions of $-100$ in CAD, $-50$ in CHF and $-25$ in DEM (USD amounts, written in parentheses on slide~39; on the sign convention see the box below) and the covariance matrix of the daily changes
+\[
+  \Sigma=\begin{pmatrix}
+    0.000037&-0.000018&-0.000017\\-0.000018&0.000321&0.000257\\-0.000017&0.000257&0.000227
+  \end{pmatrix}.
+\]
+The daily volatilities are $0.61\%$, $1.79\%$ and $1.51\%$, and the correlations $\rho_{\mathrm{CAD,CHF}}=-0.17$, $\rho_{\mathrm{CAD,DEM}}=-0.19$, $\rho_{\mathrm{CHF,DEM}}=0.95$ (our computation; unsurprisingly the two European currencies move together). Then
+\[
+  \bm x\T\Sigma\bm x=1.691875,\qquad\sigma_P=1.3007,\qquad2.33\,\sigma_P=3.0307
+\]
+(slide~40; $2.3263\,\sigma_P=3.026$ with the exact quantile). The stand-alone VaRs are $1.417$, $2.087$ and $0.878$, adding to $4.382$: the diversification benefit is $1.35$, a third of the sum. Almost none of it comes from the imperfect correlation of CHF and DEM (with $\rho=0.95$ and positions of the same sign their two stand-alone VaRs add to $2.97$ against $2.94$ together, a benefit of $0.03$); the remaining $1.32$ comes from the negative correlation of CAD with both.
+\end{example}
+
+\begin{finance}[Signs, units and the position vector]\label{ch19:fin-signs}
+Nearly every mistake in this method is a sign or a unit \ts{13}{7}{43:13}\ts{13}{7}{58:51}: ``like physics, only worse, because if you get the units wrong in physics you blow up, and here it just costs money''. A short gold position is entered as a negative number. The exchange rate dollar/yen is quoted in yen per dollar (say $95$): a dollar investor who owns yen loses when the quote rises to $100$, so the position enters as $-100$, whereas if the covariance matrix measures yen in dollars per yen ($0.0105$) the same position is $+100$ \ts{13}{7}{48:22}\ts{13}{7}{49:25}. For a bond, similarly, the PV01 of a long position is negative because the yield is the factor \ts{13}{7}{49:25}. Positions must all be in the same currency and in the same scale (units or millions), and the covariance matrix must use the same convention for returns (percent or log changes). Volatilities and correlations must be for the same differencing interval as the VaR horizon.
+\end{finance}
+
+\subsection{Where does the risk come from? Absolute, incremental and component VaR}
+A firm wants to attribute the portfolio VaR to desks or positions. The slides define (slides 59--62) the \emph{absolute VaR} of a bucket as its stand-alone VaR (the position vector with all other entries set to zero; equivalently its sensitivity times its volatility) and the \emph{marginal} (in today's language \emph{incremental}) VaR as the difference between the portfolio VaR and the VaR with that bucket removed, to see ``natural hedges'' and the effect of hedge portfolios \ts{13}{7}{49:25}. For the example: removing the CAD position lowers VaR by $0.096$ only, removing CHF by $1.508$ and removing DEM by $0.709$. These numbers add up to $2.31$, not to $3.03$: incremental VaRs depend on what else is in the book and are not additive. The slides later (77--80, see \cref{ch19:sec-hs}) use another notion, the \emph{component} VaR, which \emph{is} additive.
+
+\begin{proposition}[Component (Euler) VaR; not discussed in class]\label{ch19:prop-euler}
+In the variance--covariance method $\mathrm{VaR}(\bm x)=z_\beta\sqrt{\bm x\T\Sigma\bm x}$ is positively homogeneous of degree one, so by Euler's theorem
+\[
+  \mathrm{VaR}=\sum_ix_i\,\frac{\partial\,\mathrm{VaR}}{\partial x_i}=\sum_iC_i,\qquad
+  C_i=z_\beta\,\frac{x_i(\Sigma\bm x)_i}{\sqrt{\bm x\T\Sigma\bm x}}=z_\beta\,\frac{\Cov(x_ir_i,\ \bm x\T\bm r)}{\sigma_P}.
+\]
+\end{proposition}
+\begin{proof}
+$\partial\sigma_P/\partial x_i=(\Sigma\bm x)_i/\sigma_P$ and $\sum_ix_i(\Sigma\bm x)_i=\bm x\T\Sigma\bm x=\sigma_P^2$. Also $(\Sigma\bm x)_i=\Cov(r_i,\bm x\T\bm r)$.
+\end{proof}
+For the currency example $C=(0.425,\ 1.852,\ 0.753)$, adding to $3.031$; the CAD position, nearly uncorrelated with the rest, contributes little, and $\partial\mathrm{VaR}/\partial x_i$ is the change of VaR per unit added of position $i$. A position with negative $C_i$ is a hedge of the rest of the book. Component VaRs are what one compares with limits by desk; the stand-alone VaRs are larger and add to $4.382>3.031$.
+
+\subsection{The choices behind the covariance matrix}\label{ch19:sec-assump}
+The lecture then goes through the assumptions that hide in $\Sigma$ (slides 45--56). We list them with Abbott's opinions.
+
+\begin{itemize}
+  \item \textbf{How much history.} Rule of thumb for time series: at least $100$ observations \ts{13}{7}{53:37}. Regulators require at least a year; firms use one, two or five years. Slide~47 adds that the window should be weighed against data availability, changes of pricing regime (Brazil~1995, the introduction of the euro, the 2008 crisis) and market anomalies that traders might exploit.
+  \item \textbf{Weighting.} Equal weights, or weights that decay exponentially into the past: the covariance is
+  \[
+    \hat\sigma_{xy}=\frac{\sum_{i=0}^{n-1}\omega^i\,(x_i-\bar x)(y_i-\bar y)}{\sum_{i=0}^{n-1}\omega^i},
+  \]
+  with $i=0$ today, $i=1$ yesterday, and $\omega$ near $0.95$ \ts{13}{7}{55:42}. The weight on the $m$ most recent observations is $(1-\omega^m)/(1-\omega^n)\approx1-\omega^m$; for $\omega=0.94$, $m=76$ observations carry $99.1\%$ of the weight ($99\%$ needs $m=74.4$), as Abbott says \ts{13}{7}{56:44}. This is the RiskMetrics estimator; its effective sample size $(1+\omega)/(1-\omega)\approx32$ observations and its relation to GARCH are in \cref{ch13:sec-ewma,ch13:sec-igarch}. Abbott's opinion is that the choice of $\omega$ has a material effect on the measured volatility (slide~51 compares a rolling six-month window with $\omega=0.92,\dots,0.98$) and that any assumption with such an effect calls for extreme care: one can get whichever volatility one wants (``lies, damn lies, and statistics''). He prefers equal weights out of Occam's razor: not knowing how much more last week matters than three weeks ago, he does not pretend to \ts{13}{7}{53:37}\ts{13}{7}{58:51}. Slide~49 lists the case for the other side: it smooths the volatility as positions age and reflects a heuristic that recent information matters more.
+  \item \textbf{Missing data.} Fill gaps by linear interpolation, the previous day's value, a Brownian bridge (a Monte Carlo between the two neighbours) or regression on other series \ts{13}{7}{54:41}; this is also what protects against non-positive-definite matrices (\cref{ch19:sec-mc}).
+  \item \textbf{Update frequency.} Daily updating of $\Sigma$ is overkill; Abbott's firm updates weekly, ``and that is overkill, but tell that to my regulators'' \ts{13}{7}{55:42}. Slide~53: changes of volatility are common in short-term euro-deposit and Japanese rates, changes of correlation are hard to estimate.
+  \item \textbf{Percentage or log changes.} $r_{\mathrm{pct}}=e^{r_{\log}}-1=r_{\log}+\tfrac12r_{\log}^2+\cdots$, so the two differ by second-order terms that matter only at the ends of the distribution: a $4\%$ log move is a $4.08\%$ percentage move. Abbott uses percentage changes for convenience, although prices are closer to lognormal; the log form is what one simulates, since it keeps prices positive \ts{13}{7}{30:40}\ts{13}{7}{31:42}. Even yields, which the lognormal model keeps positive, have gone negative (slide~54).
+  \item \textbf{Differencing interval.} Daily data are the norm. One can scale up a daily covariance matrix, but slide~55 warns of asynchronicity (markets close at different times) and serial correlation, whose effect on the $\sqrt T$ rule is quantified in \cref{ch08:prop-autocorr}.
+  \item \textbf{Bucketing.} A book cannot carry a risk factor per position; positions are mapped to a set of risk indices (equal-VaR, duration-weighted, hedge-based buckets, slides 52 and 69) at a loss of granularity that should not cost accuracy if done well.
+  \item \textbf{Stability of correlations.} A one-day horizon makes correlations less ambiguous, and short horizons mean that linear approximations are less of a problem, but correlations tend to ``swing'' from neutral to directional when markets are under stress (slide~37): the diversification benefit of \cref{ch19:ex-fx} is what disappears first in a crisis.
+\end{itemize}
+Abbott's summary of the method is the flow chart of slide~44: market data from several sources; returns; tests (graphs, ``$2$ standard deviations''); covariance matrix; positions and PV01s in a vector; the multiplication $\bm x\T\Sigma\bm x$; and then portfolio VaR, absolute and marginal sub-portfolio VaRs and scenario analysis \ts{13}{7}{51:31}. Up to the late 1990s this was how it was done: in 1996 about $80\%$ of the European banks used the variance--covariance method \ts{13}{7}{50:25}. Twenty years earlier the calculation was squeezed into the $256$ columns of a spreadsheet \ts{13}{7}{48:22}.
+
+% ==================================================================
+\section{Historical simulation}\label{ch19:sec-hs}
+Abbott skipped this part in class (``historical simulation is Monte Carlo without the Monte Carlo part'' \ts{13}{7}{6:26}\ts{13}{7}{58:51}); it is on slides 63--85, which we summarise.
+
+\subsection{The method}
+Historical simulation marks the \emph{current} portfolio to market using the changes of the risk factors observed on each day of a past window, ranks the resulting hypothetical P\&L numbers and reads off the order statistic (slide~63). With $n$ historical scenarios $\bm r_1,\dots,\bm r_n$ (vectors of factor returns, or of changes measured in standard deviations), current factor values $\bm S$ and a valuation function $V$,
+\[
+  \Delta P_j=V\bigl(\bm S\odot(\bm 1+\bm r_j)\bigr)-V(\bm S)\ \approx\ \bm x\T\bm r_j,\qquad
+  \mathrm{VaR}_\beta=-\Delta P_{(k)},\quad k=(1-\beta)n,
+\]
+$\Delta P_{(k)}$ being the $k$-th smallest P\&L. The steps of slide~67 are: collect position data; map to risk indices; compute sensitivities (deltas, gammas); collect historical data; compute returns; shock the portfolio with the returns; compute P\&L; rank and take the order statistic. The horizontal layout of slide~75 keeps a P\&L column for each desk and for the total, so the desk VaR is the $k$-th worst of the desk column and the total VaR the $k$-th worst of the total column. The rank $k$ depends on the significance level and on the data available:
+\begin{center}\footnotesize
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+history & 1 year & 2 years & 3 years & 4 years\\
+observations $n$ & $250$ & $500$ & $750$ & $1\,000$\\
+$99\%$: worst $k=0.01n$ & $2.5$ (2nd--3rd) & $5$ & $7.5$ (7th--8th) & $10$\\
+$95\%$: worst $k=0.05n$ & $12.5$ & $25$ & $37.5$ & $50$\\
+\bottomrule
+\end{tabular}
+\end{center}
+(the $99\%$ row is slide~75; the $95\%$ row is ours). It is ``probably sensible'' to compute the $1\%$, $5\%$ and $10\%$ levels together, and to save the detail, because the P\&L at the tail can be driven by very few positions (slide~73). The method is \emph{nonparametric}: it uses no distribution, so skewness, fat tails and the actual dependence between factors, including credit-spread jumps, are in the data; it works equally for long and short positions; aggregation is trivial (add the P\&L columns) (slides 64 and 82).
+The weaknesses (slide~65): it needs a lot of data, and history is missing exactly for new products; it assumes that the future is drawn from the same distribution as the window (stationarity) --- slide~66 calls it a limited Monte Carlo, and in statistical language it is a bootstrap in which the past scenarios are resampled with equal probability (slide~66); and the tail estimate rests on very few points. The last point deserves a proof.
+
+\begin{proposition}[Standard error of an empirical quantile; not discussed in class]\label{ch19:prop-quantile}
+Let $L_1,\dots,L_n$ be i.i.d.\ losses with distribution function $F$ and density $f$, continuous and positive at $q=F^{-1}(\beta)$, and let $\hat q_n$ be the empirical $\beta$-quantile. Then, as $n\to\infty$,
+\[
+  \sqrt n\,(\hat q_n-q)\ \Rightarrow\ N\Bigl(0,\ \frac{\beta(1-\beta)}{f(q)^2}\Bigr).
+\]
+\end{proposition}
+\begin{proof}[Sketch]
+Let $\hat F_n$ be the empirical distribution function. $n\hat F_n(q)\sim\mathrm{Bin}(n,\beta)$, so $\hat F_n(q)-\beta$ has variance $\beta(1-\beta)/n$ and, by the central limit theorem, is asymptotically normal. By definition $\hat F_n(\hat q_n)\approx\beta$, and $\hat F_n(\hat q_n)-\hat F_n(q)\approx F(\hat q_n)-F(q)\approx f(q)(\hat q_n-q)$ for large $n$ (the empirical process is uniformly close to $F$; this step is the Bahadur representation of the quantile). Hence $\hat q_n-q\approx-(\hat F_n(q)-\beta)/f(q)$, which has the stated variance.
+\end{proof}
+For the standard normal at $\beta=99\%$, $f(q)=\varphi(2.326)=0.0267$, so $\mathrm{sd}(\hat q_n)=0.236/\sqrt{n/250}$: $10\%$ of the VaR with one year of data, $5\%$ with four years ($n=1\,000$), $3\%$ with ten. A heavy tail is worse, because $f(q)$ is smaller: for the standardised Student $t_4$, $f(q)=0.0123$ and the error is more than twice as large. \cref{ch19:fig-hsnoise} shows the sampling distribution in a simulation.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.9\linewidth,height=5.6cm,xmin=1.5,xmax=3.3,ymin=0,ymax=5.8,
+  xlabel={estimated $99\%$ VaR of a $N(0,1)$ loss},ylabel={density},
+  tick label style={font=\scriptsize},label style={font=\small},legend pos=north east,legend style={font=\scriptsize}]
+\addplot[ideacol,thick,mark=none] coordinates {(1.53,0.0) (1.59,0.003) (1.65,0.02) (1.71,0.03) (1.77,0.087) (1.83,0.213) (1.89,0.437) (1.95,0.63) (2.01,1.013) (2.07,1.477) (2.13,1.677) (2.19,1.94) (2.25,1.9) (2.31,1.657) (2.37,1.467) (2.43,1.303) (2.49,0.997) (2.55,0.713) (2.61,0.373) (2.67,0.243) (2.73,0.193) (2.79,0.143) (2.85,0.067) (2.91,0.023) (2.97,0.03) (3.03,0.017) (3.09,0.007) (3.15,0.003) (3.21,0.003) (3.27,0.0)};
+\addplot[fincol,thick,mark=none] coordinates {(1.77,0.003) (1.83,0.013) (1.89,0.07) (1.95,0.243) (2.01,0.577) (2.07,1.09) (2.13,1.697) (2.19,2.26) (2.25,2.58) (2.31,2.263) (2.37,2.187) (2.43,1.447) (2.49,1.0) (2.55,0.62) (2.61,0.33) (2.67,0.14) (2.73,0.08) (2.79,0.053) (2.85,0.01) (2.91,0.0)};
+\addplot[thmcol,thick,mark=none] coordinates {(2.07,0.01) (2.13,0.213) (2.19,1.317) (2.25,3.587) (2.31,5.193) (2.37,4.117) (2.43,1.813) (2.49,0.363) (2.55,0.047) (2.61,0.007) (2.67,0.0)};
+\legend{$n=250$,$n=500$,$n=2500$}
+\draw[dashed] (axis cs:2.326,0) -- (axis cs:2.326,5.8);
+\node[font=\scriptsize,anchor=west] at (axis cs:2.36,5.5) {true $2.326$};
+\end{axis}
+\end{tikzpicture}
+\caption{Historical-simulation estimates of the $99\%$ VaR of a standard normal loss: sampling distribution over $5\,000$ independent samples of $n=250$, $500$ and $2\,500$ days (histograms with bin width $0.06$; estimator: linearly interpolated empirical quantile). Standard deviations $0.213$, $0.158$ and $0.073$ against the asymptotic $0.236$, $0.167$ and $0.075$ of \cref{ch19:prop-quantile}; means $2.258$, $2.284$ and $2.318$, so a short window also biases the VaR downwards. Simulation by the authors.}\label{ch19:fig-hsnoise}
+\end{figure}
+
+\subsection{Marginal VaR in historical simulation}
+Slides 77--81 attribute a historical-simulation VaR along an organisational hierarchy. The VaR engine produces P\&L \emph{vectors}, one entry per date (here $1\,043$ dates, four years of history), and the vector of a parent unit is the sum of the vectors of its children, $y=\sum_ix_i$ (Firm $=$ Equities $+$ Fixed income).
+
+\begin{proposition}[Variance--covariance ratio allocation]\label{ch19:prop-hsmarg}
+Let $y=\sum_{i=1}^nx_i$ be the parent P\&L and $x_i$ the child P\&Ls, as random variables over the historical dates. Then
+\[
+\begin{gathered}
+  \sigma_y^2=\sum_{i=1}^n\Cov(y,x_i),\qquad
+  \mathrm{MVaR}_i=\frac{\Cov(y,x_i)}{\Var y}\,\mathrm{VaR}_y,\\
+  \text{so that}\quad\sum_i\mathrm{MVaR}_i=\mathrm{VaR}_y .
+\end{gathered}
+\]
+\end{proposition}
+\begin{proof}
+$\Var y=\Cov(y,y)=\Cov\bigl(y,\sum_ix_i\bigr)$ by bilinearity (slides 78--79 write $\sigma_y=\sum_iE[(y-\bar y)(x_i-\bar x_i)]/\sigma_y$). Divide by $\Var y$ and multiply by $\mathrm{VaR}_y$.
+\end{proof}
+Variance is used as a proxy for risk to split a number that is a quantile. In the variance--covariance model of \cref{ch19:prop-vc} the two are the same thing, $\mathrm{MVaR}_i$ being the component VaR of \cref{ch19:prop-euler}. In a general empirical setting the exact Euler contribution of VaR is a conditional expectation, $\E[x_i\mid y=\mathrm{VaR}]$, which is a noisy average of the very few scenarios near the quantile, and the ratio allocation is a smoothed substitute (a remark of ours). The example on slide~81 has firm VaR $81\,411$ with children marginals $2\,822$, $14\,273$ and $64\,316$ (sum $81\,411$); the second child's stand-alone VaR is $29\,990$ against a marginal of $14\,273$, and the first's $14\,481$ against $2\,822$: the diversifying units carry much less than their stand-alone VaR. The marginals are relative to the immediate parent in the hierarchy, and the five children of the largest unit sum to $69\,020$ against a stand-alone parent VaR of $72\,457$; the slide attributes the gap to a different ``golden run'' of the data, although the text claims that the children's marginals add to the parent's stand-alone VaR.
+
+\subsection{The ratio of the $95\%$ to the $99\%$ VaR}
+Slide~85 shows the ratio of the $95\%$ to the $99\%$ VaR of a portfolio over the decade 2001--2011 (the slide does not say whose), with the normal-law value $1.65/2.33$ marked in red. The ratio $z_{0.95}/z_{0.99}=0.7071$ is, to three digits, $1/\sqrt2$. Before 2008 the ratio fluctuates between about $0.63$ and $0.74$, around the normal value; from the end of 2008 it drops to $0.40$--$0.65$. The slide has no comment, but the ratio measures tail thickness: for heavier tails the $99\%$ quantile grows faster than the $95\%$ one. For a standardised Student $t_\nu$ (variance one) the ratio is:
+\begin{center}\small
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+$\nu$ & $3$ & $4$ & $6$ & $10$ & $30$ & $100$ & $\infty$\\
+\midrule
+$q_{95}$ & 1.359 & 1.507 & 1.587 & 1.621 & 1.640 & 1.644 & 1.645\\
+$q_{99}$ & 2.622 & 2.649 & 2.566 & 2.472 & 2.374 & 2.340 & 2.326\\
+$q_{95}/q_{99}$ & 0.518 & 0.569 & 0.618 & 0.656 & 0.691 & 0.702 & 0.707\\
+\bottomrule
+\end{tabular}
+\end{center}
+so that a ratio of $0.5$--$0.6$ corresponds to a tail like that of a $t_3$--$t_4$ (the table is ours; historical simulation adds sampling noise, \cref{ch19:prop-quantile}). The lesson, again ours: the ratio is a free diagnostic of whether the normal multiplier of \cref{ch19:prop-vc} can be trusted, and after 2008 it could not.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.8\linewidth,height=5.2cm,xmode=log,xmin=2.8,xmax=120,ymin=0.5,ymax=0.73,
+  xlabel={degrees of freedom $\nu$ of the standardised $t$},ylabel={$q_{95}/q_{99}$},
+  tick label style={font=\scriptsize},label style={font=\small},xtick={3,4,6,10,30,100},xticklabels={3,4,6,10,30,100}]
+\addplot[ideacol,thick,mark=*,mark size=1.5pt] coordinates {(3,0.518) (4,0.569) (5,0.599) (6,0.618) (8,0.642) (10,0.656) (15,0.674) (20,0.682) (30,0.691) (50,0.697) (100,0.702)};
+\draw[dashed] (axis cs:2.8,0.7071) -- (axis cs:120,0.7071);
+\node[font=\scriptsize,anchor=south west] at (axis cs:3,0.7085) {normal: $0.7071$};
+\end{axis}
+\end{tikzpicture}
+\caption{The ratio of the $95\%$ and $99\%$ quantiles for standardised Student-$t$ losses as a function of the degrees of freedom (the observable of slide~85).}\label{ch19:fig-ratio}
+\end{figure}
+
+% ==================================================================
+\section{Monte Carlo simulation}\label{ch19:sec-mc}
+Instead of the closed form of \cref{ch19:prop-vc}, one can simulate: draw, say, $10\,000$ possible outcomes for tomorrow, reprice, sort, and take the $100$th worst for the $99\%$ level (the $500$th for $95\%$) \ts{13}{7}{1:00:53}. It is again an order statistic, but now of a sample that we generate, so the assumptions can be relaxed at will: the distribution need not be normal (a $t$, a customised law, mean reversion, jumps) \ts{13}{7}{1:01:58}. The method, named during the Manhattan Project after games of chance, needs only that the system be described by probability density functions (slide~86). Its financial uses (slide~87) are path-dependent products, the risk of convex portfolios in hedge analysis, portfolios with strong jump risk (insurance), credit exposure --- and VaR. The seven steps of slide~89, drawn as a diagram on slide~88, are:
+\begin{enumerate}[1.]
+  \item generate uniform random numbers;
+  \item convert them to standard normals;
+  \item build the covariance matrix;
+  \item factor it;
+  \item create correlated random shocks;
+  \item use the shocks to reprice;
+  \item sort the P\&L and read the order statistic.
+\end{enumerate}
+
+\subsection{Random numbers}
+Truly random numbers cannot be produced by a computer; they come from an external source such as radioactive decay \ts{13}{7}{1:03:03}. What software provides are \emph{pseudo-random} numbers, the output of a deterministic algorithm that ``look independent and uniform'' (slide~90; see Knuth), and Abbott recalls, as a young man, seeing two computers print the same ``random'' sequence (the effect of an identical seed) \ts{13}{7}{1:04:09}. \emph{Quasi-random} (low-discrepancy) sequences impose uniformity on purpose, so that a finite draw does not leave a region empty; they are harder to implement (slide~90). Reproducibility is a virtue for an audit trail: fix the seed.
+
+\paragraph{From uniform to normal.} A uniform variable $U$ on $(0,1)$ becomes a standard normal by $Z=\Phi^{-1}(U)$ (the probability integral transform of \cref{ch03:prop-pit}, slide~91) \ts{13}{7}{1:05:13}. Slide~91 also points to the Box--Muller method of \emph{Numerical Recipes}, which avoids inverting $\Phi$:
+\[
+  Z_1=\sqrt{-2\ln U_1}\,\cos(2\pi U_2),\qquad Z_2=\sqrt{-2\ln U_1}\,\sin(2\pi U_2)
+\]
+are independent $N(0,1)$ if $U_1,U_2$ are independent uniform (proof, not given in class: if $Z_1,Z_2$ are i.i.d.\ $N(0,1)$ then in polar coordinates the angle is uniform on $(0,2\pi)$, independent of the radius, and $\Prob(Z_1^2+Z_2^2>s)=e^{-s/2}$, so that $U_1=e^{-(Z_1^2+Z_2^2)/2}$ is uniform; invert). Abbott admits that today he trusts the built-in generators of Excel and MATLAB \ts{13}{7}{1:05:13}, and that ``I kind of violate my own rules'' \ts{13}{7}{1:05:13}.
+
+\subsection{Correlated shocks}
+Draw independent standard normals and give them the covariance structure of the market. Everything rests on a ``square root'' of $\Sigma$.
+
+\begin{proposition}[Correlated normal shocks]\label{ch19:prop-shocks}
+Let $\Sigma$ be a symmetric positive semidefinite matrix and $\bm Z\sim N(\bm0,I_n)$ a column vector. If $A$ is any real matrix with $AA\T=\Sigma$, then $\bm r=A\bm Z\sim N(\bm 0,\Sigma)$. Two standard choices:
+\begin{enumerate}[(i)]
+  \item \emph{eigenvalue decomposition}: $\Sigma=E\Lambda E\T$ with $E$ orthogonal and $\Lambda=\diag(\lambda_i)$, $\lambda_i\ge0$ (\cref{thm:spectral}); $A=E\Lambda^{1/2}$;
+  \item \emph{Cholesky}: $\Sigma=LL\T$ with $L$ lower triangular, which exists for $\Sigma$ positive definite; $A=L$.
+\end{enumerate}
+The matrix $A$ is not unique: $AQ$ works for every orthogonal $Q$, and all choices give the same distribution.
+\end{proposition}
+\begin{proof}
+$\bm r$ is a linear function of a Gaussian vector and $\Cov\bm r=A\,I\,A\T=\Sigma$, as in \cref{ch03:prop-mvn}. For (i), $AA\T=E\Lambda^{1/2}\Lambda^{1/2}E\T=\Sigma$.
+\end{proof}
+Written for a \emph{row} vector of shocks (as in a spreadsheet, where each row is a draw) the recipe is $\bm r\T=\bm Z\T\Lambda^{1/2}E\T$ \ts{13}{7}{1:10:40}. The lecture calls $\Lambda^{1/2}E\T$ the ``transformation matrix'', ``a prism'': uncorrelated white noise goes in and correlated noise comes out \ts{13}{7}{1:12:42}. For two assets the Cholesky factor is explicit,
+\[
+  L=\begin{pmatrix}\sigma_1&0\\ \rho\sigma_2&\sigma_2\sqrt{1-\rho^2}\end{pmatrix},\qquad
+  r_1=\sigma_1Z_1,\quad r_2=\sigma_2\bigl(\rho Z_1+\sqrt{1-\rho^2}\,Z_2\bigr),
+\]
+which shows why $|\rho|\le1$ is necessary. Slides 94--95 list the trade-off: Cholesky is computationally simpler and used by several packages but requires positive \emph{definiteness}; the eigen-decomposition is more complex, more robust (it works for semidefinite matrices) and is what Abbott uses. He notes that this construction is the vaunted \emph{Gaussian copula}, which most people treat as a black box although anyone with a little statistics can open it \ts{13}{7}{1:07:21}. Precisely, the joint law of $\bm r$ is the multivariate normal, whose copula is the Gaussian copula with correlation matrix $R$; the same eigen-decomposition on the correlation matrix is the principal-component analysis of \cref{ch:pca}. Abbott adds in passing that the method ``can really only take two distributions'' \ts{13}{7}{1:18:06}; presumably he means the normal and the Student $t$, the two elliptical laws that share this construction (with one extra step, see \cref{ch19:cs-three}).
+
+\begin{coursenote}[Erratum: slides 95 and 96]\label{ch19:cn-slide95}
+\begin{itemize}
+  \item Slide~95 states $R\Lambda^{1/2}E'\sim N(0,\Sigma)$ where $R$ is called an $n\times1$ vector of normals; the product as written needs $R$ to be a \emph{row} ($1\times n$) vector, as in the spreadsheet; for a column vector the formula is $E\Lambda^{1/2}R$.
+  \item Slide~96 gives, as a test of correlations, $\hat\rho\sim N\bigl(\rho_0,(1-\rho_0^2)/n\bigr)$. The large-sample variance of a sample correlation from $n$ normal pairs is $(1-\rho_0^2)^2/n$, i.e.\ standard deviation $(1-\rho_0^2)/\sqrt n$; equivalently, Fisher's $\operatorname{artanh}\hat\rho$ is $N\bigl(\operatorname{artanh}\rho_0,1/(n-3)\bigr)$. For $\rho_0=0.95$ and $n=1\,000$ the standard deviation is $0.003$, not $0.01$.
+  \item The variance test on the same slide, $\hat\sigma_o^2/\sigma^2\sim F(m-1,k-1)$, is a comparison of two independent sample variances from samples of sizes $m$ and $k$ (original and simulated data).
+\end{itemize}
+\end{coursenote}
+
+\subsection{When the covariance matrix is not positive semidefinite}
+A covariance matrix must be positive semidefinite, ``another of those high-school-maths things that suddenly matter'' \ts{13}{7}{1:08:33}. If different entries are estimated from different amounts of data (say $100$ observations for most pairs and $25$ for one of them), the estimated matrix can have a \emph{negative eigenvalue}; then $\Lambda^{1/2}$ is imaginary and the simulation cannot even start. Abbott reports that, in the 1990s, nobody he asked (including a chairman of a statistics department) knew why he was getting negative eigenvalues; the cure is to fill in the missing data so that every entry uses the same sample \ts{13}{7}{1:09:38}. A minimal example shows that it is not a matter of rounding.
+
+\begin{example}[An inconsistent correlation matrix; not from the lecture]\label{ch19:ex-psd}
+Let three assets have $\rho_{12}=\rho_{23}=0.9$ and $\rho_{13}=0$, each perfectly plausible if estimated separately:
+\[
+  R=\begin{pmatrix}1&0.9&0\\0.9&1&0.9\\0&0.9&1\end{pmatrix},\qquad\text{eigenvalues }1-0.9\sqrt2=-0.273,\ 1,\ 1+0.9\sqrt2=2.273 .
+\]
+For the direction $\bm v=(1,-\sqrt2,1)/2$, $\bm v\T R\bm v=-0.273$: a portfolio with a negative ``variance'', hence an imaginary VaR. In general $\rho_{12}=\rho_{23}=\rho$ forces $\rho_{13}\in[2\rho^2-1,\,1]$: indeed $\det R=-(\rho_{13}-1)(\rho_{13}+1-2\rho^2)$, which must be non-negative (the geometric statement is that three angles $\arccos\rho_{12},\arccos\rho_{23},\arccos\rho_{13}$ between unit vectors satisfy a triangle inequality). For $\rho=0.9$ the lower bound is $0.62$, and $\rho_{13}=0$ is impossible.
+\end{example}
+Other remedies than filling in the data exist (replacing the matrix by the nearest positive-semidefinite correlation matrix, or setting the negative eigenvalues to zero and rescaling); the slide only lists ``precision, negative eigenvalues, computation time, data storage, error audit trail'' as the potential problems (slide~97).
+
+\subsection{Checking the simulation, and why simulate at all}
+Abbott's test of his spreadsheet: $10$ series of yield changes (Treasury, AAA, AA, \dots) with about $800$ observations; a $10\times10$ correlation matrix, for instance $0.83$ between the government $10$-year and the AAA $10$-year; the transformation matrix; $1\,000$ rows of independent normals multiplied by it \ts{13}{7}{1:13:47}\ts{13}{7}{1:15:57}. The correlations of the simulated data are close to but not identical with the original ones, ``because of sampling error'': with $1\,000$ draws the standard deviation of an estimated correlation is $(1-\rho^2)/\sqrt{1\,000}$ (\cref{ch19:cn-slide95}), for example $0.02$--$0.03$ for $\rho=0.5$ \ts{13}{7}{1:17:02}. With a million draws the match is much closer. Slide~96 lists the ways of checking: re-create the covariance matrix from the simulated data; test the variances (an $F$ or $\chi^2$ test); test the correlations; Box's $M$ test for the equality of covariance matrices. ``It is difficult to make small mistakes'' (slide~96): a wrong factorisation gives grossly wrong correlations.
+
+Why draw a million scenarios when the data set has a few hundred? Because VaR looks at the tail: with $100$ observations there is one point in the $1\%$ tail, which says little about how fast the distribution drops off, whereas a simulation can put a billion points there \ts{13}{7}{1:17:02}\ts{13}{7}{1:18:06}. The price is the assumption of the generating distribution (slide~98 lists ``multivariate normality, serial correlation, skewness, kurtosis'', and the need to adjust for mean reversion and jump diffusion). The simulation error of the estimated quantile is \cref{ch19:prop-quantile} with $n$ replaced by the number $N$ of draws, which is at our disposal: $N=10^4$ gives a standard error of $0.037$ standard deviations of the P\&L, $N=10^6$ one of $0.004$.
+
+\begin{casestudy}[Three methods, one portfolio; our numerical experiment]\label{ch19:cs-three}
+Take the three-currency portfolio of \cref{ch19:ex-fx} ($\sigma_P=1.3007$) and compute the one-day $99\%$ VaR in four ways. Simulations use \cref{ch19:prop-shocks} with the eigen-decomposition; the fat-tailed version replaces the normal shock by a multivariate Student $t_4$ with the \emph{same} covariance matrix, $\bm r=\sqrt{(\nu-2)/\nu}\ \bm A\bm Z/\sqrt{W/\nu}$ with $W\sim\chi^2_\nu$ independent of $\bm Z$ (a normal variance mixture, \cref{ch03:prop-mixture}).
+\begin{center}\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+method & $99\%$ VaR & standard error & $99.9\%$ VaR\\
+\midrule
+variance--covariance (\cref{ch19:prop-vc}), $z_{0.99}\sigma_P$ & $3.026$ & --- & $4.020$\\
+Monte Carlo, normal, $N=10^4$ (mean of $300$ runs) & $3.021$ & $0.049$ & --- \\
+Monte Carlo, normal, Cholesky instead, $N=10^4$ & $3.022$ & $0.045$ & --- \\
+Monte Carlo, normal, $N=10^6$ (one run) & $3.026$ & $\approx0.005$ & --- \\
+$t_4$ shocks, exact & $3.446$ & --- & $6.598$\\
+$t_4$ shocks, Monte Carlo $N=10^4$ (mean of $300$) & $3.429$ & $0.102$ & --- \\
+$t_4$ shocks, Monte Carlo $N=2\cdot10^6$ (one run) & $3.453$ & $\approx0.01$ & --- \\
+\bottomrule
+\end{tabular}
+\end{center}
+The normal Monte Carlo converges to the closed form, as it must (the closed form \emph{is} the limit); the standard error agrees with $0.037\,\sigma_P=0.049$ from \cref{ch19:prop-quantile}. The two factorisations are statistically indistinguishable. With the same covariance matrix but heavy tails the $99\%$ VaR is $14\%$ higher and the $99.9\%$ VaR $64\%$ higher: the variance is a summary that hides the tail, and only the simulation (or the history) can see it. Note also that the Monte Carlo error with $10^4$ draws, $0.05$, is already small against this model risk, $0.4$.
+\end{casestudy}
+
+% ==================================================================
+\section{Non-linear positions}\label{ch19:sec-nl}
+The variance--covariance method assumes that the P\&L is linear in the risk factors, $\Delta P=\bm x\T\bm r$. This is exact for stocks and currencies, and for bonds it holds through the PV01 for small moves (\cref{ch19:sec-fi}); for options it is the delta approximation. Slide~70 states the rule of thumb: ``for a daily VaR, delta is probably enough; gamma is needed for a long holding period or for volatile markets'', and that convexity is not a big problem for bonds. Historical simulation and Monte Carlo can do better: they need a way to compute the P\&L for each scenario, either by \emph{exact repricing} of every instrument with the full model (accurate, computationally heavy) or from a \emph{parametric representation} of the price (a Taylor expansion, or a grid of precomputed values interpolated between scenarios, ``pricing grids'', slide~84), which can be very accurate but where cross-partial terms create noise (slides 83 and 99). Slide~83 illustrates it with the P\&L of an option book as a function of a shock: exact curve, coarse grid, refined grid.
+
+The following example, ours, shows that gamma can matter even for one day. Let the risk factor return be $x\sim N(0,1)$ in units of its daily standard deviation, and let the P\&L be
+\[
+  \Delta P(x)=\delta\,x+\tfrac12\Gamma\,x^2,\qquad\delta>0,\ \Gamma<0
+\]
+(a short-gamma position, for example a written option; $\delta$ is the P\&L of a one-sigma move to first order, and the units are those of $\delta$). The three approximations below use the same $\delta$ and $\Gamma$.
+
+\begin{proposition}[Exact VaR of a delta--gamma position; ours]\label{ch19:prop-dg}
+For $\Gamma<0$ the loss $L=-\Delta P=\tfrac12|\Gamma|x^2-\delta x$ satisfies $L\le\ell$ iff $x_-\le x\le x_+$ with $x_\pm=\bigl(\delta\pm\sqrt{\delta^2+2|\Gamma|\ell}\bigr)/|\Gamma|$. The exact $\mathrm{VaR}_\beta$ is the unique root $\ell$ of $\Phi(x_+)-\Phi(x_-)=\beta$. For $\delta=0$, $\mathrm{VaR}_\beta=\tfrac12|\Gamma|\,\chi^2_{1,\beta}$, with $\chi^2_{1,\beta}$ the $\beta$-quantile of the $\chi^2_1$ law ($6.635$ for $\beta=99\%$).
+\end{proposition}
+\begin{proof}
+Solve the quadratic inequality; the loss is increasing in $\ell$ so the equation has one root. For $\delta=0$, $L=\frac12|\Gamma|x^2$ and $x^2\sim\chi^2_1$.
+\end{proof}
+\begin{center}\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+& delta-normal & delta--gamma, & exact $\mathrm{VaR}_{99\%}$ & exact $\mathrm{ES}_{99\%}$ \\
+& $z_{0.99}\,\delta$ & normal moments & (\cref{ch19:prop-dg}) & (simulation) \\
+\midrule
+$\delta=1,\ \Gamma=-0.5$ & $2.33$ & $2.72$ & $3.68$ & $4.46$ \\
+$\delta=0,\ \Gamma=-0.5$ & $0$ & $1.07$ & $1.66$ & $2.11$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+The ``delta--gamma normal'' column matches the mean $\frac12\Gamma$ and variance $\delta^2+\frac12\Gamma^2$ of the P\&L to a normal law (see \cref{ch08:prop-simm} for the moments of such a quadratic form, and \cref{ch15:sec-greeks} for the Greeks). The delta-normal VaR is $37\%$ too low for the first position and simply zero for the delta-neutral one, which nevertheless loses $1.66$ one day in a hundred. Even the moment-matched normal misses by a quarter, because the loss is a skewed, bounded-below variable ($\tfrac12|\Gamma|x^2$ is a $\chi^2_1$), and so does not resemble a normal law in the tail; the exact quantile comes from the distribution of the quadratic form, or from simulation.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.85\linewidth,height=6.2cm,xmin=-5,xmax=5,ymin=-12,ymax=4,
+  xlabel={risk-factor move $x$ (standard deviations)},ylabel={P\&L},
+  tick label style={font=\scriptsize},label style={font=\small},
+  legend pos=south east,legend style={font=\scriptsize}]
+\addplot[ideacol,thick,domain=-5:5,samples=2] {x};
+\addplot[thmcol,thick,domain=-5:5,samples=60] {x-0.25*x*x};
+\legend{delta approximation $x$,exact $x-\tfrac14x^2$}
+\draw[dashed] (axis cs:-5,-2.326) -- (axis cs:5,-2.326);
+\draw[dashed] (axis cs:-5,-3.679) -- (axis cs:5,-3.679);
+\node[font=\scriptsize,anchor=south west] at (axis cs:-4.9,-2.326) {delta-normal $-2.33$};
+\node[font=\scriptsize,anchor=north west] at (axis cs:-4.9,-3.679) {exact $-3.68$};
+\end{axis}
+\end{tikzpicture}
+\caption{P\&L of the short-gamma position $\delta=1$, $\Gamma=-0.5$ against the risk-factor move. The tangent (delta) sees a loss of $2.33$ at the $99\%$ move $x=-2.33$; the true P\&L there is $-3.68$, which is also the true $99\%$ VaR (the other root $x_+=6.33$ of \cref{ch19:prop-dg} is negligible). For a delta-neutral position the loss is even in $x$ and large moves of \emph{either} sign lose.}\label{ch19:fig-gamma}
+\end{figure}
+
+% ==================================================================
+\section{Back-testing, stress tests and use of VaR}\label{ch19:sec-bt}
+\subsection{Why a bank needs it}
+The first paragraph of the motivation has an accounting side that Abbott insists on \ts{13}{7}{13:55}. A balance sheet has assets on one side, financed by borrowing or by the firm's own money (equity); the ratio of the two is the leverage. Every loss reduces the equity, and when it reaches zero the firm is bankrupt. Risk management asks how large a one-day loss can be, with some level of certainty, so that the equity is enough to absorb it \ts{13}{7}{14:57}: \emph{that} is the capital that supports a position. VaR is the number that says how much is needed.
+
+\begin{finance}[The uses of a VaR number]\label{ch19:fin-uses}
+Position limits (``how much is too much?'' \ts{13}{7}{4:13}), capital, and the daily report to management. Abbott's caveats, all on slides: ``VaR numbers in isolation are worthless''; one must compute them every day and compare them (slide~74); the actual P\&L, or changes in the risk indices, must be used in the comparison; repricing is preferred to sensitivities; and VaR must be used together with \emph{stress testing} and \emph{scenario analysis}. Slide~76 is a diagram of the data flow: back-office systems provide positions and sensitivities, data providers provide history, and the VaR engine (the ``$1\%$ worst'') feeds limit reports, stress tests, historical scenarios and ad-hoc analyses. Historical scenarios (the 2008 crisis, Brazil in 1995, the introduction of the euro, slide~47) are the natural stress tests: revalue today's book with the moves of a known bad day, an ``automatic scenario analysis'' (slide~82). ``$90\%$ of risk management is knowing what you own and where you own it'' (slide~68).
+\end{finance}
+
+\subsection{Back-testing}
+A \emph{back-test} compares the VaR computed at time $t$ with the realised P\&L at $t+1$ (slide~101). Reasons: it is required by regulators; it is a reality check on the calculation; it finds errors; it detects changes of the risk profile. The counting test (the binomial law of the number of exceedances, with rejection at $5\%$) is in \cref{ch08:sec-estimation}; we add its likelihood-ratio version, which is the one used in the literature.
+
+\begin{proposition}[Kupiec's unconditional-coverage test; not discussed in class]\label{ch19:prop-kupiec}
+If the VaR at level $\beta$ is correct and exceedances are independent, then in $n$ days the number $N$ of exceedances is $\mathrm{Bin}(n,p)$ with $p=1-\beta$. The likelihood-ratio statistic of $H_0\colon p=1-\beta$ against a free exceedance probability, $\hat p=N/n$,
+\[
+  \mathrm{LR}=-2\ln\frac{(1-p)^{n-N}p^{N}}{(1-\hat p)^{n-N}\hat p^{N}}
+\]
+is asymptotically $\chi^2_1$ under $H_0$ (Wilks' theorem), and one rejects when it exceeds $3.84$ ($5\%$) or $6.63$ ($1\%$).
+\end{proposition}
+Applications: the IPC example of \cref{ch19:rem-eight} ($N=8$, $n=520$): $\mathrm{LR}=1.31$, $p$-value $0.25$, not rejected. The $12$ exceedances in $500$ days of the counting test in \cref{ch08:sec-estimation}: $\mathrm{LR}=7.11$, $p=0.008$, rejected, consistent with the $0.5\%$ tail probability found there. Five exceedances in $250$ days: $\mathrm{LR}=1.96$, $p=0.16$: not rejected, although the expected count is $2.5$: a year of data cannot tell a good $99\%$ model from a moderately bad one.
+
+\begin{finance}[The regulatory traffic light; not discussed in class]\label{ch19:fin-basel}
+The Basel back-test of the 1990s uses $n=250$ days of $99\%$ VaR. With $p=1\%$, $\Prob(N\le4)=89.2\%$, $\Prob(N\le9)=99.97\%$ and $\Prob(N\ge10)=0.025\%$ (our computation), so the \emph{green zone} is $0$--$4$ exceptions, the \emph{yellow zone} $5$--$9$ and the \emph{red zone} $10$ or more; the capital multiplier applied to the VaR increases from $3$ in the green zone through the yellow zone to $4$ in the red zone (from memory of the 1996 amendment; the reader should check the figures against the Basel text). The 10-day, $99\%$ horizon is obtained from one-day figures by $\sqrt{10}$, with the caveats of \cref{ch08:prop-autocorr}. The later tightening to stressed VaR and expected shortfall is in \cref{ch08:sec-estimation}.
+\end{finance}
+
+\subsection{Practical issues}
+Slides 102--103 list the practical issues: back-tests are done down to the desk level, where every outlier must be documented (``need to document outliers''), but one often needs to aggregate, and aggregation hides spikes; \emph{split books} (a position whose P\&L is shared across desks) are a problem; whether one compares with front-office or back-office P\&L, the timing of P\&L recognition, re-organisations, data maintenance, the frequency of updates, and whether upside jumps should count as exceptions (a VaR is one-sided). Slides 104--105 (repeated as 113--114) plot the daily revenue of a business as bars with the $99\%$ and $95\%$ VaR as lines below the axis. In the first, the revenue stays within the lines except for a few isolated days, as it should; in the second the revenue is calm for a long period and then, after a break, the bars fall far outside the VaR lines, which adapt only slowly. The slides on the next pages (106--111, without axis labels or commentary in the lecture) show more series of this kind, of a P\&L band with a horizontal level: they illustrate that the scale of the P\&L can change abruptly (a position is cut, a new product starts from zero, a data error produces a spike) and that the VaR, the limit, or the data process reacts with a delay.
+
+Slide~112 is the cleanest example of a regime change. It shows the spread of a five-year US credit-card asset-backed security over about four years ending in 2008: for three years it stays at about $0.3\%$, and its daily moves at a few basis points; from the summer of 2007 the spread rises to about $4\%$ and the daily moves reach tens of basis points, with the old percentile bands (dashed lines) ending up far inside the new distribution. A $99\%$ VaR estimated from an equally weighted window of one or two years, as Abbott prefers, must fail on such a series for the length of the window, and the exponentially weighted estimate of \cref{ch19:sec-assump} fails for about $1/(1-\omega)$ days: the price of simplicity, stated in Abbott's own terms.
+
+\begin{coursenote}[What the lecture covered and what the slides add]\label{ch19:cn-scope}
+Abbott states at the start that he will ``fly through'' the material, which is normally two hours of his university course \ts{13}{7}{6:26}\ts{13}{7}{49:25}, and announces that he will skip historical simulation to spend the time on Monte Carlo \ts{13}{7}{58:51}. The spoken lecture therefore corresponds to slides 1--62 (one-asset VaR, fixed income, variance--covariance with data issues and marginal VaR) and 86--97 (Monte Carlo); slides 63--85 (historical simulation, marginal VaR by variance ratio, the $95/99$ ratio) and 98--115 (the end of Monte Carlo, back-testing) are not discussed in the recording. He promises to send spreadsheets and papers by email to anyone who asks \ts{13}{7}{7:27}, and jokes, at the end, that the only use he has found for trigonometry is the seasonal decomposition of temperature data in sines and cosines \ts{13}{7}{1:20:10}. He teaches a longer version at NYU and other schools. The 2024 course has no counterpart lecture on these methods: the 2024 Lecture~10 (\cref{ch08:sec-riskmeasures}) takes the estimation of VaR and ES by historical simulation as its starting point and concentrates on the mathematics of risk measures, so the two chapters are complementary.
+\end{coursenote}
+
+\subsection{Abbott's principles, in brief}
+\begin{intuition}[A physicist's summary]\label{ch19:int-summary}
+A VaR is the location of a quantile of a distribution that one never sees and estimates from few data, using a Gaussian approximation whose parameters carry error and whose tails are wrong. The three methods differ in what they take as given: the variance--covariance method a linear map and a normal law (two parameters, a matrix); historical simulation nothing but the stationarity of the past (a sample); Monte Carlo a generating distribution (a model). Each buys a benefit at a cost: speed and transparency against tails; realism against sample size; flexibility against model risk. Abbott's practical advice reads like a laboratory notebook: use the simplest estimator that you understand, look at the data before you trust it, test every step (a matrix square root squared must return the matrix), record units and signs, and treat every number as an estimate with an error bar. Then keep a second, independent estimator, a stress test, to see what the first one cannot.
+\end{intuition}
+
+% ==================================================================
+\section*{Summary of results}
+\begin{keyformulas}
+\begin{align*}
+&\text{One asset (normal):} && \mathrm{VaR}_\beta=z_\beta\sigma V,\quad z_{0.99}=2.326,\ z_{0.95}=1.645\\
+&\text{Bond:} && \mathrm{VaR}_\beta=z_\beta|\mathrm{PV01}|\,\sigma_{\mathrm{bp}},\quad\sigma_{\mathrm{bp}}=100\,y_{\%}\,\sigma_{\Delta y/y}\\
+&\text{Portfolio:} && \mathrm{VaR}_\beta=z_\beta\sqrt{\bm x\T\Sigma\bm x},\quad\Sigma=DRD\\
+&\text{Component VaR:} && C_i=z_\beta\,\frac{x_i(\Sigma\bm x)_i}{\sqrt{\bm x\T\Sigma\bm x}},\quad\sum_iC_i=\mathrm{VaR}\\
+&\text{EWMA covariance:} && \hat\sigma_{xy}=\frac{\sum_i\omega^i(x_i-\bar x)(y_i-\bar y)}{\sum_i\omega^i},\quad\text{weight on last }m\text{ obs.}\approx1-\omega^m\\
+&\text{Hist.\ simulation:} && \mathrm{VaR}_\beta=-\Delta P_{(k)},\ k=(1-\beta)n;\quad\mathrm{sd}(\hat q)\approx\frac{\sqrt{\beta(1-\beta)/n}}{f(q)}\\
+&\text{Marginal VaR (hist.):} && \mathrm{MVaR}_i=\frac{\Cov(y,x_i)}{\Var y}\mathrm{VaR}_y,\quad\sum_i\mathrm{MVaR}_i=\mathrm{VaR}_y\\
+&\text{Monte Carlo:} && \bm r=E\Lambda^{1/2}\bm Z\ \text{or}\ L\bm Z\sim N(\bm0,\Sigma),\quad\Sigma=E\Lambda E\T=LL\T\\
+&\text{Box--Muller:} && Z_{1,2}=\sqrt{-2\ln U_1}\,\bigl(\cos,\sin\bigr)(2\pi U_2)\\
+&\text{Delta--gamma, }\delta=0\text{:} && \mathrm{VaR}_\beta=\tfrac12|\Gamma|\,\chi^2_{1,\beta}\\
+&\text{Kupiec:} && \mathrm{LR}=-2\ln\frac{(1-p)^{n-N}p^N}{(1-N/n)^{n-N}(N/n)^N}\sim\chi^2_1\\
+&\text{Correlation error:} && \mathrm{sd}(\hat\rho)\approx(1-\rho^2)/\sqrt n
+\end{align*}
+\end{keyformulas}
+
+% ==================================================================
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[not from the course: two assets]
+Two positions with daily volatilities $\sigma_1=1\%$, $\sigma_2=2\%$ (P\&L per unit of position value), correlation $\rho$, and values $V_1=100$, $V_2=50$ (long both).
+\begin{enumerate}[(a)]
+  \item Write the $99\%$ VaR as a function of $\rho$ using \cref{ch19:prop-vc}; for which $\rho$ is it equal to the sum of the stand-alone VaRs?
+  \item Find the position $V_2$ (possibly negative) that minimises the VaR for given $V_1$ and $\rho$, and show that it is the minimum-variance hedge $V_2=-\rho\,(\sigma_1/\sigma_2)V_1$.
+  \item Compute the component VaRs of the original portfolio for $\rho=0.5$ and check that they add up to the VaR.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: PV01]
+A bond has a semi-annual coupon of $3\%$, five years to maturity, and yield $3\%$. Compute its price at yields $3\%$ and $3.01\%$, the PV01 per $100$ face value, the modified and Macaulay durations, and the one-day $99\%$ VaR of a position of face value $10^7$ if the daily volatility of the relative changes of the yield is $1.5\%$. Compare $\mathrm{PV01}$ with $-D_{\mathrm{mod}}\,P\cdot10^{-4}$.
+\end{exercise}
+
+\begin{exercise}[not from the course: incremental versus component VaR]
+In the variance--covariance method, show that the incremental VaR of position $i$, $\mathrm{VaR}(\bm x)-\mathrm{VaR}(\bm x-x_i\bm e_i)$, is at most the component VaR $C_i$ of \cref{ch19:prop-euler}. (\emph{Hint:} $\bm x\mapsto\sqrt{\bm x\T\Sigma\bm x}$ is a convex function.) Verify it on the numbers of \cref{ch19:ex-fx}: $(0.096,1.508,0.709)$ against $(0.425,1.852,0.753)$. When are the two equal?
+\end{exercise}
+
+\begin{exercise}[not from the course: estimation error of a quantile]
+Using \cref{ch19:prop-quantile}, find the number of days of history needed to estimate the $99\%$ VaR of a normal loss with a relative standard error of $5\%$; and the same for the $99.9\%$ VaR. Repeat for a Laplace loss (density $\frac1{2b}e^{-|x|/b}$, quantile $b\ln\frac1{2(1-\beta)}$). (\emph{Answer for the first part:} about $1\,000$ days.)
+\end{exercise}
+
+\begin{exercise}[not from the course: back-test]
+A desk reports a $99\%$ one-day VaR and records $7$ exceedances in $250$ days. Compute the likelihood-ratio statistic of \cref{ch19:prop-kupiec} and its $p$-value, the exact binomial tail probability $\Prob(N\ge7)$, and the Basel zone. Do the two tests agree? Why is a test with $250$ days not powerful against a true exceedance probability of $2\%$?
+\end{exercise}
+
+\begin{exercise}[not from the course: correlated normals]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Derive the Cholesky factor of $\Sigma=\begin{pmatrix}4&2.4\\2.4&9\end{pmatrix}$ and give the two-line simulation recipe.
+  \item Show that $A=E\Lambda^{1/2}E\T$ (the symmetric square root) also satisfies $AA\T=\Sigma$ and relate it to $E\Lambda^{1/2}$ of \cref{ch19:prop-shocks}.
+  \item For three assets with $\rho_{12}=\rho_{23}=\rho$, show that $\rho_{13}$ must lie in $[2\rho^2-1,1]$, and find the eigenvalues of the matrix of \cref{ch19:ex-psd}.
+  \item Prove the Box--Muller formulas.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: gamma]
+For the position $\Delta P=\delta x+\frac12\Gamma x^2$ with $x\sim N(0,1)$, $\delta=0$ and $\Gamma<0$, show that $\mathrm{VaR}_\beta=\frac12|\Gamma|\chi^2_{1,\beta}$, and that the expected shortfall is $\mathrm{ES}_\beta=\frac{|\Gamma|}{2(1-\beta)}\bigl(2z_\beta\varphi(z_\beta)+(1-\beta)\bigr)$, where $\varphi$ is the standard normal density and $z_\beta$ the $\frac{1+\beta}2$-quantile. Evaluate for $\Gamma=-0.5$, $\beta=99\%$ and compare with the value $2.11$ of the table. (\emph{Hint:} $\E[x^2\mid|x|>z]=1+z\varphi(z)/(1-\Phi(z))$.)
+\end{exercise}
+
+\begin{exercise}[not from the course: the $95/99$ ratio]
+Show that for a Laplace distribution the ratio $q_{95}/q_{99}$ does not depend on the scale, and evaluate it: $\ln10/\ln50=0.589$. Compare with the table of \cref{ch19:sec-hs}: which Student-$t$ has the same ratio? What does the ratio become for a Pareto tail $\Prob(L>x)\sim x^{-\alpha}$, and how would you estimate $\alpha$ from the ratio observed on slide~85?
+\end{exercise}

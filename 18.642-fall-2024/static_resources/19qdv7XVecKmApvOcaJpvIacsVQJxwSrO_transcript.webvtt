@@ -1,0 +1,3579 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.948 align:middle line:90%
+[SQUEAKING]
+
+00:00:01.948 --> 00:00:03.409 align:middle line:90%
+[RUSTLING]
+
+00:00:03.409 --> 00:00:05.357 align:middle line:90%
+[CLICKING]
+
+00:00:05.357 --> 00:00:12.230 align:middle line:90%
+
+
+00:00:12.230 --> 00:00:13.730 align:middle line:84%
+PETER KEMPTHORNE:
+Today, we're going
+
+00:00:13.730 --> 00:00:16.850 align:middle line:84%
+to talk about
+stochastic processes,
+
+00:00:16.850 --> 00:00:19.350 align:middle line:90%
+the second set of lectures.
+
+00:00:19.350 --> 00:00:26.240 align:middle line:84%
+And we're going to begin with a
+discussion of Brownian motion.
+
+00:00:26.240 --> 00:00:30.920 align:middle line:84%
+Brownian motion is a process
+that I'm sure most of you
+
+00:00:30.920 --> 00:00:31.800 align:middle line:90%
+have heard of.
+
+00:00:31.800 --> 00:00:36.360 align:middle line:84%
+And it was named after Robert
+Brown, an English botanist.
+
+00:00:36.360 --> 00:00:39.470 align:middle line:84%
+And this is an
+interesting case where
+
+00:00:39.470 --> 00:00:44.000 align:middle line:84%
+a scientist observes
+some dynamics in nature
+
+00:00:44.000 --> 00:00:50.390 align:middle line:84%
+and then is concerned about
+what mathematical model might
+
+00:00:50.390 --> 00:00:52.350 align:middle line:90%
+describe that behavior.
+
+00:00:52.350 --> 00:00:58.880 align:middle line:84%
+Turns out that it was, I
+guess, Albert Einstein who
+
+00:00:58.880 --> 00:01:04.379 align:middle line:84%
+formalized this Brownian
+motion model, mathematically.
+
+00:01:04.379 --> 00:01:10.880 align:middle line:84%
+And Norbert Wiener,
+our MIT hero--
+
+00:01:10.880 --> 00:01:13.730 align:middle line:84%
+those of you familiar
+with the math department
+
+00:01:13.730 --> 00:01:16.910 align:middle line:84%
+know about the
+Norbert Wiener room
+
+00:01:16.910 --> 00:01:20.870 align:middle line:84%
+that we have-- and he developed
+the mathematical foundation
+
+00:01:20.870 --> 00:01:22.350 align:middle line:90%
+for Brownian motion.
+
+00:01:22.350 --> 00:01:28.580 align:middle line:84%
+Now, let's take a look at a
+simulation of Brownian motion
+
+00:01:28.580 --> 00:01:29.970 align:middle line:90%
+in two dimensions.
+
+00:01:29.970 --> 00:01:35.970 align:middle line:84%
+So this is the kind of dynamics
+that Brown was observing.
+
+00:01:35.970 --> 00:01:39.680 align:middle line:84%
+And so in these
+slides, we're going
+
+00:01:39.680 --> 00:01:44.750 align:middle line:84%
+to start the process at the
+origin of the space, where
+
+00:01:44.750 --> 00:01:49.280 align:middle line:84%
+the red dot is, and then move
+around in two dimensions, where
+
+00:01:49.280 --> 00:01:53.990 align:middle line:84%
+each step is a random
+move in the x direction
+
+00:01:53.990 --> 00:01:57.540 align:middle line:84%
+and a random move
+in the y direction.
+
+00:01:57.540 --> 00:02:04.090 align:middle line:84%
+And for this simulation, we
+use Gaussian distributions.
+
+00:02:04.090 --> 00:02:08.620 align:middle line:84%
+But as I page
+through these graphs,
+
+00:02:08.620 --> 00:02:13.290 align:middle line:84%
+one can see how a
+particle moving according
+
+00:02:13.290 --> 00:02:16.200 align:middle line:84%
+to these dynamics will
+start at the origin
+
+00:02:16.200 --> 00:02:19.260 align:middle line:90%
+and evolve to the final red dot.
+
+00:02:19.260 --> 00:02:26.110 align:middle line:84%
+And if we hold down the
+graphs and see where it goes,
+
+00:02:26.110 --> 00:02:30.960 align:middle line:84%
+you can see that
+basically there's
+
+00:02:30.960 --> 00:02:36.040 align:middle line:84%
+purely random dynamics but
+of a very special kind.
+
+00:02:36.040 --> 00:02:41.610 align:middle line:84%
+And so the special kind
+is that the movements
+
+00:02:41.610 --> 00:02:48.780 align:middle line:84%
+are jagged and unpredictable
+in terms of their direction.
+
+00:02:48.780 --> 00:02:51.960 align:middle line:84%
+Something that's really quite
+interesting when you just
+
+00:02:51.960 --> 00:02:56.760 align:middle line:84%
+look at this and page
+through the dynamics here,
+
+00:02:56.760 --> 00:03:01.600 align:middle line:84%
+animating the process,
+the movements, in fact,
+
+00:03:01.600 --> 00:03:08.050 align:middle line:84%
+have no trend in them to
+move left or up or down.
+
+00:03:08.050 --> 00:03:13.590 align:middle line:84%
+And so the movements
+we see basically
+
+00:03:13.590 --> 00:03:18.550 align:middle line:84%
+are movements that are
+symmetrical in their dynamics.
+
+00:03:18.550 --> 00:03:21.630 align:middle line:84%
+And so that's a very
+interesting property
+
+00:03:21.630 --> 00:03:25.690 align:middle line:84%
+that we would like to
+characterize mathematically.
+
+00:03:25.690 --> 00:03:31.770 align:middle line:84%
+So let's look at how we
+define Brownian motion in one
+
+00:03:31.770 --> 00:03:33.360 align:middle line:90%
+dimension.
+
+00:03:33.360 --> 00:03:40.560 align:middle line:84%
+So in one dimension, we are
+simply looking at a graph.
+
+00:03:40.560 --> 00:03:42.035 align:middle line:90%
+Let me find the eraser here.
+
+00:03:42.035 --> 00:03:50.520 align:middle line:90%
+
+
+00:03:50.520 --> 00:03:51.020 align:middle line:90%
+OK.
+
+00:03:51.020 --> 00:03:55.840 align:middle line:90%
+
+
+00:03:55.840 --> 00:03:59.370 align:middle line:84%
+In one dimension,
+we have time t.
+
+00:03:59.370 --> 00:04:02.910 align:middle line:84%
+And we're going to
+think of a process
+
+00:04:02.910 --> 00:04:07.900 align:middle line:90%
+Bt, which will start at 0.
+
+00:04:07.900 --> 00:04:13.620 align:middle line:84%
+And then it's going to evolve
+over time in such a way
+
+00:04:13.620 --> 00:04:21.000 align:middle line:84%
+that the increments
+of the process from t
+
+00:04:21.000 --> 00:04:23.130 align:middle line:90%
+to t plus delta t--
+
+00:04:23.130 --> 00:04:26.790 align:middle line:84%
+so if we have t and
+t plus delta t here,
+
+00:04:26.790 --> 00:04:33.230 align:middle line:84%
+and we look at B of t here
+and B of t plus delta t--
+
+00:04:33.230 --> 00:04:35.790 align:middle line:90%
+
+
+00:04:35.790 --> 00:04:41.460 align:middle line:84%
+this vertical increment is
+going to be normally distributed
+
+00:04:41.460 --> 00:04:45.820 align:middle line:84%
+for any increment
+of time delta t.
+
+00:04:45.820 --> 00:04:51.450 align:middle line:84%
+And the normal distribution for
+the magnitude of that increment
+
+00:04:51.450 --> 00:04:55.480 align:middle line:84%
+will be a normal random
+variable with mean 0
+
+00:04:55.480 --> 00:04:59.950 align:middle line:84%
+and a variance that is
+proportional to the length
+
+00:04:59.950 --> 00:05:01.120 align:middle line:90%
+of the interval.
+
+00:05:01.120 --> 00:05:07.150 align:middle line:84%
+So as we consider increments,
+delta t that are larger
+
+00:05:07.150 --> 00:05:12.340 align:middle line:84%
+will have greater variation in
+the vertical increment that's
+
+00:05:12.340 --> 00:05:13.880 align:middle line:90%
+normally distributed.
+
+00:05:13.880 --> 00:05:17.600 align:middle line:84%
+Now, in addition to
+normal increments,
+
+00:05:17.600 --> 00:05:22.340 align:middle line:84%
+we have independent,
+disjoint increments.
+
+00:05:22.340 --> 00:05:27.730 align:middle line:84%
+So if we have different
+time points, like t1,
+
+00:05:27.730 --> 00:05:33.310 align:middle line:90%
+t2, and then t3, t4--
+
+00:05:33.310 --> 00:05:37.540 align:middle line:84%
+if these increments are
+separate or disjoint
+
+00:05:37.540 --> 00:05:42.640 align:middle line:84%
+from each other, then
+the change from t1 to t2
+
+00:05:42.640 --> 00:05:45.520 align:middle line:84%
+and the change from
+t3 to t4, those
+
+00:05:45.520 --> 00:05:49.600 align:middle line:84%
+will be independent
+random variables.
+
+00:05:49.600 --> 00:05:57.370 align:middle line:84%
+Finally, B of t turns out to be
+a continuous function of time
+
+00:05:57.370 --> 00:06:00.050 align:middle line:84%
+if it satisfies
+these properties.
+
+00:06:00.050 --> 00:06:06.430 align:middle line:84%
+And so this is a
+very simple model
+
+00:06:06.430 --> 00:06:10.810 align:middle line:84%
+in terms of a continuous
+time stochastic process.
+
+00:06:10.810 --> 00:06:16.660 align:middle line:84%
+Now, the properties
+of Brownian motion
+
+00:06:16.660 --> 00:06:21.380 align:middle line:90%
+are that it's a Markov process.
+
+00:06:21.380 --> 00:06:28.330 align:middle line:84%
+So if we're looking at the
+value at B of t plus delta
+
+00:06:28.330 --> 00:06:34.960 align:middle line:84%
+t at this time point,
+that is equal to the value
+
+00:06:34.960 --> 00:06:37.100 align:middle line:90%
+at any prior time point--
+
+00:06:37.100 --> 00:06:38.830 align:middle line:90%
+well, at B of t--
+
+00:06:38.830 --> 00:06:41.050 align:middle line:90%
+plus the increment.
+
+00:06:41.050 --> 00:06:46.400 align:middle line:84%
+And so given the information
+set up to time little t,
+
+00:06:46.400 --> 00:06:50.500 align:middle line:84%
+the conditional
+distribution simply
+
+00:06:50.500 --> 00:06:55.450 align:middle line:84%
+is equal to that
+starting point, B of t,
+
+00:06:55.450 --> 00:06:57.830 align:middle line:90%
+plus the random increment.
+
+00:06:57.830 --> 00:07:03.050 align:middle line:84%
+So displacements are
+independent of the past,
+
+00:07:03.050 --> 00:07:05.583 align:middle line:84%
+apart from the last
+value of the past.
+
+00:07:05.583 --> 00:07:09.010 align:middle line:90%
+
+
+00:07:09.010 --> 00:07:09.700 align:middle line:90%
+OK.
+
+00:07:09.700 --> 00:07:16.930 align:middle line:84%
+Mean and variance of B of t--
+well, because the increments are
+
+00:07:16.930 --> 00:07:19.700 align:middle line:84%
+normally distributed
+with mean 0,
+
+00:07:19.700 --> 00:07:25.840 align:middle line:84%
+then the expected value
+of B of t into the future
+
+00:07:25.840 --> 00:07:27.890 align:middle line:90%
+will stay at 0.
+
+00:07:27.890 --> 00:07:33.920 align:middle line:84%
+But the variance of B of
+t will increase with time,
+
+00:07:33.920 --> 00:07:39.650 align:middle line:84%
+and so the standard deviation
+of B of t will be proportional--
+
+00:07:39.650 --> 00:07:43.300 align:middle line:84%
+or will be sigma times
+the square root of t.
+
+00:07:43.300 --> 00:07:49.040 align:middle line:84%
+So if we think of
+drawing curves which
+
+00:07:49.040 --> 00:07:52.590 align:middle line:84%
+correspond to sigma
+square root of t,
+
+00:07:52.590 --> 00:07:57.860 align:middle line:84%
+this corresponds to 1
+standard deviation above the 0
+
+00:07:57.860 --> 00:07:59.143 align:middle line:90%
+mean for the process.
+
+00:07:59.143 --> 00:08:02.115 align:middle line:90%
+
+
+00:08:02.115 --> 00:08:02.615 align:middle line:90%
+OK.
+
+00:08:02.615 --> 00:08:06.300 align:middle line:84%
+The covariance function
+of Brownian motion--
+
+00:08:06.300 --> 00:08:11.330 align:middle line:84%
+if we want to look at the
+covariance between two times,
+
+00:08:11.330 --> 00:08:16.410 align:middle line:84%
+s and t-- so suppose here is
+time s, in here is time t--
+
+00:08:16.410 --> 00:08:27.530 align:middle line:84%
+then the process paths
+to time t include
+
+00:08:27.530 --> 00:08:31.010 align:middle line:84%
+the process paths up to
+time s, but then have
+
+00:08:31.010 --> 00:08:34.169 align:middle line:84%
+this independent
+increment beyond time s.
+
+00:08:34.169 --> 00:08:38.000 align:middle line:84%
+And so when we look
+at the covariance
+
+00:08:38.000 --> 00:08:42.020 align:middle line:84%
+of the process at
+times s and t, it's
+
+00:08:42.020 --> 00:08:45.540 align:middle line:84%
+equal to the expected
+value of the product.
+
+00:08:45.540 --> 00:08:50.970 align:middle line:84%
+But we can split B of t into
+B of s plus the increment,
+
+00:08:50.970 --> 00:08:55.230 align:middle line:84%
+and we simply get sigma
+squared s for the covariance.
+
+00:08:55.230 --> 00:08:57.770 align:middle line:84%
+So the degree to
+which the process
+
+00:08:57.770 --> 00:09:02.760 align:middle line:84%
+is correlated with other
+values of the process,
+
+00:09:02.760 --> 00:09:06.710 align:middle line:84%
+it depends on how much overlap
+there is in the time intervals
+
+00:09:06.710 --> 00:09:10.130 align:middle line:84%
+corresponding to
+those two values.
+
+00:09:10.130 --> 00:09:23.600 align:middle line:84%
+Now, this process that starts at
+0, B of 0 or B sub 0 or B of 0
+
+00:09:23.600 --> 00:09:28.880 align:middle line:84%
+equal to 0, we could start
+it at any other level
+
+00:09:28.880 --> 00:09:32.400 align:middle line:84%
+and have a process that
+has similar properties
+
+00:09:32.400 --> 00:09:36.480 align:middle line:84%
+but just has a different
+mean level from time 0.
+
+00:09:36.480 --> 00:09:41.810 align:middle line:84%
+So we can talk about starting
+the Brownian motion at any given
+
+00:09:41.810 --> 00:09:44.240 align:middle line:90%
+point.
+
+00:09:44.240 --> 00:09:48.950 align:middle line:84%
+And so in order to
+work with these models,
+
+00:09:48.950 --> 00:09:53.870 align:middle line:84%
+we'll find it convenient
+to introduce the notation
+
+00:09:53.870 --> 00:09:57.410 align:middle line:90%
+for normal random variables.
+
+00:09:57.410 --> 00:10:03.530 align:middle line:84%
+And so if we have Z be
+a standard normal, that
+
+00:10:03.530 --> 00:10:08.070 align:middle line:84%
+is a normal distribution with
+mean 0 and standard deviation 1,
+
+00:10:08.070 --> 00:10:12.860 align:middle line:84%
+then the probability
+density function
+
+00:10:12.860 --> 00:10:15.840 align:middle line:90%
+is given by this formula.
+
+00:10:15.840 --> 00:10:19.020 align:middle line:84%
+I'm sure everyone is
+comfortable with that.
+
+00:10:19.020 --> 00:10:22.070 align:middle line:84%
+And the cumulative
+distribution function
+
+00:10:22.070 --> 00:10:27.320 align:middle line:84%
+is simply the integral of the
+density from minus infinity
+
+00:10:27.320 --> 00:10:29.970 align:middle line:90%
+up to c for phi of c.
+
+00:10:29.970 --> 00:10:35.780 align:middle line:84%
+And this notation of small
+case phi and uppercase Phi are
+
+00:10:35.780 --> 00:10:39.920 align:middle line:84%
+standard for referring to
+Gaussian or normal densities
+
+00:10:39.920 --> 00:10:42.090 align:middle line:90%
+in cdf's.
+
+00:10:42.090 --> 00:10:47.850 align:middle line:84%
+Well, if we have a normal
+with non-zero mean mu
+
+00:10:47.850 --> 00:10:52.710 align:middle line:84%
+and variance tau squared,
+or standard deviation tau,
+
+00:10:52.710 --> 00:11:00.000 align:middle line:84%
+then we have the
+density of this normal Y
+
+00:11:00.000 --> 00:11:06.180 align:middle line:84%
+is a simple function of the
+density of the standard normal.
+
+00:11:06.180 --> 00:11:11.610 align:middle line:84%
+We simply subtract the mean mu
+and divide by tau inside phi,
+
+00:11:11.610 --> 00:11:16.300 align:middle line:84%
+and we have a tau
+denominator factor in front.
+
+00:11:16.300 --> 00:11:21.780 align:middle line:84%
+And what's particularly
+convenient at times
+
+00:11:21.780 --> 00:11:32.130 align:middle line:84%
+is that, if we want to calculate
+the cdf of Y, then this cdf of Y
+
+00:11:32.130 --> 00:11:37.950 align:middle line:84%
+is actually the cdf under
+the standard normal of c
+
+00:11:37.950 --> 00:11:41.130 align:middle line:90%
+minus mu over tau.
+
+00:11:41.130 --> 00:11:54.220 align:middle line:84%
+So we basically have Y is equal
+to mu plus sigma or tau z.
+
+00:11:54.220 --> 00:12:00.310 align:middle line:84%
+And so z is equal to
+Y minus mu over tau.
+
+00:12:00.310 --> 00:12:06.300 align:middle line:84%
+And so we're just substituting
+in this equation for Y
+
+00:12:06.300 --> 00:12:08.550 align:middle line:90%
+in terms of z.
+
+00:12:08.550 --> 00:12:14.190 align:middle line:84%
+Now, the probability model
+of the whole Brownian motion
+
+00:12:14.190 --> 00:12:19.450 align:middle line:90%
+process is given by--
+
+00:12:19.450 --> 00:12:23.220 align:middle line:84%
+or we can represent it by saying
+the conditional distribution
+
+00:12:23.220 --> 00:12:28.830 align:middle line:84%
+of the time t value,
+given the time s value,
+
+00:12:28.830 --> 00:12:34.830 align:middle line:84%
+is normally distributed with
+mean equal to the time s
+
+00:12:34.830 --> 00:12:38.460 align:middle line:84%
+value, X, and variance
+sigma squared times
+
+00:12:38.460 --> 00:12:41.730 align:middle line:90%
+the length of the increment.
+
+00:12:41.730 --> 00:12:45.900 align:middle line:90%
+So its pdf has this form.
+
+00:12:45.900 --> 00:12:53.370 align:middle line:84%
+So the notation here is
+the density of y at time t,
+
+00:12:53.370 --> 00:12:58.020 align:middle line:90%
+given x, the value at time s.
+
+00:12:58.020 --> 00:13:03.040 align:middle line:84%
+We have this Gaussian
+density that's centered at x.
+
+00:13:03.040 --> 00:13:10.170 align:middle line:84%
+And the variance of y depends
+on the increment from s
+
+00:13:10.170 --> 00:13:15.330 align:middle line:84%
+to t multiplied by
+the sigma squared.
+
+00:13:15.330 --> 00:13:22.380 align:middle line:84%
+Now, with this
+probability model,
+
+00:13:22.380 --> 00:13:27.210 align:middle line:84%
+it turns out this density
+function satisfies the diffusion
+
+00:13:27.210 --> 00:13:28.920 align:middle line:90%
+equation.
+
+00:13:28.920 --> 00:13:31.200 align:middle line:84%
+And the diffusion
+equation is going
+
+00:13:31.200 --> 00:13:37.600 align:middle line:84%
+to arise again and again in
+this course, especially when we
+
+00:13:37.600 --> 00:13:42.580 align:middle line:84%
+get into the valuation
+of derivatives.
+
+00:13:42.580 --> 00:13:50.530 align:middle line:84%
+And so for now, let's just
+understand this diffusion
+
+00:13:50.530 --> 00:13:51.620 align:middle line:90%
+equation.
+
+00:13:51.620 --> 00:13:54.610 align:middle line:84%
+It says that the
+partial derivative
+
+00:13:54.610 --> 00:14:02.650 align:middle line:84%
+of p with respect to time
+t is equal to a multiple
+
+00:14:02.650 --> 00:14:08.500 align:middle line:84%
+of the second partial derivative
+of p with respect to y.
+
+00:14:08.500 --> 00:14:15.460 align:middle line:84%
+So this is easy to verify for
+s equals 0 and sigma equals 1.
+
+00:14:15.460 --> 00:14:22.150 align:middle line:84%
+And if we look at
+this set of graphs,
+
+00:14:22.150 --> 00:14:30.760 align:middle line:90%
+here's the density of X, given--
+
+00:14:30.760 --> 00:14:35.398 align:middle line:84%
+or let's say, here's,
+essentially, the density of Y
+
+00:14:35.398 --> 00:14:40.000 align:middle line:84%
+represented by X. So
+the notation symbol here
+
+00:14:40.000 --> 00:14:42.950 align:middle line:84%
+is we're using X
+now instead of Y.
+
+00:14:42.950 --> 00:14:48.610 align:middle line:84%
+And we're considering the
+initial value of the Brownian
+
+00:14:48.610 --> 00:14:49.845 align:middle line:90%
+motion being 0.
+
+00:14:49.845 --> 00:14:52.870 align:middle line:90%
+
+
+00:14:52.870 --> 00:15:00.190 align:middle line:84%
+And if we increase time,
+then this normal density
+
+00:15:00.190 --> 00:15:07.870 align:middle line:84%
+drops in the middle and it
+increases far from the middle.
+
+00:15:07.870 --> 00:15:14.320 align:middle line:84%
+And so the change
+in the density is
+
+00:15:14.320 --> 00:15:22.460 align:middle line:84%
+negative near the middle
+and positive outside.
+
+00:15:22.460 --> 00:15:28.390 align:middle line:84%
+And that's because, if we
+look at the second derivative
+
+00:15:28.390 --> 00:15:33.070 align:middle line:84%
+of this density
+function, it's positive,
+
+00:15:33.070 --> 00:15:36.050 align:middle line:84%
+then it's negative for
+the second derivative.
+
+00:15:36.050 --> 00:15:37.700 align:middle line:90%
+The curvature is negative.
+
+00:15:37.700 --> 00:15:42.040 align:middle line:84%
+And then it switches from
+being a negative curvature
+
+00:15:42.040 --> 00:15:43.970 align:middle line:90%
+to a positive curvature.
+
+00:15:43.970 --> 00:15:48.370 align:middle line:84%
+And those points of inflection
+with the normal density
+
+00:15:48.370 --> 00:15:52.960 align:middle line:84%
+are actually at plus and
+minus 1 standard deviation.
+
+00:15:52.960 --> 00:16:03.070 align:middle line:84%
+So if we increase the time
+from 1 to 2 to 3, or 2.5 here,
+
+00:16:03.070 --> 00:16:08.860 align:middle line:84%
+you can see how it's
+basically dropping
+
+00:16:08.860 --> 00:16:10.420 align:middle line:84%
+in the middle of
+the distribution
+
+00:16:10.420 --> 00:16:13.240 align:middle line:84%
+and it's rising
+on the other side.
+
+00:16:13.240 --> 00:16:17.650 align:middle line:84%
+So this kind of
+motion or dynamics
+
+00:16:17.650 --> 00:16:21.400 align:middle line:84%
+satisfies the
+diffusion equation.
+
+00:16:21.400 --> 00:16:26.800 align:middle line:84%
+And so what's, I
+think, important
+
+00:16:26.800 --> 00:16:31.430 align:middle line:84%
+is just to have a
+good sense of what
+
+00:16:31.430 --> 00:16:35.570 align:middle line:84%
+it means when a function
+such as the density
+
+00:16:35.570 --> 00:16:40.310 align:middle line:84%
+satisfies this
+diffusion equation.
+
+00:16:40.310 --> 00:16:44.610 align:middle line:90%
+Now, let's see.
+
+00:16:44.610 --> 00:16:50.960 align:middle line:84%
+This diffusion equation
+relates to a conservation
+
+00:16:50.960 --> 00:16:54.110 align:middle line:90%
+of probability for every x.
+
+00:16:54.110 --> 00:17:00.050 align:middle line:84%
+So regardless of what
+the starting value is,
+
+00:17:00.050 --> 00:17:04.849 align:middle line:84%
+we have the probability density
+integrating to 1 always.
+
+00:17:04.849 --> 00:17:12.950 align:middle line:84%
+And it turns out that this
+density is a unique solution
+
+00:17:12.950 --> 00:17:15.060 align:middle line:90%
+to this diffusion equation.
+
+00:17:15.060 --> 00:17:22.490 align:middle line:84%
+So an important issue in
+the mathematical development
+
+00:17:22.490 --> 00:17:27.660 align:middle line:84%
+framework for models is our
+solutions to our equations.
+
+00:17:27.660 --> 00:17:28.740 align:middle line:90%
+Do they exist?
+
+00:17:28.740 --> 00:17:29.940 align:middle line:90%
+Are they unique?
+
+00:17:29.940 --> 00:17:32.480 align:middle line:84%
+In fact, for this
+diffusion equation,
+
+00:17:32.480 --> 00:17:38.930 align:middle line:84%
+we get a unique solution
+satisfying the properties.
+
+00:17:38.930 --> 00:17:41.155 align:middle line:90%
+OK.
+
+00:17:41.155 --> 00:17:43.760 align:middle line:84%
+In other disciplines--
+well, in physics,
+
+00:17:43.760 --> 00:17:44.795 align:middle line:90%
+there's a heat equation.
+
+00:17:44.795 --> 00:17:47.660 align:middle line:90%
+
+
+00:17:47.660 --> 00:17:48.710 align:middle line:90%
+Let's see.
+
+00:17:48.710 --> 00:17:52.970 align:middle line:84%
+In the dynamics of
+populations, there's
+
+00:17:52.970 --> 00:17:57.200 align:middle line:84%
+the Fokker-Planck equation and
+Kolmogorov Forward equation.
+
+00:17:57.200 --> 00:18:03.350 align:middle line:84%
+These arise outside of
+mathematical Brownian motion
+
+00:18:03.350 --> 00:18:04.290 align:middle line:90%
+as well.
+
+00:18:04.290 --> 00:18:10.730 align:middle line:84%
+Now, the interesting
+question perhaps,
+
+00:18:10.730 --> 00:18:12.980 align:middle line:84%
+or at least the interesting
+question to mathematicians
+
+00:18:12.980 --> 00:18:20.750 align:middle line:84%
+is, how do we really define
+Brownian motion formally
+
+00:18:20.750 --> 00:18:23.480 align:middle line:90%
+as a stochastic process?
+
+00:18:23.480 --> 00:18:27.620 align:middle line:84%
+And so it turns out
+that Brownian motion
+
+00:18:27.620 --> 00:18:33.470 align:middle line:84%
+can be defined as the
+limiting stochastic process
+
+00:18:33.470 --> 00:18:37.550 align:middle line:90%
+corresponding to a random walk.
+
+00:18:37.550 --> 00:18:43.490 align:middle line:84%
+So let's consider
+random variables
+
+00:18:43.490 --> 00:18:47.420 align:middle line:84%
+X indexed by integers
+that are independent
+
+00:18:47.420 --> 00:18:49.670 align:middle line:90%
+and identically distributed.
+
+00:18:49.670 --> 00:18:55.130 align:middle line:84%
+And let's assume that
+those X's have mean
+
+00:18:55.130 --> 00:18:58.400 align:middle line:90%
+0 and standard deviation 1.
+
+00:18:58.400 --> 00:19:05.930 align:middle line:84%
+Then, if we look at the
+random walk with steps X1
+
+00:19:05.930 --> 00:19:11.340 align:middle line:84%
+to Xn for the n-th position
+of the random walk,
+
+00:19:11.340 --> 00:19:18.620 align:middle line:84%
+then the limiting distribution
+of the normalized random walk
+
+00:19:18.620 --> 00:19:23.400 align:middle line:84%
+is actually a standard
+normal distribution.
+
+00:19:23.400 --> 00:19:29.100 align:middle line:84%
+So phi of c is our standard
+normal cumulative distribution
+
+00:19:29.100 --> 00:19:30.040 align:middle line:90%
+function.
+
+00:19:30.040 --> 00:19:35.220 align:middle line:84%
+The standardized random
+walk will in the limit,
+
+00:19:35.220 --> 00:19:40.650 align:middle line:84%
+as n grows large, have
+a Gaussian distribution
+
+00:19:40.650 --> 00:19:44.130 align:middle line:84%
+with mean 0 and
+standard deviation 1.
+
+00:19:44.130 --> 00:19:50.070 align:middle line:84%
+So what we can do is
+consider normalizing
+
+00:19:50.070 --> 00:19:59.460 align:middle line:84%
+the random-walk
+process by having
+
+00:19:59.460 --> 00:20:06.510 align:middle line:84%
+the partial sums of the
+steps divided by root n.
+
+00:20:06.510 --> 00:20:11.850 align:middle line:84%
+But rather than focusing just on
+those increments, those integer
+
+00:20:11.850 --> 00:20:20.490 align:middle line:84%
+increments, we consider four
+times, say, between 0 and 1--
+
+00:20:20.490 --> 00:20:28.720 align:middle line:84%
+we can consider values
+for time t between, say,
+
+00:20:28.720 --> 00:20:33.610 align:middle line:84%
+integer k over n and integer
+k over n plus 1 over n
+
+00:20:33.610 --> 00:20:44.760 align:middle line:84%
+to define a continuous path of
+Bn of t, given s of n and t.
+
+00:20:44.760 --> 00:20:48.100 align:middle line:84%
+And so what we
+then can do is say,
+
+00:20:48.100 --> 00:20:54.120 align:middle line:84%
+let's consider the limit as
+the number of increments--
+
+00:20:54.120 --> 00:20:57.790 align:middle line:84%
+number of steps
+increases arbitrarily.
+
+00:20:57.790 --> 00:21:02.230 align:middle line:84%
+Let's consider the
+limiting process.
+
+00:21:02.230 --> 00:21:07.050 align:middle line:84%
+And that turns out to be
+a Brownian motion process.
+
+00:21:07.050 --> 00:21:12.610 align:middle line:84%
+So with this normalized
+random-walk process,
+
+00:21:12.610 --> 00:21:21.300 align:middle line:84%
+it turns out that this
+limiting distribution is--
+
+00:21:21.300 --> 00:21:25.620 align:middle line:84%
+or this limiting process is
+invariant to the distribution
+
+00:21:25.620 --> 00:21:27.540 align:middle line:90%
+of the X's.
+
+00:21:27.540 --> 00:21:32.790 align:middle line:84%
+So if we have random walks
+with independent steps
+
+00:21:32.790 --> 00:21:36.390 align:middle line:84%
+that have mean 0,
+standard deviation 1,
+
+00:21:36.390 --> 00:21:41.050 align:middle line:84%
+then regardless of what
+that distribution is,
+
+00:21:41.050 --> 00:21:44.040 align:middle line:84%
+the limiting
+normalized random walk
+
+00:21:44.040 --> 00:21:46.890 align:middle line:90%
+will be the diffusion process.
+
+00:21:46.890 --> 00:21:52.140 align:middle line:84%
+So let's take a look at two
+cases for the steps, Bernoulli
+
+00:21:52.140 --> 00:21:59.490 align:middle line:84%
+X's and Gaussian X's, which
+of course will be Gaussian.
+
+00:21:59.490 --> 00:22:11.880 align:middle line:84%
+And so here is a cumulation or
+a random walk with 10 steps.
+
+00:22:11.880 --> 00:22:18.430 align:middle line:84%
+The top panel corresponds to
+unit plus 1 or minus 1 steps,
+
+00:22:18.430 --> 00:22:22.833 align:middle line:84%
+and the bottom panel
+corresponds to Gaussian steps.
+
+00:22:22.833 --> 00:22:26.860 align:middle line:90%
+
+
+00:22:26.860 --> 00:22:29.320 align:middle line:84%
+And if we increase
+the number of steps
+
+00:22:29.320 --> 00:22:34.810 align:middle line:84%
+and normalize them by
+dividing by root t,
+
+00:22:34.810 --> 00:22:39.860 align:middle line:84%
+we end up getting these
+different paths tracing out.
+
+00:22:39.860 --> 00:22:42.820 align:middle line:84%
+And so what's important
+in this display is
+
+00:22:42.820 --> 00:22:47.090 align:middle line:84%
+that, as we let n get
+arbitrarily large,
+
+00:22:47.090 --> 00:22:51.020 align:middle line:84%
+the process will be
+equivalent to Brownian motion.
+
+00:22:51.020 --> 00:22:56.830 align:middle line:84%
+So we're going to go
+up to 2,000 steps here.
+
+00:22:56.830 --> 00:23:02.980 align:middle line:84%
+And one can see how this
+normalized random-walk process
+
+00:23:02.980 --> 00:23:05.320 align:middle line:90%
+evolves.
+
+00:23:05.320 --> 00:23:12.310 align:middle line:84%
+And when we get to the end of
+the simulation here of 2,000
+
+00:23:12.310 --> 00:23:16.180 align:middle line:90%
+steps, this is what we have.
+
+00:23:16.180 --> 00:23:23.920 align:middle line:84%
+And so the key takeaway is
+that the limiting process will
+
+00:23:23.920 --> 00:23:30.880 align:middle line:84%
+be a Brownian motion, and it
+doesn't matter what the step
+
+00:23:30.880 --> 00:23:34.570 align:middle line:90%
+distribution is in the limit.
+
+00:23:34.570 --> 00:23:39.490 align:middle line:84%
+And so this implies
+that this model
+
+00:23:39.490 --> 00:23:43.060 align:middle line:84%
+may be useful in a
+variety of contexts, where
+
+00:23:43.060 --> 00:23:46.960 align:middle line:84%
+underlying steps of
+the process increments
+
+00:23:46.960 --> 00:23:52.000 align:middle line:84%
+may have some distribution
+that's non-Gaussian.
+
+00:23:52.000 --> 00:23:56.470 align:middle line:84%
+But the distribution
+of increments
+
+00:23:56.470 --> 00:24:01.586 align:middle line:84%
+over long periods of time will
+then follow the diffusion.
+
+00:24:01.586 --> 00:24:06.700 align:middle line:90%
+
+
+00:24:06.700 --> 00:24:09.160 align:middle line:84%
+So the key properties
+of Brownian motion
+
+00:24:09.160 --> 00:24:10.670 align:middle line:90%
+are independent increments.
+
+00:24:10.670 --> 00:24:14.200 align:middle line:84%
+And the variance
+of those increments
+
+00:24:14.200 --> 00:24:19.810 align:middle line:84%
+are proportional to the time
+period between the measures.
+
+00:24:19.810 --> 00:24:25.300 align:middle line:84%
+Now, there's a
+reflection principle
+
+00:24:25.300 --> 00:24:30.940 align:middle line:84%
+in working with Brownian
+motion that is very powerful.
+
+00:24:30.940 --> 00:24:36.430 align:middle line:84%
+This is an example where
+the mathematical theory
+
+00:24:36.430 --> 00:24:40.730 align:middle line:90%
+is a bit tricky.
+
+00:24:40.730 --> 00:24:45.490 align:middle line:84%
+But if you're clever
+at solving the problem,
+
+00:24:45.490 --> 00:24:50.000 align:middle line:84%
+you may find an elegant,
+simple solution to the problem.
+
+00:24:50.000 --> 00:24:53.980 align:middle line:84%
+So let's just understand what
+it means to be reflecting
+
+00:24:53.980 --> 00:24:56.620 align:middle line:90%
+Brownian motion first.
+
+00:24:56.620 --> 00:25:07.185 align:middle line:84%
+So we consider Brownian motion
+to be the process B of t.
+
+00:25:07.185 --> 00:25:13.000 align:middle line:90%
+
+
+00:25:13.000 --> 00:25:18.200 align:middle line:84%
+And so this will be one
+realization of the path perhaps.
+
+00:25:18.200 --> 00:25:28.370 align:middle line:84%
+And then if we consider the
+first time the process hits
+
+00:25:28.370 --> 00:25:38.270 align:middle line:84%
+x and define tau equal
+to the first time B of t
+
+00:25:38.270 --> 00:25:46.100 align:middle line:84%
+is equal to x, then, OK,
+this is the first time it
+
+00:25:46.100 --> 00:25:49.070 align:middle line:90%
+hits that level x.
+
+00:25:49.070 --> 00:25:57.230 align:middle line:84%
+If we consider reflecting this
+path about the level at time
+
+00:25:57.230 --> 00:25:59.340 align:middle line:90%
+x going into the future--
+
+00:25:59.340 --> 00:26:07.230 align:middle line:84%
+so this would be going like
+this and then up like that--
+
+00:26:07.230 --> 00:26:13.130 align:middle line:84%
+This is the mathematical formula
+for doing a reflection of B
+
+00:26:13.130 --> 00:26:15.290 align:middle line:90%
+be about x.
+
+00:26:15.290 --> 00:26:20.430 align:middle line:84%
+And we'll see some examples
+of this in a minute.
+
+00:26:20.430 --> 00:26:25.850 align:middle line:84%
+But what is important
+in these reflected
+
+00:26:25.850 --> 00:26:30.440 align:middle line:84%
+paths is that the
+probability model
+
+00:26:30.440 --> 00:26:35.580 align:middle line:84%
+for the original process
+and the reflected process,
+
+00:26:35.580 --> 00:26:38.480 align:middle line:90%
+those are identical.
+
+00:26:38.480 --> 00:26:44.180 align:middle line:84%
+So let's take a look at this
+reflected Brownian motion
+
+00:26:44.180 --> 00:26:45.000 align:middle line:90%
+simulation.
+
+00:26:45.000 --> 00:26:50.330 align:middle line:84%
+So what I'm doing here is
+simulating Brownian motion over
+
+00:26:50.330 --> 00:26:57.810 align:middle line:84%
+10,000 steps and looking at
+an original process in red,
+
+00:26:57.810 --> 00:27:00.900 align:middle line:84%
+and then reflecting
+that in green.
+
+00:27:00.900 --> 00:27:05.330 align:middle line:84%
+And because of overlapping
+colors, I guess,
+
+00:27:05.330 --> 00:27:10.430 align:middle line:84%
+the beginning process at
+time 0 is the original
+
+00:27:10.430 --> 00:27:11.820 align:middle line:90%
+and the reflected path.
+
+00:27:11.820 --> 00:27:14.100 align:middle line:90%
+So it appears as the reflected.
+
+00:27:14.100 --> 00:27:18.900 align:middle line:84%
+So once it hits
+this level x in red,
+
+00:27:18.900 --> 00:27:23.940 align:middle line:84%
+the green reflects
+about x, the value.
+
+00:27:23.940 --> 00:27:30.050 align:middle line:84%
+And it continues reflecting
+across the remaining
+
+00:27:30.050 --> 00:27:34.190 align:middle line:90%
+path of the original series.
+
+00:27:34.190 --> 00:27:39.230 align:middle line:84%
+Now, here's another realization
+of reflected Brownian motion,
+
+00:27:39.230 --> 00:27:42.260 align:middle line:90%
+has the same property.
+
+00:27:42.260 --> 00:27:46.560 align:middle line:90%
+And here's a third.
+
+00:27:46.560 --> 00:27:50.820 align:middle line:84%
+Basically, with different
+realizations of Brownian motion,
+
+00:27:50.820 --> 00:27:53.690 align:middle line:90%
+we'll get different paths.
+
+00:27:53.690 --> 00:27:57.590 align:middle line:84%
+And the reflected paths
+have these same properties.
+
+00:27:57.590 --> 00:28:05.525 align:middle line:84%
+Now, the interesting
+question is--
+
+00:28:05.525 --> 00:28:08.250 align:middle line:90%
+
+
+00:28:08.250 --> 00:28:12.270 align:middle line:84%
+well, it's actually-- let me
+go back to the notes here.
+
+00:28:12.270 --> 00:28:17.640 align:middle line:84%
+And the interesting
+question is to ask,
+
+00:28:17.640 --> 00:28:28.800 align:middle line:84%
+what is the maximum of a
+Brownian motion up to time t?
+
+00:28:28.800 --> 00:28:32.100 align:middle line:84%
+So we can define
+m of t to be, what
+
+00:28:32.100 --> 00:28:35.790 align:middle line:84%
+is the maximum value that
+the Brownian motion has
+
+00:28:35.790 --> 00:28:40.380 align:middle line:90%
+realized between time 0 and t?
+
+00:28:40.380 --> 00:28:50.910 align:middle line:84%
+Well, the probability of the
+maximum exceeding x, some level,
+
+00:28:50.910 --> 00:28:55.020 align:middle line:84%
+will actually be
+twice the probability
+
+00:28:55.020 --> 00:28:59.860 align:middle line:84%
+that the ending value of
+the process exceeds x.
+
+00:28:59.860 --> 00:29:04.863 align:middle line:84%
+So let's take a look again
+at the reflected paths.
+
+00:29:04.863 --> 00:29:09.180 align:middle line:90%
+
+
+00:29:09.180 --> 00:29:20.970 align:middle line:84%
+So if we look at the reflected
+paths about x, then the red
+
+00:29:20.970 --> 00:29:27.376 align:middle line:84%
+and the green paths have the
+same probabilities of occurring.
+
+00:29:27.376 --> 00:29:33.460 align:middle line:90%
+
+
+00:29:33.460 --> 00:29:35.076 align:middle line:90%
+Let's see.
+
+00:29:35.076 --> 00:29:41.220 align:middle line:84%
+If we look at whether the ending
+value of the original Brownian
+
+00:29:41.220 --> 00:29:42.660 align:middle line:90%
+motion--
+
+00:29:42.660 --> 00:29:49.605 align:middle line:84%
+sorry-- or the ending
+value of a Brownian motion
+
+00:29:49.605 --> 00:29:55.950 align:middle line:84%
+exceeds a given
+level, then there
+
+00:29:55.950 --> 00:30:01.770 align:middle line:84%
+will be twice that number,
+twice those realizations
+
+00:30:01.770 --> 00:30:05.080 align:middle line:84%
+for which the maximum
+exceeded that level.
+
+00:30:05.080 --> 00:30:10.410 align:middle line:84%
+So for both of these
+reflected paths, the maximum--
+
+00:30:10.410 --> 00:30:15.900 align:middle line:84%
+let's see-- the maximum
+of the path exceeded x.
+
+00:30:15.900 --> 00:30:27.330 align:middle line:84%
+And so looking here, the
+probability of the maximum
+
+00:30:27.330 --> 00:30:30.750 align:middle line:84%
+exceeding x, well,
+we can just look
+
+00:30:30.750 --> 00:30:38.830 align:middle line:84%
+at the probability of a path
+exceeding x at the end point.
+
+00:30:38.830 --> 00:30:44.020 align:middle line:84%
+And the reflected intervals
+will match those, one for one.
+
+00:30:44.020 --> 00:30:47.340 align:middle line:84%
+And so we basically
+have the formula
+
+00:30:47.340 --> 00:30:57.960 align:middle line:84%
+that we have twice the final
+value of the process exceeding
+
+00:30:57.960 --> 00:31:03.070 align:middle line:84%
+x is equal to the probability
+that the maximum exceeds x.
+
+00:31:03.070 --> 00:31:08.080 align:middle line:84%
+And we can write out what
+that probability is in terms
+
+00:31:08.080 --> 00:31:10.403 align:middle line:90%
+of the standard normal cdf.
+
+00:31:10.403 --> 00:31:14.800 align:middle line:90%
+
+
+00:31:14.800 --> 00:31:24.490 align:middle line:84%
+Now, from this result, we can
+differentiate this probability
+
+00:31:24.490 --> 00:31:35.650 align:middle line:84%
+with respect to x and get
+the density of the maximum.
+
+00:31:35.650 --> 00:31:40.780 align:middle line:90%
+And so let's see here.
+
+00:31:40.780 --> 00:31:47.080 align:middle line:84%
+So here is a graph of the
+cumulative probability
+
+00:31:47.080 --> 00:31:53.030 align:middle line:84%
+of the maximum
+exceeding a level x.
+
+00:31:53.030 --> 00:31:58.600 align:middle line:84%
+And this is, basically,
+we're interested in,
+
+00:31:58.600 --> 00:32:02.450 align:middle line:84%
+what's the probability of
+exceeding x before time t?
+
+00:32:02.450 --> 00:32:07.310 align:middle line:84%
+And with lower
+values of x, like 1,
+
+00:32:07.310 --> 00:32:08.955 align:middle line:90%
+the probability is quite high.
+
+00:32:08.955 --> 00:32:12.610 align:middle line:90%
+
+
+00:32:12.610 --> 00:32:13.250 align:middle line:90%
+Let's see.
+
+00:32:13.250 --> 00:32:16.510 align:middle line:90%
+If x is very--
+
+00:32:16.510 --> 00:32:17.140 align:middle line:90%
+let's see.
+
+00:32:17.140 --> 00:32:18.220 align:middle line:90%
+Or, sorry.
+
+00:32:18.220 --> 00:32:19.605 align:middle line:90%
+Is that x there?
+
+00:32:19.605 --> 00:32:23.095 align:middle line:90%
+
+
+00:32:23.095 --> 00:32:23.595 align:middle line:90%
+Right.
+
+00:32:23.595 --> 00:32:24.310 align:middle line:90%
+OK.
+
+00:32:24.310 --> 00:32:29.620 align:middle line:84%
+So if the maximum is 3, the
+probability of exceeding 3
+
+00:32:29.620 --> 00:32:30.700 align:middle line:90%
+is much lower.
+
+00:32:30.700 --> 00:32:37.360 align:middle line:84%
+The probability of exceeding
+2 is in the mid-way there.
+
+00:32:37.360 --> 00:32:40.870 align:middle line:84%
+And what's also
+very interesting is
+
+00:32:40.870 --> 00:32:47.710 align:middle line:84%
+that we can use these results
+to calculate the density
+
+00:32:47.710 --> 00:32:54.880 align:middle line:84%
+function for the first
+hitting time of a given level.
+
+00:32:54.880 --> 00:32:59.380 align:middle line:84%
+And so importantly, we
+have the probability
+
+00:32:59.380 --> 00:33:01.630 align:middle line:84%
+of the max up to
+time t exceeding
+
+00:33:01.630 --> 00:33:09.850 align:middle line:84%
+x is twice the probability that
+the ending value exceeds x.
+
+00:33:09.850 --> 00:33:16.720 align:middle line:84%
+And we can differentiate
+this with respect to t.
+
+00:33:16.720 --> 00:33:22.840 align:middle line:84%
+And we get this density function
+for the density of the stopping
+
+00:33:22.840 --> 00:33:28.210 align:middle line:84%
+time for hitting
+a given level x.
+
+00:33:28.210 --> 00:33:32.380 align:middle line:84%
+So let's see here
+if we have that.
+
+00:33:32.380 --> 00:33:34.896 align:middle line:84%
+So here's the hitting
+time densities.
+
+00:33:34.896 --> 00:33:37.540 align:middle line:90%
+
+
+00:33:37.540 --> 00:33:39.610 align:middle line:84%
+So with standard
+Brownian motion,
+
+00:33:39.610 --> 00:33:44.720 align:middle line:84%
+if we're looking at the time to
+hit the level 1 starting at 0,
+
+00:33:44.720 --> 00:33:48.370 align:middle line:84%
+then there's this nice
+unimodal distribution
+
+00:33:48.370 --> 00:33:51.800 align:middle line:84%
+for that time, which
+is relatively short.
+
+00:33:51.800 --> 00:33:56.570 align:middle line:84%
+But if we're looking at hitting
+times for higher levels,
+
+00:33:56.570 --> 00:34:02.030 align:middle line:84%
+like two or three, then that
+hitting time distribution
+
+00:34:02.030 --> 00:34:03.540 align:middle line:90%
+spreads out.
+
+00:34:03.540 --> 00:34:05.910 align:middle line:90%
+So now, let's see.
+
+00:34:05.910 --> 00:34:12.620 align:middle line:84%
+We can talk about some
+extensions of Brownian motion.
+
+00:34:12.620 --> 00:34:18.179 align:middle line:84%
+One is just reflected
+Brownian motion around 0.
+
+00:34:18.179 --> 00:34:27.770 align:middle line:84%
+So if we have the process
+bouncing off 0 level,
+
+00:34:27.770 --> 00:34:31.909 align:middle line:84%
+we can think of
+that process being
+
+00:34:31.909 --> 00:34:35.159 align:middle line:90%
+a positive stochastic process.
+
+00:34:35.159 --> 00:34:40.670 align:middle line:84%
+And it's fairly easy to show
+that the expected value of this
+
+00:34:40.670 --> 00:34:45.530 align:middle line:84%
+reflected Brownian motion
+is a multiple of root
+
+00:34:45.530 --> 00:34:50.239 align:middle line:84%
+t, square root of 2 over pi,
+and the variance is 1 minus 2
+
+00:34:50.239 --> 00:34:53.050 align:middle line:90%
+over pi t.
+
+00:34:53.050 --> 00:34:59.390 align:middle line:84%
+And we can also consider
+absorbed Brownian motion.
+
+00:34:59.390 --> 00:35:05.330 align:middle line:84%
+If we consider tau being
+the first time the level 0--
+
+00:35:05.330 --> 00:35:15.170 align:middle line:84%
+or level x is hit, then we
+can define our process being
+
+00:35:15.170 --> 00:35:21.920 align:middle line:84%
+equal to the original Brownian
+motion B of t, or B at 0 for t
+
+00:35:21.920 --> 00:35:23.450 align:middle line:90%
+greater than tau.
+
+00:35:23.450 --> 00:35:30.170 align:middle line:84%
+And so with absorbed Brownian
+motion, these kinds of processes
+
+00:35:30.170 --> 00:35:34.550 align:middle line:84%
+are useful, for
+example, when we have
+
+00:35:34.550 --> 00:35:39.530 align:middle line:84%
+a Brownian motion-like process
+for a stock price, which
+
+00:35:39.530 --> 00:35:42.960 align:middle line:84%
+is generally positive, so
+long as the company is viable.
+
+00:35:42.960 --> 00:35:44.550 align:middle line:84%
+But if the company
+goes bankrupt,
+
+00:35:44.550 --> 00:35:48.800 align:middle line:84%
+then the price
+gets absorbed at 0.
+
+00:35:48.800 --> 00:35:57.470 align:middle line:84%
+Now, we have another extension
+of Brownian motion, which
+
+00:35:57.470 --> 00:36:01.340 align:middle line:90%
+is called the Brownian Bridge.
+
+00:36:01.340 --> 00:36:12.680 align:middle line:84%
+And so if we consider a Brownian
+motion process starting at 0,
+
+00:36:12.680 --> 00:36:23.240 align:middle line:84%
+and it goes up to, let's
+say, time 1, starting at 0,
+
+00:36:23.240 --> 00:36:24.313 align:middle line:90%
+we can define--
+
+00:36:24.313 --> 00:36:27.680 align:middle line:90%
+
+
+00:36:27.680 --> 00:36:38.040 align:middle line:84%
+we can define the procedure
+x, which is equal to B of t--
+
+00:36:38.040 --> 00:36:41.930 align:middle line:90%
+
+
+00:36:41.930 --> 00:36:50.270 align:middle line:84%
+let's see-- B of
+t minus tB of 1.
+
+00:36:50.270 --> 00:36:50.790 align:middle line:90%
+Let's see.
+
+00:36:50.790 --> 00:36:52.384 align:middle line:90%
+Is that right?
+
+00:36:52.384 --> 00:36:55.440 align:middle line:90%
+Minus t times B of 1.
+
+00:36:55.440 --> 00:36:58.474 align:middle line:90%
+So if we consider--
+
+00:36:58.474 --> 00:37:05.400 align:middle line:90%
+
+
+00:37:05.400 --> 00:37:07.290 align:middle line:90%
+let's see-- looking at--
+
+00:37:07.290 --> 00:37:08.070 align:middle line:90%
+well, let's see.
+
+00:37:08.070 --> 00:37:13.710 align:middle line:84%
+This process, so x
+of 1 is equal to B
+
+00:37:13.710 --> 00:37:20.400 align:middle line:84%
+of 1 minus 1 times B of
+1, which is equal to 0.
+
+00:37:20.400 --> 00:37:26.553 align:middle line:90%
+If we basically draw a line to--
+
+00:37:26.553 --> 00:37:29.730 align:middle line:90%
+
+
+00:37:29.730 --> 00:37:38.220 align:middle line:84%
+if we consider this line as
+1 and this has slope B of 1,
+
+00:37:38.220 --> 00:37:43.680 align:middle line:84%
+then if we subtract
+tB of 1, we're
+
+00:37:43.680 --> 00:37:50.400 align:middle line:84%
+looking at pinning down
+the Brownian motion
+
+00:37:50.400 --> 00:37:59.070 align:middle line:84%
+and looking at the distance
+from a constant slope, tB of 1
+
+00:37:59.070 --> 00:38:00.700 align:middle line:90%
+and B of t.
+
+00:38:00.700 --> 00:38:05.280 align:middle line:84%
+And this particular
+process actually
+
+00:38:05.280 --> 00:38:11.400 align:middle line:84%
+arises in a very
+interesting context
+
+00:38:11.400 --> 00:38:15.310 align:middle line:84%
+of normalized empirical
+distribution functions.
+
+00:38:15.310 --> 00:38:23.170 align:middle line:84%
+So what do we want
+to highlight here?
+
+00:38:23.170 --> 00:38:28.620 align:middle line:84%
+If we have a sequence
+of random variables
+
+00:38:28.620 --> 00:38:36.870 align:middle line:84%
+that are uniformly
+distributed between 0 and 1
+
+00:38:36.870 --> 00:38:43.230 align:middle line:84%
+and we calculate their empirical
+distribution function--
+
+00:38:43.230 --> 00:38:49.410 align:middle line:84%
+so it's the count of the
+U's less than or equal to
+
+00:38:49.410 --> 00:38:51.960 align:middle line:90%
+t divided by n--
+
+00:38:51.960 --> 00:38:58.080 align:middle line:84%
+then this empirical
+distribution function
+
+00:38:58.080 --> 00:39:08.400 align:middle line:84%
+will have expectation equal to t
+and variance equal to t times 1
+
+00:39:08.400 --> 00:39:10.120 align:middle line:90%
+minus t over n.
+
+00:39:10.120 --> 00:39:17.890 align:middle line:90%
+So if we think of these U's--
+
+00:39:17.890 --> 00:39:24.180 align:middle line:84%
+so we have Ui is distributed
+uniform from 0 to 1.
+
+00:39:24.180 --> 00:39:27.690 align:middle line:90%
+We have the scale from 0 to 1.
+
+00:39:27.690 --> 00:39:34.110 align:middle line:84%
+And we consider a value
+Ui as a realization.
+
+00:39:34.110 --> 00:39:43.414 align:middle line:84%
+Then the probability that Ui
+is less than or equal to t
+
+00:39:43.414 --> 00:39:45.050 align:middle line:90%
+is equal to t.
+
+00:39:45.050 --> 00:39:51.190 align:middle line:90%
+
+
+00:39:51.190 --> 00:40:01.480 align:middle line:84%
+And the variance
+of the indicator
+
+00:40:01.480 --> 00:40:04.460 align:middle line:84%
+of Ui being less
+than or equal to t,
+
+00:40:04.460 --> 00:40:09.460 align:middle line:84%
+this is a Bernoulli
+outcome, which
+
+00:40:09.460 --> 00:40:14.650 align:middle line:84%
+has variance equal to the
+probability of occurring
+
+00:40:14.650 --> 00:40:17.840 align:middle line:90%
+times the complement of that.
+
+00:40:17.840 --> 00:40:26.770 align:middle line:84%
+So we get this t times 1 minus
+t being the variance of--
+
+00:40:26.770 --> 00:40:30.970 align:middle line:84%
+the indicator of the Ui being
+less than or equal to t.
+
+00:40:30.970 --> 00:40:38.930 align:middle line:84%
+And then if we consider the
+empirical distribution function,
+
+00:40:38.930 --> 00:40:42.530 align:middle line:84%
+which is summing over
+these indicators,
+
+00:40:42.530 --> 00:40:54.130 align:middle line:84%
+then we get a process which
+has a limiting value, which
+
+00:40:54.130 --> 00:41:01.360 align:middle line:84%
+is basically the deviation from
+its mean, scaled up by root n,
+
+00:41:01.360 --> 00:41:05.710 align:middle line:84%
+is normal with mean 0 and
+variance t times 1 minus t.
+
+00:41:05.710 --> 00:41:10.780 align:middle line:84%
+And this is actually the
+Brownian Bridge process.
+
+00:41:10.780 --> 00:41:18.490 align:middle line:90%
+Now, let's see.
+
+00:41:18.490 --> 00:41:25.210 align:middle line:84%
+With these examples where we
+use uniform random variables
+
+00:41:25.210 --> 00:41:30.550 align:middle line:84%
+and properties of functions
+of those uniforms,
+
+00:41:30.550 --> 00:41:39.400 align:middle line:84%
+it's important to note that for
+any continuous distribution,
+
+00:41:39.400 --> 00:41:45.985 align:middle line:90%
+say, Y distributed with some--
+
+00:41:45.985 --> 00:41:48.740 align:middle line:90%
+
+
+00:41:48.740 --> 00:42:02.930 align:middle line:84%
+this is the cdf of Y.
+If we calculate F of Y,
+
+00:42:02.930 --> 00:42:06.276 align:middle line:84%
+this happens to be a
+uniform distribution.
+
+00:42:06.276 --> 00:42:09.260 align:middle line:90%
+
+
+00:42:09.260 --> 00:42:12.680 align:middle line:84%
+So this is the probability
+integral transform
+
+00:42:12.680 --> 00:42:14.580 align:middle line:90%
+of any random variable.
+
+00:42:14.580 --> 00:42:19.100 align:middle line:84%
+And so when we
+have this property
+
+00:42:19.100 --> 00:42:24.680 align:middle line:84%
+for the empirical distribution
+function of uniforms--
+
+00:42:24.680 --> 00:42:31.010 align:middle line:84%
+well, of uniforms, if
+we replace the U's,
+
+00:42:31.010 --> 00:42:35.210 align:middle line:84%
+which are uniform
+0, 1 by assumption,
+
+00:42:35.210 --> 00:42:39.830 align:middle line:84%
+with a distribution
+function F of Y, where
+
+00:42:39.830 --> 00:42:49.160 align:middle line:84%
+we have Y1 to Yn iid,
+with this cdf F sub Y,
+
+00:42:49.160 --> 00:43:00.780 align:middle line:84%
+then the Ui equal to
+F of Yi F sub Y of i,
+
+00:43:00.780 --> 00:43:02.283 align:middle line:90%
+these will be iid uniform.
+
+00:43:02.283 --> 00:43:05.210 align:middle line:90%
+
+
+00:43:05.210 --> 00:43:11.600 align:middle line:84%
+So that's a really
+nice result. And it
+
+00:43:11.600 --> 00:43:19.130 align:middle line:84%
+leads to issues involved with
+modeling model selection.
+
+00:43:19.130 --> 00:43:23.060 align:middle line:84%
+If we want to know whether a
+given an assumed probability
+
+00:43:23.060 --> 00:43:27.590 align:middle line:84%
+model for Y's is
+true or not, we can
+
+00:43:27.590 --> 00:43:33.230 align:middle line:84%
+do this transformation and test
+whether the transformed series
+
+00:43:33.230 --> 00:43:37.610 align:middle line:84%
+or transformed sample is
+consistent with being uniform
+
+00:43:37.610 --> 00:43:38.125 align:middle line:90%
+or not.
+
+00:43:38.125 --> 00:43:40.730 align:middle line:90%
+
+
+00:43:40.730 --> 00:43:42.650 align:middle line:90%
+All right.
+
+00:43:42.650 --> 00:43:48.140 align:middle line:84%
+Well, with simple Brownian
+motion, standard Brownian
+
+00:43:48.140 --> 00:43:51.290 align:middle line:84%
+motion, we can
+consider an extension
+
+00:43:51.290 --> 00:43:56.940 align:middle line:84%
+of that to Brownian
+motion with drift, mu.
+
+00:43:56.940 --> 00:44:00.950 align:middle line:84%
+So we can consider a drift
+parameter and a volatility
+
+00:44:00.950 --> 00:44:03.740 align:middle line:90%
+parameter.
+
+00:44:03.740 --> 00:44:12.500 align:middle line:84%
+And such a process will
+have independent increments,
+
+00:44:12.500 --> 00:44:20.240 align:middle line:84%
+with variances of differences
+proportional to the time
+
+00:44:20.240 --> 00:44:21.770 align:middle line:90%
+interval between s and t.
+
+00:44:21.770 --> 00:44:32.570 align:middle line:84%
+And we can work with
+the Brownian motion
+
+00:44:32.570 --> 00:44:40.770 align:middle line:84%
+with drift using a
+one-step analysis.
+
+00:44:40.770 --> 00:44:48.510 align:middle line:84%
+And in considering
+this X process--
+
+00:44:48.510 --> 00:44:56.790 align:middle line:84%
+so X is equal to t
+mu plus sigma B of t.
+
+00:44:56.790 --> 00:44:58.970 align:middle line:90%
+So this is X of t.
+
+00:44:58.970 --> 00:45:02.460 align:middle line:90%
+
+
+00:45:02.460 --> 00:45:09.510 align:middle line:84%
+If we look at the increment
+ahead delta t from little t,
+
+00:45:09.510 --> 00:45:15.600 align:middle line:84%
+then expanding out the
+representation of this Brownian
+
+00:45:15.600 --> 00:45:20.070 align:middle line:84%
+motion with drift,
+we get that it's
+
+00:45:20.070 --> 00:45:27.330 align:middle line:84%
+equal to the Brownian motion at
+time little t plus mu delta t
+
+00:45:27.330 --> 00:45:33.780 align:middle line:84%
+plus sigma times the increment
+of the Brownian motion process
+
+00:45:33.780 --> 00:45:37.620 align:middle line:90%
+from t to t plus delta t.
+
+00:45:37.620 --> 00:45:43.710 align:middle line:84%
+And so increments
+of X correspond
+
+00:45:43.710 --> 00:45:50.820 align:middle line:84%
+to increments of time plus
+times the drift rate, mu,
+
+00:45:50.820 --> 00:45:53.550 align:middle line:84%
+plus sigma, the
+volatility parameter,
+
+00:45:53.550 --> 00:45:58.830 align:middle line:84%
+times the increment of the
+standard Brownian motion.
+
+00:45:58.830 --> 00:46:04.890 align:middle line:84%
+So our process X,
+Brownian with drift,
+
+00:46:04.890 --> 00:46:10.350 align:middle line:84%
+will have non-zero
+mean increments
+
+00:46:10.350 --> 00:46:13.530 align:middle line:84%
+and increments
+variances that are
+
+00:46:13.530 --> 00:46:17.080 align:middle line:84%
+proportional to
+the change in time.
+
+00:46:17.080 --> 00:46:24.180 align:middle line:84%
+And this increment will have
+an exact normal distribution
+
+00:46:24.180 --> 00:46:26.160 align:middle line:90%
+with these properties.
+
+00:46:26.160 --> 00:46:33.300 align:middle line:84%
+And what's particularly
+important is that,
+
+00:46:33.300 --> 00:46:39.270 align:middle line:84%
+as we let delta t, the
+length of our increments,
+
+00:46:39.270 --> 00:46:48.330 align:middle line:84%
+get infinitesimal, then the
+expected squared increment of X
+
+00:46:48.330 --> 00:46:50.770 align:middle line:90%
+ends up being equal to--
+
+00:46:50.770 --> 00:46:55.380 align:middle line:84%
+well, it's exactly equal to
+the variance of that increment
+
+00:46:55.380 --> 00:46:57.900 align:middle line:90%
+plus the square of the mean.
+
+00:46:57.900 --> 00:47:03.870 align:middle line:84%
+But the square of
+the mean is a term
+
+00:47:03.870 --> 00:47:08.040 align:middle line:90%
+that is small order of delta t.
+
+00:47:08.040 --> 00:47:12.570 align:middle line:84%
+So our expected
+squared increments
+
+00:47:12.570 --> 00:47:18.780 align:middle line:84%
+will be to order
+delta t equal to sigma
+
+00:47:18.780 --> 00:47:24.780 align:middle line:84%
+squared delta t and then a
+small order of delta t term
+
+00:47:24.780 --> 00:47:25.870 align:middle line:90%
+after that.
+
+00:47:25.870 --> 00:47:30.990 align:middle line:84%
+Also, if we consider
+powers of delta X,
+
+00:47:30.990 --> 00:47:36.640 align:middle line:84%
+so our increments to
+a power, then when
+
+00:47:36.640 --> 00:47:40.040 align:middle line:90%
+our power c is greater than 2--
+
+00:47:40.040 --> 00:47:42.710 align:middle line:84%
+it's equal to 2 here--
+when it's greater than 2,
+
+00:47:42.710 --> 00:47:47.480 align:middle line:84%
+then this will also be
+a small order delta t.
+
+00:47:47.480 --> 00:47:53.920 align:middle line:84%
+Now, the reason why we're
+interested in these properties
+
+00:47:53.920 --> 00:48:02.770 align:middle line:84%
+is because we're going to be
+working, ultimately, with, say,
+
+00:48:02.770 --> 00:48:13.360 align:middle line:84%
+a value of some derivative
+that depends upon X of t.
+
+00:48:13.360 --> 00:48:22.150 align:middle line:84%
+So there's basically a
+derivative value, which
+
+00:48:22.150 --> 00:48:33.400 align:middle line:90%
+depends upon the underlying--
+
+00:48:33.400 --> 00:48:37.960 align:middle line:84%
+I'll just say the
+underlying asset price.
+
+00:48:37.960 --> 00:48:45.700 align:middle line:84%
+And so the dynamics of
+the derivative prices
+
+00:48:45.700 --> 00:48:51.630 align:middle line:84%
+can be written as
+a Taylor series.
+
+00:48:51.630 --> 00:48:55.900 align:middle line:90%
+
+
+00:48:55.900 --> 00:49:00.970 align:middle line:84%
+And so we'll want to be able
+to deal with increments of X
+
+00:49:00.970 --> 00:49:10.990 align:middle line:84%
+and powers of increments of X
+as our valuation function may
+
+00:49:10.990 --> 00:49:15.150 align:middle line:84%
+be expressed, if it has a
+Taylor series representation.
+
+00:49:15.150 --> 00:49:20.170 align:middle line:90%
+
+
+00:49:20.170 --> 00:49:21.165 align:middle line:90%
+All right.
+
+00:49:21.165 --> 00:49:29.050 align:middle line:84%
+So let's consider the problem
+of Brownian motion underlying
+
+00:49:29.050 --> 00:49:31.600 align:middle line:90%
+a gambler's ruin problem.
+
+00:49:31.600 --> 00:49:38.350 align:middle line:84%
+So let's let X of t be
+Brownian motion with drift, mu
+
+00:49:38.350 --> 00:49:41.350 align:middle line:90%
+and variance sigma squared.
+
+00:49:41.350 --> 00:49:47.740 align:middle line:84%
+And we'll consider
+an initial level
+
+00:49:47.740 --> 00:49:51.345 align:middle line:84%
+equal to X that's between
+two levels, a and b.
+
+00:49:51.345 --> 00:49:58.750 align:middle line:90%
+
+
+00:49:58.750 --> 00:50:09.520 align:middle line:84%
+And we want to consider the
+stopping time hitting a or b
+
+00:50:09.520 --> 00:50:16.660 align:middle line:84%
+and ask, what's the probability
+that we hit b first?
+
+00:50:16.660 --> 00:50:27.640 align:middle line:84%
+So over time t, we have,
+basically, levels a
+
+00:50:27.640 --> 00:50:35.000 align:middle line:84%
+and b and an initial
+level X at time 0.
+
+00:50:35.000 --> 00:50:42.560 align:middle line:84%
+And we're interested
+in hitting a or b
+
+00:50:42.560 --> 00:50:51.080 align:middle line:84%
+so tau is equal to the
+hit time of a or b.
+
+00:50:51.080 --> 00:50:55.160 align:middle line:84%
+And we're interested in,
+what's the probability
+
+00:50:55.160 --> 00:51:02.270 align:middle line:90%
+of hitting b first before a?
+
+00:51:02.270 --> 00:51:11.510 align:middle line:84%
+And this generalizes our
+problem in the first lecture
+
+00:51:11.510 --> 00:51:16.880 align:middle line:84%
+on stochastic processes, where
+we had a random walk with unit
+
+00:51:16.880 --> 00:51:18.540 align:middle line:90%
+steps with drift.
+
+00:51:18.540 --> 00:51:21.770 align:middle line:90%
+
+
+00:51:21.770 --> 00:51:26.030 align:middle line:84%
+So there was a bias of maybe
+a plus 1 versus a minus 1
+
+00:51:26.030 --> 00:51:26.880 align:middle line:90%
+occurring.
+
+00:51:26.880 --> 00:51:28.850 align:middle line:84%
+And we wanted to
+solve for, what's
+
+00:51:28.850 --> 00:51:34.760 align:middle line:84%
+the likelihood of hitting
+a level b before level a?
+
+00:51:34.760 --> 00:51:42.600 align:middle line:84%
+So with this, we use an
+infinitesimal one-step analysis.
+
+00:51:42.600 --> 00:51:48.620 align:middle line:84%
+And this solution approach
+is illustrative of how many
+
+00:51:48.620 --> 00:51:55.370 align:middle line:84%
+problems are solved with
+stochastic processes.
+
+00:51:55.370 --> 00:52:03.710 align:middle line:84%
+We can define u of x to be the
+probability function, which
+
+00:52:03.710 --> 00:52:11.780 align:middle line:84%
+is the probability that the
+stopped process equals b, given
+
+00:52:11.780 --> 00:52:24.230 align:middle line:84%
+that it starts at X. And
+so if we consider u of x
+
+00:52:24.230 --> 00:52:30.050 align:middle line:84%
+and write it as the expected
+value of u of x plus delta X,
+
+00:52:30.050 --> 00:52:39.360 align:middle line:84%
+then if our delta t time
+increment is very, very short,
+
+00:52:39.360 --> 00:52:46.730 align:middle line:84%
+then this expectation
+will equal u of x.
+
+00:52:46.730 --> 00:52:52.010 align:middle line:84%
+So the likelihood
+of hitting b first
+
+00:52:52.010 --> 00:52:59.420 align:middle line:84%
+will be the expectation of u
+of x, a very short increment
+
+00:52:59.420 --> 00:53:01.140 align:middle line:90%
+into the future.
+
+00:53:01.140 --> 00:53:04.790 align:middle line:84%
+And so if we take the
+expectation with respect
+
+00:53:04.790 --> 00:53:11.660 align:middle line:84%
+to the delta X variable,
+well, delta X is X of t
+
+00:53:11.660 --> 00:53:15.020 align:middle line:90%
+plus delta t minus X of t--
+
+00:53:15.020 --> 00:53:24.060 align:middle line:84%
+then if we assume that our
+function u, this probability,
+
+00:53:24.060 --> 00:53:29.520 align:middle line:84%
+is twice differentiable,
+then the Taylor
+
+00:53:29.520 --> 00:53:36.240 align:middle line:84%
+series about the center X
+will equal u of x plus delta X
+
+00:53:36.240 --> 00:53:41.040 align:middle line:84%
+times the first derivative
+plus a half delta
+
+00:53:41.040 --> 00:53:43.270 align:middle line:84%
+X squared times the
+second derivative,
+
+00:53:43.270 --> 00:53:50.130 align:middle line:84%
+plus small order terms
+of delta X squared.
+
+00:53:50.130 --> 00:53:57.480 align:middle line:84%
+And so if we take an
+expectation of that first Taylor
+
+00:53:57.480 --> 00:54:04.030 align:middle line:84%
+series on both sides, well,
+the u of x is a constant.
+
+00:54:04.030 --> 00:54:07.740 align:middle line:84%
+And then we have u prime
+of x, a constant times
+
+00:54:07.740 --> 00:54:10.890 align:middle line:84%
+the expected value
+of delta X. And then
+
+00:54:10.890 --> 00:54:13.200 align:middle line:84%
+plus a half the
+expected value of delta
+
+00:54:13.200 --> 00:54:16.830 align:middle line:90%
+x squared times u double prime.
+
+00:54:16.830 --> 00:54:21.480 align:middle line:84%
+And we have mu delta t is
+the expectation of delta
+
+00:54:21.480 --> 00:54:26.940 align:middle line:84%
+X. Sigma squared delta t
+plus little o of delta t
+
+00:54:26.940 --> 00:54:31.230 align:middle line:84%
+is the expectation
+of delta X squared.
+
+00:54:31.230 --> 00:54:38.700 align:middle line:84%
+So we have this expansion
+from the Taylor series.
+
+00:54:38.700 --> 00:54:48.510 align:middle line:84%
+And from what we said before,
+this expected value of u
+
+00:54:48.510 --> 00:54:53.610 align:middle line:84%
+evaluated at x plus delta X
+should simply equal u of x.
+
+00:54:53.610 --> 00:55:02.850 align:middle line:84%
+And if that's true, then we
+get this equation for u prime
+
+00:55:02.850 --> 00:55:06.090 align:middle line:90%
+and u double prime.
+
+00:55:06.090 --> 00:55:16.140 align:middle line:84%
+And if we take that equation
+and u prime and u double prime
+
+00:55:16.140 --> 00:55:19.260 align:middle line:84%
+and we divide by
+delta t, we then
+
+00:55:19.260 --> 00:55:30.360 align:middle line:84%
+get 0 is equal to mu u prime
+of x plus a half sigma squared
+
+00:55:30.360 --> 00:55:32.060 align:middle line:90%
+u double prime of x.
+
+00:55:32.060 --> 00:55:35.100 align:middle line:90%
+
+
+00:55:35.100 --> 00:55:44.200 align:middle line:84%
+And to be really precise, little
+o factor to make it an equation.
+
+00:55:44.200 --> 00:55:51.870 align:middle line:84%
+Now, this equation here is
+a second-order differential
+
+00:55:51.870 --> 00:55:53.520 align:middle line:90%
+equation.
+
+00:55:53.520 --> 00:56:02.773 align:middle line:84%
+And so what are solutions to
+this second-order differential
+
+00:56:02.773 --> 00:56:03.273 align:middle line:90%
+equation?
+
+00:56:03.273 --> 00:56:10.440 align:middle line:90%
+
+
+00:56:10.440 --> 00:56:16.523 align:middle line:84%
+This is an
+interesting challenge.
+
+00:56:16.523 --> 00:56:18.065 align:middle line:84%
+Let me just get some
+more chalk here.
+
+00:56:18.065 --> 00:56:22.120 align:middle line:90%
+
+
+00:56:22.120 --> 00:56:23.620 align:middle line:84%
+It's maybe been
+a number of years
+
+00:56:23.620 --> 00:56:26.630 align:middle line:84%
+since people have taken
+differential equations, right?
+
+00:56:26.630 --> 00:56:29.350 align:middle line:90%
+
+
+00:56:29.350 --> 00:56:39.730 align:middle line:84%
+But let's consider, let's see,
+u double prime over u prime
+
+00:56:39.730 --> 00:56:41.003 align:middle line:90%
+is equal to--
+
+00:56:41.003 --> 00:56:44.950 align:middle line:90%
+
+
+00:56:44.950 --> 00:56:45.580 align:middle line:90%
+let's see.
+
+00:56:45.580 --> 00:56:46.900 align:middle line:90%
+Have I done this right?
+
+00:56:46.900 --> 00:56:50.980 align:middle line:84%
+u double prime
+divided by u prime
+
+00:56:50.980 --> 00:56:55.155 align:middle line:84%
+is equal to minus 2
+mu over sigma squared.
+
+00:56:55.155 --> 00:57:02.470 align:middle line:90%
+
+
+00:57:02.470 --> 00:57:13.210 align:middle line:84%
+And so this is the derivative
+is equal to the derivative
+
+00:57:13.210 --> 00:57:15.240 align:middle line:90%
+of the log of u prime.
+
+00:57:15.240 --> 00:57:18.400 align:middle line:90%
+
+
+00:57:18.400 --> 00:57:25.840 align:middle line:84%
+And so if we integrate this,
+we basically get log of u prime
+
+00:57:25.840 --> 00:57:35.963 align:middle line:84%
+is equal to minus 2 mu over
+sigma squared x plus a constant.
+
+00:57:35.963 --> 00:57:39.010 align:middle line:90%
+
+
+00:57:39.010 --> 00:57:44.230 align:middle line:84%
+And this is true if
+mu is not equal to 0.
+
+00:57:44.230 --> 00:57:46.750 align:middle line:84%
+And so we basically
+get that u prime
+
+00:57:46.750 --> 00:57:50.920 align:middle line:84%
+is equal to e to the
+minus 2 mu x over sigma
+
+00:57:50.920 --> 00:57:53.023 align:middle line:90%
+squared times a constant.
+
+00:57:53.023 --> 00:57:58.960 align:middle line:90%
+
+
+00:57:58.960 --> 00:58:03.560 align:middle line:84%
+And what if we integrate
+both sides of this?
+
+00:58:03.560 --> 00:58:05.560 align:middle line:90%
+We then get u.
+
+00:58:05.560 --> 00:58:08.560 align:middle line:84%
+So what function
+has a derivative
+
+00:58:08.560 --> 00:58:10.076 align:middle line:90%
+equal to an exponential?
+
+00:58:10.076 --> 00:58:12.817 align:middle line:90%
+
+
+00:58:12.817 --> 00:58:13.900 align:middle line:90%
+AUDIENCE: The exponential.
+
+00:58:13.900 --> 00:58:15.970 align:middle line:84%
+PETER KEMPTHORNE: Just
+the exponential, yeah.
+
+00:58:15.970 --> 00:58:18.760 align:middle line:84%
+So we get u is
+just going to equal
+
+00:58:18.760 --> 00:58:23.925 align:middle line:84%
+a constant times e to the minus
+2 mu over sigma squared x.
+
+00:58:23.925 --> 00:58:26.710 align:middle line:90%
+
+
+00:58:26.710 --> 00:58:36.370 align:middle line:84%
+And if mu is equal
+to 0, then we have
+
+00:58:36.370 --> 00:58:47.316 align:middle line:84%
+the log of u prime is equal
+to 0, or the derivative--
+
+00:58:47.316 --> 00:58:52.490 align:middle line:90%
+
+
+00:58:52.490 --> 00:58:55.120 align:middle line:84%
+yeah, we basically have the
+derivative of the log of u
+
+00:58:55.120 --> 00:58:58.940 align:middle line:90%
+prime is equal to 0.
+
+00:58:58.940 --> 00:59:02.295 align:middle line:90%
+So we end up getting--
+
+00:59:02.295 --> 00:59:04.960 align:middle line:90%
+
+
+00:59:04.960 --> 00:59:07.550 align:middle line:84%
+let's see-- basically a linear
+function for the solution.
+
+00:59:07.550 --> 00:59:09.940 align:middle line:90%
+So let me go to the notes here.
+
+00:59:09.940 --> 00:59:13.590 align:middle line:84%
+Well, we basically get
+u is equal to Ax plus B,
+
+00:59:13.590 --> 00:59:20.660 align:middle line:84%
+if mu is equal to 0, and it's
+equal to this constant, A times
+
+00:59:20.660 --> 00:59:23.490 align:middle line:84%
+e to the minus 2 mu
+x over sigma squared.
+
+00:59:23.490 --> 00:59:24.150 align:middle line:90%
+All right.
+
+00:59:24.150 --> 00:59:27.770 align:middle line:84%
+Well, this general
+solution has to satisfy
+
+00:59:27.770 --> 00:59:29.420 align:middle line:90%
+the initial conditions.
+
+00:59:29.420 --> 00:59:35.150 align:middle line:84%
+u of a is going to equal 0,
+and u of b is going to equal 1.
+
+00:59:35.150 --> 00:59:40.870 align:middle line:90%
+So if we start at a, where the--
+
+00:59:40.870 --> 00:59:44.660 align:middle line:84%
+basically, we stop at
+a, if we start at a.
+
+00:59:44.660 --> 00:59:47.760 align:middle line:90%
+So u of 0 is going to equal 0.
+
+00:59:47.760 --> 00:59:53.120 align:middle line:84%
+And if we start at
+b, it's equal to 1.
+
+00:59:53.120 --> 00:59:59.030 align:middle line:84%
+We end up getting this
+formula for what u is.
+
+00:59:59.030 --> 01:00:04.260 align:middle line:84%
+And so what's
+interesting to ask is,
+
+01:00:04.260 --> 01:00:11.720 align:middle line:84%
+how does this probability
+vary with different drifts
+
+01:00:11.720 --> 01:00:13.665 align:middle line:90%
+and volatilities?
+
+01:00:13.665 --> 01:00:14.165 align:middle line:90%
+OK.
+
+01:00:14.165 --> 01:00:20.300 align:middle line:84%
+So here's the graph
+of these probabilities
+
+01:00:20.300 --> 01:00:26.430 align:middle line:90%
+of hitting b before a when x--
+
+01:00:26.430 --> 01:00:30.680 align:middle line:90%
+well, when a is 0.
+
+01:00:30.680 --> 01:00:39.890 align:middle line:84%
+So if we have 0 here
+and b is equal to 3,
+
+01:00:39.890 --> 01:00:50.030 align:middle line:84%
+then here's the initial
+value x between 0 and 3.
+
+01:00:50.030 --> 01:00:55.840 align:middle line:84%
+And we have the probabilities
+of hitting b before a
+
+01:00:55.840 --> 01:01:01.850 align:middle line:84%
+And if our mu is very
+high, so the trend
+
+01:01:01.850 --> 01:01:05.660 align:middle line:90%
+is up in the Brownian motion--
+
+01:01:05.660 --> 01:01:11.420 align:middle line:84%
+so basically, if mu is
+greater than 0, then
+
+01:01:11.420 --> 01:01:17.070 align:middle line:84%
+we basically have an
+upward-trending path on average,
+
+01:01:17.070 --> 01:01:21.260 align:middle line:84%
+and we get high probabilities
+of hitting b first.
+
+01:01:21.260 --> 01:01:30.960 align:middle line:84%
+And as we decrease the
+drift from 3 down to 0.5,
+
+01:01:30.960 --> 01:01:33.200 align:middle line:90%
+we get this Brown curve.
+
+01:01:33.200 --> 01:01:37.790 align:middle line:84%
+And the limiting case,
+where mu is equal to 0,
+
+01:01:37.790 --> 01:01:46.460 align:middle line:84%
+so there's no drift at all,
+corresponds to the probability
+
+01:01:46.460 --> 01:01:48.650 align:middle line:90%
+given by this line.
+
+01:01:48.650 --> 01:01:54.410 align:middle line:84%
+And so given the starting
+value x, the closer you
+
+01:01:54.410 --> 01:02:00.530 align:middle line:84%
+are to b, the more likely you
+will be to hit b first and vice
+
+01:02:00.530 --> 01:02:02.660 align:middle line:90%
+versa with a.
+
+01:02:02.660 --> 01:02:10.000 align:middle line:84%
+So these probabilities vary with
+the different model parameters.
+
+01:02:10.000 --> 01:02:16.290 align:middle line:84%
+Here is the corresponding graph
+when there's a negative drift.
+
+01:02:16.290 --> 01:02:26.840 align:middle line:84%
+So the likelihood
+of hitting b first
+
+01:02:26.840 --> 01:02:33.780 align:middle line:84%
+is proportional when
+the drift term is 0--
+
+01:02:33.780 --> 01:02:36.640 align:middle line:84%
+basically how
+close you are to b.
+
+01:02:36.640 --> 01:02:44.440 align:middle line:84%
+But as we increase the
+magnitude of the negative drift,
+
+01:02:44.440 --> 01:02:48.360 align:middle line:84%
+we basically get lower and
+lower probabilities coming out.
+
+01:02:48.360 --> 01:02:51.150 align:middle line:90%
+So that's that solution.
+
+01:02:51.150 --> 01:02:51.650 align:middle line:90%
+OK.
+
+01:02:51.650 --> 01:02:53.580 align:middle line:90%
+So let's see.
+
+01:02:53.580 --> 01:02:56.610 align:middle line:84%
+The next comment
+about Brownian motion
+
+01:02:56.610 --> 01:03:02.340 align:middle line:84%
+is a very important property
+that the Brownian motion process
+
+01:03:02.340 --> 01:03:04.560 align:middle line:90%
+is not differentiable.
+
+01:03:04.560 --> 01:03:07.060 align:middle line:84%
+So when you look at a
+Brownian motion path,
+
+01:03:07.060 --> 01:03:08.680 align:middle line:90%
+it looks very jagged.
+
+01:03:08.680 --> 01:03:13.740 align:middle line:84%
+And in fact, that jaggedness
+is characteristic of there
+
+01:03:13.740 --> 01:03:17.880 align:middle line:84%
+not being a smooth derivative,
+or it's not being smooth enough
+
+01:03:17.880 --> 01:03:19.540 align:middle line:90%
+to compute a derivative.
+
+01:03:19.540 --> 01:03:23.850 align:middle line:84%
+And so if we look at the
+increment of the Brownian motion
+
+01:03:23.850 --> 01:03:27.060 align:middle line:84%
+from t to t plus
+delta t and have
+
+01:03:27.060 --> 01:03:32.310 align:middle line:84%
+that being normal with mean
+0 and variance delta t,
+
+01:03:32.310 --> 01:03:34.080 align:middle line:90%
+the length of that increment--
+
+01:03:34.080 --> 01:03:39.520 align:middle line:84%
+if we normalize the
+increment by delta t--
+
+01:03:39.520 --> 01:03:41.160 align:middle line:84%
+so we're basically
+trying to look
+
+01:03:41.160 --> 01:03:47.520 align:middle line:84%
+at the slope between
+t and t plus delta t--
+
+01:03:47.520 --> 01:03:52.380 align:middle line:84%
+then that has a normal
+distribution with mean 0,
+
+01:03:52.380 --> 01:03:56.190 align:middle line:90%
+but variance 1 over delta t.
+
+01:03:56.190 --> 01:04:02.430 align:middle line:84%
+So this normalized
+increment is going to not be
+
+01:04:02.430 --> 01:04:04.420 align:middle line:90%
+well defined in the limit.
+
+01:04:04.420 --> 01:04:06.930 align:middle line:84%
+It's basically going
+to be equivalent to--
+
+01:04:06.930 --> 01:04:11.230 align:middle line:84%
+or the limiting value
+basically doesn't exist.
+
+01:04:11.230 --> 01:04:15.050 align:middle line:84%
+It basically becomes an
+explosive distribution.
+
+01:04:15.050 --> 01:04:22.470 align:middle line:84%
+So that's a very important
+property of Brownian motion.
+
+01:04:22.470 --> 01:04:27.000 align:middle line:84%
+Something that is a positive
+property of Brownian motion
+
+01:04:27.000 --> 01:04:32.580 align:middle line:84%
+is the issue of
+quadratic variation.
+
+01:04:32.580 --> 01:04:37.740 align:middle line:84%
+And so to define
+quadratic variation,
+
+01:04:37.740 --> 01:04:44.653 align:middle line:84%
+we consider looking at
+partitions of the time.
+
+01:04:44.653 --> 01:04:49.470 align:middle line:90%
+
+
+01:04:49.470 --> 01:04:58.620 align:middle line:84%
+So we have pi, which is, what, a
+partition of the interval from 0
+
+01:04:58.620 --> 01:05:00.990 align:middle line:90%
+to t, say--
+
+01:05:00.990 --> 01:05:04.960 align:middle line:90%
+or 0 to capital T.
+
+01:05:04.960 --> 01:05:12.100 align:middle line:84%
+So we have a time scale
+finishing at T, starting at 0.
+
+01:05:12.100 --> 01:05:18.190 align:middle line:84%
+And we can just draw arbitrary
+points t, j, j equaling 1 up
+
+01:05:18.190 --> 01:05:32.620 align:middle line:84%
+to n, say, or 1 to n minus 1,
+that are inside this interval.
+
+01:05:32.620 --> 01:05:33.893 align:middle line:90%
+And they're ordered.
+
+01:05:33.893 --> 01:05:37.780 align:middle line:90%
+
+
+01:05:37.780 --> 01:05:45.700 align:middle line:84%
+If we consider the partition
+corresponding to these time
+
+01:05:45.700 --> 01:05:50.500 align:middle line:84%
+points, we can
+define a magnitude
+
+01:05:50.500 --> 01:06:02.590 align:middle line:84%
+of the partition equal to the
+maximum of tj minus tj minus 1
+
+01:06:02.590 --> 01:06:03.585 align:middle line:90%
+over j.
+
+01:06:03.585 --> 01:06:08.500 align:middle line:90%
+
+
+01:06:08.500 --> 01:06:12.910 align:middle line:84%
+And then we can talk about
+the quadratic variation
+
+01:06:12.910 --> 01:06:18.130 align:middle line:84%
+of the process, which
+is to look at increments
+
+01:06:18.130 --> 01:06:26.200 align:middle line:84%
+of b over these intervals
+from between tj minus 1
+
+01:06:26.200 --> 01:06:33.700 align:middle line:84%
+and tj, square those, and sum
+the squared of those values.
+
+01:06:33.700 --> 01:06:42.640 align:middle line:84%
+This is an appropriate term
+for a quadratic variation.
+
+01:06:42.640 --> 01:06:57.340 align:middle line:84%
+And if we consider the limit
+as the partition width gets
+
+01:06:57.340 --> 01:07:01.180 align:middle line:84%
+narrower and
+narrower, then we'll
+
+01:07:01.180 --> 01:07:06.460 align:middle line:84%
+define this limiting value
+to be the quadratic variation
+
+01:07:06.460 --> 01:07:10.000 align:middle line:90%
+of the Brownian motion process.
+
+01:07:10.000 --> 01:07:13.480 align:middle line:84%
+So we can define the quadratic
+variation corresponding
+
+01:07:13.480 --> 01:07:18.440 align:middle line:84%
+to a given partition and then
+the quadratic variation overall,
+
+01:07:18.440 --> 01:07:20.680 align:middle line:84%
+if we take the limit
+over partitions that are
+
+01:07:20.680 --> 01:07:24.730 align:middle line:90%
+getting infinitesimally small.
+
+01:07:24.730 --> 01:07:30.340 align:middle line:84%
+And the claim is that
+this quadratic variation
+
+01:07:30.340 --> 01:07:36.430 align:middle line:84%
+is going to equal capital
+T, the length of the period,
+
+01:07:36.430 --> 01:07:40.270 align:middle line:90%
+with probability 1.
+
+01:07:40.270 --> 01:07:41.990 align:middle line:90%
+So what does that mean?
+
+01:07:41.990 --> 01:07:50.560 align:middle line:84%
+That means that for
+every realization
+
+01:07:50.560 --> 01:07:56.870 align:middle line:84%
+of the process, or
+almost every realization,
+
+01:07:56.870 --> 01:08:03.200 align:middle line:84%
+this quadratic variation is
+going to equal a constant.
+
+01:08:03.200 --> 01:08:12.440 align:middle line:84%
+So here, I'm looking at
+examples of random walks
+
+01:08:12.440 --> 01:08:20.550 align:middle line:84%
+that are normalized to
+be between time 0 and 1.
+
+01:08:20.550 --> 01:08:23.090 align:middle line:84%
+So these are the
+normalized random walks,
+
+01:08:23.090 --> 01:08:25.910 align:middle line:84%
+which are effectively
+Brownian-- or whose
+
+01:08:25.910 --> 01:08:28.189 align:middle line:90%
+limits are Brownian motion.
+
+01:08:28.189 --> 01:08:30.319 align:middle line:84%
+And in the top
+panel, I'm drawing
+
+01:08:30.319 --> 01:08:35.850 align:middle line:84%
+the path of the random
+walk, with Gaussian steps.
+
+01:08:35.850 --> 01:08:39.380 align:middle line:84%
+And in the bottom, I'm drawing
+the cumulative quadratic
+
+01:08:39.380 --> 01:08:42.350 align:middle line:90%
+variation.
+
+01:08:42.350 --> 01:08:46.399 align:middle line:84%
+So this is up to 20,
+30, 40 steps now.
+
+01:08:46.399 --> 01:08:55.100 align:middle line:84%
+As we increase to 100 steps,
+this cumulative quadratic
+
+01:08:55.100 --> 01:09:02.479 align:middle line:84%
+variation is getting
+pretty close to the time t
+
+01:09:02.479 --> 01:09:06.180 align:middle line:84%
+over which we're accumulating
+the quadratic variation.
+
+01:09:06.180 --> 01:09:17.880 align:middle line:84%
+And as we increase the number
+of steps from 200 to many more--
+
+01:09:17.880 --> 01:09:21.439 align:middle line:90%
+1,000 and then 2,000--
+
+01:09:21.439 --> 01:09:24.920 align:middle line:84%
+you can see that, basically,
+the quadratic variation
+
+01:09:24.920 --> 01:09:29.510 align:middle line:84%
+of the process
+cumulates, basically,
+
+01:09:29.510 --> 01:09:34.460 align:middle line:84%
+to the time period over
+which that's being cumulated.
+
+01:09:34.460 --> 01:09:40.319 align:middle line:84%
+So this property is a
+really nice property.
+
+01:09:40.319 --> 01:09:43.760 align:middle line:84%
+What it highlights
+is that there are
+
+01:09:43.760 --> 01:09:49.550 align:middle line:84%
+some significant regularities
+to Brownian motion.
+
+01:09:49.550 --> 01:09:58.970 align:middle line:84%
+And the regularity here is that
+the variation of the increments
+
+01:09:58.970 --> 01:10:03.710 align:middle line:84%
+normalizes, basically, to
+the length of the period
+
+01:10:03.710 --> 01:10:05.220 align:middle line:90%
+over which they're accumulated.
+
+01:10:05.220 --> 01:10:10.130 align:middle line:84%
+So the quadratic variation is
+proportional to the time period.
+
+01:10:10.130 --> 01:10:15.440 align:middle line:84%
+Now, this idea, or this
+property of Brownian motion,
+
+01:10:15.440 --> 01:10:21.440 align:middle line:84%
+is one that can be
+explored with time series
+
+01:10:21.440 --> 01:10:26.150 align:middle line:84%
+that we might think are
+well-modeled by Brownian motion.
+
+01:10:26.150 --> 01:10:40.940 align:middle line:84%
+So if we were to look at a time
+series of the log of Pt divided
+
+01:10:40.940 --> 01:10:55.230 align:middle line:84%
+by P0 for Pt equal to
+0, 1, up to capital N,
+
+01:10:55.230 --> 01:11:00.040 align:middle line:84%
+basically, for prices of
+assets and equity markets,
+
+01:11:00.040 --> 01:11:07.206 align:middle line:84%
+this corresponds to the log
+return from time 0 to t.
+
+01:11:07.206 --> 01:11:16.050 align:middle line:84%
+And that log return from 0 to t
+might follow a Brownian motion
+
+01:11:16.050 --> 01:11:22.570 align:middle line:84%
+process with drift,
+positive return.
+
+01:11:22.570 --> 01:11:29.350 align:middle line:84%
+And so we basically can
+have this process evolving.
+
+01:11:29.350 --> 01:11:35.310 align:middle line:84%
+If we were to calculate
+the quadratic variation
+
+01:11:35.310 --> 01:11:41.276 align:middle line:84%
+of this process,
+then if it followed--
+
+01:11:41.276 --> 01:11:44.760 align:middle line:90%
+
+
+01:11:44.760 --> 01:11:47.670 align:middle line:84%
+if it followed a
+Brownian motion process,
+
+01:11:47.670 --> 01:11:52.710 align:middle line:84%
+it would tend to grow
+according to a straight line,
+
+01:11:52.710 --> 01:11:59.460 align:middle line:84%
+with slope equal
+to sigma squared.
+
+01:11:59.460 --> 01:12:04.650 align:middle line:84%
+And in empirical
+modeling, if we look
+
+01:12:04.650 --> 01:12:08.220 align:middle line:84%
+at this quadratic
+variation of an asset
+
+01:12:08.220 --> 01:12:13.890 align:middle line:84%
+and see that it's
+not a straight line--
+
+01:12:13.890 --> 01:12:16.950 align:middle line:84%
+there may be periods
+where the slope is low
+
+01:12:16.950 --> 01:12:22.200 align:middle line:84%
+and periods where the slope is
+higher and it curves around--
+
+01:12:22.200 --> 01:12:26.700 align:middle line:84%
+a way of trying to model
+the dynamic volatility
+
+01:12:26.700 --> 01:12:35.700 align:middle line:84%
+could be suggested by studying
+these plots and using them.
+
+01:12:35.700 --> 01:12:40.380 align:middle line:84%
+So it's a very
+interesting property.
+
+01:12:40.380 --> 01:12:43.530 align:middle line:90%
+Now, let's see.
+
+01:12:43.530 --> 01:12:46.470 align:middle line:90%
+
+
+01:12:46.470 --> 01:12:47.200 align:middle line:90%
+Let's see.
+
+01:12:47.200 --> 01:12:52.420 align:middle line:84%
+There's one last note in
+the slide in the notes.
+
+01:12:52.420 --> 01:13:03.690 align:middle line:84%
+But before doing that,
+I wanted to highlight
+
+01:13:03.690 --> 01:13:12.310 align:middle line:84%
+a connection of Brownian motion
+to the Laplace distribution.
+
+01:13:12.310 --> 01:13:17.736 align:middle line:90%
+And so if we have--
+
+01:13:17.736 --> 01:13:18.750 align:middle line:90%
+let's see.
+
+01:13:18.750 --> 01:13:28.710 align:middle line:84%
+If we have B of t, which
+is Brownian motion,
+
+01:13:28.710 --> 01:13:35.323 align:middle line:90%
+and we observe it at--
+
+01:13:35.323 --> 01:13:38.190 align:middle line:90%
+
+
+01:13:38.190 --> 01:13:42.413 align:middle line:84%
+let's see-- if we look
+at, basically, x of--
+
+01:13:42.413 --> 01:13:48.130 align:middle line:90%
+
+
+01:13:48.130 --> 01:13:55.510 align:middle line:84%
+if we observe it at
+times t equals 0, 1, 2,
+
+01:13:55.510 --> 01:14:05.890 align:middle line:84%
+discrete times, then
+the delta B of t
+
+01:14:05.890 --> 01:14:11.770 align:middle line:84%
+are distributed as
+normal with mean--
+
+01:14:11.770 --> 01:14:19.790 align:middle line:84%
+I guess it's mu t and variance
+sigma squared times 1,
+
+01:14:19.790 --> 01:14:21.910 align:middle line:90%
+which is delta t.
+
+01:14:21.910 --> 01:14:23.280 align:middle line:90%
+And these are iid.
+
+01:14:23.280 --> 01:14:26.890 align:middle line:90%
+
+
+01:14:26.890 --> 01:14:35.110 align:middle line:84%
+So we have, basically, time
+points 0, 1, 2, and so forth.
+
+01:14:35.110 --> 01:14:37.960 align:middle line:84%
+If instead of
+observing the process
+
+01:14:37.960 --> 01:14:42.820 align:middle line:84%
+at equal increments
+of time, let's
+
+01:14:42.820 --> 01:14:48.140 align:middle line:84%
+consider the possibility that
+the time increments are random.
+
+01:14:48.140 --> 01:15:05.240 align:middle line:84%
+So let's consider B of t for
+t equal to T1, T2, up to Tn,
+
+01:15:05.240 --> 01:15:10.790 align:middle line:84%
+where the delta T's,
+the increments of time,
+
+01:15:10.790 --> 01:15:15.710 align:middle line:84%
+are distributed as an
+exponential random variable,
+
+01:15:15.710 --> 01:15:19.280 align:middle line:90%
+with some mean lambda, say.
+
+01:15:19.280 --> 01:15:24.750 align:middle line:84%
+So we're not observing the
+process at regular intervals.
+
+01:15:24.750 --> 01:15:28.640 align:middle line:84%
+We're observing it
+at random intervals.
+
+01:15:28.640 --> 01:15:34.580 align:middle line:84%
+It turns out, then,
+that the Brownian motion
+
+01:15:34.580 --> 01:15:44.090 align:middle line:84%
+process has increments that
+are Laplace distributed.
+
+01:15:44.090 --> 01:15:50.710 align:middle line:84%
+So the delta B of t,
+then will, in fact,
+
+01:15:50.710 --> 01:15:55.240 align:middle line:84%
+have what's called a
+Laplace distribution.
+
+01:15:55.240 --> 01:16:00.940 align:middle line:84%
+And so instead of having
+a bell-shaped curve, which
+
+01:16:00.940 --> 01:16:03.850 align:middle line:84%
+is a Gaussian
+distribution, it'll
+
+01:16:03.850 --> 01:16:10.990 align:middle line:84%
+be a bilateral, exponential
+distribution about the mean.
+
+01:16:10.990 --> 01:16:18.350 align:middle line:84%
+And it turns out that with
+Standard and Poor's 500 returns,
+
+01:16:18.350 --> 01:16:24.040 align:middle line:84%
+this Laplace model seems to
+fit the data much better, which
+
+01:16:24.040 --> 01:16:29.500 align:middle line:84%
+leads to the consideration of
+what are called subordinated
+
+01:16:29.500 --> 01:16:33.520 align:middle line:84%
+stochastic processes,
+where the time scale is
+
+01:16:33.520 --> 01:16:37.600 align:middle line:90%
+different than our clock time.
+
+01:16:37.600 --> 01:16:38.360 align:middle line:90%
+All right.
+
+01:16:38.360 --> 01:16:39.340 align:middle line:90%
+Well, let's see.
+
+01:16:39.340 --> 01:16:44.480 align:middle line:84%
+The final slide here for today
+addresses what are called
+
+01:16:44.480 --> 01:16:46.500 align:middle line:90%
+adapted processes.
+
+01:16:46.500 --> 01:16:53.030 align:middle line:84%
+And so in financial
+modeling, we can
+
+01:16:53.030 --> 01:16:59.420 align:middle line:84%
+think of there being a
+stochastic process X of t
+
+01:16:59.420 --> 01:17:04.670 align:middle line:84%
+characterizing relevant
+dynamics in the system.
+
+01:17:04.670 --> 01:17:09.110 align:middle line:84%
+And we can think
+of X representing
+
+01:17:09.110 --> 01:17:12.320 align:middle line:84%
+the prices of a single asset
+or a collection of assets
+
+01:17:12.320 --> 01:17:14.220 align:middle line:90%
+as it varies over time.
+
+01:17:14.220 --> 01:17:20.570 align:middle line:84%
+Then, as we let
+time increase, there
+
+01:17:20.570 --> 01:17:27.560 align:middle line:84%
+are events that relate to
+what has happened so far.
+
+01:17:27.560 --> 01:17:34.010 align:middle line:84%
+And we can think of
+these script F sub t
+
+01:17:34.010 --> 01:17:38.540 align:middle line:84%
+to be the information
+on realizations
+
+01:17:38.540 --> 01:17:40.910 align:middle line:90%
+up to time little t.
+
+01:17:40.910 --> 01:17:48.500 align:middle line:84%
+And if we consider script
+F sub t prime with t
+
+01:17:48.500 --> 01:17:51.440 align:middle line:84%
+prime greater than t,
+then that corresponds
+
+01:17:51.440 --> 01:17:54.710 align:middle line:84%
+to information about
+all realizations from t
+
+01:17:54.710 --> 01:17:56.070 align:middle line:90%
+up until t prime.
+
+01:17:56.070 --> 01:17:58.370 align:middle line:84%
+So it's giving us
+more information
+
+01:17:58.370 --> 01:18:01.340 align:middle line:84%
+about what's happened
+with the process.
+
+01:18:01.340 --> 01:18:12.860 align:middle line:84%
+Well, if we want to look at the
+stochastic modeling of a process
+
+01:18:12.860 --> 01:18:19.910 align:middle line:84%
+Y that depends on trading
+on assets with dynamics X,
+
+01:18:19.910 --> 01:18:27.530 align:middle line:84%
+then we want our
+process Y to be adapted
+
+01:18:27.530 --> 01:18:33.570 align:middle line:84%
+to X, which essentially means we
+can't see the future in trading.
+
+01:18:33.570 --> 01:18:40.040 align:middle line:84%
+And so our Y of t, which is
+perhaps the value of trading up
+
+01:18:40.040 --> 01:18:46.340 align:middle line:84%
+until time t, is a
+function only of the values
+
+01:18:46.340 --> 01:18:49.790 align:middle line:90%
+of the process prior to time t.
+
+01:18:49.790 --> 01:18:55.040 align:middle line:84%
+And so we consider
+transformations
+
+01:18:55.040 --> 01:19:02.270 align:middle line:84%
+of our original process to the
+process of, say, trading gains
+
+01:19:02.270 --> 01:19:05.640 align:middle line:84%
+and losses, according to
+some trading strategy.
+
+01:19:05.640 --> 01:19:13.110 align:middle line:84%
+And these will be well defined
+if the process is adapted.
+
+01:19:13.110 --> 01:19:20.360 align:middle line:84%
+So with that, the topics
+connect with what we had
+
+01:19:20.360 --> 01:19:23.330 align:middle line:84%
+in our previous
+lecture, which was
+
+01:19:23.330 --> 01:19:29.180 align:middle line:84%
+we can have martingales
+defined on X,
+
+01:19:29.180 --> 01:19:32.840 align:middle line:84%
+and then we can define
+martingales relating
+
+01:19:32.840 --> 01:19:43.360 align:middle line:84%
+to Y when we combine
+adaptive functions to X.
+
+01:19:43.360 --> 01:19:48.150 align:middle line:84%
+And so the martingale theory
+extends to modeling trading
+
+01:19:48.150 --> 01:19:50.200 align:middle line:90%
+strategies, effectively.
+
+01:19:50.200 --> 01:19:53.730 align:middle line:84%
+And what's interesting
+with those techniques
+
+01:19:53.730 --> 01:19:59.430 align:middle line:84%
+is that you end up
+transforming the process
+
+01:19:59.430 --> 01:20:02.160 align:middle line:90%
+to have a constant mean.
+
+01:20:02.160 --> 01:20:05.350 align:middle line:84%
+Martingales are processes
+with a constant mean.
+
+01:20:05.350 --> 01:20:12.840 align:middle line:84%
+And so those arguments are
+applied again and again
+
+01:20:12.840 --> 01:20:14.920 align:middle line:90%
+in solving for their properties.
+
+01:20:14.920 --> 01:20:24.480 align:middle line:84%
+And option pricing can be
+expressed in this context
+
+01:20:24.480 --> 01:20:25.660 align:middle line:90%
+as well.
+
+01:20:25.660 --> 01:20:26.500 align:middle line:90%
+All right.
+
+01:20:26.500 --> 01:20:28.990 align:middle line:90%
+We'll finish there for today.
+
+01:20:28.990 --> 01:20:35.000 align:middle line:90%

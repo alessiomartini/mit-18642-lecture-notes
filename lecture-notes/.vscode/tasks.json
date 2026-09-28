@@ -1,0 +1,110 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "LaTeX: Compile main.pdf (latexmk)",
+      "type": "shell",
+      "command": "latexmk",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-pdf",
+        "-outdir=build",
+        "main.tex"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [
+        "$latexmk"
+      ],
+      "detail": "Full build with latexmk (resolves all refs, citations, TOC)"
+    },
+    {
+      "label": "LaTeX: Compile single chapter (fast)",
+      "type": "shell",
+      "command": "pdflatex",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-output-directory=build",
+        "\\includeonly{${input:chapter}}\\input{main}"
+      ],
+      "problemMatcher": [
+        "$latex"
+      ],
+      "detail": "Quick compile of one chapter. Prompts for chapter name (e.g., chapters/ch01-markets-bonds)"
+    },
+    {
+      "label": "LaTeX: Clean build artifacts",
+      "type": "shell",
+      "command": "latexmk",
+      "args": [
+        "-C",
+        "-outdir=build",
+        "main.tex"
+      ],
+      "problemMatcher": [],
+      "detail": "Removes all generated files (aux, log, pdf, etc.)"
+    },
+    {
+      "label": "LaTeX: Clean everything (including build folder)",
+      "type": "shell",
+      "command": "rm",
+      "args": [
+        "-rf",
+        "build",
+        "*.aux",
+        "*.bbl",
+        "*.blg",
+        "*.log",
+        "*.out",
+        "*.toc",
+        "*.fls",
+        "*.fdb_latexmk",
+        "*.synctex.gz",
+        "*.dbt"
+      ],
+      "problemMatcher": [],
+      "detail": "Nuclear clean - removes build folder and all stray aux files"
+    },
+    {
+      "label": "LaTeX: Check spelling (chktex)",
+      "type": "shell",
+      "command": "chktex",
+      "args": [
+        "-v0",
+        "main.tex"
+      ],
+      "problemMatcher": [],
+      "detail": "Runs chktex linter on main.tex (catches style issues, not just errors)"
+    },
+    {
+      "label": "LaTeX: Word count (texcount)",
+      "type": "shell",
+      "command": "texcount",
+      "args": [
+        "-inc",
+        "-total",
+        "-merge",
+        "main.tex"
+      ],
+      "problemMatcher": [],
+      "detail": "Counts words in the whole document (includes \\input/\\include files)"
+    },
+    {
+      "label": "LaTeX: Open PDF in default viewer",
+      "type": "shell",
+      "command": "start",
+      "args": [
+        "",
+        "build/main.pdf"
+      ],
+      "problemMatcher": [],
+      "detail": "Opens the compiled PDF in your default PDF viewer"
+    }
+  ]
+}

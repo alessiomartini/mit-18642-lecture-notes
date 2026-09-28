@@ -1,0 +1,35 @@
+{
+  "body": "",
+  "content": "<p>This lecture provides a comprehensive overview of portfolio management, focusing on the practical aspects of asset allocation, risk measurement, and investment sizing beyond traditional modern portfolio theory, highlighting its limitations and proposing improved approaches such as gain-loss ratios. It also explores behavioral finance concepts like crowding behavior and power law distributions, emphasizing the importance of dynamic rebalancing and understanding market influences from powerful agents such as governments and large funds.</p>\n",
+  "content_type": "resource",
+  "draft": false,
+  "file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/18642-lecture-13-version-4_360p_16_9.mp4",
+  "file_size": 136362829,
+  "file_type": "video/mp4",
+  "image_metadata": {
+    "caption": "",
+    "credit": "",
+    "image-alt": ""
+  },
+  "iscjklanguage": false,
+  "learning_resource_types": [
+    "Lecture Videos"
+  ],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "resourcetype": "Video",
+  "title": "Lecture 13: Portfolio Management",
+  "uid": "3f939b77-774b-431d-996f-d985f7b5fd10",
+  "video_files": {
+    "archive_url": "",
+    "video_captions_file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/1yOmm7LuMUTZASn5bUrNlGJO4EiCHCQ3k_transcript.webvtt",
+    "video_thumbnail_file": "https://img.youtube.com/vi/o7OnkMdmjLg/default.jpg",
+    "video_transcript_file": "/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024/1yOmm7LuMUTZASn5bUrNlGJO4EiCHCQ3k_transcript.pdf"
+  },
+  "video_metadata": {
+    "source": "",
+    "video_speakers": "",
+    "video_tags": "18-642-topics-in-mathematics-with-applications-in-finance-fall-2024, asset allocation, behavioral finance, capital market assumptions, crowding behavior, diversification, gain-loss ratio, investment sizing, modern portfolio theory, portfolio management, power law distribution, rebalancing, risk measurement",
+    "youtube_description": "MIT 18.642 Topics in Mathematics with Applications in Finance, Fall 2024\nInstructor: Jake Xia\nView the complete course: https://ocw.mit.edu/courses/18-642-topics-in-mathematics-with-applications-in-finance-fall-2024\nYouTube Playlist: https://www.youtube.com/playlist?list=PLUl4u3cNGP601Q2jo-J_3raNCMMs6Jves\n\nThis lecture provides a comprehensive overview of portfolio management, focusing on the practical aspects of asset allocation, risk measurement, and investment sizing beyond traditional modern portfolio theory, highlighting its limitations and proposing improved approaches such as gain-loss ratios. It also explores behavioral finance concepts like crowding behavior and power law distributions, emphasizing the importance of dynamic rebalancing and understanding market influences from powerful agents such as governments and large funds.\n\nLicense: Creative Commons BY-NC-SA\nMore information at https://ocw.mit.edu/terms\nMore courses at https://ocw.mit.edu\nSupport OCW at http://ow.ly/a1If50zVRlQ\n\nWe encourage constructive comments and discussion on OCW’s YouTube and other social media channels. Personal attacks, hate speech, trolling, and inappropriate comments are not allowed and may be removed. More details at https://ocw.mit.edu/comments.",
+    "youtube_id": "o7OnkMdmjLg"
+  }
+}

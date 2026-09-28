@@ -1,0 +1,1328 @@
+0:00
+[SQUEAKING] [RUSTLING] [CLICKING]
+0:07
+0:16
+JAKE XIA: So today, we'll be talking about portfolio management as one of the application lectures.
+0:24
+So I will share some of my research work from a practitioner's point of view,
+0:32
+rather than from pure theoretical or math point of view. So as we mentioned at the beginning of the term,
+0:40
+we've been teaching this class since 2012. And in 2013, this class was recorded for MIT OpenCourseWare.
+0:52
+The link, I put it here. It's the lecture from 2013.
+0:58
+Some of you may have watched that lecture. It actually turned out to be one of the top most viewed courses.
+1:06
+Our course is one of the top five, actually, on the OpenCourseWare. So I want to promise you, in today's lecture,
+1:14
+I will give you a lot of new content. So you will make showing up, your presence here, worthwhile.
+1:24
+So we can also make it interactive. So this is the outline of what I will be talking about today.
+1:34
+So first, I'll talk about what really all this portfolio construction is about, coming from a very basic level.
+1:42
+Then we'll talk about what is the endowment model. How do we manage the endowment fund?
+1:48
+Then I'll talk about the portfolio theory and illustrate it in some really special and simple cases for you
+1:56
+to understand the math. Then I will really switch gears and talk about the limitations
+2:03
+of this theory. The theory was proposed in the 1950s. I mean, of course, a lot of people
+2:10
+have worked in the field, tried to overcome the shortcomings of these theories.
+2:16
+So I myself have been spending a lot of time thinking about these problems.
+2:22
+So I will talk about my own research work, in terms of how to improve the portfolio construction theory--
+2:30
+for example, how to improve the risk measurement using volatility and Sharpe ratio and how to model crowding behavior.
+2:41
+And also, you probably heard the power law, how this behavior actually originated from the crowding
+2:50
+behavior. Now, I will summarize. So before we start the lecture, I
+2:57
+want to do an exercise with all of you. I'm going to hand over a piece of paper to all of you.
+3:04
+Please pass it down. Make sure everyone gets one piece of paper. Now, what I want you to do is to write down your own investment
+3:14
+portfolio. Just hypothetically, think about you have $10,000 to manage.
+3:23
+And put down investments you'd like to have in the portfolio.
+3:29
+Put down the percentage of each investment. And I also want you not to think too hard and also too long
+3:38
+on this. Just use your intuition. Imagine you're now a fund manager sitting
+3:43
+at a pension fund, or endowment fund, or hedge fund. I'm just asking you to pick a few investments.
+3:50
+And then just hand it back to me after you finish.
+3:56
+Then we will talk about, from where you started, how to do the portfolio management.
+4:02
+So just spend a couple of minutes.
+4:08
+Don't over spend your time. So while I'm talking, so you can write down your choices.
+4:15
+So when you received that blank sheet of paper, you must be thinking, what are the criteria for me to do this?
+4:24
+What are the considerations? So this is exactly how I want to lead you into how
+4:30
+to think about these problems. First of all, you need to think about, what's the objective of doing this exercise?
+4:36
+So always say, oh, I want to get a great return for the investment. Sure.
+4:42
+So you have a return objective. But is that what is the great return? Is that 10%, 50%, or 100%?
+4:50
+What is the time horizon we are talking about? And because the investment is highly uncertain,
+4:59
+what's your loss tolerance? You think about it. You have a $10,000.
+5:05
+How much can you afford to lose? So those are the questions.
+5:11
+Then when you pick those investments, you should also ask yourself, what's
+5:17
+your own ability of picking a winner? Why do you think you have an edge in predicting that market
+5:24
+or investment? Then of course, how many investments you should have in the portfolio?
+5:30
+Is that 1, 5, or 50, or 100?
+5:36
+How diversified or how well-mixed that investment portfolio should be?
+5:45
+Then ultimately, the most important question is, how do you your size each of the investments?
+5:52
+It comes all down to sizing. So portfolio construction, I will show you later,
+5:59
+is really about, when you have a list of investments you like, how do you size them accordingly
+6:06
+in relative amounts to each other, to the whole portfolio?
+6:12
+So now, please hand it back because I
+6:18
+want you to listen to me, not just spending the time on writing down your portfolio.
+6:23
+STUDENT: Do we put our names on it?
+6:29
+JAKE XIA: It's your choice. Name or no name is fine. Yeah, I'm not going to call your names. But I will probably use some of your answers
+6:37
+as examples to talk about investments.
+6:43
+So as we are collecting these portfolio choices,
+6:52
+I'm also going to talk about, in your decision making process--
+6:59
+so when you choose investments, you probably were thinking about what markets, first of all, you will be selecting your investments from.
+7:08
+And what are the instruments?
+7:17
+Are we mostly finished? So by the way, for you, we are doing
+7:22
+an exercise, where we ask you to put down your investment portfolio. Just put down the percentage, whatever you can do.
+7:31
+So anyway-- STUDENT: Here. JAKE XIA: You're done? OK.
+7:38
+For the rest of you, if you want to take a longer time, that's fine. I'm just going to use some of the examples.
+7:43
+So the decision making process I was talking about-- you
+7:49
+need to decide which market to pick your investment. Then you need to think about what data to collect,
+7:55
+what kind of signals you can derive, and what models you need to build, what factors you need to take into consideration, what
+8:04
+predictions you need to make, then assemble them into strategies.
+8:09
+Then we're talking about sizing and allocating your capital portfolio construction, then optimize it,
+8:16
+then at the end really to manage the risk. So now, you can see what we really come down to is
+8:25
+how to compare different investments. To understand the relationship between different investments
+8:32
+is to understand the return and the risk profiles of all the investments.
+8:37
+So what is risk? So in this chart we are talking about here, I'm using volatility for the time being,
+8:45
+which represents uncertainty of the outcome.
+8:50
+Later on, I will come back and tell you
+8:55
+volatility is not really the best measure for risk. But let's save that for later.
+9:02
+But before we talk about the investment choices, let me look at some of what you have written down.
+9:09
+So one portfolio here has half in S&P straddle--
+9:18
+so this is actually option strategy-- and then 30% in VIX related ETFs,
+9:26
+and 20% in dollar index futures. So it sounds like someone has done an internship somewhere
+9:35
+knowing option strategies. So this portfolio has about eight investments.
+9:45
+The largest one is cash, 20%, and 20%
+9:50
+in QQQ, which is NASDAQ ETF.
+9:57
+Let me see. This one is 70% bonds, 30% stocks.
+10:04
+This one is quite interesting because, when we normally talk about 60/40 or 70/30 portfolios, the bigger piece tends to be
+10:16
+the equity piece. But this one probably has more risk neutral or risk parity type
+10:24
+of construction. So we'll get to that. This has many single name stocks,
+10:31
+Microsoft being on the top. And this is a 50% S&P, 50% Vanguard Pell fund.
+10:43
+Probably that's what is written. And this 100% S&P. Yeah, very much
+10:50
+representing the average market. And so this one probably has five stocks, 20% cash.
+11:02
+Yeah, 50% US Treasury bonds, 25% S&P. So fairly similar.
+11:10
+So now, you've got the idea. And Peter and I used to review, over the years,
+11:18
+year to year change of the investment selection. Only three years ago, in 2021, most of the class
+11:26
+chose some cryptocurrencies. And Dogecoin's being the top one being selected by everyone.
+11:35
+I haven't seen any crypto investments today. So that just tells you the index investing
+11:43
+ETF seems to be the theme of this year. I don't blame you. I think it's a pretty good idea.
+11:50
+S&P, if you don't have particular edge you
+11:55
+feel you like to have, Investing in index is a pretty good choice. So on this graph, I'm showing you
+12:03
+here return versus volatility. So we already touched upon-- a lot of people chose cash.
+12:11
+Cash, basically, you can view it as 0 volatility, as some minimum return.
+12:17
+The Fed just cut interest rate. It's still over 4%, close to 5% And they may cut more.
+12:26
+But compared to the interest rate where it has been in the last 10 years,
+12:31
+this is actually not a bad place to park your capital. Bonds have slightly higher return, a little more
+12:39
+uncertainty of return. Stocks definitely have more, but the index has less volatility.
+12:47
+And the index, return wise, it may not be lagging the broad stock market.
+12:55
+I mean, as you know, the index now is heavily weighted towards large cap tech stocks.
+13:03
+And lately, those large cap tech stocks have been doing really well.
+13:08
+So if you're long QQQ or S&P, you're essentially long the Magnificent Seven stocks.
+13:15
+And so the ETF investment choice here is not a bad choice or index investment.
+13:23
+Further up on the right is the private equity and venture capital choice, which I haven't seen anyone put it down.
+13:32
+So you may be more thinking about the public markets.
+13:37
+But private equity and venture capital are basically investing in private companies not publicly
+13:44
+listed on stock exchanges. So those companies tend to be illiquid.
+13:49
+You cannot get your money out easily. You have to stay with them for a very long time.
+13:54
+But a lot of times, you have more influence on the company's operation and venture.
+14:02
+For example, you invest in start-up companies. Those companies can grow very fast, can also fail very fast.
+14:13
+So the outcome, the uncertainty range, is very big. But overall, over the years they tend
+14:20
+to produce higher returns to justify the uncertainty or risk
+14:25
+premium you are dealing with. So coming back to the return objective and loss tolerance,
+14:36
+we should think about when you write down your portfolio. So you try to maximize your return for sure.
+14:43
+Does anyone here disagree with you should maximize your return?
+14:48
+Probably not. At the same time, you should minimize your risk.
+14:53
+In this case, minimize your uncertainty. So you want to maximize the ratio of return over volatility.
+15:00
+That's one of the objectives. But you may have constraints as well.
+15:06
+There are certain investments you may not want to participate in.
+15:12
+For example, many universities declared we don't want to invest in fossil fuels
+15:19
+for the environmental concerns. And in the past, like tobacco companies
+15:24
+or some kind of weapon companies, people have, in principle, reasons to go against them.
+15:33
+And so there are constraints of what your investment universe should be.
+15:40
+Then there's liquidity, how much you need to use the money.
+15:46
+The $10,000 you had in the portfolio, you may not want to use it all in the investment or illiquid
+15:54
+investment all the time. So you may want to spend 5% a year, for example.
+16:00
+So you need to take into account your spending needs. And also on the down side, how much you can afford to lose
+16:10
+is really a very important question. So if your $10,000 becomes $5,000,
+16:16
+will you feel really bad? You would just say, I'm going to stop investing altogether.
+16:24
+I cannot afford to lose. Maybe that's the tuition I saved for next year, I put aside.
+16:30
+I just want to earn some return. I don't want to lose it. So then your risk tolerance is very low.
+16:37
+It's very different. So for many asset owners, inflation
+16:42
+is also an important concern because wealth represents relative purchasing power.
+16:50
+So how much wealth you have is not really just the dollar amount you have in your bank account.
+16:56
+It's how much you can buy. So when the price of goods and services are going up,
+17:03
+your purchasing power is going down. So that's inflation. And it's also relative to the next group of people or person,
+17:12
+how much they can buy. So for universities, that means you want to hire a professor.
+17:19
+If there are competing offers, how much more you can offer to the professor to get them
+17:27
+to come to your university. So there's definitely absolute return angle for the requirement
+17:35
+of the portfolio. And there's also a lot of people nowadays talk about beating a benchmark, beating an index.
+17:44
+Many of you have chosen S&P as an index. But if you can produce more return on top of S&P return,
+17:53
+that's called the alpha, relative return. That's also often being used as a measurement of investment
+18:01
+skills. So you don't just put in a beta or broad market investment.
+18:06
+You actually can extract more return. So asset liability matching, cash flow is very important.
+18:15
+So 2008 taught many asset owners a big lesson.
+18:20
+When you don't have the right asset liability match, when your portfolio has a drawdown,
+18:29
+your liability side will basically dominate on your balance sheet.
+18:34
+You need to cut your spending budget, stop your building projects, and lay off people.
+18:42
+So those are painful lessons. You need to have the cash flow well planned.
+18:49
+So time horizon, I mentioned, is very important. When I gave you that piece of paper, I didn't say time horizon on purpose.
+18:56
+I want you to think about it. You should ask the question-- this portfolio is for how long?
+19:01
+Is that for one day, or for a year, or for 10 years?
+19:06
+So in the investment world, people always compare returns,
+19:13
+like year to year, sometimes even quarter to quarter. Peers try to say, oh, I outperformed--
+19:20
+A outperformed B. So therefore, A is better than B. So this is actually,
+19:27
+a lot of times, unhealthy exercise because, for long term investors, you should really focus on long term return.
+19:35
+But inevitably, in the real world, people look at short term returns.
+19:41
+So you cannot ignore it. But that's the peer pressure for a lot of investment managers.
+19:47
+That's the career risk because their board may think, in the short term they are not good. They try to replace them.
+19:55
+So coming back more on why investing, so on the left,
+20:03
+on your left, if you look at the personal income and spending as one person's age, as age as the function,
+20:15
+so your income level kind of peaks somewhere in your mid-career.
+20:23
+So let's call it around the age of 50. So you're earning the most.
+20:29
+You're probably also spending the most. But you as a student, you probably don't earn that much.
+20:36
+You don't spend that much either. I mean, same is true when you're over the peak point.
+20:43
+You're getting into the retirement stage. So you don't earn that much. You don't spend that much.
+20:49
+So you need to plan accordingly of your personal portfolio. So that's related to the question of time horizon.
+20:57
+And also, the marginal benefit of having more wealth and money starts to diminish when you have had certain minimum amount.
+21:07
+So that's the bottom curve. Your benefits start to plateau.
+21:14
+And so also, do you want to take more risk or not at that point? But for organization or endowment on the right,
+21:23
+it's a little different because it's a perpetual portfolio.
+21:28
+It's a very long time horizon. And the spending keeps going up as inflation goes up.
+21:37
+So you cannot basically be complacent and say,
+21:43
+I just put all the portfolio into some conservative investments. You have to keep producing those kind of returns.
+21:52
+So the endowment is setup for university-- typically, they spend 5% of the portfolio.
+22:01
+And on top of that, there's an expected 3% inflation. So the nominal return target is 8%.
+22:12
+So as you know, it's probably not always easy to make 8% consistently year
+22:19
+over year, especially when interest rate is low. You don't have a bond.
+22:25
+There's safety bond that you can put in. Also, endowment tends to have a long time horizon, definitely
+22:34
+more than 10 years. That's what the people always say. Universities have hundreds of years of history
+22:42
+and looking to have another many more hundreds of years.
+22:48
+And on the university's spending budget, operating budget, now, roughly about 40% of the budget
+22:57
+is coming from endowment spending. So you can see universities are now more and more relying
+23:05
+on endowment returns. And that's because the research grants from federal agencies
+23:15
+and the industries are coming down. So this has to be made up from the investment portfolio.
+23:22
+And so this is just a list of the strategies endowments tend to invest in.
+23:29
+I mentioned cash, government bonds, corporate bonds, and the credit products, meaning the issuer,
+23:36
+unlike the US government, it has the risk of defaulting. So therefore, it will pay you higher interest.
+23:45
+So there are hedge funds betting on the macro markets, betting on the Fed or stock market, the general direction.
+23:53
+There are also quantitative funds doing the trend following. People usually call it CTA, commodity trading advisors,
+24:02
+or stat arb, which is to capture the relative value
+24:09
+between a pair of stocks or actually many pairs of stocks. So it's statistical arbitrage, they call it,
+24:17
+which is really to find statistical patterns to generate
+24:23
+returns. So this is heavily computer driven strategies. And many big quantitative shops are still doing a lot of these.
+24:32
+So there are fundamental equity hedge funds. They buy stocks and also sell short stocks.
+24:40
+And they are also the platforms you probably heard-- the big platforms, they're
+24:46
+called multi strat or multi PM, portfolio manager, platforms.
+24:52
+They hire hundreds of different teams trading
+24:58
+on the same platform in a very different wide range of strategies, but achieve a high degree of diversification.
+25:08
+And they can level up the portfolio quite a bit.
+25:13
+And so I mentioned private equity earlier. There are also real asset investments-- real estate,
+25:20
+natural resources, farmland, timberland, those type of investments--
+25:26
+and the new assets, such as crypto, or intellectual properties, or legal claims, and so on.
+25:33
+So basically, anything you can think of can generate a return. It can also be considered.
+25:42
+At the first lecture, I already highlighted some of the features of the endowment model.
+25:48
+So endowment model nowadays tends to focus on hiring external managers
+25:55
+and doing both public and private investing. And we hire both generalists, who
+26:02
+look at everything, and also specialists in certain domains, such as biotech, AI, and so on.
+26:12
+We focus on both absolute return and also relative return to the benchmark.
+26:19
+So we are mostly active managers. So we have some passive beta index investments.
+26:27
+But it's a minority of the investment. It's also not always permanent.
+26:32
+So whenever we can find an active strategy or manager to beat a benchmark or index, we will always
+26:40
+go for the active investment.
+26:46
+Yeah, so as you can see, this investment process
+26:51
+is centered around manager selection, selecting the good investing fund managers.
+27:00
+And Harvard, actually in the old days, used to have a lot of internal fund managers.
+27:06
+But that model has changed from seven years ago to focus more on external managers.
+27:15
+So now, I'm going to shift gears a little bit to talk about portfolio construction problems,
+27:22
+so shifting towards the math part of the discussion a little bit. So the classic portfolio construction problem
+27:30
+is stated as such-- assume you know your return objectives.
+27:35
+You have a loss tolerance. And you can predict each investment's return volatility,
+27:43
+which is the standard deviation, and also the correlation matrix of these investments.
+27:51
+The question is what percentage you should put in each of the investments.
+27:57
+So that's the portfolio construction problem. And the objective of that, as we mentioned earlier,
+28:04
+is to maximize the return for the whole portfolio, while minimizing the portfolio risk.
+28:12
+In this classic problem, it's to minimize the uncertainty or volatility of the whole portfolio.
+28:21
+So as you can see, the portfolio construction problem really is a sizing problem of investments
+28:30
+at all different levels. You can relate that to asset allocation problems.
+28:36
+So what is the asset allocation problem? So you group those investments into different asset classes.
+28:43
+So as I showed you earlier, the list of these strategies, you can also think of them as lists of different asset
+28:51
+classes. So from top down, the discussion needs to be had
+28:57
+is how much you want to be in each category or each asset class.
+29:02
+And sometimes, people will say, well, that's still way too many asset classes.
+29:09
+If you have 10 to 15 asset classes, that makes the optimization problem very hard.
+29:15
+So people tend to reduce them to big risk factors,
+29:22
+sometimes, say, 3 to 5 risk factors, usually equity, bonds,
+29:28
+plus one of the other things could be inflation.
+29:35
+It could be currency. It could be credit and other dimensions.
+29:42
+But the factor analysis can also expand into many detailed levels.
+29:49
+You can have 50 factors or even hundreds of factors.
+29:54
+But it's just different ways of grouping the investments to make the optimization
+30:01
+problem a little easier. So then what is the risk management
+30:06
+problem of a portfolio? So risk management problem, in many ways,
+30:12
+is actually the same problem as portfolio construction. It's the sizing problem. But in addition, you need to think about how
+30:21
+to avoid concentration. Concentration, of course, is also a sizing problem and also
+30:27
+illiquidity. And what's unacceptable losses and unwanted risks
+30:34
+To constrain the portfolio?
+30:39
+So I'm going to spend a few minutes on the portfolio theory, which is illustrated in two assets.
+30:51
+Asset 1 has a return, R1; volatility, sigma 1; and will have a weight in the portfolio of w1,
+31:00
+similarly for asset 2. So the sum of the two weights should be equal to 1, w1 plus w2.
+31:08
+And the portfolio return, which is denoted here as R sub p,
+31:13
+is the weighted return of R1 and R2.
+31:18
+And the variance-- or in this here, it's the sigma p squared,
+31:25
+the volatility squared, can be expressed in terms of the weights and the volatility of each of the two
+31:34
+investments, as well as the correlation, rho, between the two investments.
+31:39
+So this is a very common equation you probably have seen many times
+31:46
+in any probability or statistics classes.
+31:52
+So let's look at some special cases.
+32:00
+So when the correlation, rho, is positive 1, meaning the two assets are perfectly correlated,
+32:10
+one moves up, the other moves up at the same time, one goes down, the other one goes down at the same time.
+32:17
+So that's called perfect correlation. So if rho equals to 1 and we can simplify the sigma p, which
+32:31
+is the portfolio volatility, it becomes the weighted sum of the two volatilities-- w1 times sigma 1 plus w2 times
+32:39
+sigma 2. Or you can also express the w1 in terms of 1 minus w2.
+32:47
+So therefore, solving for w2 in terms of sigma p
+32:53
+and the sigma 1 and sigma 2. So then you can derive the overall return of the portfolio,
+33:03
+R sub p, in terms of w2, because w2 above is a function,
+33:11
+is a linear function of sigma p. So you know, in this case, the return of the portfolio, Rp,
+33:19
+is a linear function of sigma p.
+33:26
+So on this chart, you can see that straight line when rho equals to 1.
+33:32
+That's the special case. When rho equals to minus 1, that means they are perfectly
+33:41
+negatively correlated. So one goes up, the other one goes down.
+33:46
+So when that is the case, you will actually easily derive
+33:51
+that this sigma p is actually-- you have two branches of solutions.
+33:58
+So it depends on the value of w1 sigma 1 compared to w2 sigma 2.
+34:04
+So that's the two separate lines on the left.
+34:11
+That's the other solution. In the middle is the other values of the correlation between negative 1 and plus 1,
+34:20
+including 0 correlation, rho equal to 0.
+34:29
+So what if the first asset has 0 volatility, sigma 1 equals to 0?
+34:35
+So then from the equation earlier, we can derive sigma p, the portfolio volatility is simply w2 times sigma 2
+34:45
+because sigma 1 is 0. And therefore, w2, the weighting on the asset 2,
+34:52
+is sigma p divided by sigma 2. That's a straightforward result.
+35:01
+And the portfolio return, R sub p, now can be written as R1, which is
+35:11
+the first asset with 0 volatility, which you can think of as a cash right.
+35:16
+We mentioned earlier, cash has zero volatility. So this cash or riskless asset has return R1.
+35:23
+Its Rp is still a linear function of sigma p.
+35:33
+But it's a straight line, in this case. You can see the slope of that line
+35:41
+is determined by the difference of R2 minus R1 and divided by sigma 2.
+35:50
+So by the way, this is so-called capital allocation line
+35:56
+in the portfolio theory. So we can look at, let's say, a constructed portfolio.
+36:04
+You already have a sigma p, which has many assets in it, and also Rp.
+36:10
+By adding one riskless asset, or cash, which returns Rf.
+36:19
+Rf is basically like a risk free return. You can draw a tangent line over the sigma P point.
+36:30
+You pick the one point on that efficient frontier.
+36:35
+I should explain efficient frontier, meaning on that return versus volatility chart,
+36:41
+because you have different weightings-- so let's come back to this.
+36:46
+Let's look at this curve here. So for different w1 and w2's, you
+36:54
+can have different resulting portfolio return and the portfolio volatility. So this line, the upper part of this
+37:03
+is called the efficient frontier because by lowering your risk
+37:08
+and moving your return up, that's your objective. You are improving the portfolio.
+37:14
+So any point on this line is a potential solution of that portfolio construction.
+37:22
+So when we add the risk free asset on this Rf point,
+37:31
+we can basically combine that risk free asset with the existing portfolio to further improve the risk--
+37:42
+the efficient frontier to move up to that straight line.
+37:47
+So that slope, Rp minus RF divided by sigma p is so-called Sharpe ratio.
+37:54
+In simple terms, think about your return over volatility. So that's the Sharpe ratio definition.
+38:05
+Sometimes, you also hear the term alpha and beta. That's compared with a benchmark.
+38:12
+So in this case, you can write down the portfolio return minus the risk-free asset in terms
+38:19
+of alpha plus beta times benchmark minus the risk-free return.
+38:25
+And the beta is a function of correlation
+38:30
+of the portfolio to the benchmark and the ratio of the volatility.
+38:38
+What if you want to level up the portfolio and borrow more,
+38:46
+meaning make the weight of the first risk-free asset to be minus 100% and make the other asset be 200%,
+38:56
+so still sum up to 1? So that means you're borrowing money in cash.
+39:04
+You're putting the proceeds into the risky asset. So you're moving the volatility up to this point
+39:16
+by investing more into the second asset. So that's also possible.
+39:21
+That's a typical exercise people do in risk parity portfolios.
+39:27
+By the way, if you don't follow any of those, that's fine. The reason I want to talk about this
+39:33
+is really to give you some flavors of what the portfolio theory is about because then I'm going to tell you, in practice,
+39:44
+a lot of these need to be improved. So the example of portfolio with two assets that we talked about
+39:52
+is the 60/40 equity bonds. Some of you wrote down 70 bonds, 30% stocks.
+40:00
+That's very much similar to the risk parity portfolio, which they try to make equal risk contribution coming
+40:09
+from the bonds and equity by borrowing more to invest in the bonds because bonds typically have lower
+40:18
+volatility than equity. So you need to have more to make them have equal risk
+40:24
+contribution. So that's the idea. Again, today, I'm not going into the math.
+40:30
+In the previous years, sometimes I spent more time on that. But I feel I want to talk about other things a bit more today.
+40:40
+But before we move away, I want to talk about the importance of rebalancing.
+40:47
+Because we had this 2013 OCW video, just two weeks ago,
+40:53
+I think somebody made a clip out of that class, sped it up to 1.5 times, and made it a 3-minute video
+41:06
+of the only free lunch of diversification, which is exactly this example.
+41:13
+So I'm going to go through it with you quickly. Just think about you have two assets,
+41:22
+assets in a two-year period. In year 1, the first one doubles.
+41:27
+And then in year 2, it halves. So I think it's a little easier to show on the blackboard.
+41:35
+But the other one does the opposite.
+41:46
+So they both started here. The first asset doubles, then halves.
+41:53
+So this is year 1. This is year 2. The second asset halves first, then doubles.
+42:03
+So those were the R1 and R2's. So if you start as equal weight of the two, and after year 1,
+42:13
+you can calculate. The portfolio is up 25%. So this is just simple math.
+42:21
+The first asset 1 is 50% weight. Asset 2 is also 50% weight.
+42:27
+One doubles, one halves. So total, you made 25% But if you don't do anything
+42:35
+at this point, asset 1 will be dominating the portfolio.
+42:40
+Asset 2 will be just a small portion. Then because asset 2 then doubles,
+42:47
+you're coming back to the same point. After two years, your portfolio's return is exactly 0%, even though you had
+42:56
+a diversified portfolio with perfectly negatively correlated assets.
+43:03
+But if you rebalance at this point to equal weight,
+43:09
+then your portfolio in year 2 will make another 25% return in year 2.
+43:16
+So you're making compounded return of 25% two years in a row.
+43:23
+So some of you may point out that isn't this just betting on mean reversion?
+43:32
+And if you think it's a trend trade, you shouldn't do this.
+43:37
+That's right. The question you should ask yourself, what is the basis of your sizing or weighting of the two assets?
+43:47
+So you started with an equal weighting, meaning that you think the two assets have
+43:54
+the same likelihood of performing and the same amount of risk.
+43:59
+That's why you size them equally. And of course, you also know they are negatively correlated.
+44:07
+So at the end of year 1, do you maintain that view or not? If you think it's still the same projection of risk and return,
+44:18
+then you should maintain the equal weight. You should not change the weighting unless, at the year 1,
+44:25
+your projection has totally changed. You think asset 1 will continue to outperform asset 2.
+44:34
+Yes, in that case, you can change to a non-equal weighting. So that's the point.
+44:39
+If you believe they have the same probability distribution, then there's no reason for you not to rebalance.
+44:49
+So people say there's a free lunch. The only free lunch is diversification. But you have to rebalance to eat it.
+44:57
+So that's on that. So then I'm going to shift the gear
+45:02
+to talk about the limitations of so-called modern portfolio
+45:07
+theory, in short MPT. I mentioned this was mostly developed in the 1950s.
+45:14
+And Harry Markowitz pioneered in this area. He actually got a Nobel Prize in the, I think,
+45:22
+early '90s for his work. So all I have just described to you so far,
+45:31
+the mathematical part, has a lot to do with his work. But you can tell already, a lot of
+45:40
+these depend on your confidence in the capital market assumptions, which is the projections of return volatility
+45:50
+and the correlation matrix of these investments. And the mean variance optimization problem
+45:58
+often has unlimited number of solutions. And you have to put artificial constraints
+46:05
+to bound the solutions. They are very sensitive to small change of these capital market
+46:12
+assumptions. So in practice, it's very hard to use it.
+46:18
+Probably not many people use it. So with those questions, I myself
+46:27
+have always been curious about this and have done various research work in this.
+46:33
+So today, I'm going to highlight a few. The first one is more related to the sizing question,
+46:41
+using a different approach.
+46:46
+I call it a gain-loss ratio. The second part, I will talk a bit
+46:52
+about the effect of crowding behavior and how to model it.
+46:58
+And lastly, I will talk about the power law distribution
+47:05
+coming out of these crowd interactions, why these are all relevant to portfolio construction.
+47:14
+So issue number 1 for the MPT, volatility is a poor measure of risk.
+47:21
+Why do I say that? Because volatility is just the standard deviation
+47:28
+or the range of uncertainties. So if I am long, out of the money call option--
+47:36
+think about it. You have one investment. And Steven, you worked on options.
+47:42
+You probably can get this easily. If I'm not out of the money option,
+47:48
+do I wish the volatility to go up or down?
+47:56
+Do I want my portfolio to have high vol or low vol? I want my portfolio-- yes, yeah?
+48:02
+STUDENT: The higher vol. JAKE XIA: Yes, right. The higher vol, the better. So on the other hand, if I'm short on the money option,
+48:11
+I probably want to have lower vol because I don't want to get exercised.
+48:17
+So it really depends on your gain situation, your payout,
+48:23
+or your potential loss. And the Sharpe ratio is derived from volatility.
+48:30
+So basically, it suffers from the same issue. So over the years, there are methods,
+48:36
+like the Sortino ratio, that try to differentiate
+48:41
+the upside range and the downside range. I think it's a good measurement.
+48:48
+But it doesn't give you a direct link to sizing.
+48:55
+The ultimate question we need to answer is sizing.
+49:00
+So the new way to compare different investments I'm basically using, or I came up with,
+49:09
+is to use expected gain and expected loss. I call the G and L. Here are both use positive numbers.
+49:18
+So when I say loss, these are absolute numbers. So we are looking for the best skill, which
+49:27
+is getting much bigger expected gain, much bigger
+49:33
+than the expected loss. Or written in different forms, in the G minus
+49:40
+L, which is the return, divided by GA plus L.
+49:45
+And you change the format a little bit. It becomes 1 minus 2L divided by G plus L.
+49:52
+This is really exactly the sizing percentage from
+49:59
+Kelly's criteria in the binary betting.
+50:04
+So this number is bounded from minus 1 to plus 1. So it can be directly translated into sizing.
+50:15
+And so let me give you a few examples to help you understand this.
+50:21
+So if you are flipping a coin, you know the head has a certain probability
+50:30
+and the tail has a certain probability. And when it's a head, it has a payout you will get or lose.
+50:37
+And when it's tail, you have a payout or lose. So expected gain is the probability of the head times the payout, if you bet on head.
+50:45
+Expected loss is the probability of the tail times the payout on that side.
+50:52
+So in that discrete example, it's fairly easy to understand. But in the continuous example, it's the terminal distribution.
+51:01
+Let's say you have a probability density function describing
+51:07
+all the outcomes. Then you need to use that probability density function times the payout integrated over all the losing
+51:18
+parts and integrated over all the gaining parts to get the expected loss and the expected
+51:25
+gain. So it doesn't have to be always separated by 0.
+51:32
+If you have a target return, you integrate over, say,
+51:37
+from minus infinity to the targeted return, that's your expected loss.
+51:43
+That is what needs to be included in L. So when you do this, your optimization problem
+51:52
+is no longer return versus volatility. But in the vertical axis is gain.
+52:00
+In the horizontal axis, L is loss. So you need to basically maximize G
+52:09
+while minimizing L. So this is all relevant because, as I just
+52:16
+explained earlier, minimizing volatility is not always for your benefit.
+52:22
+When you are long option, you need to have higher volatility. But in this case, when you specify expected loss,
+52:30
+that's what you need to budget and control your investment.
+52:36
+So in the investment game we gave you at the beginning,
+52:41
+I hope you all have submitted your choices in September.
+52:46
+And some of you rebalanced in October.
+52:51
+I wanted you to track the daily gain and the loss
+52:57
+in dollar amount. And at the end of the game, which is mid-November,
+53:04
+I want you to summarize all the daily gains
+53:10
+and also summarize the daily losses to derive the G and L.
+53:15
+So some of you said, in order to win this game, why don't I just pick the highest volatility
+53:21
+stock to have the best potential to produce highest return?
+53:29
+Yes. But your higher volatility investment
+53:34
+will suffer on the denominator, which the G plus L--
+53:40
+this ratio will indicate the quality of your investment, even though your G minus L, which is the return,
+53:47
+may be good. But the denominator will normalize it to make it basically comparable to other investments.
+53:57
+So the optimization problem-- yes, please. STUDENT: So in practice, what do you
+54:03
+use to estimate the expected gain? [SNEEZE] JAKE XIA: Yeah, bless you. STUDENT: [INAUDIBLE] estimate the distribution of the pricing?
+54:12
+JAKE XIA: Yes. But no more difficult than getting the return and standard
+54:18
+deviation. Yeah, so it's the same amount of work. It's just that you're separating the numbers.
+54:25
+You're calculating half distribution instead of the whole distribution.
+54:30
+So it is. So especially when you do the optimization problem, as I'm
+54:36
+about to explain, these lines-- basically, for example, the 45-degree line indicates G minus
+54:45
+L equal to 0, so 0 return line. So you don't want to pick any investments below that 45-degree
+54:54
+line. You want the lines that have higher slope, indicating higher G over L ratio.
+55:01
+But when you combine them, combine, let's say, two assets into one, calculating
+55:09
+the combined portfolio G and L, which is actually path dependent, which actually should be because,
+55:17
+when you have two investments, the final outcome of the expected gain and the loss
+55:24
+indeed will be path dependent. That means you probably need to do a lot of Monte Carlo simulation to derive that.
+55:33
+Yeah, but it's no more work amount than the traditional distribution calculation.
+55:40
+Yeah. OK, let's move on to modern portfolio theory issue number 2.
+55:52
+How do we predict the future based on the past? How confident can we be in the capital market assumptions--
+56:01
+return, volatility, and the correlation? So because we human thinking process--
+56:08
+our thinking process is always extracting patterns from the data. So we have observations.
+56:15
+I'm just outlining the typical thinking process. You have observation.
+56:20
+You have measurable data. Try to quantify them. Then you try to extract useful information
+56:27
+or recognize patterns. Then you try to build the models, having inputs, outputs
+56:34
+and conditions. Then you predict output from the inputs and the conditions.
+56:41
+Then you repeat your observation. Then you iterate, try to calibrate your model parameters.
+56:49
+When you are very good at it, you can actually control conditions and inputs to get the desired outcome.
+56:56
+So that's true for any subject--
+57:01
+physics, engineering, finance. But finance involves human behaviors,
+57:09
+which is much more complicated. So the historical patterns may not be repeatable.
+57:17
+And also, the crowding behavior and also adaptive behavior of human players will make the process much more complicated.
+57:26
+So I want to show you a video. Let's see if this works.
+57:32
+58:03
+So you are watching is a video of birds or bats
+58:08
+in a totally is self-organized way to form a group behavior.
+58:18
+What they do is they watch their neighbors. They adjust their actions.
+58:27
+And the group as a whole displays certain patterns.
+58:33
+The financial market is very similar to this, except there's
+58:46
+a central observation you can actually see, which is the stock price.
+58:52
+You can also look at your neighbors, too. But nowadays, it's much easier to look
+58:58
+at the central observation.
+59:05
+In the past, I've also shown the London Bridge video.
+59:12
+How many of you have heard the Millennium Bridge of London? Yes? OK.
+59:17
+It opened, the Millennium Bridge, around 2000. On the first day, when people walked on it, it starts to sway.
+59:27
+And then people tried to keep their balance. They become synchronized in steps.
+59:33
+That made the sway even bigger. So market does the same thing.
+59:39
+When panic feeds into panic or greed feeds into greed,
+59:45
+market can form bubbles and the crashing. And these kind of behaviors are not easily predictable.
+59:55
+But it's part of crowding behavior. So how to understand and model this kind of behavior?
+1:00:05
+So we can look at it as a feedback loop. So S here is the agent's action.
+1:00:14
+O is the observation. A is kind of an amplifier or agent's action fed through
+1:00:22
+into the observation. As you can see, the change of the observation
+1:00:28
+is the sum of the agent's action times the power they have,
+1:00:34
+which is A. Then agent's action, the change of agent's action,
+1:00:40
+dS, is influenced by external force, as well as the feedback loop of the observation
+1:00:48
+plus some random noise. So that's the basic framework of crowd modeling.
+1:00:57
+When the agents behave in normal conditions,
+1:01:02
+they are more rational. So they are less reactive to the observations.
+1:01:08
+Or you can call it the feedback loop. Parameter B is actually taking a lower value.
+1:01:13
+But when observation changes in a more volatile fashion,
+1:01:20
+the agents tend to react more. They get into a reactive state.
+1:01:26
+So more agents in the crowd get into reactive state.
+1:01:31
+The crowd actually becomes more synchronized. So if we look at the order parameter, which
+1:01:40
+I defined as the ratio of the sum of all the actions together
+1:01:46
+divided by the sum of the absolute number of the actions,
+1:01:51
+if they are all synchronized, that number should be 1. If they are not synchronized at all,
+1:02:00
+that number can be very close to 0. So what the first chart on the left shows
+1:02:06
+is the order parameter as a function of number of agents in the crowd in the reactive state.
+1:02:15
+So then when more agents become reactive to the observation,
+1:02:21
+the order parameter can become very high. The crowd gets synchronized.
+1:02:28
+And on the right, you can see the order parameter is also
+1:02:33
+a function of the random noise term in the previous page.
+1:02:39
+The higher the noise, the less likely the agents--
+1:02:44
+the crowd will be synchronized. So this type of behavior, by the way, is not new in physics.
+1:02:51
+In some of the circuit engineering systems,
+1:02:58
+when you inject a noise, you can also reduce the order of parameter synchronization.
+1:03:04
+But in social science, this actually is also a similar behavior.
+1:03:12
+So I further simulated the bubble b process. So when you have an external force showing on the upper left,
+1:03:21
+it's kind of ramping up, then coming down, then oscillate.
+1:03:27
+The number of agents in reactive state starts to peak up, then also drop when
+1:03:35
+the external shock diminishes. The observation, as a result, also
+1:03:42
+follows, but then comes down. But if the external shock, on the other hand,
+1:03:50
+maintains at a higher level forever, eventually, all the members of the crowd, all the agents,
+1:04:00
+get into the reactive state. So the whole crowd becomes synchronized.
+1:04:06
+The observation basically shoots through the roof. So it becomes a very unstable system.
+1:04:14
+So that's the bubble. At that point, when the system becomes unstable, your bubble will burst.
+1:04:19
+So that's the part of the crowding behavior.
+1:04:28
+So the purpose of showing that is, when we look at portfolio management, this type of bubble forming and bursting process
+1:04:37
+is a very important aspect of our understanding beyond the fundamental analysis.
+1:04:45
+This is all about behavioral finance.
+1:04:52
+It has nothing to do with the fundamental of the economy or the fundamental of a company.
+1:04:58
+But then you probably also have heard power law distribution.
+1:05:03
+So what is power law distribution? It's the winner take all, the 80-20 rule,
+1:05:08
+or the Matthews effect, many different terms describing essentially a social phenomenon that there are a small number
+1:05:21
+or percentage of the agents taking a majority share
+1:05:26
+of something in the group. So let's think about wealth distribution.
+1:05:33
+So 20% of the people probably have 80% of the wealth. And this is also true.
+1:05:41
+You look at the top 20%. Within that 20%, the top 20% has 80% of the wealth.
+1:05:49
+Then within that, it's still true. This is so-called scale free or scale invariance.
+1:05:56
+This is the unique property of power law distribution. So in mathematical terms, the probability of b times x-- x
+1:06:07
+is the random variable. b is the scaling factor-- equal to some function of g of b times the probability of x.
+1:06:17
+So this you can prove mathematically. If and only if this p of x is a power law distribution,
+1:06:25
+that scale-free property maintains. So an example of power law distribution,
+1:06:33
+I mentioned the wealth distribution. Venture capital funds returns--
+1:06:38
+the top tier funds tend to get the majority of the profit
+1:06:44
+of the startup companies. There's a book published two years ago. It's called Power Law, by Sebastian Mallaby.
+1:06:55
+You should check it out. It's very interesting. It's not mathematical. But it talks about how the top tier VC firms
+1:07:04
+winner take all phenomenon. City sizes, same thing.
+1:07:10
+Big cities get bigger. Why? In the network theory, because all the nodes
+1:07:17
+want to connect to a more popular node to attract more traffic. So the network space, internet connections, web pages
+1:07:27
+or social media posts, this type of power law is very common.
+1:07:33
+But in nature, we've observed a lot of normal distributions,
+1:07:40
+such as height. So a lot of people are probably centered around
+1:07:46
+call it between 5 to around 6 feet, maybe just under 6 feet.
+1:07:55
+This is the majority of the population. It's not like most people are very short,
+1:08:02
+but there are a few giants, really, just much taller. So that's power law.
+1:08:07
+Power law does not exist in the height distribution.
+1:08:12
+So now, we commented on many social phenomena obey power law distribution.
+1:08:17
+But why? This is the question that always makes me very curious.
+1:08:24
+So what's the cause of such skewed wealth distribution?
+1:08:32
+So eventually, I realized this actually has a lot to do with the crowd interaction.
+1:08:38
+So the same mechanism we looked at earlier, the agents
+1:08:45
+have the feedback loop. That's the reason of the cause of this type of power law.
+1:08:51
+In nature, you don't have that kind of a feedback mechanism. Once you are born, you grow to a certain height.
+1:08:59
+Your height doesn't change. But in social phenomena, that keeps changing.
+1:09:07
+So agents have different powers influencing the market in financial market.
+1:09:13
+The rich can get richer. So we need to model each agent differently.
+1:09:18
+So we call it heterogeneous agents.
+1:09:24
+So for a random variable x, the normal distribution we're all familiar with is the e to the x minus the mean
+1:09:34
+divided by 2 sigma squared. But for power law, people, a lot of times,
+1:09:39
+get confused about the terminologies. The Pareto law talks about the cumulative density
+1:09:49
+function of the probability. And Zipf's law talks about the rank of that outcome.
+1:10:02
+So basically, the random variable x versus the rank of X, which is more displayed in this chart.
+1:10:11
+But they are all related. When we normally look at the power law in a probability
+1:10:18
+density function, that behaves like this
+1:10:23
+versus the normal distribution. So even distribution, of course, is a delta function.
+1:10:30
+So the parameters of these three different ways of representing power law, they are all linked by that formula.
+1:10:39
+So power law probability density function is C over x to the power of a.
+1:10:46
+a is related to the cumulative density function, power k,
+1:10:53
+as well as the Zipf's law of parameter b.
+1:10:58
+So if we look at the feedback mechanism,
+1:11:05
+we can derive that the agents with more power, in this case,
+1:11:13
+which is represented by a, varying over time, can gain more power when they bet in the right direction,
+1:11:22
+when the observation shows their betting is in the right direction. So that's how rich get richer.
+1:11:28
+So that's how concentration of power is formed. Super agents will be born, in this case.
+1:11:37
+The system may or may not become stable when that happens. And I mean, this actually can be expanded
+1:11:45
+into a discussion of entropy. What is order? What is stable?
+1:11:51
+But this is beyond the scope of this lecture. Just to come back, this is all relevant to portfolio
+1:11:59
+management. So I want to summarize, in this page, of what we learned today.
+1:12:07
+So portfolio management is about how to size each investment. You need to clarify your objectives.
+1:12:15
+You need to know your loss tolerance. Diversification helps. But you need to rebalance.
+1:12:22
+Volatility is not risk. Sharpe ratio doesn't capture skill nor provide sizing.
+1:12:28
+We should use the new ratio I presented to you. Capital market assumptions are not reliable.
+1:12:35
+And the crowding behavior can push markets to extremes. You should pay attention to powerful super agents.
+1:12:44
+Who are the most powerful super agents you can think about?
+1:12:49
+Anybody has any idea in the market? STUDENT: The Fed. JAKE XIA: Yes, the Fed.
+1:12:56
+Yes. So when you invest in the market, you have to pay attention because they have such a big power to change the direction of markets.
+1:13:06
+And in the old days, some hedge funds have more power. But I would say, nowadays, it's definitely the governments.
+1:13:12
+So you need to understand the key drivers of your portfolio.
+1:13:17
+So I want to stop the lecture here. I want to take some questions.
+1:13:23
+Then I will save a couple of minutes to talk about the investment game. But before I get there, let's open up for questions.
+1:13:33
+I packed in a lot of content for today. I know. The idea is not necessary to ask you
+1:13:42
+to follow in details because some of the math you probably need to derive it yourself
+1:13:47
+to get a feel. But I want to give you the concepts of what the portfolio construction is all about.
+1:13:53
+It's about sizing of investments. Sizing is about comparison about investments.
+1:14:00
+So how to compare them, that's what it really comes down to.
+1:14:06
+So for that, please, questions.
+1:14:12
+Yes? STUDENT: [INAUDIBLE] that can influence
+1:14:17
+investments is taxes that you have to pay on capital gains or how long you own something can vary
+1:14:24
+[INAUDIBLE] certain types of investments might be more tax sensitive than others.
+1:14:31
+Is that something that is considered heavily in terms of investment supports [INAUDIBLE]?
+1:14:39
+JAKE XIA: Yeah, so that's a great question. Endowments are tax free, by the way.
+1:14:45
+So don't consider that. But if you run a family office, you have to be very careful to plan your capital gains.
+1:14:54
+So the family offices, or private investors, tend to invest more in long term private equity
+1:15:00
+because they don't have to realize those gains. They invest less in public equity for the tax reason.
+1:15:07
+So it is a very important parameter. Yeah.
+1:15:12
+Any other questions? Yes? STUDENT: What is the best risk measure?
+1:15:17
+What should you measuree risk with? JAKE XIA: So I still think we should try to understand the potential loss or expected loss--
+1:15:27
+so that's the L I discussed earlier-- because people tend to think gain and loss are symmetrical.
+1:15:38
+But normally, it's not the case because you can construct your positions of very asymmetrical payouts.
+1:15:45
+So you need to understand, when you buy an option, of course, your maximum loss is the option premium you paid.
+1:15:52
+It's very clear. But when you buy a stock, that may not be so clear.
+1:15:58
+So you need to understand how much the stock can lose. It can move down. And what's the likely range it can move down
+1:16:05
+to and those kind of things. So I think the risk measurement should be shifted or focused
+1:16:12
+more on the downside protection. Understand your downside, which is really expected loss.
+1:16:19
+STUDENT: [INAUDIBLE] the question expected loss versus worst-case loss. How do you--
+1:16:26
+JAKE XIA: Yeah, those are two different things. So roughly, you can think about worst loss may be
+1:16:32
+a few standard deviations away. I mean, expected loss probably is really
+1:16:38
+the weighted average of outcome times the payout, that kind of thing.
+1:16:45
+So you cannot construct your portfolio all based on worst
+1:16:51
+case. Then you will not be doing anything. So that's why expected loss is probably a better way
+1:16:58
+to measure for sizing your investments. But you need to be aware of your worst loss, yeah,
+1:17:05
+in case something happens. Yeah? Yes? STUDENT: I was going to say, going off the worst-case loss, [INAUDIBLE] implement stop losses?
+1:17:13
+How effective have you found those? [INAUDIBLE] as well? JAKE XIA: Yeah.
+1:17:18
+So yeah, I think it's a very good question both of you brought up.
+1:17:25
+Stop loss is an interesting concept. So stop loss typically is not set at the worst loss.
+1:17:32
+It's set usually quite close, probably even closer than the expected loss.
+1:17:39
+If you're trading at the hedge fund platforms, they give you a very tight stop loss for the reason
+1:17:46
+that they try to artificially construct an asymmetric payout for the portfolio
+1:17:53
+managers or the traders. When you lose a little bit, they cut your position in half. Then you lose another few percentage points,
+1:18:00
+cut another half, then get you out. So when you make money, they try to let you ride on the winds
+1:18:07
+to create that kind of asymmetric optionality. But that forces you to pick investment
+1:18:16
+that has that kind of a probability distribution. So if you think an investment has a worst case loss which
+1:18:23
+is very bad, but has a very low probability,
+1:18:28
+let's just say, you need to think about if that--
+1:18:34
+almost like the firm takes that risk for you because they are responsible to cut you out.
+1:18:40
+But if you think the upside is very big, then you should take that bet.
+1:18:46
+You get it. Yeah. STUDENT: [INAUDIBLE] JAKE XIA: Yeah, right.
+1:18:54
+Yeah, that's a lot of the issues with hedge funds.
+1:19:01
+They get a cut on the profit, but they don't bear the downside responsibilities.
+1:19:06
+So they are long a free call option. Yeah. So that's why a lot of people want to be a hedge fund manager.
+1:19:14
+So I will just touch upon the investment game.
+1:19:20
+We already talked about it. When we pass November 15, you should
+1:19:29
+keep track of G and L numbers and let us know how you performed.
+1:19:34
+And I will try to verify. But last slide, I want to just coming back to the point,
+1:19:40
+a lot of people ask how to become a hedge fund manager.
+1:19:45
+Maybe I want to poll the audience here a little bit. Is there a value, you think, from that trading or investment
+1:19:54
+game to do some paper trading games? Or do you think you want more lectures on the research
+1:20:01
+process, how to do data collection, signal generation, backtesting, and all the things and the portfolio optimization,
+1:20:09
+as we talk about today? Or some people say, I just want to learn more about how
+1:20:16
+to become a manager, how to do fundraising, how to build a team, how to negotiate the terms
+1:20:22
+and how to assemble systems and a back office, legal taxes, and so on.
+1:20:29
+So I'm actually thinking maybe there's something we,
+1:20:35
+as an organization, or some other people should really just help the younger potential PMs a little more
+1:20:45
+to incubate them to become a better fund manager. If any one of you think that's something valid, this idea,
+1:20:55
+you can talk to me, email me, or just come to me after class.
+1:21:01
+Maybe there's something beyond what we talk in this class that could be useful to any one of you.
+1:21:11
+So with that, thank you very much.

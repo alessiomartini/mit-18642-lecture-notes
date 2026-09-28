@@ -1,0 +1,661 @@
+% !TEX root = ../main.tex
+\chapter{Introduction to Machine Learning}\label{ch:ml}
+
+\begin{sources}
+\small
+\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+\textbf{Lecture} & \textbf{Speaker} & \textbf{Content}\\
+\midrule
+2024 L23 & J.~Hull (Rotman School, Toronto; guest) & What machine learning is; unsupervised, supervised and reinforcement learning; training/validation/test sets and overfitting; neural networks, activation functions, gradient descent, backpropagation; two applications (learning the Black--Scholes--Merton price, explaining the movements of the implied-volatility surface); reinforcement learning, exploration versus exploitation, the game of Nim, $Q$-learning, deep $Q$-learning; hedging derivatives by reinforcement learning; questions from the class.\\
+\bottomrule
+\end{tabularx}
+
+\smallskip
+\textbf{Files.} Slides \file{mit18_642_f24_lec23.pdf} (40 slides, no overlays); transcript
+\file{Lecture 23 - Introduction to Machine Learning.txt} (about 75 minutes).
+\textbf{Problem sets.} None; all exercises are marked ``(not from the course)''.
+\textbf{Not covered in 2013.} The 2013 course had no machine-learning lecture.
+\textbf{Not in the lecture.} The bias--variance decomposition, the convergence analysis of gradient descent,
+the derivation of backpropagation, $k$-means and the Bellman equation are \emph{not} derived in the lecture, which is a
+survey by an applied researcher. They are derived here so that the slides can be read as mathematics;
+each such passage is marked \emph{(not discussed in class)}. The numerical experiments marked
+``our reconstruction'' were run for these notes and are \emph{not} Hull's results.
+\end{sources}
+
+\section*{Motivation}
+Every chapter so far fitted a model whose functional form was decided in advance: a linear factor model
+(\cref{ch:regression,ch:pca}), an ARMA process (\cref{ch:timeseries}), a Gaussian return distribution
+(\cref{ch:probability}). Machine learning starts from the opposite end. One has a large data set and a flexible
+family of functions with many parameters, and asks the computer to find the function that predicts well
+\emph{on data it has not seen}. The mathematics is that of the earlier chapters, used with a different emphasis:
+\begin{itemize}
+  \item least squares becomes one loss function among many, minimised by \emph{gradient descent} instead of by a closed
+        formula (\cref{ch05:sec-model});
+  \item overfitting, which in \cref{ch05:sec-shrink} was tamed by a ridge penalty chosen by cross-validation, becomes the
+        central practical issue, handled by a train/validation/test split and by stopping the optimiser early;
+  \item the flexible family is the \emph{neural network}, a composition of linear maps and fixed nonlinearities whose
+        gradient is computed by the chain rule (``backpropagation'');
+  \item decisions taken in sequence, such as hedging an option over its life, lead to \emph{reinforcement learning},
+        dynamic programming without a model.
+\end{itemize}
+John Hull, known for his derivatives textbook, gave this lecture in 2024 and uses his own examples: a network that
+imitates the Black--Scholes--Merton formula, a network that predicts how implied volatility moves when the
+stock moves, and reinforcement-learning hedging. \Cref{ch16:sec-what} gives the vocabulary; \cref{ch16:sec-sup}
+develops the theory of generalisation; \cref{ch16:sec-unsup} treats clustering; \cref{ch16:sec-gd,ch16:sec-nn}
+develop gradient descent and neural networks; \cref{ch16:sec-bsm,ch16:sec-vol} are the two finance applications; and
+\cref{ch16:sec-rl} covers reinforcement learning. The regularised models of \cref{ch:regularized} are the classical
+counterpart of what is said here about overfitting.
+
+% ==================================================================
+\section{What machine learning is}\label{ch16:sec-what}
+\subsection{Vocabulary, and three kinds of learning}
+Hull introduces machine learning (ML) as a branch of artificial intelligence: give a program a lot of data and let it
+find relationships between variables and make predictions \ts{24}{23}{7:17}. Some techniques date to the 1950s; what changed
+is computer speed and the falling cost of storing data. The terminology differs from statistics, and the lecture insists
+that this is a real obstacle to newcomers \ts{24}{23}{11:39}--\ts{24}{23}{12:44}.
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}l l l@{}}
+\toprule
+\textbf{Statistics} & \textbf{Machine learning} & \textbf{In these notes}\\
+\midrule
+independent variables, regressors & \emph{features} & $\bm x\in\R^d$\\
+dependent variable, response & \emph{target} (or \emph{label} for a class) & $y$\\
+coefficients $\bm\beta$ & \emph{weights} (and \emph{biases}) & $\bm\theta$\\
+fitting, estimation & \emph{training} & minimise the loss\\
+sample, one pass over the data & \emph{epoch} (one pass of the optimiser) & \\
+nonlinear link / basis function & \emph{activation function} & $\varphi$\\
+step size of a numerical optimiser & \emph{learning rate} & $\eta$\\
+tuning parameter (e.g.\ ridge $\lambda$) & \emph{hyperparameter} & $\lambda,\ \alpha,\ \varepsilon$\\
+\bottomrule
+\end{tabular}
+\caption{A small dictionary. Hull's book has a ten-page glossary; these are the terms used in the lecture.}\label{ch16:tab-dict}
+\end{table}
+
+The lecture classifies algorithms in three families \ts{24}{23}{11:39}.
+\begin{description}
+  \item[Unsupervised learning] looks for structure in features alone, e.g.\ divides customers into clusters
+        \ts{24}{23}{14:53}. ``No supervision'' means that nobody tells the algorithm what to predict \ts{24}{23}{13:47}.
+        See \cref{ch16:sec-unsup}.
+  \item[Supervised learning] predicts a numerical target (\emph{regression}) or a class (\emph{classification}) from features.
+        Linear regression (\cref{ch:regression}) is the classical example. See \cref{ch16:sec-sup,ch16:sec-nn}.
+  \item[Reinforcement learning] learns a rule for a \emph{sequence} of decisions in an environment that changes
+        unpredictably. See \cref{ch16:sec-rl}.
+\end{description}
+
+\subsection{Digitisation versus learning; statistics versus ML}
+Hull's periodisation of industrial revolutions (steam, then electricity and mass production, then computers and
+digitisation, roughly 1950--2000, and now the fourth, AI) is used to separate two things \ts{24}{23}{7:17}. If loan officers
+apply known rules, a computer can \emph{automate} them, which is digitisation. If the rules are unknown, ML can \emph{infer} them
+from past applications and decisions; and one can go a step further and improve the rules by using data on how the loans
+turned out \ts{24}{23}{8:24}--\ts{24}{23}{9:24}.
+
+The second contrast concerns workflow \ts{24}{23}{9:24}--\ts{24}{23}{10:29}. Traditional statistics: formulate a hypothesis, collect data, test.
+Machine learning: collect data, try different models, find patterns or build a predictive tool.
+\begin{intuition}[The physicist's reading]
+A physicist knows both modes: one fits a theory-driven model (Hooke's law) and one also explores a data set for unexpected
+structure. What makes the second mode legitimate is precisely what the lecture goes on to stress, namely that the
+model is judged on data that played no role in selecting it (the validation and test sets of
+\cref{ch16:sec-sup}). Searching a data set for patterns without such a safeguard is what physicists call the
+look-elsewhere effect: with enough candidate models, one always fits. ML's answer is procedural (sample splitting),
+where classical hypothesis testing corrects the significance level.
+\end{intuition}
+
+% ==================================================================
+\section{Supervised learning: generalisation and the bias--variance trade-off}\label{ch16:sec-sup}
+\subsection{Loss, training set, validation set, test set}
+\begin{definition}[Supervised learning problem]\label{ch16:def-sup}
+Given pairs $(\bm x_i,y_i)$, $i=1,\dots,n$ (features and target), choose a function $h_{\bm\theta}$ in a parametrised
+family $\mathcal H$ so as to make the \emph{empirical risk}
+\[
+  \hat R(\bm\theta)=\frac1n\sum_{i=1}^n\ell\bigl(y_i,h_{\bm\theta}(\bm x_i)\bigr)
+\]
+small, where $\ell$ is a loss function. The goal is a small \emph{expected} loss on new pairs, not on the $n$ given ones.
+\end{definition}
+The choice $\ell(y,\hat y)=(y-\hat y)^2$ with a linear $h_{\bm\theta}(\bm x)=\bm\beta\T\bm x$ is ordinary least squares
+(\cref{ch05:sec-model}); other losses (absolute, check loss) are the M-estimators of \cref{ch05:sec-mle}. Hull's lecture
+uses squared error (``mse'') and, in one plot, absolute error (see the erratum in \cref{ch16:sec-bsm}).
+
+Because there is no hypothesis, the data are divided into three sets \ts{24}{23}{15:58}--\ts{24}{23}{17:03}, typically about 60\%, 20\% and 20\%.
+\begin{itemize}
+  \item the \emph{training set} determines the parameters $\bm\theta$ of each candidate model;
+  \item the \emph{validation set} compares candidate models (and picks hyperparameters such as the degree of a polynomial or
+        the number of layers);
+  \item the \emph{test set} is kept aside and used once, to report the out-of-sample performance of the model finally chosen
+        \ts{24}{23}{18:06}.
+\end{itemize}
+The rule of thumb is to increase the complexity of the model until performance on the validation set starts
+to deteriorate \ts{24}{23}{18:06}. The three-way split is the simple, data-rich analogue of the cross-validation used in
+\cref{ch05:sec-shrink} to choose the ridge parameter, and the validation error plays the role of the criterion that
+\cref{ch:regularized} will minimise in a more structured setting.
+
+\paragraph{Hull's salary example} \ts{24}{23}{19:09}--\ts{24}{23}{21:21}. Salaries in a profession are regressed on age with polynomials
+(slide~11, whose raw data are not published). A fifth-degree polynomial follows the training points closely but does poorly
+on the validation points (\emph{overfitting}); a straight line misses the rise-and-fall pattern (\emph{underfitting}); a
+quadratic, in which salary rises and then tails off with age, is the best model. \Cref{ch16:fig-bv} reproduces the
+mechanism, not the data.
+
+\subsection{The bias--variance decomposition (not discussed in class)}
+Overfitting and underfitting are two faces of one identity. Fix a point $\bm x$ and write $y=f(\bm x)+\varepsilon$ with
+$\E\varepsilon=0$, $\Var\varepsilon=\sigma^2$, $\varepsilon$ independent of the training sample; $\hat h$ is the
+fitted function, a random function through the training sample. Expanding the square around $\E\hat h(\bm x)$ (the cross terms vanish by
+independence and by $\E[\hat h-\E\hat h]=0$),
+\begin{equation}\label{ch16:eq-bv}
+  \E\bigl[(y-\hat h(\bm x))^2\bigr]=\underbrace{\sigma^2}_{\text{irreducible noise}}
+  +\underbrace{\bigl(f(\bm x)-\E\hat h(\bm x)\bigr)^2}_{\text{bias}^2}
+  +\underbrace{\Var\hat h(\bm x)}_{\text{variance}} .
+\end{equation}
+For a concrete family the last two terms can be computed exactly. Take the linear-in-parameters case of
+\cref{ch05:sec-model}: a fixed design, $\bm y=\bm f+\bm\varepsilon\in\R^n$, $\Cov\bm\varepsilon=\sigma^2I$, and the fit
+$\hat{\bm y}=H\bm y$ with $H$ the hat matrix (a rank-$p$ orthogonal projection, \cref{ch05:prop-hat}); $p$ is the number of
+fitted parameters (for a polynomial of degree $d$, $p=d+1$).
+
+\begin{proposition}[Training and test error of a projection fit]\label{ch16:prop-bv}
+Let $b^2=\frac1n\|(I-H)\bm f\|^2$ be the squared bias averaged over the design points. Then
+\[
+  \underbrace{\frac1n\E\|\bm y-\hat{\bm y}\|^2}_{\text{training error}}=\sigma^2+b^2-\frac{p}{n}\sigma^2,\qquad
+  \underbrace{\frac1n\E\|\bm y^*-\hat{\bm y}\|^2}_{\text{test error at the same }\bm x_i,\ \text{fresh noise}}=\sigma^2+b^2+\frac{p}{n}\sigma^2 ,
+\]
+and the variance term of \eqref{ch16:eq-bv}, averaged over the design points, is $\frac pn\sigma^2$.
+\end{proposition}
+\begin{proof}
+Since $I-H$ is a projection of trace $n-p$: $\bm y-\hat{\bm y}=(I-H)\bm f+(I-H)\bm\varepsilon$, and the cross term has zero mean, so
+$\E\|\bm y-\hat{\bm y}\|^2=\|(I-H)\bm f\|^2+\sigma^2\tr(I-H)=nb^2+\sigma^2(n-p)$. For the fit error,
+$\hat{\bm y}-\bm f=-(I-H)\bm f+H\bm\varepsilon$ gives $\E\|\hat{\bm y}-\bm f\|^2=nb^2+\sigma^2p$; the variance is
+$\E\|H\bm\varepsilon\|^2=\sigma^2\tr H=p\sigma^2$. Finally $\bm y^*-\hat{\bm y}=\bm\varepsilon^*+(\bm f-\hat{\bm y})$ with
+$\bm\varepsilon^*$ independent of $\hat{\bm y}$, so the test error is $\sigma^2+\frac1n\E\|\hat{\bm y}-\bm f\|^2$.
+\end{proof}
+The gap test $-$ training $=2\sigma^2p/n$ is the \emph{optimism} of the training error (it is the correction in Mallows' $C_p$).
+More parameters lower the bias and raise the variance linearly in $p$; the training error decreases with $p$
+\emph{always}, so it cannot choose the model. This is why the lecture selects on a validation set.
+
+\begin{example}[Polynomials of degree $d$ fitted to $\sin 2\pi x$]\label{ch16:ex-poly}
+Take $n=20$ equispaced points $x_i\in[0,1]$, $f(x)=\sin(2\pi x)$, $\sigma=0.3$ (\emph{our reconstruction}; Hull's salary
+data are not available). The bias $b^2$ is the residual of the projection of $\bm f$ on the polynomials, computed
+numerically (Legendre basis, python); the variance is exactly $\sigma^2(d+1)/n$.
+Test error and training error follow from \cref{ch16:prop-bv}: the test error is minimal at $d=3$ (value $0.114$, of which $\sigma^2=0.09$ is noise), and it then rises slowly with
+$d$, while the training error keeps falling ($0.078$ at $d=3$, $0.050$ at $d=8$).
+\end{example}
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.92\linewidth,height=6.2cm,xlabel={degree $d$ of the polynomial},ylabel={mean squared error},xmin=-0.3,xmax=8.3,ymin=0,ymax=0.62,
+  xtick={0,...,8},grid=major,grid style={black!10},legend pos=north east,legend style={font=\footnotesize,fill=white,draw=black!30}]
+  \addplot[thick,color=defcol,mark=*,mark size=1.6pt] coordinates {(0,0.5695) (1,0.3303) (2,0.3348) (3,0.1140) (4,0.1185) (5,0.1170) (6,0.1215) (7,0.1260) (8,0.1305)};
+  \addplot[thick,color=thmcol,mark=square*,mark size=1.6pt] coordinates {(0,0.5605) (1,0.3123) (2,0.3078) (3,0.0780) (4,0.0735) (5,0.0630) (6,0.0585) (7,0.0540) (8,0.0495)};
+  \addplot[thick,dashed,color=intcol,mark=triangle*,mark size=1.6pt] coordinates {(0,0.4750) (1,0.2313) (2,0.2313) (3,0.0060) (4,0.0060) (5,0.0000) (6,0.0000) (7,0.0000) (8,0.0000)};
+  \addplot[thick,dashed,color=cscol,mark=diamond*,mark size=1.8pt] coordinates {(0,0.0045) (1,0.0090) (2,0.0135) (3,0.0180) (4,0.0225) (5,0.0270) (6,0.0315) (7,0.0360) (8,0.0405)};
+  \legend{test error,training error,$b^2$ (bias$^2$),variance $\sigma^2(d+1)/n$}
+\end{axis}
+\end{tikzpicture}
+\caption{Expected training and test errors for polynomial regression of degree $d$ ($n=20$, $\sigma^2=0.09$; our reconstruction of the
+mechanism of slide~11). The test error is $\sigma^2+b^2+\sigma^2(d+1)/n$; the training error is $\sigma^2+b^2-\sigma^2(d+1)/n$.
+The minimum of the test error (degree~3) is the model the validation set would select; the training error alone would choose the largest degree.}\label{ch16:fig-bv}
+\end{figure}
+
+\begin{finance}[Overfitting is the everyday enemy of backtests]
+Financial data are short and noisy (a few thousand daily returns, a low signal-to-noise ratio). A model with many free
+parameters will always fit the past; the validation and test sets must respect time order, otherwise
+information from the future leaks into the fit (\cref{ch:timeseries}). The lecture's advice to keep a test set
+untouched until the end is, for a trading strategy, the discipline of an out-of-sample period used once.
+\end{finance}
+\begin{remark}[Forward reference]
+The classical route to a controlled bias--variance trade-off in a regression is not to shrink the number of parameters but the
+size of the coefficients: ridge regression, whose effective number of parameters is $\sum_jd_j^2/(d_j^2+\lambda)<p$
+(\cref{ch05:sec-shrink}). \Cref{ch:regularized} uses the same idea to calibrate pricing and risk models.
+\end{remark}
+
+% ==================================================================
+\section{Unsupervised learning: clustering}\label{ch16:sec-unsup}
+The lecture spends one slide on unsupervised learning \ts{24}{23}{14:53}--\ts{24}{23}{15:58}: give the software a list of
+customers with, say, ten attributes (annual spend, number of products bought, location, \dots) and ask it to group them so that
+customers in a cluster have similar feature values. The value is in finding clusters one had not thought of.
+No algorithm is named. The standard one is $k$-means, derived here \emph{(not discussed in class)}.
+
+\begin{definition}[$k$-means]\label{ch16:def-kmeans}
+Given points $\bm x_1,\dots,\bm x_n\in\R^d$ and $K$, choose an assignment $c:\{1..n\}\to\{1..K\}$ and centres
+$\bm\mu_1,\dots,\bm\mu_K$ to minimise
+\[
+  J(c,\bm\mu)=\sum_{i=1}^n\|\bm x_i-\bm\mu_{c(i)}\|^2 .
+\]
+\end{definition}
+\begin{proposition}[Lloyd's algorithm]\label{ch16:prop-lloyd}
+Alternate
+\begin{enumerate}[1.]
+  \item $c(i)\leftarrow\arg\min_k\|\bm x_i-\bm\mu_k\|^2$ and
+  \item $\bm\mu_k\leftarrow$ mean of the points assigned to $k$.
+\end{enumerate}
+Each step does not increase $J$, so $J$ decreases monotonically and the algorithm stops after finitely many steps at a local
+minimum (in general not the global one).
+\end{proposition}
+\begin{proof}
+For fixed centres, $J$ is a sum over $i$ of terms each minimised by the nearest centre, so step 1 cannot increase $J$.
+For a fixed assignment and one cluster $C_k$, $\sum_{i\in C_k}\|\bm x_i-\bm m\|^2$ is a convex quadratic in $\bm m$ with
+gradient $2\sum_{i\in C_k}(\bm m-\bm x_i)$, which vanishes at the mean, so step 2 cannot increase $J$.
+There are finitely many assignments and $J$ is non-increasing, so the sequence of assignments cannot cycle except through
+equal values, and the algorithm stops.
+\end{proof}
+\begin{example}[Six points]\label{ch16:ex-kmeans}
+Take $(0,0),(0,1),(1,0)$ and $(5,5),(5,6),(6,5)$ with initial centres $(0,0)$ and $(5,5)$. The assignment is already
+stable, the means are $(\tfrac13,\tfrac13)$ and $(\tfrac{16}3,\tfrac{16}3)$, and $J=\tfrac43+\tfrac43=\tfrac83\approx2.667$ (checked in python).
+\end{example}
+\begin{intuition}[Link with principal components]
+$k$-means minimises a within-cluster sum of squares, exactly as PCA minimises a residual sum of squares over subspaces
+(\cref{ch07:sec-geom}): PCA compresses to a linear subspace, $k$-means to $K$ points. It is a known result (Ding and He, 2004; not
+proved here) that a continuous relaxation of the $k$-means objective is solved by the leading principal components of the data,
+so PCA is often used to reduce the features before clustering. Unlike PCA, $J$ has many local minima; one restarts from different
+initial centres.
+\end{intuition}
+
+% ==================================================================
+\section{Optimisation: gradient descent}\label{ch16:sec-gd}
+\subsection{The algorithm and Hull's example}
+Training a model means minimising $\hat R(\bm\theta)$, a function of many parameters, for which there is no closed formula
+(least squares is the exception). Hull describes the procedure in words \ts{24}{23}{31:08}: choose starting values and a \emph{learning rate}, compute the gradient,
+which shows the direction in which the parameters can be improved, take a step against it, and repeat. In symbols,
+\begin{equation}\label{ch16:eq-gd}
+  \bm\theta_{k+1}=\bm\theta_k-\eta\,\nabla\hat R(\bm\theta_k).
+\end{equation}
+The first slide on the subject (slide~16) minimises the one-variable function $y=x^2-8x+20$
+starting at $x_0=1$ \ts{24}{23}{34:17}; the minimum is at $x=4$ (there $y=4$). The gradient is $2x-8=-6$ at $x_0$, and the iterates printed on the slide, $2.2$ and $2.92$,
+correspond to a learning rate $\eta=0.2$: $x_1=1+0.2\cdot6=2.2$, $x_2=2.2+0.2\cdot3.6=2.92$.
+
+\begin{coursenote}[A slip in the spoken example]
+In the spoken introduction Hull says the function is ``$6x^2-8x+20$'' with minimiser $x=4$ \ts{24}{23}{34:17}. That cannot be right: he also says the gradient is
+$2x-8$, which is the derivative of $x^2-8x+20$, the function on the slide. (For $6x^2-8x+20$ the minimiser would be $2/3$.) The
+slide is correct. Also, on slide~16 the vertical lines of the picture lie at about $1, 2.4, 2.9, 3.3$; the labels $2.2$ and $2.92$ in the
+text should be trusted, since $2.2$ and $2.92$ are exactly what \eqref{ch16:eq-gd} gives with $\eta=0.2$.
+\end{coursenote}
+
+\subsection{Convergence, learning rate, scaling (not discussed in class)}
+Near a minimum every smooth function is a quadratic, so the quadratic case explains the behaviour of the method.
+Let $f(\bm\theta)=\tfrac12(\bm\theta-\bm\theta^*)\T A(\bm\theta-\bm\theta^*)+f^*$ with $A$ symmetric positive definite, eigenvalues
+$0<\lambda_{\min}\le\dots\le\lambda_{\max}$. Then $\nabla f=A(\bm\theta-\bm\theta^*)$ and \eqref{ch16:eq-gd} gives, for the error $\bm e_k=\bm\theta_k-\bm\theta^*$,
+\[
+  \bm e_{k+1}=(I-\eta A)\bm e_k,\qquad \bm e_k=(I-\eta A)^k\bm e_0 .
+\]
+In the eigenbasis of $A$ each component is multiplied by $(1-\eta\lambda_j)$ at every step. Hence:
+\begin{proposition}[Gradient descent on a quadratic]\label{ch16:prop-gd}
+The iteration converges for every $\bm e_0$ iff $|1-\eta\lambda_j|<1$ for all $j$, i.e.\ $0<\eta<2/\lambda_{\max}$. The error is
+multiplied by $r(\eta)=\max_j|1-\eta\lambda_j|$ per step; $r$ is minimal, and equal to $\frac{\kappa-1}{\kappa+1}$
+with $\kappa=\lambda_{\max}/\lambda_{\min}$ the condition number, at $\eta=2/(\lambda_{\max}+\lambda_{\min})$.
+For $\eta>1/\lambda_{\max}$ the components along the top eigenvector change sign at each step (oscillation).
+\end{proposition}
+\begin{proof}
+The first two statements are the geometric-series criterion applied to each eigen-component. The maximum of $|1-\eta\lambda|$ over $[\lambda_{\min},\lambda_{\max}]$ is attained at an end point;
+$r$ is decreasing in $\eta$ while $1-\eta\lambda_{\min}$ dominates and increasing when $\eta\lambda_{\max}-1$ dominates, so the minimum is where
+$1-\eta\lambda_{\min}=\eta\lambda_{\max}-1$, which gives the stated $\eta$ and $r=\frac{\lambda_{\max}-\lambda_{\min}}{\lambda_{\max}+\lambda_{\min}}$.
+\end{proof}
+For Hull's example $A=2$ (one dimension), so $\lambda=2$, $e_k=(1-2\eta)^ke_0=(0.6)^k\cdot(-3)$ for $\eta=0.2$: convergence is geometric, with $1-2\eta=0.6$. The
+stability condition is $\eta<1$; $\eta=\tfrac12$ reaches the minimum in one step; $\eta>\tfrac12$ overshoots and alternates around $4$; $\eta>1$ diverges
+(\cref{ch16:fig-gd}). This is Hull's warning about the learning rate \ts{24}{23}{36:26}--\ts{24}{23}{37:28}: too small, and one never reaches the bottom in reasonable time; too big, and the iterates
+oscillate from one side of the valley to the other.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.47\linewidth,height=5.4cm,xlabel={$x$},ylabel={$y=x^2-8x+20$},xmin=0,xmax=8,ymin=0,ymax=22,grid=major,grid style={black!10}]
+  \addplot[thick,color=black!60,smooth] coordinates {(0,20) (0.5,16.25) (1,13) (1.5,10.25) (2,8) (2.5,6.25) (3,5) (3.5,4.25) (4,4) (4.5,4.25) (5,5) (5.5,6.25) (6,8) (6.5,10.25) (7,13) (7.5,16.25) (8,20)};
+  \addplot[only marks,mark=*,mark size=2pt,color=thmcol] coordinates {(1.000,13.000) (2.200,7.240) (2.920,5.166) (3.352,4.420)};
+  \node[font=\footnotesize,anchor=south west,color=thmcol] at (axis cs:1.1,13.2) {$x_0=1$};
+  \node[font=\footnotesize,anchor=south west,color=thmcol] at (axis cs:2.3,7.4) {$2.2$};
+  \node[font=\footnotesize,anchor=south west,color=thmcol] at (axis cs:3.0,5.4) {$2.92$};
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[width=0.47\linewidth,height=5.4cm,xlabel={step $k$},ylabel={$x_k$},xmin=0,xmax=8,ymin=-2.6,ymax=10,xtick={0,2,4,6,8},grid=major,grid style={black!10},
+  legend columns=2,legend style={font=\scriptsize,draw=black!30,at={(0.5,-0.32)},anchor=north}]
+  \addplot[thick,color=defcol,mark=*,mark size=1.2pt] coordinates {(0,1) (1,1.3) (2,1.57) (3,1.813) (4,2.032) (5,2.229) (6,2.406) (7,2.565) (8,2.709)};
+  \addplot[thick,color=intcol,mark=*,mark size=1.2pt] coordinates {(0,1) (1,2.2) (2,2.92) (3,3.352) (4,3.611) (5,3.767) (6,3.86) (7,3.916) (8,3.95)};
+  \addplot[thick,color=fincol,mark=*,mark size=1.2pt] coordinates {(0,1) (1,6.4) (2,2.08) (3,5.536) (4,2.771) (5,4.983) (6,3.214) (7,4.629) (8,3.497)};
+  \addplot[thick,color=thmcol,mark=*,mark size=1.2pt] coordinates {(0,1) (1,7.3) (2,0.37) (3,7.993) (4,-0.392) (5,8.832) (6,-1.315) (7,9.846) (8,-2.431)};
+  \draw[dashed,black!50] (axis cs:0,4) -- (axis cs:8,4);
+  \legend{$\eta=0.05$,$\eta=0.2$,$\eta=0.9$,$\eta=1.05$}
+\end{axis}
+\end{tikzpicture}
+\caption{Left: the first three steps of gradient descent from $x_0=1$ with $\eta=0.2$ on the function of slide~16. Right: the iterates for four learning rates
+($x_{k+1}-4=(1-2\eta)(x_k-4)$; dashed line: the minimiser $x=4$). $\eta=0.05$ is too small, $\eta=0.9$ oscillates but converges, and $\eta=1.05$ diverges.}\label{ch16:fig-gd}
+\end{figure}
+
+The role of $\kappa$ explains Hull's third remark, that the method \emph{works best when the variables have been scaled}
+\ts{24}{23}{37:28}. For a least-squares loss $\tfrac12\|\bm y-X\bm\beta\|^2$ the matrix $A$ is $X\T X$, and its condition number is the ratio of the squared singular values of $X$. A
+regressor measured in units 100 times larger changes the corresponding diagonal entry of $X\T X$ by $10^4$ and can make $\kappa$ huge; then the stable step size is dictated by
+the stiff direction while the flat direction crawls (the rate is $\frac{\kappa-1}{\kappa+1}\approx1-2/\kappa$). Standardising the columns, as done before ridge in \cref{ch05:sec-shrink}, is the remedy in both cases.
+
+\begin{remark}[Not covered: stochastic gradients]
+With $n$ in the millions one computes the gradient of \eqref{ch16:eq-gd} on a random subset (\emph{mini-batch}) of the data at each step, and an \emph{epoch} is one pass over all batches. Hull uses
+``epoch'' for one training iteration \ts{24}{23}{41:44}; in his examples the whole training set is used at every step of an epoch, as far as the slides say. The lecture also mentions ``clever ways'' of setting
+the learning rate \ts{24}{23}{37:28} without naming them (adaptive schemes such as Adam belong there).
+\end{remark}
+
+\subsection{Early stopping is a form of ridge regression (not discussed in class)}
+Hull's stopping rule, ``continue until the validation results diverge from the training results'' \ts{24}{23}{36:26}, has a precise meaning in the linear model. Let $X=UDV\T$ be the thin SVD as in \cref{ch05:sec-shrink}
+and run \eqref{ch16:eq-gd} on $\tfrac12\|\bm y-X\bm\beta\|^2$ from $\bm\beta_0=\bm 0$. Along the $j$-th right singular vector the error contracts by $(1-\eta d_j^2)$ per step, so after $k$ steps the fitted values are
+\[
+  \hat{\bm y}_k=\sum_{j=1}^p\bigl[1-(1-\eta d_j^2)^k\bigr]c_j\bm u_j,\qquad\text{ridge: }\ \hat{\bm y}^{\text{ridge}}=\sum_{j=1}^p\frac{d_j^2}{d_j^2+\lambda}c_j\bm u_j,\quad c_j=\bm u_j\T\bm y .
+\]
+Both filters go from $0$ (for $d_j\to0$) to $1$ (for large $d_j$): directions of large variance are fitted first, small-variance directions last and only if we keep going. The filter $1-e^{-\eta kd^2}$ (the small-$\eta$ limit of the first) and
+$d^2/(d^2+\lambda)$ agree qualitatively with $\lambda\approx1/(\eta k)$. For $\eta=0.05$ and $d^2\in\{0.1,1,10\}$ the two filters are $(0.049,0.401,0.999)$ for gradient descent after $k=10$ steps and $(0.048,0.333,0.833)$ for ridge with
+$\lambda=2$; after $k=200$ steps and $\lambda=0.1$ they are $(0.633,1.000,1.000)$ and $(0.500,0.909,0.990)$ (python). Stopping early therefore shrinks small-variance directions like a ridge penalty, and the number of epochs is the hyperparameter chosen on
+the validation set instead of $\lambda$.
+
+% ==================================================================
+\section{Neural networks}\label{ch16:sec-nn}
+\subsection{Architecture}
+A supervised model that predicts the output from the input ``in one go'' (linear regression is the model to keep in mind) is replaced by a sequence of stages
+\ts{24}{23}{22:21}--\ts{24}{23}{24:34}: the input layer holds the known variables, $v_{0,1},v_{0,2},\dots$; a first hidden layer $v_{1,1},v_{1,2},\dots$ is computed from it, a second hidden layer from the first, and so on up to the output layer (slide~13).
+Each neuron is a weighted combination of all the neurons of the previous layer, to which an \emph{activation function} is applied \ts{24}{23}{25:41}.
+
+\begin{definition}[Feedforward neural network]\label{ch16:def-nn}
+Let $L\ge1$, layer widths $m_0=d,m_1,\dots,m_L$, weight matrices $W^{(l)}\in\R^{m_l\times m_{l-1}}$, bias vectors $\bm b^{(l)}\in\R^{m_l}$ and activation functions $\varphi_l:\R\to\R$ applied componentwise. With $\bm a^{(0)}=\bm x$,
+\[
+  \bm z^{(l)}=W^{(l)}\bm a^{(l-1)}+\bm b^{(l)},\qquad \bm a^{(l)}=\varphi_l\bigl(\bm z^{(l)}\bigr),\qquad l=1,\dots,L,
+\]
+and the network output is $h_{\bm\theta}(\bm x)=\bm a^{(L)}$, $\bm\theta=\{W^{(l)},\bm b^{(l)}\}_l$. The parameters are the \emph{weights}
+\ts{24}{23}{26:48}--\ts{24}{23}{27:51}.
+\end{definition}
+Hull's slide writes a neuron as a ``weighted average'' followed by $f$; the constant term $\bm b^{(l)}$ (the bias) is left implicit. The number of parameters is the sum of $m_l(m_{l-1}+1)$; for the Black--Scholes network below (5 inputs, three hidden layers of 20 neurons,
+one output) it is $20\cdot6+2\cdot20\cdot21+21=981$, to be estimated from $6{,}000$ observations. In the volatility-surface network (3 inputs) it is $941$.
+
+\paragraph{Activation functions} (slide~14) \ts{24}{23}{28:54}--\ts{24}{23}{30:01}: identity $f(y)=y$; sigmoid $f(y)=1/(1+e^{-y})\in(0,1)$; hyperbolic tangent
+$f(y)=(e^{2y}-1)/(e^{2y}+1)\in(-1,1)$; ReLU $f(y)=\max(y,0)$. Two identities are used below:
+\[
+  \sigma'(y)=\sigma(y)\bigl(1-\sigma(y)\bigr)\le\tfrac14,\qquad
+  \tanh y=\frac{e^{2y}-1}{e^{2y}+1}=2\sigma(2y)-1,\quad(\tanh)'=1-\tanh^2 .
+\]
+(The slide's formula for tanh is correct; both identities were confirmed numerically.) If all activations are the identity the network collapses to $\bm x\mapsto W^{(L)}\cdots W^{(1)}\bm x+\text{const}$, a linear model, which is Hull's remark
+\ts{24}{23}{28:54}: it is why the nonlinearity is essential, and why the identity is nevertheless used on the \emph{last} layer, where it lets the output range over $\R$. A sigmoid output would confine the prediction to $(0,1)$, which is impossible for an option price
+\ts{24}{23}{39:36}.
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.8\linewidth,height=5.2cm,xlabel={$y$},xmin=-4,xmax=4,ymin=-1.15,ymax=2.2,grid=major,grid style={black!10},
+  legend columns=3,legend pos=north west,legend style={font=\footnotesize,fill=white,draw=black!30}]
+  \addplot[thick,color=defcol,smooth] coordinates {(-4.00,0.0180) (-3.50,0.0293) (-3.00,0.0474) (-2.50,0.0759) (-2.00,0.1192) (-1.50,0.1824) (-1.00,0.2689) (-0.50,0.3775) (0.00,0.5000) (0.50,0.6225) (1.00,0.7311) (1.50,0.8176) (2.00,0.8808) (2.50,0.9241) (3.00,0.9526) (3.50,0.9707) (4.00,0.9820)};
+  \addplot[thick,color=intcol,smooth] coordinates {(-4.00,-0.9993) (-3.50,-0.9982) (-3.00,-0.9951) (-2.50,-0.9866) (-2.00,-0.9640) (-1.50,-0.9051) (-1.00,-0.7616) (-0.50,-0.4621) (0.00,0.0000) (0.50,0.4621) (1.00,0.7616) (1.50,0.9051) (2.00,0.9640) (2.50,0.9866) (3.00,0.9951) (3.50,0.9982) (4.00,0.9993)};
+  \addplot[thick,color=thmcol] coordinates {(-4,0) (0,0) (2.2,2.2)};
+  \legend{sigmoid,$\tanh$,ReLU}
+\end{axis}
+\end{tikzpicture}
+\caption{The activation functions of slide~14 (the ReLU is cut at the upper edge of the frame).}\label{ch16:fig-act}
+\end{figure}
+\begin{remark}[Not discussed: what the hidden layers buy]
+A network with one hidden layer of sufficiently many sigmoid (or tanh) units can approximate any continuous function on a compact set to arbitrary accuracy (universal approximation theorem, Cybenko 1989, Hornik 1991); the theorem says nothing about how many units are
+needed or how to find the weights. The lecture's point is more modest: several stages make the model ``a lot more flexible'' than one written-down equation \ts{24}{23}{24:34}. A network with no hidden layer, an identity output and squared loss \emph{is} the linear regression of
+\cref{ch:regression}; with a sigmoid output and the cross-entropy loss $\ell=-y\log p-(1-y)\log(1-p)$, $p=\sigma(\bm w\T\bm x)$, it is logistic regression, the natural model for the loan-acceptance example of \cref{ch16:sec-what}, with the remarkably simple gradient
+$\partial\ell/\partial z=p-y$ (from $\sigma'=\sigma(1-\sigma)$).
+\end{remark}
+
+\subsection{Backpropagation}
+Gradient descent needs $\partial\ell/\partial\theta$ for \emph{every} weight, and there may be many. The lecture says only that each output is a function of a function of a function, so the gradient follows from the chain rule, with shortcuts that avoid computing each derivative from scratch
+\ts{24}{23}{32:16}--\ts{24}{23}{33:16}, and that this is called backpropagation \ts{24}{23}{37:28}. The derivation is short \emph{(not discussed in class)}.
+
+For one training pair and loss $\ell=\tfrac12\|\bm a^{(L)}-\bm y\|^2$ define the \emph{error signals} $\bm\delta^{(l)}=\partial\ell/\partial\bm z^{(l)}$.
+\begin{proposition}[Backpropagation]\label{ch16:prop-bp}
+\[
+  \bm\delta^{(L)}=(\bm a^{(L)}-\bm y)\odot\varphi_L'(\bm z^{(L)}),\qquad
+  \bm\delta^{(l)}=\bigl(W^{(l+1)\mathsf T}\bm\delta^{(l+1)}\bigr)\odot\varphi_l'\bigl(\bm z^{(l)}\bigr),
+\]
+\[
+  \frac{\partial\ell}{\partial W^{(l)}}=\bm\delta^{(l)}\bm a^{(l-1)\mathsf T},\qquad \frac{\partial\ell}{\partial\bm b^{(l)}}=\bm\delta^{(l)} ,
+\]
+where $\odot$ is the componentwise product. One forward pass (to store the $\bm z^{(l)},\bm a^{(l)}$) and one backward pass give the whole gradient at a cost proportional to the number of weights.
+\end{proposition}
+\begin{proof}
+The last formula is the chain rule for $\bm a^{(L)}=\varphi_L(\bm z^{(L)})$. Since $\bm z^{(l+1)}$ depends on $\bm z^{(l)}$ only through $\bm a^{(l)}=\varphi_l(\bm z^{(l)})$,
+$\delta^{(l)}_j=\sum_i\delta^{(l+1)}_i\,\partial z^{(l+1)}_i/\partial z^{(l)}_j=\sum_i\delta^{(l+1)}_iW^{(l+1)}_{ij}\varphi_l'(z^{(l)}_j)$. Finally $z^{(l)}_i=\sum_jW^{(l)}_{ij}a^{(l-1)}_j+b^{(l)}_i$ gives $\partial\ell/\partial W^{(l)}_{ij}=\delta^{(l)}_ia^{(l-1)}_j$ and $\partial\ell/\partial b_i^{(l)}=\delta^{(l)}_i$.
+\end{proof}
+The name is the direction of the recursion: the error signal is propagated from the output layer to the input layer, and each layer's derivative reuses the one above. (The formulas were checked against a finite-difference derivative for a $3\to4\to1$ sigmoid network: the derivative of a weight agrees to
+$8$ digits.) For sigmoid layers $\varphi'=a(1-a)\le\tfrac14$, so the product of $\varphi'$ along many layers shrinks the signal, the \emph{vanishing-gradient} problem, one reason why ReLU ($\varphi'\in\{0,1\}$) is popular in deep networks. Hull reports that all the
+activation functions he tried behaved similarly well, and that sigmoid worked best in his two applications \ts{24}{23}{1:12:20}.
+
+% ==================================================================
+\section{Application: learning the Black--Scholes--Merton price}\label{ch16:sec-bsm}
+\begin{casestudy}[A network that imitates Black--Scholes--Merton (slides 18--21)]
+\textbf{Goal.} Test whether a network can recover a known pricing function from noisy data \ts{24}{23}{38:30}.
+\textbf{Data.} $10{,}000$ European call prices from the Black--Scholes--Merton formula, with parameters drawn at random: $S\in[40,60]$, $K\in[0.5S,1.5S]$, $r\in[0,5\%]$, $\sigma\in[10\%,40\%]$, $T\in[0.25,2]$ years. To each price a
+normal error with mean $0$ and standard deviation $0.15$ is added. The split is $6{,}000$ training, $2{,}000$ validation, $2{,}000$ test observations \ts{24}{23}{40:41}.
+\textbf{Method.} Three hidden layers of $20$ neurons, sigmoid activation everywhere except the last layer, where the identity is used because a sigmoid output would lie in $(0,1)$ and prices do not \ts{24}{23}{39:36}. Training error and validation error are recorded as the number of epochs grows.
+\textbf{Result.} The validation error stops improving and slowly worsens after a while while the training error keeps decreasing (slide~19); on the 50-epoch moving average (slide~20) the minimum is found and training is stopped after $2{,}575$ epochs
+\ts{24}{23}{40:41}--\ts{24}{23}{41:44}. With only $10{,}000$ observations the network imitates the formula very well, in spite of the noise \ts{24}{23}{42:46}.
+\textbf{Lesson.} The noise variance cannot be fitted away: the best possible mean squared error is $0.15^2=0.0225$ and the flexible model reaches it only if it stops before it starts fitting the noise. Early stopping is the safeguard (\cref{ch16:sec-gd}).
+\end{casestudy}
+
+\begin{coursenote}[Erratum: the axis of slides 19--20 is not the mean squared error]
+The titles of slides 19 and 20 say ``mse'', but the vertical axis is labelled \emph{Mean Absolute Error} and the curves level off near $0.12$. For a noise $N(0,0.15^2)$ the smallest attainable mean absolute error is $0.15\sqrt{2/\pi}=0.1197$, while the smallest
+attainable mean squared error is $0.0225$. So the plotted quantity is the mean \emph{absolute} error, and it is the title that is wrong (the transcript also says only ``mse''). Slide~26, by contrast, does show a mean squared error (values around $6.5\times10^{-5}$).
+\end{coursenote}
+
+\paragraph{Our reconstruction.} To see the mechanics we repeated the experiment (numpy, hand-written backpropagation as in \cref{ch16:prop-bp}, inputs standardised, full-batch Adam with learning rate $10^{-2}$; the slides do not say which optimiser
+was used). After $4{,}000$ epochs the test-set mean squared error against the noisy prices is $0.0259$ against a floor of $0.0225$, and the root-mean-square distance between the network and the \emph{noise-free} Black--Scholes--Merton price is $0.054$ (the prices range up to about $25$). At $4{,}000$ epochs the validation
+error was still decreasing, so no overfitting phase was reached in this short run; Hull's $2{,}575$ epochs are specific to his optimiser and learning rate, not a universal number.
+
+\begin{finance}[Why imitate a formula that one already has?]
+Hull's answer \ts{24}{23}{42:46}--\ts{24}{23}{44:53}: some derivatives have no formula and are valued by Monte Carlo simulation, which can take minutes, too slow with a client on the phone or for scenario analysis, where a portfolio is revalued thousands of times.
+The recipe is
+\begin{enumerate}[1.]
+  \item run the simulation many times to build a table relating price to inputs, without adding any noise;
+  \item train a network to reproduce the table;
+  \item price by a forward pass through the network, which is nearly instantaneous.
+\end{enumerate}
+The Black--Scholes exercise is the test bed, because there the right answer is known.
+The price paid is the training set: the surrogate is reliable only inside the range of inputs it was trained on.
+\end{finance}
+
+% ==================================================================
+\section{Application: how the implied-volatility surface moves}\label{ch16:sec-vol}
+The second application \ts{24}{23}{45:53}--\ts{24}{23}{50:07} concerns hedging with the delta of \cref{ch:bs} and the volatility surface of \cref{ch:volatility}. The standard delta hedge takes $\partial c/\partial S$ with the implied volatility held fixed. If the implied volatility tends to move with the asset price
+(when the stock rises the firm is less levered, so volatility falls \ts{24}{23}{46:57}), the hedge that minimises the variance of the hedged position is different.
+
+\begin{proposition}[Minimum-variance delta (not discussed in class)]\label{ch16:prop-mvdelta}
+Let an option have value $f(S,\sigma)$ with $\delta=\partial f/\partial S$ and $\nu=\partial f/\partial\sigma$ (vega), and to first order $\Delta f\approx\delta\,\Delta S+\nu\,\Delta\sigma$ over a short interval. Write $\Delta\sigma=b\,\Delta S+\epsilon$ with
+$b=\Cov(\Delta\sigma,\Delta S)/\Var(\Delta S)$ the regression slope (\cref{ch:regression}) and $\epsilon$ uncorrelated with $\Delta S$. The number of shares $h$ minimising $\Var(\Delta f-h\Delta S)$ is
+\[
+  \delta_{\mathrm{MV}}=\delta+\nu\,b .
+\]
+\end{proposition}
+\begin{proof}
+$\Delta f-h\Delta S=(\delta+\nu b-h)\Delta S+\nu\epsilon$, the two terms are uncorrelated, so the variance is $(\delta+\nu b-h)^2\Var(\Delta S)+\nu^2\Var\epsilon$, minimal at $h=\delta+\nu b$.
+\end{proof}
+Hull and White (2017) proposed an analytic model for $\E[\Delta\sigma\mid\Delta S]$ (its form is not on the slides). The lecture's neural network replaces it by a learned function
+\ts{24}{23}{48:01}: \emph{inputs} the daily asset-price return, the moneyness (measured by delta) and the time to maturity; \emph{output} the change in implied volatility. For a call, $\nu>0$ and typically $b<0$, so $\delta_{\mathrm{MV}}<\delta$.
+
+\begin{casestudy}[S\&P~500 options (slides 24--27)]
+\textbf{Data.} S\&P~500 call options, 2014--2019, $100$ options sampled at random per day, $125{,}700$ observations, split $60/20/20\%$ ($75{,}420$, $25{,}140$, $25{,}140$).
+\textbf{Method.} Three hidden layers of $20$ neurons; several activation functions tried, sigmoid best \ts{24}{23}{48:01}. Training stopped after $5{,}826$ epochs, where the validation mse turned up (slide~26: mse of about $6.5\times10^{-5}$ on the training and $6.8\times10^{-5}$ on the validation set).
+\textbf{Results.} On the test set the network gave only a modest $11\%$ improvement over the Hull--White analytic model \ts{24}{23}{49:02}. But when the VIX index of day $t$ was added as a feature, a further improvement of over $60\%$ was found: the behaviour of the surface differs
+in high-volatility and low-volatility environments \ts{24}{23}{49:02}--\ts{24}{23}{50:07}. The slides do not define ``improvement''; presumably it is the relative reduction of the mean squared error of the predicted volatility change.
+\textbf{Lesson.} The 60\% is a result one is unlikely to find by ``playing around'' \ts{24}{23}{50:07}: the network was used to \emph{discover} that the regime matters, and the regime variable was then added by hand.
+\end{casestudy}
+
+% ==================================================================
+\section{Reinforcement learning}\label{ch16:sec-rl}
+\subsection{The model and the exploration--exploitation trade-off}
+Reinforcement learning (RL) finds a strategy for a \emph{series} of decisions in a changing environment \ts{24}{23}{50:07}--\ts{24}{23}{51:11}; software of this kind beats the best human chess and Go players. The general model (slide~30) has a state $S_t$, an action $A_t$ taken in it,
+a reward $R_{t+1}$ and a new state $S_{t+1}$ \ts{24}{23}{52:21}: $S_0\xrightarrow{A_0}(R_1,S_1)\xrightarrow{A_1}(R_2,S_2)\cdots$.
+
+\begin{definition}[Value of an action]\label{ch16:def-Q}
+Fix a policy $\pi$ (a rule $S\mapsto A$). With discount factor $\gamma\in[0,1]$ the \emph{return} is $G_t=\sum_{k\ge0}\gamma^kR_{t+k+1}$, and
+$Q^\pi(s,a)=\E[G_t\mid S_t=s,A_t=a]$ is the value of taking $a$ in $s$ and following $\pi$ afterwards. The optimal $Q^*=\max_\pi Q^\pi$ satisfies the Bellman equation
+\[
+  Q^*(s,a)=\E\Bigl[R_{t+1}+\gamma\max_{a'}Q^*(S_{t+1},a')\ \Bigm|\ S_t=s,A_t=a\Bigr].
+\]
+\end{definition}
+The Bellman equation is dynamic programming (the backward induction of \cref{ch:bs} on a tree) but written for an unknown environment, so that the expectation is replaced by observed trials. The lecture does not use these formulas; in Nim below $\gamma=1$ and the only reward is $\pm1$ at the end.
+
+At each trial the agent must choose between \emph{exploitation}, taking the best action found so far, and \emph{exploration}, taking a random one to learn something new \ts{24}{23}{53:22}. With probability $\varepsilon$ it explores and with probability $1-\varepsilon$ it
+exploits (\emph{$\varepsilon$-greedy}); $\varepsilon$ starts at $1$ and is multiplied at each trial by a decay factor such as $0.995$ (a hyperparameter set by trial and error, slide~31), so that after enough trials the agent exploits only \ts{24}{23}{54:25}. With the decay $0.9995$ used
+in the Nim tables, $\varepsilon_n=0.9995^n$ is $0.607,\ 0.082,\ 0.0067$ after $1{,}000$, $5{,}000$, $10{,}000$ trials.
+
+\subsection{Nim and the updating rule}
+The game (slide~32) \ts{24}{23}{54:25}--\ts{24}{23}{55:31}: a pile of $n$ matches, two players alternately take $1$, $2$ or $3$; whoever must take the last match loses. Hull takes $n=8$, reward $+1$ for a win and $-1$ for a loss, an opponent who plays at random, state $S$ = matches left when it is the agent's turn, action
+$A$ = number taken, and $Q(S,A)$ initialised at $0$.
+
+\begin{proposition}[Perfect play in Nim]\label{ch16:prop-nim}
+The player to move with $s$ matches loses against perfect play iff $s\equiv1\pmod 4$.
+\end{proposition}
+\begin{proof}
+Induction on $s$. With $s=1$ the mover must take the last match and loses. If $s\not\equiv1$, i.e.\ $s-1\equiv1,2,3\pmod 4$ ($s\ge2$), the mover takes $(s-1)\bmod4\in\{1,2,3\}$ and leaves $4m+1$ matches to the opponent, who loses by the induction hypothesis. If $s\equiv1$ and $s>1$,
+whatever $a\in\{1,2,3\}$ the mover takes leaves $s-a\equiv1-a\not\equiv1\pmod4$, a winning position for the opponent.
+\end{proof}
+This is the ``$4n+1$'' strategy of the lecture \ts{24}{23}{56:34}--\ts{24}{23}{57:39}: five matches is lost, nine is lost, and so on. Starting from $8$ the right move is to take $3$. The point of the exercise is to see whether a machine that knows nothing finds it
+\ts{24}{23}{57:39}.
+
+\paragraph{Updating} (slides 33--34) \ts{24}{23}{58:40}--\ts{24}{23}{1:00:45}. In the first trial of the slides the agent takes $1$, the opponent $3$, the agent $1$, the opponent $3$, and the agent wins. The pairs $(8,1)$ and $(4,1)$ visited are updated with the rule
+\begin{equation}\label{ch16:eq-qupdate}
+  Q(S,A)^{\text{new}}=Q(S,A)^{\text{old}}+\alpha\bigl[G-Q(S,A)^{\text{old}}\bigr],
+\end{equation}
+where $\alpha$ (e.g.\ $0.05$) is a hyperparameter: with $G=1$ and $Q^{\text{old}}=0$ the new value is $0.05$, as on the slide. It is an exponentially weighted moving average of the gains, and a stochastic-approximation step for the mean of $G$. There are two choices for the gain $G$:
+\begin{itemize}
+  \item the final reward of the trial (\emph{Monte Carlo method}): $G=R_{\text{end}}=\pm1$;
+  \item the value of the next state under the best decision, $G=R+\gamma\max_{a'}Q(S',a')$ (\emph{temporal-difference learning}, or \emph{$Q$-learning}), which is the Bellman equation with the expectation replaced by one observation.
+\end{itemize}
+Monte Carlo waits until the game is over and needs the whole trajectory. Temporal-difference learning \emph{bootstraps}: it updates from a neighbouring estimate immediately. Under $\varepsilon$-greedy play the Monte Carlo average estimates the value of the
+current exploratory policy, whereas the temporal-difference target estimates the value of the greedy one, which is why the latter learns faster while $\varepsilon$ is large. (That $Q$-learning converges to $Q^*$ if $\alpha$ decays suitably and every pair is visited infinitely often is a theorem of Watkins and Dayan; not shown here.)
+
+\begin{example}[Exact solution against a random opponent (our reconstruction)]\label{ch16:ex-nim}
+Against an opponent who picks uniformly among the legal moves, the optimal values follow from backward induction, $Q^*(s,a)=\frac1{n}\sum_{b}V^*(s-a-b)$ with $V^*(s)=\max_aQ^*(s,a)$, $V^*(0)$ read as $+1$ when the opponent took the last match
+and $Q^*(s,s)=-1$ when the agent did. The values (python) are:
+\begin{center}\small
+\begin{tabular}{@{}c|ccccccccc@{}}
+$a\backslash s$ & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8\\ \hline
+1 & $-1$ & $1$ & $0$ & $\tfrac13$ & $\tfrac13$ & $1$ & $\tfrac79$ & $\tfrac79$\\
+2 &  & $-1$ & $1$ & $0$ & $\tfrac13$ & $\tfrac13$ & $1$ & $\tfrac79$\\
+3 &  &  & $-1$ & $1$ & $0$ & $\tfrac13$ & $\tfrac13$ & $1$\\
+\end{tabular}
+\end{center}
+At $s=8$ the best move is $3$ with value $1$ (the opponent, left with $5$ and moving at random, always ends in a lost position for himself, since the agent then plays perfectly), while $1$ and $2$ give $7/9\approx0.778$, positive because the opponent is not perfect. Compare slides 35--36:
+after $10{,}000$ trials the slide's row $s=8$ reads $(0.674,0.793,1.000)$ for Monte Carlo and $(0.813,0.910,1.000)$ for temporal-difference, so the action $3$ is found and the other two values are noisy estimates of $0.778$. Column $7$ is $0$ everywhere in the slides, correctly: after the agent's first move and the opponent's reply at most $6$ matches remain, so state $7$ is never met.
+Some entries, e.g.\ $Q(3,1)=0.618$ in the temporal-difference table against the exact $0$, are stale: once $\varepsilon$ is small the agent rarely tries a bad action again, and its value keeps the noise of the few early trials.
+\end{example}
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.92\linewidth,height=5.4cm,xlabel={number of trials},ylabel={mean $Q(8,3)$},xmin=0,xmax=10000,scaled x ticks=false,xtick={0,2000,4000,6000,8000,10000},ymin=0,ymax=1.08,grid=major,grid style={black!10},
+  legend pos=south east,legend style={font=\footnotesize,fill=white,draw=black!30}]
+  \addplot[thick,color=thmcol,mark=*,mark size=1.2pt] coordinates {(500,0.259) (1000,0.385) (1500,0.522) (2000,0.641) (2500,0.721) (3000,0.781) (3500,0.836) (4000,0.863) (4500,0.892) (5000,0.916) (5500,0.935) (6000,0.947) (6500,0.965) (7000,0.967) (7500,0.980) (8000,0.981) (8500,0.985) (9000,0.991) (9500,0.991) (10000,0.995)};
+  \addplot[thick,color=intcol,mark=square*,mark size=1.2pt] coordinates {(500,0.942) (1000,0.999) (1500,1.000) (2000,1.000) (2500,1.000) (3000,1.000) (3500,1.000) (4000,1.000) (4500,1.000) (5000,1.000) (5500,1.000) (6000,1.000) (6500,1.000) (7000,1.000) (7500,1.000) (8000,1.000) (8500,1.000) (9000,1.000) (9500,1.000) (10000,1.000)};
+  \legend{Monte Carlo,temporal difference}
+\end{axis}
+\end{tikzpicture}
+\caption{Learning Nim with $\varepsilon_0=1$, decay $0.9995$, $\alpha=0.05$ (parameters of slides 35--36). The curves are the value of the winning move $Q(8,3)$, averaged over 100 independent runs of our own simulation. The temporal-difference rule learns the right value in about a thousand
+trials, the Monte Carlo rule in about ten times more (compare the tables of slides 35 and 36).}\label{ch16:fig-nim}
+\end{figure}
+In our simulation of $200$ independent runs, the fraction of runs in which the greedy move at $s=8$ is $3$ after $1{,}000$, $5{,}000$, $10{,}000$ trials is $62.5\%,\,95\%,\,100\%$ for the Monte Carlo rule and $100\%$ at all three horizons for temporal-difference learning. This matches the lecture's remark that with Monte Carlo the machine is not yet sure after $1{,}000$ trials, is
+fairly sure after $5{,}000$ and certain after $10{,}000$, and that temporal difference is faster \ts{24}{23}{1:01:52}--\ts{24}{23}{1:02:54}. Hull adds that when the opponent also learns, moves $1$ and $2$ from $8$ turn negative \ts{24}{23}{1:03:55}: against a perfect opponent $Q(8,1)$ and $Q(8,2)$ are $-1$, because $7$ and $6$ leave a winning position.
+
+\subsection{Deep $Q$-learning}
+When there are many states or actions the table is filled only partly \ts{24}{23}{1:03:55}--\ts{24}{23}{1:05:00}, so $Q$ is estimated as a function by a network $Q_{\bm\theta}(S,A)$, trained to minimise the sum of squared differences between the network and the target \ts{24}{23}{1:05:00} (slide~37):
+\[
+  L(\bm\theta)=\sum_{\text{observed }(S,A,R,S')}\Bigl(R+\gamma\max_{a'}Q_{\bm\theta}(S',a')-Q_{\bm\theta}(S,A)\Bigr)^2 ,
+\]
+where, as in \eqref{ch16:eq-qupdate}, the target is held fixed when differentiating (a ``semi-gradient''; common implementations keep a lagged copy of $\bm\theta$ inside the target for stability; not discussed in class). This is nonlinear least squares, i.e.\ \cref{ch16:sec-gd,ch16:sec-nn}
+with a moving target. The table of Nim is the special case with one parameter per pair $(S,A)$ and a constant step: \eqref{ch16:eq-qupdate} is one gradient step on the square $\tfrac12(G-Q(S,A))^2$ with learning rate $\alpha$.
+
+\subsection{Hedging derivatives by reinforcement learning}
+Hull's research question \ts{24}{23}{1:05:00}--\ts{24}{23}{1:06:05}: the traditional hedge uses the Greek letters, i.e.\ derivatives of the portfolio value with respect to a variable over a very short horizon. RL instead looks several periods ahead and chooses today's hedge to work well over the whole
+horizon. \textbf{Findings} (slide~39) \ts{24}{23}{1:06:05}--\ts{24}{23}{1:10:14}:
+\begin{itemize}
+  \item for vanilla options it does about as well as Greek-letter hedging when there are no transaction costs, but it \emph{saves transaction costs}, in some cases significantly;
+  \item for exotic options such as barrier options it produces better results even with no transaction costs;
+  \item the user \emph{chooses the objective function}: e.g.\ VaR$_{95}$ or CVaR$_{95}$ of the hedging loss, which the Greeks cannot do;
+  \item it is robust and works well in stressed periods; JP Morgan is the main competitor doing this research;
+  \item disadvantage: it is much more computationally demanding, minutes rather than nothing for a Greek, but computers are getting faster.
+\end{itemize}
+\begin{intuition}[Why looking ahead saves costs (own illustration, not from the lecture)]
+Hull's example \ts{24}{23}{1:07:09}: the delta is $0.5$, rises to $0.7$, and there is a 50\% chance that at the next hedging date it will be back at $0.5$. With a proportional cost $c$ per share traded, rebalancing at once costs $0.2c$ now and, with probability $\tfrac12$, another $0.2c$
+later: expected cost $0.3c$. Waiting costs $0$ now and $0.2c$ only if the delta stays at $0.7$: expected cost $0.1c$. The price of waiting is a hedge that is $0.2$ shares short for one period, which adds a variance $0.2^2\Var(\Delta S)=0.04\Var(\Delta S)$ to the hedged position. Waiting is better
+when $0.2c$ exceeds the value put on this variance, i.e.\ when transaction costs are large, which is Hull's conclusion \ts{24}{23}{1:08:13}. A Greek-letter hedger, who looks one period ahead, always rebalances; a multi-period agent can trade the two effects off.
+\end{intuition}
+\begin{coursenote}[VaR and CVaR: a misstatement in the transcript]
+Explaining the objective functions, Hull says that with VaR$_{95}$ one wants ``the 95th percentile point of the loss distribution to be as high as possible'' \ts{24}{23}{1:09:13}. A risk manager wants it \emph{as low as possible}: the objective is to \emph{minimise} the
+95th percentile of the loss (as for the CVaR$_{95}$ described in the next sentence, the average loss beyond that percentile, ``as low as possible''). The definitions and the properties of both measures are in \cref{ch:var}.
+\end{coursenote}
+
+% ==================================================================
+\section{The questions at the end}
+The remaining minutes are questions \ts{24}{23}{1:11:20}--\ts{24}{23}{1:15:24}. Asked whether the choice of activation matters, Hull answers that sigmoid has worked well, perhaps by chance, that the alternatives tried gave results close to each other, and that the size of the model (neurons per layer, number of layers) matters more.
+Asked whether a two-layer network can be extended to three layers without starting again, he believes one must start from scratch. (This is the practice in his examples; in the wider literature weights of a smaller network are sometimes reused as an initialisation, not discussed.) He points to the Python code for the book's examples on his
+Toronto website \ts{24}{23}{1:13:20}, and, asked how the objective function is chosen, says that it depends on the problem: to match an exotic option price one minimises the difference between the network and target price \ts{24}{23}{1:14:20}--\ts{24}{23}{1:15:24}.
+
+\begin{finance}[Summary: where the tools sit in the course]
+\begin{itemize}
+  \item \emph{Regression and shrinkage} (\cref{ch:regression}): squared loss, linear model, ridge penalty; the network is the nonlinear generalisation and early stopping is the ridge penalty in disguise (\cref{ch16:sec-gd}).
+  \item \emph{PCA} (\cref{ch:pca}): dimension reduction on the features, also the linear cousin of clustering.
+  \item \emph{Volatility and Black--Scholes} (\cref{ch:volatility,ch:bs}): the network learns the pricing function and the response of the surface; the minimum-variance delta is a regression coefficient.
+  \item \emph{Regularised models} (\cref{ch:regularized}): the finance-industry treatment of the same bias--variance balance, for pricing and risk model calibration.
+  \item \emph{VaR} (\cref{ch:var}): the loss functionals used as objectives in RL hedging.
+\end{itemize}
+\end{finance}
+
+\begin{keyformulas}
+\begin{align*}
+&\text{Empirical risk:} && \hat R(\bm\theta)=\tfrac1n\textstyle\sum_i\ell(y_i,h_{\bm\theta}(\bm x_i))\\
+&\text{Bias--variance:} && \E(y-\hat h)^2=\sigma^2+(f-\E\hat h)^2+\Var\hat h\\
+&\text{Projection fit:} && \text{test}=\sigma^2+b^2+\tfrac pn\sigma^2,\quad\text{train}=\sigma^2+b^2-\tfrac pn\sigma^2\\
+&\text{$k$-means:} && J=\textstyle\sum_i\|\bm x_i-\bm\mu_{c(i)}\|^2\ \text{(Lloyd: monotone decrease)}\\
+&\text{Gradient descent:} && \bm\theta_{k+1}=\bm\theta_k-\eta\nabla\hat R(\bm\theta_k)\\
+&\text{Quadratic case:} && \bm e_{k+1}=(I-\eta A)\bm e_k;\ 0<\eta<\tfrac2{\lambda_{\max}};\ r_{\min}=\tfrac{\kappa-1}{\kappa+1}\\
+&\text{Early stopping:} && \text{filter }1-(1-\eta d^2)^k\ \leftrightarrow\ \text{ridge }\tfrac{d^2}{d^2+\lambda},\ \lambda\approx\tfrac1{\eta k}\\
+&\text{Network layer:} && \bm z^{(l)}=W^{(l)}\bm a^{(l-1)}+\bm b^{(l)},\quad\bm a^{(l)}=\varphi(\bm z^{(l)})\\
+&\text{Activations:} && \sigma(y)=\tfrac1{1+e^{-y}},\ \sigma'=\sigma(1-\sigma),\ \tanh y=2\sigma(2y)-1\\
+&\text{Backpropagation:} && \bm\delta^{(l)}=(W^{(l+1)\mathsf T}\bm\delta^{(l+1)})\odot\varphi'(\bm z^{(l)})\\
+& && \partial\ell/\partial W^{(l)}=\bm\delta^{(l)}\bm a^{(l-1)\mathsf T}\\
+&\text{Min-variance delta:} && \delta_{\mathrm{MV}}=\delta+\nu\,\Cov(\Delta\sigma,\Delta S)/\Var(\Delta S)\\
+&\text{Bellman:} && Q^*(s,a)=\E[R+\gamma\max_{a'}Q^*(S',a')]\\
+&\text{$Q$ update:} && Q\leftarrow Q+\alpha[G-Q]\\
+& && G=R_{\text{end}}\ (\text{MC}),\quad G=R+\gamma\max_{a'}Q(S',a')\ (\text{TD})\\
+&\text{Exploration:} && \varepsilon_n=\varepsilon_{n-1}\cdot\text{decay},\quad \varepsilon_n=0.9995^n
+\end{align*}
+\end{keyformulas}
+
+% ==================================================================
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[not from the course: gradient descent on an ill-conditioned quadratic]
+Let $f(\bm\theta)=\tfrac12(\theta_1^2+10\theta_2^2)$.
+\begin{enumerate}[(a)]
+  \item For which $\eta$ does gradient descent converge?
+  \item Find the $\eta$ that minimises the contraction factor and this factor.
+  \item Starting at $(1,1)$, how many steps are needed to bring $\|\bm\theta\|$ below $10^{-3}$ with that $\eta$,
+      and with $\eta=0.05$?
+  \item Rescale $\theta_2=\theta_2'/\sqrt{10}$ and repeat: what has changed?
+\end{enumerate}
+\end{exercise}
+\begin{exercise}[not from the course: backpropagation]
+A network has one input, one hidden layer with two $\tanh$ neurons, and a linear output, $h=w_1\tanh(u_1x+c_1)+w_2\tanh(u_2x+c_2)+d$, with loss $\ell=\tfrac12(h-y)^2$. Using \cref{ch16:prop-bp}, compute $\partial\ell/\partial u_1$, $\partial\ell/\partial c_1$, $\partial\ell/\partial w_1$ and check with a finite-difference in
+python for random values of the parameters.
+\end{exercise}
+\begin{exercise}[not from the course: optimism of any linear smoother]
+Let $\hat{\bm y}=S\bm y$ for a fixed matrix $S$ (ridge regression, \cref{ch05:sec-shrink}, is an example with $S=X(X\T X+\lambda I)^{-1}X\T$), $\bm y=\bm f+\bm\varepsilon$, $\Cov\bm\varepsilon=\sigma^2I$. Show that $\frac1n\E\|\bm y^*-\hat{\bm y}\|^2-\frac1n\E\|\bm y-\hat{\bm y}\|^2=\frac{2\sigma^2}{n}\tr S$, where
+$\bm y^*=\bm f+\bm\varepsilon^*$ is an independent copy, so that $\tr S$ plays the role of the number of parameters in \cref{ch16:prop-bv}. Evaluate $\tr S$ for ridge in terms of the singular values.
+\end{exercise}
+\begin{exercise}[not from the course: $k$-means]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Show that the mean minimises $\sum_{i\in C}\|\bm x_i-\bm m\|^2$ and that the minimum equals $\frac1{2|C|}\sum_{i,j\in C}\|\bm x_i-\bm x_j\|^2$.
+  \item Take the four points $(0,0),(4,0),(0,1),(4,1)$ and $K=2$. Show that ``left pair/right pair'' and ``bottom pair/top pair'' are both stable
+      under Lloyd's algorithm, and compute $J$ for each ($1$ and $16$): a local minimum need not be a global one.
+\end{enumerate}
+\end{exercise}
+\begin{exercise}[not from the course: Nim]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Verify \cref{ch16:prop-nim} for $s\le13$ by listing the winning moves.
+  \item Verify by hand the exact values $Q^*(5,\cdot)=(\tfrac13,\tfrac13,0)$ and $Q^*(7,\cdot)=(\tfrac79,1,\tfrac13)$ of \cref{ch16:ex-nim}.
+  \item For which starting number of matches $n\le13$ is there a first move that wins even if the opponent plays perfectly?
+\end{enumerate}
+\end{exercise}
+\begin{exercise}[not from the course: one $Q$-learning step]
+In Nim with $\alpha=0.05$, $\gamma=1$, let $Q(8,3)=0.5$ and $Q(4,\cdot)=(0.1,0.2,0.4)$. A trial goes $8\xrightarrow{3}5\to4$ (opponent takes $1$). Compute the updated $Q(8,3)$ by
+\begin{enumerate}[(a)]
+  \item the temporal-difference rule and
+  \item the Monte Carlo rule, if the trial ends with a win.
+\end{enumerate}
+\end{exercise}
+\begin{exercise}[not from the course: minimum-variance delta]
+A call has $\delta=0.60$ and vega $\nu=25$ (price change per unit change of $\sigma$ in absolute terms, e.g.\ $0.01$ of volatility is $0.25$). Suppose over a day $\Delta\sigma=-0.008\,\Delta S+\epsilon$ ($\Delta S$ in dollars). Compute $\delta_{\mathrm{MV}}$.
+How does the variance of the hedged position change when $h=\delta_{\mathrm{MV}}$ replaces $h=\delta$, if $\Var(\Delta S)=1$ and $\Var(\epsilon)=10^{-5}$?
+\end{exercise}

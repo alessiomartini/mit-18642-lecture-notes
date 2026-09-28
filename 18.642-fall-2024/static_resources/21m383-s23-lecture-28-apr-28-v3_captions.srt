@@ -1,0 +1,4930 @@
+1
+00:00:00,000 --> 00:00:01,976
+[SQUEAKING]
+
+2
+00:00:01,976 --> 00:00:03,952
+[RUSTLING]
+
+3
+00:00:03,952 --> 00:00:07,410
+[CLICKING]
+
+4
+00:00:07,410 --> 00:00:09,707
+
+
+5
+00:00:09,707 --> 00:00:11,040
+KIKI GUTIERREZ: My name is Kiki.
+
+6
+00:00:11,040 --> 00:00:13,170
+I'm visiting a
+scholar here at MIT.
+
+7
+00:00:13,170 --> 00:00:14,780
+I'm actually an
+assistant professor
+
+8
+00:00:14,780 --> 00:00:18,530
+at Polytechnical
+University of Madrid.
+
+9
+00:00:18,530 --> 00:00:21,030
+My background is
+actually on engineering.
+
+10
+00:00:21,030 --> 00:00:23,490
+I am aerospace engineer.
+
+11
+00:00:23,490 --> 00:00:28,140
+I did my PhD on numerical
+methods, but after my postdoc,
+
+12
+00:00:28,140 --> 00:00:30,660
+I decided to start doing things
+that really fascinates me,
+
+13
+00:00:30,660 --> 00:00:33,710
+and that's how I end up doing
+something related with music.
+
+14
+00:00:33,710 --> 00:00:36,350
+So I'm relatively
+new in this field.
+
+15
+00:00:36,350 --> 00:00:39,470
+Today I'm going to show you
+an algorithm that I came up
+
+16
+00:00:39,470 --> 00:00:42,200
+for pattern detection
+in music, which
+
+17
+00:00:42,200 --> 00:00:45,240
+is what I've been working on
+for the last year and a half,
+
+18
+00:00:45,240 --> 00:00:46,040
+more or less.
+
+19
+00:00:46,040 --> 00:00:50,270
+So as running example,
+I'm going to use
+
+20
+00:00:50,270 --> 00:00:57,620
+the most listened song of the
+history, which is Baby Shark.
+
+21
+00:00:57,620 --> 00:01:02,180
+So I don't know
+if I can play it.
+
+22
+00:01:02,180 --> 00:01:07,135
+At least, it's the most listened
+song of the history of YouTube.
+
+23
+00:01:07,135 --> 00:01:07,760
+[MUSIC PLAYING]
+
+24
+00:01:07,760 --> 00:01:10,380
+Baby shark doo doo
+doo doo doo doo.
+
+25
+00:01:10,380 --> 00:01:12,450
+Baby Shark doo doo
+doo doo doo doo.
+
+26
+00:01:12,450 --> 00:01:14,550
+Baby Shark doo doo
+doo doo doo doo.
+
+27
+00:01:14,550 --> 00:01:15,780
+Baby shark.
+
+28
+00:01:15,780 --> 00:01:18,720
+Mommy shark doo doo doo doo doo.
+
+29
+00:01:18,720 --> 00:01:20,790
+Mommy shark doo doo doo doo.
+
+30
+00:01:20,790 --> 00:01:22,860
+Mommy shark doo doo doo doo.
+
+31
+00:01:22,860 --> 00:01:23,690
+Mommy shark--
+
+32
+00:01:23,690 --> 00:01:26,450
+OK, is pretty much
+like that of the song.
+
+33
+00:01:26,450 --> 00:01:28,350
+This is the melody.
+
+34
+00:01:28,350 --> 00:01:32,030
+So what's the problem of
+pattern detection in music?
+
+35
+00:01:32,030 --> 00:01:36,770
+We would like to have a
+tool, an automated tool that
+
+36
+00:01:36,770 --> 00:01:40,910
+helps us to identify over
+the score or over a corpus
+
+37
+00:01:40,910 --> 00:01:43,280
+the important musical
+ideas there, you know.
+
+38
+00:01:43,280 --> 00:01:46,790
+So I'm highlighting
+here some fragments,
+
+39
+00:01:46,790 --> 00:01:49,740
+how I look first at the
+blue fragment over there.
+
+40
+00:01:49,740 --> 00:01:53,040
+There are three fragments,
+three occurrences of them.
+
+41
+00:01:53,040 --> 00:01:54,870
+All of them are
+exactly the same.
+
+42
+00:01:54,870 --> 00:01:57,590
+They have the same notes
+with the same pitches
+
+43
+00:01:57,590 --> 00:01:59,150
+and same durations.
+
+44
+00:01:59,150 --> 00:02:00,950
+The only difference
+is that they occur
+
+45
+00:02:00,950 --> 00:02:04,380
+at different moments of the
+score, but it seems logical.
+
+46
+00:02:04,380 --> 00:02:07,880
+It seems reasonable to group
+them as the same musical idea
+
+47
+00:02:07,880 --> 00:02:13,190
+and say that they
+represent the same pattern.
+
+48
+00:02:13,190 --> 00:02:15,170
+We can call them--
+
+49
+00:02:15,170 --> 00:02:18,210
+we can put them a
+label, blue pattern.
+
+50
+00:02:18,210 --> 00:02:20,780
+For the green one,
+it's a little trickier
+
+51
+00:02:20,780 --> 00:02:24,740
+because the occurrence number
+2 and the occurrence number 3
+
+52
+00:02:24,740 --> 00:02:26,330
+are exactly the same.
+
+53
+00:02:26,330 --> 00:02:28,560
+Probably makes sense
+to group them together.
+
+54
+00:02:28,560 --> 00:02:31,250
+Occurrence number 1
+has different durations
+
+55
+00:02:31,250 --> 00:02:34,820
+for the notes and the
+occurrence number 4
+
+56
+00:02:34,820 --> 00:02:40,490
+is even trickier because they
+just start with the rest that--
+
+57
+00:02:40,490 --> 00:02:43,950
+it's three notes
+also and the lyrics.
+
+58
+00:02:43,950 --> 00:02:46,160
+But it's pretty different.
+
+59
+00:02:46,160 --> 00:02:49,760
+So that's one of the main
+difficulties of the problem
+
+60
+00:02:49,760 --> 00:02:51,050
+of pattern mining in music.
+
+61
+00:02:51,050 --> 00:02:55,310
+That even though objects that
+we want to group together--
+
+62
+00:02:55,310 --> 00:02:59,490
+because in our mind represent
+the same musical idea--
+
+63
+00:02:59,490 --> 00:03:02,740
+over the table, they might
+look pretty different.
+
+64
+00:03:02,740 --> 00:03:05,490
+And there are two
+mechanisms involved here.
+
+65
+00:03:05,490 --> 00:03:07,560
+The first one is something
+that we have already
+
+66
+00:03:07,560 --> 00:03:09,220
+studied, transformations.
+
+67
+00:03:09,220 --> 00:03:12,960
+So if we have a
+music fragment, if we
+
+68
+00:03:12,960 --> 00:03:16,590
+apply a mathematical
+transformation over the notes
+
+69
+00:03:16,590 --> 00:03:20,970
+there, we obtain other fragments
+that under some circumstances,
+
+70
+00:03:20,970 --> 00:03:23,910
+our mind will process
+them as equivalent.
+
+71
+00:03:23,910 --> 00:03:28,270
+And how to deal with
+this computationally
+
+72
+00:03:28,270 --> 00:03:31,330
+from the point of view of
+pattern mining algorithms?
+
+73
+00:03:31,330 --> 00:03:34,780
+My approach was to use
+the concept of viewpoint.
+
+74
+00:03:34,780 --> 00:03:37,570
+I'm going to show you an
+example of what is this about,
+
+75
+00:03:37,570 --> 00:03:40,080
+but for the moment,
+it's enough to know
+
+76
+00:03:40,080 --> 00:03:43,770
+that it has a double task.
+
+77
+00:03:43,770 --> 00:03:46,890
+On the first hand,
+it directly takes
+
+78
+00:03:46,890 --> 00:03:48,613
+into account these
+transformations.
+
+79
+00:03:48,613 --> 00:03:49,780
+You will see it in a minute.
+
+80
+00:03:49,780 --> 00:03:53,950
+And probably more important, it
+simplifies the representation,
+
+81
+00:03:53,950 --> 00:03:57,330
+because one of the constants in
+this course, in these classes,
+
+82
+00:03:57,330 --> 00:04:00,160
+is that music is
+something complex.
+
+83
+00:04:00,160 --> 00:04:04,020
+It has complex,
+logical structures
+
+84
+00:04:04,020 --> 00:04:06,040
+among the elements of the score.
+
+85
+00:04:06,040 --> 00:04:10,650
+And if we find a way to
+simplify that representation,
+
+86
+00:04:10,650 --> 00:04:13,930
+would be helpful from the
+computational point of view.
+
+87
+00:04:13,930 --> 00:04:17,769
+So the viewpoint representation
+is pretty simple.
+
+88
+00:04:17,769 --> 00:04:19,800
+It's just I'm
+going to substitute
+
+89
+00:04:19,800 --> 00:04:26,830
+a complex tune like this one by
+a single sequence of symbols.
+
+90
+00:04:26,830 --> 00:04:30,060
+So actually, here I'm showing
+three viewpoints representation.
+
+91
+00:04:30,060 --> 00:04:34,240
+The pitch viewpoint, it's the
+sequence of these symbols 83,
+
+92
+00:04:34,240 --> 00:04:35,800
+83, 83, 85.
+
+93
+00:04:35,800 --> 00:04:37,300
+It's the midi Note.
+
+94
+00:04:37,300 --> 00:04:41,100
+Then we have the duration
+and the onset time.
+
+95
+00:04:41,100 --> 00:04:44,050
+I'm going to
+highlight a fragment.
+
+96
+00:04:44,050 --> 00:04:46,680
+So you can see the different
+viewpoints representations
+
+97
+00:04:46,680 --> 00:04:47,800
+for that fragment.
+
+98
+00:04:47,800 --> 00:04:50,640
+And it's nice that the
+idea of constructing
+
+99
+00:04:50,640 --> 00:04:54,000
+the score by overlapping
+layers of information.
+
+100
+00:04:54,000 --> 00:04:55,230
+That's the idea.
+
+101
+00:04:55,230 --> 00:04:58,830
+Formerly, a viewpoint
+is a mapping
+
+102
+00:04:58,830 --> 00:05:03,960
+between the current event, the
+current time slice, and all
+
+103
+00:05:03,960 --> 00:05:08,550
+the former ones into symbol,
+usually an integer or float
+
+104
+00:05:08,550 --> 00:05:10,420
+but could be others.
+
+105
+00:05:10,420 --> 00:05:13,560
+Those that are
+derived at viewpoints.
+
+106
+00:05:13,560 --> 00:05:17,950
+And perhaps for your own
+particular music application,
+
+107
+00:05:17,950 --> 00:05:21,780
+you need to develop your own
+viewpoint representation.
+
+108
+00:05:21,780 --> 00:05:25,230
+And here is clearly highlighted
+how the transformations
+
+109
+00:05:25,230 --> 00:05:28,440
+could be directly taken into
+account by using this technique.
+
+110
+00:05:28,440 --> 00:05:32,400
+For instance, if you apply
+the octave transformation
+
+111
+00:05:32,400 --> 00:05:35,680
+to that pattern
+there, that fragment,
+
+112
+00:05:35,680 --> 00:05:42,510
+you obtain that one over there,
+which by the interval viewpoint
+
+113
+00:05:42,510 --> 00:05:45,640
+representation, we
+have the same symbol.
+
+114
+00:05:45,640 --> 00:05:48,180
+So for sure, any
+pattern mining algorithm
+
+115
+00:05:48,180 --> 00:05:52,290
+that is trying to
+find this sequence
+
+116
+00:05:52,290 --> 00:05:54,840
+will see that that
+one is the same.
+
+117
+00:05:54,840 --> 00:05:58,260
+Is that enough to deal with
+the concept of dissimilarity
+
+118
+00:05:58,260 --> 00:05:59,140
+in music?
+
+119
+00:05:59,140 --> 00:06:00,580
+Unfortunately, no.
+
+120
+00:06:00,580 --> 00:06:04,110
+So have a look at these two
+occurrences of the green pattern
+
+121
+00:06:04,110 --> 00:06:05,640
+of Baby Shark.
+
+122
+00:06:05,640 --> 00:06:08,520
+There is no viewpoint
+representation
+
+123
+00:06:08,520 --> 00:06:11,110
+that can take us from
+one to the other.
+
+124
+00:06:11,110 --> 00:06:13,210
+So someone said
+at some point, OK,
+
+125
+00:06:13,210 --> 00:06:16,500
+it would be nice to
+have a kind of measure,
+
+126
+00:06:16,500 --> 00:06:19,770
+a mathematical tool that help
+us to evaluate how different two
+
+127
+00:06:19,770 --> 00:06:21,480
+fragments are.
+
+128
+00:06:21,480 --> 00:06:27,180
+Like the aim here is that,
+OK, if I use that matrix
+
+129
+00:06:27,180 --> 00:06:31,980
+with this guy and this guy,
+I would expect a lower value
+
+130
+00:06:31,980 --> 00:06:34,080
+than the one that
+I would obtain when
+
+131
+00:06:34,080 --> 00:06:35,920
+taking this guy and this guy.
+
+132
+00:06:35,920 --> 00:06:39,240
+Because they are more far.
+
+133
+00:06:39,240 --> 00:06:42,550
+They represent further ideas.
+
+134
+00:06:42,550 --> 00:06:46,050
+So in computer science, they
+use what is called the distance
+
+135
+00:06:46,050 --> 00:06:46,930
+functions.
+
+136
+00:06:46,930 --> 00:06:52,260
+This in a general scenario is
+that you can give to a function
+
+137
+00:06:52,260 --> 00:06:55,710
+two objects, two random objects,
+for instance, me, myself,
+
+138
+00:06:55,710 --> 00:06:58,020
+and this computer,
+and it returns
+
+139
+00:06:58,020 --> 00:07:01,800
+a non-negative real
+number, evaluating
+
+140
+00:07:01,800 --> 00:07:05,040
+the degree of dissimilarity
+between the two objects.
+
+141
+00:07:05,040 --> 00:07:07,680
+In the context of
+sequences, because we
+
+142
+00:07:07,680 --> 00:07:09,580
+are using viewpoint
+representation,
+
+143
+00:07:09,580 --> 00:07:12,160
+so now this fragment
+will be a sequence.
+
+144
+00:07:12,160 --> 00:07:13,510
+For instance.
+
+145
+00:07:13,510 --> 00:07:16,840
+Let's think that I'm using
+the duration viewpoint.
+
+146
+00:07:16,840 --> 00:07:22,000
+So in the literature, we have
+plenty of distance functions.
+
+147
+00:07:22,000 --> 00:07:26,820
+This was a very trending topic
+in music information retrieval
+
+148
+00:07:26,820 --> 00:07:28,930
+15 years ago, more or less.
+
+149
+00:07:28,930 --> 00:07:32,010
+There were many
+studies and papers
+
+150
+00:07:32,010 --> 00:07:36,880
+trying to figure out which was
+the best distance function,
+
+151
+00:07:36,880 --> 00:07:39,240
+depending on the style.
+
+152
+00:07:39,240 --> 00:07:42,210
+The Levenshtein distance
+function, perhaps, it's
+
+153
+00:07:42,210 --> 00:07:43,980
+not the most advanced
+one, but this
+
+154
+00:07:43,980 --> 00:07:46,750
+is one of the simplest one and
+probably the most used one.
+
+155
+00:07:46,750 --> 00:07:50,710
+And it accounts for the number
+of substitutions, deletions,
+
+156
+00:07:50,710 --> 00:07:54,710
+or insertions to go from
+one sequence to the other.
+
+157
+00:07:54,710 --> 00:08:01,790
+So to go from the sequence 0.5,
+0.5, 0.5 to the sequence 0.5,
+
+158
+00:08:01,790 --> 00:08:05,120
+0.52, we just need a
+single substitution.
+
+159
+00:08:05,120 --> 00:08:08,830
+So the Levenshtein distance
+function between the fragment
+
+160
+00:08:08,830 --> 00:08:11,038
+2 and fragment 4 is 1.
+
+161
+00:08:11,038 --> 00:08:13,330
+Probably the Levenshtein
+distance function between this
+
+162
+00:08:13,330 --> 00:08:14,650
+guy and this guy it's--
+
+163
+00:08:14,650 --> 00:08:17,500
+I don't know-- two
+or three, at least.
+
+164
+00:08:17,500 --> 00:08:18,920
+So cool.
+
+165
+00:08:18,920 --> 00:08:21,730
+Now we have all the
+ingredients needed
+
+166
+00:08:21,730 --> 00:08:26,240
+to understand the inputs
+and outputs of my algorithm.
+
+167
+00:08:26,240 --> 00:08:29,780
+We have a corpus or
+a piece of music.
+
+168
+00:08:29,780 --> 00:08:31,660
+We have also the
+viewpoint representation
+
+169
+00:08:31,660 --> 00:08:33,500
+that the user wants to choose.
+
+170
+00:08:33,500 --> 00:08:36,020
+And some parameters
+at the input.
+
+171
+00:08:36,020 --> 00:08:39,070
+The minimum support is the
+minimum number of repetitions
+
+172
+00:08:39,070 --> 00:08:43,610
+that we require to a pattern
+to be considered frequent
+
+173
+00:08:43,610 --> 00:08:45,820
+and to be included
+in the result list.
+
+174
+00:08:45,820 --> 00:08:48,410
+These two guys, the minimum
+length and maximum length,
+
+175
+00:08:48,410 --> 00:08:50,980
+are the parameters to control
+the lengths of the patterns
+
+176
+00:08:50,980 --> 00:08:53,590
+that we want to mine
+and some parameters
+
+177
+00:08:53,590 --> 00:08:56,410
+to control the degree
+of dissimilarity
+
+178
+00:08:56,410 --> 00:08:57,740
+from the former slide.
+
+179
+00:08:57,740 --> 00:09:02,440
+And the result is just like
+the list of frequent patterns
+
+180
+00:09:02,440 --> 00:09:04,040
+together with the position.
+
+181
+00:09:04,040 --> 00:09:08,650
+This is an example with the
+piece of the former slide.
+
+182
+00:09:08,650 --> 00:09:13,540
+Now I'm selecting the interval
+viewpoint and those parameters
+
+183
+00:09:13,540 --> 00:09:14,240
+over there.
+
+184
+00:09:14,240 --> 00:09:18,140
+And this is an example of the
+output that we might obtain.
+
+185
+00:09:18,140 --> 00:09:23,590
+So we have a yellow pattern
+that has four occurrences
+
+186
+00:09:23,590 --> 00:09:26,800
+and have a look that
+each of these fragments
+
+187
+00:09:26,800 --> 00:09:33,070
+are at most distance one
+from any of the rest,
+
+188
+00:09:33,070 --> 00:09:35,780
+taking the Levenshtein
+distance function.
+
+189
+00:09:35,780 --> 00:09:38,320
+And we might have,
+for instance, also
+
+190
+00:09:38,320 --> 00:09:42,080
+this guy, the purple
+pattern, and this green one,
+
+191
+00:09:42,080 --> 00:09:43,910
+which is of length 4.
+
+192
+00:09:43,910 --> 00:09:47,920
+So in a real case,
+the pattern structure
+
+193
+00:09:47,920 --> 00:09:49,810
+might be complex, as
+you see, because you
+
+194
+00:09:49,810 --> 00:09:50,990
+have nested patterns.
+
+195
+00:09:50,990 --> 00:09:52,330
+You have many overlappings.
+
+196
+00:09:52,330 --> 00:09:54,010
+I won't go into
+the details of how
+
+197
+00:09:54,010 --> 00:09:57,760
+I implemented the algorithm,
+just a brief overview.
+
+198
+00:09:57,760 --> 00:10:00,080
+I divided in four steps.
+
+199
+00:10:00,080 --> 00:10:03,510
+The one is the creation
+of an initial database.
+
+200
+00:10:03,510 --> 00:10:05,980
+A vertical database
+is called sometimes,
+
+201
+00:10:05,980 --> 00:10:10,340
+where I just take a sliding
+window of minimum length,
+
+202
+00:10:10,340 --> 00:10:12,620
+the minimum length
+selected by the user,
+
+203
+00:10:12,620 --> 00:10:16,450
+and I just create a
+database of all the patterns
+
+204
+00:10:16,450 --> 00:10:18,770
+together with their
+positions within the score.
+
+205
+00:10:18,770 --> 00:10:23,020
+Then in the next step,
+I compare every pattern
+
+206
+00:10:23,020 --> 00:10:27,910
+against all the rest, trying
+to see if they satisfies
+
+207
+00:10:27,910 --> 00:10:29,410
+the distance constraint.
+
+208
+00:10:29,410 --> 00:10:32,020
+And in that case, I
+group them together
+
+209
+00:10:32,020 --> 00:10:37,000
+into what I call metric
+patterns, which are like groups
+
+210
+00:10:37,000 --> 00:10:38,730
+of fragments of music.
+
+211
+00:10:38,730 --> 00:10:41,020
+At this stage,
+it's safe to delete
+
+212
+00:10:41,020 --> 00:10:44,775
+the entries that doesn't reach
+the minimum support constraint.
+
+213
+00:10:44,775 --> 00:10:46,480
+They don't have
+enough occurrences
+
+214
+00:10:46,480 --> 00:10:48,280
+to be considered frequent.
+
+215
+00:10:48,280 --> 00:10:53,917
+And finally, as here, I
+still have patterns of length
+
+216
+00:10:53,917 --> 00:10:55,750
+equal to the minimum
+length, and we actually
+
+217
+00:10:55,750 --> 00:10:57,020
+want longer patterns.
+
+218
+00:10:57,020 --> 00:11:00,430
+So the last stitch is
+overlapping different patterns
+
+219
+00:11:00,430 --> 00:11:03,260
+to form longer ones.
+
+220
+00:11:03,260 --> 00:11:06,530
+And to finish this I'm going
+to show you some results.
+
+221
+00:11:06,530 --> 00:11:08,200
+This is the last slide.
+
+222
+00:11:08,200 --> 00:11:10,690
+I'm actually already using this.
+
+223
+00:11:10,690 --> 00:11:13,300
+I started collaborating
+with these research groups
+
+224
+00:11:13,300 --> 00:11:15,650
+like seven months ago.
+
+225
+00:11:15,650 --> 00:11:22,490
+This is a research group from
+another university of Madrid.
+
+226
+00:11:22,490 --> 00:11:26,170
+They got a good amount of
+money of the European Union
+
+227
+00:11:26,170 --> 00:11:28,760
+to study the Italian operas.
+
+228
+00:11:28,760 --> 00:11:34,100
+They have a huge database with
+many features for each piece.
+
+229
+00:11:34,100 --> 00:11:37,180
+And in particular, they are
+interested in the motion
+
+230
+00:11:37,180 --> 00:11:39,320
+that the piece evokes.
+
+231
+00:11:39,320 --> 00:11:43,480
+So here, we are trying
+to find some correlations
+
+232
+00:11:43,480 --> 00:11:46,840
+between the emotions and
+the pattern structure
+
+233
+00:11:46,840 --> 00:11:48,560
+of the different pieces.
+
+234
+00:11:48,560 --> 00:11:51,800
+These two other products
+are pretty similar.
+
+235
+00:11:51,800 --> 00:11:58,250
+The number 2 is on a corpus of
+folk music from a very concrete
+
+236
+00:11:58,250 --> 00:12:01,650
+region of Europe,
+around the Pyrenees,
+
+237
+00:12:01,650 --> 00:12:07,740
+and the second one is the
+database of jazz solos.
+
+238
+00:12:07,740 --> 00:12:10,940
+So here we are building
+classifiers, similar to what
+
+239
+00:12:10,940 --> 00:12:13,350
+we did in the last class.
+
+240
+00:12:13,350 --> 00:12:17,480
+Here I'm showing the number
+of patterns per style
+
+241
+00:12:17,480 --> 00:12:21,440
+for the different
+styles in this corpus,
+
+242
+00:12:21,440 --> 00:12:25,520
+but perhaps here, we can see
+a cool thing of the algorithm.
+
+243
+00:12:25,520 --> 00:12:28,440
+That it returns also the
+position of the patterns,
+
+244
+00:12:28,440 --> 00:12:31,370
+not only the fact that a
+piece contains the pattern.
+
+245
+00:12:31,370 --> 00:12:33,200
+So here, I'm plotting--
+
+246
+00:12:33,200 --> 00:12:35,550
+it's called coverage,
+this variable,
+
+247
+00:12:35,550 --> 00:12:39,770
+but it's actually like
+the probability function
+
+248
+00:12:39,770 --> 00:12:42,680
+of encountering a
+pattern within a solo.
+
+249
+00:12:42,680 --> 00:12:47,240
+So I normalize the length
+of all the solos by style,
+
+250
+00:12:47,240 --> 00:12:50,670
+and the thin line is the
+average for the solos.
+
+251
+00:12:50,670 --> 00:12:55,220
+We can see, for instance, that
+the concentration of patterns
+
+252
+00:12:55,220 --> 00:12:57,930
+tends to be at the beginning
+and not in the end.
+
+253
+00:12:57,930 --> 00:13:02,360
+This is intuitive because
+the improvisers usually
+
+254
+00:13:02,360 --> 00:13:05,550
+start their solos in
+a more organized way,
+
+255
+00:13:05,550 --> 00:13:08,610
+taking thematic material
+from the original melody,
+
+256
+00:13:08,610 --> 00:13:11,660
+and then they start to
+do more crazy stuff.
+
+257
+00:13:11,660 --> 00:13:14,780
+Then, I'm also trying
+to build up a pattern
+
+258
+00:13:14,780 --> 00:13:18,270
+dictionary in an Irish corpus.
+
+259
+00:13:18,270 --> 00:13:21,020
+These are the five
+most frequent patterns
+
+260
+00:13:21,020 --> 00:13:25,050
+in the subset of minor rules in
+the corpus that I'm working on.
+
+261
+00:13:25,050 --> 00:13:27,410
+So I don't know
+for a performance
+
+262
+00:13:27,410 --> 00:13:29,550
+that is interested in
+playing this music.
+
+263
+00:13:29,550 --> 00:13:32,900
+Perhaps, the take away
+of this is, OK, you
+
+264
+00:13:32,900 --> 00:13:35,090
+might want to start
+studying these patterns
+
+265
+00:13:35,090 --> 00:13:39,180
+because they appear quite
+often in the corpus.
+
+266
+00:13:39,180 --> 00:13:42,590
+So better to first master them.
+
+267
+00:13:42,590 --> 00:13:46,880
+For the future with
+Michael, we want
+
+268
+00:13:46,880 --> 00:13:49,760
+to study how the
+algorithm performs
+
+269
+00:13:49,760 --> 00:13:52,380
+in a nice corpus of
+early music that he has,
+
+270
+00:13:52,380 --> 00:13:55,890
+and also, we want to analyze
+some solos of Charlie Parker,
+
+271
+00:13:55,890 --> 00:13:59,420
+who was one of the most
+mathematical improvisers
+
+272
+00:13:59,420 --> 00:14:00,500
+of the history.
+
+273
+00:14:00,500 --> 00:14:02,660
+And also for the
+close future, I would
+
+274
+00:14:02,660 --> 00:14:06,080
+like to see if this tool can
+be helpful for plagiarism
+
+275
+00:14:06,080 --> 00:14:06,980
+detection.
+
+276
+00:14:06,980 --> 00:14:12,530
+I suspect that two pieces
+that are very similar
+
+277
+00:14:12,530 --> 00:14:16,190
+are also some similarities
+in their pattern structure.
+
+278
+00:14:16,190 --> 00:14:17,550
+And that's all.
+
+279
+00:14:17,550 --> 00:14:19,100
+Thank you very much guys.
+
+280
+00:14:19,100 --> 00:14:20,020
+Any questions.
+
+281
+00:14:20,020 --> 00:14:23,250
+[APPLAUSE]
+
+282
+00:14:23,250 --> 00:14:24,793
+
+
+283
+00:14:24,793 --> 00:14:26,210
+MICHAEL CUTHBERT:
+By the way, just
+
+284
+00:14:26,210 --> 00:14:27,930
+so you get a sense
+for your final things,
+
+285
+00:14:27,930 --> 00:14:29,010
+that was 12 minutes.
+
+286
+00:14:29,010 --> 00:14:32,875
+So a tiny bit longer than
+what you have as a maximum.
+
+287
+00:14:32,875 --> 00:14:37,940
+
+
+288
+00:14:37,940 --> 00:14:39,170
+KIKI GUTIERREZ: Cool.
+
+289
+00:14:39,170 --> 00:14:41,570
+If any of you are interested
+in a particular thing
+
+290
+00:14:41,570 --> 00:14:43,530
+of the algorithm,
+just drop me an email,
+
+291
+00:14:43,530 --> 00:14:46,190
+and we can talk about it.
+
+292
+00:14:46,190 --> 00:14:47,277
+Thank you.
+
+293
+00:14:47,277 --> 00:14:48,860
+MICHAEL CUTHBERT:
+So what I want to do
+
+294
+00:14:48,860 --> 00:14:51,830
+is I want to immediately
+start by putting
+
+295
+00:14:51,830 --> 00:14:54,750
+some of these thoughts to work.
+
+296
+00:14:54,750 --> 00:15:00,206
+So get with a
+partner next to you.
+
+297
+00:15:00,206 --> 00:15:00,900
+You can do that.
+
+298
+00:15:00,900 --> 00:15:02,400
+Over here, we need
+a group of three.
+
+299
+00:15:02,400 --> 00:15:03,775
+Or unless you want
+to participate
+
+300
+00:15:03,775 --> 00:15:09,140
+with a friend or jump over
+there or jump over with Jordan,
+
+301
+00:15:09,140 --> 00:15:10,970
+if you do.
+
+302
+00:15:10,970 --> 00:15:14,990
+And here are six melodies.
+
+303
+00:15:14,990 --> 00:15:18,090
+I'm going to play
+each one of them.
+
+304
+00:15:18,090 --> 00:15:20,370
+I'm going to play A
+bunch of times also.
+
+305
+00:15:20,370 --> 00:15:23,840
+So I'll tell you which one I'm
+playing, and you're going to--
+
+306
+00:15:23,840 --> 00:15:27,870
+and you can talk during this or
+wait till just after playing.
+
+307
+00:15:27,870 --> 00:15:33,457
+You're going to
+tell me which melody
+
+308
+00:15:33,457 --> 00:15:37,006
+is most or least similar to A.
+
+309
+00:15:37,006 --> 00:15:43,677
+[PLAYING INSTRUMENT]
+
+310
+00:15:43,677 --> 00:15:46,020
+OK.
+
+311
+00:15:46,020 --> 00:15:51,640
+And this is B. And I
+want you to say why.
+
+312
+00:15:51,640 --> 00:15:54,996
+[PLAYING INSTRUMENT]
+
+313
+00:15:54,996 --> 00:15:59,870
+
+
+314
+00:15:59,870 --> 00:16:02,823
+This is C.
+
+315
+00:16:02,823 --> 00:16:06,190
+[PLAYING INSTRUMENT]
+
+316
+00:16:06,190 --> 00:16:09,560
+
+
+317
+00:16:09,560 --> 00:16:11,390
+And I'm going to
+play A one more time
+
+318
+00:16:11,390 --> 00:16:13,636
+to get it back into our heads.
+
+319
+00:16:13,636 --> 00:16:16,898
+[PLAYING INSTRUMENT]
+
+320
+00:16:16,898 --> 00:16:19,700
+
+
+321
+00:16:19,700 --> 00:16:23,210
+And now D--
+
+322
+00:16:23,210 --> 00:16:24,950
+Oh, and by the way,
+this isn't a right--
+
+323
+00:16:24,950 --> 00:16:26,180
+isn't a right answer one.
+
+324
+00:16:26,180 --> 00:16:29,470
+[PLAYING INSTRUMENT]
+
+325
+00:16:29,470 --> 00:16:32,300
+
+
+326
+00:16:32,300 --> 00:16:35,000
+Great.
+
+327
+00:16:35,000 --> 00:16:36,180
+Now E.
+
+328
+00:16:36,180 --> 00:16:39,484
+[PLAYING INSTRUMENT]
+
+329
+00:16:39,484 --> 00:16:44,220
+
+
+330
+00:16:44,220 --> 00:16:49,688
+And now A one more time before
+doing F. So this is A again.
+
+331
+00:16:49,688 --> 00:16:53,146
+[PLAYING INSTRUMENT]
+
+332
+00:16:53,146 --> 00:16:56,610
+
+
+333
+00:16:56,610 --> 00:17:03,240
+And now F.
+
+334
+00:17:03,240 --> 00:17:04,680
+[PLAYING INSTRUMENT]
+
+335
+00:17:04,680 --> 00:17:06,970
+Oops, that's F and
+E simultaneously,
+
+336
+00:17:06,970 --> 00:17:07,980
+which is very different.
+
+337
+00:17:07,980 --> 00:17:09,304
+Now F.
+
+338
+00:17:09,304 --> 00:17:12,736
+[PLAYING INSTRUMENT]
+
+339
+00:17:12,736 --> 00:17:16,710
+
+
+340
+00:17:16,710 --> 00:17:17,520
+Great.
+
+341
+00:17:17,520 --> 00:17:18,609
+Talk amongst yourself.
+
+342
+00:17:18,609 --> 00:17:21,062
+I want a ranking
+from your group,
+
+343
+00:17:21,062 --> 00:17:22,145
+so somebody write it down.
+
+344
+00:17:22,145 --> 00:17:27,900
+
+
+345
+00:17:27,900 --> 00:17:29,663
+And I want to know why.
+
+346
+00:17:29,663 --> 00:17:33,000
+
+
+347
+00:17:33,000 --> 00:17:34,823
+OK, let's bring it
+all back together.
+
+348
+00:17:34,823 --> 00:17:37,650
+
+
+349
+00:17:37,650 --> 00:17:40,350
+Let's bring it
+all back together.
+
+350
+00:17:40,350 --> 00:17:45,570
+So look looking at
+your list, and we'll
+
+351
+00:17:45,570 --> 00:17:47,050
+count like normal human beings.
+
+352
+00:17:47,050 --> 00:17:50,440
+Whichever one is the
+top in your list is one.
+
+353
+00:17:50,440 --> 00:17:52,390
+Whichever one
+second, two, stuff.
+
+354
+00:17:52,390 --> 00:17:58,000
+And we'll vote by fingers first
+off for the general ranking.
+
+355
+00:17:58,000 --> 00:18:02,775
+So if you hold up the
+number of fingers that--
+
+356
+00:18:02,775 --> 00:18:05,710
+if it's closest, it's
+pulled up one finger.
+
+357
+00:18:05,710 --> 00:18:07,600
+If not, two-- whatever.
+
+358
+00:18:07,600 --> 00:18:11,350
+And full palm means I
+have no idea what that is.
+
+359
+00:18:11,350 --> 00:18:22,410
+OK, B. Oh, B's doing pretty well
+A lot of twos, a couple of ones.
+
+360
+00:18:22,410 --> 00:18:27,112
+C. OK, well, a little
+bit more variety.
+
+361
+00:18:27,112 --> 00:18:29,070
+Hold them up so that
+other people can see also.
+
+362
+00:18:29,070 --> 00:18:29,770
+Look around the room.
+
+363
+00:18:29,770 --> 00:18:30,450
+It's not just for me.
+
+364
+00:18:30,450 --> 00:18:30,950
+Great.
+
+365
+00:18:30,950 --> 00:18:31,740
+Great.
+
+366
+00:18:31,740 --> 00:18:38,110
+D. Oh, OK, we got a variety
+who don't know, whatever.
+
+367
+00:18:38,110 --> 00:18:39,090
+Great.
+
+368
+00:18:39,090 --> 00:18:45,490
+E. Oh, still see
+some poems or things.
+
+369
+00:18:45,490 --> 00:18:45,990
+Great.
+
+370
+00:18:45,990 --> 00:18:50,280
+And F. OK.
+
+371
+00:18:50,280 --> 00:18:52,120
+Oh, we have one four.
+
+372
+00:18:52,120 --> 00:18:54,120
+Good, good.
+
+373
+00:18:54,120 --> 00:18:55,380
+What do you-- you put it down.
+
+374
+00:18:55,380 --> 00:18:58,095
+What do you guys--
+those who put F as four,
+
+375
+00:18:58,095 --> 00:18:59,095
+what do you put as five?
+
+376
+00:18:59,095 --> 00:18:59,597
+AUDIENCE: D.
+
+377
+00:18:59,597 --> 00:19:00,430
+MICHAEL CUTHBERT: B.
+
+378
+00:19:00,430 --> 00:19:00,930
+AUDIENCE: D.
+
+379
+00:19:00,930 --> 00:19:02,820
+MICHAEL CUTHBERT:
+D. OK, D. Good.
+
+380
+00:19:02,820 --> 00:19:03,640
+Good.
+
+381
+00:19:03,640 --> 00:19:05,100
+Great.
+
+382
+00:19:05,100 --> 00:19:13,065
+Somebody who had C above
+B justify your answer.
+
+383
+00:19:13,065 --> 00:19:14,260
+Who had C above B?
+
+384
+00:19:14,260 --> 00:19:15,510
+There were a couple people.
+
+385
+00:19:15,510 --> 00:19:16,980
+Yeah, go ahead.
+
+386
+00:19:16,980 --> 00:19:18,960
+Jake first.
+
+387
+00:19:18,960 --> 00:19:20,580
+Yeah, groups.
+
+388
+00:19:20,580 --> 00:19:23,940
+AUDIENCE: C was basically just a
+transposition, whereas B like--
+
+389
+00:19:23,940 --> 00:19:26,700
+B changed a lot of
+the rhythms a bit.
+
+390
+00:19:26,700 --> 00:19:31,170
+B, I think, fits the exact
+pitches a little better, but--
+
+391
+00:19:31,170 --> 00:19:34,900
+or aside from a couple places
+where it has some accidentals,
+
+392
+00:19:34,900 --> 00:19:37,600
+but it changes the
+rhythm quite a bit.
+
+393
+00:19:37,600 --> 00:19:39,460
+Whereas C is just
+a transposition.
+
+394
+00:19:39,460 --> 00:19:41,400
+So for relative
+pitch essentially.
+
+395
+00:19:41,400 --> 00:19:43,495
+We waited transposition
+equivalence more.
+
+396
+00:19:43,495 --> 00:19:44,620
+MICHAEL CUTHBERT: OK, good.
+
+397
+00:19:44,620 --> 00:19:44,790
+Good.
+
+398
+00:19:44,790 --> 00:19:47,020
+I'm already hearing words
+that I'm liking stuff.
+
+399
+00:19:47,020 --> 00:19:47,558
+Great.
+
+400
+00:19:47,558 --> 00:19:50,100
+Somebody who had it the other
+way around justify your answer.
+
+401
+00:19:50,100 --> 00:19:53,265
+Who had it the other way around?
+
+402
+00:19:53,265 --> 00:19:58,140
+Who had-- a bunch of people
+had B above C. Yeah, John.
+
+403
+00:19:58,140 --> 00:20:03,360
+AUDIENCE: I'm looking for
+the sound feel that A had.
+
+404
+00:20:03,360 --> 00:20:07,180
+Because a lot of the comments
+are probably similar to A and B.
+
+405
+00:20:07,180 --> 00:20:09,790
+That's why we put it a
+bit higher relative to C.
+
+406
+00:20:09,790 --> 00:20:13,620
+And when you take transposition
+into account, only part of C's
+
+407
+00:20:13,620 --> 00:20:15,420
+becoming transpose,
+so it doesn't even
+
+408
+00:20:15,420 --> 00:20:17,540
+feel like it's like
+a full transposition.
+
+409
+00:20:17,540 --> 00:20:18,540
+MICHAEL CUTHBERT: Great.
+
+410
+00:20:18,540 --> 00:20:19,870
+Only part of it's transpose.
+
+411
+00:20:19,870 --> 00:20:22,950
+Yeah, yeah, it kind of
+gets back on for a bit
+
+412
+00:20:22,950 --> 00:20:24,700
+and then comes back off.
+
+413
+00:20:24,700 --> 00:20:26,810
+Great.
+
+414
+00:20:26,810 --> 00:20:30,880
+Who had D-- who had D one two?
+
+415
+00:20:30,880 --> 00:20:31,410
+Anybody?
+
+416
+00:20:31,410 --> 00:20:33,660
+I can't remember.
+
+417
+00:20:33,660 --> 00:20:36,300
+Why do you have one or two?
+
+418
+00:20:36,300 --> 00:20:38,770
+AUDIENCE: Because it
+basically has this--
+
+419
+00:20:38,770 --> 00:20:42,120
+so it has all of the same
+notes in the right positions--
+
+420
+00:20:42,120 --> 00:20:45,026
+or basically--
+
+421
+00:20:45,026 --> 00:20:47,040
+yeah, all you have to
+do is remove notes,
+
+422
+00:20:47,040 --> 00:20:49,650
+and then you get the
+same thing, and--
+
+423
+00:20:49,650 --> 00:20:51,190
+I think with a few exceptions.
+
+424
+00:20:51,190 --> 00:20:52,980
+But that never happened
+in any of them.
+
+425
+00:20:52,980 --> 00:20:53,980
+MICHAEL CUTHBERT: Great.
+
+426
+00:20:53,980 --> 00:20:57,000
+Who had D very low?
+
+427
+00:20:57,000 --> 00:20:58,700
+Yeah, go ahead, Tony.
+
+428
+00:20:58,700 --> 00:20:59,900
+AUDIENCE: Like before--
+
+429
+00:20:59,900 --> 00:21:01,150
+MICHAEL CUTHBERT: Sorry, Tony.
+
+430
+00:21:01,150 --> 00:21:02,025
+Can you speak louder?
+
+431
+00:21:02,025 --> 00:21:06,773
+AUDIENCE: Before, like a
+rhythm, I guess, the same.
+
+432
+00:21:06,773 --> 00:21:07,940
+MICHAEL CUTHBERT: OK, great.
+
+433
+00:21:07,940 --> 00:21:12,330
+
+
+434
+00:21:12,330 --> 00:21:18,030
+Did anybody have E above four?
+
+435
+00:21:18,030 --> 00:21:19,446
+OK.
+
+436
+00:21:19,446 --> 00:21:21,870
+AUDIENCE: We have D at three.
+
+437
+00:21:21,870 --> 00:21:26,173
+And we put it there because
+the pattern was very similar,
+
+438
+00:21:26,173 --> 00:21:27,840
+if not identical,
+even though the melody
+
+439
+00:21:27,840 --> 00:21:29,110
+wasn't all that close.
+
+440
+00:21:29,110 --> 00:21:31,205
+So we figured that probably
+counted for something.
+
+441
+00:21:31,205 --> 00:21:33,330
+MICHAEL CUTHBERT: So when
+you say pattern, what's--
+
+442
+00:21:33,330 --> 00:21:33,720
+AUDIENCE: It's like the rhythm.
+
+443
+00:21:33,720 --> 00:21:34,320
+MICHAEL CUTHBERT: The rhythm.
+
+444
+00:21:34,320 --> 00:21:36,070
+The rhythmic pattern,
+it's about the same.
+
+445
+00:21:36,070 --> 00:21:37,768
+Good.
+
+446
+00:21:37,768 --> 00:21:39,310
+AUDIENCE: That's an
+inversion, right?
+
+447
+00:21:39,310 --> 00:21:41,090
+MICHAEL CUTHBERT:
+Is it an inversion?
+
+448
+00:21:41,090 --> 00:21:41,960
+No.
+
+449
+00:21:41,960 --> 00:21:43,600
+No.
+
+450
+00:21:43,600 --> 00:21:45,640
+Would I do that?
+
+451
+00:21:45,640 --> 00:21:47,150
+AUDIENCE: The inversion.
+
+452
+00:21:47,150 --> 00:21:49,692
+MICHAEL CUTHBERT: By the way,
+I can't remember where melody--
+
+453
+00:21:49,692 --> 00:21:54,490
+I think melody A comes from
+a Huron book and then gives--
+
+454
+00:21:54,490 --> 00:21:58,630
+there's some search book, and
+I should have my notes better,
+
+455
+00:21:58,630 --> 00:22:01,210
+and I'll try to make sure
+it gets annotated later.
+
+456
+00:22:01,210 --> 00:22:02,870
+That had three other melodies.
+
+457
+00:22:02,870 --> 00:22:05,140
+I tried this in the past,
+and it was so obvious
+
+458
+00:22:05,140 --> 00:22:06,928
+that everybody had the
+exact same ranking.
+
+459
+00:22:06,928 --> 00:22:07,970
+I had to agree with them.
+
+460
+00:22:07,970 --> 00:22:10,580
+But I think this is better
+for making some arguments.
+
+461
+00:22:10,580 --> 00:22:11,760
+Good.
+
+462
+00:22:11,760 --> 00:22:14,920
+Who had F anything but--
+
+463
+00:22:14,920 --> 00:22:16,820
+actually, somebody
+who gave F five?
+
+464
+00:22:16,820 --> 00:22:19,095
+Jonathan, why would you--
+did you give F five?
+
+465
+00:22:19,095 --> 00:22:19,720
+AUDIENCE: Yeah.
+
+466
+00:22:19,720 --> 00:22:21,580
+MICHAEL CUTHBERT: Why
+did you give it five?
+
+467
+00:22:21,580 --> 00:22:26,660
+AUDIENCE: I mean, it didn't have
+any noticeable similarities.
+
+468
+00:22:26,660 --> 00:22:30,550
+Like at first, it seemed
+closer to E in terms of-- it
+
+469
+00:22:30,550 --> 00:22:33,400
+might have been inversion
+but then not really.
+
+470
+00:22:33,400 --> 00:22:36,890
+The rhythm is also completely
+different-- or not completely,
+
+471
+00:22:36,890 --> 00:22:38,420
+but it's fairly different.
+
+472
+00:22:38,420 --> 00:22:39,700
+MICHAEL CUTHBERT: Great.
+
+473
+00:22:39,700 --> 00:22:44,464
+So I'm just going to
+point, and we'll get some--
+
+474
+00:22:44,464 --> 00:22:47,560
+
+
+475
+00:22:47,560 --> 00:22:49,550
+just what your ranking is.
+
+476
+00:22:49,550 --> 00:22:50,830
+So say them from--
+
+477
+00:22:50,830 --> 00:22:52,960
+Matthew, what was yours?
+
+478
+00:22:52,960 --> 00:22:54,220
+AUDIENCE: Alphabetical order.
+
+479
+00:22:54,220 --> 00:22:55,790
+MICHAEL CUTHBERT:
+B, C, D, E, F--
+
+480
+00:22:55,790 --> 00:22:58,590
+OK, good.
+
+481
+00:22:58,590 --> 00:22:59,590
+AUDIENCE: B, C, D, E, F.
+
+482
+00:22:59,590 --> 00:23:01,535
+MICHAEL CUTHBERT: B, C, D, E, F.
+
+483
+00:23:01,535 --> 00:23:02,870
+AUDIENCE: [INAUDIBLE]
+
+484
+00:23:02,870 --> 00:23:05,860
+MICHAEL CUTHBERT: B,
+C, E, D, F. Great.
+
+485
+00:23:05,860 --> 00:23:07,510
+Great.
+
+486
+00:23:07,510 --> 00:23:09,080
+Vincent?
+
+487
+00:23:09,080 --> 00:23:10,270
+AUDIENCE: C, B, D--
+
+488
+00:23:10,270 --> 00:23:12,400
+MICHAEL CUTHBERT:
+C, B, D-- good.
+
+489
+00:23:12,400 --> 00:23:14,650
+And anything it
+feels like you're not
+
+490
+00:23:14,650 --> 00:23:16,220
+being represented on there?
+
+491
+00:23:16,220 --> 00:23:18,850
+Hannah, what's your group have?
+
+492
+00:23:18,850 --> 00:23:22,270
+AUDIENCE: I think we
+put C, B, D, E, F.
+
+493
+00:23:22,270 --> 00:23:24,945
+MICHAEL CUTHBERT: C, B,
+D, E, F-- great, super.
+
+494
+00:23:24,945 --> 00:23:26,320
+Now what I want
+you to do-- we're
+
+495
+00:23:26,320 --> 00:23:29,150
+not going to get through
+all of the exercises today,
+
+496
+00:23:29,150 --> 00:23:31,215
+but I think this is the
+most important part.
+
+497
+00:23:31,215 --> 00:23:35,763
+What I want you to do is
+think about what ways--
+
+498
+00:23:35,763 --> 00:23:38,037
+
+
+499
+00:23:38,037 --> 00:23:39,620
+I'll give you a
+little bit of things--
+
+500
+00:23:39,620 --> 00:23:42,640
+what are some ways you can
+make sure that your computer
+
+501
+00:23:42,640 --> 00:23:46,250
+system that is going to
+classify things by similarity
+
+502
+00:23:46,250 --> 00:23:49,790
+follows your intuition
+of what is similar,
+
+503
+00:23:49,790 --> 00:23:54,020
+and not somebody else's
+intuition for what is similar?
+
+504
+00:23:54,020 --> 00:23:57,080
+So that's going to be the main
+theme for the rest of this.
+
+505
+00:23:57,080 --> 00:23:59,570
+So we are intelligent people.
+
+506
+00:23:59,570 --> 00:24:01,100
+We are intelligent musicians.
+
+507
+00:24:01,100 --> 00:24:04,330
+We make these
+choices, and yet we
+
+508
+00:24:04,330 --> 00:24:09,540
+are making differences on how
+far and how similar they are.
+
+509
+00:24:09,540 --> 00:24:11,290
+So, in fact, I'm going
+to blank the screen
+
+510
+00:24:11,290 --> 00:24:16,820
+and say the one takeaway
+from today's lecture, I hope,
+
+511
+00:24:16,820 --> 00:24:19,150
+and from all these
+things, is that there
+
+512
+00:24:19,150 --> 00:24:25,610
+is no right answer for the
+similarity between two melodies,
+
+513
+00:24:25,610 --> 00:24:28,460
+between the similarity
+between two pieces.
+
+514
+00:24:28,460 --> 00:24:30,350
+There may be wrong answers.
+
+515
+00:24:30,350 --> 00:24:33,100
+I will not deny that,
+that if somebody
+
+516
+00:24:33,100 --> 00:24:37,510
+said that F was closer to, I
+don't know, than the same thing
+
+517
+00:24:37,510 --> 00:24:39,200
+with one note
+changed or something,
+
+518
+00:24:39,200 --> 00:24:43,420
+I would think that that might be
+wrong, that your program might
+
+519
+00:24:43,420 --> 00:24:44,360
+be malfunctioning.
+
+520
+00:24:44,360 --> 00:24:45,820
+But there isn't a right answer.
+
+521
+00:24:45,820 --> 00:24:47,200
+And a lot of it--
+
+522
+00:24:47,200 --> 00:24:50,290
+what's different
+between good answers
+
+523
+00:24:50,290 --> 00:24:53,980
+are what we think
+of as important
+
+524
+00:24:53,980 --> 00:24:55,370
+when thinking similarity.
+
+525
+00:24:55,370 --> 00:24:57,410
+There is a yearly competition--
+
+526
+00:24:57,410 --> 00:24:59,683
+I think it's been
+suspended since COVID,
+
+527
+00:24:59,683 --> 00:25:01,100
+so I don't know
+if it's restarted,
+
+528
+00:25:01,100 --> 00:25:06,460
+but for the algorithm
+that can classify songs
+
+529
+00:25:06,460 --> 00:25:07,970
+as the most similar.
+
+530
+00:25:07,970 --> 00:25:09,800
+And here is a place
+where I would say,
+
+531
+00:25:09,800 --> 00:25:11,780
+what are your ground truths?
+
+532
+00:25:11,780 --> 00:25:14,720
+How do we trust that you
+have gotten it right?
+
+533
+00:25:14,720 --> 00:25:20,120
+And are we just trying having
+to recreate the views--
+
+534
+00:25:20,120 --> 00:25:22,390
+I won't say biases, but
+the views of the people
+
+535
+00:25:22,390 --> 00:25:28,940
+who organize the conference and
+what's that going to do for us?
+
+536
+00:25:28,940 --> 00:25:32,540
+So I want you to
+start thinking that.
+
+537
+00:25:32,540 --> 00:25:36,710
+And I will tell you
+what F is beforehand.
+
+538
+00:25:36,710 --> 00:25:40,890
+F is one that a lot of
+computers' programs--
+
+539
+00:25:40,890 --> 00:25:46,580
+in fact, what I went aha
+during one of these algorithms,
+
+540
+00:25:46,580 --> 00:25:47,120
+they could--
+
+541
+00:25:47,120 --> 00:25:50,220
+F is 1 that a number
+of algorithms,
+
+542
+00:25:50,220 --> 00:25:54,590
+especially older ones, will
+classify as the most similar.
+
+543
+00:25:54,590 --> 00:25:57,050
+Because what is F?
+
+544
+00:25:57,050 --> 00:26:03,740
+Unlike any of the other
+lines, F has every single note
+
+545
+00:26:03,740 --> 00:26:06,420
+and every single rhythm,
+if I did it right.
+
+546
+00:26:06,420 --> 00:26:07,430
+I was doing in my head.
+
+547
+00:26:07,430 --> 00:26:10,630
+Every single note and every
+single rhythm from A--
+
+548
+00:26:10,630 --> 00:26:13,670
+just order didn't matter.
+
+549
+00:26:13,670 --> 00:26:20,630
+A is the counterset function,
+the unordered version, the P--
+
+550
+00:26:20,630 --> 00:26:25,550
+yeah, the permutation does
+not matter version of F.
+
+551
+00:26:25,550 --> 00:26:28,590
+Or F is the permutation does
+not matter version of A.
+
+552
+00:26:28,590 --> 00:26:30,218
+Did I get it right?
+
+553
+00:26:30,218 --> 00:26:31,260
+AUDIENCE: It looks right.
+
+554
+00:26:31,260 --> 00:26:32,302
+AUDIENCE: It looks right.
+
+555
+00:26:32,302 --> 00:26:34,608
+
+
+556
+00:26:34,608 --> 00:26:37,588
+MICHAEL CUTHBERT: So
+we're going to go quickly
+
+557
+00:26:37,588 --> 00:26:39,380
+through some things I
+think you've probably
+
+558
+00:26:39,380 --> 00:26:42,390
+seen before, some ways
+of measuring distance.
+
+559
+00:26:42,390 --> 00:26:47,000
+You all learned this at some
+point, the Euclidean distance
+
+560
+00:26:47,000 --> 00:26:48,900
+between two points.
+
+561
+00:26:48,900 --> 00:26:51,390
+Take the square
+root of the x terms.
+
+562
+00:26:51,390 --> 00:26:53,190
+Take the square
+root of the y term.
+
+563
+00:26:53,190 --> 00:26:57,350
+Add, what, difference squared
+plus difference squared
+
+564
+00:26:57,350 --> 00:26:59,610
+square root.
+
+565
+00:26:59,610 --> 00:27:02,720
+Square root of x squared
+plus difference between x
+
+566
+00:27:02,720 --> 00:27:03,925
+and difference between y.
+
+567
+00:27:03,925 --> 00:27:06,800
+
+
+568
+00:27:06,800 --> 00:27:11,120
+So anyone seen this thing, where
+the distance between these two
+
+569
+00:27:11,120 --> 00:27:17,000
+points, 3 comma 2
+and 7 comma 8, is 10.
+
+570
+00:27:17,000 --> 00:27:21,200
+Taxicab distance--
+Manhattan distance,
+
+571
+00:27:21,200 --> 00:27:23,480
+we'll go with taxicabs
+since not all of us
+
+572
+00:27:23,480 --> 00:27:27,630
+have been to a Manhattan and had
+the joys of taking a taxi there.
+
+573
+00:27:27,630 --> 00:27:29,840
+And so why this--
+
+574
+00:27:29,840 --> 00:27:32,180
+here, the distance was 10.
+
+575
+00:27:32,180 --> 00:27:34,923
+Here, it's approximately--
+that's not a negative sign.
+
+576
+00:27:34,923 --> 00:27:36,090
+That's an approximate sign--
+
+577
+00:27:36,090 --> 00:27:39,296
+approximately 7.2.
+
+578
+00:27:39,296 --> 00:27:42,620
+Why is the distance
+greater here?
+
+579
+00:27:42,620 --> 00:27:46,610
+Somebody who's done this
+triangle inequality.
+
+580
+00:27:46,610 --> 00:27:50,210
+Talk English to me for a second.
+
+581
+00:27:50,210 --> 00:27:54,588
+Talk like you're talking
+to your cab driver
+
+582
+00:27:54,588 --> 00:27:55,880
+who you're explaining to this--
+
+583
+00:27:55,880 --> 00:27:57,088
+cab drivers are really smart.
+
+584
+00:27:57,088 --> 00:28:00,180
+Talk, but who may not have
+heard the final inequality.
+
+585
+00:28:00,180 --> 00:28:03,410
+What is represented
+by the term Manhattan
+
+586
+00:28:03,410 --> 00:28:07,730
+distance or taxicab distance?
+
+587
+00:28:07,730 --> 00:28:13,220
+What's the notion-- intuition?
+
+588
+00:28:13,220 --> 00:28:14,133
+Yeah?
+
+589
+00:28:14,133 --> 00:28:15,300
+AUDIENCE: Go along the axes.
+
+590
+00:28:15,300 --> 00:28:19,020
+MICHAEL CUTHBERT: Go along
+the axes or that go along--
+
+591
+00:28:19,020 --> 00:28:21,290
+let's get more literal.
+
+592
+00:28:21,290 --> 00:28:23,210
+One of the things that
+we don't do so well
+
+593
+00:28:23,210 --> 00:28:24,780
+is step back into
+the real world.
+
+594
+00:28:24,780 --> 00:28:26,940
+What is the distance traveled?
+
+595
+00:28:26,940 --> 00:28:33,420
+What constrains the taxicab
+from not hitting distance of 7.2
+
+596
+00:28:33,420 --> 00:28:34,170
+but instead of 10?
+
+597
+00:28:34,170 --> 00:28:34,760
+Yeah?
+
+598
+00:28:34,760 --> 00:28:37,550
+AUDIENCE: You get straight
+up and down to the side.
+
+599
+00:28:37,550 --> 00:28:38,450
+MICHAEL CUTHBERT: You
+can only go straight
+
+600
+00:28:38,450 --> 00:28:39,180
+up and down to the side.
+
+601
+00:28:39,180 --> 00:28:41,250
+You can only go on-- let's
+go even further back.
+
+602
+00:28:41,250 --> 00:28:44,010
+What, in Manhattan, if you
+don't want to get arrested,
+
+603
+00:28:44,010 --> 00:28:45,320
+you can only drive on?
+
+604
+00:28:45,320 --> 00:28:46,070
+AUDIENCE: Streets.
+
+605
+00:28:46,070 --> 00:28:47,153
+MICHAEL CUTHBERT: Streets.
+
+606
+00:28:47,153 --> 00:28:49,400
+And the streets
+in Manhattan go--
+
+607
+00:28:49,400 --> 00:28:50,360
+AUDIENCE: Orthogonal.
+
+608
+00:28:50,360 --> 00:28:51,690
+MICHAEL CUTHBERT: Yeah,
+they're orthogonal.
+
+609
+00:28:51,690 --> 00:28:53,220
+There are these little lines.
+
+610
+00:28:53,220 --> 00:28:56,400
+So you are constrained
+in where you can go.
+
+611
+00:28:56,400 --> 00:28:59,340
+So if there are constraints
+on your distance,
+
+612
+00:28:59,340 --> 00:29:05,150
+and the most common one is you
+can go up, down, left, or right.
+
+613
+00:29:05,150 --> 00:29:08,150
+You can't always do that
+in Manhattan but because
+
+614
+00:29:08,150 --> 00:29:08,790
+of one ways.
+
+615
+00:29:08,790 --> 00:29:11,340
+But let's assume that we
+have certain constraints.
+
+616
+00:29:11,340 --> 00:29:12,690
+You can be brought down.
+
+617
+00:29:12,690 --> 00:29:13,190
+Good.
+
+618
+00:29:13,190 --> 00:29:15,530
+I wanted to make sure
+that we all have that,
+
+619
+00:29:15,530 --> 00:29:18,380
+and so that we can
+start thinking about--
+
+620
+00:29:18,380 --> 00:29:21,420
+
+
+621
+00:29:21,420 --> 00:29:23,540
+first off, that what
+operations are allowed
+
+622
+00:29:23,540 --> 00:29:25,890
+determines the distance metric.
+
+623
+00:29:25,890 --> 00:29:28,340
+What operations are
+allowed determines
+
+624
+00:29:28,340 --> 00:29:29,790
+how far the distance are.
+
+625
+00:29:29,790 --> 00:29:32,223
+What are some operations
+we do in music?
+
+626
+00:29:32,223 --> 00:29:36,350
+
+
+627
+00:29:36,350 --> 00:29:37,350
+That's a question.
+
+628
+00:29:37,350 --> 00:29:40,290
+What operations do we
+allow and not allow?
+
+629
+00:29:40,290 --> 00:29:40,790
+Adam?
+
+630
+00:29:40,790 --> 00:29:42,600
+AUDIENCE: We could look
+at many different models.
+
+631
+00:29:42,600 --> 00:29:45,225
+MICHAEL CUTHBERT: We can look at
+midi difference between notes.
+
+632
+00:29:45,225 --> 00:29:50,460
+So therefore, we can take notes
+and bring them higher and lower.
+
+633
+00:29:50,460 --> 00:29:52,890
+We can raise and lower notes.
+
+634
+00:29:52,890 --> 00:29:54,535
+What are other things we can do?
+
+635
+00:29:54,535 --> 00:29:58,190
+
+
+636
+00:29:58,190 --> 00:30:00,890
+What are some things you've
+ever done with a piece
+
+637
+00:30:00,890 --> 00:30:04,910
+to make it a little bit
+different or interesting?
+
+638
+00:30:04,910 --> 00:30:05,810
+Yeah?
+
+639
+00:30:05,810 --> 00:30:08,030
+AUDIENCE: You can
+subdivide or combine notes.
+
+640
+00:30:08,030 --> 00:30:11,000
+MICHAEL CUTHBERT: You can
+subdivide or combine notes.
+
+641
+00:30:11,000 --> 00:30:12,330
+Maybe you can, maybe you can't.
+
+642
+00:30:12,330 --> 00:30:13,740
+But yeah, quite often you can.
+
+643
+00:30:13,740 --> 00:30:16,850
+This is a context where you can.
+
+644
+00:30:16,850 --> 00:30:17,510
+Yeah, other--
+
+645
+00:30:17,510 --> 00:30:18,427
+AUDIENCE: --durations.
+
+646
+00:30:18,427 --> 00:30:22,400
+MICHAEL CUTHBERT: You can
+change durations-- great, super.
+
+647
+00:30:22,400 --> 00:30:24,800
+How about this?
+
+648
+00:30:24,800 --> 00:30:29,220
+Which of these two chords
+are closer to the first one?
+
+649
+00:30:29,220 --> 00:30:36,103
+The first one is going
+to be C major versus--
+
+650
+00:30:36,103 --> 00:30:43,800
+
+
+651
+00:30:43,800 --> 00:30:46,500
+another little
+similarity problem.
+
+652
+00:30:46,500 --> 00:30:50,730
+The second one was G major.
+
+653
+00:30:50,730 --> 00:30:53,590
+Sorry, the first
+one was G major.
+
+654
+00:30:53,590 --> 00:30:58,170
+The second one, I went from
+C major to C augmented.
+
+655
+00:30:58,170 --> 00:30:59,770
+Great, C augmented triad.
+
+656
+00:30:59,770 --> 00:31:02,290
+So those are two things.
+
+657
+00:31:02,290 --> 00:31:02,830
+Which one?
+
+658
+00:31:02,830 --> 00:31:08,130
+Who votes that from going from
+C major to G major is closer?
+
+659
+00:31:08,130 --> 00:31:12,330
+Who votes that C major and
+C augmented are closer?
+
+660
+00:31:12,330 --> 00:31:12,850
+Two people.
+
+661
+00:31:12,850 --> 00:31:13,510
+OK, great.
+
+662
+00:31:13,510 --> 00:31:18,210
+So a lot of it has to do
+with your thought about--
+
+663
+00:31:18,210 --> 00:31:21,990
+well, on the augmented,
+you're only changing one note,
+
+664
+00:31:21,990 --> 00:31:25,830
+and you're only changing by a
+half step, the minimum distance
+
+665
+00:31:25,830 --> 00:31:30,780
+in our Manhattanized musical
+world of midi and piano
+
+666
+00:31:30,780 --> 00:31:31,530
+keyboards.
+
+667
+00:31:31,530 --> 00:31:34,560
+That is, their minimum
+distance is one half step--
+
+668
+00:31:34,560 --> 00:31:36,040
+not for all music in the world.
+
+669
+00:31:36,040 --> 00:31:36,540
+Great.
+
+670
+00:31:36,540 --> 00:31:38,290
+C major to G major--
+
+671
+00:31:38,290 --> 00:31:40,432
+you're also just moving one.
+
+672
+00:31:40,432 --> 00:31:41,890
+If you think of
+something this way,
+
+673
+00:31:41,890 --> 00:31:45,720
+you're moving one
+distance in what space?
+
+674
+00:31:45,720 --> 00:31:46,735
+AUDIENCE: [INAUDIBLE]
+
+675
+00:31:46,735 --> 00:31:48,360
+MICHAEL CUTHBERT:
+Oh, what's that word?
+
+676
+00:31:48,360 --> 00:31:48,970
+AUDIENCE: Circle of fifths.
+
+677
+00:31:48,970 --> 00:31:50,910
+MICHAEL CUTHBERT: It's
+circle of fifths space.
+
+678
+00:31:50,910 --> 00:31:53,490
+C and G are about
+as close as you
+
+679
+00:31:53,490 --> 00:31:55,410
+can get without
+being the identity,
+
+680
+00:31:55,410 --> 00:31:57,947
+C and F probably the other
+way, although, I don't know,
+
+681
+00:31:57,947 --> 00:31:59,530
+maybe it's a one way
+circle of fifths.
+
+682
+00:31:59,530 --> 00:32:02,110
+You only go around one
+direction or another.
+
+683
+00:32:02,110 --> 00:32:04,380
+Great.
+
+684
+00:32:04,380 --> 00:32:06,750
+Based on the time,
+I'm not going to go
+
+685
+00:32:06,750 --> 00:32:09,570
+through all these other
+measurements of distance
+
+686
+00:32:09,570 --> 00:32:10,420
+that people can do.
+
+687
+00:32:10,420 --> 00:32:12,430
+Who has heard of
+earthmover distance?
+
+688
+00:32:12,430 --> 00:32:14,790
+That is the amount
+of work that it
+
+689
+00:32:14,790 --> 00:32:20,260
+takes to move one mound of
+things over to another place.
+
+690
+00:32:20,260 --> 00:32:23,280
+And sometimes, you're
+optimizing depending
+
+691
+00:32:23,280 --> 00:32:26,700
+on how much it costs
+to move distance
+
+692
+00:32:26,700 --> 00:32:29,760
+and how much it costs
+to move material.
+
+693
+00:32:29,760 --> 00:32:31,513
+You can end up with
+different results.
+
+694
+00:32:31,513 --> 00:32:35,183
+
+
+695
+00:32:35,183 --> 00:32:36,600
+This was one of
+the charts I think
+
+696
+00:32:36,600 --> 00:32:39,240
+I showed early in the
+semester is here's
+
+697
+00:32:39,240 --> 00:32:41,490
+one place where
+earthmover distance might
+
+698
+00:32:41,490 --> 00:32:46,840
+be a good use of
+things of distances.
+
+699
+00:32:46,840 --> 00:32:49,860
+And then Levenshtein
+or edit distance
+
+700
+00:32:49,860 --> 00:32:51,810
+is what was mentioned in--
+
+701
+00:32:51,810 --> 00:32:53,550
+do you use it in your work?
+
+702
+00:32:53,550 --> 00:32:56,400
+Yep, so that's where
+you're talking about,
+
+703
+00:32:56,400 --> 00:33:02,370
+so the idea of how to change
+the word Hyundai into Honda,
+
+704
+00:33:02,370 --> 00:33:08,230
+and no international East Asian
+politics please for a second.
+
+705
+00:33:08,230 --> 00:33:13,510
+And you can think of every
+time, OK, H and H are the same.
+
+706
+00:33:13,510 --> 00:33:15,130
+So it has a cost of 0.
+
+707
+00:33:15,130 --> 00:33:19,300
+Or we can delete the H and start
+an O, and we have a cost of 1.
+
+708
+00:33:19,300 --> 00:33:22,380
+But we can find the
+pattern of as we
+
+709
+00:33:22,380 --> 00:33:25,560
+change, we're going to
+insert a Y after the H.
+
+710
+00:33:25,560 --> 00:33:28,590
+We're going to
+substitute a U for an O.
+
+711
+00:33:28,590 --> 00:33:30,570
+This should be
+symmetrical the other way
+
+712
+00:33:30,570 --> 00:33:32,100
+around-- different operations.
+
+713
+00:33:32,100 --> 00:33:34,480
+N is the same, so that's good.
+
+714
+00:33:34,480 --> 00:33:36,610
+D is the same, so it
+doesn't cost anything.
+
+715
+00:33:36,610 --> 00:33:38,050
+So our cost function goes here.
+
+716
+00:33:38,050 --> 00:33:41,490
+And so we're trying to find
+the minimum cost from going
+
+717
+00:33:41,490 --> 00:33:43,770
+from one end to another.
+
+718
+00:33:43,770 --> 00:33:47,650
+We don't have time to go through
+all of the algorithms for this.
+
+719
+00:33:47,650 --> 00:33:50,070
+But Levenshtein
+distance, edit distance,
+
+720
+00:33:50,070 --> 00:33:53,550
+has a lot of good
+qualities that makes
+
+721
+00:33:53,550 --> 00:33:58,170
+it useful for a lot of
+musical similarity tasks.
+
+722
+00:33:58,170 --> 00:34:00,960
+Just so that you can
+say your professor
+
+723
+00:34:00,960 --> 00:34:04,780
+at least put the algorithm
+up on the hand for a second.
+
+724
+00:34:04,780 --> 00:34:07,350
+But more importantly,
+I think a lot of times
+
+725
+00:34:07,350 --> 00:34:10,770
+is thinking about the
+particular costs of things
+
+726
+00:34:10,770 --> 00:34:13,330
+in a musical space,
+in a musical world.
+
+727
+00:34:13,330 --> 00:34:18,330
+So for instance,
+is deleting what--
+
+728
+00:34:18,330 --> 00:34:23,219
+we're trying to think about
+two pieces, two melodies.
+
+729
+00:34:23,219 --> 00:34:26,580
+One of them deletes
+the first note.
+
+730
+00:34:26,580 --> 00:34:28,980
+What would you call
+the cost on that?
+
+731
+00:34:28,980 --> 00:34:30,850
+Well, maybe 1.
+
+732
+00:34:30,850 --> 00:34:36,630
+But then, if it doesn't make
+up the total rhythm later,
+
+733
+00:34:36,630 --> 00:34:38,770
+and everything from here
+on is going to be off,
+
+734
+00:34:38,770 --> 00:34:41,969
+and it's one line within
+an orchestral piece,
+
+735
+00:34:41,969 --> 00:34:46,630
+that might be a higher
+cost, maybe some--
+
+736
+00:34:46,630 --> 00:34:49,830
+and the classic debate
+is whether changing
+
+737
+00:34:49,830 --> 00:34:53,820
+a note is that the same
+or changing a letter
+
+738
+00:34:53,820 --> 00:34:55,210
+in something like this?
+
+739
+00:34:55,210 --> 00:34:56,980
+Is this the same?
+
+740
+00:34:56,980 --> 00:34:59,860
+Does this cost 1
+or does this cost--
+
+741
+00:34:59,860 --> 00:35:02,530
+well, one way you can change
+a letter is you delete it,
+
+742
+00:35:02,530 --> 00:35:06,220
+and then you add a new
+letter back with a cost of 2.
+
+743
+00:35:06,220 --> 00:35:09,000
+And these are things
+that come up quite a bit
+
+744
+00:35:09,000 --> 00:35:11,490
+in similarity search.
+
+745
+00:35:11,490 --> 00:35:15,220
+And just really want to say that
+it comes up a lot in music--
+
+746
+00:35:15,220 --> 00:35:19,240
+don't borrow your distance
+metric from somebody else.
+
+747
+00:35:19,240 --> 00:35:21,880
+Different ones might be used
+for different situations.
+
+748
+00:35:21,880 --> 00:35:25,540
+So the distance
+between dog and gato--
+
+749
+00:35:25,540 --> 00:35:29,260
+well, we can substitute d for g.
+
+750
+00:35:29,260 --> 00:35:31,490
+I don't know, or maybe
+we add other things.
+
+751
+00:35:31,490 --> 00:35:34,670
+But I'm going to assert
+that, in some situations,
+
+752
+00:35:34,670 --> 00:35:38,570
+the distance might be
+2 between dog and gato.
+
+753
+00:35:38,570 --> 00:35:42,460
+What we do is we use the
+substitute closely related
+
+754
+00:35:42,460 --> 00:35:44,960
+pet function for cost of 1.
+
+755
+00:35:44,960 --> 00:35:48,700
+So dog becomes cat, and then
+translate English to Spanish
+
+756
+00:35:48,700 --> 00:35:50,500
+might cost 1.
+
+757
+00:35:50,500 --> 00:35:53,200
+And if you think about
+large language learning
+
+758
+00:35:53,200 --> 00:35:55,840
+models and things,
+you might want
+
+759
+00:35:55,840 --> 00:35:57,710
+to have functions like this.
+
+760
+00:35:57,710 --> 00:36:02,690
+And, in fact, this is not a
+digital humanities text class.
+
+761
+00:36:02,690 --> 00:36:04,640
+But if it were and we
+were doing computation,
+
+762
+00:36:04,640 --> 00:36:08,300
+we'd definitely be talking about
+an algorithm called word2vec,
+
+763
+00:36:08,300 --> 00:36:11,950
+which was one of the earlier
+successful algorithms
+
+764
+00:36:11,950 --> 00:36:16,120
+for trying to predict what words
+are similar to other words, what
+
+765
+00:36:16,120 --> 00:36:21,040
+words are synonyms, so you can
+create a kind of cost function
+
+766
+00:36:21,040 --> 00:36:24,830
+that is for this word is a
+synonym for this one that
+
+767
+00:36:24,830 --> 00:36:29,460
+has been substituted
+that is lower than this--
+
+768
+00:36:29,460 --> 00:36:31,490
+then this sentence is
+different from this one
+
+769
+00:36:31,490 --> 00:36:34,403
+because it's using a
+completely different concept.
+
+770
+00:36:34,403 --> 00:36:37,400
+
+
+771
+00:36:37,400 --> 00:36:39,830
+I'll skip that.
+
+772
+00:36:39,830 --> 00:36:44,810
+So when we're thinking
+about these distances
+
+773
+00:36:44,810 --> 00:36:49,040
+and these weird things
+like substitute dog for cat
+
+774
+00:36:49,040 --> 00:36:51,950
+on low-cost substitute
+cat for gato
+
+775
+00:36:51,950 --> 00:36:57,450
+at low cost, what's the term
+that we spent a lot of time,
+
+776
+00:36:57,450 --> 00:36:59,360
+maybe even too much
+time for-- it felt
+
+777
+00:36:59,360 --> 00:37:02,480
+like at the time-- talking about
+earlier in this semester, that
+
+778
+00:37:02,480 --> 00:37:06,480
+helps to think about things
+that are not the same,
+
+779
+00:37:06,480 --> 00:37:08,800
+but might be closely
+related to each other?
+
+780
+00:37:08,800 --> 00:37:13,173
+
+
+781
+00:37:13,173 --> 00:37:14,090
+AUDIENCE: Equivalence.
+
+782
+00:37:14,090 --> 00:37:16,760
+MICHAEL CUTHBERT: Equivalence,
+or equivalence classes, yes.
+
+783
+00:37:16,760 --> 00:37:18,950
+So one of the things
+you might want to do
+
+784
+00:37:18,950 --> 00:37:21,840
+is define what equivalence
+classes it could be.
+
+785
+00:37:21,840 --> 00:37:23,560
+I mean, I think last--
+
+786
+00:37:23,560 --> 00:37:27,400
+other times, I've given the
+exact same melody up an octave,
+
+787
+00:37:27,400 --> 00:37:29,000
+and everybody
+immediately said, oh,
+
+788
+00:37:29,000 --> 00:37:31,160
+that is basically
+the same thing.
+
+789
+00:37:31,160 --> 00:37:33,310
+So everybody was
+very quickly putting
+
+790
+00:37:33,310 --> 00:37:36,730
+in an oh, equivalence
+class things.
+
+791
+00:37:36,730 --> 00:37:41,600
+So I wanted to make
+sure that we had that.
+
+792
+00:37:41,600 --> 00:37:44,680
+And so once you have
+these distances,
+
+793
+00:37:44,680 --> 00:37:48,407
+we tend to go through-- and this
+is if you're in a biology class,
+
+794
+00:37:48,407 --> 00:37:50,240
+you'll spend a lot of
+computational biology,
+
+795
+00:37:50,240 --> 00:37:53,140
+a lot of time on this--
+sequence alignment,
+
+796
+00:37:53,140 --> 00:37:55,120
+a kind of distance
+metric where you're
+
+797
+00:37:55,120 --> 00:37:58,720
+trying to find the minimum
+distance between two things
+
+798
+00:37:58,720 --> 00:38:03,290
+that you believe might represent
+the same type of thing.
+
+799
+00:38:03,290 --> 00:38:06,620
+Or you might say it's
+innocent until proven guilty.
+
+800
+00:38:06,620 --> 00:38:10,060
+We'll first try to see if they
+can be changed into another
+
+801
+00:38:10,060 --> 00:38:15,610
+thing at a low cost and then
+discard once we realize the cost
+
+802
+00:38:15,610 --> 00:38:17,860
+cannot be minimized.
+
+803
+00:38:17,860 --> 00:38:21,940
+I will say that algorithms that
+can be short circuited, that you
+
+804
+00:38:21,940 --> 00:38:24,250
+can prove at a certain
+point you can't
+
+805
+00:38:24,250 --> 00:38:31,070
+do better than this cost will
+speed up a lot of your run times
+
+806
+00:38:31,070 --> 00:38:32,050
+because once--
+
+807
+00:38:32,050 --> 00:38:36,880
+you might say that
+there's no way
+
+808
+00:38:36,880 --> 00:38:44,030
+that this could be better than
+20% or it could be-- yeah,
+
+809
+00:38:44,030 --> 00:38:47,080
+there's no way that this could
+possibly be better than 90%
+
+810
+00:38:47,080 --> 00:38:48,260
+similar to this.
+
+811
+00:38:48,260 --> 00:38:51,280
+So I'm going to stop looking
+at the rest of the piece
+
+812
+00:38:51,280 --> 00:38:54,280
+or whatever your cut off.
+
+813
+00:38:54,280 --> 00:38:58,060
+So one of the classic things
+for sequence alignment
+
+814
+00:38:58,060 --> 00:38:59,680
+is trying to find--
+
+815
+00:38:59,680 --> 00:39:02,530
+this is Google's data
+set they released
+
+816
+00:39:02,530 --> 00:39:06,370
+at the height of Britney
+Spears popularity of all
+
+817
+00:39:06,370 --> 00:39:09,910
+the number of searches
+that they believed
+
+818
+00:39:09,910 --> 00:39:14,740
+were trying to find the top
+left one, Britney Spears--
+
+819
+00:39:14,740 --> 00:39:16,270
+actually really,
+really impressed
+
+820
+00:39:16,270 --> 00:39:20,620
+that the number of correct
+spellings of a hard name
+
+821
+00:39:20,620 --> 00:39:22,460
+to spell outweighs the rest.
+
+822
+00:39:22,460 --> 00:39:23,870
+Anyhow, that's
+all we're talking.
+
+823
+00:39:23,870 --> 00:39:27,310
+And the people who are
+really, really good
+
+824
+00:39:27,310 --> 00:39:30,610
+at this-- and any time
+I'm trying to figure out
+
+825
+00:39:30,610 --> 00:39:34,090
+a similarity sequence
+alignment or a similarity task
+
+826
+00:39:34,090 --> 00:39:37,300
+that I don't know is to
+look at the people who
+
+827
+00:39:37,300 --> 00:39:42,130
+are trying to align
+base pairs in biology
+
+828
+00:39:42,130 --> 00:39:52,760
+or trying to align genes because
+they have many, many options.
+
+829
+00:39:52,760 --> 00:39:55,120
+So I'm just going
+to keep pounding
+
+830
+00:39:55,120 --> 00:39:58,510
+this term in as many
+different ways I can do.
+
+831
+00:39:58,510 --> 00:40:00,670
+All the things that
+we're just working with--
+
+832
+00:40:00,670 --> 00:40:06,050
+Hyundai, Honda, Britney Spears,
+genes, those are all strings.
+
+833
+00:40:06,050 --> 00:40:10,100
+But we work on notes and clefs
+and things like notes and stuff,
+
+834
+00:40:10,100 --> 00:40:11,060
+but things like that.
+
+835
+00:40:11,060 --> 00:40:13,480
+So how do we get them in?
+
+836
+00:40:13,480 --> 00:40:16,610
+So this is great to get this
+from two different people,
+
+837
+00:40:16,610 --> 00:40:19,740
+same thing-- we use
+things called hashes,
+
+838
+00:40:19,740 --> 00:40:23,840
+which are very similar to
+the concept of viewpoints
+
+839
+00:40:23,840 --> 00:40:25,370
+to the rescue, so that--
+
+840
+00:40:25,370 --> 00:40:28,670
+try to convert things--
+
+841
+00:40:28,670 --> 00:40:29,610
+hash and note.
+
+842
+00:40:29,610 --> 00:40:33,290
+We might say that here are
+equivalence classes all notes
+
+843
+00:40:33,290 --> 00:40:34,560
+that are names with octave.
+
+844
+00:40:34,560 --> 00:40:39,510
+And so we might hash a stream by
+just joining all the hash notes
+
+845
+00:40:39,510 --> 00:40:42,410
+for all the notes in there.
+
+846
+00:40:42,410 --> 00:40:46,050
+You will find, in Music 21,
+if you're working on it,
+
+847
+00:40:46,050 --> 00:40:48,800
+there's a bunch of
+tools for this already.
+
+848
+00:40:48,800 --> 00:40:51,380
+They're in
+music21.search, a module
+
+849
+00:40:51,380 --> 00:40:52,970
+that we have not
+talked about now
+
+850
+00:40:52,970 --> 00:40:54,480
+and we will not
+talk about again.
+
+851
+00:40:54,480 --> 00:40:56,310
+But if you're doing
+a lot of searching,
+
+852
+00:40:56,310 --> 00:41:01,920
+it's probably worth reading
+the module reference for it.
+
+853
+00:41:01,920 --> 00:41:03,990
+I think that there
+might be a user's guide,
+
+854
+00:41:03,990 --> 00:41:05,900
+but I can't remember
+if I finished it
+
+855
+00:41:05,900 --> 00:41:08,220
+or if it just trails
+off after a few words.
+
+856
+00:41:08,220 --> 00:41:13,980
+So we might take a string,
+convert it to a stream--
+
+857
+00:41:13,980 --> 00:41:15,710
+that's hard to say very fast--
+
+858
+00:41:15,710 --> 00:41:17,910
+and translate it.
+
+859
+00:41:17,910 --> 00:41:20,940
+And we might have
+some of hash function
+
+860
+00:41:20,940 --> 00:41:27,990
+that tries to make everything
+into an ASCII character.
+
+861
+00:41:27,990 --> 00:41:30,060
+Though there's no
+reason that everything
+
+862
+00:41:30,060 --> 00:41:34,860
+needs to be turned into a
+string like nameWithOctave.
+
+863
+00:41:34,860 --> 00:41:41,183
+In a lot of ways, strings
+are just arrays of ints.
+
+864
+00:41:41,183 --> 00:41:43,740
+
+
+865
+00:41:43,740 --> 00:41:53,880
+We're talking about that A--
+
+866
+00:41:53,880 --> 00:41:59,010
+no, lowercase a is generally
+represented internally
+
+867
+00:41:59,010 --> 00:42:01,048
+as anyone-- remember number?
+
+868
+00:42:01,048 --> 00:42:01,590
+AUDIENCE: 97.
+
+869
+00:42:01,590 --> 00:42:03,090
+MICHAEL CUTHBERT: What's that?
+
+870
+00:42:03,090 --> 00:42:05,580
+97 or 96, I can't remember.
+
+871
+00:42:05,580 --> 00:42:06,370
+96?
+
+872
+00:42:06,370 --> 00:42:08,772
+Yep, and capital
+A-- is that one 60--
+
+873
+00:42:08,772 --> 00:42:09,314
+AUDIENCE: 65.
+
+874
+00:42:09,314 --> 00:42:10,189
+MICHAEL CUTHBERT: 65.
+
+875
+00:42:10,189 --> 00:42:12,250
+OK, so some people
+some people know these.
+
+876
+00:42:12,250 --> 00:42:13,930
+I used to have them
+all top of the head.
+
+877
+00:42:13,930 --> 00:42:16,020
+So all the letters
+you're doing have
+
+878
+00:42:16,020 --> 00:42:17,540
+a particular representation.
+
+879
+00:42:17,540 --> 00:42:22,597
+And back in the bad, bad days
+of the '60s and '70s, different
+
+880
+00:42:22,597 --> 00:42:24,930
+computers would have different
+representations for this,
+
+881
+00:42:24,930 --> 00:42:28,950
+and then we all agreed on the
+same representation for letters.
+
+882
+00:42:28,950 --> 00:42:33,890
+And then we remembered that
+there are other things in the--
+
+883
+00:42:33,890 --> 00:42:36,290
+other characters in the world.
+
+884
+00:42:36,290 --> 00:42:38,180
+That looks too much
+like an A. How do I
+
+885
+00:42:38,180 --> 00:42:43,020
+do a jin or something, or an
+alpha, beta, things like that.
+
+886
+00:42:43,020 --> 00:42:45,425
+And then, for a while,
+we had a big problem
+
+887
+00:42:45,425 --> 00:42:47,550
+that they weren't all
+converging to the same thing.
+
+888
+00:42:47,550 --> 00:42:51,230
+Anyhow, digression aside,
+maybe we'll get to the point
+
+889
+00:42:51,230 --> 00:42:54,680
+where we can start converting
+things besides midi numbers
+
+890
+00:42:54,680 --> 00:42:58,260
+and notes into something
+more standardized
+
+891
+00:42:58,260 --> 00:43:00,740
+because, right now, the
+midi numbers is basically
+
+892
+00:43:00,740 --> 00:43:03,290
+the only standardized
+notes, which is probably
+
+893
+00:43:03,290 --> 00:43:10,430
+why midi keeps being used for a
+lot of computational projects.
+
+894
+00:43:10,430 --> 00:43:14,720
+So the hard part is
+always finding out
+
+895
+00:43:14,720 --> 00:43:18,230
+what numbers we should
+use to represent a note.
+
+896
+00:43:18,230 --> 00:43:21,060
+
+
+897
+00:43:21,060 --> 00:43:24,210
+So if we're going to
+convert nameWithOctave
+
+898
+00:43:24,210 --> 00:43:26,070
+and we want to make
+a string, and then
+
+899
+00:43:26,070 --> 00:43:27,990
+we want to make it
+a number, and then
+
+900
+00:43:27,990 --> 00:43:30,100
+we want to have a
+whole bunch of numbers,
+
+901
+00:43:30,100 --> 00:43:35,640
+what have we just recently
+seen that looks like a tool
+
+902
+00:43:35,640 --> 00:43:39,820
+to take a score or
+a part or something
+
+903
+00:43:39,820 --> 00:43:42,120
+and works like a
+hash or a viewpoint
+
+904
+00:43:42,120 --> 00:43:44,413
+that tries to convert it
+to a bunch of numbers?
+
+905
+00:43:44,413 --> 00:43:53,460
+
+
+906
+00:43:53,460 --> 00:43:58,440
+Not asking you to think too
+far back, but farther back
+
+907
+00:43:58,440 --> 00:43:58,970
+than today.
+
+908
+00:43:58,970 --> 00:44:02,100
+
+
+909
+00:44:02,100 --> 00:44:02,792
+Yeah?
+
+910
+00:44:02,792 --> 00:44:04,750
+AUDIENCE: I'm getting a
+feature representation.
+
+911
+00:44:04,750 --> 00:44:05,730
+MICHAEL CUTHBERT:
+Yeah, extracting
+
+912
+00:44:05,730 --> 00:44:07,690
+features, getting a
+feature representation.
+
+913
+00:44:07,690 --> 00:44:10,860
+Yeah, so feature
+extraction and this kind
+
+914
+00:44:10,860 --> 00:44:15,790
+of viewpoint searching go
+hand-in-hand with each other.
+
+915
+00:44:15,790 --> 00:44:20,312
+So if it's partially why once
+you finish up a search function,
+
+916
+00:44:20,312 --> 00:44:22,020
+you're just going to
+want to probably try
+
+917
+00:44:22,020 --> 00:44:25,410
+to see if AI or machine
+learning can do it
+
+918
+00:44:25,410 --> 00:44:27,970
+better because you have
+everything ready to go for it.
+
+919
+00:44:27,970 --> 00:44:32,520
+But sometimes what we extract
+is different from others.
+
+920
+00:44:32,520 --> 00:44:39,960
+I want to give a little bit
+of a caution that back then--
+
+921
+00:44:39,960 --> 00:44:41,680
+of course, you had
+to do a little final,
+
+922
+00:44:41,680 --> 00:44:43,350
+a final project called the UAP--
+
+923
+00:44:43,350 --> 00:44:45,310
+and we thought that
+making these viewpoints,
+
+924
+00:44:45,310 --> 00:44:50,580
+making a hashing system for
+Music 21 for comparisons
+
+925
+00:44:50,580 --> 00:44:52,750
+would be a nice senior project.
+
+926
+00:44:52,750 --> 00:44:56,520
+And then we both
+realized that, no,
+
+927
+00:44:56,520 --> 00:44:59,100
+it's a lot bigger than we
+thought and a lot more complex
+
+928
+00:44:59,100 --> 00:45:02,040
+than we thought, and so
+it needed to be an M. Eng.
+
+929
+00:45:02,040 --> 00:45:04,650
+Emily Zhang was great at
+creating this and great,
+
+930
+00:45:04,650 --> 00:45:06,940
+oh, we did a really
+great M. Eng project.
+
+931
+00:45:06,940 --> 00:45:10,710
+And then we realized,
+no, this really
+
+932
+00:45:10,710 --> 00:45:12,280
+needs to be a PhD project.
+
+933
+00:45:12,280 --> 00:45:15,190
+We did not continue on--
+
+934
+00:45:15,190 --> 00:45:19,200
+there are so many difficult
+parts of hash algorithms
+
+935
+00:45:19,200 --> 00:45:23,670
+because you want to
+think about things like--
+
+936
+00:45:23,670 --> 00:45:27,060
+yeah, we'll not get to it--
+
+937
+00:45:27,060 --> 00:45:32,730
+going all the way
+back to the beginning,
+
+938
+00:45:32,730 --> 00:45:36,720
+how can we create a
+viewpoint or something
+
+939
+00:45:36,720 --> 00:45:42,120
+that allows D not to be totally,
+totally different for anybody
+
+940
+00:45:42,120 --> 00:45:48,240
+who didn't put D as the last
+of all possible results?
+
+941
+00:45:48,240 --> 00:45:51,580
+What kinds of hashes--
+
+942
+00:45:51,580 --> 00:45:54,840
+what kinds of numbers would we
+need to represent a piece on
+
+943
+00:45:54,840 --> 00:46:02,220
+to make D not the worst
+and really make sure
+
+944
+00:46:02,220 --> 00:46:05,070
+that F isn't the best?
+
+945
+00:46:05,070 --> 00:46:07,990
+So that's going to be our
+last 5-6 minutes of class.
+
+946
+00:46:07,990 --> 00:46:11,010
+I want you to talk with 5
+minutes of y'all talking with
+
+947
+00:46:11,010 --> 00:46:14,390
+each other, and 5 minutes of
+y'all talk and talking to me.
+
+948
+00:46:14,390 --> 00:46:18,493
+So what kinds of
+feature extraction,
+
+949
+00:46:18,493 --> 00:46:20,660
+what kind of hash function,
+what kind of viewpoints?
+
+950
+00:46:20,660 --> 00:46:22,400
+These are all slightly
+different concepts,
+
+951
+00:46:22,400 --> 00:46:23,775
+but they're all
+in the same area.
+
+952
+00:46:23,775 --> 00:46:25,330
+What kinds of
+equivalence classes
+
+953
+00:46:25,330 --> 00:46:31,360
+will you need in order
+to make this happen?
+
+954
+00:46:31,360 --> 00:46:34,090
+Go ahead.
+
+955
+00:46:34,090 --> 00:46:38,900
+OK, I hear words continuing
+but less frequently.
+
+956
+00:46:38,900 --> 00:46:41,140
+Let's talk about what
+are some of the ways
+
+957
+00:46:41,140 --> 00:46:45,880
+that people thought to create
+a strategy that doesn't
+
+958
+00:46:45,880 --> 00:46:48,810
+make D and F about the same?
+
+959
+00:46:48,810 --> 00:46:52,840
+
+
+960
+00:46:52,840 --> 00:46:53,537
+Yeah, go ahead.
+
+961
+00:46:53,537 --> 00:46:55,870
+AUDIENCE: You could look at
+the sequence of local maxima
+
+962
+00:46:55,870 --> 00:46:56,740
+and minima.
+
+963
+00:46:56,740 --> 00:46:58,490
+MICHAEL CUTHBERT: Local
+maxima and minima.
+
+964
+00:46:58,490 --> 00:47:00,365
+OK, I think I know what
+you're talking about,
+
+965
+00:47:00,365 --> 00:47:02,230
+but let's give you
+a little example.
+
+966
+00:47:02,230 --> 00:47:04,730
+Let's talk about
+A. What do you--
+
+967
+00:47:04,730 --> 00:47:06,760
+AUDIENCE: So you
+could maybe argue
+
+968
+00:47:06,760 --> 00:47:08,770
+that the C is the
+local minima, and then
+
+969
+00:47:08,770 --> 00:47:11,630
+the F is higher than both of its
+neighbors, so it's a maximum.
+
+970
+00:47:11,630 --> 00:47:14,380
+And then a D is a minimum,
+the E's a maximum,
+
+971
+00:47:14,380 --> 00:47:18,720
+and then the D and C after that
+are not really anything until
+
+972
+00:47:18,720 --> 00:47:21,902
+you hit the A on the 16th note.
+
+973
+00:47:21,902 --> 00:47:22,860
+MICHAEL CUTHBERT: Cool.
+
+974
+00:47:22,860 --> 00:47:24,568
+So yeah, we're just
+looking at every time
+
+975
+00:47:24,568 --> 00:47:26,620
+the direction changes
+of the pitches.
+
+976
+00:47:26,620 --> 00:47:27,120
+Great.
+
+977
+00:47:27,120 --> 00:47:32,730
+And compare that-- so beginning
+A has G, F, D, E. Here,
+
+978
+00:47:32,730 --> 00:47:35,490
+we have D, F, G--
+
+979
+00:47:35,490 --> 00:47:39,572
+a tiny bit different, D,
+F, but then going down to--
+
+980
+00:47:39,572 --> 00:47:41,280
+a little bit different,
+but it's at least
+
+981
+00:47:41,280 --> 00:47:45,150
+giving some numbers we have.
+
+982
+00:47:45,150 --> 00:47:48,990
+Always the question is,
+does your current streak
+
+983
+00:47:48,990 --> 00:47:51,790
+end when you hit a rest or not?
+
+984
+00:47:51,790 --> 00:47:54,640
+And maybe it depends on how
+long the rest is, so good.
+
+985
+00:47:54,640 --> 00:47:56,810
+Other strategies?
+
+986
+00:47:56,810 --> 00:47:57,310
+Adam?
+
+987
+00:47:57,310 --> 00:47:58,920
+AUDIENCE: I would look at
+where offsets are the same
+
+988
+00:47:58,920 --> 00:48:01,000
+and then check that their
+notes are the same or not.
+
+989
+00:48:01,000 --> 00:48:02,000
+MICHAEL CUTHBERT: Great.
+
+990
+00:48:02,000 --> 00:48:04,230
+So we're going to look at
+offsets that are the same
+
+991
+00:48:04,230 --> 00:48:07,180
+and see if notes
+are the same or not.
+
+992
+00:48:07,180 --> 00:48:08,410
+That works really well.
+
+993
+00:48:08,410 --> 00:48:12,460
+And what I'd love to do, if
+this were, what do you call it,
+
+994
+00:48:12,460 --> 00:48:15,000
+the generalized
+adversarial problem
+
+995
+00:48:15,000 --> 00:48:17,388
+set, the gain problem
+set, where one team
+
+996
+00:48:17,388 --> 00:48:18,430
+has to solve the problem.
+
+997
+00:48:18,430 --> 00:48:20,070
+The other team has
+to keep giving them
+
+998
+00:48:20,070 --> 00:48:21,960
+things that break that.
+
+999
+00:48:21,960 --> 00:48:23,938
+I think it was a great idea.
+
+1000
+00:48:23,938 --> 00:48:25,480
+And I think it would
+work in general.
+
+1001
+00:48:25,480 --> 00:48:32,250
+But I could generate something
+where all I insert is
+
+1002
+00:48:32,250 --> 00:48:36,360
+let's insert a 64th rest at
+the beginning and then put all
+
+1003
+00:48:36,360 --> 00:48:37,830
+random notes.
+
+1004
+00:48:37,830 --> 00:48:39,850
+And you're going
+to end up with--
+
+1005
+00:48:39,850 --> 00:48:42,940
+and then maybe we'll put one
+note that's the same at the end.
+
+1006
+00:48:42,940 --> 00:48:47,130
+And you could end up with 100%
+of the notes on the same offset
+
+1007
+00:48:47,130 --> 00:48:50,310
+are the same.
+
+1008
+00:48:50,310 --> 00:48:53,980
+I think we would really
+work in the real world,
+
+1009
+00:48:53,980 --> 00:48:57,480
+but we might want to always
+think about something like that,
+
+1010
+00:48:57,480 --> 00:48:58,020
+too.
+
+1011
+00:48:58,020 --> 00:48:58,830
+Great idea.
+
+1012
+00:48:58,830 --> 00:48:59,410
+John?
+
+1013
+00:48:59,410 --> 00:49:00,600
+Then two people.
+
+1014
+00:49:00,600 --> 00:49:02,798
+AUDIENCE: [INAUDIBLE] so first--
+
+1015
+00:49:02,798 --> 00:49:04,090
+MICHAEL CUTHBERT: You can say--
+
+1016
+00:49:04,090 --> 00:49:06,900
+AUDIENCE: --builds
+up on what Adam said
+
+1017
+00:49:06,900 --> 00:49:09,480
+AUDIENCE: But first, you
+take a look at the notes
+
+1018
+00:49:09,480 --> 00:49:14,560
+and do a set, kind of like
+crossover between a set of D's
+
+1019
+00:49:14,560 --> 00:49:16,450
+and aces and then ASes.
+
+1020
+00:49:16,450 --> 00:49:19,910
+So both of those would still
+show up relatively high.
+
+1021
+00:49:19,910 --> 00:49:22,150
+And then compare
+the offsets, which
+
+1022
+00:49:22,150 --> 00:49:24,370
+would obviously take
+up a bit, but still
+
+1023
+00:49:24,370 --> 00:49:26,680
+keep D relatively high.
+
+1024
+00:49:26,680 --> 00:49:27,680
+MICHAEL CUTHBERT: Super.
+
+1025
+00:49:27,680 --> 00:49:30,040
+When we're talking about
+offsets, are we talking about--
+
+1026
+00:49:30,040 --> 00:49:33,460
+what kind of offsets?
+
+1027
+00:49:33,460 --> 00:49:34,960
+AUDIENCE: We're in the--
+
+1028
+00:49:34,960 --> 00:49:37,420
+I guess within the two
+measures that the notes being--
+
+1029
+00:49:37,420 --> 00:49:37,900
+MICHAEL CUTHBERT: Great.
+
+1030
+00:49:37,900 --> 00:49:38,983
+Where in the two measures?
+
+1031
+00:49:38,983 --> 00:49:40,360
+Where in the measure?
+
+1032
+00:49:40,360 --> 00:49:43,750
+We sometimes want to do global
+offset from the beginning
+
+1033
+00:49:43,750 --> 00:49:44,390
+of the measure.
+
+1034
+00:49:44,390 --> 00:49:49,180
+But then you can't identify
+similar phrases or, all it takes
+
+1035
+00:49:49,180 --> 00:49:53,330
+is put a repeat, put the first
+four measures, repeat it once,
+
+1036
+00:49:53,330 --> 00:49:55,580
+and suddenly the whole rest
+of the piece is different.
+
+1037
+00:49:55,580 --> 00:49:57,730
+So yeah, that's great.
+
+1038
+00:49:57,730 --> 00:50:02,080
+AUDIENCE: If you
+just start at time
+
+1039
+00:50:02,080 --> 00:50:04,220
+equals 0 and go all the
+way through the piece,
+
+1040
+00:50:04,220 --> 00:50:08,090
+like anytime the two pieces
+have the same pitch, you score--
+
+1041
+00:50:08,090 --> 00:50:10,930
+so the alpha that they
+both have on beat two
+
+1042
+00:50:10,930 --> 00:50:13,828
+would be like a
+quarter point because--
+
+1043
+00:50:13,828 --> 00:50:16,120
+MICHAEL CUTHBERT: The F that
+they both have on beat two
+
+1044
+00:50:16,120 --> 00:50:17,740
+would be a quarter
+point because--
+
+1045
+00:50:17,740 --> 00:50:20,450
+AUDIENCE: Their duration
+is only for that 16th note.
+
+1046
+00:50:20,450 --> 00:50:21,533
+MICHAEL CUTHBERT: Got you.
+
+1047
+00:50:21,533 --> 00:50:23,060
+So we look at shared duration.
+
+1048
+00:50:23,060 --> 00:50:24,320
+Great.
+
+1049
+00:50:24,320 --> 00:50:25,760
+I like that a lot.
+
+1050
+00:50:25,760 --> 00:50:28,850
+Did anybody try to come
+up with a equivalent?
+
+1051
+00:50:28,850 --> 00:50:29,350
+Yeah?
+
+1052
+00:50:29,350 --> 00:50:32,620
+The contour ends up being a
+kind of a new equivalence class
+
+1053
+00:50:32,620 --> 00:50:34,900
+that we hadn't talked about,
+which kind of works out
+
+1054
+00:50:34,900 --> 00:50:38,620
+in thinking that everything
+that doesn't change directions
+
+1055
+00:50:38,620 --> 00:50:43,480
+is a kind of passing tone, even
+though not in the proper music
+
+1056
+00:50:43,480 --> 00:50:48,250
+theory term, and
+so can be ignored.
+
+1057
+00:50:48,250 --> 00:50:50,860
+By the way, the one
+I use quite often
+
+1058
+00:50:50,860 --> 00:50:54,100
+is I'm just going to look
+on downbeats or on beats
+
+1059
+00:50:54,100 --> 00:50:57,730
+and ignore everything else,
+and that works pretty well
+
+1060
+00:50:57,730 --> 00:51:01,020
+for a lot of things.
+
+1061
+00:51:01,020 --> 00:51:09,000

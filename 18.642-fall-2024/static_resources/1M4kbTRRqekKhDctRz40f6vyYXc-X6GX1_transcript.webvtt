@@ -1,0 +1,4008 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.476 align:middle line:90%
+[SQUEAKING]
+
+00:00:01.476 --> 00:00:03.444 align:middle line:90%
+[RUSTLING]
+
+00:00:03.444 --> 00:00:05.904 align:middle line:90%
+[CLICKING]
+
+00:00:05.904 --> 00:00:10.862 align:middle line:90%
+
+
+00:00:10.862 --> 00:00:12.320 align:middle line:84%
+PETER KEMPTHORNE:
+Well, today we're
+
+00:00:12.320 --> 00:00:15.120 align:middle line:84%
+going to talk about
+volatility modeling.
+
+00:00:15.120 --> 00:00:19.800 align:middle line:84%
+And this topic in finance
+is one that has really
+
+00:00:19.800 --> 00:00:23.240 align:middle line:90%
+interested me for decades.
+
+00:00:23.240 --> 00:00:25.920 align:middle line:84%
+And there are a lot of
+subtle details involved
+
+00:00:25.920 --> 00:00:29.340 align:middle line:84%
+with understanding
+volatility, how to measure it,
+
+00:00:29.340 --> 00:00:31.880 align:middle line:90%
+how to forecast it.
+
+00:00:31.880 --> 00:00:38.640 align:middle line:84%
+And we've had some talks
+already with the group projects
+
+00:00:38.640 --> 00:00:42.680 align:middle line:84%
+about dealing with
+volatility estimation
+
+00:00:42.680 --> 00:00:47.240 align:middle line:84%
+and measuring volatility, in
+particular implied volatility.
+
+00:00:47.240 --> 00:00:52.760 align:middle line:84%
+Today we'll focus more on
+realized volatility and modeling
+
+00:00:52.760 --> 00:00:53.920 align:middle line:90%
+that.
+
+00:00:53.920 --> 00:01:00.530 align:middle line:84%
+And so to begin, here's just
+an overview of different ways
+
+00:01:00.530 --> 00:01:04.349 align:middle line:90%
+one might define volatility.
+
+00:01:04.349 --> 00:01:08.790 align:middle line:84%
+And its basic definition is the
+annualized standard deviation
+
+00:01:08.790 --> 00:01:12.690 align:middle line:84%
+of the change in price or
+value of a financial security.
+
+00:01:12.690 --> 00:01:15.790 align:middle line:84%
+And of course, this
+concept is really
+
+00:01:15.790 --> 00:01:23.990 align:middle line:84%
+important for measuring risk and
+evaluating the value of options
+
+00:01:23.990 --> 00:01:25.370 align:middle line:90%
+on underlying assets.
+
+00:01:25.370 --> 00:01:26.163 align:middle line:90%
+Yep?
+
+00:01:26.163 --> 00:01:28.227 align:middle line:84%
+AUDIENCE: What do you
+mean by annualized?
+
+00:01:28.227 --> 00:01:29.810 align:middle line:84%
+PETER KEMPTHORNE:
+What that means, OK,
+
+00:01:29.810 --> 00:01:43.910 align:middle line:84%
+suppose we have a sigma day
+that's equal to, say, 0.01%.
+
+00:01:43.910 --> 00:01:47.190 align:middle line:90%
+So 1% variability per day.
+
+00:01:47.190 --> 00:01:52.630 align:middle line:84%
+If we wanted to measure
+volatility on an annualized
+
+00:01:52.630 --> 00:02:00.050 align:middle line:84%
+scale, then we could consider
+possibly the square root
+
+00:02:00.050 --> 00:02:04.650 align:middle line:90%
+of 252 times sigma day.
+
+00:02:04.650 --> 00:02:07.650 align:middle line:84%
+So it's a matter of
+scaling the volatility up
+
+00:02:07.650 --> 00:02:10.289 align:middle line:90%
+to an annual horizon.
+
+00:02:10.289 --> 00:02:15.410 align:middle line:84%
+And the value of
+that rescaling is
+
+00:02:15.410 --> 00:02:18.610 align:middle line:84%
+that we can talk
+about volatilities
+
+00:02:18.610 --> 00:02:20.730 align:middle line:90%
+over different maturities.
+
+00:02:20.730 --> 00:02:25.970 align:middle line:84%
+And they're measured
+on the same scale.
+
+00:02:25.970 --> 00:02:30.890 align:middle line:84%
+And with different
+estimation approaches,
+
+00:02:30.890 --> 00:02:34.050 align:middle line:84%
+there's historical sample
+volatility measures
+
+00:02:34.050 --> 00:02:39.690 align:middle line:84%
+which don't require really any
+probability models with them.
+
+00:02:39.690 --> 00:02:42.590 align:middle line:84%
+Then we have geometric
+Brownian motion.
+
+00:02:42.590 --> 00:02:46.130 align:middle line:84%
+That's a very familiar
+model to everyone here.
+
+00:02:46.130 --> 00:02:49.250 align:middle line:84%
+And we can consider
+extensions of that
+
+00:02:49.250 --> 00:02:52.490 align:middle line:84%
+to the Poisson jump
+diffusion model.
+
+00:02:52.490 --> 00:02:57.200 align:middle line:84%
+A group delivered
+a nice lecture note
+
+00:02:57.200 --> 00:02:59.600 align:middle line:90%
+on the Poisson jump diffusions.
+
+00:02:59.600 --> 00:03:03.440 align:middle line:84%
+And then following
+these cases are
+
+00:03:03.440 --> 00:03:09.960 align:middle line:84%
+cases where volatility might
+have some time dynamics in them.
+
+00:03:09.960 --> 00:03:14.400 align:middle line:84%
+With these geometric Brownian
+motion and Poisson jump
+
+00:03:14.400 --> 00:03:18.280 align:middle line:84%
+diffusion models, we
+think of volatility
+
+00:03:18.280 --> 00:03:22.640 align:middle line:84%
+being some constant,
+which is the same from one
+
+00:03:22.640 --> 00:03:24.480 align:middle line:90%
+period to the next.
+
+00:03:24.480 --> 00:03:27.280 align:middle line:84%
+But it turns out
+that there can be
+
+00:03:27.280 --> 00:03:30.600 align:middle line:90%
+time dependence in volatility.
+
+00:03:30.600 --> 00:03:34.240 align:middle line:84%
+And so there are ARCH
+and GARCH models,
+
+00:03:34.240 --> 00:03:38.520 align:middle line:84%
+which stand for Autoregressive
+Conditional Heteroskedastic
+
+00:03:38.520 --> 00:03:39.680 align:middle line:90%
+Models.
+
+00:03:39.680 --> 00:03:44.200 align:middle line:84%
+And then the GARCH are
+generalized versions of those.
+
+00:03:44.200 --> 00:03:48.960 align:middle line:84%
+And then there are stochastic
+volatility models as well.
+
+00:03:48.960 --> 00:03:54.260 align:middle line:84%
+I know, let's see, the
+Heston option pricing model
+
+00:03:54.260 --> 00:04:01.040 align:middle line:84%
+uses a stochastic volatility
+term in its formulation.
+
+00:04:01.040 --> 00:04:04.640 align:middle line:84%
+So we have those
+kinds of extensions.
+
+00:04:04.640 --> 00:04:06.740 align:middle line:84%
+And then finally, there's
+implied volatility
+
+00:04:06.740 --> 00:04:09.060 align:middle line:90%
+from options and derivatives.
+
+00:04:09.060 --> 00:04:13.860 align:middle line:84%
+So let's just look at
+computing volatility
+
+00:04:13.860 --> 00:04:19.820 align:middle line:84%
+from an historical
+series of actual prices.
+
+00:04:19.820 --> 00:04:26.300 align:middle line:84%
+If we have prices PT, then
+we can define the log returns
+
+00:04:26.300 --> 00:04:31.900 align:middle line:84%
+by looking at the ratio
+of prices from one day
+
+00:04:31.900 --> 00:04:34.820 align:middle line:84%
+to the next, or one
+period to the next,
+
+00:04:34.820 --> 00:04:38.220 align:middle line:84%
+and taking the
+logarithm of that.
+
+00:04:38.220 --> 00:04:42.780 align:middle line:84%
+This is a useful way
+of measuring returns
+
+00:04:42.780 --> 00:04:47.980 align:middle line:84%
+as an alternative to simply the
+percentage change in value using
+
+00:04:47.980 --> 00:04:52.210 align:middle line:84%
+the log scale or the
+log return, if we
+
+00:04:52.210 --> 00:04:57.730 align:middle line:84%
+look at the cumulative change
+over successive periods.
+
+00:04:57.730 --> 00:05:01.210 align:middle line:90%
+With log returns, they just add.
+
+00:05:01.210 --> 00:05:03.530 align:middle line:84%
+Whereas if we were using
+percentage returns,
+
+00:05:03.530 --> 00:05:08.090 align:middle line:84%
+we'd have to basically multiply
+factors together representing
+
+00:05:08.090 --> 00:05:08.850 align:middle line:90%
+that.
+
+00:05:08.850 --> 00:05:16.810 align:middle line:84%
+Now, in modeling
+volatility, we consider
+
+00:05:16.810 --> 00:05:22.650 align:middle line:84%
+models that correspond
+to stationary processes
+
+00:05:22.650 --> 00:05:24.770 align:middle line:90%
+for our returns.
+
+00:05:24.770 --> 00:05:29.730 align:middle line:84%
+So the log returns
+of price series
+
+00:05:29.730 --> 00:05:36.690 align:middle line:84%
+are often consistent via tests
+with a stationary distribution
+
+00:05:36.690 --> 00:05:38.250 align:middle line:90%
+of returns.
+
+00:05:38.250 --> 00:05:41.930 align:middle line:84%
+And under the assumption
+of covariance stationarity,
+
+00:05:41.930 --> 00:05:48.010 align:middle line:84%
+we can define sigma
+to be the variance of
+
+00:05:48.010 --> 00:05:51.850 align:middle line:84%
+or the standard deviation
+of those returns.
+
+00:05:51.850 --> 00:05:57.110 align:middle line:84%
+Now, in this notation here,
+this sigma for the volatility
+
+00:05:57.110 --> 00:06:01.510 align:middle line:84%
+would be corresponding to a
+frequency of observation that's
+
+00:06:01.510 --> 00:06:04.550 align:middle line:90%
+daily or weekly or monthly.
+
+00:06:04.550 --> 00:06:08.030 align:middle line:84%
+And we'd have sample
+estimates given
+
+00:06:08.030 --> 00:06:15.910 align:middle line:84%
+by the square root of the sample
+variance where we traditionally
+
+00:06:15.910 --> 00:06:19.430 align:middle line:84%
+use the estimator
+for variance, which
+
+00:06:19.430 --> 00:06:23.130 align:middle line:84%
+is an unbiased estimate
+of the variance.
+
+00:06:23.130 --> 00:06:28.950 align:middle line:84%
+So that factor divisor t
+minus 1 is included there.
+
+00:06:28.950 --> 00:06:32.390 align:middle line:84%
+And then if we want to
+annualize these values,
+
+00:06:32.390 --> 00:06:38.430 align:middle line:84%
+it's common practice just
+to treat these returns
+
+00:06:38.430 --> 00:06:44.210 align:middle line:84%
+as independent or
+uncorrelated over time,
+
+00:06:44.210 --> 00:06:49.580 align:middle line:84%
+so that the variance of a sum
+is the sum of the variances.
+
+00:06:49.580 --> 00:06:54.240 align:middle line:84%
+So there are roughly
+252 days in a year.
+
+00:06:54.240 --> 00:07:02.000 align:middle line:84%
+So we multiply by the square
+root of 252 for daily returns.
+
+00:07:02.000 --> 00:07:06.420 align:middle line:84%
+For weekly returns, we'd
+do the root 52 times
+
+00:07:06.420 --> 00:07:10.260 align:middle line:84%
+sigma hat and route
+12 for monthly.
+
+00:07:10.260 --> 00:07:20.060 align:middle line:84%
+Now, when measuring
+historical volatility,
+
+00:07:20.060 --> 00:07:24.660 align:middle line:84%
+we can think of a simple
+historical average
+
+00:07:24.660 --> 00:07:28.180 align:middle line:84%
+since the beginning
+of our time series.
+
+00:07:28.180 --> 00:07:32.180 align:middle line:84%
+So this historical average
+would use all available data.
+
+00:07:32.180 --> 00:07:37.420 align:middle line:84%
+It's reasonable to think that
+volatility isn't necessarily
+
+00:07:37.420 --> 00:07:42.820 align:middle line:84%
+stable over the entire time
+range of a price series.
+
+00:07:42.820 --> 00:07:48.350 align:middle line:84%
+And so we could consider
+just using the last m values.
+
+00:07:48.350 --> 00:07:51.970 align:middle line:84%
+So take a rolling
+average of the last m
+
+00:07:51.970 --> 00:07:58.950 align:middle line:84%
+values of this sigma
+hat squared t minus j.
+
+00:07:58.950 --> 00:08:06.090 align:middle line:84%
+Now, if we define
+sigma hat squared t
+
+00:08:06.090 --> 00:08:11.230 align:middle line:84%
+to just be a single
+day's volatility,
+
+00:08:11.230 --> 00:08:18.730 align:middle line:84%
+that could be like the square of
+the daily return on a given day.
+
+00:08:18.730 --> 00:08:27.530 align:middle line:84%
+Now, using equal weighted
+values over a window of length m
+
+00:08:27.530 --> 00:08:33.490 align:middle line:84%
+might be improved upon by using
+an exponential moving average.
+
+00:08:33.490 --> 00:08:36.330 align:middle line:84%
+And so exponential
+moving averages
+
+00:08:36.330 --> 00:08:41.610 align:middle line:84%
+are averages where we
+take a weighted average
+
+00:08:41.610 --> 00:08:47.990 align:middle line:84%
+of the previous
+estimate of volatility
+
+00:08:47.990 --> 00:08:51.950 align:middle line:84%
+and the current
+estimate of volatility
+
+00:08:51.950 --> 00:08:55.530 align:middle line:90%
+using the time t value.
+
+00:08:55.530 --> 00:08:58.710 align:middle line:84%
+So this 1 minus beta
+beta weight allows
+
+00:08:58.710 --> 00:09:06.970 align:middle line:84%
+us to weight the past versus the
+present in an exponential way.
+
+00:09:06.970 --> 00:09:11.210 align:middle line:84%
+And with this formula,
+it's recursive over t.
+
+00:09:11.210 --> 00:09:15.070 align:middle line:84%
+And so it can actually
+apply across an entire range
+
+00:09:15.070 --> 00:09:17.590 align:middle line:90%
+of historical data.
+
+00:09:17.590 --> 00:09:22.190 align:middle line:84%
+An alternative to just the
+regular exponential moving
+
+00:09:22.190 --> 00:09:24.310 align:middle line:84%
+averages and exponential
+weighted moving
+
+00:09:24.310 --> 00:09:29.190 align:middle line:84%
+average where we only
+go back maybe m periods,
+
+00:09:29.190 --> 00:09:36.590 align:middle line:84%
+but we decrease the weights
+on past volatility estimates
+
+00:09:36.590 --> 00:09:40.010 align:middle line:84%
+according to the
+power of beta j.
+
+00:09:40.010 --> 00:09:47.220 align:middle line:84%
+So beta j or beta
+is a decay factor
+
+00:09:47.220 --> 00:09:49.060 align:middle line:90%
+in estimating volatilities.
+
+00:09:49.060 --> 00:09:54.400 align:middle line:90%
+
+
+00:09:54.400 --> 00:09:58.820 align:middle line:84%
+Additionally, one could
+consider regression models
+
+00:09:58.820 --> 00:10:06.180 align:middle line:84%
+with these volatility
+sigma hats indexed by t.
+
+00:10:06.180 --> 00:10:12.860 align:middle line:84%
+And depending on
+the relationship
+
+00:10:12.860 --> 00:10:18.180 align:middle line:84%
+of volatility to the past,
+we might use more data
+
+00:10:18.180 --> 00:10:20.120 align:middle line:84%
+to increase precision
+of estimators,
+
+00:10:20.120 --> 00:10:24.700 align:middle line:84%
+but use data closer
+to time t when
+
+00:10:24.700 --> 00:10:28.820 align:middle line:84%
+we believe that the volatility
+may be changing over time.
+
+00:10:28.820 --> 00:10:32.980 align:middle line:84%
+And what's neat about
+these estimation
+
+00:10:32.980 --> 00:10:39.360 align:middle line:84%
+methods is that we can evaluate,
+say, the exponential moving
+
+00:10:39.360 --> 00:10:45.000 align:middle line:84%
+average estimates of volatility
+over different assets
+
+00:10:45.000 --> 00:10:47.680 align:middle line:90%
+and different asset classes.
+
+00:10:47.680 --> 00:10:56.480 align:middle line:84%
+And this approach was
+applied in RiskMetrics.
+
+00:10:56.480 --> 00:11:03.360 align:middle line:84%
+Here there's a web link to the
+RiskMetrics technical document.
+
+00:11:03.360 --> 00:11:05.450 align:middle line:90%
+I think I have it listed here.
+
+00:11:05.450 --> 00:11:08.400 align:middle line:90%
+
+
+00:11:08.400 --> 00:11:17.600 align:middle line:84%
+So actually this RiskMetrics
+was created by JP Morgan back
+
+00:11:17.600 --> 00:11:19.840 align:middle line:90%
+in the 1990s.
+
+00:11:19.840 --> 00:11:24.400 align:middle line:84%
+Coincidentally, when I was
+at the Sloan School teaching
+
+00:11:24.400 --> 00:11:27.320 align:middle line:84%
+statistics and
+financial modeling,
+
+00:11:27.320 --> 00:11:30.120 align:middle line:84%
+I was part of the Financial
+Services Research Center
+
+00:11:30.120 --> 00:11:35.240 align:middle line:84%
+that was sponsored by JP
+Morgan and other groups
+
+00:11:35.240 --> 00:11:41.190 align:middle line:84%
+when this risk metrics
+document was created.
+
+00:11:41.190 --> 00:11:45.030 align:middle line:84%
+And if we look at,
+let's see, there's
+
+00:11:45.030 --> 00:11:53.390 align:middle line:84%
+a section here of risk metrics
+decay factors for volatility.
+
+00:11:53.390 --> 00:11:56.790 align:middle line:84%
+Basically, for
+different countries,
+
+00:11:56.790 --> 00:12:04.270 align:middle line:84%
+one can use the exponential
+moving average of asset returns
+
+00:12:04.270 --> 00:12:08.710 align:middle line:84%
+for foreign exchange
+10 year 0 prices equity
+
+00:12:08.710 --> 00:12:11.750 align:middle line:90%
+indices and other assets.
+
+00:12:11.750 --> 00:12:16.390 align:middle line:84%
+And what's interesting to
+see is that the decay factor
+
+00:12:16.390 --> 00:12:19.290 align:middle line:90%
+is generally well above 0.9.
+
+00:12:19.290 --> 00:12:24.110 align:middle line:84%
+It's more like 0.95, which
+suggests that volatility
+
+00:12:24.110 --> 00:12:27.110 align:middle line:90%
+is changing slowly over time.
+
+00:12:27.110 --> 00:12:31.790 align:middle line:84%
+And the way they chose
+these decay factors was
+
+00:12:31.790 --> 00:12:38.090 align:middle line:84%
+to look at how predictive they
+were with mean squared error
+
+00:12:38.090 --> 00:12:39.110 align:middle line:90%
+of volatility.
+
+00:12:39.110 --> 00:12:44.230 align:middle line:84%
+So these are reasonable
+estimates of volatility.
+
+00:12:44.230 --> 00:12:49.450 align:middle line:84%
+And an important aspect
+of these measures
+
+00:12:49.450 --> 00:12:55.290 align:middle line:84%
+is having benchmark values
+that people can agree upon.
+
+00:12:55.290 --> 00:12:59.950 align:middle line:84%
+So we're not arguing that
+these are the best estimators,
+
+00:12:59.950 --> 00:13:05.370 align:middle line:84%
+but they're a simple objective
+estimator that can be applied.
+
+00:13:05.370 --> 00:13:08.650 align:middle line:84%
+And when we communicate
+about these other people,
+
+00:13:08.650 --> 00:13:10.890 align:middle line:90%
+understand what we're measuring.
+
+00:13:10.890 --> 00:13:13.930 align:middle line:90%
+So those are important.
+
+00:13:13.930 --> 00:13:17.530 align:middle line:90%
+Now, let's see.
+
+00:13:17.530 --> 00:13:21.050 align:middle line:84%
+With geometric Brownian
+motion, turning now
+
+00:13:21.050 --> 00:13:28.130 align:middle line:84%
+to having a stochastic
+process model for the prices.
+
+00:13:28.130 --> 00:13:31.330 align:middle line:84%
+If we have this
+stochastic differential
+
+00:13:31.330 --> 00:13:37.240 align:middle line:84%
+equation, the geometric Brownian
+motion one, we see that,
+
+00:13:37.240 --> 00:13:42.840 align:middle line:84%
+and it's totally obvious, but if
+we divide both sides by s of t,
+
+00:13:42.840 --> 00:13:55.560 align:middle line:84%
+we get mu dt plus sigma ds of t
+or sigma dw of t, where w of t
+
+00:13:55.560 --> 00:13:59.980 align:middle line:90%
+is a standard Brownian motion.
+
+00:13:59.980 --> 00:14:03.960 align:middle line:84%
+So by looking at
+essentially the percentage
+
+00:14:03.960 --> 00:14:08.880 align:middle line:84%
+change on an
+infinitesimal level,
+
+00:14:08.880 --> 00:14:13.160 align:middle line:84%
+we basically have a linear
+trend that's deterministic
+
+00:14:13.160 --> 00:14:16.880 align:middle line:84%
+and then a random walk
+with Brownian motion
+
+00:14:16.880 --> 00:14:20.280 align:middle line:90%
+steps on that scale.
+
+00:14:20.280 --> 00:14:25.280 align:middle line:84%
+And with this geometric
+Brownian motion,
+
+00:14:25.280 --> 00:14:32.900 align:middle line:84%
+we have basically independent
+increments with normally
+
+00:14:32.900 --> 00:14:38.660 align:middle line:84%
+distributed increments on this
+log scale for the Brownian
+
+00:14:38.660 --> 00:14:40.100 align:middle line:90%
+motion.
+
+00:14:40.100 --> 00:14:47.540 align:middle line:84%
+And with our homework exercise
+this past week, we actually
+
+00:14:47.540 --> 00:14:54.820 align:middle line:84%
+dealt with estimating the drift
+parameter and the volatility
+
+00:14:54.820 --> 00:14:58.300 align:middle line:84%
+parameter in geometric
+Brownian motion.
+
+00:14:58.300 --> 00:15:05.100 align:middle line:84%
+And so if our increments of
+time are unit increments,
+
+00:15:05.100 --> 00:15:11.420 align:middle line:84%
+then we can estimate
+a drift term mu star
+
+00:15:11.420 --> 00:15:14.300 align:middle line:90%
+with the average log return.
+
+00:15:14.300 --> 00:15:22.300 align:middle line:84%
+And we can estimate the period
+volatility or period variance
+
+00:15:22.300 --> 00:15:28.300 align:middle line:84%
+with the sample variance
+using n instead of n minus 1.
+
+00:15:28.300 --> 00:15:33.490 align:middle line:84%
+Now, these essentially
+correspond to maximum likelihood
+
+00:15:33.490 --> 00:15:35.850 align:middle line:90%
+estimates of these parameters.
+
+00:15:35.850 --> 00:15:41.450 align:middle line:84%
+And what's important
+to note here
+
+00:15:41.450 --> 00:15:51.170 align:middle line:84%
+is that the drift term
+mu star per period
+
+00:15:51.170 --> 00:15:55.810 align:middle line:84%
+is actually equal to the mu
+of the geometric Brownian
+
+00:15:55.810 --> 00:16:02.450 align:middle line:84%
+motion minus the square of the
+volatility term divided by 2.
+
+00:16:02.450 --> 00:16:05.730 align:middle line:84%
+And so what's
+important is that when
+
+00:16:05.730 --> 00:16:13.290 align:middle line:84%
+we apply this stochastic
+differential equation,
+
+00:16:13.290 --> 00:16:18.330 align:middle line:84%
+there basically
+comes an extra term
+
+00:16:18.330 --> 00:16:22.890 align:middle line:84%
+in the drift that's due
+to the squared variation
+
+00:16:22.890 --> 00:16:24.810 align:middle line:90%
+in the process.
+
+00:16:24.810 --> 00:16:29.200 align:middle line:84%
+So in working with these
+the stochastic differential
+
+00:16:29.200 --> 00:16:34.260 align:middle line:84%
+equations, it's important not to
+just look at first order terms,
+
+00:16:34.260 --> 00:16:37.680 align:middle line:84%
+but to look at second order
+terms in your Taylor series
+
+00:16:37.680 --> 00:16:38.540 align:middle line:90%
+approximation.
+
+00:16:38.540 --> 00:16:41.960 align:middle line:84%
+And that's how that
+mu star gets in there
+
+00:16:41.960 --> 00:16:44.160 align:middle line:90%
+to be different from mu.
+
+00:16:44.160 --> 00:16:50.600 align:middle line:84%
+Now, an interesting exercise,
+which hopefully was of interest
+
+00:16:50.600 --> 00:16:53.920 align:middle line:84%
+to people who worked
+on that last week,
+
+00:16:53.920 --> 00:16:59.400 align:middle line:84%
+if we vary the increments
+delta j over which we observe
+
+00:16:59.400 --> 00:17:10.119 align:middle line:84%
+this price process, then we
+can talk about how accurate
+
+00:17:10.119 --> 00:17:18.200 align:middle line:84%
+or how precise are our estimates
+of mu star and sigma squared.
+
+00:17:18.200 --> 00:17:25.780 align:middle line:84%
+And it turns out that if
+the delta j, the increments
+
+00:17:25.780 --> 00:17:34.260 align:middle line:84%
+between observations varies,
+then our estimate of mu star
+
+00:17:34.260 --> 00:17:36.020 align:middle line:90%
+is always the same.
+
+00:17:36.020 --> 00:17:39.580 align:middle line:84%
+It corresponds to just
+the cumulative return
+
+00:17:39.580 --> 00:17:43.240 align:middle line:84%
+over the entire period divided
+by the length of the period.
+
+00:17:43.240 --> 00:17:47.820 align:middle line:84%
+So it's the average rate
+of return per period.
+
+00:17:47.820 --> 00:17:53.180 align:middle line:84%
+Interestingly, if we increase
+the number of increments,
+
+00:17:53.180 --> 00:17:57.140 align:middle line:84%
+then our precision
+on the variance
+
+00:17:57.140 --> 00:18:03.100 align:middle line:84%
+gets more and more precise,
+and the variability of that
+
+00:18:03.100 --> 00:18:07.260 align:middle line:84%
+actually goes down
+with a factor of n.
+
+00:18:07.260 --> 00:18:11.580 align:middle line:84%
+So that was a homework
+exercise that I think
+
+00:18:11.580 --> 00:18:16.700 align:middle line:90%
+is an important one to realize.
+
+00:18:16.700 --> 00:18:22.380 align:middle line:84%
+Now, a really
+interesting extension
+
+00:18:22.380 --> 00:18:27.370 align:middle line:84%
+of maximum likelihood
+estimation with normally
+
+00:18:27.370 --> 00:18:32.490 align:middle line:84%
+distributed increments coming
+from the Brownian motion process
+
+00:18:32.490 --> 00:18:39.850 align:middle line:84%
+is looking at the problem of
+using more information than just
+
+00:18:39.850 --> 00:18:43.130 align:middle line:90%
+the close to close prices.
+
+00:18:43.130 --> 00:18:47.770 align:middle line:84%
+And so what we want
+to do is introduce you
+
+00:18:47.770 --> 00:18:51.610 align:middle line:90%
+to the Garman-Klass estimator.
+
+00:18:51.610 --> 00:18:59.490 align:middle line:84%
+And let me just turn to
+the Garman-Klass paper.
+
+00:18:59.490 --> 00:19:04.210 align:middle line:84%
+These papers are distributed in
+Canvas in the volatility notes
+
+00:19:04.210 --> 00:19:05.490 align:middle line:90%
+section.
+
+00:19:05.490 --> 00:19:12.450 align:middle line:84%
+But if we think of a period
+of time with one day,
+
+00:19:12.450 --> 00:19:19.650 align:middle line:84%
+going from yesterday's close to
+today's open to today's close,
+
+00:19:19.650 --> 00:19:27.070 align:middle line:84%
+then in thinking about
+measuring volatility
+
+00:19:27.070 --> 00:19:30.710 align:middle line:84%
+using the difference
+between today's close
+
+00:19:30.710 --> 00:19:35.390 align:middle line:84%
+and yesterday's close,
+that can be very useful,
+
+00:19:35.390 --> 00:19:38.590 align:middle line:84%
+but it's missing out
+on other information
+
+00:19:38.590 --> 00:19:42.830 align:middle line:84%
+that we may have access
+to, such as what's
+
+00:19:42.830 --> 00:19:47.910 align:middle line:90%
+the opening price today?
+
+00:19:47.910 --> 00:19:49.810 align:middle line:90%
+What's the low value today?
+
+00:19:49.810 --> 00:19:51.710 align:middle line:90%
+What's the high value today?
+
+00:19:51.710 --> 00:19:55.150 align:middle line:84%
+And how can we use
+that extra information
+
+00:19:55.150 --> 00:20:00.910 align:middle line:84%
+to have more precise
+estimates of volatility?
+
+00:20:00.910 --> 00:20:06.350 align:middle line:84%
+Anecdotally, when I was studying
+for a doctorate in statistics
+
+00:20:06.350 --> 00:20:13.710 align:middle line:84%
+at Berkeley, I was a research
+assistant to Michael Klass.
+
+00:20:13.710 --> 00:20:18.310 align:middle line:84%
+And I was getting interested
+in non-statistics topics
+
+00:20:18.310 --> 00:20:22.580 align:middle line:84%
+like finance, and so I took a
+course from Mark Garman, who
+
+00:20:22.580 --> 00:20:24.840 align:middle line:90%
+co-wrote this paper.
+
+00:20:24.840 --> 00:20:29.160 align:middle line:84%
+So it's rather interesting
+to have had that exposure.
+
+00:20:29.160 --> 00:20:33.500 align:middle line:84%
+Actually, it was a very
+inspiring set of classes
+
+00:20:33.500 --> 00:20:38.980 align:middle line:84%
+that I took, which motivated
+my, I guess, lifelong interest
+
+00:20:38.980 --> 00:20:40.980 align:middle line:90%
+in financial modeling.
+
+00:20:40.980 --> 00:20:45.780 align:middle line:84%
+So let's take a look
+at some notation.
+
+00:20:45.780 --> 00:20:54.020 align:middle line:84%
+Very simply, we'll think of just
+a single period, like one day,
+
+00:20:54.020 --> 00:20:59.260 align:middle line:84%
+and refer to the
+closing price on day j,
+
+00:20:59.260 --> 00:21:06.540 align:middle line:84%
+opening price on day j, the
+high and low on day j as well.
+
+00:21:06.540 --> 00:21:12.580 align:middle line:84%
+Importantly, the notation
+here includes this--
+
+00:21:12.580 --> 00:21:15.580 align:middle line:84%
+well, includes the time
+points, but it also
+
+00:21:15.580 --> 00:21:23.960 align:middle line:84%
+includes the parameter f,
+which is the length of time
+
+00:21:23.960 --> 00:21:26.360 align:middle line:84%
+that the market is
+closed on a given day.
+
+00:21:26.360 --> 00:21:32.000 align:middle line:84%
+So the time between the close
+and open of the next day.
+
+00:21:32.000 --> 00:21:35.200 align:middle line:90%
+So we have this notation.
+
+00:21:35.200 --> 00:21:41.360 align:middle line:84%
+And if we consider just
+focusing on single periods,
+
+00:21:41.360 --> 00:21:44.960 align:middle line:84%
+and in this case,
+the first one, if we
+
+00:21:44.960 --> 00:21:48.560 align:middle line:84%
+look at the change
+in closing values,
+
+00:21:48.560 --> 00:21:51.320 align:middle line:84%
+now, perhaps it makes
+sense to think of these
+
+00:21:51.320 --> 00:21:55.760 align:middle line:90%
+on the log scale of the prices.
+
+00:21:55.760 --> 00:22:02.040 align:middle line:84%
+The close to close
+squared return
+
+00:22:02.040 --> 00:22:07.760 align:middle line:84%
+basically will have
+mean sigma squared
+
+00:22:07.760 --> 00:22:11.840 align:middle line:84%
+and variance equal to
+2 sigma to the fourth.
+
+00:22:11.840 --> 00:22:16.310 align:middle line:84%
+Now, this corresponds
+to the theory
+
+00:22:16.310 --> 00:22:21.910 align:middle line:84%
+of normal random variables
+for returns, which
+
+00:22:21.910 --> 00:22:23.910 align:middle line:90%
+comes from the Brownian motion.
+
+00:22:23.910 --> 00:22:31.310 align:middle line:84%
+And the expected
+squared value is--
+
+00:22:31.310 --> 00:22:35.150 align:middle line:84%
+well, actually, we can think
+of maybe the mean return
+
+00:22:35.150 --> 00:22:41.270 align:middle line:84%
+being 0 or being subtracted
+from all the returns.
+
+00:22:41.270 --> 00:22:45.750 align:middle line:84%
+But the variance of
+this sigma 0 hat squared
+
+00:22:45.750 --> 00:22:49.030 align:middle line:84%
+is the variance of a chi
+squared random variable
+
+00:22:49.030 --> 00:22:50.990 align:middle line:90%
+with 1 degree of freedom.
+
+00:22:50.990 --> 00:22:53.590 align:middle line:84%
+And so in probability
+classes, we
+
+00:22:53.590 --> 00:22:58.670 align:middle line:84%
+learn that a chi squared
+random variable has expectation
+
+00:22:58.670 --> 00:23:00.790 align:middle line:90%
+equal to the degrees of freedom.
+
+00:23:00.790 --> 00:23:03.190 align:middle line:84%
+And if it's a
+scaled chi squared,
+
+00:23:03.190 --> 00:23:06.910 align:middle line:84%
+it's the scale factor
+sigma squared times that.
+
+00:23:06.910 --> 00:23:09.110 align:middle line:84%
+And the variance
+of a chi squared
+
+00:23:09.110 --> 00:23:11.590 align:middle line:84%
+is equal to twice the
+degrees of freedom.
+
+00:23:11.590 --> 00:23:14.980 align:middle line:84%
+So that's where that
+formula comes from.
+
+00:23:14.980 --> 00:23:20.700 align:middle line:84%
+Now, if we look at the close
+to open squared return,
+
+00:23:20.700 --> 00:23:25.540 align:middle line:84%
+the same arguments lead to
+this sigma 1 hat squared.
+
+00:23:25.540 --> 00:23:30.780 align:middle line:84%
+Looking at the squared
+return from closed to open,
+
+00:23:30.780 --> 00:23:37.820 align:middle line:84%
+normalized by the length of
+the period between the close
+
+00:23:37.820 --> 00:23:42.340 align:middle line:84%
+and open, this will
+also have expectation
+
+00:23:42.340 --> 00:23:44.500 align:middle line:90%
+equal to sigma squared.
+
+00:23:44.500 --> 00:23:49.500 align:middle line:84%
+And its variance will also
+be 2 sigma to the fourth.
+
+00:23:49.500 --> 00:23:56.180 align:middle line:84%
+So if the model applies
+throughout the time
+
+00:23:56.180 --> 00:23:59.820 align:middle line:84%
+periods of the market
+being open as well
+
+00:23:59.820 --> 00:24:04.660 align:middle line:84%
+as the market being closed,
+then these formulas apply.
+
+00:24:04.660 --> 00:24:10.300 align:middle line:84%
+Now, we could also do the
+open to close squared return
+
+00:24:10.300 --> 00:24:18.880 align:middle line:84%
+and, again, if we normalize the
+squared change in price or log
+
+00:24:18.880 --> 00:24:23.400 align:middle line:84%
+price, if we normalize that
+by the length of the period
+
+00:24:23.400 --> 00:24:28.360 align:middle line:84%
+1 minus f, then we get
+the same properties
+
+00:24:28.360 --> 00:24:31.960 align:middle line:84%
+of the moments for these
+estimates of sigma squared.
+
+00:24:31.960 --> 00:24:36.040 align:middle line:84%
+So all of these have
+expectation equal to sigma
+
+00:24:36.040 --> 00:24:41.560 align:middle line:84%
+squared, and all of them have
+the same degree of variation.
+
+00:24:41.560 --> 00:24:50.680 align:middle line:84%
+Well, this second or the
+index one and two cases
+
+00:24:50.680 --> 00:24:54.800 align:middle line:84%
+are estimates that
+use different time
+
+00:24:54.800 --> 00:24:58.480 align:middle line:84%
+periods, different increments,
+disjoint increments
+
+00:24:58.480 --> 00:25:00.720 align:middle line:90%
+of the process.
+
+00:25:00.720 --> 00:25:05.640 align:middle line:84%
+And so these have to be
+independent if our Brownian
+
+00:25:05.640 --> 00:25:09.000 align:middle line:90%
+motion model applies.
+
+00:25:09.000 --> 00:25:15.750 align:middle line:84%
+And so if we simply take the
+weighted average of these
+
+00:25:15.750 --> 00:25:23.390 align:middle line:84%
+or the simple average, then
+the expectation is unchanged
+
+00:25:23.390 --> 00:25:29.470 align:middle line:84%
+and the variance is equal to
+basically 1/2 squared times
+
+00:25:29.470 --> 00:25:31.310 align:middle line:90%
+the sum of the variances.
+
+00:25:31.310 --> 00:25:34.470 align:middle line:84%
+And that equals actually
+sigma to the fourth.
+
+00:25:34.470 --> 00:25:38.710 align:middle line:84%
+So we're able to get a
+more precise estimate
+
+00:25:38.710 --> 00:25:45.710 align:middle line:84%
+of the volatility using these
+two increments separately.
+
+00:25:45.710 --> 00:25:52.710 align:middle line:84%
+And so it's common in
+statistical theory of estimators
+
+00:25:52.710 --> 00:25:58.710 align:middle line:84%
+to talk about the efficiency of
+one estimator versus another.
+
+00:25:58.710 --> 00:26:06.390 align:middle line:84%
+And so if we compare
+this sigma star,
+
+00:26:06.390 --> 00:26:11.250 align:middle line:84%
+we can divide its variance into
+the variance of sigma 0 squared
+
+00:26:11.250 --> 00:26:13.410 align:middle line:90%
+and get a factor of 2.
+
+00:26:13.410 --> 00:26:16.180 align:middle line:90%
+So we basically have--
+
+00:26:16.180 --> 00:26:18.890 align:middle line:90%
+
+
+00:26:18.890 --> 00:26:19.390 align:middle line:90%
+let's see.
+
+00:26:19.390 --> 00:26:20.440 align:middle line:90%
+Have I got that correct?
+
+00:26:20.440 --> 00:26:23.662 align:middle line:90%
+
+
+00:26:23.662 --> 00:26:24.610 align:middle line:90%
+Right.
+
+00:26:24.610 --> 00:26:29.490 align:middle line:84%
+We basically have twice the
+efficiency in this case.
+
+00:26:29.490 --> 00:26:34.090 align:middle line:84%
+So we're thinking of inverse
+relationships of the variance.
+
+00:26:34.090 --> 00:26:36.690 align:middle line:90%
+Now, let's see.
+
+00:26:36.690 --> 00:26:43.370 align:middle line:84%
+Parkinson came up
+with considering
+
+00:26:43.370 --> 00:26:47.890 align:middle line:84%
+the high and low
+values over a period
+
+00:26:47.890 --> 00:26:55.890 align:middle line:84%
+and showed that this
+estimate sigma hat 3 squared
+
+00:26:55.890 --> 00:27:04.450 align:middle line:84%
+is an unbiased estimate of sigma
+squared when f is equal to 0
+
+00:27:04.450 --> 00:27:09.600 align:middle line:90%
+and has efficiency equal to 5.2.
+
+00:27:09.600 --> 00:27:17.400 align:middle line:84%
+So this high and low data really
+has a lot of information in it
+
+00:27:17.400 --> 00:27:22.720 align:middle line:84%
+compared with just the
+close to close returns.
+
+00:27:22.720 --> 00:27:26.000 align:middle line:84%
+Our precision with estimating
+sigma squared basically
+
+00:27:26.000 --> 00:27:30.600 align:middle line:84%
+can increase by a
+factor of 5 with using
+
+00:27:30.600 --> 00:27:34.130 align:middle line:84%
+the high and low values
+instead of the close to close.
+
+00:27:34.130 --> 00:27:36.840 align:middle line:90%
+
+
+00:27:36.840 --> 00:27:38.160 align:middle line:90%
+And let's see.
+
+00:27:38.160 --> 00:27:42.440 align:middle line:84%
+I just posted today the
+problem set due next week
+
+00:27:42.440 --> 00:27:48.760 align:middle line:84%
+where there's an article by
+Parkinson discussing issues
+
+00:27:48.760 --> 00:27:57.400 align:middle line:84%
+of high and low or extreme value
+estimates of the variance, which
+
+00:27:57.400 --> 00:27:59.060 align:middle line:84%
+I think will be
+interesting to read.
+
+00:27:59.060 --> 00:28:02.000 align:middle line:84%
+I think it's
+somewhat fun to read
+
+00:28:02.000 --> 00:28:04.900 align:middle line:84%
+the classic papers
+in these areas,
+
+00:28:04.900 --> 00:28:06.920 align:middle line:84%
+especially because
+the older they are,
+
+00:28:06.920 --> 00:28:08.840 align:middle line:84%
+the easier they are
+to read, I think,
+
+00:28:08.840 --> 00:28:11.900 align:middle line:84%
+although sometimes
+that's not totally true.
+
+00:28:11.900 --> 00:28:17.260 align:middle line:84%
+Anyway, what Garman
+and Klass did was
+
+00:28:17.260 --> 00:28:22.100 align:middle line:84%
+they considered
+alternatives, which
+
+00:28:22.100 --> 00:28:28.020 align:middle line:84%
+included the high-low
+volatility estimate.
+
+00:28:28.020 --> 00:28:34.940 align:middle line:84%
+And a simple average, or
+weighted by a and 1 minus
+
+00:28:34.940 --> 00:28:42.380 align:middle line:84%
+of this high-low estimate of
+Parkinson and the sigma 1,
+
+00:28:42.380 --> 00:28:46.080 align:middle line:90%
+which is the--
+
+00:28:46.080 --> 00:28:46.580 align:middle line:90%
+let's see.
+
+00:28:46.580 --> 00:28:47.540 align:middle line:90%
+Let's go back.
+
+00:28:47.540 --> 00:28:54.180 align:middle line:84%
+And the sigma 1, which is
+the open to close value.
+
+00:28:54.180 --> 00:28:59.660 align:middle line:84%
+This has an even higher
+efficiency of 6.2
+
+00:28:59.660 --> 00:29:04.790 align:middle line:84%
+and a rather striking
+result of their paper,
+
+00:29:04.790 --> 00:29:10.370 align:middle line:84%
+as they were able to derive
+the best analytic scale
+
+00:29:10.370 --> 00:29:12.810 align:middle line:90%
+invariant estimator.
+
+00:29:12.810 --> 00:29:15.850 align:middle line:84%
+So, depending on whether
+you like mathematics or not,
+
+00:29:15.850 --> 00:29:18.370 align:middle line:90%
+you may like this paper or not.
+
+00:29:18.370 --> 00:29:21.210 align:middle line:84%
+But it's really
+interesting to see
+
+00:29:21.210 --> 00:29:27.050 align:middle line:84%
+how a property of
+finding a scale invariant
+
+00:29:27.050 --> 00:29:36.290 align:middle line:84%
+estimator that is best among the
+class of such estimators, that's
+
+00:29:36.290 --> 00:29:38.990 align:middle line:84%
+actually derived by
+Garman and Klass.
+
+00:29:38.990 --> 00:29:48.410 align:middle line:84%
+So let me just highlight how
+this section five in their paper
+
+00:29:48.410 --> 00:29:52.370 align:middle line:84%
+talks about best analytic
+scale invariant estimators.
+
+00:29:52.370 --> 00:29:57.170 align:middle line:84%
+And you may be able to see
+from the derivation here
+
+00:29:57.170 --> 00:29:59.770 align:middle line:84%
+that their arguments
+just are dealing
+
+00:29:59.770 --> 00:30:03.840 align:middle line:84%
+with some quadratic
+forms and solving
+
+00:30:03.840 --> 00:30:07.600 align:middle line:84%
+for properties, minimizing
+these quadratic forms.
+
+00:30:07.600 --> 00:30:10.160 align:middle line:84%
+And so it's rather
+neat that they're
+
+00:30:10.160 --> 00:30:14.080 align:middle line:84%
+able to achieve
+this result. Yeah?
+
+00:30:14.080 --> 00:30:16.872 align:middle line:84%
+AUDIENCE: Why is it
+necessary [INAUDIBLE]?
+
+00:30:16.872 --> 00:30:21.286 align:middle line:84%
+Because that's just commenting
+about the prepared bearings,
+
+00:30:21.286 --> 00:30:21.786 align:middle line:90%
+right?
+
+00:30:21.786 --> 00:30:28.680 align:middle line:84%
+PETER KEMPTHORNE: Well, with
+a higher efficient estimator,
+
+00:30:28.680 --> 00:30:34.400 align:middle line:84%
+you can have as precise an
+estimator with a smaller
+
+00:30:34.400 --> 00:30:37.520 align:middle line:90%
+or shorter time series.
+
+00:30:37.520 --> 00:30:42.040 align:middle line:84%
+So instead of using, say,
+20 days close to close,
+
+00:30:42.040 --> 00:30:46.920 align:middle line:84%
+you could use a week of
+data and have estimators
+
+00:30:46.920 --> 00:30:49.760 align:middle line:90%
+that are comparably precise.
+
+00:30:49.760 --> 00:30:51.640 align:middle line:90%
+AUDIENCE: [INAUDIBLE]
+
+00:30:51.640 --> 00:30:53.280 align:middle line:90%
+
+
+00:30:53.280 --> 00:30:55.798 align:middle line:90%
+PETER KEMPTHORNE: Yeah, yeah.
+
+00:30:55.798 --> 00:30:56.340 align:middle line:90%
+That's right.
+
+00:30:56.340 --> 00:30:59.220 align:middle line:84%
+And so there are all
+these extra assumptions
+
+00:30:59.220 --> 00:31:00.720 align:middle line:90%
+that complicate things.
+
+00:31:00.720 --> 00:31:02.660 align:middle line:84%
+And in many of
+these developments,
+
+00:31:02.660 --> 00:31:06.860 align:middle line:84%
+they're simplifying
+assumptions like the mean is 0.
+
+00:31:06.860 --> 00:31:13.140 align:middle line:84%
+But if you were trying to model
+time varying volatility, then
+
+00:31:13.140 --> 00:31:17.100 align:middle line:84%
+rather than looking at, say,
+close to close volatility
+
+00:31:17.100 --> 00:31:19.660 align:middle line:84%
+and how that changes
+over time, if you
+
+00:31:19.660 --> 00:31:26.100 align:middle line:84%
+use these other estimators,
+the Garman-Klass, for example,
+
+00:31:26.100 --> 00:31:29.140 align:middle line:84%
+you could maybe use a
+much shorter time period
+
+00:31:29.140 --> 00:31:33.100 align:middle line:84%
+and be able to track or model
+changes in volatility over time
+
+00:31:33.100 --> 00:31:33.880 align:middle line:90%
+with that.
+
+00:31:33.880 --> 00:31:39.300 align:middle line:90%
+
+
+00:31:39.300 --> 00:31:40.160 align:middle line:90%
+Well, let's see.
+
+00:31:40.160 --> 00:31:46.900 align:middle line:90%
+
+
+00:31:46.900 --> 00:31:49.960 align:middle line:84%
+So then finally, there's
+this composite estimator,
+
+00:31:49.960 --> 00:31:53.940 align:middle line:90%
+which has efficiency 8.4.
+
+00:31:53.940 --> 00:31:57.250 align:middle line:84%
+And finally, there are
+a number of extensions
+
+00:31:57.250 --> 00:32:02.010 align:middle line:84%
+of the Garman-Klass
+that are listed here.
+
+00:32:02.010 --> 00:32:07.570 align:middle line:84%
+And the one that is actually
+recommended these days
+
+00:32:07.570 --> 00:32:12.150 align:middle line:84%
+is actually this
+Yang Zhang model,
+
+00:32:12.150 --> 00:32:16.370 align:middle line:84%
+which has a drift independent
+volatility estimation based
+
+00:32:16.370 --> 00:32:18.590 align:middle line:90%
+on the high-low close.
+
+00:32:18.590 --> 00:32:22.610 align:middle line:84%
+So the fact that it's
+drift independent deals
+
+00:32:22.610 --> 00:32:27.090 align:middle line:84%
+with that assumption
+that was just mentioned.
+
+00:32:27.090 --> 00:32:29.170 align:middle line:90%
+Now, let's see.
+
+00:32:29.170 --> 00:32:35.530 align:middle line:84%
+There's a case study
+of using R to calculate
+
+00:32:35.530 --> 00:32:39.050 align:middle line:84%
+these different
+volatility estimates.
+
+00:32:39.050 --> 00:32:44.250 align:middle line:90%
+And let's see here.
+
+00:32:44.250 --> 00:32:52.210 align:middle line:84%
+So here's the case
+study, which goes
+
+00:32:52.210 --> 00:32:58.530 align:middle line:84%
+through calculating different
+measures of volatility,
+
+00:32:58.530 --> 00:33:02.030 align:middle line:84%
+using close to close
+Parkinson's all the way down
+
+00:33:02.030 --> 00:33:05.710 align:middle line:84%
+to Yang and Zhang in section
+1.6 and then comparing
+
+00:33:05.710 --> 00:33:10.670 align:middle line:90%
+those for the S&P 500 Index.
+
+00:33:10.670 --> 00:33:15.590 align:middle line:84%
+And we'll go through
+these in a moment.
+
+00:33:15.590 --> 00:33:20.270 align:middle line:84%
+But following just looking
+at these individually,
+
+00:33:20.270 --> 00:33:25.270 align:middle line:84%
+we consider time series modeling
+of these different volatility
+
+00:33:25.270 --> 00:33:27.790 align:middle line:90%
+statistics.
+
+00:33:27.790 --> 00:33:33.870 align:middle line:84%
+And so in terms of understanding
+realized volatility,
+
+00:33:33.870 --> 00:33:37.830 align:middle line:84%
+a useful analysis is
+to be able to predict
+
+00:33:37.830 --> 00:33:42.710 align:middle line:84%
+how our realized volatility is
+going to change into the future.
+
+00:33:42.710 --> 00:33:45.390 align:middle line:84%
+So there may be some
+predictability there.
+
+00:33:45.390 --> 00:33:49.870 align:middle line:84%
+And what we'll see is
+that in the time series
+
+00:33:49.870 --> 00:33:55.460 align:middle line:84%
+analysis of these volatilities,
+time series models
+
+00:33:55.460 --> 00:33:58.860 align:middle line:84%
+such as autoregressive
+integrated moving average models
+
+00:33:58.860 --> 00:34:03.900 align:middle line:84%
+can be applied and
+can be very useful.
+
+00:34:03.900 --> 00:34:07.540 align:middle line:84%
+And in particular,
+there's a role
+
+00:34:07.540 --> 00:34:12.300 align:middle line:84%
+to be played with
+seasonal ARIMA models.
+
+00:34:12.300 --> 00:34:15.690 align:middle line:90%
+So let's take a look at that.
+
+00:34:15.690 --> 00:34:18.460 align:middle line:90%
+
+
+00:34:18.460 --> 00:34:21.620 align:middle line:84%
+And just as a
+preview, let's see,
+
+00:34:21.620 --> 00:34:26.060 align:middle line:84%
+one of the problems in
+the next problem set
+
+00:34:26.060 --> 00:34:34.980 align:middle line:84%
+is to look at this same set
+of analysis for the S&P 500,
+
+00:34:34.980 --> 00:34:40.540 align:middle line:84%
+look at the same analysis
+for the stock ARKK, which
+
+00:34:40.540 --> 00:34:45.300 align:middle line:84%
+is Cathie Wood's
+ETF, and just see
+
+00:34:45.300 --> 00:34:48.420 align:middle line:90%
+how different the results are.
+
+00:34:48.420 --> 00:34:55.360 align:middle line:84%
+And what's nice is that
+the R markdown files
+
+00:34:55.360 --> 00:35:00.280 align:middle line:84%
+that create this case study can
+be applied to any other stocks
+
+00:35:00.280 --> 00:35:03.400 align:middle line:84%
+you want to analyze,
+if you so choose.
+
+00:35:03.400 --> 00:35:09.960 align:middle line:84%
+For the problem set, I posted
+the two versions of this study
+
+00:35:09.960 --> 00:35:13.000 align:middle line:90%
+for S&P 500 and ARKK.
+
+00:35:13.000 --> 00:35:15.100 align:middle line:84%
+So you don't need
+to do R at all.
+
+00:35:15.100 --> 00:35:23.060 align:middle line:84%
+But if you set up a Posit Cloud
+account with RStudio Cloud,
+
+00:35:23.060 --> 00:35:26.960 align:middle line:84%
+you should be able to just
+upload the file, the R markdown
+
+00:35:26.960 --> 00:35:31.800 align:middle line:84%
+file, and rerun the programs
+and do so with another stock,
+
+00:35:31.800 --> 00:35:34.720 align:middle line:90%
+if you so choose.
+
+00:35:34.720 --> 00:35:36.840 align:middle line:84%
+So in this note,
+the first section
+
+00:35:36.840 --> 00:35:43.320 align:middle line:84%
+just goes through and
+looks at the S&P 500 index.
+
+00:35:43.320 --> 00:35:49.550 align:middle line:84%
+It actually is going through
+a couple of days ago.
+
+00:35:49.550 --> 00:35:55.230 align:middle line:84%
+It's a good time to
+have an equity exposure.
+
+00:35:55.230 --> 00:36:00.590 align:middle line:84%
+And if we look at close
+to close volatility,
+
+00:36:00.590 --> 00:36:06.590 align:middle line:84%
+this is a graph of the
+21 day variance scaled up
+
+00:36:06.590 --> 00:36:13.310 align:middle line:84%
+to an annualized basis by
+multiplying by root 252.
+
+00:36:13.310 --> 00:36:20.430 align:middle line:84%
+And what's important is to
+see that volatility generally
+
+00:36:20.430 --> 00:36:25.150 align:middle line:90%
+is well below 25%.
+
+00:36:25.150 --> 00:36:32.190 align:middle line:84%
+Often it's around 12%
+to 15% when it's low,
+
+00:36:32.190 --> 00:36:33.990 align:middle line:90%
+but it does have spikes.
+
+00:36:33.990 --> 00:36:38.790 align:middle line:84%
+And during COVID, there
+was the huge spike up.
+
+00:36:38.790 --> 00:36:46.970 align:middle line:84%
+And more recently, there
+was some elevated volatility
+
+00:36:46.970 --> 00:36:52.530 align:middle line:84%
+that suggests that
+volatility is not constant.
+
+00:36:52.530 --> 00:36:55.810 align:middle line:84%
+So anyway, this is the
+close to close volatility.
+
+00:36:55.810 --> 00:37:01.650 align:middle line:84%
+If we look at the high-low
+volatility of Parkinson,
+
+00:37:01.650 --> 00:37:04.690 align:middle line:84%
+then we just are
+averaging the log
+
+00:37:04.690 --> 00:37:10.570 align:middle line:84%
+of the ratio of the high
+to low and scaling it up.
+
+00:37:10.570 --> 00:37:15.690 align:middle line:84%
+And so we get this plot,
+which is very, very similar.
+
+00:37:15.690 --> 00:37:20.930 align:middle line:84%
+In principle, this
+estimator is more precise,
+
+00:37:20.930 --> 00:37:25.010 align:middle line:84%
+at least if our underlying
+Brownian motion model
+
+00:37:25.010 --> 00:37:29.170 align:middle line:84%
+or geometric Brownian
+motion model is true,
+
+00:37:29.170 --> 00:37:31.810 align:middle line:84%
+but it gives us
+different values.
+
+00:37:31.810 --> 00:37:36.770 align:middle line:84%
+And then the Garman-Klass
+model is here.
+
+00:37:36.770 --> 00:37:39.530 align:middle line:84%
+So what's useful just
+in this case study
+
+00:37:39.530 --> 00:37:43.930 align:middle line:84%
+is partly just seeing what the
+formulas are for the volatility
+
+00:37:43.930 --> 00:37:48.160 align:middle line:84%
+estimates and then being
+able to compare those.
+
+00:37:48.160 --> 00:37:53.240 align:middle line:84%
+And then finally,
+this Yang-Zhang model
+
+00:37:53.240 --> 00:37:56.320 align:middle line:90%
+is an extension of Garman-Klass.
+
+00:37:56.320 --> 00:38:01.280 align:middle line:84%
+And as it says here, this is
+currently the preferred version
+
+00:38:01.280 --> 00:38:02.740 align:middle line:90%
+of volatility estimates.
+
+00:38:02.740 --> 00:38:09.960 align:middle line:84%
+Now, in looking at these
+different volatility estimates,
+
+00:38:09.960 --> 00:38:16.980 align:middle line:84%
+we can create a panel series
+of all the volatility measures.
+
+00:38:16.980 --> 00:38:20.320 align:middle line:84%
+This shows, not
+surprisingly, there's
+
+00:38:20.320 --> 00:38:24.040 align:middle line:84%
+peaks at the same times
+with all of these.
+
+00:38:24.040 --> 00:38:25.840 align:middle line:84%
+What's more
+interesting is to look
+
+00:38:25.840 --> 00:38:30.000 align:middle line:90%
+how they move simultaneously.
+
+00:38:30.000 --> 00:38:33.200 align:middle line:84%
+And if you look
+at too much data,
+
+00:38:33.200 --> 00:38:35.980 align:middle line:84%
+it's hard to see
+exactly what's going on.
+
+00:38:35.980 --> 00:38:38.240 align:middle line:84%
+So there's a graph
+here of looking
+
+00:38:38.240 --> 00:38:43.380 align:middle line:84%
+at just the last year,
+almost two years of data,
+
+00:38:43.380 --> 00:38:46.950 align:middle line:84%
+and seeing how these different
+volatility estimates vary.
+
+00:38:46.950 --> 00:38:54.270 align:middle line:84%
+So what this highlights is how
+a choice of volatility measure
+
+00:38:54.270 --> 00:38:55.790 align:middle line:90%
+matters.
+
+00:38:55.790 --> 00:38:59.190 align:middle line:84%
+There can be significant
+differences between them.
+
+00:38:59.190 --> 00:39:09.750 align:middle line:84%
+And what would you anticipate is
+a good property of a volatility
+
+00:39:09.750 --> 00:39:10.456 align:middle line:90%
+estimator?
+
+00:39:10.456 --> 00:39:13.950 align:middle line:90%
+
+
+00:39:13.950 --> 00:39:19.910 align:middle line:84%
+That's a very general
+question, but intuitively,
+
+00:39:19.910 --> 00:39:22.680 align:middle line:84%
+what would make one estimator
+better than another?
+
+00:39:22.680 --> 00:39:30.990 align:middle line:90%
+
+
+00:39:30.990 --> 00:39:35.510 align:middle line:84%
+And there's no right or
+wrong answer to this,
+
+00:39:35.510 --> 00:39:40.510 align:middle line:84%
+but I think it's useful to
+think about what you would like
+
+00:39:40.510 --> 00:39:47.210 align:middle line:84%
+to have in an estimator, and
+whether these estimators might
+
+00:39:47.210 --> 00:39:48.880 align:middle line:90%
+be consistent with that or not.
+
+00:39:48.880 --> 00:39:56.330 align:middle line:90%
+
+
+00:39:56.330 --> 00:39:57.270 align:middle line:90%
+Any thoughts?
+
+00:39:57.270 --> 00:40:03.090 align:middle line:90%
+
+
+00:40:03.090 --> 00:40:07.610 align:middle line:84%
+Well, one of the
+problems, I guess
+
+00:40:07.610 --> 00:40:12.370 align:middle line:84%
+I'll call it a problem, with
+the close to close estimator,
+
+00:40:12.370 --> 00:40:16.250 align:middle line:84%
+is that if you have a rolling
+window of close to close
+
+00:40:16.250 --> 00:40:22.050 align:middle line:84%
+variance estimates, then if
+you have a spike in returns,
+
+00:40:22.050 --> 00:40:24.610 align:middle line:84%
+positive or negative,
+that spike is
+
+00:40:24.610 --> 00:40:29.170 align:middle line:84%
+going to remain in that
+window until it falls off.
+
+00:40:29.170 --> 00:40:36.210 align:middle line:84%
+And so there can be elevated
+volatilities due in the close
+
+00:40:36.210 --> 00:40:40.680 align:middle line:84%
+to close series,
+volatility series.
+
+00:40:40.680 --> 00:40:47.580 align:middle line:84%
+That may not be as persistent
+with the other estimators.
+
+00:40:47.580 --> 00:40:50.660 align:middle line:84%
+So when there are
+spikes in volatility,
+
+00:40:50.660 --> 00:40:53.800 align:middle line:84%
+often those spikes
+occur when there's
+
+00:40:53.800 --> 00:41:00.560 align:middle line:84%
+some great uncertainty in the
+market that gets resolved.
+
+00:41:00.560 --> 00:41:06.280 align:middle line:84%
+And the volatility often drops
+a fair amount after that.
+
+00:41:06.280 --> 00:41:11.520 align:middle line:84%
+And so I would think that
+those volatility estimates
+
+00:41:11.520 --> 00:41:17.520 align:middle line:84%
+that basically drop faster
+following the spikes
+
+00:41:17.520 --> 00:41:20.400 align:middle line:90%
+could be better.
+
+00:41:20.400 --> 00:41:24.960 align:middle line:84%
+And certainly if we're trying
+to use these volatility
+
+00:41:24.960 --> 00:41:30.600 align:middle line:84%
+estimates to predict
+future realized volatility,
+
+00:41:30.600 --> 00:41:34.800 align:middle line:90%
+that property could be useful.
+
+00:41:34.800 --> 00:41:40.500 align:middle line:84%
+Now, what's interesting in
+section two of this case study
+
+00:41:40.500 --> 00:41:44.900 align:middle line:84%
+is to just consider some
+really, really basic time series
+
+00:41:44.900 --> 00:41:49.480 align:middle line:84%
+modeling of the different
+volatility measures.
+
+00:41:49.480 --> 00:41:54.220 align:middle line:84%
+So what we are modeling is
+different volatility measures
+
+00:41:54.220 --> 00:41:58.980 align:middle line:84%
+over a 21 day period that's
+rolling through our time series.
+
+00:41:58.980 --> 00:42:05.100 align:middle line:84%
+And so one of the most
+basic forecasting models
+
+00:42:05.100 --> 00:42:08.700 align:middle line:84%
+there is is a model
+called the naive model.
+
+00:42:08.700 --> 00:42:19.860 align:middle line:84%
+And with a naive model,
+we have a time series yt.
+
+00:42:19.860 --> 00:42:30.500 align:middle line:84%
+And we basically have that y
+hat t is equal to yt minus 1.
+
+00:42:30.500 --> 00:42:38.570 align:middle line:84%
+And if we think of yt is equal
+to y hat t plus an error term,
+
+00:42:38.570 --> 00:42:46.930 align:middle line:84%
+then our errors are equal to
+yt minus y hat t, which is
+
+00:42:46.930 --> 00:42:50.490 align:middle line:90%
+equal to yt minus yt minus 1.
+
+00:42:50.490 --> 00:42:55.290 align:middle line:84%
+And this specification
+corresponds to a random walk
+
+00:42:55.290 --> 00:42:56.690 align:middle line:90%
+model.
+
+00:42:56.690 --> 00:43:00.530 align:middle line:84%
+So there's basically a
+random walk model for yt.
+
+00:43:00.530 --> 00:43:07.090 align:middle line:90%
+
+
+00:43:07.090 --> 00:43:11.290 align:middle line:84%
+And the random walk
+model is consistent
+
+00:43:11.290 --> 00:43:14.450 align:middle line:84%
+with efficient
+markets where our best
+
+00:43:14.450 --> 00:43:19.970 align:middle line:84%
+estimate of what's going to
+happen is where things are now.
+
+00:43:19.970 --> 00:43:28.630 align:middle line:84%
+So this naive model basically
+has an autocorrelation function,
+
+00:43:28.630 --> 00:43:31.370 align:middle line:90%
+which has a very high--
+
+00:43:31.370 --> 00:43:36.390 align:middle line:84%
+or our data has a high
+first order autocorrelation.
+
+00:43:36.390 --> 00:43:40.950 align:middle line:84%
+And if we calculate
+first differences, which
+
+00:43:40.950 --> 00:43:43.590 align:middle line:84%
+are the residuals
+from this model,
+
+00:43:43.590 --> 00:43:51.070 align:middle line:84%
+then we get this residual
+diagnostic information, the time
+
+00:43:51.070 --> 00:43:55.950 align:middle line:84%
+series of residuals, the
+autocorrelation function
+
+00:43:55.950 --> 00:44:02.310 align:middle line:84%
+of the residuals, and the
+histogram of residuals.
+
+00:44:02.310 --> 00:44:06.190 align:middle line:84%
+Now, would you say
+that these residuals
+
+00:44:06.190 --> 00:44:13.040 align:middle line:84%
+are consistent with white noise
+that may be Gaussian or normal?
+
+00:44:13.040 --> 00:44:18.070 align:middle line:90%
+
+
+00:44:18.070 --> 00:44:21.010 align:middle line:84%
+I see some going mm-hmm
+and others going hmm.
+
+00:44:21.010 --> 00:44:24.110 align:middle line:90%
+
+
+00:44:24.110 --> 00:44:28.470 align:middle line:84%
+Well, one thing that's important
+is that the autocorrelation
+
+00:44:28.470 --> 00:44:34.660 align:middle line:84%
+function of residuals,
+if the residuals are
+
+00:44:34.660 --> 00:44:36.380 align:middle line:84%
+consistent with
+white noise, there
+
+00:44:36.380 --> 00:44:40.060 align:middle line:84%
+should be no significant
+autocorrelation at any lag.
+
+00:44:40.060 --> 00:44:43.540 align:middle line:84%
+And so there are some
+spikes of autocorrelation
+
+00:44:43.540 --> 00:44:46.100 align:middle line:84%
+that break beyond
+the critical levels.
+
+00:44:46.100 --> 00:44:51.140 align:middle line:84%
+And so those are suggesting
+that this is not white noise.
+
+00:44:51.140 --> 00:44:56.740 align:middle line:84%
+And if we look at the
+distribution of the residuals,
+
+00:44:56.740 --> 00:45:00.700 align:middle line:84%
+they're unimodal, but they
+certainly aren't well described
+
+00:45:00.700 --> 00:45:02.246 align:middle line:90%
+by a normal distribution.
+
+00:45:02.246 --> 00:45:06.140 align:middle line:90%
+
+
+00:45:06.140 --> 00:45:11.220 align:middle line:90%
+So let's see.
+
+00:45:11.220 --> 00:45:17.820 align:middle line:84%
+So we can plot forecasts
+of this naive method.
+
+00:45:17.820 --> 00:45:21.040 align:middle line:90%
+And then let's see.
+
+00:45:21.040 --> 00:45:27.700 align:middle line:84%
+We can also fit an ARIMA
+model to this close
+
+00:45:27.700 --> 00:45:30.730 align:middle line:90%
+to close volatility series.
+
+00:45:30.730 --> 00:45:35.650 align:middle line:84%
+And with the ARIMA
+model, actually there's
+
+00:45:35.650 --> 00:45:40.776 align:middle line:90%
+this package in R called FPP2.
+
+00:45:40.776 --> 00:45:45.570 align:middle line:90%
+
+
+00:45:45.570 --> 00:45:51.290 align:middle line:84%
+And this was created by the
+authors of a book, Forecasting
+
+00:45:51.290 --> 00:45:56.090 align:middle line:84%
+Principles In Practice, that's
+in the references to this.
+
+00:45:56.090 --> 00:46:01.890 align:middle line:84%
+They have an automated
+ARIMA modeling function,
+
+00:46:01.890 --> 00:46:04.370 align:middle line:84%
+which will take an
+input, a time series,
+
+00:46:04.370 --> 00:46:11.490 align:middle line:84%
+as output, what is judged to
+be a decent autoregressive
+
+00:46:11.490 --> 00:46:13.770 align:middle line:90%
+integrated moving average model.
+
+00:46:13.770 --> 00:46:28.022 align:middle line:84%
+And so this ARIMA 310
+corresponds to ARIMA p equals 3,
+
+00:46:28.022 --> 00:46:34.990 align:middle line:84%
+d equals 1, and
+q equals 0, where
+
+00:46:34.990 --> 00:46:37.510 align:middle line:84%
+p is the order of
+the autoregression.
+
+00:46:37.510 --> 00:46:38.990 align:middle line:90%
+d is the order of differencing.
+
+00:46:38.990 --> 00:46:39.950 align:middle line:90%
+Yes?
+
+00:46:39.950 --> 00:46:43.550 align:middle line:84%
+AUDIENCE: How does
+it [INAUDIBLE]?
+
+00:46:43.550 --> 00:46:47.230 align:middle line:84%
+PETER KEMPTHORNE: Yes,
+it uses a criterion
+
+00:46:47.230 --> 00:46:52.550 align:middle line:84%
+that's called the corrected
+Akaike Information Criterion.
+
+00:46:52.550 --> 00:47:01.870 align:middle line:84%
+And so there's this AICC, which
+is equal to the corrected AIC.
+
+00:47:01.870 --> 00:47:06.350 align:middle line:84%
+And the corrected AIC
+is due to the fact
+
+00:47:06.350 --> 00:47:12.430 align:middle line:84%
+that with shorter series,
+there's a bias in the AIC
+
+00:47:12.430 --> 00:47:14.330 align:middle line:90%
+that is systematic.
+
+00:47:14.330 --> 00:47:18.030 align:middle line:84%
+And so this correct
+for that bias.
+
+00:47:18.030 --> 00:47:24.110 align:middle line:84%
+Now, when we do this with
+any fitted model, what's
+
+00:47:24.110 --> 00:47:29.980 align:middle line:84%
+really important to check is
+how our estimated coefficients
+
+00:47:29.980 --> 00:47:33.340 align:middle line:84%
+compare with their
+standard errors.
+
+00:47:33.340 --> 00:47:38.220 align:middle line:84%
+When the signal estimate to
+noise standard error ratio
+
+00:47:38.220 --> 00:47:41.380 align:middle line:84%
+is bigger than 2, we
+have some confidence
+
+00:47:41.380 --> 00:47:44.620 align:middle line:84%
+that that's an important
+factor in the model.
+
+00:47:44.620 --> 00:47:52.340 align:middle line:84%
+And in this case, the AR3 has a
+signal to noise ratio of almost
+
+00:47:52.340 --> 00:47:58.820 align:middle line:84%
+3, and the AR2 has a
+ratio that's 1 and 1/2.
+
+00:47:58.820 --> 00:48:06.340 align:middle line:84%
+Now, if we go
+through, let's see,
+
+00:48:06.340 --> 00:48:09.260 align:middle line:84%
+the second section
+does the same analysis
+
+00:48:09.260 --> 00:48:14.300 align:middle line:84%
+of the Yang-Zhang
+volatility estimate.
+
+00:48:14.300 --> 00:48:28.640 align:middle line:84%
+And I guess importantly here,
+we have an ARIMA model now
+
+00:48:28.640 --> 00:48:37.680 align:middle line:84%
+for this Yang-Zhang model,
+which is an ARIMA 111.
+
+00:48:37.680 --> 00:48:44.160 align:middle line:84%
+And the coefficient
+estimates are many multiples
+
+00:48:44.160 --> 00:48:45.380 align:middle line:90%
+of the standard error.
+
+00:48:45.380 --> 00:48:47.920 align:middle line:90%
+So these are highly significant.
+
+00:48:47.920 --> 00:48:53.080 align:middle line:84%
+And this is our
+residual analysis check,
+
+00:48:53.080 --> 00:48:55.540 align:middle line:84%
+which suggests that,
+for the most part,
+
+00:48:55.540 --> 00:48:58.660 align:middle line:84%
+the residuals are
+consistent with white noise.
+
+00:48:58.660 --> 00:49:00.620 align:middle line:84%
+The autocorrelations
+tend to be close to 0.
+
+00:49:00.620 --> 00:49:05.360 align:middle line:84%
+However, there's this
+large spike at 21.
+
+00:49:05.360 --> 00:49:06.580 align:middle line:90%
+And here the residuals.
+
+00:49:06.580 --> 00:49:10.273 align:middle line:84%
+Now, why do you think
+there's a large spike at 21?
+
+00:49:10.273 --> 00:49:15.560 align:middle line:90%
+
+
+00:49:15.560 --> 00:49:20.440 align:middle line:84%
+Well, we're computing
+rolling statistics.
+
+00:49:20.440 --> 00:49:25.010 align:middle line:84%
+And so the window
+is of length 21.
+
+00:49:25.010 --> 00:49:30.310 align:middle line:84%
+So this corresponds to
+cases entering and exiting
+
+00:49:30.310 --> 00:49:31.790 align:middle line:90%
+the windows.
+
+00:49:31.790 --> 00:49:36.470 align:middle line:84%
+And so interestingly,
+we can accommodate that
+
+00:49:36.470 --> 00:49:39.870 align:middle line:84%
+by fitting a
+seasonal ARIMA model.
+
+00:49:39.870 --> 00:49:43.590 align:middle line:84%
+And so with the
+seasonal ARIMA model
+
+00:49:43.590 --> 00:49:49.550 align:middle line:84%
+I'll jump to the conclusion
+here at the very end,
+
+00:49:49.550 --> 00:49:58.990 align:middle line:84%
+which is for the Yang-Zhang
+volatility estimator.
+
+00:49:58.990 --> 00:50:03.670 align:middle line:84%
+This is its simple
+autocorrelation function
+
+00:50:03.670 --> 00:50:05.710 align:middle line:90%
+before the model.
+
+00:50:05.710 --> 00:50:11.110 align:middle line:84%
+And then when we fit
+the seasonal ARIMA model
+
+00:50:11.110 --> 00:50:17.550 align:middle line:84%
+automatically, it gives
+us a 213 and a 201.
+
+00:50:17.550 --> 00:50:19.750 align:middle line:90%
+And let's see.
+
+00:50:19.750 --> 00:50:29.730 align:middle line:84%
+When we introduced you to time
+series models before, let's see,
+
+00:50:29.730 --> 00:50:42.930 align:middle line:84%
+if we have an ARIMA
+model, which is p, d, q,
+
+00:50:42.930 --> 00:50:51.650 align:middle line:84%
+we basically have 1 minus phi
+1 b minus phi 2 b squared minus
+
+00:50:51.650 --> 00:51:02.890 align:middle line:84%
+phi p b to the p power times yt
+turns out to be equal to 1 minus
+
+00:51:02.890 --> 00:51:12.450 align:middle line:84%
+theta 1b minus theta 2b
+squared minus theta, or sorry,
+
+00:51:12.450 --> 00:51:23.160 align:middle line:84%
+1 plus here, plus theta qb to
+the q power times our error
+
+00:51:23.160 --> 00:51:23.820 align:middle line:90%
+term.
+
+00:51:23.820 --> 00:51:28.280 align:middle line:84%
+So we have this kind of
+mathematical equation
+
+00:51:28.280 --> 00:51:37.160 align:middle line:84%
+for an ARIMA model, where
+we assume that the epsilon t
+
+00:51:37.160 --> 00:51:44.920 align:middle line:84%
+series is white noise, which
+means that its expectation is
+
+00:51:44.920 --> 00:51:53.040 align:middle line:84%
+always 0 and the
+variances are constant,
+
+00:51:53.040 --> 00:51:59.720 align:middle line:84%
+and the correlation between any
+different epsilons is equal to 0
+
+00:51:59.720 --> 00:52:04.280 align:middle line:90%
+if t is not equal to t prime.
+
+00:52:04.280 --> 00:52:08.000 align:middle line:84%
+The power of autoregressive
+integrated moving average models
+
+00:52:08.000 --> 00:52:14.640 align:middle line:84%
+is that these autoregressive
+terms, as well as moving average
+
+00:52:14.640 --> 00:52:19.280 align:middle line:84%
+terms, can account for
+all of the correlations,
+
+00:52:19.280 --> 00:52:22.020 align:middle line:84%
+autocorrelations in
+the original series.
+
+00:52:22.020 --> 00:52:25.740 align:middle line:84%
+And our residuals,
+which are estimates
+
+00:52:25.740 --> 00:52:30.100 align:middle line:84%
+of this error sequence, should
+be consistent with white noise.
+
+00:52:30.100 --> 00:52:33.420 align:middle line:84%
+Now, what ends up
+happening with--
+
+00:52:33.420 --> 00:52:39.110 align:middle line:90%
+
+
+00:52:39.110 --> 00:52:42.660 align:middle line:84%
+actually, I should
+maybe put here yt prime,
+
+00:52:42.660 --> 00:52:49.060 align:middle line:84%
+where y prime is maybe equal
+to 1 minus b to the power d yt.
+
+00:52:49.060 --> 00:52:54.980 align:middle line:84%
+So if we have an
+ordered d model,
+
+00:52:54.980 --> 00:52:57.020 align:middle line:84%
+we take the d-th
+order difference
+
+00:52:57.020 --> 00:53:00.020 align:middle line:90%
+and put that into an ARMA model.
+
+00:53:00.020 --> 00:53:07.020 align:middle line:84%
+And if we have a
+seasonal ARIMA model,
+
+00:53:07.020 --> 00:53:15.650 align:middle line:84%
+we actually add a capital
+P, capital D, capital Q.
+
+00:53:15.650 --> 00:53:19.950 align:middle line:84%
+And here we have the
+frequency of the data.
+
+00:53:19.950 --> 00:53:26.850 align:middle line:84%
+And in this example, I
+considered a 21 period frequency
+
+00:53:26.850 --> 00:53:31.730 align:middle line:84%
+just to correspond
+to the window size.
+
+00:53:31.730 --> 00:53:42.200 align:middle line:84%
+And what this model does is
+it has another polynomial of--
+
+00:53:42.200 --> 00:53:55.450 align:middle line:90%
+
+
+00:53:55.450 --> 00:53:59.810 align:middle line:90%
+so this is b to the 2 times 21.
+
+00:53:59.810 --> 00:54:07.130 align:middle line:84%
+So we basically end up having
+backshift operator polynomials
+
+00:54:07.130 --> 00:54:15.270 align:middle line:84%
+that work with the seasonal
+frequencies of the time series.
+
+00:54:15.270 --> 00:54:23.180 align:middle line:90%
+
+
+00:54:23.180 --> 00:54:32.520 align:middle line:84%
+So this is a polynomial of order
+q of order p in B to the 12th--
+
+00:54:32.520 --> 00:54:35.640 align:middle line:90%
+sorry, B to the 21.
+
+00:54:35.640 --> 00:54:40.100 align:middle line:84%
+And then we would also
+multiply this on this side,
+
+00:54:40.100 --> 00:54:48.600 align:middle line:84%
+perhaps, by a 1 minus
+capital theta 1 B to the 21,
+
+00:54:48.600 --> 00:54:55.440 align:middle line:84%
+or plus, plus theta 2
+B to the 21 squared.
+
+00:54:55.440 --> 00:54:59.280 align:middle line:90%
+So times 2.
+
+00:54:59.280 --> 00:55:04.840 align:middle line:84%
+And so this kind of
+notation leads us
+
+00:55:04.840 --> 00:55:07.420 align:middle line:90%
+to these coefficient estimates.
+
+00:55:07.420 --> 00:55:11.900 align:middle line:84%
+So there's the simple
+order autoregressive
+
+00:55:11.900 --> 00:55:13.470 align:middle line:90%
+terms and moving average terms.
+
+00:55:13.470 --> 00:55:16.180 align:middle line:90%
+
+
+00:55:16.180 --> 00:55:20.660 align:middle line:84%
+Order two, autoregressive,
+order three, moving average.
+
+00:55:20.660 --> 00:55:24.220 align:middle line:84%
+But then for the seasonal
+autoregressive terms,
+
+00:55:24.220 --> 00:55:27.680 align:middle line:90%
+we have these terms here.
+
+00:55:27.680 --> 00:55:29.560 align:middle line:84%
+And for the seasonal
+moving average,
+
+00:55:29.560 --> 00:55:32.600 align:middle line:90%
+we have the last term here.
+
+00:55:32.600 --> 00:55:37.100 align:middle line:84%
+And what's generally
+important in fitting models is
+
+00:55:37.100 --> 00:55:41.960 align:middle line:84%
+when you consider the last
+terms to enter into a model,
+
+00:55:41.960 --> 00:55:48.000 align:middle line:84%
+such as in this case, the
+seasonal moving average term,
+
+00:55:48.000 --> 00:55:52.220 align:middle line:84%
+its estimate is many multiples
+of its standard error.
+
+00:55:52.220 --> 00:55:55.810 align:middle line:84%
+So that's a very important
+factor in the model.
+
+00:55:55.810 --> 00:56:05.820 align:middle line:90%
+
+
+00:56:05.820 --> 00:56:12.610 align:middle line:84%
+As an anecdote,
+let me just say--
+
+00:56:12.610 --> 00:56:13.490 align:middle line:90%
+let's see.
+
+00:56:13.490 --> 00:56:23.195 align:middle line:84%
+If we take a series yt and we
+look at a seasonal difference
+
+00:56:23.195 --> 00:56:30.410 align:middle line:84%
+operator and a first
+order difference operator,
+
+00:56:30.410 --> 00:56:33.930 align:middle line:84%
+this turns out to be equal
+to the first difference
+
+00:56:33.930 --> 00:56:40.090 align:middle line:84%
+operator multiplying the
+seasonal difference operator.
+
+00:56:40.090 --> 00:56:47.930 align:middle line:84%
+And it equals basically 1
+minus B plus B to the 21.
+
+00:56:47.930 --> 00:56:55.130 align:middle line:84%
+Sorry, minus B to the 21
+plus B to the 22 times yt.
+
+00:56:55.130 --> 00:57:02.530 align:middle line:84%
+And so with seasonal differences
+in autoregressive moving
+
+00:57:02.530 --> 00:57:07.430 align:middle line:84%
+averages, whether we
+take first differences
+
+00:57:07.430 --> 00:57:11.310 align:middle line:84%
+non-seasonally and then
+seasonal differences
+
+00:57:11.310 --> 00:57:13.330 align:middle line:84%
+subsequently, or
+reverse the order,
+
+00:57:13.330 --> 00:57:16.160 align:middle line:84%
+we end up getting the same
+transformation of the data.
+
+00:57:16.160 --> 00:57:19.350 align:middle line:90%
+
+
+00:57:19.350 --> 00:57:21.450 align:middle line:84%
+Well, actually with
+economic time series,
+
+00:57:21.450 --> 00:57:28.910 align:middle line:84%
+where we have a seasonal
+frequency of, say, months, then
+
+00:57:28.910 --> 00:57:31.310 align:middle line:84%
+basically the seasonal
+differences correspond
+
+00:57:31.310 --> 00:57:37.830 align:middle line:84%
+to year over year changes,
+whereas the simple differences
+
+00:57:37.830 --> 00:57:41.710 align:middle line:84%
+are just period by
+period differences.
+
+00:57:41.710 --> 00:57:45.950 align:middle line:84%
+Anyway, with this final
+example here, this
+
+00:57:45.950 --> 00:57:51.230 align:middle line:84%
+is how the residual
+analysis looks.
+
+00:57:51.230 --> 00:57:55.750 align:middle line:84%
+And it actually
+does yield residuals
+
+00:57:55.750 --> 00:57:58.030 align:middle line:84%
+that do look a lot
+like white noise,
+
+00:57:58.030 --> 00:58:03.430 align:middle line:84%
+although there is still
+this persistent spike just
+
+00:58:03.430 --> 00:58:06.800 align:middle line:84%
+beyond the window width
+for the computation.
+
+00:58:06.800 --> 00:58:10.580 align:middle line:84%
+But the distribution
+of the residuals
+
+00:58:10.580 --> 00:58:14.280 align:middle line:84%
+looks more Gaussian,
+perhaps, than, well,
+
+00:58:14.280 --> 00:58:17.540 align:middle line:90%
+much more than the cases before.
+
+00:58:17.540 --> 00:58:27.900 align:middle line:84%
+So with that, in analyzing
+different time series models,
+
+00:58:27.900 --> 00:58:31.100 align:middle line:84%
+there are these
+accuracy statistics
+
+00:58:31.100 --> 00:58:35.380 align:middle line:84%
+that can be computed for
+any forecasting model.
+
+00:58:35.380 --> 00:58:39.420 align:middle line:84%
+And so you're probably familiar
+with root mean squared error
+
+00:58:39.420 --> 00:58:42.220 align:middle line:90%
+or mean squared error.
+
+00:58:42.220 --> 00:58:47.380 align:middle line:84%
+But we also have the MAPE, which
+is the Mean Absolute Percentage
+
+00:58:47.380 --> 00:58:48.540 align:middle line:90%
+Error.
+
+00:58:48.540 --> 00:58:53.700 align:middle line:84%
+And I actually find that
+pretty useful for judging
+
+00:58:53.700 --> 00:58:56.220 align:middle line:90%
+how effective the models are.
+
+00:58:56.220 --> 00:59:01.540 align:middle line:84%
+And what's really nice
+about the FPP2 package
+
+00:59:01.540 --> 00:59:06.080 align:middle line:84%
+is that one can just
+ask it to plot the time
+
+00:59:06.080 --> 00:59:10.960 align:middle line:84%
+series and the forecast, and
+it generates a point forecast
+
+00:59:10.960 --> 00:59:13.800 align:middle line:84%
+in a solid blue line
+and prediction intervals
+
+00:59:13.800 --> 00:59:16.960 align:middle line:84%
+about that forecast,
+which assume
+
+00:59:16.960 --> 00:59:20.480 align:middle line:84%
+Gaussian or normal distributions
+for the error terms.
+
+00:59:20.480 --> 00:59:25.400 align:middle line:84%
+But one can see how those
+evolve into the future.
+
+00:59:25.400 --> 00:59:29.240 align:middle line:84%
+And it's really consistent
+for prediction intervals
+
+00:59:29.240 --> 00:59:32.560 align:middle line:84%
+to get wider the
+further out we forecast.
+
+00:59:32.560 --> 00:59:33.780 align:middle line:90%
+And that's happening here.
+
+00:59:33.780 --> 00:59:38.960 align:middle line:84%
+What's rather interesting
+about this forecast
+
+00:59:38.960 --> 00:59:44.720 align:middle line:84%
+using the Yang-Zhang measure and
+forecasting that into the future
+
+00:59:44.720 --> 00:59:49.380 align:middle line:84%
+is that it actually, after
+being at a lower level,
+
+00:59:49.380 --> 00:59:51.880 align:middle line:84%
+is predicting that it
+might go back to more
+
+00:59:51.880 --> 00:59:54.560 align:middle line:90%
+of a mean level of volatility.
+
+00:59:54.560 --> 00:59:56.810 align:middle line:84%
+So that's an
+interesting property.
+
+00:59:56.810 --> 01:00:00.360 align:middle line:90%
+
+
+01:00:00.360 --> 01:00:05.150 align:middle line:84%
+Well, let's go back
+to the notes here.
+
+01:00:05.150 --> 01:00:08.230 align:middle line:90%
+And let's see.
+
+01:00:08.230 --> 01:00:14.190 align:middle line:84%
+There are extensions of
+geometric Brownian motion
+
+01:00:14.190 --> 01:00:18.870 align:middle line:90%
+that we have seen before.
+
+01:00:18.870 --> 01:00:23.150 align:middle line:84%
+One of them is a Poisson
+jump diffusion model,
+
+01:00:23.150 --> 01:00:26.630 align:middle line:84%
+where the stochastic
+differential equation
+
+01:00:26.630 --> 01:00:31.030 align:middle line:84%
+has the Brownian motion
+part as the first two terms,
+
+01:00:31.030 --> 01:00:36.550 align:middle line:84%
+but then has a jump
+process as a last term
+
+01:00:36.550 --> 01:00:43.490 align:middle line:84%
+where the jump process can be
+modeled as a Poisson process.
+
+01:00:43.490 --> 01:00:50.710 align:middle line:84%
+So a jump occurs
+at some rate that
+
+01:00:50.710 --> 01:00:53.310 align:middle line:90%
+defines the Poisson process.
+
+01:00:53.310 --> 01:00:56.270 align:middle line:90%
+And the rate is lambda.
+
+01:00:56.270 --> 01:01:01.200 align:middle line:84%
+And if an event in the
+Poisson process occurs,
+
+01:01:01.200 --> 01:01:07.140 align:middle line:84%
+then there's a jump
+in the stock, which
+
+01:01:07.140 --> 01:01:11.700 align:middle line:90%
+is given by this factor here.
+
+01:01:11.700 --> 01:01:19.210 align:middle line:84%
+So one can actually model data
+with this Poisson jump diffusion
+
+01:01:19.210 --> 01:01:19.710 align:middle line:90%
+model.
+
+01:01:19.710 --> 01:01:22.740 align:middle line:90%
+
+
+01:01:22.740 --> 01:01:29.820 align:middle line:84%
+I ended up working with David
+Pickard and Arshad Zakaria
+
+01:01:29.820 --> 01:01:34.540 align:middle line:84%
+on fitting this Poisson
+jump diffusion model.
+
+01:01:34.540 --> 01:01:39.860 align:middle line:84%
+And it was an interesting
+application in statistics
+
+01:01:39.860 --> 01:01:44.380 align:middle line:90%
+of using the EM algorithm.
+
+01:01:44.380 --> 01:01:49.540 align:middle line:84%
+Basically, the jumps are
+treated as latent or hidden
+
+01:01:49.540 --> 01:01:51.740 align:middle line:90%
+values in our data.
+
+01:01:51.740 --> 01:01:56.420 align:middle line:84%
+And those hidden
+values occur according
+
+01:01:56.420 --> 01:01:59.400 align:middle line:84%
+to Poisson probabilities,
+like the probability
+
+01:01:59.400 --> 01:02:03.320 align:middle line:84%
+of one jump or two
+jumps, can be computed
+
+01:02:03.320 --> 01:02:05.800 align:middle line:90%
+using the Poisson parameter.
+
+01:02:05.800 --> 01:02:09.440 align:middle line:84%
+And one can apply
+this EM algorithm
+
+01:02:09.440 --> 01:02:14.760 align:middle line:84%
+to obtain maximum likelihood
+estimates of all the parameters.
+
+01:02:14.760 --> 01:02:18.960 align:middle line:84%
+And in applying this,
+an interesting property
+
+01:02:18.960 --> 01:02:28.236 align:middle line:84%
+that occurred was that
+there were quite frequent--
+
+01:02:28.236 --> 01:02:33.720 align:middle line:84%
+or the rate of Poisson
+events was quite high,
+
+01:02:33.720 --> 01:02:37.120 align:middle line:90%
+like every couple of days.
+
+01:02:37.120 --> 01:02:42.840 align:middle line:84%
+And what the model was
+doing was capturing
+
+01:02:42.840 --> 01:02:46.800 align:middle line:84%
+heavier tailed distributions
+than a normal distribution.
+
+01:02:46.800 --> 01:02:51.940 align:middle line:84%
+So instead of a single
+normal model for the return,
+
+01:02:51.940 --> 01:02:56.190 align:middle line:84%
+one has a mixture of a normal
+with no jumps, a normal with one
+
+01:02:56.190 --> 01:03:00.430 align:middle line:84%
+jump, two jumps, weighted
+according to Poisson rates.
+
+01:03:00.430 --> 01:03:04.150 align:middle line:84%
+And so the implication
+of the model fitting
+
+01:03:04.150 --> 01:03:08.070 align:middle line:84%
+was that one didn't have
+rare events necessarily
+
+01:03:08.070 --> 01:03:17.070 align:middle line:84%
+that occurred, but there was
+evidence suggesting a jump
+
+01:03:17.070 --> 01:03:21.510 align:middle line:84%
+process that related
+to trying to capture
+
+01:03:21.510 --> 01:03:26.150 align:middle line:84%
+the excess variability of
+the stock price returns.
+
+01:03:26.150 --> 01:03:32.810 align:middle line:84%
+Now, that leads to another
+model extending Brownian motion.
+
+01:03:32.810 --> 01:03:39.350 align:middle line:84%
+And this is the Laplace
+distribution, where if instead
+
+01:03:39.350 --> 01:03:51.830 align:middle line:84%
+of observing a time series over
+equal increments, so between 0,
+
+01:03:51.830 --> 01:03:55.530 align:middle line:84%
+and one can think of just
+equal increments of time.
+
+01:03:55.530 --> 01:04:02.010 align:middle line:84%
+So t1, t2, and so forth
+up to tn, say, from time 0
+
+01:04:02.010 --> 01:04:09.810 align:middle line:84%
+to capital T. It may be that
+we observe the Brownian motion
+
+01:04:09.810 --> 01:04:17.210 align:middle line:84%
+process at random times
+t1, and then here's t2,
+
+01:04:17.210 --> 01:04:23.010 align:middle line:84%
+here's t3, where the
+increments of time
+
+01:04:23.010 --> 01:04:25.490 align:middle line:90%
+themselves are also random.
+
+01:04:25.490 --> 01:04:32.930 align:middle line:84%
+And it turns out that if the
+times at which we observe
+
+01:04:32.930 --> 01:04:41.410 align:middle line:84%
+have a time increment that's
+exponentially distributed,
+
+01:04:41.410 --> 01:04:45.650 align:middle line:84%
+then the increments
+of the Brownian motion
+
+01:04:45.650 --> 01:04:48.770 align:middle line:90%
+follow a Laplace distribution.
+
+01:04:48.770 --> 01:04:54.520 align:middle line:84%
+So heavier tailed distributions
+than normal, and this
+
+01:04:54.520 --> 01:05:01.608 align:middle line:84%
+is the density of a
+Laplace distribution,
+
+01:05:01.608 --> 01:05:08.560 align:middle line:84%
+it depends on the exponential
+of minus the magnitude
+
+01:05:08.560 --> 01:05:12.360 align:middle line:84%
+of the deviation of
+x from mu as opposed
+
+01:05:12.360 --> 01:05:15.560 align:middle line:90%
+to the square of that deviation.
+
+01:05:15.560 --> 01:05:17.320 align:middle line:84%
+A Gaussian or
+normal distribution
+
+01:05:17.320 --> 01:05:22.180 align:middle line:84%
+would have a power 2 there
+with the Laplace distribution
+
+01:05:22.180 --> 01:05:23.680 align:middle line:90%
+as the absolute.
+
+01:05:23.680 --> 01:05:28.200 align:middle line:84%
+And with this
+distribution, we have
+
+01:05:28.200 --> 01:05:34.080 align:middle line:84%
+a mean mu, which is at the
+center of the distribution.
+
+01:05:34.080 --> 01:05:38.480 align:middle line:84%
+The variance turns out to
+depend on this scale factor
+
+01:05:38.480 --> 01:05:43.720 align:middle line:90%
+B, which is twice B squared.
+
+01:05:43.720 --> 01:05:51.560 align:middle line:84%
+So let's just take a look at
+what Laplace models look like.
+
+01:05:51.560 --> 01:05:56.420 align:middle line:84%
+They basically are bilateral
+exponential distributions.
+
+01:05:56.420 --> 01:06:03.220 align:middle line:84%
+And if we consider fitting the
+daily returns on the S&P 500,
+
+01:06:03.220 --> 01:06:08.420 align:middle line:84%
+this is data for a
+four year period.
+
+01:06:08.420 --> 01:06:15.740 align:middle line:84%
+This peaked distribution with
+exponentially decaying density
+
+01:06:15.740 --> 01:06:18.980 align:middle line:84%
+is fitting the data
+really quite well.
+
+01:06:18.980 --> 01:06:24.180 align:middle line:84%
+And more importantly, much
+better really than a Gaussian
+
+01:06:24.180 --> 01:06:25.580 align:middle line:90%
+curve does.
+
+01:06:25.580 --> 01:06:31.760 align:middle line:84%
+So here, we have the fit of
+the Gaussian bell curve in red,
+
+01:06:31.760 --> 01:06:37.500 align:middle line:84%
+comparing it to the
+Laplace curve in blue.
+
+01:06:37.500 --> 01:06:42.580 align:middle line:84%
+And an interesting
+question is, how do we
+
+01:06:42.580 --> 01:06:48.450 align:middle line:84%
+judge whether one model or
+another is a good model?
+
+01:06:48.450 --> 01:06:58.130 align:middle line:84%
+And a useful tool is to
+construct a q-q plot, which
+
+01:06:58.130 --> 01:07:01.610 align:middle line:90%
+is a quantile-quantile plot.
+
+01:07:01.610 --> 01:07:08.930 align:middle line:84%
+So we consider points where
+the vertical value corresponds
+
+01:07:08.930 --> 01:07:16.090 align:middle line:84%
+to the magnitude of our data,
+and the horizontal coordinate
+
+01:07:16.090 --> 01:07:23.610 align:middle line:84%
+corresponds to the theoretical
+value for the smallest
+
+01:07:23.610 --> 01:07:28.010 align:middle line:84%
+from a sample of Laplace, the
+second smallest from a given
+
+01:07:28.010 --> 01:07:29.890 align:middle line:90%
+Laplace distribution.
+
+01:07:29.890 --> 01:07:35.050 align:middle line:84%
+And so we basically
+plot observed
+
+01:07:35.050 --> 01:07:39.290 align:middle line:84%
+quantiles versus theoretical
+quantiles for the fitted model.
+
+01:07:39.290 --> 01:07:45.290 align:middle line:84%
+So this fits quite close to a
+line, although it's not perfect.
+
+01:07:45.290 --> 01:07:47.840 align:middle line:84%
+At least if it were
+perfect, it would even
+
+01:07:47.840 --> 01:07:54.320 align:middle line:84%
+snake around the straight line
+where the sample quantiles equal
+
+01:07:54.320 --> 01:07:56.200 align:middle line:90%
+the theoretical quantiles.
+
+01:07:56.200 --> 01:08:03.360 align:middle line:84%
+If we do the same q-q plot for
+a Gaussian or normal model,
+
+01:08:03.360 --> 01:08:06.280 align:middle line:84%
+this is what our
+q-q plot looks like.
+
+01:08:06.280 --> 01:08:11.920 align:middle line:84%
+And so one can see that this
+second q-q plot is not fitting
+
+01:08:11.920 --> 01:08:15.640 align:middle line:90%
+the data very well at all.
+
+01:08:15.640 --> 01:08:24.760 align:middle line:84%
+So this would favor using the
+Laplace instead of the Gaussian
+
+01:08:24.760 --> 01:08:29.240 align:middle line:84%
+as a model for
+independent daily returns.
+
+01:08:29.240 --> 01:08:34.640 align:middle line:84%
+Now, the independence of
+our period by period returns
+
+01:08:34.640 --> 01:08:39.380 align:middle line:84%
+is one that may not be
+satisfied by the data.
+
+01:08:39.380 --> 01:08:44.859 align:middle line:84%
+And Robert Engle
+proposed looking
+
+01:08:44.859 --> 01:08:52.899 align:middle line:84%
+at time series of returns and
+considering the possibility
+
+01:08:52.899 --> 01:08:56.060 align:middle line:84%
+that the variability
+of these returns
+
+01:08:56.060 --> 01:09:00.899 align:middle line:84%
+given by the variability
+of the epsilon t terms,
+
+01:09:00.899 --> 01:09:08.740 align:middle line:84%
+that these, in fact, have time
+varying volatility sigma t,
+
+01:09:08.740 --> 01:09:17.420 align:middle line:84%
+where the sigma t squared
+evolves according to a moving
+
+01:09:17.420 --> 01:09:21.620 align:middle line:90%
+average of past squared errors.
+
+01:09:21.620 --> 01:09:27.220 align:middle line:84%
+So an autoregressive
+conditionally heteroskedastic
+
+01:09:27.220 --> 01:09:31.580 align:middle line:90%
+model is what he proposed.
+
+01:09:31.580 --> 01:09:37.620 align:middle line:84%
+And in looking at
+this model, it's
+
+01:09:37.620 --> 01:09:47.290 align:middle line:84%
+interesting to note that if
+one can re-express the ARCH
+
+01:09:47.290 --> 01:09:55.010 align:middle line:84%
+model in terms of this
+squared error term
+
+01:09:55.010 --> 01:10:01.290 align:middle line:84%
+and have this model in
+the second equation being
+
+01:10:01.290 --> 01:10:05.450 align:middle line:84%
+consistent with the first,
+and this second model
+
+01:10:05.450 --> 01:10:11.970 align:middle line:84%
+corresponds to there being
+an autoregressive model
+
+01:10:11.970 --> 01:10:15.250 align:middle line:84%
+consistent with the
+squared returns.
+
+01:10:15.250 --> 01:10:19.650 align:middle line:84%
+And so this Lagrange
+multiplier test
+
+01:10:19.650 --> 01:10:23.850 align:middle line:84%
+can fit the autoregressive model
+to these epsilon hat squareds
+
+01:10:23.850 --> 01:10:28.250 align:middle line:84%
+and test whether there is
+autoregressive structure or not.
+
+01:10:28.250 --> 01:10:32.490 align:middle line:84%
+And if we look at the
+autocorrelations of the S&P 500
+
+01:10:32.490 --> 01:10:41.390 align:middle line:84%
+returns squared, you can
+see that the first almost 10
+
+01:10:41.390 --> 01:10:45.870 align:middle line:84%
+autocorrelations are
+significantly different from 0
+
+01:10:45.870 --> 01:10:47.150 align:middle line:90%
+in magnitude.
+
+01:10:47.150 --> 01:10:52.190 align:middle line:84%
+So there is strong time
+dependence in the log returns.
+
+01:10:52.190 --> 01:10:56.490 align:middle line:84%
+And so how does
+one fit this model?
+
+01:10:56.490 --> 01:11:03.750 align:middle line:84%
+Well, the go to typically
+in statistical modeling
+
+01:11:03.750 --> 01:11:07.750 align:middle line:84%
+is to consider a
+likelihood approach
+
+01:11:07.750 --> 01:11:15.130 align:middle line:84%
+where we consider a density for
+our data specified by the model.
+
+01:11:15.130 --> 01:11:23.110 align:middle line:84%
+So if the error is epsilon
+t are independent Gaussian
+
+01:11:23.110 --> 01:11:26.110 align:middle line:84%
+distributions with
+different variances,
+
+01:11:26.110 --> 01:11:33.910 align:middle line:84%
+then this likelihood function
+defines the joint density
+
+01:11:33.910 --> 01:11:37.340 align:middle line:84%
+of our data given
+underlying parameters.
+
+01:11:37.340 --> 01:11:44.060 align:middle line:84%
+And what becomes tricky with
+this likelihood specification
+
+01:11:44.060 --> 01:11:49.540 align:middle line:84%
+is that there, in fact, are
+constraints on our parameters.
+
+01:11:49.540 --> 01:11:55.380 align:middle line:84%
+So with the ARCH model, we
+can't have a negative alpha,
+
+01:11:55.380 --> 01:11:59.420 align:middle line:84%
+because with the
+Gaussian squared epsilon,
+
+01:11:59.420 --> 01:12:05.100 align:middle line:84%
+that could be arbitrarily large
+negative, or epsilon could be--
+
+01:12:05.100 --> 01:12:06.600 align:middle line:90%
+sorry.
+
+01:12:06.600 --> 01:12:09.580 align:middle line:84%
+If the alphas were
+negative, then the epsilon
+
+01:12:09.580 --> 01:12:11.780 align:middle line:84%
+squared could be
+arbitrarily large positive
+
+01:12:11.780 --> 01:12:13.600 align:middle line:84%
+and we'd get a
+negative variance.
+
+01:12:13.600 --> 01:12:15.340 align:middle line:90%
+So we can't have that.
+
+01:12:15.340 --> 01:12:19.500 align:middle line:84%
+Also we have this property of
+the sum of the autoregressive
+
+01:12:19.500 --> 01:12:21.900 align:middle line:90%
+parameters is less than 1.
+
+01:12:21.900 --> 01:12:24.180 align:middle line:84%
+And this corresponds
+to the process
+
+01:12:24.180 --> 01:12:29.940 align:middle line:84%
+not being explosive
+in its movements.
+
+01:12:29.940 --> 01:12:32.820 align:middle line:90%
+And then let's see.
+
+01:12:32.820 --> 01:12:40.160 align:middle line:84%
+An extension of the ARCH
+models was done by Bollerslev.
+
+01:12:40.160 --> 01:12:46.920 align:middle line:84%
+And this basically adds
+to our ARCH model terms,
+
+01:12:46.920 --> 01:12:49.800 align:middle line:90%
+like an order p ARCH model.
+
+01:12:49.800 --> 01:12:57.560 align:middle line:84%
+It adds an order q set of terms
+on lags of the volatility.
+
+01:12:57.560 --> 01:13:03.400 align:middle line:84%
+And if we consider the special
+case of the GARCH 1, 1 model,
+
+01:13:03.400 --> 01:13:09.000 align:middle line:84%
+this is its form, which is
+very simple and parsimonious.
+
+01:13:09.000 --> 01:13:14.080 align:middle line:84%
+What's rather surprising is
+that the empirical specification
+
+01:13:14.080 --> 01:13:19.040 align:middle line:84%
+of these models is such
+that the GARCH 1, 1
+
+01:13:19.040 --> 01:13:22.520 align:middle line:84%
+model is often
+chosen or identified
+
+01:13:22.520 --> 01:13:26.320 align:middle line:90%
+as the best GARCH order case.
+
+01:13:26.320 --> 01:13:29.560 align:middle line:84%
+So we end up having
+a very simple model
+
+01:13:29.560 --> 01:13:34.370 align:middle line:84%
+with just a few parameters to
+characterize the volatility.
+
+01:13:34.370 --> 01:13:39.330 align:middle line:90%
+
+
+01:13:39.330 --> 01:13:43.510 align:middle line:84%
+These notes talk about how the
+GARCH model induces an ARMA
+
+01:13:43.510 --> 01:13:44.170 align:middle line:90%
+model.
+
+01:13:44.170 --> 01:13:46.510 align:middle line:84%
+So this is some
+time series results
+
+01:13:46.510 --> 01:13:48.390 align:middle line:90%
+that are gone through here.
+
+01:13:48.390 --> 01:13:54.990 align:middle line:84%
+And there's a long run
+variance of the GARCH model
+
+01:13:54.990 --> 01:13:57.970 align:middle line:90%
+that is given here.
+
+01:13:57.970 --> 01:14:02.830 align:middle line:84%
+And with a GARCH 1, 1
+model, there basically
+
+01:14:02.830 --> 01:14:13.550 align:middle line:84%
+is a long run volatility
+sigma star, which
+
+01:14:13.550 --> 01:14:15.240 align:middle line:90%
+has this particular formula.
+
+01:14:15.240 --> 01:14:24.230 align:middle line:90%
+
+
+01:14:24.230 --> 01:14:28.150 align:middle line:84%
+So one can find the long run
+variance of a GARCH model
+
+01:14:28.150 --> 01:14:30.630 align:middle line:90%
+with this formula.
+
+01:14:30.630 --> 01:14:34.490 align:middle line:84%
+This formula also leads
+to updates of volatility
+
+01:14:34.490 --> 01:14:38.110 align:middle line:84%
+being a multiple of
+the long run variance,
+
+01:14:38.110 --> 01:14:41.760 align:middle line:84%
+plus a deviation from
+that long run variance.
+
+01:14:41.760 --> 01:14:48.110 align:middle line:90%
+
+
+01:14:48.110 --> 01:14:52.130 align:middle line:84%
+So we have a maximum likelihood
+estimation for these models.
+
+01:14:52.130 --> 01:14:57.250 align:middle line:84%
+Now, I wanted to
+share with you a case
+
+01:14:57.250 --> 01:15:01.730 align:middle line:84%
+study using ARCH and GARCH
+models with foreign exchange
+
+01:15:01.730 --> 01:15:03.370 align:middle line:90%
+returns.
+
+01:15:03.370 --> 01:15:07.930 align:middle line:84%
+And so this note
+uses data collected
+
+01:15:07.930 --> 01:15:15.490 align:middle line:84%
+from the Federal Reserve
+on foreign exchange values.
+
+01:15:15.490 --> 01:15:19.810 align:middle line:84%
+Section 1.2 actually
+fits Brownian motion
+
+01:15:19.810 --> 01:15:21.990 align:middle line:90%
+using different time scales.
+
+01:15:21.990 --> 01:15:24.290 align:middle line:90%
+So not assuming time dependence.
+
+01:15:24.290 --> 01:15:29.880 align:middle line:84%
+It actually is interesting
+to think about different time
+
+01:15:29.880 --> 01:15:32.480 align:middle line:90%
+scales.
+
+01:15:32.480 --> 01:15:39.400 align:middle line:84%
+But if we go to
+section 1.3 and look
+
+01:15:39.400 --> 01:15:41.900 align:middle line:84%
+at time dependence
+in squared returns,
+
+01:15:41.900 --> 01:15:48.840 align:middle line:84%
+this is the dollar
+pound returns.
+
+01:15:48.840 --> 01:15:54.120 align:middle line:84%
+This shows the autocorrelation
+and partial autocorrelation
+
+01:15:54.120 --> 01:15:57.120 align:middle line:90%
+of the returns.
+
+01:15:57.120 --> 01:16:02.040 align:middle line:84%
+So there's strong
+partial autocorrelations
+
+01:16:02.040 --> 01:16:03.720 align:middle line:90%
+of the actual series.
+
+01:16:03.720 --> 01:16:07.680 align:middle line:84%
+And if we look at
+the squared returns,
+
+01:16:07.680 --> 01:16:12.780 align:middle line:84%
+the actual series has high
+autocorrelations over time.
+
+01:16:12.780 --> 01:16:17.720 align:middle line:84%
+But the partial autocorrelations
+have very high spikes
+
+01:16:17.720 --> 01:16:18.780 align:middle line:90%
+at low lags.
+
+01:16:18.780 --> 01:16:21.320 align:middle line:84%
+So this suggests an
+autoregressive model
+
+01:16:21.320 --> 01:16:23.680 align:middle line:90%
+in the squared returns.
+
+01:16:23.680 --> 01:16:29.630 align:middle line:84%
+And the note fits an
+ARCH 1 and ARCH 2.
+
+01:16:29.630 --> 01:16:34.070 align:middle line:84%
+So one lag, or sorry,
+one autoregressive
+
+01:16:34.070 --> 01:16:37.470 align:middle line:84%
+term, two autoregressive
+terms or 10,
+
+01:16:37.470 --> 01:16:40.470 align:middle line:90%
+and then fits the GARCH 1, 1.
+
+01:16:40.470 --> 01:16:44.630 align:middle line:84%
+And the results are
+highlighted here,
+
+01:16:44.630 --> 01:16:46.870 align:middle line:84%
+just showing you the different
+coefficient estimates
+
+01:16:46.870 --> 01:16:48.790 align:middle line:90%
+for these different models.
+
+01:16:48.790 --> 01:16:51.110 align:middle line:84%
+They're all
+statistically significant
+
+01:16:51.110 --> 01:16:53.670 align:middle line:90%
+in terms of the parameters.
+
+01:16:53.670 --> 01:16:56.030 align:middle line:84%
+What's of interest,
+though, is just
+
+01:16:56.030 --> 01:17:01.230 align:middle line:84%
+to look at the time series plot
+of the fitted volatilities using
+
+01:17:01.230 --> 01:17:03.330 align:middle line:90%
+ARCH of different orders.
+
+01:17:03.330 --> 01:17:06.990 align:middle line:90%
+So here's the ARCH 1 model.
+
+01:17:06.990 --> 01:17:10.710 align:middle line:90%
+Here's the ARCH 2 model.
+
+01:17:10.710 --> 01:17:15.490 align:middle line:84%
+A property of these ARCH models
+is that it never goes below 0.
+
+01:17:15.490 --> 01:17:17.830 align:middle line:90%
+There's a lower bound.
+
+01:17:17.830 --> 01:17:21.830 align:middle line:84%
+Here's the ARCH 10 model, which
+looks like it's maybe tracking
+
+01:17:21.830 --> 01:17:23.370 align:middle line:90%
+time varying volatility well.
+
+01:17:23.370 --> 01:17:30.650 align:middle line:84%
+And then finally, we can compare
+that with the GARCH 1, 1 model.
+
+01:17:30.650 --> 01:17:34.490 align:middle line:84%
+So instead of having 10
+autoregressive parameters
+
+01:17:34.490 --> 01:17:38.650 align:middle line:84%
+in ARCH, the
+generalized ARCH model
+
+01:17:38.650 --> 01:17:42.530 align:middle line:84%
+is capturing time varying
+volatility in an appealing
+
+01:17:42.530 --> 01:17:47.650 align:middle line:84%
+way, whether that's really
+valid or not is of interest.
+
+01:17:47.650 --> 01:17:50.770 align:middle line:84%
+But it certainly is an
+alternative to these arch models
+
+01:17:50.770 --> 01:17:52.480 align:middle line:90%
+that is quite powerful.
+
+01:17:52.480 --> 01:17:56.850 align:middle line:90%
+
+
+01:17:56.850 --> 01:18:01.490 align:middle line:84%
+Well, here's just a graph
+of all three together.
+
+01:18:01.490 --> 01:18:05.610 align:middle line:84%
+This note actually
+does a final section
+
+01:18:05.610 --> 01:18:11.570 align:middle line:84%
+of looking at what happens if
+our error distribution is not
+
+01:18:11.570 --> 01:18:15.396 align:middle line:84%
+Gaussian, but is
+a t distribution.
+
+01:18:15.396 --> 01:18:18.170 align:middle line:90%
+
+
+01:18:18.170 --> 01:18:21.170 align:middle line:84%
+There are packages,
+rugarch, which
+
+01:18:21.170 --> 01:18:27.960 align:middle line:84%
+allow us to specify parameters
+and fits using t models,
+
+01:18:27.960 --> 01:18:30.320 align:middle line:84%
+t distribution models
+for the errors.
+
+01:18:30.320 --> 01:18:37.200 align:middle line:84%
+And what's very
+curious is in judging
+
+01:18:37.200 --> 01:18:47.160 align:middle line:84%
+the histogram of
+standardized residuals,
+
+01:18:47.160 --> 01:18:51.680 align:middle line:84%
+the t distribution seems
+to do a decent job.
+
+01:18:51.680 --> 01:18:59.040 align:middle line:84%
+And so here's with Gaussian
+residuals, I guess.
+
+01:18:59.040 --> 01:19:06.000 align:middle line:84%
+And then here's the
+Gaussian residuals and q-q
+
+01:19:06.000 --> 01:19:10.280 align:middle line:84%
+plot associated with the
+standardized Gaussian
+
+01:19:10.280 --> 01:19:11.960 align:middle line:90%
+assumption.
+
+01:19:11.960 --> 01:19:18.400 align:middle line:84%
+Then finally, there's the q-q
+plot of standardized residuals
+
+01:19:18.400 --> 01:19:20.780 align:middle line:90%
+with a t distribution assumed.
+
+01:19:20.780 --> 01:19:25.540 align:middle line:84%
+So what's significant is just
+how the quantile-quantile plot
+
+01:19:25.540 --> 01:19:27.580 align:middle line:84%
+suggests that this
+model is really fitting
+
+01:19:27.580 --> 01:19:30.380 align:middle line:84%
+the data much, much better
+in terms of characterizing
+
+01:19:30.380 --> 01:19:31.900 align:middle line:90%
+the variation.
+
+01:19:31.900 --> 01:19:36.860 align:middle line:84%
+And the choice of
+which order model
+
+01:19:36.860 --> 01:19:45.900 align:middle line:84%
+to use for the
+degrees of freedom,
+
+01:19:45.900 --> 01:19:52.300 align:middle line:84%
+there's this negative
+log likelihood function
+
+01:19:52.300 --> 01:19:56.000 align:middle line:84%
+of models for different
+t distributions
+
+01:19:56.000 --> 01:19:59.300 align:middle line:84%
+as we vary the degrees
+of freedom for the t.
+
+01:19:59.300 --> 01:20:02.500 align:middle line:84%
+And the t distribution
+has a heavier tail
+
+01:20:02.500 --> 01:20:05.500 align:middle line:90%
+than a Gaussian distribution.
+
+01:20:05.500 --> 01:20:07.960 align:middle line:84%
+At least if the degrees
+of freedom is really high,
+
+01:20:07.960 --> 01:20:10.700 align:middle line:84%
+it's virtually
+equivalent to a Gaussian.
+
+01:20:10.700 --> 01:20:15.100 align:middle line:84%
+But this is suggesting
+that there's possibly a 9
+
+01:20:15.100 --> 01:20:18.020 align:middle line:90%
+degrees of freedom for that.
+
+01:20:18.020 --> 01:20:20.290 align:middle line:84%
+So that's a very
+interesting finding.
+
+01:20:20.290 --> 01:20:25.890 align:middle line:84%
+And it actually arises with
+some mathematical analysis
+
+01:20:25.890 --> 01:20:34.210 align:middle line:84%
+that t distributions are
+appropriate if we think
+
+01:20:34.210 --> 01:20:39.370 align:middle line:84%
+of spherical symmetry in
+the number of dimensions
+
+01:20:39.370 --> 01:20:42.610 align:middle line:90%
+equal to the degree of freedom.
+
+01:20:42.610 --> 01:20:48.250 align:middle line:84%
+And so if you imagine a
+joint distribution that
+
+01:20:48.250 --> 01:20:52.090 align:middle line:84%
+is spherically symmetric in
+really high dimensions, when you
+
+01:20:52.090 --> 01:20:55.590 align:middle line:84%
+project that down
+onto coordinate axes,
+
+01:20:55.590 --> 01:20:58.250 align:middle line:84%
+you end up getting a
+Gaussian distribution.
+
+01:20:58.250 --> 01:21:07.010 align:middle line:84%
+But if their symmetry is just
+of, say, 9 dimensions, then
+
+01:21:07.010 --> 01:21:09.090 align:middle line:84%
+you end up having
+a t distribution
+
+01:21:09.090 --> 01:21:11.610 align:middle line:90%
+for what those projections are.
+
+01:21:11.610 --> 01:21:18.630 align:middle line:84%
+So this suggests that
+in terms of time periods
+
+01:21:18.630 --> 01:21:25.890 align:middle line:84%
+over which the distribution
+of volatility is stable,
+
+01:21:25.890 --> 01:21:31.190 align:middle line:90%
+could be close to 9 dimensions.
+
+01:21:31.190 --> 01:21:35.870 align:middle line:84%
+So perhaps corresponding to
+9 periods of data, I believe.
+
+01:21:35.870 --> 01:21:36.370 align:middle line:90%
+All right.
+
+01:21:36.370 --> 01:21:37.412 align:middle line:90%
+Well, we'll finish there.
+
+01:21:37.412 --> 01:21:39.350 align:middle line:84%
+There's a lot of
+interesting material
+
+01:21:39.350 --> 01:21:42.710 align:middle line:84%
+for you to check
+out, if you like.
+
+01:21:42.710 --> 01:21:48.150 align:middle line:84%
+And I hope you can enjoy reading
+some of the articles of people
+
+01:21:48.150 --> 01:21:51.110 align:middle line:84%
+who've studied
+volatility and see what
+
+01:21:51.110 --> 01:21:53.770 align:middle line:90%
+their work has contributed.
+
+01:21:53.770 --> 01:21:56.550 align:middle line:84%
+And it's a really
+interesting area
+
+01:21:56.550 --> 01:22:01.750 align:middle line:84%
+for final papers,
+modeling volatility,
+
+01:22:01.750 --> 01:22:03.050 align:middle line:90%
+predicting volatility.
+
+01:22:03.050 --> 01:22:06.010 align:middle line:84%
+This is really scratching
+the surface of the topic.
+
+01:22:06.010 --> 01:22:09.770 align:middle line:84%
+So there's a lot of interesting
+problems you could study.
+
+01:22:09.770 --> 01:22:10.270 align:middle line:90%
+All right.
+
+01:22:10.270 --> 01:22:12.220 align:middle line:90%
+Thanks a lot.
+
+01:22:12.220 --> 01:22:18.000 align:middle line:90%

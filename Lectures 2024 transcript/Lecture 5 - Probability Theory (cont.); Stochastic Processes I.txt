@@ -1,0 +1,1231 @@
+0:00
+[SQUEAKING] [RUSTLING] [CLICKING]
+0:12
+PROFESSOR: All right, we'll get started. We're going to continue our discussion of principal components analysis.
+0:19
+And what I want to emphasize with principal components
+0:24
+is that we're dealing with a random vector X that's
+0:31
+in m dimensional space. And it has an expected value of alpha, say.
+0:42
+And it has a covariance matrix given by sigma, which is m by m.
+0:53
+This kind of setup can be used for modeling returns on stocks
+1:01
+or assets that may have a mean return over some holding period and a variance-covariance matrix.
+1:09
+And so in working with financial data,
+1:15
+principal components analysis can be quite useful. Essentially, what principal components does
+1:23
+is it transforms our X vector to a p
+1:32
+vector of principal component variables. And the definitions of these is we subtract
+1:40
+from X the mean vector. And then we rotate the coordinate axes of this m vector
+1:52
+by this gamma transpose matrix.
+2:02
+And so this gamma transpose can equal gamma
+2:10
+1 transpose, gamma 2 transpose, down to gamma M transpose.
+2:16
+And so the first component-- p1 down to pm.
+2:24
+The first component corresponds to using this gamma vector,
+2:31
+which happens to be an eigenvector of the covariance matrix corresponding to where
+2:41
+with associated eigenvalue lambda i. And in this representation, we basically have sigma gamma i
+2:55
+is equal to lambda i gamma i. And we can order our eigenvalues from largest to smallest.
+3:12
+And the first principal component variable corresponds to lining up--
+3:21
+or looking at a coordinate system where we're looking along the dimension of greatest variability in the data.
+3:28
+So this covariance structure it's
+3:35
+actually useful to think of a special example, which
+3:41
+is the multivariate normal distribution in m dimensions with mean vector alpha and covariance matrix
+3:49
+sigma. And so if we think of X1 and x2--
+3:57
+we'll just consider a two-dimensional case as an example. There could be an alpha 1, alpha 2 here for the mean of X1,
+4:10
+first component mean of X2. And with a bivariate normal distribution,
+4:20
+we basically will have contours of the density,
+4:26
+the joint density, of X1 and X2 that
+4:31
+are given by ellipses centered at the mean vector.
+4:37
+And the degree to which the components are highly correlated--
+4:43
+if it's a positive correlation, then we have ellipses that are tilted up.
+4:49
+If it's a negative correlation, it would be tilted down. Now, what principal components analysis does is it basically--
+5:01
+this step here corresponds to shifting the coordinate axes to, say, x1 star and x2 star.
+5:11
+So we recenter our space at the point with the origin
+5:17
+being at the mean point of the outcomes. And then we consider rotating these axes in such a way
+5:29
+that the first principal component axis corresponding
+5:36
+to the largest eigenvalue, it will orient along
+5:43
+the principal axis of the ellipse. And the second principal component axis
+5:53
+will be orthogonal to the first. And it will-- well, in two dimensions
+6:02
+it will have variability along that dimension that's smaller than P1.
+6:08
+When we extend from a two-dimensional case to an m-dimensional case--
+6:15
+so suppose we have 500 stocks or 1,000,
+6:20
+then if we apply a multinomial model to that case,
+6:26
+then our principal components will be identifying
+6:31
+coordinates-- basically coordinate system variables
+6:37
+that line up with different orthogonal dimensions
+6:43
+of variability. And so what ends up being very useful is that, at least when we
+6:52
+look at a market of stocks or asset returns, some of those
+6:58
+may be highly correlated with each other. Others may be, in a sense, orthogonal or uncorrelated
+7:05
+with each other. And with principal components analysis, we can actually identify different directions
+7:17
+in the space, which basically have decreasing levels of variability,
+7:24
+but that are also orthogonal to each other or uncorrelated with each other.
+7:30
+So when we want to specify factors, underlying factors,
+7:36
+say, in joint distributions of returns and markets, principal components can be very helpful in trying
+7:43
+to identify those. And later on, we'll talk about factor modeling
+7:49
+and see how close or how effective principal components
+7:54
+can be. But there are also general factor models
+8:00
+that we'll introduce later. So with these transformations, as noted here,
+8:09
+these principal component variables have basically a mean that's zero and a covariance matrix
+8:18
+that's diagonal. So these principal component variables
+8:24
+are uncorrelated with each other. And if we order the eigenvalues from largest to smallest,
+8:31
+the first principal component variable will be the axis with the greatest variability.
+8:39
+Now, what's interesting to highlight is that in the transformation from the original X's
+8:48
+to the principal component variables, the only thing we've done is shift the origin
+8:55
+and then rotated the coordinate axes in an orthogonal way.
+9:02
+So we're maintaining right angles between coordinate axes.
+9:08
+And that's all we've done. So if we have outcomes of X--
+9:16
+so if we have X is a random variable, but then we may have realizations--
+9:24
+realizations, say, X-- I don't know-- a, Xb.
+9:31
+I don't want to have integers referring to these because I don't want to confuse the components.
+9:38
+But we could have different realizations for different days
+9:43
+or different analysis periods, and we would get different points of realizations
+9:50
+of the outcomes of this vector. And so principal components allows us just
+9:58
+to view the data in a way that hasn't transformed
+10:05
+the data in an unusual way. Basically, the configuration of points
+10:10
+is the same before and after the construction of these PC
+10:16
+variables. So let's see. OK, there's this version of principal components
+10:26
+where we consider splitting the first k principal components
+10:32
+into a gamma 1 matrix and the remaining ones into a gamma 2
+10:40
+portion. And so one can then think of there being a linear model for our outcome
+10:48
+x variable, which might be simplified to just a mean vector
+10:56
+plus a matrix times the first k principal component
+11:04
+variables plus error. If this, in fact, were an effective model,
+11:14
+it might be the case that the last m minus k principal
+11:20
+component variables essentially have no important information in them.
+11:25
+And so this could be a very simple model for our x variable.
+11:33
+And importantly, if this were an appropriate model
+11:40
+for an m vector x, then the covariance matrix of the--
+11:48
+the covariance matrix of X is just given by--
+11:57
+or let's see. Or the-- yeah, the covariance matrix of X,
+12:03
+in terms of the diagonal entries which represent the correlations, are all due to common loadings
+12:11
+on these different principal component variables in p1. So the interesting question to think about is,
+12:21
+how can we model random vectors with some covariance matrix?
+12:30
+And are there simple structures to the covariance matrix that explain all of the intercorrelations?
+12:39
+Now, when we perform empirical principal components analysis,
+12:48
+then what we do is we-- say, we have an X matrix, which has
+12:57
+columns X1 through X sub capital T that are all m vectors.
+13:03
+Then we compute the row means--
+13:09
+we subtract those row means from the matrix row by row.
+13:18
+And then with this X star matrix that's the demeaned matrix,
+13:25
+that matrix times its transpose divided by the number of columns
+13:33
+in X capital T, that is an estimate of the covariance matrix, essentially
+13:40
+the sample covariance matrix. And we then can perform an eigenvalue eigenvector
+13:48
+decomposition of this covariance matrix, and then use these results to define
+13:56
+the empirical principal component coordinates of our data.
+14:02
+And it corresponds to just taking our estimate of the gamma matrix transpose the demeaned matrix.
+14:09
+So this is very simple to implement.
+14:16
+And let's see. The singular value decomposition is also
+14:23
+a way of obtaining these principal component transformations.
+14:30
+If we look at VDU transpose being the singular value
+14:36
+decomposition of our X star demeaned matrix, then we have our lambda estimate just
+14:49
+being the square of the D diagonal matrix divided by T. The estimate of the gamma matrix
+14:57
+is simply the V. And our principal component variables--
+15:03
+or our data transformed to principal component coordinates is simply given by DU prime.
+15:11
+So principal components analysis is very easy to implement.
+15:17
+And the lecture that was originally scheduled for today, Stefan Andreev,
+15:24
+he's going to go through a number of examples of applying principal components in equity markets
+15:31
+and in bond markets. What's really useful to anticipate is that--
+15:42
+well, one of the examples that he's used in the past is where the X vector corresponds to index returns
+15:51
+in different European markets on a daily basis, and attempting to understand the joint variability across all
+16:04
+of the markets, but also to understand where there are different geographical clusters of countries
+16:15
+like Northern European versus Southern European. Those tend to be separately highly
+16:22
+correlated with each other. Another example of principal components analysis
+16:29
+is looking at interest rates in the fixed income market.
+16:36
+It turns out that for different maturities of bonds ranging
+16:42
+from, say, one month, three month, a year, to five years, 10 years, 20 years, 30 years, the interest
+16:52
+rates can be measured in terms of their yields.
+17:00
+And the yield curve will vary day by day.
+17:05
+And it turns out that the principal components analysis of yields has a very strong structure to it.
+17:17
+So I'll let him introduce those when
+17:24
+he comes in a couple of weeks. Well, with principal component variables,
+17:31
+it's important to understand that there
+17:36
+are alternative ways of deriving or defining principal component variables.
+17:42
+One is to define the first principal component variable to be the linear combination, defined by weights w1
+17:53
+through wm, that maximize the variance of that weighted sum
+18:00
+subject to the sum of squares of the weights equaling 1. So we're looking at a unit vector w
+18:10
+and trying to find the vector w that
+18:16
+maximizes the variance of the linear combination
+18:23
+in that direction. So when we get to the transformation of the data--
+18:33
+or the random variable by demeaning it, then if we look at w vectors that
+18:42
+are unit vectors in this space, then we're
+18:47
+looking at which w vector is pointing in the direction of maximum variability.
+18:55
+Then the second principal component variable is defined as the next w vector, now
+19:05
+v, which maximizes the variance subject to having length one but being orthogonal to the first.
+19:12
+So it's a rather nice way of characterizing
+19:18
+principal component variables. Now, with principal components analysis,
+19:24
+one of the really neat things is that-- let's see.
+19:30
+We often focus on the first few principal component variables because they explain most of the variability.
+19:36
+But the last principal component variable defines the linear combination of the components
+19:46
+that has the smallest variance. And sometimes that smallest variance can be zero, in which case, we're
+19:54
+identifying a linear dependence in the returns.
+19:59
+So let's see. My first example of this case was before the euro existed.
+20:11
+So I'm really dating myself. But the German deutschmark and the French franc
+20:19
+were very, very highly correlated before the euro came out.
+20:24
+And in looking at currency returns, the principal components analysis
+20:30
+actually identified that empirically in a nice way.
+20:37
+Let's see. OK, mathematically with principal components analysis,
+20:45
+we can talk about a decomposition of the total variance. So if we have this covariance matrix sigma,
+20:55
+we could talk about the total variance is equal to the sum 1 to m of sigma jj.
+21:04
+So the j-th diagonal entry of the covariance matrix
+21:09
+is the variance of the j-th component. And the sum of that is the trace of sigma.
+21:19
+We can decompose that total variance
+21:27
+as the sum of the eigenvalues. And so principal components analysis
+21:35
+provides a decomposition of variability.
+21:41
+And we can see what proportion of variability is explained by the first or the first few principal component
+21:49
+variables. These lecture notes finish with just reminding you
+21:56
+of some important statistic-- important probability distributions in statistics.
+22:06
+The chi-squared distribution arises again and again. And the chi-squared distribution with one degree of freedom
+22:15
+is equal in distribution to the square of a standard normal distribution.
+22:22
+So this is a useful thing to remember in different cases.
+22:30
+And let's see. If we-- well, here's its density function.
+22:37
+It turns out to be a special case of the gamma distribution. And here's this moment-generating function.
+22:46
+It turns out that if we take independent normal 0, 1
+22:54
+random variables, square them and sum them, then the sum of n independent ones is a chi-squared with N
+23:00
+degrees of freedom. And we can prove these results using
+23:05
+moment-generating functions and get densities for those.
+23:11
+Importantly, t distributions often are--
+23:18
+let's see-- arise, especially in the study of regression models
+23:25
+and the significance of regression parameter estimates. But basically, with a t distribution,
+23:35
+if we take a standard normal and then divide it by the square root of a chi-squared divided
+23:44
+by its degrees of freedom, where the chi-squared variable U is
+23:50
+independent, then this will give us a t distribution with r degrees of freedom.
+23:55
+And so, let's see. With t distributions, t distributions
+24:05
+are examples of distributions that are heavier tailed than a normal distribution.
+24:13
+And so if you think of taking a normal z variable
+24:20
+and dividing by this chi-squared distribution divided by this degree of freedom and square root,
+24:29
+we're basically dividing a random normal by something that's random, but around 1.
+24:37
+And the randomness of that factor leads to greater variability than the normal.
+24:45
+So it's obvious that that could be the case. And it's indeed true.
+24:54
+And let's see. The F distribution turns out to be
+25:01
+the ratio of two chi-squared distributions,
+25:07
+each divided by their respective degrees of freedom. And in classical statistics, we often
+25:16
+are interested in measuring variability of data
+25:22
+and variability due to different driving factors.
+25:27
+And so F distributions arise commonly when we have estimates of variance
+25:35
+given by a chi-squared divided by a degree of freedom. And if we have two different estimates of variability,
+25:44
+then if those distributions have common variances,
+25:51
+then the F distribution applies.
+25:56
+Some of you may have heard of analysis of variance in statistics.
+26:02
+Anyway, the analysis of variance methods work with studying F statistic distributions.
+26:10
+Yeah? AUDIENCE: Are noncentral distributions used a lot where there's a noncentrality parameter?
+26:16
+Or are they mainly just like the centered ones? PROFESSOR: Well, the noncentrality--
+26:22
+or when you have null hypotheses in analysis of variance
+26:28
+that are true, then the F statistics will be F's with zero noncentrality.
+26:37
+And if the null hypothesis is false, then you'll have a F distribution
+26:44
+with a noncentrality parameter. So the noncentrality parameter comes
+26:50
+into specifying the distribution of the test statistic when the null hypothesis is false.
+26:59
+AUDIENCE: So it's not used sometimes then like when [INAUDIBLE] is false. PROFESSOR: Yes.
+27:05
+Actually, the next two lectures after today will be on regression analysis and testing and regression.
+27:14
+And so we'll see those come into play there. Yep.
+27:20
+All right. What else? Oh, OK. Just the weak law of large numbers and the central limit
+27:26
+theorem are the remaining topics here. If we have sample data realizations of, say, N--
+27:38
+or N realizations of a random variable--
+27:45
+and here, we say IID for Independent and Identically Distributed.
+27:52
+If those random variables have mean mu and variance sigma squared, then the sample mean, X bar n,
+28:03
+will converge in probability to that mean. So the larger the sample size in the mean,
+28:12
+the closer the sample mean will be to the true mu parameter.
+28:19
+But what we-- what's important from probability theory is how do we characterize convergence of random variables?
+28:28
+And so the convergence in probability to a constant means that the probability that the deviation,
+28:38
+the absolute deviation from mu exceeding epsilon, that that goes to zero.
+28:44
+And this theorem-- or this result
+28:49
+can be proven with Chebyshev's inequality. And it's sort of a neat example where
+29:00
+if we want to look at the variance of X bar n,
+29:07
+which is equal to, what, the expected value of X bar minus mu
+29:12
+squared.
+29:19
+Then if we were to draw X bar n, and here's mu,
+29:29
+and then have the graph of X bar n minus mu squared,
+29:36
+if we were to transform our scale to X bar n minus mu,
+29:44
+then this mu value goes to zero.
+29:49
+And if we were to look at the epsilon value for X bar n
+29:57
+minus mu, we can consider a function
+30:06
+other than this parabola, which is zero,
+30:11
+up to this epsilon away from mu point,
+30:17
+and then is simply equal to epsilon squared beyond,
+30:24
+and do the same at minus epsilon. So zero up to there.
+30:30
+And the variance, which is the probability weighted average
+30:36
+of the parabola over the distribution, has to be greater than epsilon squared times the probability
+30:47
+of exceeding-- of being further away from you than epsilon.
+30:53
+So the fact that this function is greater than or equal to epsilon squared times the probability
+31:02
+that X bar n minus mu is greater than epsilon.
+31:07
+This gives us the result. And we basically have that--
+31:18
+we're basically giving a positive bound for this.
+31:28
+Or we have an upper bound that decreases with n for this probability. So that gives us our nice result.
+31:38
+Let's see. If you really like probability theory, one can actually extend this result to the case
+31:47
+where we don't have a variance existing. We just have a mean existing.
+31:54
+And that's a rather strong result that's neat.
+32:00
+At least it's neat in terms of how the mathematics can handle more complex cases.
+32:08
+Now, finally, we have the central limit theorem, which tells us what the asymptotic distribution
+32:18
+is of a sum of independent and identically distributed
+32:26
+random variables is. And so if we have variables X1 to Xn
+32:36
+that are mean 0 variance sigma squared, it turns out that the sum of the excise divided
+32:47
+by the square root of the sample size converges to a normal distribution with mean zero
+32:55
+and variance sigma squared. So we have, what, Zn equaling 1 over root n sum 1 to n
+33:06
+of the Xi's converges to a normal with mean zero and variance sigma squared.
+33:12
+And if we were to think of X bar, which
+33:20
+is equal to 1 over root n times Zn, this basically is converging, in some sense,
+33:28
+to a normal with mean zero and variance sigma squared over n.
+33:34
+Now, I put quotes around this arrow here because it's not really legitimate to talk
+33:43
+about a limiting distribution that depends on n.
+33:48
+But this is the way we approximate the distributions
+33:56
+of sample means. Basically, they converge to the mean of the distribution,
+34:02
+in this case, zero. And the variance is sigma squared over n. Now, what's neat in this proof is just
+34:11
+to highlight the use of moment-generating functions.
+34:17
+And so if we-- say, let's calculate the moment-generating function of Zn, we're going to show that the moment-generating function
+34:28
+of Zn converges to this moment-generating function, which in fact is the normal with mean zero
+34:35
+and variance sigma squared. So the theorem that says moment-generating functions
+34:41
+are of unique, and if the limit of moment-generating functions
+34:46
+exists and equals some function, we
+34:51
+can identify the distribution by that limiting moment-generating function. Well, if we calculate just the moment-generating function
+35:00
+of Zn, if we just plug-in Zn within the expectation,
+35:07
+then noting that the X's are independent of each other,
+35:14
+we basically are taking the expectation of a product of independent terms.
+35:21
+And so that expectation of a product is the product of the expectations.
+35:27
+So we have the product of the expected value of Xi times t over root n.
+35:35
+And this expectation here is actually the moment-generating function of X evaluated at t over root n.
+35:48
+So it's the n-th power of that when we take the product of all n of those.
+35:54
+Now, this is where it gets interesting. If we look at our moment-generating function of t
+36:02
+over root n, well, we don't really know much about
+36:07
+the distribution of the X's. We know it has a mean. We know it has a variance.
+36:13
+The mean is zero. The variance is sigma squared. If we expand the moment-generating function
+36:20
+into a Taylor series, then we get
+36:25
+1 plus the expected value of X times t over root n
+36:31
+plus the expected value of X squared divided
+36:36
+by 2 times t over root n squared plus, an order term that is given by the third power of the argument.
+36:46
+And so as n gets large, these higher order terms
+36:53
+are of smaller order. And so we finally have that this in the limit
+37:01
+is 1 plus this multiple over n plus a small o of t
+37:06
+squared over n. And if we take this expression to the n-th power,
+37:15
+then it converges to the exponent of the argument
+37:22
+sigma squared t squared over 2. So let's see if we have 1 plus r--
+37:34
+let's -- 1 plus r over n to the n-th power,
+37:43
+this converges to e to the r.
+37:49
+And Vasiliy used this argument in the first lecture
+37:55
+to talk about continuous compounding and what the limiting value is of continuous compounding
+38:04
+at some interest rate. Anyway, that same exponential result is true here.
+38:13
+So this actually proves the central limit theorem using the identity theorem for MGFs.
+38:20
+Yeah? AUDIENCE: Is CLT actually used in practice? Because obviously, like in finance nothing
+38:26
+is going to be IID, or at least they're not going to be independent. So is it actually still useful in a practical setting?
+38:34
+PROFESSOR: It can be very useful in a practical setting. And right now, it's specified in terms of identically distributed
+38:45
+X's. It actually generalizes to X's that are
+38:52
+independent but with different distributions as well.
+38:59
+So also what's I guess really important is that if a variable
+39:09
+we're working with corresponds to the sum
+39:14
+of independent or uncorrelated terms,
+39:21
+the sum can approach a normal distribution well.
+39:26
+And if one looks at, I guess, linear projections
+39:36
+of multidimensional vectors, X's,
+39:44
+if you had a random direction in the n dimensional space,
+39:51
+the projection onto that random direction will correspond to sums of close to identically distributed
+40:02
+random variables, but will very likely have a Gaussian
+40:08
+distribution as well. This will come up when we talk about regression modeling.
+40:17
+But when we look at the error vector from a regression,
+40:23
+the feasibility of the error vector being close to Gaussian
+40:31
+is plausible and reasonable given the way it's constructed sometimes.
+40:38
+OK. Well, let's move on then to this note on probability
+40:47
+theory for asset pricing. What's really neat about this note
+40:52
+is that we're going to introduce you just with basic probability
+40:58
+theory to one of the more important models in quantitative finance, or at least
+41:06
+in early quantitative finance, which is the capital asset pricing model. And so let's consider a simple context where we have
+41:21
+one risky asset, like a stock. And we have a one period model where we have--
+41:34
+the beginning of the period is t0, and the end of the period
+41:42
+is t1, I guess.
+41:53
+And there's this risky asset, a--
+41:58
+so there's a risky asset, a.
+42:06
+And we'll consider a market agent
+42:13
+having Qa shares of the asset, and just
+42:26
+Q units of a risk-free asset.
+42:33
+Now, the risk-free asset is like putting money in the bank
+42:39
+and being confident that you'll get it back with interest.
+42:45
+And we'll assume that the risk-free asset costs $1--
+42:55
+so $1 per unit. And the risky asset will be of price Pa per share.
+43:07
+So this market agent has a wealth at time 0.
+43:19
+So W0 is going to be equal to qa pa plus q times $1.
+43:28
+And X-- OK, so maybe we'll put an f here just to indicate that it's the risk-free asset.
+43:39
+Now, at time T1--
+43:45
+so this is the t0 prices are given here.
+43:53
+At T1, the risk-free asset is going to be worth 1 plus rf.
+44:00
+44:07
+And the price of the risky asset, we'll
+44:12
+assume that it's a random variable given by f tilde.
+44:18
+And for simplicity, we'll assume that it has some mean, mu,
+44:28
+and variance sigma squared. Now, right away this is maybe a bad assumption
+44:34
+to make because Gaussian or normal distributions can be arbitrarily large negative.
+44:41
+But we'll assume that the likelihood of impossible values
+44:46
+is very close to 0, so that this is a useful model.
+44:51
+So this is the time T1 state of the market, which
+45:01
+has certainty for the risk-free investment
+45:09
+but uncertain outcome for the risky asset.
+45:15
+Well, one could consider the agent
+45:24
+being able to buy x units of the risky asset
+45:31
+at the initial time point, t0, and then
+45:36
+have end of period wealth that reflects that trade of buying
+45:43
+X units at t0. So at the end of the period t1, time, there
+45:55
+will be Qa plus X shares with value f tilde.
+46:01
+And the x shares will have been bought by paying
+46:10
+Pa, the t0 price at time 0. And so there will be money invested
+46:17
+in the risk-free asset earning the interest rate, or the absolute return of 1 plus rf.
+46:25
+Now, what we want to do is consider what
+46:30
+is the optimal choice of X-- the number of shares to buy for this agent?
+46:37
+And in order to make that choice,
+46:42
+one can apply the decision theory under uncertainty
+46:51
+and associate a utility of the end period wealth given
+46:58
+by some utility function, u. And we can choose the X value to maximize
+47:06
+the expected utility of wealth. So importantly, If we have u of w as a function of w,
+47:21
+and there's basically a w0 value here--
+47:28
+utility of w0-- there are some standard assumptions
+47:37
+one makes as to what the utility function is like.
+47:44
+And we might assume that the first derivative and second derivative exist.
+47:49
+So we'll assume that these exist.
+47:57
+And so-- well, the first derivative
+48:03
+is likely to be positive. More wealth is preferred to less.
+48:09
+So we have a better direction being up and to the right.
+48:16
+And the second derivative, this actually could be less than 0
+48:23
+if there's a decreasing marginal utility to more wealth.
+48:29
+So this function might go and look like this with a U prime greater than 0 and U double prime less
+48:39
+than 0. So these kinds of assumptions are reasonable to assume.
+48:47
+And the theory of rational decision-making
+48:53
+under uncertainty, if this is indeed your utility function, is to find the action X that maximizes this.
+49:04
+And if we are lucky, we might be able to solve
+49:10
+for X by satisfying the first order condition, the derivative of the expected utility equaling 0
+49:21
+at the maximum value. And-- yeah?
+49:26
+AUDIENCE: Why would you use anything other than the identity function for U? Because surely you just want to maximize
+49:33
+your end of period wealth?
+49:38
+PROFESSOR: Let's see. If you use the identity, then there's--
+49:47
+well, it will turn out there's no penalty for a risk that you're undertaking.
+49:54
+And so with this decreasing marginal utility of wealth,
+50:00
+you end up having a penalty for taking risks. And so the-- yeah.
+50:19
+So I'll leave it there, but it's a very good question.
+50:24
+And let's see. There's actually some-- well, there's
+50:32
+some really interesting discussions and about how to optimally invest, as this case.
+50:43
+And there was a controversy between Claude Shannon and I think it was Milton Friedman about maximizing
+50:58
+the exponential-- or the expected log
+51:04
+return of investments just period and that being optimal.
+51:09
+So anyway, we'll return to that discussion later as well.
+51:15
+But for now, let's assume that this is a reasonable thing to do. And in order to solve this problem,
+51:23
+we're actually going to use a lemma called Stein's Lemma, which is a curious mathematical result
+51:33
+dealing with normally distributed y variable and y
+51:41
+star. They're jointly distributed with each other and Gaussian.
+51:47
+If we look at the expected value of g of Y times Y minus mu,
+51:55
+and the expected value of g prime of Y, if both of those
+52:01
+exist, then we get these simple formulas for essentially the covariance between g of Y and Y,
+52:10
+and the covariance of g and Y and Y star. So this is a mathematical theorem that is abstract
+52:20
+as it's stated, but it ends up being applicable in our problem.
+52:27
+So if we define our wealth at the end of the period at time t1
+52:33
+to be given by this w tilde vector, then
+52:39
+if the outcome of the asset price, f tilde,
+52:47
+if this is Gaussian, then this wealth at time t1
+52:56
+will also be Gaussian because we're just taking a multiple of that plus a constant.
+53:03
+So that note is simple.
+53:08
+Then if we look at the expected utility
+53:14
+and try to take the derivative of that with respect to X,
+53:20
+then under certain conditions we can take the expectation
+53:27
+of the derivative with respect to X of the integrand
+53:33
+with the expectation. Now, under what conditions is it feasible to differentiate
+53:41
+underneath the integral sign when you're doing computations in calculus?
+53:48
+54:01
+I mean, basically what we want to do is take the expected value of U of w tilde plus delta
+54:16
+and subtract the expectation of U of w tilde and divide
+54:24
+by delta, and take the limit as this goes to 0.
+54:32
+So that's the formula for computing the derivative.
+54:39
+It turns out we can do that if the first derivative of U
+54:46
+is bounded or has bounded expectation. And so if that's possible to do, then we
+54:55
+can take the derivative underneath the integral sign. And we have basically the derivative
+55:01
+of U multiplied by the chain rule, the derivative of w tilde
+55:09
+with respect to X. So if we take the derivative
+55:14
+of w tilde with respect to X, we get f tilde minus Pa
+55:19
+times 1 plus rf. So this is just the chain rule of differentiation there.
+55:25
+Now with this expression in black, we can use the--
+55:37
+well, let's see. We can express this as the expected product of two
+55:46
+random variables is equal to the covariance plus the product of the expectations.
+55:52
+So here, we have U prime and f tilde minus Pa1 plus rf.
+55:59
+The covariance between those two plus the product of their expectations is equal to that expected product.
+56:08
+Then, by Stein's Lemma, one actually can simplify
+56:16
+or re-express this covariance as the expected second derivative
+56:22
+of U times the covariance of w and f.
+56:31
+And so we can then substitute this expression
+56:37
+into this last expression here and get 0
+56:43
+equals that covariance plus the product of the first expectations there.
+56:52
+And so we're substituting in this expected second derivative
+56:59
+of U times the covariance in that formula. Now, with this expression here, we
+57:12
+have this covariance of w and f. Well, the covariance between w and f
+57:19
+is simply the covariance of f with a multiple of f.
+57:28
+So it equals that multiple times the variance of f.
+57:35
+And so we plug that in to this covariance term.
+57:40
+And what's curious, and is the punch line,
+57:46
+is that this final equation gives us a formula for how we solve for X.
+58:06
+And so the value of X that we should choose
+58:14
+will basically satisfy this equation.
+58:20
+And so our X value will depend upon what the price of the asset
+58:29
+is. And it actually is equal to a discounted value
+58:38
+of the expected price plus this other term here.
+58:47
+And this other term here-- the second derivative is negative.
+58:53
+First derivative is positive. So this is actually a negative factor here.
+58:59
+And so we end up getting that--
+59:05
+we have a formula that depends upon that ratio
+59:13
+of second derivative expectation to first derivative expectation of the utility function.
+59:20
+Now, in economics classes, maybe some of you have come across the constant absolute risk aversion utility
+59:30
+function. Has anybody come across that in an economics class? Maybe.
+59:36
+Maybe not. But that function, which is a constant minus
+59:48
+e to the minus Aw, this is the constant absolute risk aversion
+1:00:01
+utility function. And so it basically has the right shape
+1:00:16
+in terms of marginal utilities decreasing and utilities always increasing.
+1:00:25
+And so with this particular utility function, we have the U double prime divided by U prime,
+1:00:36
+those actually giving us just the factor A here.
+1:00:42
+So we have our price of the asset should equal the discounted expected cash
+1:00:51
+flow minus a risk adjustment. And the risk adjustment in the price,
+1:01:01
+that's like the fair price for the asset, varies depending upon what the risk aversion
+1:01:10
+coefficient is of the agent. And also the magnitude of the shares
+1:01:16
+of the risky asset that are obtained and the variance of the price outcome.
+1:01:25
+So the fair price for the market agent
+1:01:32
+basically is balancing all of these factors. And let's see if--
+1:01:39
+OK. Well, with this result for a single asset, what's really neat
+1:01:49
+is that we can generalize from one asset to many
+1:02:00
+and set up the whole problem with almost the same notation.
+1:02:06
+So we consider defining a Q vector of shares
+1:02:12
+of assets 1 through n-- a1 through an-- and Qf units of the risk-free asset.
+1:02:23
+And we can go through the same logic of the initial wealth
+1:02:31
+being the Q shares per asset times the price at time 0,
+1:02:38
+t0, of the assets plus the value of the risk-free investment.
+1:02:45
+And we can assume that the random prices at time t1
+1:02:52
+are jointly normally distributed.
+1:02:59
+And so we then can think of the market agent basically
+1:03:07
+adjusting the initial shares Q by the X vector
+1:03:13
+and choosing the X vector to maximize expected utility.
+1:03:19
+And we can just plug everything in now
+1:03:27
+with vectors instead of scalars, and the same arguments apply.
+1:03:36
+And we end up getting, at the end of the day, different equilibrium prices
+1:03:43
+for the different assets that are discounted
+1:03:48
+expected values of the price plus a penalty
+1:03:55
+depending upon the risk aversion of the agent.
+1:04:03
+And so we end up getting this final result here.
+1:04:12
+Now, what's particularly interesting from this setup
+1:04:24
+is to then say, well, what prices
+1:04:30
+should be holding if this market model is in equilibrium?
+1:04:39
+And so if the market is in equilibrium,
+1:04:46
+then we should have expected returns of risky assets
+1:04:53
+that satisfy this formula here.
+1:05:00
+And if we look at an initial endowment of no shares at all,
+1:05:11
+and define the X allocation to be an equilibrium
+1:05:19
+investment in the market portfolio,
+1:05:25
+then our market portfolio defined by X
+1:05:32
+will have a market value of f tilde m, the sum of the Xi's
+1:05:40
+shares times f tilde i. The price initially of the market portfolio
+1:05:47
+will be just the sum of the Xi shares times the initial price as Pai.
+1:05:56
+And the return of the market portfolio
+1:06:01
+will just be the change in value divided by the initial value, which corresponds
+1:06:09
+to a weighted sum of the asset changes or percentage returns.
+1:06:17
+So the percentage return r tilde m is simply the weighted returns
+1:06:23
+of the individual assets. And this is our expected return of the market portfolio
+1:06:33
+when the underlying assets satisfy these pricing
+1:06:38
+conditions. Now, if we expand this expected market return expression,
+1:06:52
+we can successively derive that it equals the risk-free rate,
+1:07:04
+plus this blue factor times the covariance of the initial w
+1:07:14
+vector with rm. And this blue expression can be solved for as the excess return
+1:07:33
+of the market portfolio divided by the covariance term here.
+1:07:39
+And so we end up getting that this covariance of w and rm
+1:07:50
+end up being simply pm times the covariance of rm,
+1:07:57
+or the variance of rm. And plugging this in, we finally get
+1:08:03
+that the expected returns of different assets
+1:08:10
+are simply a beta factor times the excess return--
+1:08:16
+expected return of the market portfolio over the risk-free rate.
+1:08:22
+And so this expression is actually
+1:08:27
+the expression for what's called the security market line, where
+1:08:33
+we have the expected return of asset i
+1:08:38
+is the risk-free rate, plus a beta factor times the excess return of the market over the risk-free rate.
+1:08:47
+And this beta factor is the ratio
+1:08:53
+of the covariance of asset i and the market portfolio divided
+1:09:02
+by the variance of the market portfolio. And so this beta i is equivalent to the regression coefficient
+1:09:14
+of the excess return of stocks regressed on the excess return of the market.
+1:09:19
+So in this model, we end up having that different assets
+1:09:31
+will have different returns. And those returns are bounded below by rf,
+1:09:43
+but then are increased by having a higher beta factor multiplying
+1:09:52
+the excess return of the market. So you may be familiar with issues
+1:09:58
+of betas in equity markets and their being low betas
+1:10:04
+or high beta stocks. In this model, we have that the way
+1:10:13
+you get higher expected return is to have a higher beta.
+1:10:18
+And so this also just leads to understanding
+1:10:30
+what the equilibrium prices are of individual assets.
+1:10:36
+If we take those expressions for returns and then reverse them into expressions for the equilibrium
+1:10:44
+prices, we have that the equilibrium prices are the expected terminal price divided by a discount
+1:10:58
+factor that discounts by the discount rate of the risk-free investment,
+1:11:06
+but adding to that a penalty based on the level of risk
+1:11:12
+that's being taken. And here are just some references on this topic
+1:11:22
+that you may want to check out.
+1:11:27
+The development here was actually taken from the first reference by Frank de Jong and Barbara
+1:11:37
+Rindi. There are other important citations.
+1:11:43
+One of them that's of interest is John Lintner, "The Valuation of Risky Assets."
+1:11:48
+The capital asset pricing model was actually formulated by John
+1:11:58
+Lintner and William Sharpe back in the early '60s.
+1:12:03
+And I distributed one of the articles of Lintner
+1:12:09
+in the Canvas site. And it's actually nice to be able to read a very technical
+1:12:16
+paper in an accessible way. And so I think that you'll enjoy checking that paper out.
+1:12:25
+OK.
+1:12:30
+Well, let me turn then to the main topic in our syllabus
+1:12:37
+for today, but it's the tail end of today, to talk about stochastic processes, concepts.
+1:12:47
+And one of the most important concepts in stochastic processes
+1:12:53
+is the concept of a Martingale process.
+1:12:59
+And so if we have a stochastic process given
+1:13:06
+by a sequence of random variables Xn,
+1:13:12
+we can define a related process Mn,
+1:13:19
+which is defined as functions of the first n X's for each n.
+1:13:28
+So if we have Mn depending only on the first nX's
+1:13:36
+in some well-defined way given by a function fn, then we will say that this Mn sequence, which is random,
+1:13:48
+because of its dependence on the X's, it will be a Martingale if the expected value of the n-th M,
+1:14:00
+given the first n minus 1 X's, is simply
+1:14:05
+equal to the n minus first value of M.
+1:14:10
+And we also are going to require that the magnitude of the Mn's
+1:14:15
+as a finite expectation for all n too. Now, let's consider perhaps the simplest example
+1:14:25
+of a Martingale, which is basically a random walk. Suppose the Xn sequence is just independent random variables
+1:14:36
+that each has mean 0, and Sn is the sum of the first nX's.
+1:14:47
+Then this Sn is a random walk with steps given by X.
+1:14:53
+And it's going to be a Martingale with respect to the original process of Xn's.
+1:15:01
+Now, we can make this example, even simpler by assuming that the X's are independent and identically
+1:15:09
+distributed, and maybe that they're discrete with just a plus 1 or minus 1 step increment
+1:15:18
+with equal probability. So these X's have expectation equal to 0 and variance equal
+1:15:29
+to 1. And the process Sn has expectation 0,
+1:15:36
+the sum of the expectations. And the variance of Sn is the variance
+1:15:41
+of a sum of independent steps, increments. And so it's just the sum of the variances.
+1:15:48
+So that's n. Well, here's a random walk realization
+1:15:55
+of this model with 100 steps. And so it basically starts at time 0,
+1:16:05
+and then as steps occur, increments up or down plus or minus 1.
+1:16:11
+If we increase from 100 steps to 1,000, this is what a realization looks like.
+1:16:22
+And then here's an extension from 1,000 steps to 10,000 steps.
+1:16:28
+And what's rather significant is the general shape
+1:16:33
+of this random walk process as we increase the number of steps. It becomes this very jagged path.
+1:16:43
+And it actually corresponds to Brownian motion models
+1:16:48
+that we'll come across. Now, if we were to realize 10 different paths of length
+1:16:56
+10,000, here are examples of that.
+1:17:02
+And so one can see that for low number of steps
+1:17:08
+there's not very much variability that increases as we increase the number of steps.
+1:17:13
+And here, we're just drawing bands at plus or minus multiples of the standard deviation
+1:17:22
+of the random walk value. And so these standard deviation levels basically
+1:17:34
+apply just through the mathematics of calculating one or two standard deviations of the sum.
+1:17:44
+And what we know from our central limit theorem
+1:17:52
+is that the distribution of possible values at any given time step will be closely modeled
+1:18:00
+by a Gaussian distribution because of the central limit theorem. [BELL RINGING]
+1:18:06
+We have a stop. OK, I'm going to take two more minutes just to show you a more-- not a more interesting,
+1:18:12
+but a related but very interesting Martingale. Suppose that once we've calculated this random walk Sn,
+1:18:23
+we look at the square of Sn and subtract n sigma squared.
+1:18:30
+It turns out that this is a martingale as well.
+1:18:35
+And here's one realization over 10,000 steps,
+1:18:42
+and here are 10 realizations. And so these look very, very different
+1:18:49
+from the simple random walk. But these, as well, are martingales.
+1:18:55
+And so one of the-- what we'll see next time is how martingales have very special properties which
+1:19:07
+can be used to solve challenging probability problems.
+1:19:13
+And just as a closing remark, does anyone here know where
+1:19:19
+the term "martingale" comes from?
+1:19:24
+Do we have any equestrians? There's a bridle and a horse called a martingale bridle
+1:19:31
+that keeps the horse straight, looking straight. So it is a bridle that has pressure
+1:19:41
+on both sides of the mouth to keep the horse looking straight. And what's true about a martingale is that the expected value in the future
+1:19:48
+is always a constant level equal to the last level of the series.
+1:19:54
+So that property will end up being very, very convenient,
+1:20:00
+and we'll see examples of that next time.
+

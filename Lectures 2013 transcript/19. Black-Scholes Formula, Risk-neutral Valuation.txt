@@ -1,0 +1,819 @@
+0:00
+The following content is provided under a Creative Commons license. Your support will help MIT OpenCourseWare
+0:06
+continue to offer high quality educational resources for free. To make a donation or view additional materials
+0:13
+from hundreds of MIT courses, visit MIT OpenCourseWare at ocw.mit.edu.
+0:22
+PROFESSOR: So let's start with a simple but quite illustrative example.
+0:27
+So suppose you're a bookie. And what a bookie does-- he sets bets on the horses,
+0:36
+sets the odds, and then pays money back. Probably collects a fee somewhere in between.
+0:46
+So suppose he is a good bookie and he knows quite well the horses, and there are two horses.
+0:54
+He knows that for sure one horse has 20% chance of winning and another horse has 80% chance of winning.
+1:01
+Obviously, the general public doesn't have all of this information. So they place a bet slightly differently.
+1:07
+And then there is $10,000 bet on one horse and $50,000
+1:12
+bet on another horse. Well, bookie is sure that he possesses good information.
+1:20
+So he-- suppose he sets the odds according to real-life probability.
+1:26
+So he sets it four to one. What would be possible outcomes of the race for him?
+1:34
+Monetary. So suppose the first horse wins. Then what happens?
+1:40
+He has to pay back $10,000 and four times more. So he pays out $50,000.
+1:48
+And he receives $60,000, right? So he can keep $10,000 out of it.
+1:55
+OK. So what happens is the other more probable horse wins.
+2:01
+Well, he'll have to pay back the $50,000 and one quarter of it, which is $12.25.
+2:10
+So at the end, he'll pay 62 1/2 thousand, while he collected $60,000, out right?
+2:16
+So he will-- in this situation, he will lose $2,500.
+2:23
+Well, all in all, he expects to make nothing. So he probably could collect enough fees
+2:29
+to cover his potential loss. But there is certainly a variability in outcomes.
+2:35
+He can win a lot. He can lose some. Now, what if he forgets about his knowledge
+2:42
+about the real-life probabilities of horses winning or losing and instead sets bets according to the amount which
+2:52
+we are already bet. According to the market, effectively. So what if he sets the odds five to one,
+3:00
+according to the bets placed? Well, in this situation, if the first horse wins,
+3:06
+he pays back 10 plus 5 times 10, so 60.
+3:12
+He is 0. And if the second horse wins, he pays back 50 plus 1/5 of 50,
+3:19
+plus another 10. Again 60. So no matter which horse wins, he will get 0.
+3:26
+We're 100% sure. And if he collects some fee on top of it,
+3:33
+he will make a riskless profit. And that's how, actually, bookies are operating.
+3:40
+So it's a simple example. But it gives us a first idea of how a risk-neutral framework
+3:46
+and risk-neutral pricing works. So we are, here, not in the business
+3:52
+of making bets on horses. We are actually in the business of pricing derivatives.
+3:58
+So we will talk about the simplest possible derivatives-- mostly derivatives on stocks.
+4:06
+But there are more complicated derivatives, underlying for which could be interest rates, bonds, swaps,
+4:14
+commodities, whatever. So a derivative contract is some--
+4:22
+in general speaking, a formal pay-out connected to underlying.
+4:27
+Usually, the underlying is a liquid instrument which is traded on exchanges. And derivative may be traded on exchanges.
+4:35
+Actually, quite a few equity options are traded on exchanges. But in general, they are over-the-counter contracts
+4:43
+where two counterparties just agree on some kind of pay-out.
+4:48
+One of the simpler derivatives is a forward contract.
+4:53
+So what is a forward contract? A forward contract is a contract where one party agrees
+5:01
+to buy an asset from another party for a price which is agreed today.
+5:07
+Usually, this forward price is set in such a way
+5:13
+that right now, no money changes hands. Right?
+5:20
+And here is an example. Well, suppose there is a stock which, right now, is priced at $80.
+5:27
+And this is the forward for two years. So somebody agrees to buy the stock
+5:32
+in two years for this price. And not surprisingly, I somehow set this price such
+5:39
+that currently the value of the contract is 0.
+5:44
+And we'll see how I'll come up with the price. So this blue line is actually the pay-out, what will happen at the end.
+5:51
+Right? The pay-out, depending-- the graph of F at time T, the determination time or expiry--
+6:02
+how it depends on the stock price. Right? So obviously, the pay-out is S minus K, where S is the stock price, so it's a linear function.
+6:12
+It turns out that the counter price is also a linear function but slightly shifted. And we'll see how come it's slightly shifted
+6:18
+and how much it should be shifted. And K is usually referred to as a strike price.
+6:28
+Another slightly more complicated contract is called a call option.
+6:33
+So if previously the forward is an obligation to buy the asset for an agreed price,
+6:40
+call option is actually an option to buy an asset at the agreed price today.
+6:49
+You can view it-- a call option can be viewed as kind of insurance that the--
+6:54
+against the asset going down. Basically the pay-out is always positive.
+7:01
+You can never lose money. On the forward, you can lose money. You agree on the price. The asset ends up being lower than this price,
+7:07
+but you still have to buy it. Right? Here, if the asset ends up at expiry below strike price
+7:16
+or out of the money, then the pay-out will be 0.
+7:21
+If, on the other hand, it ends up being above the strike price
+7:26
+or, it's called, the option is in the money. Then the pay-out will be S minus K as before.
+7:37
+So in mathematical terms, the pay-out is maximum of S minus K and 0.
+7:44
+Right? And that's what happens at expiry time-- this blue line.
+7:49
+So what is the price of this option now? Well, obviously it should be slightly above
+7:57
+because even if now the asset is slightly out of the money-- below strike price--
+8:04
+there is some volatility to it, and there is a probability that we will still end up in the money at expiry.
+8:10
+So you would be willing-- you should be willing to pay something for this.
+8:16
+Obviously, if it's way out of the money, it should be 0. Right? On the other hand, if it's way in the money, in fact,
+8:23
+it should be just as forward. And in fact, it is. We'll see because the probability
+8:30
+for the asset going back to the strike price and below will be low.
+8:36
+And the Black-Scholes equation and Black-Scholes formula is exactly the solution for this curved line,
+8:43
+which we'll see in a second. Another simple contract, which is kind of dual to call option,
+8:51
+is a put option. So put option, on the contrary, is
+8:57
+a bet on the asset going down, rather than up. Right? So the pay-out is maximum of K minus S and 0.
+9:07
+So it's kind of reversed. Also a ramp function, at maturity.
+9:14
+And here is the current price. Again, even if it's in the money--
+9:22
+if it's way in the money, we expect it to be 0. If it's way in the money, we expect
+9:30
+it to be slightly below forward, just because of this counting.
+9:37
+OK. So and here are a few-- three main points,
+9:44
+which we'll try to follow, through the class. So first of all, what we'll see--
+9:52
+that if we have current price of the underlying and some assumptions on how the market or the underlying
+10:03
+behaves, there is actually no uncertainty in the price of the option, obviously,
+10:11
+if we fix the pay-out. Right? So somehow there is no uncertainty. It's completely deterministic, once we
+10:18
+know the price of underlying. The other interesting fact, which we'll find out,
+10:27
+is actually risk-neutrality, meaning that in fact, the price of the option
+10:32
+has nothing to do with the risk preferences of market participants or counter-parties.
+10:40
+It actually only depends on the dynamics of the stock, only depends on the volatility of the stock.
+10:48
+And finally, the most important idea of this class-- that mathematical apparatus
+10:53
+allows you to figure out how much this deterministic option price is now.
+10:59
+So let's consider a very simple example, a very simple market,
+11:09
+two-period. So suppose our time is discrete, and we are one step before the maturity.
+11:17
+So right now, our stock has price at 0. And there is some derivative f_0 with some pay-out.
+11:27
+We'll consider a few of those. Right? Also, we'll add to the mix a bit of cash.
+11:33
+Right? Some amount of riskless cash B_0.
+11:40
+And riskless meaning that it grows exponentially
+11:45
+with some interest rate r. And there is no uncertainty. It's completely-- if you have now B_0, we know then,
+11:53
+in time dt, our B_0 will grow exponentially.
+11:59
+It will become B e to the rt. So a bond, basically, zero-coupon bond.
+12:05
+Or money market account, rather. If you go to Cambridge Savings Bank, put $1 in today,
+12:14
+then in a year, you'll get $1 and basically nothing
+12:20
+because interest rates are 0. So in time dt, we will assume with some probability p,
+12:27
+our market can go to the state where stock becomes S_1-- the price of stock becomes S_1.
+12:33
+Our bond grows exponentially-- no uncertainty. And our derivative becomes f_1.
+12:40
+Or with probability 1 minus p-- only two states, so-- our stock becomes S_2.
+12:46
+Bond stays the same. And the derivative is some f_2.
+12:51
+So let's start with our simple contract, the forward contract.
+12:58
+So one can naively approach a problem, trying
+13:04
+to get the price of the derivative, using the real-world probabilities, p and 1 minus p.
+13:12
+Right? So we know that the pay-out is S minus K. That's given.
+13:18
+So one would say that if we know we are one step before the pay-out, so let's just
+13:24
+compute expected value of the pay-out, using real-world probabilities, get this value.
+13:31
+And actually, what we are looking here is to set K such that the price now at time t is 0.
+13:38
+That's usual convention. So we'll then set K to this probability,
+13:48
+to this number, which depends on real-world probability and obviously depends on the stock price at expiry.
+13:54
+But obviously, we don't know real-world probabilities.
+14:00
+We can guess. We can say, oh, this stock is as likely to go up then down.
+14:06
+Then it's just an average of end stock prices or something else.
+14:12
+But it's all hand-wavy. And actually, we never will be right.
+14:17
+Instead of doing this-- we're kind of following bookie example-- let's try to do something else.
+14:26
+Let's think a little bit. So we have a stock which is trading at market now
+14:33
+for the price S_0. How about we go to the bank and borrow S_0 dollars right now
+14:41
+and immediately go to the market and buy the stock. So right now we are net 0.
+14:47
+We borrowed S_0. We paid it immediately to buy the stock. So we have stock at hand.
+14:53
+Then we'll wait for one period. And at the same time-- sorry-- we
+15:00
+enter on the short side of the forward contract. So we agree to sell the stock for some price K_0.
+15:10
+So in dt, in one period of time, the contract expires.
+15:16
+We already have stock. So we just go and exchange it for K_0 dollars.
+15:21
+Right? But at the same time, we need to repay our loan which now have
+15:29
+become S_0 times e to the r*dt. This is deterministic, right?
+15:35
+We borrowed S_0. In time dt, it became S times e to the r*dt.
+15:41
+So what's our net? The net is K_0 minus S times e r*dt.
+15:51
+So suppose K_0 is greater than this value. Then we made riskless profit.
+15:58
+There is no risk in the strategy which we proposed.
+16:06
+So this is good. But why wouldn't everybody do it all day long?
+16:11
+On the other hand, if K_0 is less than S_0, that's a loss for sure.
+16:18
+And if anybody thinks, as we did-- and we assume that everybody can do it-- then nobody
+16:24
+would want to enter it, which means that in order for our forward to be price 0 now,
+16:34
+the strike price has to be equal to this amount. And there is no uncertainty about it.
+16:42
+So let's stop and think a little bit.
+16:48
+Well, actually, just to see how it works.
+16:58
+And that's exactly why I set this K to this number.
+17:04
+So by the way, who can tell me which interest rate does it imply?
+17:15
+If our strike-- our stock price is $80, our strike is 88.41.
+17:24
+And the expiry is in two years, approximately.
+17:29
+AUDIENCE: 2.5? PROFESSOR: 2.5. So in two years, it will be 5%.
+17:37
+So roughly speaking, without compounding, it should be 5% of-- 80 plus 5%.
+17:43
+It would be 84. So 10% for two years.
+17:48
+So the interest rate is 5%. Yeah. So yeah. That's actually exactly 5 exponentially compounded.
+17:58
+Yeah. Well, in a good world-- probably five years ago, that's how it would work. The two-years interest rates now, the last time I checked,
+18:06
+was, I think, 30 pips. We can check where the bond is trading now.
+18:13
+All right. Give me a sec. Now.
+18:22
+Yep. 32 1/2 basis points. 1.6 basis points up, since the morning.
+18:30
+Quite a bit, by the way. So yeah. So right now interest rates are basically 0. So these two lines would be very close right now
+18:38
+if we were for two years, in that case. So coming back to our example.
+18:49
+So what's important here? How did we arrive to this strike price,
+18:55
+or to this price of the forward contract? We, in fact, tried-- we took some amount of stock.
+19:03
+In this particular case, it was the whole price of stock. We took some amount of cash, and by combining these two pieces,
+19:11
+we somehow replicated the final pay-off. Right? And that's the general idea of risk-neutral pricing
+19:20
+and replicating portfolio. What we will try to do, in the rest of the class, is take a pay-off and try to find a replicating portfolio,
+19:31
+maybe more complicated, maybe a dynamic such that at the end, this replicating portfolio will be exactly our pay-off.
+19:38
+Right? And what would it mean? Well, obviously it would mean that the current price
+19:46
+of the derivative should be the price of our replicating portfolio right now. Right?
+19:51
+And that's how the risk-neutral pricing works.
+19:58
+So we are still in this simple situation. But we will try to price a general pay-off f_1--
+20:05
+a general pay-off f. Right? And here's how it goes. So we still will try to form our replicating portfolio out
+20:16
+of the bond, of some amount of bond, and some amount of stock.
+20:21
+And we'll say that we will need a S_1 and b of the bond.
+20:28
+Right? And we'll try to find a and b such that no matter what
+20:35
+the real-world probability is, at one step maturity,
+20:41
+we'll replicate our pay-off exactly. And fortunately, in this particular case, it's very doable. It's just two equations.
+20:48
+We use two variables. We should be able to do it. And we can solve it and find this a and b.
+20:55
+Then we'll substitute them in the formula. Right? Take the current price of the stock, which we know,
+21:02
+and some cash, and find the current price
+21:11
+of the derivative. Right? And this works-- it should work for any derivative. It doesn't matter, is it forward,
+21:17
+call, put, or some complicated option, as long as it is deterministic at expiry.
+21:23
+An interesting way, though, to look at it
+21:29
+is to rewrite this formula slightly, in such a way, which does remind us, taking an expected value,
+21:40
+maybe discounting it because this is expected value at some time in the future.
+21:46
+But this probability-- and it is a probability because this number q, here, is between 0 and 1.
+21:53
+But this probability has little to do with real world.
+21:59
+Right? In fact, it's something different. But such probability exists.
+22:06
+And it's called-- the measure where our stock behaves like this is called a risk-neutral measure
+22:12
+or martingale measure. And in this measure, as we will see,
+22:18
+the value of the derivative will be just expected value of our pay-out.
+22:24
+And that's-- yeah. That's what I'm trying to say, here.
+22:33
+So now let's get into continuous world. Right?
+22:40
+In continuous world, we'll need some assumptions on the dynamics of our stock underlying.
+22:46
+And let's make an assumption that it is log-normal.
+22:54
+What does it mean that it's log-normal? It means that the proportional change of the stock,
+23:04
+over infinitely small amount of time dt, has some drift mu, and some stochastic component,
+23:13
+which is just Brownian Motion. Right? So this dW is distributed normally
+23:21
+with mean 0 and standard deviation, which
+23:26
+is actually square root of dt. That's how Brownian Motion works. And that's extremely important, that the standard deviation
+23:33
+of Brownian Motion is square root of delta t.
+23:39
+And that's how it works. And again, we will use this idea of replicating portfolio.
+23:49
+What would it mean in this case? Well, we would like to find such coefficients a and b,
+23:58
+on this infinitely small period of time dt, such that by combining small changes in stock,
+24:06
+with coefficient a, and small changes in bond, with coefficient b, will exactly replicate
+24:14
+the change in the derivative-- in the pay-out of derivative-- not pay-out. In the derivative.
+24:19
+In the change of the derivative, over this infinitely small time t.
+24:27
+Well, to do this, we'll need to use Ito's formula. Did you talk about Ito already?
+24:33
+OK. Cool. That's great. So just to remind you that Ito's formula
+24:38
+is nothing more than the Taylor rule, actually-- the first approximation up to dt.
+24:45
+But because of the standard deviation of the Brownian Motion being on the scale of square root of t,
+24:53
+we will need one more term there. Right? So one term is df/dt by dt.
+24:59
+Another is df by dS by dS. And the square of dS now is actually
+25:05
+of order of magnitude of dt. So we'll need a quadratic term there.
+25:12
+All right. So if this is our df, so what we'll do-- we'll differentiate.
+25:21
+We'll just substitute it here. Right? We'll substitute it here.
+25:27
+We'll substitute df taken from our dS, which is like this,
+25:33
+and dB.
+25:40
+Let's not forget that dB-- that B is deterministic. Right?
+25:45
+There is nothing uncertain about it. So dB is actually r*B*dt.
+25:51
+All right? Because our B grows exponentially
+25:57
+with interest rate r. So we substitute everything into the formula above.
+26:04
+This is just our df with dS expanded and everything.
+26:10
+And then when we start comparing the terms. One immediate thing to notice-- that a
+26:20
+has to be equal to df over dS, for this to hold.
+26:25
+Right? And if you compare the terms near dt, we'll get this expression here.
+26:32
+But that's actually even more the most important part.
+26:37
+Then we'll go and use our knowledge that some part
+26:45
+of our equation is deterministic and basically take f and a*S
+26:52
+on one side and leave the deterministic part, on the other side, differentiated once again.
+27:00
+And left side will be just r*B*dt. And if we substitute once again df--
+27:08
+and don't forget that what we learned is that a is equal to df by dS.
+27:15
+Then we collect all the terms and arrive to this partial differential equation which
+27:24
+connects-- which basically is a partial differential equation for the current price of a derivative--
+27:31
+of any derivative. And how if we solve it, then we should actually
+27:38
+be able to know the price of the derivative. So now how do we solve this partial differential equation?
+27:45
+Well, for-- yeah. So a few observations about this equation.
+27:51
+Well, the first observation is that any tradable
+27:59
+derivative-- we made no assumptions about the pay-off. So any tradable derivative as any pay-off
+28:07
+should satisfy this equation. The other observation is as we expected,
+28:14
+there is no dependency on real-world drift or any probability of it going up or down.
+28:23
+The only dependence is on the volatility of the stock. Right?
+28:31
+Not only we found the value of the derivative-- most importantly, we actually were
+28:38
+able to come up with a hedging strategy. And what does it mean, we came up with a hedging strategy?
+28:45
+Well, we found coefficients-- for any time, we found the coefficients, a and b,
+28:51
+such that we have a replicating portfolio. So what we could do, at any point of time,
+28:58
+we can hold the derivative-- short derivative and long the portfolio of stock itself, and some cash,
+29:06
+and then know how much it should be. Here, it's more complicated. We have to dynamically change these numbers,
+29:11
+as time develops. Every time dt we will have to rebalance. But both parts will replicate each other perfectly.
+29:20
+It's like in a bookie's example. We can go to a counterparty, agree
+29:29
+for some derivative contract. Probably there will be some fee. And then we'll go to exchange and buy the stock,
+29:37
+and we will get just cash from the bank. And we'll maintain this at some amount of stock and some amount of cash.
+29:43
+And we'll be sure that we are hedged. There is no risk in this combination of the derivative
+29:50
+and our hedge. So we will just collect a fee on the transaction.
+29:56
+So that's what actually-- how the business is working.
+30:01
+Traders are trading and hedging their positions immediately. I mean, they do take some market risks.
+30:07
+But you want to take very little and very directional, very specific market risks and not everything.
+30:16
+So our strategy allows us to have a hedging portfolio at the same time-- hedging strategy.
+30:24
+And now there are more mathematical but practical consequences that actually, by certain-- not very easy--
+30:34
+change of variables, we can take the Black-Scholes equation and put it back to heat equation.
+30:40
+Actually, I suggest it as one of the topics for the final paper,
+30:45
+for you to do it or check it out in the books. Go and understand it.
+30:52
+But the good part of it-- that heat equation is well known and well understood. There are many, many ways to solve it numerically.
+31:01
+For simple pay-outs, for calls and puts, we don't have to do it numerically,
+31:07
+but if the pay-outs are more complicated or the dynamics is different, then numerical methods
+31:18
+will be needed, for sure. So again, to solve this equation,
+31:24
+we'll need, as for any partial differential equation, we'll need some boundary and initial conditions.
+31:32
+And these come from our final pay-out of the option, which we know.
+31:39
+We will know what happens at expiry. And some boundary conditions. For call and put, the final pay-out we know.
+31:49
+Right? So at time T. And the boundary conditions
+31:56
+we discussed, we can observe them graphically.
+32:01
+So basically for call, as we said, at current time t,
+32:09
+and boundary 0, it should be 0. The price should be 0. And at infinity, it should be actually the forward price.
+32:20
+So it should be just discounted S minus K. Discounted pay-out.
+32:28
+Right? And similarly for put.
+32:34
+32:40
+So given these conditions, we can solve the equation.
+32:47
+And as I said, for call and put and for simple dynamics--
+32:52
+Black-Scholes dynamical or log-normal dynamics-- actually,
+32:58
+these equations can be solved exactly-- exactly meaning up to this term, the normal distribution, which
+33:07
+still has to be computed numerically, obviously. But here are the formulas.
+33:13
+They do kind of look a little bit-- and we'll see about it-- there is some kind of expected
+33:19
+volume going on. Right? One probability times another.
+33:25
+But these are the formulas. And that's how I drew the lines on the graphs.
+33:34
+And as I said, in fact, the whole world,
+33:45
+instead of solving the whole partial differential equation, we can approach it from a risk-neutral position
+33:55
+and say that, in fact, the price of our derivative now is just expected value of pay-out, discounted, probably,
+34:06
+from the maturity. But not in real time or real-world measure,
+34:13
+but in some specific risk-neutral measure. And how do we find this risk-neutral measure?
+34:18
+Well, the risk-neutral measure is such that the drift of our stock is actually interest rate.
+34:24
+It's riskless. That's exactly how we saw it in our binary example.
+34:32
+All right? So even in our binary example, our expected value
+34:42
+of our stock, under risk-neutral measure, meaning using the risk-neutral probability,
+34:50
+was drifting with interest rate r. So that the same happens in continuous case.
+34:59
+And that's another good exercise-- and I would accept it as a final paper-- is deriving
+35:10
+the Black-Scholes formula just by the expected value
+35:16
+of the call and put pay-out with the log-normal distribution--
+35:23
+terminal distribution.
+35:28
+All right. So for more complicated pay-offs,
+35:36
+the life becomes more complicated. And some finite differences should
+35:43
+be used for more complicated pay-offs or American pay-offs
+35:49
+or path-dependent pay-offs, tree methods or Monte Carlo simulations.
+35:54
+And that's what was happening in real life.
+36:03
+Yeah. Now, since we have, actually, plenty of time,
+36:13
+I would like to give an example of how replicating-- idea
+36:21
+of replicating portfolio works. I give a couple more examples.
+36:26
+36:34
+So OK. Here is a Bloomberg screen for foreign options-- call options on IBM stock.
+36:40
+It actually was taken a while ago-- a few years ago. And so here are different strikes for a call option.
+36:49
+The current price of the stock is $81.14.
+36:55
+And here are the strikes of the call. So obviously, if the option is way out of the money,
+37:04
+meaning the strike is very high compared to the stock price,
+37:11
+the value of the option is 0. If it's way in the money, in fact, it is just S minus K.
+37:20
+So S being $81. And say, the strike being $55.
+37:27
+So it's $26. Right? So there is some difference. But actually, here it's a bit small
+37:32
+because the difference should be just discounting, as we know. Right? But it's pretty short-dated options.
+37:38
+They are probably a month long, so there is not much discounting.
+37:44
+So it becomes pretty parallel. It's similar here, right? So I mean, this changes by 5.
+37:53
+This changes by 5. It's pretty linear. But it becomes non-linear around the money,
+37:59
+around current stock price. Right? So we do observe this behavior.
+38:07
+But to tell you the truth, if you were to-- I didn't put implied volatilities here.
+38:18
+But actually, you would observe that the world is not Black-Scholes, meaning that-- what's
+38:25
+the assumption of Black-Scholes. The assumption of Black-Scholes is that every option, for any strike, on a given stock,
+38:31
+on a given expiry, would have the same volatility. Right? So if we went through exercise of implying the volatility
+38:38
+according to Black-Scholes formula, from the option price which is traded on the market and the current price,
+38:46
+we would find out that, actually, the volatility is not
+38:52
+constant with strike.
+38:57
+Well, it's actually skewed. Well, actually it is smiled.
+39:03
+They would find something like this, which means that Black-Scholes theory is not perfectly good.
+39:11
+Right? So something more complicated should be done. But in some cases, we even don't need
+39:18
+to do something more complicated. One example, being so-called put-call parity.
+39:27
+Right? So let's see. Suppose we look at the screen.
+39:32
+So we know all prices for all call options for all strikes.
+39:37
+Well, probably will be some granularity, but we know those. But instead of pricing a call, we need to price a put.
+39:42
+Somehow, we don't know how the dynamics of our stock
+39:48
+looks like. So we have strong suspicion that it's not exactly log-normal.
+39:54
+So there is some volatility smile. It's not constant. The world is slightly not Black-Scholes.
+40:00
+So how do we price put? Well, let's see.
+40:05
+We'll stare long enough at the pay-outs of the call and put.
+40:14
+So what's the pay-out of a call with some strike? It looks like this.
+40:20
+Right? The pay-out of the put, with the same strike,
+40:25
+would look like this. So what if we take, we buy a call and sell a put?
+40:35
+40:45
+So this would go like this. Right? Straight line.
+40:51
+Looks very much like forward, right? So if we actually subtract the stock from here,
+41:00
+move it from here, then it should
+41:12
+be-- yeah-- minus K. Yeah.
+41:19
+I think I got the signs correct. Right? And this is just a number. Right?
+41:25
+And that's what happens at pay-out. So if we take this portfolio, if we action now, buy a call,
+41:30
+sell a put, and sell a stock, we know that at the end, we'll for sure get K in money.
+41:37
+Right? So which means that now-- so this is at time t.
+41:45
+41:50
+So right now, it looks, to me, that if we do write this,
+42:02
+and that's just the current price of the stock, this should be-- right?
+42:11
+We just need to discount this price to now, in this amount of cash, which means that our put, at any time
+42:23
+t, is stock minus K. Right?
+42:36
+So if we know all of the prices for any strike K-- if we know price of a call, we don't need any Black-Scholes
+42:44
+or anything. We can immediately tell everybody how much is a put.
+42:50
+Right? So then this relationship is actually a call-put parity.
+42:57
+And that's, again-- that's a replicating portfolio. It's a simple replicating portfolio. It's static, meaning that we fixed it now
+43:04
+and we don't change it to expiry. So it's quite good this way.
+43:10
+But that's how it works.
+43:16
+Another example. So for this, I have, actually, a picture.
+43:24
+So again, we have the same situation.
+43:30
+We have prices of calls. But instead of pricing a call, we want to price a digital.
+43:36
+So what is digital? Digital is such a weird contract, which pay-out is just a function-- Basically,
+43:43
+it's a bet on the stock to finish above strike price, K. Right?
+43:50
+If at expiry, the stock is above K, you get 1.
+43:56
+You'd get $1. If it's below, you'd get nothing, 0.
+44:01
+Right? So So such an interesting contract.
+44:07
+The question is, can we price it, given that we know the prices of Calls?
+44:13
+And I suggest we use the idea of replicating portfolio.
+44:20
+Any ideas how to do it? It's my typical interview question.
+44:31
+So just pretend that you are interviewing.
+44:41
+Yep? AUDIENCE: You long the call, and then you short the call, just like smaller or a higher strike.
+44:49
+PROFESSOR: Yep. The call strike. Yeah, you're absolutely right. Good.
+44:54
+You've got an offer. Yeah. So here's how it goes. So this is a strike K. Right?
+45:02
+So let's buy a call with strike K minus 1/2
+45:16
+and sell a Call with strike K plus 1/2.
+45:21
+Right? We just sold. So if we combine these two-- well, actually, if this is 1--
+45:31
+yeah.
+45:38
+If this is 1, it should look something like this.
+45:45
+Great. So how will it look like? So obviously, here, it's 0.
+45:51
+Right? Then it will be like this. Right? And after that, it will be what?
+45:58
+AUDIENCE: Constant. PROFESSOR: It will be constant. Right? And because this is K minus 1/2 and this is K plus 1/2,
+46:04
+it will be exactly 1. Right? Good. So our pay-out, at the end, will be like this.
+46:11
+So that's good.
+46:17
+But there is quite a bit of slope here. So how can we do better than this?
+46:25
+Well, if we buy it at K minus 1/4, and sell it at K plus 1/4,
+46:37
+and just combine those, it will be exactly the same, but the level will be 1/2.
+46:43
+So we need to buy two of those and to sell two of those. Right?
+46:50
+Well, we might as well go K minus epsilon and K plus epsilon, so it'll be call price at strike K minus epsilon,
+47:04
+minus call price at K plus epsilon, divided by 2*epsilon.
+47:13
+Right? This 2*epsilon coefficient needed rescale it back to 1.
+47:20
+Right? So in fact, if we go small epsilon, we need a lot of both.
+47:27
+Right? And that's how-- that's the approximation
+47:37
+of our digital price. And that's actually how people on the market
+47:43
+do price and hedge, most importantly, the digital contracts, because call contracts are liquid,
+47:54
+and they are traded on exchanges while digitals are way less liquid.
+47:59
+So somebody would call again-- to counterparty, enter into digital, and hedge it on the exchange.
+48:06
+These two calls with a call spread. But now tell me, is it surprising
+48:12
+that-- I mean, what does it remind you?
+48:18
+Yeah. So it's derivative of the call price
+48:26
+but with respect to strike. Right? Is it surprising?
+48:31
+48:38
+How did our call price look like? It's a ramp. Right?
+48:44
+If we take a derivative of this, what will we get? Yeah. AUDIENCE: [INAUDIBLE].
+48:49
+PROFESSOR: Right. So in fact, if we do something even more weird with this, and then I'll take a square or something else,
+48:59
+the same will apply. So it's not surprising at all.
+49:05
+All right. So that's basically how the replicate-- this idea
+49:15
+of replicating portfolios is extremely powerful.
+49:21
+And in fact, that's what happens in real life. In real life, you have some complicated derivative
+49:29
+which you need to hedge. And how to hedge-- you'll find something else which replicates-- to a certain extent,
+49:36
+replicates your pay-off. That's what you'll try to do. And this will be your hedge portfolio.
+49:42
+Usually, it's dynamic. So you'll have to rebalance. And that's how you basically reduce the risks.

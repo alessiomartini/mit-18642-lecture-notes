@@ -1,0 +1,3685 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.445 align:middle line:90%
+[SQUEAKING]
+
+00:00:02.445 --> 00:00:03.912 align:middle line:90%
+[RUSTLING]
+
+00:00:03.912 --> 00:00:05.868 align:middle line:90%
+[CLICKING]
+
+00:00:05.868 --> 00:00:16.940 align:middle line:90%
+
+
+00:00:16.940 --> 00:00:19.520 align:middle line:84%
+PETER KEMPTHORNE: All
+right, we'll get started.
+
+00:00:19.520 --> 00:00:22.560 align:middle line:84%
+See, last time we introduced
+you to the definition
+
+00:00:22.560 --> 00:00:24.040 align:middle line:90%
+of martingales.
+
+00:00:24.040 --> 00:00:27.680 align:middle line:84%
+And what we're going to
+do the first part today
+
+00:00:27.680 --> 00:00:32.960 align:middle line:84%
+is to see how useful
+and powerful martingale
+
+00:00:32.960 --> 00:00:37.520 align:middle line:84%
+properties are and solving
+interesting questions
+
+00:00:37.520 --> 00:00:38.540 align:middle line:90%
+and challenges.
+
+00:00:38.540 --> 00:00:43.840 align:middle line:84%
+So just as a reminder, if
+we have a stochastic process
+
+00:00:43.840 --> 00:00:48.120 align:middle line:84%
+xn, which is just a sequence
+of random variables,
+
+00:00:48.120 --> 00:00:52.680 align:middle line:84%
+generally the index n
+corresponds to time.
+
+00:00:52.680 --> 00:00:58.040 align:middle line:84%
+Then we can consider a
+derived process capital
+
+00:00:58.040 --> 00:01:03.420 align:middle line:84%
+M sub n, which is a function
+of the first n values
+
+00:01:03.420 --> 00:01:06.100 align:middle line:90%
+of the stochastic process x.
+
+00:01:06.100 --> 00:01:12.180 align:middle line:84%
+And we say that this second
+process, this derived process,
+
+00:01:12.180 --> 00:01:18.500 align:middle line:84%
+is a martingale if the expected
+value into the future from time
+
+00:01:18.500 --> 00:01:24.660 align:middle line:84%
+n minus 1 is simply equal
+to the time n minus 1 value.
+
+00:01:24.660 --> 00:01:32.020 align:middle line:84%
+So with the process
+evolving over time,
+
+00:01:32.020 --> 00:01:35.480 align:middle line:90%
+we have an M sub n process.
+
+00:01:35.480 --> 00:01:40.100 align:middle line:84%
+Basically, at time n
+minus 1 we have a value,
+
+00:01:40.100 --> 00:01:44.420 align:middle line:84%
+our prediction is that
+the expected value of that
+
+00:01:44.420 --> 00:01:49.100 align:middle line:90%
+in the future is Mn minus 1.
+
+00:01:49.100 --> 00:01:51.700 align:middle line:90%
+And so some examples of these.
+
+00:01:51.700 --> 00:01:55.940 align:middle line:84%
+We went through last time
+a simple random walk.
+
+00:01:55.940 --> 00:01:59.590 align:middle line:84%
+And with the simple
+random walk, we
+
+00:01:59.590 --> 00:02:05.190 align:middle line:84%
+end up having realizations
+of this martingale
+
+00:02:05.190 --> 00:02:10.550 align:middle line:84%
+that evolve from, say,
+a starting point 0.
+
+00:02:10.550 --> 00:02:14.870 align:middle line:84%
+And what's critical
+with these realizations
+
+00:02:14.870 --> 00:02:21.470 align:middle line:84%
+is that the future paths
+that have yet to be graphed
+
+00:02:21.470 --> 00:02:25.950 align:middle line:84%
+will have average value
+equal to the last point
+
+00:02:25.950 --> 00:02:28.030 align:middle line:90%
+on these realizations.
+
+00:02:28.030 --> 00:02:31.790 align:middle line:84%
+So there's a notion of
+there being flatness
+
+00:02:31.790 --> 00:02:37.502 align:middle line:90%
+in the martingale expectations.
+
+00:02:37.502 --> 00:02:43.190 align:middle line:84%
+With the example here
+of a simple random walk
+
+00:02:43.190 --> 00:02:47.470 align:middle line:84%
+with equal probability of
+going up or down one step,
+
+00:02:47.470 --> 00:02:52.350 align:middle line:84%
+one can graph the
+standard deviations up
+
+00:02:52.350 --> 00:02:56.490 align:middle line:84%
+from the average 0
+for the processes.
+
+00:02:56.490 --> 00:03:03.250 align:middle line:84%
+And basically the realizations
+of the random walk
+
+00:03:03.250 --> 00:03:06.330 align:middle line:84%
+will, by the central
+limit theorem,
+
+00:03:06.330 --> 00:03:09.570 align:middle line:84%
+converge to a
+normal distribution
+
+00:03:09.570 --> 00:03:12.970 align:middle line:84%
+at any given time point
+far into the future.
+
+00:03:12.970 --> 00:03:19.250 align:middle line:84%
+Now, this second
+example of a martingale
+
+00:03:19.250 --> 00:03:22.770 align:middle line:84%
+where we have a random
+walk Sn but then
+
+00:03:22.770 --> 00:03:27.970 align:middle line:84%
+we square it and subtract
+n times the sigma squared,
+
+00:03:27.970 --> 00:03:30.290 align:middle line:84%
+the variance of each
+of the steps, this
+
+00:03:30.290 --> 00:03:32.330 align:middle line:90%
+is also a martingale.
+
+00:03:32.330 --> 00:03:37.885 align:middle line:84%
+And so looking at different
+realizations of this martingale,
+
+00:03:37.885 --> 00:03:40.010 align:middle line:84%
+we can see that it's very,
+very different from that
+
+00:03:40.010 --> 00:03:42.970 align:middle line:90%
+of a simple random walk.
+
+00:03:42.970 --> 00:03:48.290 align:middle line:84%
+And importantly,
+there's basically
+
+00:03:48.290 --> 00:03:52.650 align:middle line:84%
+of a lower limit
+of the process, it
+
+00:03:52.650 --> 00:03:58.860 align:middle line:84%
+appears, for fixed n and
+an unbounded upper limit.
+
+00:03:58.860 --> 00:04:04.700 align:middle line:84%
+But this process as
+well is a martingale.
+
+00:04:04.700 --> 00:04:06.420 align:middle line:90%
+And let's see.
+
+00:04:06.420 --> 00:04:09.260 align:middle line:84%
+A different martingale
+can be defined,
+
+00:04:09.260 --> 00:04:15.420 align:middle line:84%
+not in terms of random
+walks with steps that add,
+
+00:04:15.420 --> 00:04:23.240 align:middle line:84%
+but with random shifts
+with factors x1 to xn.
+
+00:04:23.240 --> 00:04:28.300 align:middle line:84%
+So if we have Mn being
+the product of x1 to xn,
+
+00:04:28.300 --> 00:04:33.980 align:middle line:84%
+where the x's are independent
+random variables with mean value
+
+00:04:33.980 --> 00:04:40.380 align:middle line:84%
+1, then this particular
+process M sub n
+
+00:04:40.380 --> 00:04:44.140 align:middle line:84%
+will be a martingale with
+respect to the original series.
+
+00:04:44.140 --> 00:04:52.540 align:middle line:84%
+So here's an example of
+our Bernoulli factors,
+
+00:04:52.540 --> 00:05:00.440 align:middle line:84%
+which are with 50%
+probability 1.5 and with 50%
+
+00:05:00.440 --> 00:05:03.320 align:middle line:90%
+probability 0.5.
+
+00:05:03.320 --> 00:05:09.400 align:middle line:84%
+This would correspond
+to the change in wealth
+
+00:05:09.400 --> 00:05:13.440 align:middle line:84%
+from betting your wealth
+in a lottery where
+
+00:05:13.440 --> 00:05:20.080 align:middle line:84%
+you either make 50% or lose
+50% with equal probability.
+
+00:05:20.080 --> 00:05:27.220 align:middle line:84%
+And here is the graph of a
+realization over 50 steps.
+
+00:05:27.220 --> 00:05:30.400 align:middle line:90%
+Here's other realizations.
+
+00:05:30.400 --> 00:05:36.200 align:middle line:84%
+And what's interesting
+to see is that
+
+00:05:36.200 --> 00:05:40.240 align:middle line:84%
+with this particular
+martingale, there
+
+00:05:40.240 --> 00:05:45.120 align:middle line:84%
+are opportunities to, basically,
+if you're playing this lottery
+
+00:05:45.120 --> 00:05:51.260 align:middle line:84%
+game at each step, to be able
+to grow your wealth to 5 or 10
+
+00:05:51.260 --> 00:05:54.860 align:middle line:90%
+times its initial value.
+
+00:05:54.860 --> 00:06:00.780 align:middle line:84%
+But with moderate or
+even high probability,
+
+00:06:00.780 --> 00:06:04.780 align:middle line:84%
+you actually have lost
+almost all your wealth.
+
+00:06:04.780 --> 00:06:08.460 align:middle line:84%
+So yet another
+example, and this one
+
+00:06:08.460 --> 00:06:13.460 align:middle line:84%
+is really rather
+curious to introduce,
+
+00:06:13.460 --> 00:06:18.340 align:middle line:84%
+but it shows you how we can
+be flexible in generating
+
+00:06:18.340 --> 00:06:21.260 align:middle line:90%
+or constructing martingales.
+
+00:06:21.260 --> 00:06:28.100 align:middle line:84%
+If we have the yn
+sequence being iid
+
+00:06:28.100 --> 00:06:36.260 align:middle line:84%
+random variables and the
+moment generating function
+
+00:06:36.260 --> 00:06:47.900 align:middle line:84%
+e to the lambda yn
+or e to the lambda y,
+
+00:06:47.900 --> 00:06:52.910 align:middle line:84%
+yn is equal to the moment
+generating function.
+
+00:06:52.910 --> 00:06:56.750 align:middle line:90%
+Or that's e to the ty.
+
+00:06:56.750 --> 00:07:00.670 align:middle line:84%
+In our notation, we're going
+to use a phi of lambda here
+
+00:07:00.670 --> 00:07:01.810 align:middle line:90%
+or phi of t.
+
+00:07:01.810 --> 00:07:04.470 align:middle line:90%
+
+
+00:07:04.470 --> 00:07:15.270 align:middle line:84%
+Then if we consider
+taking xn equaling e
+
+00:07:15.270 --> 00:07:22.830 align:middle line:84%
+to the lambda yn divided
+by phi of lambda,
+
+00:07:22.830 --> 00:07:30.310 align:middle line:84%
+then this xn will
+be a martingale.
+
+00:07:30.310 --> 00:07:34.230 align:middle line:84%
+Or this xn, rather,
+will be factors that
+
+00:07:34.230 --> 00:07:39.030 align:middle line:90%
+have expectation equaling 1.
+
+00:07:39.030 --> 00:07:45.470 align:middle line:84%
+And if we take the product
+of these x's, we basically
+
+00:07:45.470 --> 00:07:53.170 align:middle line:84%
+have M sub n equaling e to the
+lambda times the sum of the yn's
+
+00:07:53.170 --> 00:08:03.210 align:middle line:84%
+divided by phi of lambda
+to the n-th power.
+
+00:08:03.210 --> 00:08:06.290 align:middle line:90%
+This will also be a martingale.
+
+00:08:06.290 --> 00:08:11.010 align:middle line:84%
+And what we'll see towards
+the middle of this lecture
+
+00:08:11.010 --> 00:08:13.970 align:middle line:84%
+is that this
+particular martingale
+
+00:08:13.970 --> 00:08:16.610 align:middle line:84%
+can be used to
+solve probabilities
+
+00:08:16.610 --> 00:08:20.490 align:middle line:84%
+of gambler's ruin, when
+you have gambles that
+
+00:08:20.490 --> 00:08:27.350 align:middle line:84%
+have different probabilities
+of success versus failure,
+
+00:08:27.350 --> 00:08:31.850 align:middle line:90%
+not necessarily equal fair bets.
+
+00:08:31.850 --> 00:08:32.470 align:middle line:90%
+All right.
+
+00:08:32.470 --> 00:08:36.370 align:middle line:84%
+Well, with martingales,
+it turns out
+
+00:08:36.370 --> 00:08:41.770 align:middle line:84%
+to be very useful
+to consider what
+
+00:08:41.770 --> 00:08:51.340 align:middle line:84%
+we call the information sets on
+the subsequence of variables x1
+
+00:08:51.340 --> 00:08:52.980 align:middle line:90%
+through xn.
+
+00:08:52.980 --> 00:08:59.660 align:middle line:84%
+So if we think of information
+progressing over time,
+
+00:08:59.660 --> 00:09:03.860 align:middle line:84%
+the information up
+to time little n
+
+00:09:03.860 --> 00:09:07.980 align:middle line:84%
+can be given by the
+outcomes of the x process.
+
+00:09:07.980 --> 00:09:15.200 align:middle line:84%
+And we can consider
+expectations of random variables
+
+00:09:15.200 --> 00:09:17.740 align:middle line:90%
+given this information set.
+
+00:09:17.740 --> 00:09:21.360 align:middle line:84%
+And the kinds of
+random variables
+
+00:09:21.360 --> 00:09:26.200 align:middle line:84%
+we might be interested in,
+z, can correspond to, say,
+
+00:09:26.200 --> 00:09:31.940 align:middle line:84%
+trading strategies based on
+the outcomes of asset prices
+
+00:09:31.940 --> 00:09:34.700 align:middle line:90%
+progressing over time.
+
+00:09:34.700 --> 00:09:44.420 align:middle line:84%
+And if we have, let's see, if
+this original information set is
+
+00:09:44.420 --> 00:09:50.320 align:middle line:84%
+represented in terms
+of a martingale,
+
+00:09:50.320 --> 00:10:04.040 align:middle line:84%
+then we can consider functions
+of the first n values given
+
+00:10:04.040 --> 00:10:14.380 align:middle line:84%
+by y, and relating to this
+function of the first n values,
+
+00:10:14.380 --> 00:10:19.520 align:middle line:84%
+which could be, say, the trading
+gains from applying a trading
+
+00:10:19.520 --> 00:10:24.360 align:middle line:84%
+strategy with asset
+prices given by the x's.
+
+00:10:24.360 --> 00:10:29.640 align:middle line:84%
+It will be very useful to
+use random variables that
+
+00:10:29.640 --> 00:10:32.840 align:middle line:90%
+are called non-anticipating.
+
+00:10:32.840 --> 00:10:37.440 align:middle line:84%
+And so a non-anticipating
+random variable
+
+00:10:37.440 --> 00:10:43.640 align:middle line:84%
+is a random variable
+An that is defined
+
+00:10:43.640 --> 00:10:47.040 align:middle line:90%
+signed by the information set.
+
+00:10:47.040 --> 00:10:51.700 align:middle line:84%
+It's non-random given the
+information set of the first n
+
+00:10:51.700 --> 00:10:54.020 align:middle line:90%
+minus 1 x's.
+
+00:10:54.020 --> 00:11:02.020 align:middle line:84%
+So if we wanted to represent
+the outcome of making trading
+
+00:11:02.020 --> 00:11:07.500 align:middle line:84%
+decisions using the
+first n minus 1 values,
+
+00:11:07.500 --> 00:11:11.500 align:middle line:84%
+this An could characterize
+how we might invest
+
+00:11:11.500 --> 00:11:15.220 align:middle line:90%
+for the n-th trading period.
+
+00:11:15.220 --> 00:11:21.420 align:middle line:84%
+Now, with such a non
+anticipating random variable,
+
+00:11:21.420 --> 00:11:30.420 align:middle line:84%
+we can consider a transformation
+of the original martingale,
+
+00:11:30.420 --> 00:11:38.260 align:middle line:84%
+given by M's with no tildes,
+and consider a transformation
+
+00:11:38.260 --> 00:11:42.910 align:middle line:84%
+of the Mn martingale
+by considering
+
+00:11:42.910 --> 00:11:46.610 align:middle line:90%
+this decomposition of M tilde.
+
+00:11:46.610 --> 00:11:50.030 align:middle line:90%
+So we have an initial value M0.
+
+00:11:50.030 --> 00:11:56.630 align:middle line:84%
+Then we have the non
+anticipating variable A1 that
+
+00:11:56.630 --> 00:12:00.390 align:middle line:84%
+depends only on
+information at time 0 times
+
+00:12:00.390 --> 00:12:05.390 align:middle line:84%
+the increment of the Martingale
+from time 0 to time 1.
+
+00:12:05.390 --> 00:12:07.570 align:middle line:90%
+And we add successive terms.
+
+00:12:07.570 --> 00:12:11.790 align:middle line:84%
+So these A's basically
+are random variables
+
+00:12:11.790 --> 00:12:14.910 align:middle line:90%
+at the beginning of time.
+
+00:12:14.910 --> 00:12:27.270 align:middle line:84%
+But after observing, say, j
+time periods, the Aj, let's see,
+
+00:12:27.270 --> 00:12:28.430 align:middle line:90%
+will be--
+
+00:12:28.430 --> 00:12:32.110 align:middle line:84%
+or j minus 1 time
+periods, the Aj
+
+00:12:32.110 --> 00:12:38.000 align:middle line:84%
+will be defined and non-random
+going from time j to j plus 1.
+
+00:12:38.000 --> 00:12:41.650 align:middle line:90%
+
+
+00:12:41.650 --> 00:12:48.970 align:middle line:84%
+And if you were to look at
+this M tilde sub n definition,
+
+00:12:48.970 --> 00:12:54.970 align:middle line:84%
+we basically have terms
+that are given by increments
+
+00:12:54.970 --> 00:13:00.850 align:middle line:84%
+of the martingale process,
+where each of those increments
+
+00:13:00.850 --> 00:13:04.850 align:middle line:90%
+has expectation equal to 0.
+
+00:13:04.850 --> 00:13:10.850 align:middle line:84%
+And so if we take the
+expectation of those
+
+00:13:10.850 --> 00:13:19.290 align:middle line:84%
+from time 0, then by conditional
+expectation properties,
+
+00:13:19.290 --> 00:13:27.970 align:middle line:84%
+the A's are fixed given the
+information up to time or j
+
+00:13:27.970 --> 00:13:35.370 align:middle line:84%
+minus 1, and then the variation
+of the martingale process
+
+00:13:35.370 --> 00:13:41.060 align:middle line:84%
+from time j minus 1 to
+j has expectation 0.
+
+00:13:41.060 --> 00:13:45.780 align:middle line:84%
+Anyway, the martingale
+transform theorem
+
+00:13:45.780 --> 00:13:51.400 align:middle line:84%
+says that this M tilde n
+process is a martingale
+
+00:13:51.400 --> 00:13:57.260 align:middle line:84%
+also with respect to
+the information sets fn.
+
+00:13:57.260 --> 00:14:00.980 align:middle line:84%
+And we often call this
+collection of information
+
+00:14:00.980 --> 00:14:04.060 align:middle line:90%
+sets a filtration.
+
+00:14:04.060 --> 00:14:07.800 align:middle line:84%
+And so when we think
+of different processes,
+
+00:14:07.800 --> 00:14:14.100 align:middle line:84%
+different realizations of
+a process up to time n,
+
+00:14:14.100 --> 00:14:19.060 align:middle line:84%
+then whatever the
+history is prior
+
+00:14:19.060 --> 00:14:25.380 align:middle line:84%
+to n, that is the information
+set we have available.
+
+00:14:25.380 --> 00:14:32.660 align:middle line:84%
+And as we observe successive
+values of the original Mn
+
+00:14:32.660 --> 00:14:39.080 align:middle line:84%
+process, we're basically
+adding more information
+
+00:14:39.080 --> 00:14:41.920 align:middle line:90%
+about the realizations.
+
+00:14:41.920 --> 00:14:45.920 align:middle line:90%
+And that's how it progresses.
+
+00:14:45.920 --> 00:14:51.560 align:middle line:84%
+Now, with martingales, an
+important concept for us
+
+00:14:51.560 --> 00:14:57.840 align:middle line:84%
+is a stopping time random
+variable, which we'll call tau.
+
+00:14:57.840 --> 00:15:02.000 align:middle line:84%
+And so what the
+stopping time variable
+
+00:15:02.000 --> 00:15:11.120 align:middle line:84%
+is, is a random variable
+that characterizes
+
+00:15:11.120 --> 00:15:16.840 align:middle line:84%
+whether, let's see, or
+I guess at any time n,
+
+00:15:16.840 --> 00:15:22.840 align:middle line:84%
+we know whether the stopping
+time has occurred or not.
+
+00:15:22.840 --> 00:15:30.360 align:middle line:84%
+So the event of the stopping
+time being less than or equal
+
+00:15:30.360 --> 00:15:37.260 align:middle line:84%
+to n steps, that has to be
+known in the information set up
+
+00:15:37.260 --> 00:15:38.200 align:middle line:90%
+to time n.
+
+00:15:38.200 --> 00:15:42.940 align:middle line:84%
+So the notation here
+is a little bit tricky.
+
+00:15:42.940 --> 00:15:51.980 align:middle line:84%
+We think of this set or event
+being the underlying probability
+
+00:15:51.980 --> 00:15:58.540 align:middle line:84%
+distribution states where
+the tau variable is less than
+
+00:15:58.540 --> 00:16:00.620 align:middle line:90%
+or equal to n.
+
+00:16:00.620 --> 00:16:08.620 align:middle line:84%
+And at any time n, we know
+whether this set has occurred
+
+00:16:08.620 --> 00:16:10.180 align:middle line:90%
+or not.
+
+00:16:10.180 --> 00:16:16.340 align:middle line:84%
+So the stopping time
+is a random variable,
+
+00:16:16.340 --> 00:16:19.120 align:middle line:90%
+and it could be infinite.
+
+00:16:19.120 --> 00:16:24.100 align:middle line:84%
+So it takes values on
+the set S varying from 0
+
+00:16:24.100 --> 00:16:29.980 align:middle line:84%
+up to possibly infinity if
+the process never stops.
+
+00:16:29.980 --> 00:16:34.630 align:middle line:84%
+Now, a way of trying
+to help explain
+
+00:16:34.630 --> 00:16:40.010 align:middle line:84%
+this is with a stopping
+time random variable,
+
+00:16:40.010 --> 00:16:46.610 align:middle line:84%
+we have different omegas
+in the probability space,
+
+00:16:46.610 --> 00:16:52.150 align:middle line:84%
+and the omegas can be thought of
+as indexing all possible paths.
+
+00:16:52.150 --> 00:16:56.750 align:middle line:84%
+So with different realizations,
+we have a different omega.
+
+00:16:56.750 --> 00:17:07.230 align:middle line:84%
+And so with these paths, our
+expectation or our event E,
+
+00:17:07.230 --> 00:17:12.550 align:middle line:84%
+which is the set of paths
+for which the stopping
+
+00:17:12.550 --> 00:17:17.510 align:middle line:84%
+time evaluated on that path
+is less than or equal to n,
+
+00:17:17.510 --> 00:17:24.470 align:middle line:84%
+this event is known to either
+have occurred or not to occur.
+
+00:17:24.470 --> 00:17:30.910 align:middle line:84%
+So we have the indicator
+of the path being
+
+00:17:30.910 --> 00:17:35.570 align:middle line:90%
+in this set E is either 0 or 1.
+
+00:17:35.570 --> 00:17:43.930 align:middle line:84%
+And so we can work with
+this random variable,
+
+00:17:43.930 --> 00:17:50.130 align:middle line:84%
+the indicator of whether the
+stopping time has occurred
+
+00:17:50.130 --> 00:17:51.410 align:middle line:90%
+or not.
+
+00:17:51.410 --> 00:17:58.490 align:middle line:84%
+And with this
+setup, we can think
+
+00:17:58.490 --> 00:18:05.650 align:middle line:84%
+of the process that is governed
+by a stopping time tau.
+
+00:18:05.650 --> 00:18:10.250 align:middle line:84%
+We can represent the
+process at the stopped time
+
+00:18:10.250 --> 00:18:16.010 align:middle line:84%
+tau as the sum of
+the realizations xn
+
+00:18:16.010 --> 00:18:21.650 align:middle line:84%
+times a simple indicator of
+whether the stopping time equals
+
+00:18:21.650 --> 00:18:23.850 align:middle line:90%
+n or not.
+
+00:18:23.850 --> 00:18:28.210 align:middle line:84%
+So we basically have
+our stopped process
+
+00:18:28.210 --> 00:18:37.100 align:middle line:84%
+being a sum of weights times the
+xn's, where those weights are
+
+00:18:37.100 --> 00:18:38.560 align:middle line:90%
+actually 0 or 1.
+
+00:18:38.560 --> 00:18:41.100 align:middle line:90%
+
+
+00:18:41.100 --> 00:18:45.940 align:middle line:84%
+Now, in the mathematics of
+dealing with stopping times,
+
+00:18:45.940 --> 00:18:53.780 align:middle line:84%
+the potential for infinite
+values of the stopping time
+
+00:18:53.780 --> 00:18:56.020 align:middle line:90%
+makes things complicated.
+
+00:18:56.020 --> 00:19:01.380 align:middle line:84%
+And what we can do is
+consider the minimum
+
+00:19:01.380 --> 00:19:06.740 align:middle line:84%
+of n and the stopping
+time tau denoting that
+
+00:19:06.740 --> 00:19:12.220 align:middle line:84%
+by n caret tau, so the
+minimum of n and tau.
+
+00:19:12.220 --> 00:19:18.140 align:middle line:84%
+And so if we have
+a finite value n,
+
+00:19:18.140 --> 00:19:22.380 align:middle line:84%
+this truncated
+stopping time is going
+
+00:19:22.380 --> 00:19:28.580 align:middle line:84%
+to be a measurable random
+variable with respect
+
+00:19:28.580 --> 00:19:36.320 align:middle line:84%
+to the information set script
+FM, information set FM for M
+
+00:19:36.320 --> 00:19:38.040 align:middle line:90%
+greater than or equal to n.
+
+00:19:38.040 --> 00:19:48.400 align:middle line:84%
+So if we imagine basically
+this time increasing,
+
+00:19:48.400 --> 00:19:54.840 align:middle line:84%
+and we think of the
+minimum of n and tau,
+
+00:19:54.840 --> 00:20:00.760 align:middle line:84%
+then we will be
+considering processes
+
+00:20:00.760 --> 00:20:08.200 align:middle line:84%
+that maybe stop for a given
+tau, for a given realization.
+
+00:20:08.200 --> 00:20:11.680 align:middle line:84%
+Or if they don't really
+stop until later,
+
+00:20:11.680 --> 00:20:15.920 align:middle line:84%
+we just consider the
+value at the n point.
+
+00:20:15.920 --> 00:20:22.880 align:middle line:84%
+Now, this theorem can be
+proven with this argument.
+
+00:20:22.880 --> 00:20:29.860 align:middle line:84%
+And what you can see
+is that we define
+
+00:20:29.860 --> 00:20:38.740 align:middle line:84%
+our non-anticipating variables
+to be the indicator of tau,
+
+00:20:38.740 --> 00:20:41.340 align:middle line:84%
+the stopping time being
+greater than or equal to k.
+
+00:20:41.340 --> 00:20:47.540 align:middle line:84%
+And so substituting
+that in to the formula
+
+00:20:47.540 --> 00:20:58.100 align:middle line:84%
+for the decomposition, we end
+up getting that this stopped
+
+00:20:58.100 --> 00:21:02.540 align:middle line:84%
+martingale at time,
+the minimum of n or tau
+
+00:21:02.540 --> 00:21:06.860 align:middle line:84%
+is actually equal to the sum of
+these non-anticipating variables
+
+00:21:06.860 --> 00:21:10.300 align:middle line:84%
+times the increments
+of the martingale.
+
+00:21:10.300 --> 00:21:17.260 align:middle line:84%
+So this is easily a
+martingale transform
+
+00:21:17.260 --> 00:21:20.900 align:middle line:84%
+and satisfies that
+martingale transform theorem.
+
+00:21:20.900 --> 00:21:27.630 align:middle line:84%
+So this stopped martingale
+at the minimum of n and tau
+
+00:21:27.630 --> 00:21:29.670 align:middle line:90%
+is also a martingale.
+
+00:21:29.670 --> 00:21:35.970 align:middle line:84%
+What we then want to
+do is consider taking--
+
+00:21:35.970 --> 00:21:36.470 align:middle line:90%
+let's see.
+
+00:21:36.470 --> 00:21:39.490 align:middle line:84%
+I'm not sure if we do
+it here shortly or not,
+
+00:21:39.490 --> 00:21:44.750 align:middle line:84%
+but we'll basically
+let little n grow large
+
+00:21:44.750 --> 00:21:48.250 align:middle line:84%
+and argue that in
+the limiting case,
+
+00:21:48.250 --> 00:21:53.150 align:middle line:84%
+we basically have the stopped
+martingale without the minimum
+
+00:21:53.150 --> 00:21:55.030 align:middle line:90%
+of n in tau.
+
+00:21:55.030 --> 00:21:58.830 align:middle line:84%
+Well, let's look at
+the simple random
+
+00:21:58.830 --> 00:22:05.430 align:middle line:84%
+walk we had before where the
+steps are plus 1 or negative 1.
+
+00:22:05.430 --> 00:22:11.830 align:middle line:84%
+And we consider Sn being
+the sum of the steps.
+
+00:22:11.830 --> 00:22:18.630 align:middle line:84%
+This can be used to characterize
+the problem of playing
+
+00:22:18.630 --> 00:22:24.030 align:middle line:84%
+against an opponent and
+betting $1 with each iteration
+
+00:22:24.030 --> 00:22:25.450 align:middle line:90%
+of the game.
+
+00:22:25.450 --> 00:22:29.570 align:middle line:84%
+And you either win
+or lose that dollar
+
+00:22:29.570 --> 00:22:32.630 align:middle line:90%
+each iteration of the game.
+
+00:22:32.630 --> 00:22:46.610 align:middle line:84%
+And we can consider having
+a hit level for the sum Sn
+
+00:22:46.610 --> 00:22:49.850 align:middle line:84%
+being equal to
+plus A or minus B.
+
+00:22:49.850 --> 00:22:56.890 align:middle line:84%
+And so basically, this
+reflects whether we
+
+00:22:56.890 --> 00:23:06.450 align:middle line:84%
+beat our opponent or not,
+where our opponent has a,
+
+00:23:06.450 --> 00:23:12.410 align:middle line:84%
+well, let's see, if
+we have a bankroll B
+
+00:23:12.410 --> 00:23:16.210 align:middle line:84%
+and our opponent
+has a bankroll A,
+
+00:23:16.210 --> 00:23:22.420 align:middle line:84%
+do we win the entire bankroll
+of our opponent and hit A first?
+
+00:23:22.420 --> 00:23:25.340 align:middle line:90%
+
+
+00:23:25.340 --> 00:23:28.980 align:middle line:84%
+So we have this
+problem, and we want
+
+00:23:28.980 --> 00:23:34.950 align:middle line:84%
+to know what's the likelihood
+of basically player one losing.
+
+00:23:34.950 --> 00:23:37.460 align:middle line:90%
+
+
+00:23:37.460 --> 00:23:40.980 align:middle line:90%
+And the SN is a martingale.
+
+00:23:40.980 --> 00:23:52.500 align:middle line:84%
+And tau, the time at which the
+sum Sn equals plus A or minus B
+
+00:23:52.500 --> 00:23:54.500 align:middle line:90%
+is a stopping time.
+
+00:23:54.500 --> 00:23:59.140 align:middle line:84%
+And so this is a martingale
+by the stopping time theorem.
+
+00:23:59.140 --> 00:24:02.500 align:middle line:84%
+And with such a
+martingale we have
+
+00:24:02.500 --> 00:24:10.700 align:middle line:84%
+that the expected value
+of S at the stopped time
+
+00:24:10.700 --> 00:24:16.140 align:middle line:84%
+is equal to the expected
+value initially.
+
+00:24:16.140 --> 00:24:20.620 align:middle line:90%
+And that is equal to 0.
+
+00:24:20.620 --> 00:24:26.640 align:middle line:84%
+Starting out at time
+0, Sn is equal to 0.
+
+00:24:26.640 --> 00:24:32.160 align:middle line:84%
+And so if we take the limit
+as n goes to infinity,
+
+00:24:32.160 --> 00:24:37.160 align:middle line:84%
+this converges to
+the random variable S
+
+00:24:37.160 --> 00:24:40.000 align:middle line:90%
+tau with probability 1.
+
+00:24:40.000 --> 00:24:47.680 align:middle line:84%
+And this is proven partly
+by showing that the stopping
+
+00:24:47.680 --> 00:24:49.640 align:middle line:90%
+time can't be infinite.
+
+00:24:49.640 --> 00:24:54.920 align:middle line:84%
+But if we assume that
+these results are valid,
+
+00:24:54.920 --> 00:25:00.560 align:middle line:84%
+then we have 0 is equal to
+the expected value of S tau.
+
+00:25:00.560 --> 00:25:06.720 align:middle line:84%
+And if we write out what S tau
+is, at the stopping time tau,
+
+00:25:06.720 --> 00:25:11.400 align:middle line:84%
+it's either going to
+equal A times the S tau
+
+00:25:11.400 --> 00:25:20.780 align:middle line:84%
+hitting A or minus B times the
+stopped value equaling minus B.
+
+00:25:20.780 --> 00:25:25.740 align:middle line:84%
+And if we take expectations
+of this equation,
+
+00:25:25.740 --> 00:25:31.820 align:middle line:84%
+we basically have 0 is equal
+to A times the probability
+
+00:25:31.820 --> 00:25:37.140 align:middle line:84%
+that we hit the level plus A
+minus B times the probability
+
+00:25:37.140 --> 00:25:41.580 align:middle line:84%
+that we hit minus B. And those
+probabilities are complements
+
+00:25:41.580 --> 00:25:43.940 align:middle line:90%
+of each other.
+
+00:25:43.940 --> 00:25:48.940 align:middle line:84%
+So the chance that we hit
+minus B at the stop time
+
+00:25:48.940 --> 00:25:52.060 align:middle line:84%
+is 1 minus the
+probability that we hit A.
+
+00:25:52.060 --> 00:25:56.500 align:middle line:84%
+So using these
+relationships, we get
+
+00:25:56.500 --> 00:26:05.740 align:middle line:84%
+that the probability that we hit
+A first is B over A plus B. Yes?
+
+00:26:05.740 --> 00:26:08.380 align:middle line:84%
+AUDIENCE: So on the previous
+slide, can I just check,
+
+00:26:08.380 --> 00:26:10.200 align:middle line:84%
+I don't know if it
+might be an error
+
+00:26:10.200 --> 00:26:12.540 align:middle line:84%
+or if I don't
+understand something.
+
+00:26:12.540 --> 00:26:16.370 align:middle line:84%
+Is it meant to say
+solve for S tau plus A
+
+00:26:16.370 --> 00:26:17.620 align:middle line:90%
+where it says problem in bold?
+
+00:26:17.620 --> 00:26:20.830 align:middle line:90%
+
+
+00:26:20.830 --> 00:26:22.190 align:middle line:90%
+PETER KEMPTHORNE: Let's see.
+
+00:26:22.190 --> 00:26:23.490 align:middle line:90%
+Can you ask the question again?
+
+00:26:23.490 --> 00:26:25.750 align:middle line:84%
+AUDIENCE: So where it says
+problem in bold [INAUDIBLE]
+
+00:26:25.750 --> 00:26:29.150 align:middle line:84%
+and then problem solved, is it
+meant to say probability that S
+
+00:26:29.150 --> 00:26:29.887 align:middle line:90%
+tau--
+
+00:26:29.887 --> 00:26:30.970 align:middle line:90%
+PETER KEMPTHORNE: Oh, yes.
+
+00:26:30.970 --> 00:26:37.590 align:middle line:84%
+It's probably the S tau equals
+plus A. Yes, definitely.
+
+00:26:37.590 --> 00:26:39.190 align:middle line:90%
+No, no, that's fine.
+
+00:26:39.190 --> 00:26:39.690 align:middle line:90%
+That's fine.
+
+00:26:39.690 --> 00:26:41.470 align:middle line:90%
+There's always typos.
+
+00:26:41.470 --> 00:26:46.070 align:middle line:84%
+Fewer typos on slides than on
+the Blackboard, I would say.
+
+00:26:46.070 --> 00:26:50.310 align:middle line:84%
+That's the benefit of having
+the slides, and easier to fix.
+
+00:26:50.310 --> 00:26:50.890 align:middle line:90%
+All right.
+
+00:26:50.890 --> 00:26:52.230 align:middle line:90%
+Thank you for that.
+
+00:26:52.230 --> 00:26:52.810 align:middle line:90%
+All right.
+
+00:26:52.810 --> 00:26:56.790 align:middle line:84%
+So we get this really nice
+formula for the likelihood
+
+00:26:56.790 --> 00:27:05.830 align:middle line:84%
+of hitting A before hitting
+minus B. And so by symmetry,
+
+00:27:05.830 --> 00:27:10.270 align:middle line:84%
+if A equals B, then
+this is simply 1/2.
+
+00:27:10.270 --> 00:27:18.570 align:middle line:84%
+But if the player B
+has a larger bankroll
+
+00:27:18.570 --> 00:27:25.248 align:middle line:84%
+than the chance of taking
+all the money from A,
+
+00:27:25.248 --> 00:27:30.050 align:middle line:90%
+basically goes to 1.
+
+00:27:30.050 --> 00:27:35.490 align:middle line:84%
+So it makes sense that if you're
+going to gamble with fair odds,
+
+00:27:35.490 --> 00:27:37.530 align:middle line:84%
+you have an advantage
+if you have a bigger
+
+00:27:37.530 --> 00:27:40.450 align:middle line:90%
+bankroll than your opponent.
+
+00:27:40.450 --> 00:27:46.210 align:middle line:84%
+Now, this second
+example of martingales,
+
+00:27:46.210 --> 00:27:54.010 align:middle line:84%
+which is the square of the
+random walk Sn minus n, this
+
+00:27:54.010 --> 00:27:57.210 align:middle line:90%
+is a martingale as well.
+
+00:27:57.210 --> 00:28:03.170 align:middle line:84%
+And if we look at
+this Martingale,
+
+00:28:03.170 --> 00:28:09.790 align:middle line:84%
+it's bounded by the max of A
+squared B squared plus tau.
+
+00:28:09.790 --> 00:28:14.050 align:middle line:84%
+So we have a bounded
+transformation
+
+00:28:14.050 --> 00:28:16.980 align:middle line:90%
+of the original Sn.
+
+00:28:16.980 --> 00:28:25.460 align:middle line:84%
+And so this martingale has
+expectation 0 for all n.
+
+00:28:25.460 --> 00:28:30.380 align:middle line:84%
+And so if we look
+at the expectation
+
+00:28:30.380 --> 00:28:40.060 align:middle line:84%
+of M tau, this transformation
+of the original martingale Sn,
+
+00:28:40.060 --> 00:28:47.540 align:middle line:84%
+it has 0 expectation, which is
+equal to the expected value of S
+
+00:28:47.540 --> 00:28:51.500 align:middle line:84%
+tau squared minus the
+expected value of tau.
+
+00:28:51.500 --> 00:29:01.140 align:middle line:84%
+And if we look at what is the
+expected value of S tau squared,
+
+00:29:01.140 --> 00:29:06.620 align:middle line:84%
+so this term here,
+we have that that's
+
+00:29:06.620 --> 00:29:13.340 align:middle line:84%
+equal to being stopped
+at plus A times A squared
+
+00:29:13.340 --> 00:29:15.360 align:middle line:84%
+plus the probability
+of being stopped
+
+00:29:15.360 --> 00:29:18.240 align:middle line:90%
+at minus B times B squared.
+
+00:29:18.240 --> 00:29:22.340 align:middle line:84%
+And this expectation
+is equal to 0.
+
+00:29:22.340 --> 00:29:27.640 align:middle line:84%
+So we can actually solve for
+the expected value of tau.
+
+00:29:27.640 --> 00:29:31.920 align:middle line:84%
+It's simply equal to the
+expected value of S tau squared.
+
+00:29:31.920 --> 00:29:38.240 align:middle line:84%
+So plugging everything in,
+it gets a little tricky
+
+00:29:38.240 --> 00:29:39.780 align:middle line:90%
+until we simplify.
+
+00:29:39.780 --> 00:29:43.200 align:middle line:84%
+And it's simply the
+product of A times B.
+
+00:29:43.200 --> 00:29:51.280 align:middle line:84%
+So the amount of time it
+takes to defeat the opponent
+
+00:29:51.280 --> 00:29:55.400 align:middle line:84%
+has an expected time
+equal to A times B.
+
+00:29:55.400 --> 00:30:01.740 align:middle line:84%
+So if you're gambling
+in such a situation,
+
+00:30:01.740 --> 00:30:05.720 align:middle line:84%
+the size of your bankroll times
+the size of the other person's
+
+00:30:05.720 --> 00:30:08.640 align:middle line:84%
+bankroll estimates
+the approximate time
+
+00:30:08.640 --> 00:30:16.460 align:middle line:84%
+it will take to finish the game,
+with one dominating the other.
+
+00:30:16.460 --> 00:30:21.460 align:middle line:84%
+Anyway, what's characteristic
+of these examples is
+
+00:30:21.460 --> 00:30:26.620 align:middle line:84%
+we have a martingale transform
+of the original series.
+
+00:30:26.620 --> 00:30:32.900 align:middle line:84%
+It has a 0 expectation
+as it's defined.
+
+00:30:32.900 --> 00:30:37.980 align:middle line:84%
+And that 0 expectation applies
+for all time points as well as
+
+00:30:37.980 --> 00:30:41.060 align:middle line:90%
+the stopping time.
+
+00:30:41.060 --> 00:30:43.100 align:middle line:90%
+All right.
+
+00:30:43.100 --> 00:30:48.060 align:middle line:84%
+Well, a really
+challenging problem
+
+00:30:48.060 --> 00:30:54.060 align:middle line:84%
+is to consider the
+random walk with bias.
+
+00:30:54.060 --> 00:31:01.220 align:middle line:84%
+So we consider steps plus 1
+or minus 1 with probability p
+
+00:31:01.220 --> 00:31:04.260 align:middle line:90%
+and 1 minus p respectively.
+
+00:31:04.260 --> 00:31:11.670 align:middle line:84%
+And then we're
+interested in what
+
+00:31:11.670 --> 00:31:16.770 align:middle line:84%
+is the probability of hitting
+plus A, say, in this case.
+
+00:31:16.770 --> 00:31:21.950 align:middle line:84%
+Certainly, as p
+increases, the probability
+
+00:31:21.950 --> 00:31:24.936 align:middle line:84%
+of hitting plus A
+first increases.
+
+00:31:24.936 --> 00:31:28.070 align:middle line:90%
+
+
+00:31:28.070 --> 00:31:29.410 align:middle line:90%
+But how does it do so?
+
+00:31:29.410 --> 00:31:35.043 align:middle line:84%
+Now, some of you have taken
+stochastic processes already.
+
+00:31:35.043 --> 00:31:36.710 align:middle line:84%
+Or how many people
+have taken the course
+
+00:31:36.710 --> 00:31:38.330 align:middle line:90%
+in stochastic processes?
+
+00:31:38.330 --> 00:31:41.470 align:middle line:90%
+Maybe just a couple.
+
+00:31:41.470 --> 00:31:47.870 align:middle line:84%
+Do you recall this problem
+being covered in your course?
+
+00:31:47.870 --> 00:31:53.590 align:middle line:84%
+And when I taught the
+stochastic processes course
+
+00:31:53.590 --> 00:31:59.190 align:middle line:84%
+about five or six years
+ago, the way this was solved
+
+00:31:59.190 --> 00:32:07.030 align:middle line:84%
+was by brute force understanding
+the dynamics of the process
+
+00:32:07.030 --> 00:32:14.130 align:middle line:84%
+and doing computations
+with first step analyses.
+
+00:32:14.130 --> 00:32:19.290 align:middle line:84%
+And the solution was
+really quite complex,
+
+00:32:19.290 --> 00:32:21.690 align:middle line:90%
+but it got the right answer.
+
+00:32:21.690 --> 00:32:23.690 align:middle line:84%
+What's really neat
+about martingales
+
+00:32:23.690 --> 00:32:28.810 align:middle line:84%
+is that we can actually solve
+this problem pretty elegantly.
+
+00:32:28.810 --> 00:32:32.330 align:middle line:84%
+And so we're going to use this
+moment generating function
+
+00:32:32.330 --> 00:32:34.450 align:middle line:90%
+transformation.
+
+00:32:34.450 --> 00:32:39.110 align:middle line:84%
+So our xn's have a moment
+generating function,
+
+00:32:39.110 --> 00:32:44.410 align:middle line:84%
+which is p, the probability of
+plus 1, times e to the lambda
+
+00:32:44.410 --> 00:32:50.330 align:middle line:84%
+times plus 1 plus q, the
+probability of negative 1 times
+
+00:32:50.330 --> 00:32:53.630 align:middle line:84%
+e to the lambda
+times negative 1.
+
+00:32:53.630 --> 00:32:57.010 align:middle line:84%
+So this definition of the
+moment generating function
+
+00:32:57.010 --> 00:32:59.970 align:middle line:90%
+is very straightforward.
+
+00:32:59.970 --> 00:33:04.230 align:middle line:84%
+If we take e to the
+lambda xn divided by phi,
+
+00:33:04.230 --> 00:33:07.130 align:middle line:84%
+these are independent
+random variables that
+
+00:33:07.130 --> 00:33:11.940 align:middle line:90%
+have expectation equal to 1.
+
+00:33:11.940 --> 00:33:19.100 align:middle line:84%
+And we can define n then to be
+the product of the first n yi's.
+
+00:33:19.100 --> 00:33:24.940 align:middle line:84%
+And this will be a
+martingale by our example 4.
+
+00:33:24.940 --> 00:33:36.500 align:middle line:84%
+And if we solve for the lambda
+value, that makes phi of lambda
+
+00:33:36.500 --> 00:33:39.420 align:middle line:90%
+equal to 1.
+
+00:33:39.420 --> 00:33:44.580 align:middle line:84%
+Then for that fixed
+value of lambda,
+
+00:33:44.580 --> 00:33:48.960 align:middle line:84%
+this Mn is going
+to be a martingale.
+
+00:33:48.960 --> 00:33:51.380 align:middle line:84%
+It's actually a
+martingale for any lambda.
+
+00:33:51.380 --> 00:33:55.620 align:middle line:84%
+But in addition, that special
+case where phi of lambda
+
+00:33:55.620 --> 00:33:57.620 align:middle line:90%
+equals 1.
+
+00:33:57.620 --> 00:34:02.140 align:middle line:84%
+And so if we graph this
+moment generating function
+
+00:34:02.140 --> 00:34:10.520 align:middle line:84%
+as a function of lambda, we
+can see that it's equal to 1
+
+00:34:10.520 --> 00:34:13.400 align:middle line:84%
+when e to the lambda
+is equal to q over p.
+
+00:34:13.400 --> 00:34:17.000 align:middle line:90%
+
+
+00:34:17.000 --> 00:34:22.920 align:middle line:84%
+So Mn for this particular
+lambda for which e to the lambda
+
+00:34:22.920 --> 00:34:30.840 align:middle line:84%
+equals q over p is simply
+q over p to the power Sn.
+
+00:34:30.840 --> 00:34:35.360 align:middle line:84%
+And with that, we basically
+have the initial value
+
+00:34:35.360 --> 00:34:41.199 align:middle line:84%
+of M at time 1, basically,
+or at time 0 is 1.
+
+00:34:41.199 --> 00:34:46.040 align:middle line:84%
+And that should equal the
+stopped value of q over p
+
+00:34:46.040 --> 00:34:49.980 align:middle line:84%
+to the power SN2 at
+the stopped value.
+
+00:34:49.980 --> 00:34:53.679 align:middle line:84%
+So it's q over p to the
+plus A times the probability
+
+00:34:53.679 --> 00:34:56.840 align:middle line:84%
+of stopping at A plus
+q over p to the minus
+
+00:34:56.840 --> 00:35:01.120 align:middle line:84%
+B times the probability
+of stopping at minus B.
+
+00:35:01.120 --> 00:35:06.820 align:middle line:84%
+And again, this equation
+basically gives us
+
+00:35:06.820 --> 00:35:10.740 align:middle line:84%
+two terms that are
+related to each other
+
+00:35:10.740 --> 00:35:12.460 align:middle line:90%
+that we can solve for.
+
+00:35:12.460 --> 00:35:19.900 align:middle line:84%
+So we get the probability that
+this biased random walk stops
+
+00:35:19.900 --> 00:35:24.620 align:middle line:84%
+or hits plus A first is
+simply the ratio of q
+
+00:35:24.620 --> 00:35:30.900 align:middle line:84%
+to p to the power of B minus 1
+over the same ratio to the power
+
+00:35:30.900 --> 00:35:41.660 align:middle line:84%
+A plus B. So this result
+is very direct and elegant.
+
+00:35:41.660 --> 00:35:46.060 align:middle line:84%
+If you look at stochastic
+processes books that
+
+00:35:46.060 --> 00:35:49.260 align:middle line:84%
+try to solve this
+biased random walk
+
+00:35:49.260 --> 00:35:51.780 align:middle line:84%
+problem without
+martingale theory,
+
+00:35:51.780 --> 00:35:54.290 align:middle line:84%
+it's a bit more
+involved and tricky.
+
+00:35:54.290 --> 00:35:56.900 align:middle line:90%
+
+
+00:35:56.900 --> 00:35:59.540 align:middle line:84%
+All right, so here's
+just some R code that
+
+00:35:59.540 --> 00:36:04.430 align:middle line:84%
+will graph these probabilities
+as functions of A and B.
+
+00:36:04.430 --> 00:36:08.270 align:middle line:84%
+I think it's useful only just to
+know that you can do something
+
+00:36:08.270 --> 00:36:08.770 align:middle line:90%
+like this.
+
+00:36:08.770 --> 00:36:11.150 align:middle line:84%
+You can graph the
+probability surface
+
+00:36:11.150 --> 00:36:14.990 align:middle line:84%
+as it varies with the
+hit levels A and B.
+
+00:36:14.990 --> 00:36:21.230 align:middle line:84%
+And here are contours of the
+different probabilities, which
+
+00:36:21.230 --> 00:36:23.390 align:middle line:90%
+can also be graphed easily.
+
+00:36:23.390 --> 00:36:30.190 align:middle line:84%
+And that finishes this initial
+discussion of martingales.
+
+00:36:30.190 --> 00:36:38.190 align:middle line:84%
+Now, a second topic in
+stochastic processes
+
+00:36:38.190 --> 00:36:45.670 align:middle line:84%
+that is extremely important is
+the concept of Markov processes.
+
+00:36:45.670 --> 00:36:53.230 align:middle line:84%
+And so if we think of a
+general stochastic process xt,
+
+00:36:53.230 --> 00:36:57.790 align:middle line:84%
+then we will say that
+the process is a Markov
+
+00:36:57.790 --> 00:37:07.410 align:middle line:84%
+process if for any
+times of the process S
+
+00:37:07.410 --> 00:37:17.410 align:middle line:84%
+that's between u and t, that xt
+will be independent of all xu's
+
+00:37:17.410 --> 00:37:21.210 align:middle line:90%
+where u is less than s.
+
+00:37:21.210 --> 00:37:30.170 align:middle line:84%
+So when we think of a time
+scale, so we have u less than s
+
+00:37:30.170 --> 00:37:31.190 align:middle line:90%
+less than t.
+
+00:37:31.190 --> 00:37:36.650 align:middle line:90%
+
+
+00:37:36.650 --> 00:37:42.490 align:middle line:84%
+If we imagine realizations
+of a stochastic process,
+
+00:37:42.490 --> 00:37:54.090 align:middle line:84%
+and we are interested in
+looking at the value of xt,
+
+00:37:54.090 --> 00:38:01.220 align:middle line:84%
+the value of xt given
+information on times
+
+00:38:01.220 --> 00:38:10.220 align:middle line:84%
+s and before will be independent
+of all of the times before.
+
+00:38:10.220 --> 00:38:15.660 align:middle line:84%
+And so the conditional
+distribution,
+
+00:38:15.660 --> 00:38:22.780 align:middle line:84%
+so the distribution
+of xt, given all
+
+00:38:22.780 --> 00:38:30.420 align:middle line:84%
+of the values of x prior to time
+u, is equal in distribution.
+
+00:38:30.420 --> 00:38:33.700 align:middle line:84%
+It has the same
+random distribution
+
+00:38:33.700 --> 00:38:40.260 align:middle line:84%
+as just the conditional
+distribution given xs.
+
+00:38:40.260 --> 00:38:47.580 align:middle line:84%
+So with a Markov process, the
+future depends on the past
+
+00:38:47.580 --> 00:38:51.820 align:middle line:84%
+only through the last
+value of the past.
+
+00:38:51.820 --> 00:38:56.100 align:middle line:84%
+It doesn't matter
+how one arrived
+
+00:38:56.100 --> 00:39:00.360 align:middle line:90%
+at a given value at time s.
+
+00:39:00.360 --> 00:39:04.880 align:middle line:84%
+For different realizations
+that have the same end point,
+
+00:39:04.880 --> 00:39:10.080 align:middle line:84%
+it's only that point that
+indexes the distributions
+
+00:39:10.080 --> 00:39:11.260 align:middle line:90%
+into the future.
+
+00:39:11.260 --> 00:39:12.670 align:middle line:90%
+So this is a Markov process.
+
+00:39:12.670 --> 00:39:16.840 align:middle line:90%
+
+
+00:39:16.840 --> 00:39:28.040 align:middle line:84%
+It's a simple model where
+the past information can
+
+00:39:28.040 --> 00:39:32.920 align:middle line:84%
+be encapsulated just in
+the last observed value,
+
+00:39:32.920 --> 00:39:38.320 align:middle line:84%
+not in the realizations of
+how that value was achieved.
+
+00:39:38.320 --> 00:39:41.320 align:middle line:84%
+So this is just some
+notation for trying
+
+00:39:41.320 --> 00:39:44.360 align:middle line:90%
+to say what I just said.
+
+00:39:44.360 --> 00:39:52.360 align:middle line:84%
+Now, with Markov chains, these
+are interesting stochastic
+
+00:39:52.360 --> 00:40:01.460 align:middle line:84%
+processes where we consider
+there being a state space,
+
+00:40:01.460 --> 00:40:08.020 align:middle line:84%
+capital S, where we can index
+possible states that the process
+
+00:40:08.020 --> 00:40:12.280 align:middle line:84%
+beginning, say, with
+0 and the integers.
+
+00:40:12.280 --> 00:40:17.780 align:middle line:84%
+And it could be a finite number
+or a countably infinite number.
+
+00:40:17.780 --> 00:40:23.500 align:middle line:84%
+And then we have a time
+index set with n varying
+
+00:40:23.500 --> 00:40:28.380 align:middle line:84%
+from 0 through the
+positive integers.
+
+00:40:28.380 --> 00:40:40.620 align:middle line:84%
+And so the Markov property
+with this stochastic process
+
+00:40:40.620 --> 00:40:50.300 align:middle line:84%
+would have that the probability
+of the next state being
+
+00:40:50.300 --> 00:40:59.670 align:middle line:84%
+j from time n, given the values
+of the process x0 through xn,
+
+00:40:59.670 --> 00:41:03.870 align:middle line:84%
+this conditional
+probability is equal
+
+00:41:03.870 --> 00:41:09.390 align:middle line:84%
+to the conditional
+probability of j state
+
+00:41:09.390 --> 00:41:15.590 align:middle line:84%
+at time n plus 1, just
+given that xn is equal to i.
+
+00:41:15.590 --> 00:41:22.550 align:middle line:84%
+So this is a nice
+property for processes
+
+00:41:22.550 --> 00:41:27.463 align:middle line:84%
+that makes their analysis
+a bit less complex.
+
+00:41:27.463 --> 00:41:30.070 align:middle line:90%
+
+
+00:41:30.070 --> 00:41:39.150 align:middle line:84%
+And what's important in this
+definition of the Markov process
+
+00:41:39.150 --> 00:41:45.270 align:middle line:84%
+is that there's a
+one step transition
+
+00:41:45.270 --> 00:41:54.390 align:middle line:84%
+probability from state i
+to state j, from time n
+
+00:41:54.390 --> 00:42:02.010 align:middle line:84%
+to n plus 1, and these
+transition probabilities,
+
+00:42:02.010 --> 00:42:07.050 align:middle line:84%
+together with the probabilities
+of the initial states,
+
+00:42:07.050 --> 00:42:10.970 align:middle line:84%
+completely specifies
+the stochastic process.
+
+00:42:10.970 --> 00:42:15.090 align:middle line:84%
+Now, this issue of completely
+specifying a stochastic process
+
+00:42:15.090 --> 00:42:18.210 align:middle line:84%
+is an important
+one, in that what
+
+00:42:18.210 --> 00:42:22.090 align:middle line:84%
+we want with a
+stochastic process
+
+00:42:22.090 --> 00:42:24.770 align:middle line:84%
+is to have a
+complete probability
+
+00:42:24.770 --> 00:42:27.330 align:middle line:90%
+model of that process.
+
+00:42:27.330 --> 00:42:35.410 align:middle line:84%
+And so if we have an initial
+state x0 and the probabilities
+
+00:42:35.410 --> 00:42:42.610 align:middle line:84%
+over all states i in S, that
+characterizes the probability
+
+00:42:42.610 --> 00:42:47.050 align:middle line:90%
+model for the state 0 value.
+
+00:42:47.050 --> 00:42:52.490 align:middle line:84%
+Then if we look at the
+conditional probability
+
+00:42:52.490 --> 00:42:55.580 align:middle line:90%
+from time n equals 0 to n--
+
+00:42:55.580 --> 00:42:58.380 align:middle line:90%
+
+
+00:42:58.380 --> 00:43:02.900 align:middle line:84%
+or from 0 to 1, we then have
+the conditional probabilities
+
+00:43:02.900 --> 00:43:11.260 align:middle line:84%
+of moving from any state
+0 to any state at time 1.
+
+00:43:11.260 --> 00:43:16.460 align:middle line:84%
+And so those conditional
+probabilities, together
+
+00:43:16.460 --> 00:43:19.260 align:middle line:84%
+with the marginal
+probability, specify
+
+00:43:19.260 --> 00:43:24.140 align:middle line:84%
+the distribution of the
+process over state 0 and 1.
+
+00:43:24.140 --> 00:43:29.780 align:middle line:84%
+And we can continue this
+computation for successive time
+
+00:43:29.780 --> 00:43:36.580 align:middle line:84%
+points and completely specify
+our stochastic process.
+
+00:43:36.580 --> 00:43:42.100 align:middle line:84%
+Now, the general Markov
+process, as introduced there,
+
+00:43:42.100 --> 00:43:46.580 align:middle line:84%
+is very complex, because we
+may have different transition
+
+00:43:46.580 --> 00:43:50.780 align:middle line:84%
+probabilities depending upon
+how long the process has
+
+00:43:50.780 --> 00:43:53.080 align:middle line:90%
+been operating.
+
+00:43:53.080 --> 00:43:58.940 align:middle line:84%
+A simple case is called a
+stationary Markov process,
+
+00:43:58.940 --> 00:44:04.240 align:middle line:84%
+where these transition
+probabilities, one step
+
+00:44:04.240 --> 00:44:09.820 align:middle line:84%
+transition probabilities,
+do not depend on the time.
+
+00:44:09.820 --> 00:44:11.480 align:middle line:84%
+So we have the
+same probabilities
+
+00:44:11.480 --> 00:44:13.960 align:middle line:84%
+of moving from one
+state to another
+
+00:44:13.960 --> 00:44:18.440 align:middle line:84%
+regardless of when
+that is occurring.
+
+00:44:18.440 --> 00:44:23.200 align:middle line:84%
+And so we can define
+a matrix P, which
+
+00:44:23.200 --> 00:44:28.960 align:middle line:84%
+is the collection of all
+pairwise probabilities Pij
+
+00:44:28.960 --> 00:44:34.200 align:middle line:90%
+moving from state i to state j.
+
+00:44:34.200 --> 00:44:40.600 align:middle line:84%
+And we basically require that
+these transition probabilities
+
+00:44:40.600 --> 00:44:45.360 align:middle line:84%
+are non-negative, and the
+sum over target states
+
+00:44:45.360 --> 00:44:49.200 align:middle line:84%
+j from state i that
+those probabilities
+
+00:44:49.200 --> 00:44:56.650 align:middle line:84%
+sum to 1 for a stationary
+transition probability matrix.
+
+00:44:56.650 --> 00:45:04.330 align:middle line:84%
+And to define the
+probability distribution
+
+00:45:04.330 --> 00:45:10.530 align:middle line:84%
+of the entire process xn using
+this stationary transition
+
+00:45:10.530 --> 00:45:14.970 align:middle line:84%
+probability matrix and
+initial probabilities,
+
+00:45:14.970 --> 00:45:22.610 align:middle line:84%
+we can compute any
+probabilities by computing
+
+00:45:22.610 --> 00:45:25.690 align:middle line:84%
+the collection of all
+such probabilities
+
+00:45:25.690 --> 00:45:30.630 align:middle line:84%
+where we have n
+steps of the process,
+
+00:45:30.630 --> 00:45:35.770 align:middle line:84%
+or n time points of the
+process, and states i0 through i
+
+00:45:35.770 --> 00:45:38.030 align:middle line:90%
+little n there.
+
+00:45:38.030 --> 00:45:41.290 align:middle line:84%
+So if we can calculate
+these probabilities,
+
+00:45:41.290 --> 00:45:45.250 align:middle line:84%
+we will have specified
+the probability model.
+
+00:45:45.250 --> 00:45:50.950 align:middle line:84%
+Now, in calculating
+the joint probability
+
+00:45:50.950 --> 00:45:59.510 align:middle line:84%
+of the first little n values
+states being i0 through in,
+
+00:45:59.510 --> 00:46:02.950 align:middle line:84%
+we can decompose
+this probability
+
+00:46:02.950 --> 00:46:07.190 align:middle line:84%
+into the marginal
+probability of the first n
+
+00:46:07.190 --> 00:46:15.750 align:middle line:84%
+minus 1 times the conditional
+probability of the last given
+
+00:46:15.750 --> 00:46:16.370 align:middle line:90%
+the others.
+
+00:46:16.370 --> 00:46:27.150 align:middle line:84%
+So if we think of A
+equaling x0 up to xn minus 1
+
+00:46:27.150 --> 00:46:39.430 align:middle line:84%
+equals i, n minus 1, and B
+is equal to xn equal to in,
+
+00:46:39.430 --> 00:46:46.916 align:middle line:84%
+then we can look at
+the probability of A
+
+00:46:46.916 --> 00:46:52.250 align:middle line:84%
+and B is equal to the
+probability of A times
+
+00:46:52.250 --> 00:46:57.250 align:middle line:90%
+the probability of B given A.
+
+00:46:57.250 --> 00:47:02.010 align:middle line:84%
+And this is basically
+what's written up there.
+
+00:47:02.010 --> 00:47:05.290 align:middle line:84%
+And this formula
+on the Blackboard
+
+00:47:05.290 --> 00:47:09.570 align:middle line:84%
+is simply Bayes'
+formula relating
+
+00:47:09.570 --> 00:47:11.730 align:middle line:84%
+the conditional
+probability of B given
+
+00:47:11.730 --> 00:47:27.850 align:middle line:84%
+A to the probabilities of A and
+B. So probability of B given A.
+
+00:47:27.850 --> 00:47:32.770 align:middle line:84%
+Now, with this
+second equation, we
+
+00:47:32.770 --> 00:47:37.950 align:middle line:84%
+can simplify that to
+the red probability,
+
+00:47:37.950 --> 00:47:44.370 align:middle line:84%
+which is only depending
+upon the n minus 1 value.
+
+00:47:44.370 --> 00:47:51.100 align:middle line:84%
+And so we have that
+this probability
+
+00:47:51.100 --> 00:47:54.620 align:middle line:84%
+is equal to the marginal
+probability of the first n
+
+00:47:54.620 --> 00:48:02.326 align:middle line:84%
+minus 1 times the transition
+probability from state
+
+00:48:02.326 --> 00:48:05.980 align:middle line:90%
+in minus 1 to in.
+
+00:48:05.980 --> 00:48:09.220 align:middle line:90%
+And that won't depend on n.
+
+00:48:09.220 --> 00:48:15.380 align:middle line:84%
+And so we can
+basically, by induction,
+
+00:48:15.380 --> 00:48:21.540 align:middle line:84%
+basically replace each of the
+successive state transitions
+
+00:48:21.540 --> 00:48:25.060 align:middle line:84%
+by the probability of
+moving from one state
+
+00:48:25.060 --> 00:48:29.220 align:middle line:84%
+to another and the successive
+transitions of all those states.
+
+00:48:29.220 --> 00:48:36.620 align:middle line:84%
+So this joint probability can
+be represented in this form,
+
+00:48:36.620 --> 00:48:39.980 align:middle line:84%
+exploiting the Markov property
+to simplify the one step
+
+00:48:39.980 --> 00:48:49.120 align:middle line:84%
+transitions, and using the
+stationery property to define
+
+00:48:49.120 --> 00:48:49.800 align:middle line:90%
+these Pij's.
+
+00:48:49.800 --> 00:48:52.480 align:middle line:90%
+
+
+00:48:52.480 --> 00:48:59.520 align:middle line:84%
+OK, well, with stationary
+transition probabilities,
+
+00:48:59.520 --> 00:49:03.040 align:middle line:84%
+the multi-step
+transition probabilities
+
+00:49:03.040 --> 00:49:08.040 align:middle line:84%
+turn out to have a
+really nice form.
+
+00:49:08.040 --> 00:49:16.600 align:middle line:84%
+And so we can represent the
+transition probability matrix
+
+00:49:16.600 --> 00:49:22.760 align:middle line:84%
+over n steps as the n-th power
+of the one step transition
+
+00:49:22.760 --> 00:49:25.960 align:middle line:90%
+probabilities matrices.
+
+00:49:25.960 --> 00:49:30.680 align:middle line:84%
+So this property
+of Markov chains
+
+00:49:30.680 --> 00:49:35.400 align:middle line:84%
+with stationary transition
+probabilities is very nice
+
+00:49:35.400 --> 00:49:42.250 align:middle line:90%
+and gives us this result.
+
+00:49:42.250 --> 00:49:45.610 align:middle line:90%
+Now, let's see.
+
+00:49:45.610 --> 00:49:48.130 align:middle line:84%
+In terms of proving
+this, There's
+
+00:49:48.130 --> 00:49:52.850 align:middle line:84%
+this analysis called
+first step analysis
+
+00:49:52.850 --> 00:49:54.930 align:middle line:90%
+in stochastic processes.
+
+00:49:54.930 --> 00:50:00.370 align:middle line:84%
+That's a really useful tool
+for proving different results.
+
+00:50:00.370 --> 00:50:12.130 align:middle line:84%
+And this first step
+analysis basically
+
+00:50:12.130 --> 00:50:14.770 align:middle line:84%
+says, OK, if we
+want to calculate
+
+00:50:14.770 --> 00:50:18.730 align:middle line:84%
+the probability of
+going from state 0,
+
+00:50:18.730 --> 00:50:24.490 align:middle line:84%
+sorry, state i to j
+in n steps, that's
+
+00:50:24.490 --> 00:50:31.130 align:middle line:84%
+like starting at time 0 in state
+i and transitioning to state j.
+
+00:50:31.130 --> 00:50:38.370 align:middle line:84%
+Then we can decompose
+this probability
+
+00:50:38.370 --> 00:50:44.070 align:middle line:84%
+into the sum over all
+possible first steps going
+
+00:50:44.070 --> 00:50:55.910 align:middle line:84%
+from i to k in state 1 and then
+from state k to j by time n.
+
+00:50:55.910 --> 00:51:03.590 align:middle line:84%
+And so this first equation
+here is a first step equation
+
+00:51:03.590 --> 00:51:04.890 align:middle line:90%
+of the probabilities.
+
+00:51:04.890 --> 00:51:09.750 align:middle line:84%
+We can basically decompose the
+process of going from state i
+
+00:51:09.750 --> 00:51:13.430 align:middle line:84%
+to j in n steps as
+going from state i
+
+00:51:13.430 --> 00:51:21.470 align:middle line:84%
+to each k state in step one,
+and then going from state k
+
+00:51:21.470 --> 00:51:25.510 align:middle line:90%
+to n in n minus 1 steps.
+
+00:51:25.510 --> 00:51:33.470 align:middle line:90%
+So this is that formula.
+
+00:51:33.470 --> 00:51:47.130 align:middle line:84%
+And so if we write this out, we
+end up getting the xn equaling--
+
+00:51:47.130 --> 00:51:52.610 align:middle line:84%
+or this in blue is equal
+to the term above in black
+
+00:51:52.610 --> 00:51:57.770 align:middle line:84%
+because of the Markov
+nature of the Markov
+
+00:51:57.770 --> 00:52:00.290 align:middle line:90%
+property of the process.
+
+00:52:00.290 --> 00:52:04.170 align:middle line:84%
+And so we basically
+have this sum
+
+00:52:04.170 --> 00:52:13.940 align:middle line:84%
+of Pik times probability of xn
+minus 1 equaling jx0 equals k.
+
+00:52:13.940 --> 00:52:20.090 align:middle line:90%
+
+
+00:52:20.090 --> 00:52:25.010 align:middle line:84%
+So we end up basically getting
+this matrix equation of the n
+
+00:52:25.010 --> 00:52:29.850 align:middle line:84%
+step transition probabilities
+is equal to the one step matrix
+
+00:52:29.850 --> 00:52:33.570 align:middle line:84%
+P times the n minus 1 step
+transition probability
+
+00:52:33.570 --> 00:52:36.170 align:middle line:90%
+matrix in green.
+
+00:52:36.170 --> 00:52:36.930 align:middle line:90%
+OK.
+
+00:52:36.930 --> 00:52:41.440 align:middle line:84%
+Well, these transition
+probabilities,
+
+00:52:41.440 --> 00:52:44.580 align:middle line:84%
+together with the
+marginal distribution
+
+00:52:44.580 --> 00:52:47.940 align:middle line:84%
+of the initial state, gives
+us the marginal distribution
+
+00:52:47.940 --> 00:52:50.670 align:middle line:90%
+of xn at any time.
+
+00:52:50.670 --> 00:52:53.640 align:middle line:90%
+
+
+00:52:53.640 --> 00:52:57.820 align:middle line:84%
+So these formulas just indicate
+how we do these computations.
+
+00:52:57.820 --> 00:53:02.900 align:middle line:84%
+Now, where do Markov
+chains arise in finance?
+
+00:53:02.900 --> 00:53:07.100 align:middle line:84%
+Well, one example to
+think about is how
+
+00:53:07.100 --> 00:53:11.060 align:middle line:90%
+companies have credit ratings.
+
+00:53:11.060 --> 00:53:17.940 align:middle line:84%
+And those credit ratings range
+from high credit, which is AAA,
+
+00:53:17.940 --> 00:53:23.780 align:middle line:84%
+and low credit being I
+guess C. D being default
+
+00:53:23.780 --> 00:53:29.820 align:middle line:84%
+is maybe a terminal state,
+at least in some sense.
+
+00:53:29.820 --> 00:53:34.580 align:middle line:84%
+But companies are
+graded or rated
+
+00:53:34.580 --> 00:53:40.560 align:middle line:84%
+by Standard and Poor's and
+Fitch and other rating agencies,
+
+00:53:40.560 --> 00:53:44.440 align:middle line:84%
+and depending upon how good
+their credit rating is,
+
+00:53:44.440 --> 00:53:50.600 align:middle line:84%
+they can borrow money
+at lower interest rates.
+
+00:53:50.600 --> 00:53:54.000 align:middle line:84%
+And the way corporations
+borrow money
+
+00:53:54.000 --> 00:53:57.600 align:middle line:84%
+is to issue a bond, paying
+a certain interest rate
+
+00:53:57.600 --> 00:54:04.560 align:middle line:84%
+and having that interest rate
+be attractive to lenders.
+
+00:54:04.560 --> 00:54:10.440 align:middle line:84%
+And the way that
+such a loan contract
+
+00:54:10.440 --> 00:54:15.280 align:middle line:84%
+is attractive to lenders
+is with a high interest
+
+00:54:15.280 --> 00:54:24.680 align:middle line:84%
+rate to the lender, but a low
+risk of default by the borrower.
+
+00:54:24.680 --> 00:54:32.360 align:middle line:84%
+And so one can think about
+how these credit ratings vary
+
+00:54:32.360 --> 00:54:36.210 align:middle line:90%
+from one period to the next.
+
+00:54:36.210 --> 00:54:42.970 align:middle line:84%
+And here's a table of
+migration probabilities
+
+00:54:42.970 --> 00:54:45.930 align:middle line:90%
+from one year to the next.
+
+00:54:45.930 --> 00:54:52.170 align:middle line:84%
+And one can see that
+AAA initial ratings
+
+00:54:52.170 --> 00:54:59.650 align:middle line:84%
+had only a 43% chance of staying
+AAA at the end of that one year.
+
+00:54:59.650 --> 00:55:02.410 align:middle line:84%
+And there was a
+very low probability
+
+00:55:02.410 --> 00:55:09.130 align:middle line:90%
+of downgrades to C, CCC, or B.
+
+00:55:09.130 --> 00:55:16.810 align:middle line:84%
+And with, say, very low credit
+rating companies, the chance
+
+00:55:16.810 --> 00:55:22.610 align:middle line:84%
+of basically increasing
+their credit rating to B
+
+00:55:22.610 --> 00:55:28.650 align:middle line:84%
+was 41%, staying at
+CCC is 32%, but almost
+
+00:55:28.650 --> 00:55:31.890 align:middle line:84%
+a 20% chance of
+defaulting perhaps.
+
+00:55:31.890 --> 00:55:39.030 align:middle line:84%
+So these kinds of
+metrics basically
+
+00:55:39.030 --> 00:55:48.190 align:middle line:84%
+can be analyzed with the
+tools of Markov chains.
+
+00:55:48.190 --> 00:55:50.270 align:middle line:90%
+And let's see.
+
+00:55:50.270 --> 00:55:54.510 align:middle line:84%
+Then another example
+that I put together
+
+00:55:54.510 --> 00:56:02.170 align:middle line:84%
+is looking at the stock
+price dynamics of any stock,
+
+00:56:02.170 --> 00:56:07.150 align:middle line:84%
+but I chose Apple,
+and using daily prices
+
+00:56:07.150 --> 00:56:14.390 align:middle line:84%
+to consider states of the
+Apple stock price, which
+
+00:56:14.390 --> 00:56:18.110 align:middle line:90%
+is it an up day or a down day?
+
+00:56:18.110 --> 00:56:22.470 align:middle line:84%
+Is the price at day t
+higher than t minus 1,
+
+00:56:22.470 --> 00:56:24.810 align:middle line:90%
+or is it a down day?
+
+00:56:24.810 --> 00:56:26.310 align:middle line:84%
+I guess one of those
+should probably
+
+00:56:26.310 --> 00:56:30.910 align:middle line:84%
+be a less than or equal to
+if we wanted to incorporate
+
+00:56:30.910 --> 00:56:32.730 align:middle line:90%
+corporate everything.
+
+00:56:32.730 --> 00:56:42.650 align:middle line:84%
+But we can consider defining
+a two day state, which,
+
+00:56:42.650 --> 00:56:44.910 align:middle line:84%
+let's see, the formatting
+here is a little off,
+
+00:56:44.910 --> 00:56:49.250 align:middle line:84%
+but we could have
+two up days in a row,
+
+00:56:49.250 --> 00:56:52.610 align:middle line:84%
+an up day followed
+by a down day,
+
+00:56:52.610 --> 00:56:54.730 align:middle line:84%
+a down day followed
+by an up day,
+
+00:56:54.730 --> 00:56:57.770 align:middle line:84%
+and a down day
+followed by a down day.
+
+00:56:57.770 --> 00:57:04.930 align:middle line:84%
+And look at trying to model
+the state changes for a two day
+
+00:57:04.930 --> 00:57:09.690 align:middle line:90%
+state with a Markov chain.
+
+00:57:09.690 --> 00:57:14.130 align:middle line:84%
+And in R, there's
+a nice r package
+
+00:57:14.130 --> 00:57:17.890 align:middle line:90%
+that will do this for us.
+
+00:57:17.890 --> 00:57:23.490 align:middle line:84%
+And this was distributed
+in the Canvas site.
+
+00:57:23.490 --> 00:57:25.650 align:middle line:84%
+And so you should be
+able to replicate this
+
+00:57:25.650 --> 00:57:30.740 align:middle line:84%
+example with Apple or
+choose any other stock
+
+00:57:30.740 --> 00:57:32.780 align:middle line:90%
+you might be interested in.
+
+00:57:32.780 --> 00:57:41.766 align:middle line:84%
+And so importantly, this uses
+the library quantmod here.
+
+00:57:41.766 --> 00:57:44.420 align:middle line:90%
+Sort of hard to see.
+
+00:57:44.420 --> 00:57:45.540 align:middle line:90%
+Let's see.
+
+00:57:45.540 --> 00:57:48.260 align:middle line:84%
+So there's a library
+quantmod, which
+
+00:57:48.260 --> 00:57:52.060 align:middle line:84%
+allows us to collect price
+data from the internet.
+
+00:57:52.060 --> 00:57:57.120 align:middle line:84%
+And then there's this
+package Markov chain,
+
+00:57:57.120 --> 00:58:03.060 align:middle line:84%
+which allows us to specify
+Markov chain models.
+
+00:58:03.060 --> 00:58:09.780 align:middle line:84%
+And so with this, our
+code, it basically
+
+00:58:09.780 --> 00:58:16.380 align:middle line:84%
+collects the data
+on Apple stock.
+
+00:58:16.380 --> 00:58:21.340 align:middle line:84%
+And I think what I really
+want to emphasize for everyone
+
+00:58:21.340 --> 00:58:23.360 align:middle line:90%
+is that these examples--
+
+00:58:23.360 --> 00:58:25.660 align:middle line:84%
+and so it's a bit tedious
+if you want to go through
+
+00:58:25.660 --> 00:58:27.080 align:middle line:90%
+these examples yourself.
+
+00:58:27.080 --> 00:58:31.160 align:middle line:84%
+However, the examples
+should work just
+
+00:58:31.160 --> 00:58:33.120 align:middle line:84%
+with clicking a
+button, saying run,
+
+00:58:33.120 --> 00:58:35.640 align:middle line:90%
+and you can replicate these.
+
+00:58:35.640 --> 00:58:38.080 align:middle line:84%
+And so for the
+Apple stock, we just
+
+00:58:38.080 --> 00:58:42.920 align:middle line:84%
+needed to substitute
+in the Apple symbol
+
+00:58:42.920 --> 00:58:45.160 align:middle line:90%
+and collect the data.
+
+00:58:45.160 --> 00:58:51.640 align:middle line:84%
+And so here's the Apple
+stock price from 2014 or 2013
+
+00:58:51.640 --> 00:58:56.040 align:middle line:90%
+through a week ago.
+
+00:58:56.040 --> 00:59:04.440 align:middle line:84%
+And I considered just fitting a
+Markov chain model for these up
+
+00:59:04.440 --> 00:59:09.320 align:middle line:84%
+and down states to the
+last 4 and 1/2 years.
+
+00:59:09.320 --> 00:59:13.920 align:middle line:84%
+And so the code
+here goes through.
+
+00:59:13.920 --> 00:59:19.840 align:middle line:84%
+And basically,
+with Apple prices,
+
+00:59:19.840 --> 00:59:24.200 align:middle line:84%
+Apple closing prices here,
+we define differences
+
+00:59:24.200 --> 00:59:27.170 align:middle line:90%
+in closing prices for two lags.
+
+00:59:27.170 --> 00:59:36.050 align:middle line:84%
+And then talk about defining
+up, up days in this section
+
+00:59:36.050 --> 00:59:41.610 align:middle line:84%
+here, up down days,
+down up, and so forth.
+
+00:59:41.610 --> 00:59:46.790 align:middle line:84%
+And then if we graph
+these states, say,
+
+00:59:46.790 --> 00:59:50.490 align:middle line:84%
+from May of this year
+to the end of August,
+
+00:59:50.490 --> 00:59:56.250 align:middle line:84%
+this shows how
+this 4 state Markov
+
+00:59:56.250 --> 01:00:01.490 align:middle line:90%
+chain evolved over these dates.
+
+01:00:01.490 --> 01:00:10.816 align:middle line:84%
+And we can just use the
+Markov chain function.
+
+01:00:10.816 --> 01:00:16.010 align:middle line:90%
+
+
+01:00:16.010 --> 01:00:16.950 align:middle line:90%
+Or let's see.
+
+01:00:16.950 --> 01:00:23.970 align:middle line:84%
+We can plot a Markov chain
+function or a Markov chain
+
+01:00:23.970 --> 01:00:29.170 align:middle line:84%
+transition states
+as this graph here.
+
+01:00:29.170 --> 01:00:32.630 align:middle line:84%
+So what this code does is
+it looks at transitions
+
+01:00:32.630 --> 01:00:35.590 align:middle line:84%
+from one day to the
+next and calculates
+
+01:00:35.590 --> 01:00:39.150 align:middle line:84%
+the probabilities of going
+from one state to another.
+
+01:00:39.150 --> 01:00:43.150 align:middle line:84%
+So the sums across
+rows equals 1.
+
+01:00:43.150 --> 01:00:49.070 align:middle line:84%
+And this graph, this
+plot shows basically
+
+01:00:49.070 --> 01:00:51.290 align:middle line:84%
+what is happening
+with the Markov chain.
+
+01:00:51.290 --> 01:00:56.110 align:middle line:84%
+We have different states
+given by the nodes.
+
+01:00:56.110 --> 01:01:00.070 align:middle line:84%
+And then we can transition
+from between nodes
+
+01:01:00.070 --> 01:01:02.990 align:middle line:90%
+by which arrows are feasible.
+
+01:01:02.990 --> 01:01:07.950 align:middle line:84%
+And this Markov chain
+package will give us
+
+01:01:07.950 --> 01:01:10.750 align:middle line:84%
+the probabilities,
+empirical probabilities,
+
+01:01:10.750 --> 01:01:13.550 align:middle line:84%
+of moving from one
+state to another.
+
+01:01:13.550 --> 01:01:20.870 align:middle line:84%
+And so one can see that
+two up days in Apple
+
+01:01:20.870 --> 01:01:27.350 align:middle line:84%
+are likely to be followed
+by two up days, again,
+
+01:01:27.350 --> 01:01:32.290 align:middle line:84%
+so that we'd get a third up day
+with that one step transition.
+
+01:01:32.290 --> 01:01:37.830 align:middle line:84%
+Two down days are not likely to
+be followed by a third down day,
+
+01:01:37.830 --> 01:01:43.290 align:middle line:84%
+because it won't go to
+that down, down state
+
+01:01:43.290 --> 01:01:49.410 align:middle line:84%
+with probability
+or more than 0.5.
+
+01:01:49.410 --> 01:01:53.210 align:middle line:84%
+So there tends to perhaps be
+reversals from double down days
+
+01:01:53.210 --> 01:02:01.090 align:middle line:84%
+and a continuation of up days,
+as suggested by these graphs.
+
+01:02:01.090 --> 01:02:08.250 align:middle line:84%
+Now, with this example, I
+thought, well, maybe there
+
+01:02:08.250 --> 01:02:09.850 align:middle line:84%
+would be some
+interesting structure
+
+01:02:09.850 --> 01:02:14.370 align:middle line:90%
+if we defined three day states.
+
+01:02:14.370 --> 01:02:23.060 align:middle line:84%
+And so the same logic gives
+us 8 states of up or down
+
+01:02:23.060 --> 01:02:26.060 align:middle line:90%
+on 3 successive days.
+
+01:02:26.060 --> 01:02:31.380 align:middle line:84%
+And so 2 times 2 times 2,
+or 8, is the total number
+
+01:02:31.380 --> 01:02:33.660 align:middle line:90%
+of possible states.
+
+01:02:33.660 --> 01:02:39.100 align:middle line:84%
+And one can calculate the
+empirical probabilities
+
+01:02:39.100 --> 01:02:50.020 align:middle line:84%
+of transitioning and then get
+this display of the Markov chain
+
+01:02:50.020 --> 01:02:52.660 align:middle line:90%
+with these eight states.
+
+01:02:52.660 --> 01:02:57.700 align:middle line:84%
+And so what's
+rather curious just
+
+01:02:57.700 --> 01:03:00.660 align:middle line:84%
+to focus on our three
+down days are not
+
+01:03:00.660 --> 01:03:03.620 align:middle line:84%
+likely to be
+followed by a fourth.
+
+01:03:03.620 --> 01:03:06.340 align:middle line:84%
+And three up days
+maybe are likely to be
+
+01:03:06.340 --> 01:03:09.340 align:middle line:90%
+followed by a fourth up day.
+
+01:03:09.340 --> 01:03:12.660 align:middle line:84%
+So you've got some
+insight perhaps
+
+01:03:12.660 --> 01:03:15.360 align:middle line:90%
+into the overall dynamics.
+
+01:03:15.360 --> 01:03:23.320 align:middle line:84%
+And what's great to me is that
+we can visualize the process
+
+01:03:23.320 --> 01:03:30.160 align:middle line:84%
+and the graphical representation
+of nodes and edges
+
+01:03:30.160 --> 01:03:35.070 align:middle line:84%
+between the nodes that have
+probabilities is quite useful.
+
+01:03:35.070 --> 01:03:37.600 align:middle line:90%
+
+
+01:03:37.600 --> 01:03:39.000 align:middle line:90%
+So let's see.
+
+01:03:39.000 --> 01:03:46.440 align:middle line:84%
+If you study Markov
+chains and then
+
+01:03:46.440 --> 01:03:52.400 align:middle line:84%
+one can classify different
+states or different nodes
+
+01:03:52.400 --> 01:03:55.280 align:middle line:90%
+as communicating states.
+
+01:03:55.280 --> 01:03:59.280 align:middle line:84%
+So can you move from one
+state to another or not?
+
+01:03:59.280 --> 01:04:05.100 align:middle line:84%
+And in this case, one can move
+from one state to another,
+
+01:04:05.100 --> 01:04:09.500 align:middle line:84%
+possibly not in one time
+period, but in multiple ones.
+
+01:04:09.500 --> 01:04:13.280 align:middle line:84%
+And so this happens to be
+a strongly connected set
+
+01:04:13.280 --> 01:04:14.760 align:middle line:90%
+of states.
+
+01:04:14.760 --> 01:04:17.100 align:middle line:90%
+And let's see.
+
+01:04:17.100 --> 01:04:20.430 align:middle line:90%
+
+
+01:04:20.430 --> 01:04:24.730 align:middle line:84%
+This little note ends
+with printing out
+
+01:04:24.730 --> 01:04:32.290 align:middle line:84%
+the columns of the
+transition probability matrix
+
+01:04:32.290 --> 01:04:38.810 align:middle line:90%
+for up moves and down moves.
+
+01:04:38.810 --> 01:04:46.090 align:middle line:84%
+And so if we wanted
+to move from one state
+
+01:04:46.090 --> 01:04:52.290 align:middle line:84%
+to an up move in
+the next period,
+
+01:04:52.290 --> 01:04:55.210 align:middle line:84%
+then looking at
+this table, one can
+
+01:04:55.210 --> 01:05:04.930 align:middle line:84%
+see that the highest probability
+of the three day state being up
+
+01:05:04.930 --> 01:05:15.850 align:middle line:84%
+in the third day, given the
+prior three day state, then
+
+01:05:15.850 --> 01:05:18.630 align:middle line:84%
+it corresponds to
+three down days
+
+01:05:18.630 --> 01:05:24.830 align:middle line:84%
+lead to an up day the next
+day with almost a 60% chance.
+
+01:05:24.830 --> 01:05:30.470 align:middle line:84%
+And one can also do
+the same for down moves
+
+01:05:30.470 --> 01:05:35.950 align:middle line:84%
+and see under what state are we
+most likely to have a down move.
+
+01:05:35.950 --> 01:05:43.350 align:middle line:84%
+And so I think 0.510
+is the highest,
+
+01:05:43.350 --> 01:05:46.230 align:middle line:84%
+which isn't much
+higher than 0.5.
+
+01:05:46.230 --> 01:05:52.750 align:middle line:84%
+But basically, the past
+few days being a bit mixed,
+
+01:05:52.750 --> 01:05:57.270 align:middle line:84%
+but with two up days
+preceded by a down day,
+
+01:05:57.270 --> 01:06:02.910 align:middle line:84%
+give us a higher
+likelihood of a down day.
+
+01:06:02.910 --> 01:06:06.710 align:middle line:90%
+So let's see.
+
+01:06:06.710 --> 01:06:13.150 align:middle line:84%
+With this note, let's
+see, there's a--
+
+01:06:13.150 --> 01:06:18.810 align:middle line:84%
+OK, so here's the reference
+for this Markov chain package.
+
+01:06:18.810 --> 01:06:22.050 align:middle line:84%
+And what's quite
+convenient with different R
+
+01:06:22.050 --> 01:06:26.570 align:middle line:84%
+packages on different
+application topics
+
+01:06:26.570 --> 01:06:32.490 align:middle line:84%
+is that these articles often
+go through the mathematical
+
+01:06:32.490 --> 01:06:34.110 align:middle line:90%
+background of the models.
+
+01:06:34.110 --> 01:06:39.410 align:middle line:84%
+And so if you check out this
+discussion, this article
+
+01:06:39.410 --> 01:06:42.570 align:middle line:84%
+on the Markov chain
+package, it actually
+
+01:06:42.570 --> 01:06:46.330 align:middle line:84%
+will include the
+mathematical issues
+
+01:06:46.330 --> 01:06:49.930 align:middle line:84%
+of how you might
+classify different states
+
+01:06:49.930 --> 01:06:52.030 align:middle line:90%
+and do various computations.
+
+01:06:52.030 --> 01:06:57.120 align:middle line:84%
+So that's quite useful to
+have as a resource with these.
+
+01:06:57.120 --> 01:06:59.650 align:middle line:90%
+
+
+01:06:59.650 --> 01:07:01.450 align:middle line:90%
+Now, let's see.
+
+01:07:01.450 --> 01:07:09.030 align:middle line:84%
+With the RStudio Cloud
+files that were distributed,
+
+01:07:09.030 --> 01:07:15.220 align:middle line:84%
+if you use those programs,
+you can change the symbols
+
+01:07:15.220 --> 01:07:19.060 align:middle line:84%
+from Apple to any other and
+use different time periods
+
+01:07:19.060 --> 01:07:22.460 align:middle line:84%
+to see whether these
+properties may be strong or not
+
+01:07:22.460 --> 01:07:23.360 align:middle line:90%
+with other stocks.
+
+01:07:23.360 --> 01:07:27.500 align:middle line:84%
+And I think that might be an
+interesting thing to check out.
+
+01:07:27.500 --> 01:07:33.940 align:middle line:84%
+Our next topic, which is
+on regression analysis.
+
+01:07:33.940 --> 01:07:41.380 align:middle line:84%
+And with regression,
+we want to just review
+
+01:07:41.380 --> 01:07:47.580 align:middle line:84%
+the notation and setup for
+multiple linear regression.
+
+01:07:47.580 --> 01:07:52.020 align:middle line:84%
+If you've taken any
+statistics class
+
+01:07:52.020 --> 01:07:55.100 align:middle line:84%
+prior to this, which
+most of you have,
+
+01:07:55.100 --> 01:07:57.820 align:middle line:84%
+you're very familiar with
+simple linear regression where
+
+01:07:57.820 --> 01:08:01.860 align:middle line:84%
+you have one dependent
+variable and one
+
+01:08:01.860 --> 01:08:05.380 align:middle line:84%
+predictor or
+explanatory variable.
+
+01:08:05.380 --> 01:08:09.660 align:middle line:84%
+We want to consider the case
+of multiple linear regression,
+
+01:08:09.660 --> 01:08:17.160 align:middle line:84%
+where we have a single dependent
+variable and multiple predictor
+
+01:08:17.160 --> 01:08:21.479 align:middle line:84%
+or explanatory variables
+given by x's, and we
+
+01:08:21.479 --> 01:08:24.000 align:middle line:84%
+want to describe
+the relationship
+
+01:08:24.000 --> 01:08:28.220 align:middle line:84%
+between the dependent and
+independent variables.
+
+01:08:28.220 --> 01:08:31.640 align:middle line:84%
+Now, different
+regression problems
+
+01:08:31.640 --> 01:08:34.160 align:middle line:90%
+can focus on prediction.
+
+01:08:34.160 --> 01:08:38.319 align:middle line:84%
+This is actually one that I
+find most engaging, at least
+
+01:08:38.319 --> 01:08:44.080 align:middle line:84%
+trying to, say, predict stock
+prices over fixed horizons
+
+01:08:44.080 --> 01:08:46.640 align:middle line:90%
+is of real interest.
+
+01:08:46.640 --> 01:08:49.200 align:middle line:84%
+But regression
+models can also be
+
+01:08:49.200 --> 01:08:55.200 align:middle line:84%
+used to make inferences
+of causality.
+
+01:08:55.200 --> 01:09:02.279 align:middle line:84%
+Regression models arise
+in medical experiments
+
+01:09:02.279 --> 01:09:04.960 align:middle line:84%
+where one of the
+explanatory variables
+
+01:09:04.960 --> 01:09:07.359 align:middle line:84%
+corresponds to a
+treatment effect.
+
+01:09:07.359 --> 01:09:09.840 align:middle line:84%
+One can also be
+interested in trying
+
+01:09:09.840 --> 01:09:15.410 align:middle line:84%
+to approximate the dependent
+variable by functions
+
+01:09:15.410 --> 01:09:18.569 align:middle line:84%
+of the independent
+variables and understand
+
+01:09:18.569 --> 01:09:21.490 align:middle line:90%
+their functional relationships.
+
+01:09:21.490 --> 01:09:30.170 align:middle line:84%
+So all of these objectives can
+be achieved with regression.
+
+01:09:30.170 --> 01:09:41.250 align:middle line:84%
+And we define a general linear
+model with these equations here.
+
+01:09:41.250 --> 01:09:45.770 align:middle line:84%
+We basically have our
+observed yi values
+
+01:09:45.770 --> 01:09:51.410 align:middle line:84%
+being a sum of a fitted
+value plus error.
+
+01:09:51.410 --> 01:09:58.210 align:middle line:84%
+And the fitted value y
+hat i is written here
+
+01:09:58.210 --> 01:10:03.250 align:middle line:84%
+as a linear function of
+the independent variables
+
+01:10:03.250 --> 01:10:09.990 align:middle line:84%
+xi with coefficients
+beta 1 through beta p.
+
+01:10:09.990 --> 01:10:12.770 align:middle line:84%
+And there's actually
+a typo there.
+
+01:10:12.770 --> 01:10:16.510 align:middle line:84%
+It shouldn't be beta sub ip,
+it should just be beta p there.
+
+01:10:16.510 --> 01:10:21.910 align:middle line:84%
+And with this setup,
+well, we could
+
+01:10:21.910 --> 01:10:26.470 align:middle line:84%
+consider different
+explanatory variables
+
+01:10:26.470 --> 01:10:32.630 align:middle line:84%
+that happen to be just
+different powers of one
+
+01:10:32.630 --> 01:10:35.270 align:middle line:90%
+independent variable x.
+
+01:10:35.270 --> 01:10:45.390 align:middle line:84%
+We could also consider
+Fourier series of x variables.
+
+01:10:45.390 --> 01:10:47.990 align:middle line:84%
+We could also have
+time series regressions
+
+01:10:47.990 --> 01:10:55.990 align:middle line:84%
+where the independent variables
+x may correspond to prior time
+
+01:10:55.990 --> 01:10:59.230 align:middle line:90%
+values of the y series.
+
+01:10:59.230 --> 01:11:03.590 align:middle line:84%
+And in all of these cases,
+what's really important
+
+01:11:03.590 --> 01:11:09.130 align:middle line:84%
+is linearity of the
+fitted value y hat.
+
+01:11:09.130 --> 01:11:18.450 align:middle line:84%
+And what's linear
+is not that it's
+
+01:11:18.450 --> 01:11:23.790 align:middle line:84%
+the sum of x's so much as it
+is the regression parameters
+
+01:11:23.790 --> 01:11:28.290 align:middle line:84%
+beta are a linear
+function of those.
+
+01:11:28.290 --> 01:11:33.610 align:middle line:84%
+So the linearity of y hat
+in the regression parameters
+
+01:11:33.610 --> 01:11:41.810 align:middle line:84%
+is a key property of this model,
+and that linearity dependence
+
+01:11:41.810 --> 01:11:46.210 align:middle line:84%
+on the parameters allows us
+to specify the parameters.
+
+01:11:46.210 --> 01:11:55.130 align:middle line:84%
+Now, let me just go to
+another example here.
+
+01:11:55.130 --> 01:11:55.900 align:middle line:90%
+Let's see here.
+
+01:11:55.900 --> 01:11:59.370 align:middle line:90%
+
+
+01:11:59.370 --> 01:12:00.290 align:middle line:90%
+OK.
+
+01:12:00.290 --> 01:12:03.730 align:middle line:84%
+Here's a time series
+of the high yield
+
+01:12:03.730 --> 01:12:08.580 align:middle line:90%
+spread in the bond markets.
+
+01:12:08.580 --> 01:12:12.620 align:middle line:84%
+And so this is looking
+at the yield on bonds
+
+01:12:12.620 --> 01:12:18.340 align:middle line:84%
+with a credit rating of B
+AA minus the yield on a US
+
+01:12:18.340 --> 01:12:19.900 align:middle line:90%
+Treasury.
+
+01:12:19.900 --> 01:12:26.100 align:middle line:84%
+And so this difference
+in yield tends
+
+01:12:26.100 --> 01:12:28.380 align:middle line:90%
+to be positive, well above 2.
+
+01:12:28.380 --> 01:12:32.060 align:middle line:84%
+It means that these
+lower credit rated
+
+01:12:32.060 --> 01:12:37.460 align:middle line:84%
+companies have to pay more
+interest to lenders when
+
+01:12:37.460 --> 01:12:39.180 align:middle line:90%
+they borrow money.
+
+01:12:39.180 --> 01:12:44.220 align:middle line:84%
+But that excess rate
+above the Treasury
+
+01:12:44.220 --> 01:12:52.380 align:middle line:84%
+evolves over time and
+sometimes drops moderately
+
+01:12:52.380 --> 01:12:54.380 align:middle line:90%
+or rises moderately.
+
+01:12:54.380 --> 01:12:58.100 align:middle line:84%
+Now, if we were to
+use just polynomials
+
+01:12:58.100 --> 01:13:04.640 align:middle line:84%
+to try and fit these, well,
+as we extend to eighth order
+
+01:13:04.640 --> 01:13:07.520 align:middle line:84%
+polynomials, everyone
+here probably knows
+
+01:13:07.520 --> 01:13:09.460 align:middle line:84%
+that with a high enough
+order polynomial,
+
+01:13:09.460 --> 01:13:12.360 align:middle line:90%
+you can match any smooth curve.
+
+01:13:12.360 --> 01:13:14.280 align:middle line:90%
+No surprise.
+
+01:13:14.280 --> 01:13:18.360 align:middle line:84%
+Do we expect this spread to
+actually follow some high order
+
+01:13:18.360 --> 01:13:19.720 align:middle line:90%
+polynomial?
+
+01:13:19.720 --> 01:13:20.670 align:middle line:90%
+Probably not.
+
+01:13:20.670 --> 01:13:24.720 align:middle line:90%
+
+
+01:13:24.720 --> 01:13:29.280 align:middle line:84%
+Here's another example
+of using Fourier series
+
+01:13:29.280 --> 01:13:34.360 align:middle line:84%
+with the same
+spread time series.
+
+01:13:34.360 --> 01:13:38.800 align:middle line:84%
+And so as we add in more
+terms in the Fourier series,
+
+01:13:38.800 --> 01:13:44.000 align:middle line:84%
+we're able to model higher
+frequency variations.
+
+01:13:44.000 --> 01:13:51.120 align:middle line:84%
+And what this shows
+is just how, I guess,
+
+01:13:51.120 --> 01:13:54.680 align:middle line:84%
+frequency analysis
+in financial series
+
+01:13:54.680 --> 01:13:56.110 align:middle line:90%
+potentially can be useful.
+
+01:13:56.110 --> 01:13:58.720 align:middle line:90%
+
+
+01:13:58.720 --> 01:14:02.420 align:middle line:84%
+What's really
+surprising, though,
+
+01:14:02.420 --> 01:14:10.490 align:middle line:84%
+is if we do a autoregression,
+where here is the high yield
+
+01:14:10.490 --> 01:14:18.010 align:middle line:84%
+spread, and then we basically
+have an autoregression
+
+01:14:18.010 --> 01:14:23.690 align:middle line:84%
+saying that the spread tomorrow
+is the same as the spread today
+
+01:14:23.690 --> 01:14:25.330 align:middle line:90%
+or very, very close.
+
+01:14:25.330 --> 01:14:29.810 align:middle line:84%
+Then we get this
+blue curve fitting
+
+01:14:29.810 --> 01:14:33.550 align:middle line:84%
+the black curve, which is over,
+underneath the blue curve.
+
+01:14:33.550 --> 01:14:40.570 align:middle line:84%
+So we get almost a perfect
+fit with this autoregression.
+
+01:14:40.570 --> 01:14:47.450 align:middle line:84%
+So there's a multiple r squared,
+which we will introduce you to,
+
+01:14:47.450 --> 01:14:51.990 align:middle line:90%
+of 0.995 for the autoregression.
+
+01:14:51.990 --> 01:14:58.330 align:middle line:84%
+So the use of historical
+values of a time series
+
+01:14:58.330 --> 01:15:02.510 align:middle line:84%
+can be very powerful in
+predicting future values.
+
+01:15:02.510 --> 01:15:03.130 align:middle line:90%
+All right.
+
+01:15:03.130 --> 01:15:06.010 align:middle line:84%
+So in fitting a multiple
+regression model,
+
+01:15:06.010 --> 01:15:11.310 align:middle line:84%
+whether it's with time series
+factors or not, what we do
+
+01:15:11.310 --> 01:15:17.070 align:middle line:84%
+is go through these steps
+of proposing a model,
+
+01:15:17.070 --> 01:15:22.870 align:middle line:84%
+step one, and make assumptions
+about the error term epsilon.
+
+01:15:22.870 --> 01:15:26.550 align:middle line:84%
+And then second, we
+define a criterion
+
+01:15:26.550 --> 01:15:30.110 align:middle line:84%
+for judging
+different estimators.
+
+01:15:30.110 --> 01:15:34.550 align:middle line:84%
+And that criterion can be
+things like least squares
+
+01:15:34.550 --> 01:15:40.310 align:middle line:84%
+or minimum mean squared
+prediction error or others.
+
+01:15:40.310 --> 01:15:46.230 align:middle line:84%
+And then characterize the best
+estimator using that criterion.
+
+01:15:46.230 --> 01:15:50.990 align:middle line:84%
+Then we check whether
+the assumptions we made
+
+01:15:50.990 --> 01:15:54.230 align:middle line:90%
+are, in fact, satisfied.
+
+01:15:54.230 --> 01:15:59.910 align:middle line:84%
+And very often, we'll discover
+that certain assumptions we make
+
+01:15:59.910 --> 01:16:05.090 align:middle line:84%
+are not satisfied and we need
+to revise those and create
+
+01:16:05.090 --> 01:16:05.740 align:middle line:90%
+a new model.
+
+01:16:05.740 --> 01:16:12.210 align:middle line:90%
+
+
+01:16:12.210 --> 01:16:18.530 align:middle line:84%
+The model assumptions
+we apply include
+
+01:16:18.530 --> 01:16:21.410 align:middle line:84%
+what are called Gauss-Markov
+assumptions, which
+
+01:16:21.410 --> 01:16:26.610 align:middle line:84%
+is where we assume that
+the errors in the model
+
+01:16:26.610 --> 01:16:32.150 align:middle line:84%
+have mean 0 and
+constant variance.
+
+01:16:32.150 --> 01:16:38.610 align:middle line:90%
+
+
+01:16:38.610 --> 01:16:44.690 align:middle line:84%
+And so with this epsilon
+hat corresponding
+
+01:16:44.690 --> 01:16:51.730 align:middle line:84%
+to the n cases in the
+series, we basically
+
+01:16:51.730 --> 01:16:57.490 align:middle line:84%
+can assume these are mean 0 and
+have standard deviation sigma
+
+01:16:57.490 --> 01:17:01.880 align:middle line:84%
+that's a constant and that
+these are uncorrelated.
+
+01:17:01.880 --> 01:17:07.700 align:middle line:90%
+
+
+01:17:07.700 --> 01:17:11.700 align:middle line:84%
+We could additionally assume
+that these errors are normally
+
+01:17:11.700 --> 01:17:15.620 align:middle line:90%
+distributed or not.
+
+01:17:15.620 --> 01:17:18.060 align:middle line:84%
+We can generalize
+the Gauss-Markov
+
+01:17:18.060 --> 01:17:22.660 align:middle line:84%
+to assume non-constant
+variances of the errors
+
+01:17:22.660 --> 01:17:26.140 align:middle line:84%
+and possibly correlations
+of errors over time.
+
+01:17:26.140 --> 01:17:28.740 align:middle line:84%
+We could also consider
+non-normal non-Gaussian
+
+01:17:28.740 --> 01:17:30.180 align:middle line:90%
+distributions.
+
+01:17:30.180 --> 01:17:32.380 align:middle line:84%
+And all of these
+cases actually have
+
+01:17:32.380 --> 01:17:37.060 align:middle line:90%
+a role in different contexts.
+
+01:17:37.060 --> 01:17:40.580 align:middle line:84%
+In particular, I guess
+generalized Gauss-Markov methods
+
+01:17:40.580 --> 01:17:43.700 align:middle line:84%
+apply with time
+series regressions,
+
+01:17:43.700 --> 01:17:49.860 align:middle line:84%
+and the non-normal non-Gaussian
+distributions arise as well,
+
+01:17:49.860 --> 01:17:53.260 align:middle line:90%
+often with asset returns data.
+
+01:17:53.260 --> 01:17:56.780 align:middle line:84%
+Now, in terms of what
+kind of criterion
+
+01:17:56.780 --> 01:17:59.560 align:middle line:84%
+we should use for
+specifying parameters,
+
+01:17:59.560 --> 01:18:03.900 align:middle line:84%
+we have least squares, maximum
+likelihood, robust methods,
+
+01:18:03.900 --> 01:18:06.860 align:middle line:84%
+Bayes' methods, a whole
+variety of methods.
+
+01:18:06.860 --> 01:18:09.040 align:middle line:84%
+And what's really
+important to me
+
+01:18:09.040 --> 01:18:14.600 align:middle line:84%
+is for people to have
+an understanding of what
+
+01:18:14.600 --> 01:18:17.960 align:middle line:84%
+these different methods
+are, and when you would
+
+01:18:17.960 --> 01:18:20.920 align:middle line:90%
+prefer one method over another.
+
+01:18:20.920 --> 01:18:24.320 align:middle line:84%
+And so what I think is a
+really important question
+
+01:18:24.320 --> 01:18:29.520 align:middle line:84%
+to ask when doing empirical
+analyses with different models
+
+01:18:29.520 --> 01:18:36.200 align:middle line:84%
+is, are your assumptions
+reasonable, if not
+
+01:18:36.200 --> 01:18:38.760 align:middle line:84%
+satisfied by the
+data you're modeling?
+
+01:18:38.760 --> 01:18:44.040 align:middle line:84%
+And with different criteria for
+judging different specifications
+
+01:18:44.040 --> 01:18:50.440 align:middle line:84%
+of models, are you using an
+appropriate criterion or not?
+
+01:18:50.440 --> 01:18:53.120 align:middle line:84%
+Are there variations
+in that criterion
+
+01:18:53.120 --> 01:18:57.850 align:middle line:84%
+that would lead to higher
+performance levels?
+
+01:18:57.850 --> 01:19:01.210 align:middle line:84%
+So that for me is
+a guiding question
+
+01:19:01.210 --> 01:19:03.330 align:middle line:84%
+throughout these
+different checks.
+
+01:19:03.330 --> 01:19:07.110 align:middle line:84%
+So with that,
+we'll finish today.
+
+01:19:07.110 --> 01:19:11.090 align:middle line:84%
+And next time, we'll
+finish these notes
+
+01:19:11.090 --> 01:19:16.130 align:middle line:84%
+going through ordinary
+least squares estimation.
+
+01:19:16.130 --> 01:19:21.610 align:middle line:84%
+And what's useful about this
+development of least squares
+
+01:19:21.610 --> 01:19:26.130 align:middle line:84%
+estimation is that it does
+so with linear algebra.
+
+01:19:26.130 --> 01:19:29.730 align:middle line:84%
+And what we'll see is
+that with linear algebra,
+
+01:19:29.730 --> 01:19:33.050 align:middle line:84%
+we get very straightforward
+formulas for least squares
+
+01:19:33.050 --> 01:19:37.170 align:middle line:84%
+estimates, as well as
+interesting analytical
+
+01:19:37.170 --> 01:19:39.910 align:middle line:84%
+properties of those
+least squares estimates.
+
+01:19:39.910 --> 01:19:43.560 align:middle line:90%
+So we'll cover that next time.
+
+01:19:43.560 --> 01:19:55.000 align:middle line:90%

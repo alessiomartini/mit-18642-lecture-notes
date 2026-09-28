@@ -1,0 +1,1051 @@
+% !TEX root = ../main.tex
+\chapter{Financial Markets, Instruments and Bond Mathematics}\label{ch:markets}
+
+\begin{sources}
+\small
+\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+\textbf{Lecture} & \textbf{Speaker} & \textbf{Content}\\
+\midrule
+2024 L1-I   & V.~Strela, P.~Kempthorne & Organisation of the class, guest lectures, R/RStudio and financial data.\\
+2024 L1-II  & J.~Xia    & Markets, products, participants, trader types, investment strategies, investment game.\\
+2024 L1-III & V.~Strela & Compounding, discounting, zero-coupon and coupon bonds, yield, yield curve, duration.\\
+2013 L1     & J.~Xia, V.~Strela & Same introduction with more detail on hedging, market making and prop trading; risk-aversion quiz; two intern projects (noisy delta, Kalman filter).\\
+\bottomrule
+\end{tabularx}
+
+\smallskip
+\textbf{Files.} Slides \file{mit18_642_f24_lec01_1.pdf} (intro, markets, bond math);
+\file{mit18_642_f24_lec01_2.pdf} (R/RStudio) with the notebook \file{FM_Intro1.Rmd} in
+\file{mit18_642_f24_rstudio.zip}; 2013 slides \file{MIT18_S096F13_lecnote1.pdf};
+the 2024 \emph{Investment Game} page. No problem set of either year covers this chapter
+directly (the 2024 problem sets start with linear algebra, \cref{ch:linalg}).
+\end{sources}
+
+\section*{Motivation}
+The first lecture has two jobs: to give a vocabulary of markets, instruments and players that
+every later application lecture takes for granted, and to introduce the single most important
+idea in quantitative finance, \emph{pricing by no-arbitrage}, on the simplest possible
+instruments: bonds. Everything in this chapter is elementary mathematically; what matters is
+the way of reasoning. The discounting argument of \cref{sec:discounting} is the ancestor of
+the replication argument behind Black--Scholes (\cref{ch:bs}) and the forward-rate formula
+of \cref{sec:forward} is the seed of the HJM framework (\cref{ch:hjm}).
+\note{What are the discounting argument? and the replication argument? and the forward-rate formula? and the HJM framework?}
+\begin{answer}[Four arguments announced here]
+The sentence is a roadmap; each item is developed later.
+\begin{itemize}
+  \item \textbf{Discounting argument} (\cref{sec:discounting}): the price today of \$1 paid in one
+        year is fixed by comparison with riskless borrowing and lending, $x=1/(1+r)$; any other
+        price gives a riskless profit.
+  \item \textbf{Replication argument}: if a portfolio of traded assets pays exactly what a contract
+        pays in every state of the world, the contract must cost what the portfolio costs.
+        Discounting is the simplest case (the claim to \$1 is replicated by lending $1/(1+r)$);
+        Black--Scholes (\cref{ch:bs}) replicates an option with a continuously rebalanced position
+        of $\Delta$ shares plus cash.
+  \item \textbf{Forward-rate formula} (\cref{prop:forward}): the interest fixed today for a loan
+        from $t$ to $T$ is read off today's discount factors, $F_{tT}=\Lambda_t/\Lambda_T-1$.
+  \item \textbf{HJM framework} (Heath--Jarrow--Morton, \cref{ch:hjm}): a model for the random
+        evolution of the whole forward curve $f(t,T)$; no-arbitrage fixes its drift in terms of its
+        volatility.
+\end{itemize}
+\end{answer}
+
+% ------------------------------------------------------------------
+\section{The course at a glance}
+The course alternates \emph{mathematics lectures} (linear algebra, probability, stochastic
+processes, regression, time series, volatility, stochastic calculus; P.~Kempthorne in 2024,
+P.~Kempthorne and C.~Lee in 2013) with \emph{application lectures} by practitioners
+(banks, hedge funds, exchanges, academia) \ts{24}{1-I}{4:05}. The mathematics is chosen
+because it is used on trading floors, not for its own sake \ts{24}{1-I}{8:17}.
+Illustrations and case studies are written in R; organisational details (problem sets, group
+project, final paper, investment game, grading) are collected in \cref{app:logistics}.
+\note{Nowadays everyone uses Python, so I will use it to illustrate the maths.}
+
+\begin{history}[The course]
+The class grew out of recruiting trips of J.~Xia and V.~Strela (then at Morgan Stanley) to MIT:
+students with strong quantitative backgrounds asked more questions about finance than an
+interview slot could answer, so a seminar was set up, later extended to a full term with
+mathematics lectures by P.~Kempthorne \ts{24}{1-II}{4:14}. The 2013 edition (18.S096) was the
+first to be recorded; the 2024 edition (18.642) keeps the same structure with new guest speakers.
+
+\smallskip
+{\footnotesize\textbf{Source.} J.~Xia's own account in the 2024 lecture (timestamp above); both
+editions are on MIT OpenCourseWare (\url{https://ocw.mit.edu}).}
+\end{history}
+
+% ------------------------------------------------------------------
+\section{Markets and products}\label{sec:products}
+
+\subsection{Where trading happens}
+\begin{itemize}
+  \item \textbf{Exchanges}: centralised venues where standardised products (\emph{listed}
+        securities, futures) trade under common rules \ts{24}{1-II}{8:23}.
+  \item \textbf{Over-the-counter (OTC)}: bilateral contracts between two counterparties,
+        not necessarily standardised and not subject to exchange rules; most swaps and many
+        options trade OTC \ts{13}{1}{12:30}. OTC trading creates \emph{counterparty risk}
+        (\cref{ch:counterparty}).
+  \item \textbf{Electronic communication networks (ECN)}: electronic platforms acting as
+        distributed exchanges \ts{24}{1-II}{9:25}.
+\end{itemize}
+\note{Difference between stock, equity, security? Define future, forward, option and swap. What are the exchange rules? Intuition behind counterparty risk?}
+\begin{answer}[Securities, derivatives, exchanges, counterparty risk]
+\begin{itemize}
+  \item \textbf{Security}: any tradable financial claim (share, bond, note, \dots).
+        \textbf{Equity}: ownership of a company, as opposed to debt. A \textbf{stock} (share) is the
+        security that represents equity; in market jargon ``equities'' simply means stocks.
+  \item \textbf{Forward}: private (OTC) agreement to buy or sell an asset at a date $T$ at a price
+        $K$ fixed today; nothing is paid today, everything is settled at $T$.
+        \textbf{Future}: the same, but standardised (size, dates) and exchange-traded, with gains and
+        losses settled daily through margin accounts. \textbf{Option}: the right, not the
+        obligation, to buy (call, payoff $(S_T-K)^+$) or sell (put, payoff $(K-S_T)^+$); the buyer
+        pays a premium today. \textbf{Swap}: exchange of two streams of cash flows on a notional,
+        e.g.\ fixed vs floating interest; it is a portfolio of forwards.
+  \item \textbf{Exchange rules}: standardised contracts; only members trade directly (others go
+        through brokers); orders are matched in an order book by price, then time; tick sizes,
+        trading hours, circuit breakers and reporting duties. Trades are cleared by a central
+        counterparty that collects margin from both sides, which is what removes bilateral
+        counterparty risk.
+  \item \textbf{Counterparty risk}: in an OTC contract your gain is only a promise of the other
+        side. If they default when the contract is worth something to you, you lose that value
+        (the cost of replacing the contract). It is like having lent money to them: the exposure is
+        what they would owe you if they disappeared now, and it matters only when the contract has
+        positive value to you. Collateral and clearing reduce it (\cref{ch:counterparty}).
+\end{itemize}
+\end{answer}
+
+\subsection{What is traded}
+\Cref{tab:products} lists the main product classes with the chapters in which their
+mathematics appears.
+
+\begin{table}[ht]
+\centering\small
+\caption{Main product classes.}\label{tab:products}
+\begin{tabularx}{\linewidth}{@{}l X l@{}}
+\toprule
+\textbf{Class} & \textbf{What it is} & \textbf{Where}\\
+\midrule
+Money, FX & Currencies issued by different states; also gold and, arguably, crypto. & \ref{ch:timeseries}, \ref{ch:quanto}\\
+Equity & Ownership of a company (stocks); baskets (indices such as the S\&P~500, ETFs). & \ref{ch:regression}, \ref{ch:portfolio}\\
+Fixed income & Loans, securitised as bonds (government, corporate, municipal); interest-rate curves. & this ch., \ref{ch:rates}\\
+Credit & Instruments whose value depends on default of an issuer. & \ref{ch:counterparty}, \ref{ch:quanto}\\
+Real estate & Mortgages, mortgage-backed (MBS) and asset-backed securities (ABS). & --\\
+Commodities & Metals, energy, agricultural products; mostly traded as futures. & \ref{ch:commodities}\\
+Derivatives & Contracts whose payoff depends on another asset: forwards, futures, swaps, options, structured products. & \ref{ch:bs}, \ref{ch:rates}\\
+\bottomrule
+\end{tabularx}
+\end{table}
+\note*{Leave some space between lines in the table.}
+
+A few points from the lectures deserve emphasis.
+\begin{itemize}
+  \item \textbf{Primary vs secondary market.} A company becomes listed through an
+        \emph{initial public offering} (IPO), the primary market; afterwards its shares are
+        traded among investors, the secondary market \ts{24}{1-II}{11:33}.
+  \item \textbf{A bond is a securitised loan.} The issuer pays periodic interest
+        (\emph{coupons}) and repays the \emph{principal} or \emph{notional} at maturity.
+        Debt is ``more generic'' than equity: finance is fundamentally about someone who has
+        money and someone who needs it \ts{13}{1}{14:36}. Since the issuer may fail to pay,
+        a bond carries \emph{credit risk} \ts{24}{1-II}{12:36}; the 2008 crisis was a credit crisis
+        that started in mortgages and spread through the derivatives built on them
+        \ts{24}{1-II}{13:36}.
+  \item \textbf{Asset-backed securities}: debt issued against a pool of assets (e.g.\ mortgages),
+        whose risk depends on the income stream of the pool \ts{13}{1}{16:44}.
+  \item \textbf{Derivatives}: an \emph{option} is the right but not the obligation to buy
+        (call) or sell (put) at a fixed price; a \emph{forward} is an agreement today to trade
+        at a future date; a \emph{future} is a standardised, exchange-traded forward; a
+        \emph{swap} exchanges two streams of cash flows (e.g.\ fixed vs floating interest)
+        \ts{24}{1-II}{15:41}.
+\end{itemize}
+\note{Is the primary market an actual market? what is a market?}
+\begin{answer}[Primary market; what a market is]
+The primary market is not a place but a process: the first sale of newly issued securities by
+the issuer to investors (an IPO for shares, auctions or bank syndicates for bonds). The money goes to
+the issuer, and investment banks organise the sale (underwriting, book-building). In the secondary
+market investors trade existing securities among themselves and the issuer receives nothing.
+In general a \emph{market} is any mechanism that brings buyers and sellers together and lets a price
+form: an exchange with an order book, a network of dealers quoting prices (OTC), or an auction.
+\end{answer}
+
+\begin{finance}[Impossible events happen]
+In April 2020 the front-month WTI crude-oil futures contract traded at a significantly
+\emph{negative} price: holders of long contracts had to pay to get rid of them because nobody
+could store the oil. Some brokers' systems had not been programmed for negative prices
+\ts{24}{1-I}{14:30}. Negative interest rates, once considered impossible, were the norm in the
+eurozone and Japan for years. Lesson: a model's hard constraints (``prices are positive'') are
+assumptions, not facts.
+\end{finance}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.9\linewidth,height=5.2cm,xlabel={year},ylabel={WTI (\$ per barrel)},
+  xmin=2011,xmax=2024.75,ymin=-45,ymax=130,xtick={2012,2014,...,2024},
+  xticklabel style={/pgf/number format/1000 sep={}},grid=major,grid style={black!10}]
+  \addplot[thin,black] table {data/fm_wti.dat};
+  \addplot[thick,thmcol,domain=2011:2024.75,samples=2] {0};
+  \node[font=\scriptsize,anchor=east,thmcol] at (axis cs:2020.1,-30) {20 Apr 2020: $-36.98$};
+\end{axis}
+\end{tikzpicture}
+\caption{WTI crude oil (FRED series \texttt{DCOILWTICO}, weekly closes, daily in spring 2020),
+2011--2024, with the zero line in red: re-drawn from the data of the course notebook
+\file{FM_Intro1.Rmd} (\cref{sec:R}), shown in class \ts{24}{1-I}{14:54}.}\label{fig:wti}
+\end{figure}
+\note*{Here I am sure there were picture from the presentation. We should include them to make the presentation clearer and more interesting.}
+
+% ------------------------------------------------------------------
+\section{Market participants}\label{sec:participants}
+
+\note{repeal? liabilities?}
+\begin{itemize}
+  \item \textbf{Commercial banks} take deposits and lend. \textbf{Investment banks} raise
+        capital and trade. The two were separated in the US by the Glass--Steagall Act (1933);
+        its repeal in 1999 is often blamed as a cause of the 2008 crisis \ts{13}{1}{17:44}.
+        An investment bank typically has three client divisions \ts{24}{1-II}{17:45}:
+        \emph{Equity} (stocks and equity derivatives), \emph{Fixed Income} (bonds, rates, FX,
+        commodities and their derivatives) and the \emph{Investment Banking Division} (IBD:
+        corporate finance, IPOs, bond issuance, M\&A advisory); plus asset and wealth
+        management.
+  \item \textbf{Dealers vs brokers.} A dealer (market maker) quotes a price and takes the other
+        side of the trade, i.e.\ takes \emph{principal risk}; a broker only matches buyers and
+        sellers and earns a commission \ts{13}{1}{23:00}.
+  \item \textbf{Asset owners and managers}: mutual funds (usually long-only), insurance companies
+        and pension funds (assets invested to meet liabilities), sovereign wealth funds,
+        endowments, family offices \ts{13}{1}{24:04}.
+  \item \textbf{Hedge funds} trade their own and their investors' capital to generate returns;
+        \textbf{private equity} buys stakes in companies to improve and later sell them.
+  \item \textbf{Retail investors}, \textbf{central banks} (policy-driven: set short rates,
+        provide liquidity, intervene in FX) and \textbf{corporates} (mostly hedgers).
+\end{itemize}
+\begin{answer}[Repeal; liabilities]
+To \emph{repeal} a law is to abolish it with a later law: the Gramm--Leach--Bliley Act (1999) removed
+the Glass--Steagall separation, so commercial and investment banks could merge again (e.g.\
+Citigroup). \emph{Liabilities} are what an entity owes: for a bank, its deposits; for a pension fund,
+the pensions it has promised; for an insurer, future claims. ``Invested to meet liabilities'' means
+choosing assets whose cash flows match those future payments (asset--liability management), e.g.\ long
+bonds against long-dated pensions, with matching durations (\cref{sec:duration}).
+\end{answer}
+\note*{Central bank decides interest rate. Right now in 2024 the interest curve is inverted! The central bank of US is Federal Reserve Bank.}\note{what is a typical shape of interest curve?}
+\begin{answer}[Central banks and the yield curve]
+The central bank sets only the \emph{short-term} policy rate (in the US the federal funds target
+range, decided by the FOMC; in the eurozone the ECB deposit rate). Longer yields are set by the
+market: expectations of future policy rates plus a term premium. The US central bank is the
+\emph{Federal Reserve System}: the Board of Governors in Washington plus twelve regional Federal
+Reserve Banks. On the inversion: the 2-year vs 10-year Treasury spread was negative from July 2022
+until early September 2024, the longest inversion on record; the September 2024 curve of
+\cref{fig:yieldcurve} is still inverted at the short end.
+
+\emph{Typical shape}: upward sloping and concave, steep over the first few years and flattening
+beyond about ten years (1992 and 2021 in \cref{fig:yieldcurve}). The other shapes are flat,
+inverted (short above long, when the market expects the central bank to cut) and humped (a
+maximum at medium maturities).
+\end{answer}
+
+\paragraph{The driving force.} Every participant tries to maximise gains while limiting losses
+under uncertainty. The fundamental trade is between \emph{lenders} (have money, need return) and
+\emph{borrowers} (need money, bear risk) \ts{24}{1-II}{20:49}. The same pairing appears as
+\emph{limited partners} (LP, the investors in a fund) vs \emph{general partners} (GP, the fund
+manager). Whether markets are a zero-sum game depends on the product: many trades net to zero,
+but markets exist because they transfer capital from those who have it to those who can use it
+productively \ts{13}{1}{20:53}.
+\note{Nice point: what is the point of a (financial) market?}
+\begin{answer}[What financial markets are for]
+\begin{itemize}
+  \item \emph{Capital allocation}: savings flow to those who can use them productively;
+  \item \emph{risk transfer}: hedgers pass risks to those willing to bear them for a premium;
+  \item \emph{price discovery}: prices aggregate dispersed information into a public signal;
+  \item \emph{liquidity}: assets can be turned into cash quickly, which makes holding them cheaper;
+  \item \emph{moving consumption in time}: saving now to spend later, or the reverse.
+\end{itemize}
+Even when payoffs net to zero (derivatives), a trade can leave both sides better off, because
+they start from different exposures and preferences.
+\end{answer}
+
+% ------------------------------------------------------------------
+\section{Three types of traders}\label{sec:tradertypes}
+
+\subsection{Hedgers}
+Hedgers already have an exposure and want to \emph{reduce} it \ts{13}{1}{26:13}: a homeowner
+with a floating-rate mortgage who locks in a fixed rate; an exporter with future euro revenues
+who sells euros forward; a company in an M\&A deal hedging currency and rate exposure.
+\note{Exposure = risk? what is M\&A?}
+\begin{answer}[Exposure; M\&A]
+\emph{Exposure} is the amount of value that moves when a risk factor moves: an exporter expecting
+EUR~10 million of revenues has a EUR~10 million EUR/USD exposure. \emph{Risk} combines the exposure
+with how much the factor moves: roughly, the size of the typical loss is exposure $\times$ volatility
+of the factor. Exposure is thus a sensitivity (for derivatives, the delta). \emph{M\&A} = mergers and
+acquisitions: one company buying another, or two merging. In a cross-border deal the buyer has to
+pay in a foreign currency at a future closing date, hence the FX and rate hedges.
+\end{answer}
+
+\begin{example}[Samurai bonds and the carry trade {\ts{13}{1}{30:29}}]
+Australian rates have historically been well above Japanese rates; the 2013 slide quotes a
+10-year swap-rate difference of $4.5\% - 1\% = 3.5\%$. An Australian company can therefore
+issue a bond in Japanese yen (JPY) (a \emph{Samurai bond}), paying $\approx 1\%$, and use the proceeds in
+Australia where money earns $\approx 4.5\%$. Why doesn't everybody do this forever? Because the
+Australian dollar (AUD) may weaken against the yen, wiping out the rate differential; and if everybody
+holds the same position, the exit moves the market against them. To hedge, the company must
+\emph{receive} JPY and \emph{pay} AUD in the future, which in practice means FX forwards,
+interest-rate swaps and cross-currency (basis) swaps.
+\end{example}
+\note*{JPY = japanese yen, AUD = australian dollar.}
+
+\begin{intuition}[Covered interest parity]
+The yen/AUD trade is an example of a general principle you will see formalised in
+\cref{ch:bs}: once the exchange-rate risk is hedged with a forward, the forward price itself
+incorporates the interest-rate differential (\emph{covered interest parity}). A risk-free
+``free lunch'' from the rate differential would be an arbitrage.
+\end{intuition}
+
+\subsection{Market makers}
+A market maker quotes a \emph{bid} (price at which it buys) and an \emph{offer} or \emph{ask}
+(price at which it sells), with bid $<$ offer, and aims to earn the spread rather than to
+take a view \ts{24}{1-II}{21:56}. For transparent products (a liquid stock) the spread is tiny;
+for opaque products (say a two-month call on Apple struck at 500) the market maker provides
+liquidity and must then manage the residual inventory of risk \ts{13}{1}{33:41}. This is done by
+balancing the \emph{Greeks} of the book \ts{13}{1}{34:46}, the partial derivatives of the
+value $V$ of the option (or of the whole book) with respect to the price $S$ of the underlying,
+time $t$ and the volatility $\sigma$ of the underlying:
+\note*{def: V is the value of the option, S is the underlying price, t is time, sigma is volatility.}
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Greek & Definition & Meaning\\
+\midrule
+Delta $\Delta$ & $\partial V/\partial S$ & sensitivity to the underlying price\\
+Gamma $\Gamma$ & $\partial^2 V/\partial S^2$ & curvature, change of delta\\
+Theta $\Theta$ & $\partial V/\partial t$ & ``carry'' or time decay when nothing moves\\
+Vega $\nu$ (or kappa) & $\partial V/\partial \sigma$ & sensitivity to volatility\\
+\bottomrule
+\end{tabular}
+\end{center}
+Beyond the Greeks, a dealer book is managed through tail-risk measures such as
+\emph{Value at Risk} (\cref{ch:var}), capital usage, balance sheet and leverage. Before 2008 many
+banks were levered about 40 times: with \$1 of capital and \$40 of exposure, a 2.5\% move wipes
+out the capital \ts{13}{1}{35:47}.
+\note{def of liquidity, residual inventory of risk. Dealer book = order book? tail-risk measures?}
+\begin{answer}[Liquidity, inventory, dealer book, tail risk]
+\begin{itemize}
+  \item \textbf{Liquidity}: the ability to trade a large size quickly without moving the price much;
+        measured by the bid--ask spread, the depth of the market and traded volume.
+  \item \textbf{Residual inventory of risk}: after buying an option from a client the market maker
+        holds a position it did not choose, and cannot sell the same option on at once (it is
+        illiquid). It hedges what it can with liquid instruments (shares for delta, other options for
+        vega); what is left is the residual risk it carries in inventory.
+  \item \textbf{Dealer book $\neq$ order book}. An order book is the exchange's list of pending buy
+        and sell orders at each price. A dealer's \emph{book} is its portfolio of positions, managed
+        as a whole.
+  \item \textbf{Tail-risk measures} describe the extreme losses of the profit-and-loss distribution:
+        \emph{Value at Risk} (the loss exceeded with probability 1\%, say, over one day),
+        \emph{Expected Shortfall} (the average loss beyond the VaR), stress tests (\cref{ch:var}).
+\end{itemize}
+\end{answer}
+
+\begin{coursenote}[Vega or kappa?]
+J.~Xia's anecdote \ts{13}{1}{6:15}: on his first day on the Morgan Stanley options desk he asked
+for the ``vega report''; the training manual explained that the house term was \emph{kappa},
+since vega is not a Greek letter. Both names are in use; this reflects how young quantitative
+finance is as a discipline (the Black--Scholes model dates to 1973) \ts{13}{1}{9:19}.
+\end{coursenote}
+
+\subsection{Proprietary traders and portfolio managers}
+Risk takers deliberately take positions to earn a return \ts{13}{1}{36:50}. Styles include:
+\begin{itemize}
+  \item \textbf{Directional}: long or short on a view (including ``gut'' trading).
+  \note{what is gut trading?}
+  \item \textbf{Arbitrage}: exploit violations of \emph{deterministic} price relationships,
+        e.g.\ the same gold priced differently in two markets, or a spot price inconsistent with
+        the forward price \ts{13}{1}{37:50}.
+  \item \textbf{Value and relative value}: estimate the ``fair value'' of an instrument relative
+        to others and trade on the difference over a longer horizon.
+  \item \textbf{Systematic}: computer models such as trend following, momentum,
+        statistical arbitrage across many stocks.
+  \item \textbf{Fundamental / global macro}: trade balances, earnings, policy changes
+        \ts{13}{1}{40:00}; \textbf{special situations}: distressed companies.
+\end{itemize}
+\begin{answer}[Gut trading]
+Trading on instinct (``gut feeling'') and experience rather than on a model or a fixed rule: the
+extreme form of \emph{discretionary} trading, as opposed to \emph{systematic} trading.
+\end{answer}
+
+\begin{definition}[Alpha and beta]\label{def:alphabeta}
+Let $R_b$ be the return of a benchmark (e.g.\ an S\&P~500 index fund) and $R_a$ the return of a
+portfolio. The linear regression
+\[
+  R_a = \alpha + \beta\, R_b + \varepsilon, \qquad \E[\varepsilon]=0,\ \Cov(\varepsilon, R_b)=0,
+\]
+decomposes the portfolio return into a part $\beta R_b$ explained by co-movement with the
+benchmark (\emph{beta}, market exposure, cheap to obtain by buying the index) and an excess
+return $\alpha$ (\emph{alpha}, the manager's skill) \ts{13}{1}{28:21}. The least-squares estimate is
+$\hat\beta = \widehat{\Cov}(R_a,R_b)/\widehat{\Var}(R_b)$; regression is developed in
+\cref{ch:regression} and the CAPM interpretation in \cref{ch:portfolio}.
+\end{definition}
+\note{def of what is a return. what is CAPM interpretation?}
+\begin{answer}[Returns; CAPM]
+Over one period, with price $P_t$ and dividend $D_t$, the \emph{simple return} is
+$R_t=(P_t+D_t-P_{t-1})/P_{t-1}$ and the \emph{log return} is $r_t=\ln(1+R_t)$; log returns add up
+over time and $r_t\approx R_t$ for small moves. The CAPM (\cref{ch:portfolio}) states that in
+equilibrium expected \emph{excess} returns are proportional to beta with respect to the market
+portfolio $M$: $\E[R_a]-r_f=\beta_a\bigl(\E[R_M]-r_f\bigr)$. Written for excess returns with the
+market as benchmark, the regression above then has $\alpha=0$: a non-zero alpha is return that
+market risk does not explain, i.e.\ skill or an unmodelled risk factor.
+\end{answer}
+
+\begin{coursenote}[Slide glitch]
+On the 2013 slide the formula reads ``$R(a) = a + b \cdot R(b)$'': the Greek letters $\alpha,\beta$
+were lost in the conversion, as J.~Xia remarks in class. In the same lecture a quote is given
+as ``\$0.99 bid, \$0.95 offer''; the bid must be below the offer, and indeed later it becomes
+``\$0.90 bid, \$0.95 offer''.
+\end{coursenote}
+
+% ------------------------------------------------------------------
+\section{Where mathematics enters}\label{sec:mathuse}
+Mathematics is used in three ways \ts{24}{1-II}{23:01}:
+\begin{itemize}
+  \item \textbf{Pricing models}: relative value and \emph{arbitrage-free} prices of complex
+        instruments (options need PDEs; \cref{ch:bs}); a pricing model also delivers the risk
+        parameters (Greeks) needed to hedge.
+  \item \textbf{Risk management}: position sizing, diversification, when to take profit or cut
+        losses, leverage, liquidity, counterparty risk; it counteracts greed and fear
+        \ts{24}{1-II}{24:10}.
+  \item \textbf{Trading strategies}: the ``holy grail'' or perpetual money machine. Such
+        strategies, when they exist, are kept secret, and markets adapt: no model can be built
+        and left alone forever \ts{13}{1}{42:03}. Firms protect them with confidentiality
+        obligations on trade secrets that do not expire when an employee leaves, and with
+        non-compete clauses (often a paid ``garden leave'' of some months) that keep departing
+        traders and quants away from competitors.
+\end{itemize}
+\note*{Life-long no-disclosure contracts for trading strategies.}
+
+\paragraph{Efficient markets vs behavioural finance.} Can one learn from historical patterns and
+extrapolate? The \emph{efficient market hypothesis} says no: a \$100 bill lying on the ground would
+have been picked up already. \emph{Behavioural finance} replies that people are not always
+rational, which creates opportunities \ts{24}{1-II}{26:15}. Deterministic (physics-like)
+relationships are nowadays almost always arbitraged away; what remains are \emph{statistical}
+relationships, which hold only with some probability \ts{24}{1-II}{29:25}. Market cycles are long
+and memories short: people over-weight recent experience \ts{13}{1}{51:23}.
+
+\begin{example}[Risk-aversion quiz {\ts{13}{1}{44:04}}]\label{ex:quiz}
+\emph{Loss framing.}
+\begin{enumerate}[(A)]
+  \item lose \$500 with probability $0.8$, win \$500 with probability $0.2$;
+  \item lose \$280 for sure.
+\end{enumerate}
+\emph{Gain framing.}
+\begin{enumerate}[(A)]
+  \item win \$500 with probability $0.8$, lose \$500 with probability $0.2$;
+  \item win \$280 for sure.
+      \note{I dont understand what's the question. whats the best strategy? }
+\end{enumerate}
+
+\smallskip
+In the loss framing $\E[A] = 0.8(-500)+0.2(500) = -300 < -280 = \E[B]$, so B has the higher
+expectation; yet many people choose A, to avoid ``locking in'' a loss. In the gain framing
+$\E[A] = +300 > 280 = \E[B]$, but most people choose B. A student's answer for B in class was
+``higher Sharpe'': indeed $\operatorname{sd}(A) = 1000\sqrt{0.8\cdot 0.2} = 400$ while B is riskless.
+\end{example}
+\begin{answer}[What the quiz asks]
+Each framing asks: \emph{which of the two would you choose?} It is a question about your
+preferences, and there is no single right answer. Xia says so explicitly: he is not telling the class which
+choice is right \ts{13}{1}{47:49}. A pure expected-value maximiser picks B in the loss framing
+($-280>-300$) and A in the gain framing ($300>280$). Most people do the opposite in both. The
+point is that the \emph{framing} (losing vs winning the same kind of bet) flips the choice, while a
+rational choice should depend only on the payoffs, one's utility and one's wealth (see the
+intuition box below).
+\end{answer}
+\note*{Brief def of Sharpe ratio, and mention the other metrics to assess an investment strategy.}
+
+\paragraph{Sharpe ratio and other performance metrics.} For a strategy with return $R$ (per period),
+risk-free rate $r_f$ and volatility $\sigma=\operatorname{sd}(R)$, the \emph{Sharpe ratio} is
+\[
+  \mathrm{SR}=\frac{\E[R]-r_f}{\sigma},
+\]
+the excess return per unit of risk. It is usually annualised, $\mathrm{SR}_{\text{year}}\approx\sqrt{252}\,\mathrm{SR}_{\text{day}}$ for
+daily returns. It does not change under leverage, which is why it is the standard basis for
+comparing strategies (\cref{ch10:prop-sharpe}). A riskless payoff has $\sigma=0$, hence the student's
+``higher Sharpe'' for B. Other common metrics:
+\begin{itemize}
+  \item \textbf{Sortino ratio}: like Sharpe, but divides by the downside deviation, so upside
+        volatility is not penalised;
+  \item \textbf{maximum drawdown}: largest peak-to-trough loss of the cumulative P\&L;
+        the \textbf{Calmar ratio} is annual return divided by maximum drawdown;
+  \item \textbf{information ratio}: active return over a benchmark divided by the tracking error;
+  \item \textbf{alpha and beta} with respect to a benchmark (\cref{def:alphabeta});
+  \item \textbf{Value at Risk} and \textbf{Expected Shortfall}: tail losses (\cref{ch:var});
+  \item \textbf{hit rate} (fraction of winning trades) and \textbf{profit factor} (gross gains over
+        gross losses), close to the ratio $(G-L)/(G+L)$ of the Investment Game (\cref{ex:game});
+  \item \textbf{turnover} and \textbf{capacity}: how much trading the strategy needs and how much
+        capital it can absorb before costs eat the returns.
+\end{itemize}
+
+\begin{intuition}[Prospect theory: reflection effect and utility]
+The pattern ``risk-seeking over losses, risk-averse over gains'' is the \emph{reflection effect}
+of Kahneman and Tversky's prospect theory (not named in the lecture). In trading it appears as the
+tendency to sell winners too early and hold losers too long, which is why discipline and
+stop-loss rules are part of risk management \ts{13}{1}{46:10}. With a concave utility $u$
+(risk aversion), B is preferred in the gain framing whenever $u(280) > 0.8\,u(500)+0.2\,u(-500)$;
+the answer depends on wealth: a student with \$800 in the bank and an investor with \$100{,}000
+should not answer the same way \ts{13}{1}{50:20}.
+\end{intuition}
+\note*{the titles of the boxes should be given more importance. here id call it something like: INTUITION: KT prospect theory, reflection effect and utility (this is just an idea)}
+
+% ------------------------------------------------------------------
+\section{Choosing an investment strategy}\label{sec:strategies}
+J.~Xia's list of choices every investor faces \ts{24}{1-II}{27:19}:
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}L@{\quad vs\quad}L@{}}
+\toprule
+Internal (direct investing) & external (fund of funds)\\
+Public assets (equity, bonds, FX, commodities) & private assets (PE, VC, real estate, natural resources)\\
+Passive (beta, benchmark) & active (alpha)\\
+Systematic (quantitative rules) & discretionary (fundamental judgement)\\
+Deterministic relationships & statistical relationships\\
+Trend following (buy strength) & mean reversion (buy the dip)\\
+Short term (fast, liquid) & long term (slow, illiquid)\\
+Value: $V(0) \gg P$ & growth: $V(T) \gg V(0)$\\
+History (repeating patterns) & future (extrapolation)\\
+\bottomrule
+\end{tabularx}
+\end{center} \note*{i am pretty sure he said something more about each choice}
+What Xia said about each choice:
+\begin{itemize}
+  \item \textbf{Internal vs external}: do it yourself, or pay other people to do it for you
+        (invest in their funds, or in a fund of funds) \ts{24}{1-II}{27:44}.
+  \item \textbf{Public vs private}: venture capital, private equity, buyouts, real-estate and
+        natural-resource funds are not transparent, ``but they seem to make a lot of returns,
+        too''. The two are very different markets and you need to pick one \ts{24}{1-II}{28:04}.
+  \item \textbf{Passive vs active}: stock picking, or just buying the index. Buying the
+        S\&P~500 over the last ten years beat most fund managers, ``so why shouldn't you just do the
+        passive?'' \ts{24}{1-II}{28:23}.
+  \item \textbf{Systematic vs discretionary}: decisions from quantitative rules or models, or case
+        by case with your own judgement \ts{24}{1-II}{28:52}.
+  \item \textbf{Deterministic vs statistical}: a deterministic relationship is like physics (A plus
+        B always gives C); a statistical one gives C only with some probability. Deterministic
+        arbitrage is nowadays very hard to find (the \$100 bills have been picked up), ``but sometimes,
+        they still show up'' \ts{24}{1-II}{29:18}.
+  \item \textbf{Trend following vs mean reversion}: when the market goes up, buy more, or sell
+        (play the contrarian, buy the dip) \ts{24}{1-II}{29:50}.
+  \item \textbf{Short vs long term}: short-term trading is fast, in liquid markets, and you can
+        change your mind easily. Long-term decisions are slow: a start-up in a venture-capital
+        portfolio may take ten years to prove itself \ts{24}{1-II}{30:10}.
+  \item \textbf{Value vs growth}: Warren Buffett-style value investing wants the price well below
+        today's value. Growth investing projects, say, NVIDIA's income over the next ten years and buys
+        if the future value exceeds the current one. In recent years more and more people focus on
+        growth, ``you need to figure out why'' \ts{24}{1-II}{30:37}.
+  \item \textbf{History vs future}: believe that history repeats and follow the patterns, or refuse
+        to simply extrapolate \ts{24}{1-II}{31:09}.
+\end{itemize}
+Here $P$ is the current price and $V(t)$ the (estimated) value of the company at time $t$: a value
+investor buys what is cheap relative to today's value, a growth investor buys expected growth. \note{This is just a different time-scale approach: connection to renormalization.}
+\begin{answer}[Value vs growth as time scales]
+Partly right. Both styles bet that price converges to value; they differ in \emph{which} value and
+over what horizon. Value bets that the gap $V(0)-P$ closes (a mean-reversion time, typically
+years). Growth bets on the drift of $V(t)$ itself up to a distant $T$. So the choice is indeed about
+which time scale carries your signal. The analogy with the renormalization group is loose, though:
+there is no coarse-graining map and no fixed point here, only two different observables. The
+solid physics connections are elsewhere: \emph{separation of time scales} (fast noise vs slow
+fundamental drift, as in the Ornstein--Uhlenbeck model of \cref{ch:sde}) and the empirical
+\emph{scaling laws} of returns across time scales (Mandelbrot's fat tails and multifractals;
+R.~N.~Mantegna and H.~E.~Stanley, \emph{An Introduction to Econophysics}, 2000), where
+renormalization-like ideas do appear.
+\end{answer}
+The key message \ts{24}{1-II}{31:28}: understand your own objectives and constraints (what the
+money is for, how much you can afford to lose, your horizon), pick the area where you have an edge
+over the rest of the market, and ``if math is your strength, make math your edge''. \note{what is an edge?}
+\begin{answer}[Edge]
+An \emph{edge} is a persistent advantage that makes your expected return, after costs, positive,
+and that you can explain: ``you need to understand why you should make money. Other people
+should give you the money'' \ts{24}{1-II}{32:10}. Typical sources:
+\begin{itemize}
+  \item better \emph{information} or better processing of public information;
+  \item better \emph{models} (the quant's edge);
+  \item \emph{speed} or lower \emph{costs};
+  \item \emph{risk capacity} or \emph{patience}: holding what others must sell, or for longer than they can;
+  \item being paid for providing a service (liquidity, insurance).
+\end{itemize}
+If you cannot say who is on the other side and why they lose, you probably have no edge.
+\end{answer}
+
+% ------------------------------------------------------------------
+\section{Time value of money}\label{sec:tvm}
+
+\subsection{Compounding}
+Invest \$1 at a constant annual interest rate $r$ \ts{24}{1-III}{1:00}. \note{what are tipical values of r?} With annual compounding
+(interest earns interest) it grows to $1+r$ after one year and to $(1+r)^n$ after $n$ years. If
+interest is paid and reinvested $m$ times a year, each period earns $r/m$ and
+\begin{equation}\label{eq:mcompound}
+  1 \;\longmapsto\; \Bigl(1+\frac{r}{m}\Bigr)^{mn} \quad\text{after $n$ years.}
+\end{equation}
+\begin{answer}[Typical values of $r$]
+A few percent per year, but the range is wide:
+\begin{itemize}
+  \item US policy rate (federal funds): $0$--$0.25\%$ in 2008--2015 and 2020--2022, then
+        $5.25$--$5.50\%$ from July 2023 to September 2024;
+  \item 10-year US Treasury yield: about $0.5\%$ at its 2020 low, about $5\%$ in October 2023,
+        above $15\%$ in 1981 (when the policy rate was near $20\%$ to fight inflation);
+  \item negative rates: the ECB deposit rate was $-0.5\%$ in 2019--2022, and the Bank of Japan's
+        policy rate was $-0.1\%$ in 2016--2024;
+  \item borrowers pay more than governments: mortgages, corporate bonds and credit cards carry a
+        credit spread on top (from $1\%$ to more than $20\%$ a year for credit cards).
+\end{itemize}
+\end{answer}
+Letting $m\to\infty$ (continuous compounding) \ts{24}{1-III}{3:02},
+\begin{equation}\label{eq:contcompound}
+  \lim_{m\to\infty}\Bigl(1+\frac{r}{m}\Bigr)^{mt} = e^{rt},
+\end{equation}
+since $\ln(1+r/m)^{mt} = mt\,\ln(1+r/m) = mt\,(r/m + O(m^{-2})) \to rt$.
+
+\begin{history}[Compound interest and the number $e$]
+V.~Strela credits Jacob Bernoulli with ``maybe the first mathematical-finance paper in history''
+\ts{24}{1-III}{4:02}. The facts:
+\begin{itemize}
+  \item in 1683 Jacob Bernoulli (1655--1705) studied continuously compounded interest and asked for
+        the limit of $(1+1/n)^n$ as $n\to\infty$, showing that it lies between 2 and 3;
+  \item he published it in May 1690 in \emph{Acta Eruditorum}, in the paper ``Quaestiones nonnullae
+        de usuris, cum solutione problematis de sorte alearum'' (``Some questions on interest,
+        with the solution of a problem on games of chance''). Finance and probability were
+        born together;
+  \item the letter $e$ is Euler's: it first appears in a letter to Goldbach (1731) and in print in
+        his \emph{Mechanica} (1736).
+\end{itemize}
+``First'' is generous: Fibonacci's \emph{Liber Abaci} (1202) already compares cash flows at
+different dates with present-value calculations (W.~N.~Goetzmann).
+
+\smallskip
+{\footnotesize\textbf{References.} J.~Bernoulli, \emph{Acta Eruditorum}, May 1690, pp.~219--223;
+J.~J.~O'Connor and E.~F.~Robertson, ``The number $e$'', MacTutor History of Mathematics
+(\url{https://mathshistory.st-andrews.ac.uk/HistTopics/e/});
+W.~N.~Goetzmann, ``Fibonacci and the Financial Revolution'', NBER Working Paper 10352 (2004).}
+\end{history}\note*{I love history facts! can we implement a special box for them? like something that looks like old, antique. Furthermore, factcheck them and add references.}
+
+\begin{remark}[Equivalent rates]
+The same growth can be quoted with different conventions: a rate $r_m$ compounded $m$ times a year
+and a continuously compounded rate $r_c$ are equivalent iff $(1+r_m/m)^m = e^{r_c}$, i.e.
+$r_c = m\ln(1+r_m/m)$. A rate is meaningless without its compounding convention.
+\end{remark}\note{is there any situation where is not allowed mathematically to use continuous compound? or where we get totally different results and we should be careful which one to use?}
+\begin{answer}[When the compounding convention matters]
+Mathematically nothing forbids continuous compounding. Every positive growth factor $G$ over a year
+can be written as $e^{r_c}$ with $r_c=\ln G$. Once rates are converted with the formula above, all
+conventions give the \emph{same} prices. Trouble comes from forgetting to convert:
+\begin{itemize}
+  \item \textbf{the size of the gap grows with $r$ and $t$}: $5\%$ annual is $r_c=4.88\%$, a small
+        difference; $50\%$ annual is only $r_c=40.5\%$. Over 30 years at $5\%$, $1.05^{30}=4.32$ but
+        $e^{1.5}=4.48$, so quoting one rate in the other convention misprices long bonds by several
+        percent;
+  \item \textbf{very negative rates}: $1+r_m/m$ must be positive, so a simple rate $r_m\le-m$ is
+        meaningless (you would lose more than everything), while $e^{r_ct}$ is always positive;
+  \item \textbf{contracts fix the convention}: coupons, money-market deposits and swaps specify
+        compounding and day-count rules (\cref{ch:rates}), and a price must follow the contract;
+  \item \textbf{continuous time}: in stochastic models (Black--Scholes, short-rate models)
+        continuous compounding is the natural choice, because $e^{rt}$ is what $\dd B=rB\dd t$ produces.
+\end{itemize}
+\end{answer}
+
+\subsection{Discounting by no-arbitrage}\label{sec:discounting}
+How much should one pay today for the right to receive \$1 in one year \ts{24}{1-III}{5:03}? Call
+the price $x$ and consider the strategy: \emph{borrow $x$ today and buy the claim}.\note{what does it mean buy the claim?} Today the
+net cash flow is zero.\note{what is net cash flow?} In one year we receive \$1 and repay $x(1+r)$, so the final profit is
+\[
+  \Pi = 1 - x(1+r) \quad\text{with certainty.}
+\]
+If $\Pi>0$ we would do this on a huge scale (riskless profit from nothing); if $\Pi<0$ the
+counterparty would do the opposite. Absence of arbitrage forces $\Pi = 0$, i.e.
+$x = 1/(1+r)$ \ts{24}{1-III}{6:08}.
+\begin{answer}[Claim; net cash flow]
+A \emph{claim} is a contract that entitles its holder to a payment: here, the right to receive
+\$1 in one year (a zero-coupon bond, \cref{sec:bonds}). \emph{Buying the claim} means paying its price $x$
+today to become the one who will be paid. The \emph{net cash flow} at a date is money in minus money
+out at that date. Today we receive $+x$ from the loan and pay $-x$ for the claim: net $0$, so the
+strategy needs no capital of our own. In one year: $+1$ from the claim, $-x(1+r)$ to repay the loan.
+\end{answer}
+
+\begin{definition}[Discount factor]
+The present value of \$1 received at time $t$ is the \emph{discount factor} $\Lambda_t$. With a
+constant rate,
+\[
+  \Lambda_n = \frac{1}{(1+r)^n} \ \text{(annual compounding)},\qquad
+  \Lambda_t = e^{-rt} \ \text{(continuous compounding)},
+\]
+and the present value of a cash flow $N$ at time $t$ is $N\Lambda_t$ \ts{24}{1-III}{8:09}.
+\end{definition}\note{am i right if i say: given X money now, its value in the future is computet via the interest rate, while its value in the past is computed via the discount factor [we consider time as having an intrinsic value - different if we compound or not]. I AM RIGHT! look at: $X_{now} = X_{future} \cdot e^{-rt}$ and notice you can easily invert it to get $X_{future} = X_{now} \cdot e^{rt}$. [it is even simpler if you allow time to be negative, then you can use the same formula for both past and future]}
+
+\begin{intuition}[No probabilities needed]
+The argument never uses probabilities or preferences: only the existence of a riskless strategy
+whose profit must vanish. The same logic, applied to a portfolio that is riskless only
+\emph{instantaneously} (option + $\Delta$ shares), yields the Black--Scholes equation.
+\end{intuition}
+
+% ------------------------------------------------------------------
+\section{Bonds}\label{sec:bonds}
+
+\subsection{Zero-coupon and coupon bonds}
+A \emph{zero-coupon} (discount) bond pays the notional $N$ at maturity $T$ and nothing else: it is
+exactly ``the right to receive $N$ at $T$'' \ts{24}{1-III}{9:09}.  \note{id say that the contract is an obligation, for the other party to pay you in the future: a future/forward contract?} A \emph{coupon bond} pays
+periodic coupons $C$ and the notional at maturity; US Treasuries pay coupons semi-annually
+\ts{24}{1-III}{10:10}. \note{what about other countries and eu?} The cash flows from the buyer's point of view (the buyer lends $P$) are:
+
+\begin{center}
+\begin{tikzpicture}[x=1.05cm,y=0.5cm,>=Stealth]
+  \draw[->] (0,0) -- (10.6,0) node[right]{$t$};
+  \foreach \k in {1,...,9} \draw[->,thick,defcol] (\k,0) -- (\k,1.4) node[above]{\small $C$};
+  \draw[->,thick,defcol] (10,0) -- (10,4) node[above]{\small $C+N$};
+  \draw[->,thick,thmcol] (0,0) -- (0,-2.4) node[below]{\small $-P$};
+  \foreach \k/\l in {0/0,1/1,2/2,9/n{-}1,10/n} \node[below,font=\scriptsize] at (\k,-0.1) {$\l$};
+\end{tikzpicture}
+\end{center}
+
+\begin{proposition}[Bond prices at a flat rate]\label{prop:bondprice}
+With annual coupons and a constant annual rate $r$,
+\begin{align}
+  P_{\text{zero}} &= \frac{N}{(1+r)^n},\label{eq:zcb}\\
+  P_{\text{coupon}} &= \sum_{k=1}^{n}\frac{C}{(1+r)^k} + \frac{N}{(1+r)^n}
+   = C\,\frac{(1+r)^n-1}{r(1+r)^n} + \frac{N}{(1+r)^n}.\label{eq:couponbond}
+\end{align}
+\end{proposition} \note{credo che il discount rate sulla parte del coupon debba essere divisa per n. no non e' vero, n e' il numero di anni, e noi calcoliamo il valore al tempo zero se riceviamo soldi al tempo k, dato un certo tasso di interesse.}
+\begin{proof}
+Each cash flow is discounted with its discount factor. With $v = 1/(1+r)$ the coupon part is the
+geometric sum $C\sum_{k=1}^n v^k = C\,v\,\frac{1-v^n}{1-v} = C\,\frac{1-(1+r)^{-n}}{r}$, which equals
+the stated expression.
+\end{proof}
+
+\begin{corollary}[Par bonds]\label{cor:par}
+A bond trades \emph{at par} ($P=N$) iff its coupon rate equals the rate: $C = rN$.
+\end{corollary} \note{does par stand for parity?}
+\begin{proof}
+Set $C = cN$ in \eqref{eq:couponbond}:
+$P/N = \frac{c}{r}\bigl(1-(1+r)^{-n}\bigr) + (1+r)^{-n} = 1 + \bigl(\tfrac{c}{r}-1\bigr)\bigl(1-(1+r)^{-n}\bigr)$,
+which equals $1$ iff $c=r$ (for $n\ge1$). The same identity shows $P>N$ (premium) iff $c>r$
+and $P<N$ (discount) iff $c<r$.
+\end{proof}
+
+\subsection{Yield}
+Prices of bonds with different coupons and maturities are not directly comparable. The market
+quotes instead the \emph{yield} \ts{24}{1-III}{11:10}.
+
+\begin{definition}[Yield to maturity]
+The yield $y$ of a bond with market price $P$ is the constant discount rate that reproduces the
+price: $P = \sum_k \mathrm{CF}_k (1+y)^{-t_k}$. For an $n$-year zero-coupon bond with $N=1$,
+\[
+  y = P^{-1/n} - 1 = \frac{1}{\sqrt[n]{P}} - 1 .
+\]
+For coupon bonds the equation is a polynomial in $(1+y)^{-1}$ and is inverted numerically
+\ts{24}{1-III}{12:14}.
+\end{definition}\note{C is the coupon, what is $F_k$? e' giusta la formula di P? perche' non usiamo continuous framework, sembra molto piu semplice-pulito? coupon non funzionerebbe! aggiungi valori tipici di yueld to maturity (e sopraa anche di coupon, prezzo di un bond, discount rate)}
+
+Since every cash flow is positive, $P(y)$ is strictly decreasing and strictly convex in $y$, so the
+yield is unique. Price decreases with yield and increases with coupon
+(\cref{fig:priceyield}); by \cref{cor:par} the yield of a par bond equals its coupon.\note{l'idea e' che un bond verra' pagato una certa quantita X il giorno Y, e magari restituisce coupon C. Il problema e' trovare quale sia il prezzo adesso. [per me yield=interest rate=discount rate]}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.8\linewidth,height=6cm,xlabel={yield $y$},ylabel={price of a 10-year bond ($N=1$)},
+  domain=0.0005:0.30,samples=120,xmin=0,xmax=0.30,ymin=0,ymax=2.1,
+  xtick={0,0.05,0.10,0.15,0.20,0.25,0.30},xticklabels={0\%,5\%,10\%,15\%,20\%,25\%,30\%},
+  legend pos=north east,legend style={font=\small},grid=major,grid style={black!10}]
+  \addplot[thick,fincol] {0.01*(1-(1+x)^(-10))/x + (1+x)^(-10)}; \addlegendentry{$C=1\%$}
+  \addplot[thick,intcol] {0.05*(1-(1+x)^(-10))/x + (1+x)^(-10)}; \addlegendentry{$C=5\%$}
+  \addplot[thick,defcol] {0.10*(1-(1+x)^(-10))/x + (1+x)^(-10)}; \addlegendentry{$C=10\%$}
+  \addplot[only marks,mark=*,mark size=1.5pt] coordinates {(0.01,1) (0.05,1) (0.10,1)};
+\end{axis}
+\end{tikzpicture}
+\caption{Price--yield curves of 10-year annual-coupon bonds, from \eqref{eq:couponbond}
+(re-drawn from slide~22 of \file{lec01_1}). At $y=0$ the price is $1+10C$; the dots mark the
+par points $y=C$.}\label{fig:priceyield}
+\end{figure}
+
+\subsection{The yield curve}
+In reality bonds of different maturities have different yields: the \emph{term structure of
+interest rates}, or \emph{yield curve} \ts{24}{1-III}{14:19}. Normally it slopes upward (lenders
+want more yield for longer commitments); when short yields exceed long yields the curve is
+\emph{inverted}. Inversions preceded the 2008 and 2020 recessions, which is why an inverted curve
+is widely (though not infallibly) read as a recession signal \ts{24}{1-III}{16:24}. \note{what is the definition of recession?} The short end
+is anchored by the central bank's policy rate \ts{24}{1-II}{14:41}; the long end reflects
+expectations, risk premia, supply and demand.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.8\linewidth,height=6.2cm,xlabel={maturity (years)},ylabel={yield (\%)},
+  xmin=0,xmax=30,ymin=0,ymax=8,legend pos=south east,legend style={font=\small},
+  grid=major,grid style={black!10},mark size=1.2pt]
+  \addplot[thick,black!50,mark=*] coordinates {(0.25,2.95) (1,3.2) (5,5.3) (7,5.9) (10,6.35) (30,7.3)};
+  \addlegendentry{11 Sep 1992}
+  \addplot[thick,cscol,mark=*] coordinates {(0.25,3.95) (0.5,4.2) (1,4.15) (2,3.9) (3,3.95) (5,4.1) (7,4.25) (10,4.4) (20,4.7) (30,4.65)};
+  \addlegendentry{12 Sep 2007}
+  \addplot[thick,defcol,mark=*] coordinates {(0.25,0.05) (0.5,0.05) (1,0.07) (2,0.21) (3,0.43) (5,0.8) (7,1.1) (10,1.33) (20,1.85) (30,1.92)};
+  \addlegendentry{10 Sep 2021}
+  \addplot[very thick,fincol,mark=*] coordinates {(0.1,5.3) (0.25,5.2) (0.5,4.8) (1,4.35) (2,3.85) (3,3.75) (5,3.65) (7,3.7) (10,3.8) (20,4.2) (30,4.1)};
+  \addlegendentry{3 Sep 2024}
+\end{axis}
+\end{tikzpicture}
+\caption{US Treasury yield curves (values read approximately from slide~23 of \file{lec01_1};
+source treasury.gov). 1992 and 2021: normal upward slope, at very different levels; 2007 and
+2024: inverted short end.}\label{fig:yieldcurve}
+\end{figure}\note{non capisco, se la maturity e' zero allora yield dovrebbe essere zero, no? non e' veramente a zero! perche' un prestito per un anno dovrebbe avere tasso di interesse piu alto che di due? cosi incentivi a comprare bond a scadenza breve, perche'?}\note{vorrei aggiungere yield curves of italian bonds}\note{fai il check con dati ufficiali di queste yield curves e aggiungi quella piu aggiornata di oggi}\note{i found this nice picture to see correlation with fed interest rate (?) https://www.gwkinvest.com/wp-content/uploads/Figure1-GP-June26.svg}
+
+\paragraph{Bootstrapping.} ``Discount factors for all times can be bootstrapped from the yield
+curve'' (slide 23). Concretely, suppose we observe par yields $c_1, c_2, \dots$ of annual-coupon
+bonds with maturities $1,2,\dots$ years. A par bond with maturity $n$ has price $1$, so
+\[
+  1 = c_n\sum_{k=1}^{n}\Lambda_k + \Lambda_n
+  \qquad\Longrightarrow\qquad
+  \Lambda_n = \frac{1 - c_n\sum_{k=1}^{n-1}\Lambda_k}{1+c_n},
+\]
+which determines $\Lambda_1,\Lambda_2,\ldots$ recursively. Real curve construction (many instrument
+types, interpolation, day-count conventions) is the subject of \cref{ch:rates}. \note{i need some more intuition on what is the discount factor and what is the yield, yield curve}
+
+\subsection{Duration and convexity}\label{sec:duration}
+A bondholder is exposed to yield changes, and the dependence is non-linear \ts{24}{1-III}{19:29}.
+The sensitivities are derivatives, conventionally scaled by the price. \note{so they are dimensionless?}
+
+\begin{definition}[Duration and convexity]
+\[
+  D = -\frac{1}{P}\frac{\dd P}{\dd y}, \qquad
+  \mathcal C = \frac{1}{P}\frac{\dd^2 P}{\dd y^2},
+\]
+so that, by Taylor expansion,
+\begin{equation}\label{eq:durconv}
+  \frac{\Delta P}{P} \approx -D\,\Delta y + \tfrac12\,\mathcal C\,(\Delta y)^2 .
+\end{equation}
+\end{definition}\note{the convention for the signs is beacuse we expect D and C to be positive. look at fig 1.2}
+
+\begin{coursenote}[Erratum in the slides]
+On slide 24 of \file{lec01_1} convexity is written with the same letter and sign as duration,
+``$D = -\frac1P\frac{d^2P}{dy^2}$''. The standard definition is $\mathcal C = +\frac1P\frac{d^2P}{dy^2}$,
+which is positive for bonds with positive cash flows.
+\end{coursenote}
+
+\begin{proposition}\label{prop:duration}
+\leavevmode
+\begin{enumerate}[(i)]
+  \item For cash flows $\mathrm{CF}_k$ at times $t_k$ discounted with annual compounding,
+        \[ D = \frac{1}{1+y}\,\underbrace{\sum_k t_k\,\frac{\mathrm{CF}_k(1+y)^{-t_k}}{P}}_{D_{\mathrm{Mac}}}, \]
+        where the \emph{Macaulay duration} $D_{\mathrm{Mac}}$ is the present-value-weighted average
+        time of the cash flows; $D$ is also called \emph{modified duration}.
+  \item Zero-coupon bond: $D_Z = \dfrac{T}{1+y}$, \quad $\mathcal C_Z = \dfrac{T(T+1)}{(1+y)^2}$.
+  \item ``Continuous'' par bond (coupon paid continuously at rate $c=y$, continuous discounting,
+        $N=1$): $D_p = \dfrac{1-e^{-yT}}{y}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(i) Differentiate $P=\sum_k \mathrm{CF}_k(1+y)^{-t_k}$:
+$\dd P/\dd y = -\sum_k t_k\,\mathrm{CF}_k(1+y)^{-t_k-1}$.
+
+(ii) For $P=(1+y)^{-T}$: $P' = -T(1+y)^{-T-1}$ and $P'' = T(T+1)(1+y)^{-T-2}$; divide by $P$.
+
+(iii) With coupon rate $c$ fixed, $P(y) = \int_0^T c\,e^{-ys}\dd s + e^{-yT} = c\,\frac{1-e^{-yT}}{y} + e^{-yT}$. Then
+\[
+P'(y) = c\,\frac{yTe^{-yT} - (1-e^{-yT})}{y^2} - Te^{-yT},
+\]
+and at $c=y$ (where $P=1$) the terms $\pm Te^{-yT}$ cancel, leaving $P'(y) = -(1-e^{-yT})/y$.
+\end{proof}
+
+\begin{intuition}[Duration as a centre of mass]
+Macaulay duration is the ``centre of mass'' of the cash flows in time, with present values as
+masses. A zero-coupon bond has all its mass at $T$; coupons pull the centre of mass earlier, so a
+coupon bond has $D_{\mathrm{Mac}} < T$. For the continuous par bond $D_p = (1-e^{-yT})/y < T$ and
+$D_p \to 1/y$ as $T\to\infty$: even a perpetual bond has finite duration because distant cash flows
+weigh almost nothing.
+\end{intuition}
+
+\begin{example}[How good is the quadratic approximation?]
+A 10-year zero at $y = 4\%$: $P = 1.04^{-10} = 0.6756$, $D = 10/1.04 = 9.615$,
+$\mathcal C = 110/1.04^2 = 101.7$. If the yield rises by $\Delta y = 1\%$:
+first order $-9.62\%$; adding convexity $+\tfrac12\cdot 101.7\cdot 0.0001 = +0.51\%$ gives $-9.11\%$;
+the exact change is $(1.04/1.05)^{10}-1 = -9.13\%$.
+\end{example}\note{we are still considering the yield to be fixed along the duration of the bond maturity, right?}
+
+\begin{finance}[Why convexity is valuable]
+Because $\mathcal C>0$, the price rises more when yields fall than it drops when yields rise by the
+same amount. Two portfolios with the same price and duration but different convexity are
+therefore not equivalent: the more convex one gains from large rate moves in either direction.
+Trading desks hedge duration (first order, like delta) and monitor convexity (second order, like
+gamma).
+\end{finance}\note{first appearence of the Greeks, right? use the symbols $\Delta$, $\Gamma$, etc.}
+\note{in general, i'd like to have graphs and conceptual maps when possible}
+
+\subsection{Forward rates}\label{sec:forward}
+\begin{definition}[Forward rate agreement]
+A \emph{forward rate agreement} (FRA) fixes today the interest $F_{tT}$ to be paid at time $T$ on a
+loan of $N$ that starts at a future date $t<T$ (slide 25): the lender pays $N$ at $t$ and receives
+$N(1+F_{tT})$ at $T$.
+\end{definition}
+
+\begin{proposition}\label{prop:forward}
+In the absence of arbitrage, $F_{tT} = \dfrac{\Lambda_t}{\Lambda_T} - 1$.
+\end{proposition}\note{reminder: price now = Lambda payoff at maturity. Lambda serve a trasportare il valore lungo il tempo - nel passato}
+\begin{proof}
+Entering an FRA costs nothing today, so the present value of its cash flows must be zero:
+$-N\Lambda_t + N(1+F_{tT})\Lambda_T = 0$. Equivalently (the form on the slide),
+$1 = \frac{1}{\Lambda_t}(1+F_{tT})\Lambda_T$. If $F_{tT}$ were larger, one could lock in a riskless
+profit by borrowing $N\Lambda_T(1+F_{tT})$ until $T$ \dots\ (\cref{ex:fra}).
+\end{proof}
+
+\begin{remark}
+$F_{tT}$ is the interest over the whole period $[t,T]$; the annualised simple rate is
+$F_{tT}/(T-t)$. In continuous time one defines the \emph{instantaneous forward rate}
+$f(0,T) = -\partial_T \ln \Lambda_T$, so that $\Lambda_T = \exp\bigl(-\int_0^T f(0,s)\dd s\bigr)$: the
+continuously compounded zero yield $-\frac1T\ln\Lambda_T$ is the \emph{average} of the forward rates
+up to $T$. Modelling the dynamics of the whole curve $f(t,T)$ is the HJM framework (\cref{ch:hjm}).
+\end{remark}\note{it feels that f plays the role of r, the interest rate. and Lambda is the correspective of the compount rate, right?}
+
+% ------------------------------------------------------------------
+\section{Working with data: R and RStudio}\label{sec:R}
+
+\begin{casestudy}[\file{FM_Intro1.Rmd} --- collecting and plotting financial time series]
+\textbf{Goal.} Show how easily financial data can be downloaded and displayed
+\ts{24}{1-I}{10:22}. \textbf{Tools.} R packages \texttt{tidyquant} (downloads), \texttt{tidyverse}
+(data handling), \texttt{fpp2} (forecasting); later lectures use \texttt{quantmod}, \texttt{xts}/\texttt{zoo}
+(time series), \texttt{car} (regression), \texttt{rugarch} (GARCH), \texttt{fxregime} (regimes).
+\textbf{Data (2011--2024).} From Yahoo Finance: S\&P~500 and VIX indices, stocks NVDA, GE, AAPL, GOOG,
+AMZN, XOM, GME, AMC, the ARKK and XLF ETFs, BTC-USD. From FRED (St.\,Louis Fed, about 80{,}000
+series): Treasury constant-maturity yields 3m, 1y, 5y, 10y (\texttt{DGS3MO}\dots\texttt{DGS10}),
+Moody's Aaa/Baa corporate yields (\texttt{DAAA}, \texttt{DBAA}), WTI crude oil (\texttt{DCOILWTICO}),
+Coinbase Bitcoin. \textbf{Steps.} Download, keep \texttt{(symbol, date, price)}, drop missing values,
+merge, plot each series, save to \file{data_fm_intro1.Rdata} for later scripts.
+
+\smallskip
+\textbf{What to look at} \ts{24}{1-I}{12:25}: the VIX (``fear gauge'', the market's implied
+volatility of the S\&P~500) spikes when the index drops, a relationship formalised by option
+pricing (\cref{ch:volatility,ch:bs}); NVIDIA and Bitcoin raise the question of detecting bubbles;
+WTI goes negative in April 2020; the Baa--Treasury spread is the credit spread modelled in
+\cref{ch:regression}.
+\end{casestudy}
+
+\begin{figure}[ht]
+\centering
+\pgfplotsset{fmts/.style={width=0.9\linewidth,height=4.2cm,xmin=2011,xmax=2024.75,
+  xtick={2012,2014,...,2024},xticklabel style={/pgf/number format/1000 sep={}},
+  grid=major,grid style={black!10},every axis plot/.append style={thin}}}
+\begin{tikzpicture}
+\begin{axis}[fmts,ylabel={S\&P 500},xticklabels={},name=top]
+  \addplot[defcol] table {data/fm_sp500.dat};
+\end{axis}
+\begin{axis}[fmts,ylabel={VIX},xlabel={year},at={(top.below south west)},anchor=north west,yshift=-4pt]
+  \addplot[thmcol] table {data/fm_vix.dat};
+\end{axis}
+\end{tikzpicture}
+\caption{S\&P~500 index and VIX, weekly closes 2011--2024, re-drawn from the data of
+\file{FM_Intro1.Rmd}. Every VIX spike (2011, 2015, 2018, 2020, 2022) coincides with a drop of the index; the record daily close,
+82.7, was on 16 March 2020.}\label{fig:spvix}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{semilogyaxis}[width=0.9\linewidth,height=5.5cm,xmin=2011,xmax=2024.75,
+  xtick={2012,2014,...,2024},xticklabel style={/pgf/number format/1000 sep={}},xlabel={year},
+  ylabel={price (\$, log scale)},grid=major,grid style={black!10},legend pos=south east,
+  legend style={font=\small}]
+  \addplot[thin,intcol] table {data/fm_nvda.dat}; \addlegendentry{NVIDIA (split-adjusted)}
+  \addplot[thin,fincol] table {data/fm_btc.dat}; \addlegendentry{Bitcoin (BTC-USD)}
+\end{semilogyaxis}
+\end{tikzpicture}
+\caption{NVIDIA and Bitcoin, weekly closes, from the data of \file{FM_Intro1.Rmd}. On a log scale
+a straight line is constant exponential growth: NVIDIA rose about 500-fold in 2012--2024, the
+kind of run that raises the bubble question \ts{24}{1-I}{14:36}.}\label{fig:nvdabtc}
+\end{figure}
+
+The notebook runs on RStudio Cloud (\url{https://posit.cloud}, free account, nothing to install) or
+on desktop RStudio (faster, works offline); \file{lec01_2} gives step-by-step instructions, summarised
+in \cref{app:rsetup}.
+
+% ------------------------------------------------------------------
+\section{Two examples of quant work (2013)}\label{sec:projects}
+V.~Strela showed two projects done by a student intern at Morgan Stanley \ts{13}{1}{54:30}.
+
+\paragraph{Noisy delta.} Prices of complex derivatives are often computed by Monte Carlo, so the
+pricing function $\hat f(x)$ is only known up to statistical noise of standard deviation
+$\operatorname{sd}(x)$. Delta is computed by a centred difference
+$\hat\Delta_\varepsilon = [\hat f(x+\varepsilon)-\hat f(x-\varepsilon)]/(2\varepsilon)$. A small shift
+$\varepsilon$ amplifies the noise, a large one introduces discretisation bias. The project chose
+$\varepsilon$ to minimise the mean squared error $\E\bigl|f'(x)-\hat\Delta_\varepsilon\bigr|^2$ and found
+a rule of the form $\varepsilon_{\text{opt}} \propto \bigl(\operatorname{sd}(x)/(d+|\Gamma(x)|)\bigr)^{1/3}$,
+with $\Gamma$ the option's gamma and $c,d$ tuning constants (slide 19 of \file{lecnote1}); the resulting
+delta is visibly smoother than with a constant shift.
+
+\begin{intuition}[Where the cube root comes from]
+Taylor-expanding, the centred difference has bias $\frac{\varepsilon^2}{6}f'''(x)$; with independent
+noise at the two points its variance is $2\operatorname{sd}^2/(2\varepsilon)^2 = \operatorname{sd}^2/(2\varepsilon^2)$.
+Hence
+\begin{gather*}
+  \mathrm{MSE}(\varepsilon) \approx \frac{\varepsilon^4 f'''(x)^2}{36} + \frac{\operatorname{sd}^2}{2\varepsilon^2},\\
+  \frac{\dd\,\mathrm{MSE}}{\dd\varepsilon}=0 \iff \varepsilon^6 = \frac{9\,\operatorname{sd}^2}{f'''(x)^2}
+  \iff \varepsilon_{\text{opt}} = \Bigl(\frac{3\operatorname{sd}}{|f'''(x)|}\Bigr)^{1/3}.
+\end{gather*}
+The same bias--variance trade-off appears in numerical differentiation of noisy experimental data.
+The course's formula uses gamma as a proxy for the local curvature scale and regularises it with $d$;
+the exact derivation is not in the material.
+\end{intuition}
+
+\paragraph{Kalman filter for FX quotes.} Five brokers quoted forward points for USD/RUB at random,
+non-uniform times; the aim was to combine these noisy observations into a better estimate of the true
+price with a Kalman filter \ts{13}{1}{57:41}. State-space models and the Kalman filter are part of
+time-series analysis (\cref{ch:timeseries}).
+
+% ------------------------------------------------------------------
+\begin{keyformulas}
+\begin{align*}
+&\text{Compounding:} && (1+r)^n,\quad (1+r/m)^{mn},\quad e^{rt}\\
+&\text{Discount factor:} && \Lambda_n=(1+r)^{-n},\quad \Lambda_t=e^{-rt}\\
+&\text{Coupon bond:} && P = C\,\tfrac{1-(1+r)^{-n}}{r} + N(1+r)^{-n};\quad P=N \iff C=rN\\
+&\text{Zero yield:} && y = P^{-1/n}-1\\
+&\text{Bootstrapping:} && \Lambda_n = \bigl(1-c_n\textstyle\sum_{k<n}\Lambda_k\bigr)/(1+c_n)\\
+&\text{Duration, convexity:} && D=-P'/P,\ \ \mathcal C=P''/P,\ \ \Delta P/P\approx -D\Delta y+\tfrac12\mathcal C\Delta y^2\\
+&\text{Zero-coupon:} && D_Z=T/(1+y),\ \ \mathcal C_Z=T(T+1)/(1+y)^2\\
+&\text{Continuous par bond:} && D_p=(1-e^{-yT})/y\\
+&\text{Forward rate:} && F_{tT}=\Lambda_t/\Lambda_T-1\\
+&\text{Alpha, beta:} && R_a=\alpha+\beta R_b+\varepsilon
+\end{align*}
+\end{keyformulas}\note{forse aiuterebbe aggiungere le unita' di misura, tipo $T^{-1}$ per r }
+
+% ------------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+No problem set covers this chapter; \cref{ex:game,ex:glossary} are the course's own activities,
+the others are added for practice (marked \emph{not from the course}).
+
+\begin{exercise}[2024 Investment Game (ungraded)]\label{ex:game}
+With a hypothetical \$10{,}000, buy a single publicly traded stock, ETF, currency or bond (to be short,
+buy an inverse ETF) at the close of Friday 13 September 2024 and sell at the close of Friday
+15 November 2024, with one optional switch of the whole balance at the close of 11 October
+\ts{24}{1-II}{32:28}. Track in a spreadsheet the number of shares, the daily P\&L in \$ and \%, the
+total P\&L, the sum $G$ of the daily gains and the sum $L$ of the daily losses (in absolute value), and
+the ratio $(G-L)/(G+L)$. Repeat the game on any two-month window of your choice.
+\begin{enumerate}[(a)]
+  \item Show that $G-L$ is the total P\&L and that $(G-L)/(G+L)\in[-1,1]$.
+  \item Interpret the ratio: which values correspond to a ``clean'' trend, which to a noisy
+        path with the same final P\&L?
+\end{enumerate}
+\end{exercise}
+\note{a) easy to se, imposta le due disuguaglianze, sono ripettate trivialmente. b) il rateo e' profitto totale didiso per il valore assoluto di tutte le variazioni, quindi grandi variazioni implicano piccolo rateo e piccole variazioni grande rateo. inoltre, grande profitto implica grande rateo, piccolo profitto piccolo rateo. quindi questa e' una metrica di quanto profittevole e con bassa volatilita linvestimento e' stato}
+
+\begin{exercise}[2013, optional homework]\label{ex:glossary}
+Build your own financial glossary: list every term of this chapter you could not define precisely and
+look it up \ts{13}{1}{53:27}.
+\end{exercise}
+
+
+\begin{exercise}[not from the course]
+A 5-year bond pays annual coupons of 6\% on $N=100$.
+\begin{enumerate}[(a)]
+  \item Price it at $y=5\%$ and $y=7\%$.
+  \item Compute its
+      Macaulay and modified duration at $y=5\%$ and check them against the price change for $\Delta y=\pm 1$\,bp.
+\end{enumerate}
+\end{exercise}\note{$a. P_5 = 0.06*-5,526 + 100*1.276 = 127.3 ; P_5 = 0.06*-5,751 + 100*1.402 = 139.8 ; b. D_Mac = 0.06*100*(1*1.05^(-1) + 2*1.05^(-2) + 3*1.05^(-3) + 4*1.05^(-4) + 5*1.05^(-5)) / 127.3 = 0.592 ; D_mod = 0.592 / 1.05 = 0.564 ; TODO $}
+
+\begin{exercise}[not from the course]
+Par yields are $c_1 = 4\%$, $c_2 = 4.5\%$, $c_3 = 5\%$ (annual coupons). Bootstrap $\Lambda_1,\Lambda_2,\Lambda_3$,
+the zero yields and the one-year forward rates $F_{1,2}$, $F_{2,3}$. Why is the zero curve above the par curve
+when the curve slopes upward?
+\end{exercise}
+
+\begin{exercise}[not from the course]\label{ex:fra}
+Complete the proof of \cref{prop:forward}: if the market quotes an FRA rate $F > \Lambda_t/\Lambda_T - 1$, write
+down an explicit zero-cost strategy with zero-coupon bonds and the FRA that has a positive payoff at $T$.
+\end{exercise}
+
+\begin{exercise}[not from the course]
+Compute the convexity of the continuous par bond of \cref{prop:duration}(iii) and its limit as $T\to\infty$.
+\end{exercise}

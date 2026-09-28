@@ -1,0 +1,1073 @@
+% !TEX root = ../main.tex
+\chapter{Linear Rates: Products and Models}\label{ch:rates}
+
+\begin{sources}
+\small
+\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+\textbf{Lecture} & \textbf{Speaker} & \textbf{Content}\\
+\midrule
+2024 L7 & A.~Gunstensen (Mizuho) & Linear rates products and the size of their markets; LIBOR and its replacement by SOFR; discounting = funding; deposits, SOFR futures and interest-rate swaps; swap valuation and par swap rates; yield-curve construction (knot points, CDF and spline interpolation, calibration, FOMC curves, turns); delta ladders and gamma; P\&L attribution; clearing and the CCP basis; electronic trading and price making; Q\&A on the rates outlook, research roles and municipal bonds.\\
+\bottomrule
+\end{tabularx}
+
+\smallskip
+\textbf{Files.} Slides \emph{Linear Rates Models} \file{mit18_642_f24_lec07.pdf} (45 slides). Slide~39 (fast
+model pricing) and slides 40--44 (bonds) were skipped in class for lack of time \ts{24}{7}{1:14:29}; they are
+covered in \cref{ch06:sec-etrading,ch06:sec-bonds}. The data file \file{fedbondyielddata_20230911.csv} and the
+notebook \file{feddataanalysis.ipynb} are listed on OCW together with Lecture~9 (PCA of Treasury yield changes)
+and are treated in \cref{ch:pca}.
+\textbf{Problem sets.} None; all exercises at the end are \emph{not from the course}.
+\textbf{2013.} No counterpart: the 2013 course has no lecture on linear rates products. The dynamics of the
+whole curve are the subject of the 2013 HJM lecture (\cref{ch:hjm}).
+\end{sources}
+
+\section*{Motivation}
+Bonds, deposits, futures and swaps are the largest and most liquid markets in the world, and their payoffs are
+fixed or linear in interest rates: pricing them requires no model of rate \emph{dynamics}, only today's
+\emph{discount curve}. \Cref{ch:markets} took that curve as given (a flat rate, or yields read off a screen,
+\cref{fig:yieldcurve}). This chapter asks the practitioner's questions: which rate should one discount with,
+which instruments reveal the curve, how does one fill the gaps between a few dozen quotes, how does one hedge
+and explain the daily P\&L of a book of swaps? The lecturer announced a deliberately ``non-mathy'' talk: a
+house is designed by thinking about rooms and how they connect, not by spending most of the time on hammers
+\ts{24}{7}{1:01}. The mathematics is elementary (linear algebra, interpolation, Taylor expansions); what matters
+is the set of conventions and design choices, and the consequences of each choice for hedging. The curve built
+here is the input of every rates-option model; its PCA is in \cref{ch:pca} and its stochastic evolution in
+\cref{ch:hjm}.
+
+% ------------------------------------------------------------------
+\section{Linear products and their markets}\label{ch06:sec-markets}
+
+\begin{definition}[Linear product]
+A rates product is \emph{linear} if its payoff is either fixed or a linear function of observed interest rates
+\ts{24}{7}{2:06}: (vanilla) bonds, certificates of deposit, interest-rate futures, forward rate agreements,
+interest-rate swaps. There is no optionality (no caps, swaptions, callable or range-accrual features).
+\end{definition}
+The PV of a linear product is a linear function of discount factors and forward rates, so it is fixed by
+today's curve alone: no volatility enters, except through small corrections (futures margining, averaging,
+payment delays) discussed below. Why should a quant care \ts{24}{7}{3:07}?
+\begin{itemize}
+  \item \textbf{Size and liquidity} (slide 4). Bonds outstanding about \$128T (ICMA, 2020), interest-rate swaps
+        \$573T notional (BIS, 2023), SOFR futures open interest above \$10T. Daily volumes: US Treasuries
+        about \$900B, swaps \$800B, SOFR futures about 4 million contracts. In a market this size, a tiny margin
+        is a large business \ts{24}{7}{3:07}.
+  \item \textbf{Hedging and inputs.} Linear products hedge the complex ones, and their curves are inputs of the
+        complex models: one builds up from the simple stuff \ts{24}{7}{4:08}.
+  \item \textbf{Post-2008 complexity.} Before the crisis vanilla modelling was considered trivial. Funding,
+        clearing and margining (\cref{ch06:sec-funding,ch06:sec-clearing}) made even ``\$1 paid in ten
+        years'' hard to value, with no unique answer \ts{24}{7}{4:08}. Regulation (including model-risk management)
+        ended much of the business in opaque, highly levered securitisations that had been sold to buyers who
+        could not assess them \ts{24}{7}{5:08}.
+\end{itemize}
+
+% ------------------------------------------------------------------
+\section{Interest rates and reference rates}\label{ch06:sec-rates}
+
+\subsection{Simple interest and accrual}
+An interest rate is the rate at which one earns (or pays) interest on a principal \ts{24}{7}{7:10}. Money-market
+instruments use \emph{simple} interest:
+\begin{equation}\label{ch06:eq-simple}
+  I = N\,r\,\Delta t,\qquad
+  \mathrm{PV}(X \text{ paid after } \Delta t) = \frac{X}{1+r_d\,\Delta t},
+\end{equation}
+where $\Delta t$ is the \emph{accrual fraction} of the period and $r_d$ a discounting rate. Example from class:
+\$1000 in one year discounted at 5\% is worth $1000/1.05=\$952.38$ today \ts{24}{7}{8:11}. The interest rate
+$r$ of an investment is easy to observe (the rate a bank advertises on a CD); the discounting rate $r_d$ is not,
+and it depends on who is doing the discounting (\cref{ch06:sec-funding}).
+
+\begin{coursenote}[Day counts (not discussed in class)]
+$\Delta t$ is computed from dates with a \emph{day-count convention}: ACT/360 (actual days$/360$; SOFR, money
+markets, the floating legs of USD swaps), ACT/365F, 30/360 (bond-style), ACT/ACT (Treasuries). Dates themselves
+are moved off holidays by a \emph{business-day convention} (e.g.\ ``modified following''). The lecturer's advice
+to job candidates: after a year on a swaps desk you will know \emph{date arithmetic}, and at least 90\% of all
+problems with swaps are date problems \ts{24}{7}{34:51}. The number of days between two dates has no unique answer;
+it depends on the convention.
+\end{coursenote}
+
+\subsection{LIBOR}
+The \emph{London Interbank Offered Rate} was created in the late 1960s as a reference for syndicated bank
+lending: corporate loans are mostly floating-rate, resetting every one or three months, and a common index was
+needed \ts{24}{7}{9:13}. Every day a panel of about 20 banks reported the rate at which they could borrow
+unsecured for various terms; the rate was a trimmed average of the submissions \ts{24}{7}{10:16}. The first
+swaps (a cross-currency swap involving IBM in 1981, then single-currency interest-rate swaps) were built on it, and
+by LIBOR's cessation some \$350--400T of swaps referenced it \ts{24}{7}{11:16}.
+
+Its weaknesses surfaced after 2008 (slide 7):
+\begin{itemize}
+  \item it was a \emph{quoted}, not a transacted rate: submitters estimated where they \emph{would} borrow;
+  \item it was \emph{unsecured}, and after Lehman almost nobody lent unsecured term money: some tenors saw a
+        handful of real transactions in six months while a rate had to be published every day
+        \ts{24}{7}{13:26};
+  \item hence it could be manipulated. A book can have millions of dollars of P\&L per basis point
+        (bp $=0.01\%$) of a fixing, and a group of traders coordinated with their banks' submitters to nudge the
+        fixings; this led to prison sentences and multi-billion-dollar fines \ts{24}{7}{12:21}.
+\end{itemize}
+Regulators (led from London) required a replacement ``anchored in actual transactions and hard to
+manipulate'' \ts{24}{7}{13:26}. USD LIBOR ended in June 2023; sterling earlier, Canada and Mexico around 2024
+\ts{24}{7}{18:40}. The migration of mortgages, bonds, loans and hundreds of trillions of swaps was enormous
+and tedious, comparable to the euro conversion and Y2K \ts{24}{7}{15:31}.
+
+\begin{finance}[Why banks liked an unsecured index]
+A bank's floating-rate loans pay LIBOR plus a fixed spread. When the banking system is under stress, bank
+credit spreads widen and LIBOR rises, so the bank's \emph{income} rises exactly when its own funding becomes
+expensive: a natural hedge (a ``right-way'' feature) \ts{24}{7}{17:40}, \ts{24}{7}{19:44}. A secured rate
+contains no bank credit risk and lacks this property. The flip side: LIBOR-based hedges of instruments that
+depend on government rates suffer when the LIBOR--Treasury spread blows out. In 2011--12 this cost the
+lecturer's employer of the time a write-off of several billion dollars on structured notes (\$8.4B quoted in
+class), most of which came back later \ts{24}{7}{14:31}.
+\end{finance}
+
+\subsection{SOFR}
+A \emph{repo} (repurchase agreement) is a collateralised loan: I deliver \$100M of Treasuries and receive, say,
+\$98M cash, agreeing to buy the bonds back the next day; the interest paid is the \emph{repo rate} (reverse
+repo for the other side) \ts{24}{7}{16:35}. This is a real market with real volume (about \$800B a day
+according to slide~8).
+
+\begin{definition}[SOFR]
+The \emph{Secured Overnight Financing Rate} is the main USD reference rate: a volume-weighted median of the
+rates on overnight repo transactions collateralised by US Treasuries, published every business day
+\ts{24}{7}{15:31}.
+\end{definition}
+
+\begin{coursenote}[Erratum (spoken)]
+In class SOFR is expanded as ``Securitized Overnight Funding Rate'' and described as an average. The name is
+\emph{Secured Overnight Financing Rate}, computed by the Federal Reserve Bank of New York (published since April
+2018, selected in 2017 by the Fed-convened Alternative Reference Rates Committee) as a volume-weighted
+\emph{median} of transaction rates. Similarly ``OAS rate'' in the transcript at 8:11 should read OIS
+(overnight index swap) rate, as on slide~6.
+\end{coursenote}
+
+SOFR has three inconvenient features \ts{24}{7}{16:35}: it is a \emph{daily} rate, while nobody wants to pay
+interest daily; a term rate built from it is known only at the \emph{end} of the period (set in arrears), while
+borrowers like to know their payment in advance; and it is \emph{secured}, while banks prefer to lend
+unsecured (previous box) \ts{24}{7}{17:40}.
+
+\paragraph{From daily fixings to term rates} \ts{24}{7}{20:49}. Over an accrual period of $d$ days, let $r_i$
+be the SOFR fixing of business day $i$, applying for $d_i$ calendar days ($d_i=3$ for a Friday fixing, which
+covers the weekend), $d=\sum_{i=1}^nd_i$. The two standard term rates (slide 9) are
+\begin{equation}\label{ch06:eq-sofr}
+  R^{\mathrm{comp}} = \frac{360}{d}\Biggl[\,\prod_{i=1}^{n}\Bigl(1+\frac{r_i d_i}{360}\Bigr)-1\Biggr],
+  \qquad
+  R^{\mathrm{avg}} = \frac1d\sum_{i=1}^{n} r_i d_i .
+\end{equation}
+$R^{\mathrm{comp}}$ is exactly what one earns by rolling an overnight deposit (interest on interest), and
+$R^{\mathrm{comp}}\ge R^{\mathrm{avg}}$ when rates are non-negative (\cref{ch06:ex-sofr}). Most USD products pay
+compounded SOFR: it is simpler to calibrate, and it needs no correction for rate volatility, which an average
+does \ts{24}{7}{21:49}. The reason is \cref{ch06:prop-float} below: a compounded leg is replicated exactly by
+rolling a deposit.
+
+\begin{example}[Compounding vs averaging (not from class)]
+A 91-day period with a fixing every day ($d_i=1$): 5.30\% for 40 days, then 5.05\% after a 25\,bp FOMC cut.
+Then $R^{\mathrm{avg}}=5.1599\%$ and $R^{\mathrm{comp}}=5.1933\%$: a 3.3\,bp difference. It is ``a few basis
+points running'', irrelevant for a retail borrower but twenty times the bid--offer of a swap market maker.
+\end{example}
+
+\paragraph{Other rates} \ts{24}{7}{21:49}--\ts{24}{7}{26:16} (slide 10).
+\begin{itemize}
+  \item \textbf{Term SOFR}: 1-, 3-, 6- and 12-month rates published by the CME by fitting a model of daily rates to
+        SOFR futures prices and averaging the fitted daily rates over the term \ts{24}{7}{24:02}. It is set in
+        advance, like LIBOR, and popular in corporate loans, whose borrowers do not want to handle daily
+        fixings. To prevent it from becoming a new LIBOR, the Fed restricts dealers to trading it only to hedge
+        their loan books. The market is therefore one-way, and term-SOFR swaps trade 4--5\,bp away from vanilla
+        SOFR swaps, 20--30 times the bid--offer \ts{24}{7}{25:09}.
+  \item \textbf{Fed Funds}: the older unsecured overnight interbank rate, still widely used; plus Prime,
+        DISCO (a Fannie Mae discount-note rate, the lecturer's favourite name), MMD (a municipal benchmark) and many
+        others \ts{24}{7}{26:16}.
+\end{itemize}
+
+% ------------------------------------------------------------------
+\section{Discounting equals funding}\label{ch06:sec-funding}
+
+Which rate should discount a future cash flow \ts{24}{7}{26:16}? Assume (slides 11--12) we own a fixed payment
+$F$ at time $T$, worth $P(t)$ today, and that we bought it with borrowed money: in this world nobody pays out
+of pocket, positions are funded. Consider one day, from $t_0$ to $t_1$, with no market move
+\ts{24}{7}{27:21}:
+\begin{align*}
+  \text{interest paid on the funding:}\quad & I(t_1) = P(t_0)\,\frac{r_b}{360},\\
+  \text{accretion of the claim:}\quad & P(t_1) = P(t_0)\Bigl(1+\frac{r_d}{360}\Bigr),\quad\text{i.e. }\
+  \Delta P = P(t_0)\,\frac{r_d}{360},
+\end{align*}
+where $r_b$ is our borrowing rate and $r_d$ the rate used to discount $F$.
+
+\begin{proposition}[Discounting rate $=$ funding rate]\label{ch06:prop-funding}
+Let an agent borrow and lend at the rate $r_b$ over $[t,T]$ ($n$ days, daily compounding, rates constant as on
+the slides). The only price of $F$ paid at $T$ that gives the agent no riskless trade is
+$P(t)=F\,(1+r_b/360)^{-n}$: future cash flows must be discounted at the funding rate, $r_d=r_b$.
+\end{proposition}
+\begin{proof}
+The funded position has a daily P\&L $P(r_d-r_b)/360$, known in advance. If $r_d>r_b$, buying the claim with
+borrowed money earns a riskless carry; if $r_d<r_b$, selling it and lending the proceeds does. Summing over the
+holding period, the terminal P\&L of ``borrow $P$, buy the claim'' is $F-P(1+r_b/360)^n$, which vanishes for
+every holding period only if $P$ is discounted at $r_b$ \ts{24}{7}{28:24}.
+\end{proof}
+
+\begin{remark}
+If the agent borrows at $r_b$ but can only lend at $r_l<r_b$, the argument only gives the band
+$F(1+r_b/360)^{-n}\le P\le F(1+r_l/360)^{-n}$. Different agents have different funding rates (the lecturer's
+example: borrowers at 4\%, 6\% and 8\% depending on their credit) and therefore different values for the same
+contract: there is no single price \ts{24}{7}{9:13}. The lecturer's one-sentence summary of the lecture:
+\emph{funding and discounting are the same thing} \ts{24}{7}{28:24}.
+\end{remark}
+
+\begin{intuition}[A stationary state]
+Think of the funded position as a closed system in which ``nothing happens'': the claim drifts up at $r_d$,
+the loan at $r_b$. Zero P\&L in the absence of market moves (a stationary state) requires equal drifts. The
+discount curve is not a law of nature but the rate at which the holder's money actually grows or costs;
+compare \cref{sec:discounting}, where the same argument with a single universal rate gave $1/(1+r)$.
+\end{intuition}
+
+\begin{finance}[Funding desks and OIS discounting]
+Banks do not let each trader manage the funding of a thousand counterparty relationships: a central funding
+desk (treasury) lends to all desks at a generic internal rate and manages the funding bases and small
+collateral exposures itself \ts{24}{7}{9:13}. For collateralised trades the relevant funding rate is the rate
+paid on the collateral, an overnight rate: hence the market standard of discounting with an OIS (now SOFR)
+curve \ts{24}{7}{8:11}. The costs of funding uncollateralised trades are priced as funding valuation
+adjustments, part of the XVA family of \cref{ch:counterparty}.
+\end{finance}
+
+% ------------------------------------------------------------------
+\section{The instruments that reveal the curve}\label{ch06:sec-instruments}
+To build a curve we start from what trades actively and is easy to observe (slide 13): whatever the model, it
+must reprice these instruments, because they can be traded \ts{24}{7}{28:24}. The workhorses are cash deposits
+(CDs), interest-rate futures and swaps \ts{24}{7}{29:26}. We write each price as a function of the discount
+function $Z(t)$ (value today of \$1 paid at $t$; $\Lambda_t$ in \cref{ch:markets}), then invert.
+
+\subsection{Deposits and certificates of deposit}
+Short-term money can be invested at a fixed simple rate $r(t)$ for maturities up to about a year (CDs,
+interbank deposits; also repo and Treasury bills, not discussed in class). Investing 1 today returns
+$1+r(t)\Delta$ at $t$, so (slide 14)
+\begin{equation}\label{ch06:eq-deposit}
+  1=\bigl[1+r(t)\Delta\bigr]Z(t)\qquad\Longrightarrow\qquad Z(t)=\frac{1}{1+r(t)\Delta}
+  \quad\text{\ts{24}{7}{29:26}.}
+\end{equation}
+Deposits are well observed but awkward for a swaps desk: they are \emph{funded} (a \$100M CD requires \$100M of
+cash and balance sheet), whereas derivatives need little cash up front and allow more leverage
+\ts{24}{7}{30:32}.
+
+\subsection{Forward rates and FRAs}
+A floating payment that sets in the future can be replicated with fixed flows \ts{24}{7}{39:04}. Let the rate
+apply to $[t_1,t_2]$ with accrual fraction $\Delta$, and suppose zero-coupon bonds maturing at $t_1$ and $t_2$
+can be traded.
+
+\begin{proposition}[Implied forward rate]\label{ch06:prop-fwd}
+The fair (zero-PV) rate fixed today for lending $N$ from $t_1$ to $t_2$ is
+\begin{equation}\label{ch06:eq-fwd}
+  f(t_1,t_2)=\frac1\Delta\Bigl(\frac{Z(t_1)}{Z(t_2)}-1\Bigr).
+\end{equation}
+\end{proposition}
+\begin{proof}
+Lending $N$ at $t_1$ and receiving $N(1+f\Delta)$ at $t_2$ has present value
+$-NZ(t_1)+Nf\Delta\,Z(t_2)+NZ(t_2)$. Setting it to zero gives $1+f\Delta=Z(t_1)/Z(t_2)$. If the market rate were
+higher, lend forward and short the replicating zeros (buy the $t_1$ zero, sell the $t_2$ zero) for a riskless
+profit, and vice versa.
+\end{proof}
+This is \cref{prop:forward} of \cref{ch:markets} with $F_{t_1t_2}=f\Delta$.
+
+\begin{coursenote}[Erratum: slide 20]
+The slide states the problem for a period $[t_1,t_2]$ but writes the equations with $t_0,t_1$:
+``$\mathrm{PV}=-NZ(t_0)+Nf\Delta Z(t_1)+NZ(t_1)=0$'' and $f=\frac1\Delta\bigl(\frac{Z(t_0)}{Z(t_1)}-1\bigr)$; it also
+says ``borrow $N$ at $t_0$''. The consistent statement is \eqref{ch06:eq-fwd}: the start of the accrual period
+plays the role of $t_0$ on the slide, the end that of $t_1$.
+\end{coursenote}
+
+\paragraph{FRAs (not discussed in class).} A forward rate agreement on notional $N$ and strike $K$ pays at
+the end of the period $N(R-K)\Delta$, where $R$ is the rate fixed for $[t_1,t_2]$ (in the LIBOR world
+usually settled at $t_1$ as $N(R-K)\Delta/(1+R\Delta)$, the same value). By \cref{ch06:prop-fwd} its value today
+is $N(f-K)\Delta\,Z(t_2)$ and the fair strike is $K=f$. A swap is a strip of FRAs sharing one strike.
+
+\subsection{SOFR futures}\label{ch06:sec-futures}
+Short-rate futures are among the most liquid contracts in every currency \ts{24}{7}{30:32}. The US contracts
+trade at the CME (slide 15) \ts{24}{7}{31:35}:
+\begin{itemize}
+  \item \textbf{3-month SOFR futures} settle on the \emph{compounded} SOFR over a period running from one
+        \emph{IMM date} to the next (third Wednesday of March, June, September, December; the dates come from
+        the old International Monetary Market in Chicago);
+  \item \textbf{1-month SOFR futures} settle on the \emph{average} SOFR over a calendar month.
+\end{itemize}
+Prices are quoted as $F=100-R$, with $R$ the settlement rate in percent: a 5\% rate gives 95, a 6\% rate 94
+\ts{24}{7}{22:58}. The convention makes the contract behave like a bond: when rates fall (the market ``rallies''),
+the price rises \ts{24}{7}{31:35}. Futures prices estimate forward rates up to a small \emph{convexity adjustment}
+(slide 15):
+\begin{equation}\label{ch06:eq-futures}
+  f(t_1,t_2) = 100 - F - \mathrm{Cvx},\qquad \mathrm{Cvx}>0 .
+\end{equation}
+
+\paragraph{Origin of the adjustment} \ts{24}{7}{32:39}. Futures are margined daily: a contract entered at no
+cost (apart from an initial margin) pays the holder the daily price change. A long position gains when the price
+rises, i.e.\ when rates fall, and the gain can then be reinvested only at the lower rate; when rates rise, the
+losses must be funded at the higher rate. This adverse correlation between the margin flows and the rate at
+which they are carried makes a long futures position slightly worse than a long FRA, so the futures price is
+lower and the futures rate $100-F$ higher than the forward rate. The adjustment can be estimated from a model, or
+simply fitted together with swaps and futures prices.
+
+\begin{remark}[Size of the adjustment (not discussed in class)]
+Daily settlement makes the futures rate the expectation of $R$ under the risk-neutral (bank-account) measure,
+$R^{\mathrm{fut}}=\E^{Q}[R]$, while the forward rate is its expectation under the $t_2$-forward measure, whose
+density with respect to $Q$ is $D/\E^Q[D]$ with $D=\exp(-\int_0^{t_2}r_s\dd s)$ (change of numeraire,
+\cref{ch:bs}). Hence
+\[
+  R^{\mathrm{fut}}-f=\E^Q[R]-\frac{\E^Q[DR]}{\E^Q[D]}=-\frac{\Cov^Q(D,R)}{\E^Q[D]}>0,
+\]
+because high rates come with low discount factors. In the Ho--Lee model with normal short-rate volatility
+$\sigma$, $\mathrm{Cvx}\approx\tfrac12\sigma^2t_1t_2$ (continuous compounding; e.g.\ Hull's
+\emph{Options, Futures, and Other Derivatives}). With $\sigma=1\%$ per year: 0.6\,bp for a contract one year
+out, 13\,bp at five years, 51\,bp at ten years. It is negligible at the front and essential at the back, which
+is why long-dated curves use swaps rather than futures.
+\end{remark}
+
+\subsection{Interest-rate swaps}
+\begin{definition}[Vanilla interest-rate swap]
+An agreement between two counterparties to exchange periodic cash flows on a notional $N$ until maturity
+(slide 16) \ts{24}{7}{33:47}: the \emph{fixed leg} pays a rate $K$ set on the trade date, the \emph{floating leg}
+pays a floating index observed periodically (today compounded SOFR). The \emph{payer} pays fixed and receives
+floating; the \emph{receiver} does the opposite. Notionals are not exchanged.
+\end{definition}
+Swaps are the most liquid rates derivative. They convert fixed-rate into floating-rate exposure and vice
+versa, are off balance sheet, cost little up front, and can be customised to any schedule a counterparty will
+accept \ts{24}{7}{33:47}.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[x=2.3cm,y=0.55cm,>=Stealth]
+  \draw[->] (0,0) -- (5.55,0) node[right]{\small $t$ (years)};
+  \foreach \k in {1,...,5} {
+    \draw[->,thick,intcol] (\k,0) -- (\k,2.4);
+    \node[below,font=\scriptsize] at (\k,-0.1) {$t_{\k}$};
+  }
+  \node[font=\scriptsize,intcol,anchor=south] at (5,2.4) {$NK\Delta_i$};
+  \foreach \k/\h in {0.25/1.3,0.5/1.5,0.75/1.6,1/1.8,1.25/1.9,1.5/2.0,1.75/2.1,2/2.15,2.25/2.2,2.5/2.25,2.75/2.3,3/2.3,
+                     3.25/2.35,3.5/2.4,3.75/2.45,4/2.5,4.25/2.55,4.5/2.6,4.75/2.65,5/2.7}
+    \draw[->,thick,thmcol] (\k,0) -- (\k,-\h);
+  \node[below left,font=\scriptsize] at (0,-0.1) {$t_0$};
+  \node[font=\scriptsize,thmcol,anchor=north] at (5,-2.8) {$NR_j\Delta_j$};
+  \node[font=\small,intcol,anchor=west] at (0.05,2.9) {fixed leg: received};
+  \node[font=\small,thmcol,anchor=west] at (0.05,-3.3) {floating leg: paid, rate unknown today};
+\end{tikzpicture}
+\caption{Cash flows of a 5-year receiver swap with annual fixed payments $NK\Delta_i$ and a floating leg drawn
+with quarterly payments $NR_j\Delta_j$ (USD SOFR swaps actually pay the compounded rate annually on both legs).
+The floating amounts are unknown today; with an upward-sloping forward curve they are expected to grow.}
+\label{ch06:fig-swapflows}
+\end{figure}
+
+\paragraph{Rolling out the cash flows.} The logic is simple but error-prone (slide 17) \ts{24}{7}{35:54}:
+today $\to$ trade date; $+$ spot rule (typically two business days) $\to$ effective date; $+$ tenor $\to$
+unadjusted maturity; step back by the payment frequency $\to$ unadjusted roll dates; $+$ business-day adjustment
+$\to$ accrual dates; $+$ reset rule $\to$ rate-fixing dates; $+$ payment rule $\to$ payment dates. Every step
+depends on holiday calendars, which change (Juneteenth, a state funeral, new national holidays), so models must
+treat them as data. The standard calendar source lists 294 distinct dollar calendars (every exchange and business
+centre has its own) \ts{24}{7}{37:00}. With the wrong calendar you misprice, and by the winner's curse you get
+the trade only when the mispricing is against you.
+
+% ------------------------------------------------------------------
+\section{Swap valuation}\label{ch06:sec-swapval}
+Let the fixed leg pay at $t_1<\dots<t_n$ with accrual fractions $\Delta_i$ and the floating leg at
+$s_1<\dots<s_m$ with fractions $\Delta_j$, both starting at $t_0=s_0$.
+
+\paragraph{Fixed leg} \ts{24}{7}{37:00}. Discount each known payment (slide 18):
+\begin{equation}\label{ch06:eq-fixed}
+  \mathrm{PV}_{\mathrm{fix}}=\sum_{i=1}^{n}K\Delta_iN\,Z(t_i)=NK\,A,\qquad
+  A=\sum_{i=1}^{n}\Delta_iZ(t_i),
+\end{equation}
+where $A$ is the \emph{annuity} (or level, or PV01 of the fixed leg per unit rate).
+
+\paragraph{Floating leg} \ts{24}{7}{38:04}. Replace unknown rates by forwards (slide 19),
+$\mathrm{PV}_{\mathrm{float}}=\sum_{j}f_j\Delta_jN\,Z(s_j)$. This needs two curves: an \emph{index} (projection)
+curve for the forwards $f_j$ and a \emph{discount} curve for the $Z(s_j)$. For vanilla SOFR swaps both are the
+SOFR curve, so there is only one curve. For compounded SOFR the replication is exact:
+
+\begin{proposition}[Floating leg]\label{ch06:prop-float}
+Assume the discount curve is the SOFR curve (\cref{ch06:prop-funding} with SOFR as the funding rate) and that
+each floating period pays $NR_j\Delta_j$ at $s_j$, where $R_j$ is SOFR compounded over $[s_{j-1},s_j]$ as in
+\eqref{ch06:eq-sofr}. Then the value of period $j$ is $N\bigl[Z(s_{j-1})-Z(s_j)\bigr]=Nf_j\Delta_jZ(s_j)$ with
+$f_j$ the forward rate \eqref{ch06:eq-fwd}, and
+\begin{equation}\label{ch06:eq-float}
+  \mathrm{PV}_{\mathrm{float}}=N\bigl[Z(s_0)-Z(s_m)\bigr].
+\end{equation}
+\end{proposition}
+\begin{proof}
+Invest $N$ at $s_{j-1}$ in an overnight deposit and roll principal and interest every day. At $s_j$ it has become
+$N\prod_i(1+r_id_i/360)=N(1+R_j\Delta_j)$, whatever the fixings. Hence the payment equals ``value of the rolled
+deposit at $s_j$'' minus $N$. The first part costs $N$ at $s_{j-1}$, worth $NZ(s_{j-1})$ today; the second is a
+fixed amount worth $NZ(s_j)$. The equality with $Nf_j\Delta_jZ(s_j)$ is \eqref{ch06:eq-fwd}. Summing over $j$,
+the sum telescopes.
+\end{proof}
+
+\begin{intuition}[A floating-rate note is worth par]
+Adding the notional at the end, $\mathrm{PV}_{\mathrm{float}}+NZ(s_m)=NZ(s_0)$: a note paying the funding rate
+is worth par at each reset, because its coupons are exactly what the money would have earned anyway. So a
+receiver swap is ``long a fixed-coupon bond, short a floating-rate note'': a bond position financed at the
+floating rate. This is also why an arithmetic \emph{average} of SOFR needs a correction: it is not what a rolled
+deposit earns, so the static replication fails and a small, volatility-dependent adjustment appears
+\ts{24}{7}{21:49}.
+\end{intuition}
+
+\begin{corollary}[Par swap rate]\label{ch06:cor-par}
+A swap traded at zero PV (the market standard) has the \emph{par swap rate} \ts{24}{7}{40:06}
+\begin{equation}\label{ch06:eq-par}
+  S=\frac{\sum_{j=1}^mf_j\Delta_jZ(s_j)}{\sum_{i=1}^n\Delta_iZ(t_i)}
+   =\frac{Z(t_0)-Z(t_n)}{A}.
+\end{equation}
+The first form (slide 21) is a weighted average of forward rates; the second holds under the single-curve
+assumptions of \cref{ch06:prop-float}. For a spot-starting swap $Z(t_0)\approx1$.
+\end{corollary}
+Par swap rates are quoted on every broker screen, and they are what the curve must reproduce. With annual
+payments, $\Delta_i=1$ and $Z(t_0)=1$, \eqref{ch06:eq-par} is exactly the par-bond equation used for
+bootstrapping in \cref{sec:bonds}: the swap rate is the coupon of a par bond priced off the SOFR curve.
+
+\paragraph{Mark-to-market and DV01.} After inception, let $S_t$ and $A_t$ be the par rate and annuity of the
+remaining schedule. Then
+\begin{equation}\label{ch06:eq-mtm}
+  V_{\mathrm{payer}}=N\bigl[(Z(t_0)-Z(t_n))-KA\bigr]=N\,A_t\,(S_t-K),\qquad V_{\mathrm{receiver}}=-V_{\mathrm{payer}},
+\end{equation}
+and to first order (holding $A_t$ fixed) a 1\,bp rise in the par rate changes the payer's value by
+$\mathrm{DV01}\approx N A_t\times10^{-4}$.
+
+\begin{example}[Valuing swaps (not from class)]
+With the curve of \cref{ch06:ex-boot} below: a 5-year receiver swap on \$100M struck at $K=4.00\%$, when the
+5-year par rate is $3.40\%$ and $A_5=4.5178$, is worth $100\text{M}\times0.006\times4.5178=\$2.71$M. A new
+10-year par swap on \$100M has $A_{10}=8.3195$ and a DV01 of about \$83{,}200 per bp.
+\end{example}
+
+\begin{finance}[Why swaps were invented, and why they trade at par]
+A comment from the audience \ts{24}{7}{41:14}: in the late 1980s swaps boomed because highly rated companies
+could borrow long-term fixed cheaply, while weaker companies could only borrow short-term floating. Each borrowed
+where it had a comparative advantage and they swapped the payments, both ending up with cheaper funding of the
+type they wanted \ts{24}{7}{42:14} (\cref{ch06:ex-compadv}). Today swaps are traded at (or within a bid--offer of
+0.1--0.2\,bp around) zero PV, i.e.\ at the par rate. Off-market swaps appear inside structured transactions,
+where the upfront value is accounted for elsewhere or is where the P\&L is taken \ts{24}{7}{41:14}.
+\end{finance}
+
+\begin{remark}[Two curves in the LIBOR era]
+With LIBOR the index (unsecured, bank credit) and the discount rate (collateral, OIS) differed, so forwards came
+from a LIBOR curve and discount factors from an OIS curve, and the telescoping \eqref{ch06:eq-float} failed
+(``multi-curve'' pricing). The SOFR transition has largely brought vanilla USD swaps back to a single curve.
+\end{remark}
+
+% ------------------------------------------------------------------
+\section{Building the yield curve}\label{ch06:sec-curve}
+The yield curve is the core valuation model of a rates desk: a function $t\mapsto Z(t)$ that feeds all other
+pricing \ts{24}{7}{42:14}. It is built in three steps (slide 22) \ts{24}{7}{43:15}:
+\begin{enumerate}[1.]
+  \item parameterise it by \emph{knot points} $\{(t_k,Z(t_k))\}_{k=1}^{N}$;
+  \item choose an \emph{interpolation} to get $Z(t)$ for $t\notin\{t_k\}$ (say a 4.5-year discount factor from
+        annual knots);
+  \item \emph{calibrate} the $Z(t_k)$ to market quotes.
+\end{enumerate}
+
+\subsection{Knot points}
+The simplest and most common choice: the maturities of the calibration instruments (1, 2, 3, 5, 7, 10-year swaps
+give knots at 1, 2, 3, 5, 7, 10 years) \ts{24}{7}{43:15}. Other choices are possible (e.g.\ FOMC meeting dates,
+\cref{ch06:sec-fomc}), but the knots must be chosen together with the interpolation and the instruments: bad choices
+give unstable hedges \ts{24}{7}{44:16}. Asked why the knots are not chosen to minimise interpolation error (e.g.\
+Chebyshev nodes), the lecturer answers that one wants a one-to-one link between knots and calibration instruments:
+with knots at 5, 10, 15, \dots\ years and instruments concentrated at the short end, the curve would be
+over-determined in one region and under-determined in another. Moreover the hedges come out in terms of the input
+instruments, which must be liquid and tradeable \ts{24}{7}{45:19}.
+
+\subsection{Interpolation: local versus global}
+\begin{definition}[CDF interpolation]\label{ch06:def-cdf}
+\emph{Constant daily forward} (CDF) interpolation assumes that the daily forward rate
+$f_d$, defined by $Z(d+1)=Z(d)/(1+f_d/360)$, is constant between consecutive knots \ts{24}{7}{44:16}.
+\end{definition}
+
+\begin{proposition}[CDF $=$ log-linear discount factors]\label{ch06:prop-cdf}
+Under CDF interpolation, for $t_k\le t\le t_{k+1}$,
+\begin{equation}\label{ch06:eq-cdf}
+  \ln Z(t)=\frac{t_{k+1}-t}{t_{k+1}-t_k}\ln Z(t_k)+\frac{t-t_k}{t_{k+1}-t_k}\ln Z(t_{k+1}),
+\end{equation}
+equivalently the product $t\,r_z(t)$ of time and continuously compounded zero rate $r_z(t)=-\ln Z(t)/t$ is
+linear between knots (slide 23). The interpolation is \emph{local}: $Z(t)$ depends only on the two neighbouring
+knots.
+\end{proposition}
+\begin{proof}
+$\ln Z(d)=\ln Z(t_k)-\sum_{d'=t_k}^{d-1}\ln(1+f_{d'}/360)$ is linear in the number of days when $f_{d'}$ is
+constant; matching the two endpoints gives \eqref{ch06:eq-cdf}, and $t\,r_z(t)=-\ln Z(t)$. In continuous time
+this is a piecewise-constant instantaneous forward $f(t)=-\dd\ln Z/\dd t$.
+\end{proof}
+CDF is very fast, local, and produces the characteristic staircase forward curve (\cref{ch06:fig-fwd}): the
+simplest, least smooth method \ts{24}{7}{46:21}.
+
+\begin{coursenote}[Erratum: figure on slide 23]
+The chart next to the CDF bullets is titled ``Yield'', but a step function is what CDF produces for the
+\emph{forward} rate. The zero yield $r_z(t)=\frac1t\int_0^tf(s)\dd s$ is continuous (of the form $a+b/t$ on each
+interval). Read the vertical axis as the daily forward rate.
+\end{coursenote}
+
+\begin{definition}[Cubic spline]
+Fit on each interval $[t_k,t_{k+1}]$ a cubic
+\[
+  x(t)=\sum_{j=0}^{3}\alpha_{kj}\,(t-t_k)^j ,
+\]
+where $x$ is the interpolated quantity (typically the zero rate), and impose continuity of $x,x',x''$ at the
+interior knots (slide 24) \ts{24}{7}{46:21}. Two end conditions (e.g.\ $x''=0$ at both ends, a \emph{natural}
+spline) close the system: $4(N-1)$ coefficients for $2(N-1)$ interpolation conditions, $2(N-2)$ smoothness
+conditions and 2 end conditions.
+\end{definition}
+
+\begin{coursenote}[Erratum: slide 24]
+The slide writes $x_i(t)=\sum_{i=0}^{3}\alpha_{ij}(t-t_i)^i$, using $i$ both for the interval and for the
+summation. The correct form is the one above: interval index $k$, power index $j$.
+\end{coursenote}
+
+The spline is reasonably fast and very smooth, but \emph{global}: the curve near an 8-year point depends on all
+knots, because moving a distant knot changes the shape everywhere through the smoothness constraints
+\ts{24}{7}{47:24}. The lecturer's advice to future rates quants is to keep a laminated card reading ``fast, local
+hedges \emph{or} smooth, global hedges'': one can be anywhere in between, but not have both. He has argued about
+this with traders for 30 years. Traders want an 8-year trade to be hedged with 7- and 10-year swaps only, not with
+5- or 15-year ones. Among smooth methods the cubic spline is the worst in this respect, precisely because it is the
+smoothest. Tension splines and B-splines sit in between, and much interpolation technology from computer graphics
+could be used \ts{24}{7}{46:21} (slide 29).
+
+\begin{intuition}[The spline as an elastic beam]
+A natural cubic spline minimises the bending energy $\int x''(t)^2\dd t$ among all interpolants: it is the
+draftsman's elastic ruler pinned at the knots. Moving one pin bends the whole ruler. For equally spaced knots the
+disturbance decays by the factor $2-\sqrt3\approx0.27$ per knot \emph{with alternating sign}, the root of
+$\lambda^2+4\lambda+1=0$ in the tridiagonal system for the second derivatives. This is exactly the ringing
+visible in the spline hedges of \cref{ch06:fig-ladder}. CDF corresponds to a ``string'' of independent segments
+in $\ln Z$: no stiffness, no propagation, no smoothness.
+\end{intuition}
+
+\subsection{Calibration}
+For each calibration instrument write the pricing error as a function of the curve (slide 25)
+\ts{24}{7}{48:27}:
+\[
+  E_i(Z)=P_i(Z)-P_i^{\mathrm{obs}},\qquad i=1,\dots,N .
+\]
+\begin{itemize}
+  \item With $N$ knots and $N$ instruments solve $E_i=0$ exactly with any root finder. When the interpolation is
+        local and instruments are sorted by maturity, each new instrument introduces a single new unknown and the
+        system can be \emph{bootstrapped} one equation at a time (as in \cref{sec:bonds}).
+  \item Otherwise minimise $E=\sum_iE_i(Z)^2$, possibly with extra terms, e.g.\ smoothness penalties on an
+        under-specified curve, or accept any curve that prices every instrument within its bid--offer (which is
+        indistinguishable from an exact fit) \ts{24}{7}{49:28}.
+\end{itemize}
+
+\begin{example}[Bootstrapping a small swap curve (not from class)]\label{ch06:ex-boot}
+Annual-pay par swap rates ($\Delta_i=1$, single curve, day counts ignored): 1Y 4.00\%, 2Y 3.60\%, 3Y 3.45\%,
+5Y 3.40\%, 7Y 3.45\%, 10Y 3.55\%. For $T\le3$ every payment date is a knot and \eqref{ch06:eq-par} gives the
+recursion $Z_T=(1-S_T\sum_{k<T}Z_k)/(1+S_T)$. For 5Y, CDF gives $Z_4=\sqrt{Z_3Z_5}$ and $Z_5$ solves the scalar
+equation $1-Z_5=S_5\bigl(Z_1+Z_2+Z_3+\sqrt{Z_3Z_5}+Z_5\bigr)$; similarly for 7Y and 10Y. Result:
+\begin{center}\small
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+knot $t_k$ (years) & 1 & 2 & 3 & 5 & 7 & 10\\
+\midrule
+par rate (\%) & 4.00 & 3.60 & 3.45 & 3.40 & 3.45 & 3.55\\
+$Z(t_k)$ & 0.96154 & 0.93184 & 0.90351 & 0.84640 & 0.78874 & 0.70466\\
+zero rate $r_z$ (\%, cont.) & 3.922 & 3.530 & 3.382 & 3.335 & 3.390 & 3.500\\
+forward on $(t_{k-1},t_k]$ (\%) & 3.922 & 3.138 & 3.088 & 3.265 & 3.528 & 3.757\\
+\bottomrule
+\end{tabular}
+\end{center}
+A natural cubic spline on zero rates, calibrated to the same six quotes, reprices them exactly too, but it
+implies a 4-year par rate of 3.405\% against 3.419\% for CDF. For a maturity that is not quoted, the choice of
+interpolation moves the price by more than a basis point, about ten times the bid--offer.
+\end{example}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.8\linewidth,height=6.2cm,xlabel={maturity (years)},ylabel={rate (\%)},
+  xmin=0,xmax=10.3,ymin=2.9,ymax=4.05,xtick={0,1,2,3,5,7,10},
+  legend pos=south east,legend style={font=\small,cells={anchor=west}},grid=major,grid style={black!10}]
+  \addplot[very thick,thmcol,const plot] coordinates {(0,3.922) (1,3.1375) (2,3.0875) (3,3.2649) (5,3.5277) (7,3.7574) (10,3.7574)};
+  \addlegendentry{forward, CDF}
+  \addplot[thick,defcol,smooth] coordinates {(1.00,3.471) (1.25,3.260) (1.50,3.093) (1.75,2.993) (2.00,2.981) (2.25,3.031)
+    (2.50,3.093) (2.75,3.146) (3.00,3.174) (3.25,3.186) (3.50,3.204) (3.75,3.228) (4.00,3.257) (4.25,3.289) (4.50,3.323)
+    (4.75,3.358) (5.00,3.394) (5.25,3.429) (5.50,3.465) (5.75,3.500) (6.00,3.534) (6.25,3.566) (6.50,3.595) (6.75,3.621)
+    (7.00,3.643) (7.25,3.662) (7.50,3.682) (7.75,3.701) (8.00,3.721) (8.25,3.740) (8.50,3.760) (8.75,3.779) (9.00,3.798)
+    (9.25,3.817) (9.50,3.836) (9.75,3.855) (10.00,3.874)};
+  \addlegendentry{forward, cubic spline on zeros}
+  \addplot[thick,black!55,dashed,mark=none] coordinates {(1,3.9221) (2,3.5298) (3,3.3824) (4,3.353) (5,3.3354) (6,3.3674)
+    (7,3.3903) (8,3.4362) (9,3.4719) (10,3.5004)};
+  \addlegendentry{zero rate, CDF}
+  \addplot[only marks,mark=*,mark size=1.6pt,fincol] coordinates {(1,4.00) (2,3.60) (3,3.45) (5,3.40) (7,3.45) (10,3.55)};
+  \addlegendentry{par swap quotes}
+\end{axis}
+\end{tikzpicture}
+\caption{Curves implied by the quotes of \cref{ch06:ex-boot}. CDF gives a staircase of forward rates with jumps at
+the knots; the spline (drawn from the first knot; below 1 year both methods coincide) gives a smooth forward curve
+that dips below the CDF forwards around 2 years. Both reprice the six quotes exactly. Continuously compounded
+rates; the 1-year zero rate is $\ln1.04=3.922\%$.}
+\label{ch06:fig-fwd}
+\end{figure}
+
+\subsection{Central-bank meeting curves, turns and data-driven curves}\label{ch06:sec-fomc}
+\paragraph{FOMC curves.} The history of daily SOFR (slide 26) is not smooth at all: it looks like a staircase
+\ts{24}{7}{49:28}. It is flat between FOMC meetings and jumps when the Fed changes its policy rate: near zero
+after March 2020, a sequence of steps up in 2022--23, a plateau around 5.3\% until the 50\,bp cut of September 2024
+(``the chart needs a 50\,bp drop at the right edge'') \ts{24}{7}{50:32}. The spike at the left edge is a repo
+squeeze related to tax-payment flows (September 2019). This suggests CDF interpolation with knots at the
+meeting dates: daily rates are constant between meetings, which is now almost universal in the industry
+\ts{24}{7}{50:32}. Two complications (slides 27--28):
+\begin{itemize}
+  \item there are 8 FOMC meetings a year but only 4 quarterly futures, so the problem is under-determined. One
+        adds 1-month futures or smoothness constraints, or uses \emph{FOMC swaps} (meeting-to-meeting OIS), which
+        now trade and directly price the rate expected after a given meeting \ts{24}{7}{51:34};
+  \item the meeting calendar is known only about two years ahead, and instruments are sparse beyond the front end.
+        Hence a \emph{hybrid} curve: CDF on meeting dates at the front, spline at the back, which works well in
+        practice \ts{24}{7}{50:32}.
+\end{itemize}
+
+\paragraph{Turns} \ts{24}{7}{52:37}. Banks report balance sheets and return on assets at quarter- and year-ends and
+want small balance sheets on those dates, so borrowing across year-end costs a premium: a spike in the forward
+curve every year. Curves include these \emph{turns} explicitly. Some hedge funds trade pairs of swaps ending just
+before and just after year-end, isolating the turn and exploiting whoever models it badly; in size this is real
+money \ts{24}{7}{53:40}.
+
+\paragraph{Data-driven curves} \ts{24}{7}{53:40}. A USD curve has about 50 inputs of very different liquidity;
+perhaps half a dozen are super-liquid. One can estimate historical factors (curve shapes) by PCA
+(\cref{ch:pca}), drive the first few factors from the most liquid instruments and build the curve from them. This
+works well for bond curves (slide 29).
+
+% ------------------------------------------------------------------
+\section{Risk: PV01, delta ladders and gamma}\label{ch06:sec-risk}
+On a desk, ``risk'' first means: how much do I make or lose if rates move \ts{24}{7}{54:42}?
+
+\begin{definition}[PV01 and delta ladder]
+The \emph{PV01} (or DV01) of a position is its sensitivity to a 1\,bp move of the curve inputs, computed by a
+two-sided finite difference (slide 30)
+\[
+  \frac{\partial\mathrm{PV}}{\partial r}\approx\frac{\mathrm{PV}(r+\epsilon)-\mathrm{PV}(r-\epsilon)}{2\epsilon},
+  \qquad \epsilon=1\,\text{bp}.
+\]
+Bumping each curve input $x_k$ separately gives the vector of partial PV01s, the \emph{delta ladder} (partial
+deltas, bucketed risk, delta strip) $\delta_k=\partial\mathrm{PV}/\partial x_k$.
+\end{definition}
+The ladder is what the desk hedges and what risk limits are set on. It is computed by brute force (bump the input,
+rebuild the curve, revalue) or analytically, but the concept is the same \ts{24}{7}{54:42}. If the inputs are the
+calibration quotes, the ladder translates directly into hedges:
+
+\begin{proposition}[Hedging with the calibration instruments]\label{ch06:prop-hedge}
+Let the curve be calibrated exactly to par swaps with quotes $q=(q_1,\dots,q_N)$ and annuities $A_k$. A payer
+swap on instrument $k$, struck at today's quote, has $\partial\mathrm{PV}_k/\partial q_j=A_k\,\delta_{kj}$ per unit
+notional. Hence a portfolio with ladder $\delta_k=\partial V/\partial q_k$ is first-order neutral to every quote
+after adding payer swaps with notionals
+\[
+  x_k=-\frac{\delta_k}{A_k},\qquad k=1,\dots,N .
+\]
+\end{proposition}
+\begin{proof}
+Because the calibrated curve reprices instrument $k$ at par rate $q_k$ for every $q$, \eqref{ch06:eq-mtm} gives
+$\mathrm{PV}_k(q)=(q_k-K)A_k(q)$. Differentiating, $\partial_{q_j}\mathrm{PV}_k=\delta_{kj}A_k+(q_k-K)\partial_{q_j}A_k$,
+and the second term vanishes at $K=q_k$. The total first-order sensitivity to $q_j$ is $\delta_j+x_jA_j=0$.
+\end{proof}
+
+\begin{example}[An 8-year swap hedged with 7- and 10-year swaps (not from class)]
+Take the curve of \cref{ch06:ex-boot} and a \$100M 8-year receiver swap at its par rate (3.492\% with CDF). Its
+parallel PV01 is $-\$68{,}835$ per bp, equal to $-NA_8\times10^{-4}$ with $A_8=6.883$. The ladder with respect to
+the six quotes depends on the interpolation (\cref{ch06:fig-ladder}):
+\begin{itemize}
+  \item \textbf{CDF}: $-\$39{,}982$ on the 7Y quote, $-\$28{,}840$ on the 10Y, a few dollars elsewhere. The hedge is
+        to pay fixed on \$65.3M 7Y and \$34.7M 10Y: exactly what traders want;
+  \item \textbf{cubic spline}: $-533$, $+3{,}244$, $-6{,}969$, $+19{,}314$, $-68{,}766$, $-15{,}138$ dollars per bp
+        on 1Y, \dots, 10Y. The hedge requires positions of alternating sign in every maturity, including
+        \$112M of 7Y and $-\$43$M of 5Y: a ``smeared hedge'' (slide 32).
+\end{itemize}
+In both cases the ladder sums to the parallel PV01.
+\end{example}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.85\linewidth,height=6cm,ybar,bar width=9pt,
+  symbolic x coords={1Y,2Y,3Y,5Y,7Y,10Y},xtick=data,
+  ylabel={hedge: payer notional (\$M)},xlabel={calibration swap},
+  ymin=-55,ymax=125,legend pos=north west,legend style={font=\small},
+  ymajorgrids,grid style={black!10},
+  nodes near coords,every node near coord/.append style={font=\tiny},
+  point meta=explicit symbolic]
+  \addplot[fill=thmcol!70,draw=thmcol] coordinates {(1Y,0) [0] (2Y,0) [0] (3Y,0) [0] (5Y,0) [0] (7Y,65.3) [65.3] (10Y,34.7) [34.7]};
+  \addlegendentry{CDF (local)}
+  \addplot[fill=defcol!60,draw=defcol] coordinates {(1Y,5.5) [5.5] (2Y,-17.1) [$-$17.1] (3Y,24.9) [24.9] (5Y,-42.8) [$-$42.8] (7Y,112.3) [112.3] (10Y,18.2) [18.2]};
+  \addlegendentry{cubic spline (global)}
+\end{axis}
+\end{tikzpicture}
+\caption{Hedge of a \$100M 8-year receiver swap with the six calibration swaps, $x_k=-\delta_k/A_k$ from
+\cref{ch06:prop-hedge}, for the two interpolations of \cref{ch06:ex-boot}. Both hedges total about \$100M, but
+the spline one rings with alternating signs through the whole curve (``fast, local'' versus ``smooth, global''
+\ts{24}{7}{47:24}).}
+\label{ch06:fig-ladder}
+\end{figure}
+
+\paragraph{Gamma} \ts{24}{7}{55:47}. Second-order risk (gamma, or convexity) matters more or less depending on the
+book. Slide 31 defines it as the change in delta for a 1\,bp move:
+\[
+  \Gamma=\frac{\mathrm{PV}(r+\epsilon)-2\,\mathrm{PV}(r)+\mathrm{PV}(r-\epsilon)}{\epsilon}
+  =\epsilon\,\frac{\partial^2\mathrm{PV}}{\partial r^2}+O(\epsilon^3).
+\]
+Note the single $\epsilon$ in the denominator: this is $\Delta(r+\tfrac\epsilon2)-\Delta(r-\tfrac\epsilon2)$ with
+$\Delta=\partial\mathrm{PV}/\partial r$, i.e.\ the second derivative times the bump, not the second derivative
+itself. The full matrix of cross gammas $\partial^2\mathrm{PV}/\partial x_j\partial x_k$ needs bumps in pairs, of
+order $N^2$ revaluations: $2{,}500$ for a 50-input curve, too expensive. Desks use a parallel gamma, a factor (PCA)
+gamma, or scenario analysis instead \ts{24}{7}{55:47}.
+
+\paragraph{Practical issues} \ts{24}{7}{56:49} (slide 32).
+\begin{itemize}
+  \item \emph{Bump size}: 1\,bp is a reporting convention. Monte Carlo pricers need larger bumps, or the noise
+        swamps the difference (the ``noisy delta'' problem of \cref{ch:markets}); PDE pricers show grid effects
+        for large bumps; too large a bump creates unnatural curve shapes.
+  \item \emph{Sum of partials vs parallel shift}: by the chain rule they agree to first order, as in the example;
+        the discrepancy comes from cross-gamma terms at finite $\epsilon$. Sequential bumps are one remedy.
+  \item \emph{Interpolation}: the ladder of a position is a property of position \emph{and} curve model. Local
+        interpolation concentrates it near the maturity, smooth interpolation smears it, which is a source of
+        endless arguments \ts{24}{7}{56:49}.
+\end{itemize}
+
+% ------------------------------------------------------------------
+\section{P\&L attribution}\label{ch06:sec-pnl}
+Every morning a desk starts with positions and a market, and every evening it has made or lost money: why
+\ts{24}{7}{56:49}? Skill, market direction, client flow earning the bid--offer? The attribution is also one of the
+best checks of the model, and in some jurisdictions a regulatory requirement. Total P\&L is known exactly (slide 33),
+$\mathrm{PnL}(t_0,t_1)=\mathrm{PV}(t_1)-\mathrm{PV}(t_0)$. It is split into three parts (slide 34)
+\ts{24}{7}{57:58}:
+\begin{itemize}
+  \item \textbf{Portfolio change}: new trades, unwinds, novations, resets, exercises. Conceptually simple,
+        mechanically the hardest (booking systems, operational flows).
+  \item \textbf{Time}, or \emph{theta}: the change in value if the market ``does not move''.
+  \item \textbf{Market moves}: to first order $\sum_i\frac{\partial\mathrm{PV}}{\partial x_i}\Delta x_i$ (the
+        linear term on slide 34), plus $\frac12\sum_{i,j}\Gamma_{ij}\Delta x_i\Delta x_j$ and higher terms.
+\end{itemize}
+What remains is the \emph{unexplained} P\&L. A large or systematic unexplained part signals missing risk factors or
+a bad model. The order in which the three steps are applied matters (the decomposition is path-dependent), so
+conventions must be fixed and documented.
+
+\paragraph{What does ``the market did not move'' mean?} \ts{24}{7}{58:59}. The curve is a function of maturity,
+and when the calendar moves one must decide what is held fixed. There is more than one defensible answer
+(not detailed in class):
+\begin{itemize}
+  \item \emph{Forwards realised}: yesterday's forward curve for fixed calendar dates is today's curve,
+        $Z_{t_1}(T)=Z_{t_0}(T)/Z_{t_0}(t_1)$. Every funded position then earns exactly the funding rate: theta
+        is pure carry.
+  \item \emph{Constant curve by tenor}: the zero (or par) rate for each time-to-maturity is unchanged. On an
+        upward-sloping curve a bond ``rolls down'' to lower yields and earns carry \emph{plus} roll-down
+        (\cref{ch06:ex-theta}).
+\end{itemize}
+For a physicist: the first convention is Lagrangian (follow each cash flow), the second Eulerian (sit at a fixed
+point of the maturity axis). Whatever the choice, the desk and its controllers must use the same one.
+
+\begin{coursenote}[The spoken P\&L example]
+In class the market term is illustrated with a long position of \$1B of bonds, a PV01 of ``\$10 million'' and
+gains of \$50M for a 5\,bp move \ts{24}{7}{58:59}. The numbers were improvised: \$1B of 10-year bonds has a PV01
+of roughly \$0.8--0.9M, so 5\,bp is worth about \$4M, and a long bond position gains when rates \emph{fall}.
+\end{coursenote}
+
+% ------------------------------------------------------------------
+\section{Clearing, margin and the CCP basis}\label{ch06:sec-clearing}
+A swap starts near zero PV, but as markets move its value drifts away from zero and becomes a credit exposure: if
+a counterparty that owes me \$10M on a swap defaults, I lose it (slide 35) \ts{24}{7}{1:00:00}. Lehman, a huge
+swap dealer, made this concrete in 2008: its counterparties had to replace hundreds of billions of hedges at once,
+bid--offers widened about twentyfold for a month or two, and the one large dealer still trading normally captured
+the flow \ts{24}{7}{1:01:03}. After the crisis regulators made \emph{central clearing} mandatory for vanilla
+swaps: once two parties agree a trade, both assign their side to a central counterparty (CCP: LCH in London,
+CME, JSCC in Japan) and post margin to it, so they no longer face each other's credit \ts{24}{7}{1:01:03}.
+
+\begin{finance}[Fewer, larger risks]
+Clearing replaces many small bilateral risks by concentrated exposure to a few enormous, deeply interconnected
+CCPs. A failure of one of them would be a systemic catastrophe, which is why members post margin and default-fund
+contributions and CCPs are heavily capitalised \ts{24}{7}{1:02:09}.
+\end{finance}
+
+\paragraph{The CCP basis} \ts{24}{7}{1:02:09}. A dollar owed by LCH is not the same as a dollar owed by CME:
+positions at different CCPs cannot be offset operationally or for collateral. From about 2017 the fixed rate for
+paying fixed at CME exceeded that at LCH. On a broker screen for 26 June 2017 (slide 36; source Tradition) the
+CME--LCH spread grew with maturity, from 0.10\,bp at 1 year through 1.05 (5Y), 2.45 (10Y) and 3.40 (30Y) to
+3.55\,bp at 50 years, in a market with a bid--offer of about 0.2\,bp \ts{24}{7}{1:03:10}. It persisted for years
+(recently it has changed sign). Why not receive at CME, pay at LCH and retire \ts{24}{7}{1:03:10}?
+\begin{itemize}
+  \item \textbf{Double margin}: the two offsetting trades sit at different CCPs, so initial margin (1--2\% of
+        notional, quoted in class) is posted twice. Its funding cost is the main driver
+        \ts{24}{7}{1:04:16}.
+  \item \textbf{Netting}: CME also clears futures, so a dealer long futures and short swaps there gets partial
+        margin offsets that the arbitrage would destroy \ts{24}{7}{1:04:16}.
+  \item \textbf{Preferences}: large US asset managers, one-way payers of fixed, preferred CME, a US-jurisdiction
+        CCP not controlled by dealers, over LCH \ts{24}{7}{1:05:21}. (LCH Group is today majority-owned by the
+        London Stock Exchange Group, with banks as minority shareholders; the perception quoted in class concerns
+        its governance.)
+\end{itemize}
+The general lesson: margin and capital requirements let spreads persist between instruments that would otherwise
+be arbitraged. To price correctly one must include how the trade is margined, how much capital it consumes, and
+every other cost that used to be ignored. Estimating these costs and pushing them into the upfront price has been
+one of the largest quant efforts of the last 15 years, made harder by the fact that many are portfolio effects
+that must be allocated to individual trades \ts{24}{7}{1:06:21} (see \cref{ch:counterparty}).
+
+% ------------------------------------------------------------------
+\section{Electronic trading and price making}\label{ch06:sec-etrading}
+Electronic trading is one of the hottest areas for quants \ts{24}{7}{1:07:23}. As a rule of thumb, equities are
+about ten years ahead of FX, and FX ten years ahead of fixed income. Slide 37 (Flow Traders data, 2023) shows the
+share of electronic trading: above 90\% for US cash equities and equity options, European ETFs and FX spot;
+about 80\% for European government bonds and 65\% for US Treasuries; 35--45\% for investment-grade corporates;
+22--27\% for high yield; about 12\% for munis and 10\% for emerging-market bonds. Small trades go electronic first:
+\$1M of Treasuries does not move a market trading \$1T a day, whereas \$500M does and needs care
+\ts{24}{7}{1:08:24}.
+
+\paragraph{Participants} \ts{24}{7}{1:10:26}. \emph{Principal trading firms} (high-frequency shops) have no
+customers, trade their own capital and are extremely fast; the lecturer met a physics PhD hired to optimise the
+microwave links between Chicago and New York, and realised that banks will never beat them at latency
+\ts{24}{7}{1:11:26}. \emph{Dealers} (banks) are fast (microseconds, not nanoseconds) and have customers, who pay
+the bid--offer. \emph{Customers} want efficient execution, a view of the full market and confidence that they are
+not being taken advantage of \ts{24}{7}{1:12:26}.
+
+\paragraph{Price making} (slide 38) \ts{24}{7}{1:12:26}. Start from a mid price, from liquidity providers for
+actively traded instruments or from a model for off-the-run ones, then \emph{skew} it according to:
+\begin{itemize}
+  \item the current position: be aggressive on risk-reducing trades, conservative on risk-increasing ones;
+  \item the client tier: a valuable client relationship justifies a better price \ts{24}{7}{1:13:29};
+  \item \emph{client toxicity}: the classic toxic client sends the same request to ten dealers at once. Whoever
+        wins finds nine others hedging the same way, and the hedge has moved away (winner's curse)
+        \ts{24}{7}{1:13:29};
+  \item market volatility (widen when the market may move before the hedge is done) and short-term prediction
+        models (market microstructure).
+\end{itemize}
+All of this requires tightly integrated systems. A credit check that answers after the client has gone is a lost
+trade \ts{24}{7}{1:14:29}.
+
+\paragraph{Fast model pricing (slide 39, not presented in class).} Model prices must be recomputed in microseconds.
+One linearises the output around the last full valuation,
+\[
+  r(t)\approx r(t_0)+\sum_{i=1}^{n}\frac{\partial r}{\partial x_i}\,\Delta x_i ,
+\]
+splits the drivers into fast ones (fed through the linearisation in real time) and slow ones, and periodically
+recomputes the full model. The slide omits the index on $\Delta x$; it must be $\Delta x_i$.
+
+% ------------------------------------------------------------------
+\section{Bonds revisited}\label{ch06:sec-bonds}
+Slides 40--44 were not presented in class; they extend \cref{sec:bonds,sec:duration}.
+
+\paragraph{Why bonds are harder than swaps.} Government bonds are the most liquid fixed-income instruments in many
+markets. G20 government bonds are usually treated as default-free, while emerging-market bonds need a default model.
+Despite their apparent simplicity bonds are harder than swaps: bonds are not fungible (each issue has its own
+coupon, maturity, liquidity, repo specialness), whereas all swaps are generated from one curve (slide 40).
+
+\paragraph{Price--yield with $f$ payments a year} (slide 41). Bonds trade and settle on price, but yield is the
+better comparison across coupons and maturities. With $n$ remaining periods, coupon $C_i$ per period per unit
+notional and $f$ coupons per year,
+\[
+  P_D(y)=\sum_{i=1}^{n}\frac{C_i}{(1+y/f)^{i}}+\frac{1}{(1+y/f)^{n}},
+\]
+which reduces to \eqref{eq:couponbond} for $f=1$. The slide's chart shows the familiar picture: premium when the
+yield is below the coupon, discount when above.
+
+\begin{proposition}[Modified and Macaulay duration]
+Let $D_{\mathrm{mod}}=-\frac1P\frac{\partial P}{\partial y}$ and let $D_{\mathrm{Mac}}=\sum_i\frac{i}{f}\,
+\frac{\mathrm{CF}_i(1+y/f)^{-i}}{P}$ be the PV-weighted average payment time in years. Then
+$D_{\mathrm{Mac}}=D_{\mathrm{mod}}\,(1+y/f)$ (slide 42).
+\end{proposition}
+\begin{proof}
+$\partial_y(1+y/f)^{-i}=-\frac{i}{f}(1+y/f)^{-i-1}$, so
+$-P'(y)=(1+y/f)^{-1}\sum_i\frac if\mathrm{CF}_i(1+y/f)^{-i}=P\,D_{\mathrm{Mac}}/(1+y/f)$.
+\end{proof}
+(The slide writes the factor as $1+y/n$ with $n$ the compounding frequency, called $f$ on the previous slide.)
+Duration is ``not generic but good to gain insight'': it assumes a flat move of a single yield, while swap risk is
+a ladder.
+
+\paragraph{Bonds against the swap curve: the z-spread} (slide 43). Swap and bond books hedge each other, so their
+risks must be aggregated. Pricing a bond off the swap (SOFR) curve,
+$P'_D=\sum_iC_iZ(t_i)+Z(t_n)$, will not reproduce its market price; the \emph{z-spread} $s$ is the parallel shift
+of the continuously compounded discount rates that does:
+\[
+  P_D=\sum_{i=1}^{n}C_iZ(t_i)e^{-st_i}+Z(t_n)e^{-st_n}.
+\]
+It measures the bond's credit, liquidity and supply premium relative to swaps, and it lets the bond's rate risk be
+expressed as a delta ladder on the swap curve plus a single spread risk.
+
+\begin{example}[z-spread and DV01 (not from class)]
+A 5-year bond with 4\% annual coupons trades at 101.50. Off the curve of \cref{ch06:ex-boot} it would be worth
+$P'_D=102.71$; the z-spread is $s=25.6$\,bp. Its yield is 3.666\%, $D_{\mathrm{Mac}}=4.633$,
+$D_{\mathrm{mod}}=4.469$, and its DV01 is $D_{\mathrm{mod}}\,P\times10^{-4}=0.0454$ per 100 of face value.
+\end{example}
+
+\paragraph{Bond flavours} (slide 44): government, asset-backed, corporate, municipal, high yield and more, each with
+its own valuation and risk nuances. \emph{Municipal bonds} were discussed in class \ts{24}{7}{1:08:24}: a huge number
+of small and heterogeneous issuers (states, towns, school boards, toll-road and bridge projects) and interest exempt
+from federal income tax. At a tax rate $\tau$ an investor is indifferent between a muni yielding $y_m$ and a taxable
+bond yielding $y_T$ when $y_m=(1-\tau)y_T$, so munis yield about 70\% of comparable taxable bonds
+\ts{24}{7}{1:09:26}. Only taxpayers benefit, so the market is retail: the lecturer's former electronic muni platform
+(acquired by TD) did 5{,}000--10{,}000 trades a day with an average size around \$28{,}000, absurdly small by
+government-bond standards but profitable in volume. Emerging-market bonds are idiosyncratic (payment terms, credit
+support) and still mostly traded by phone \ts{24}{7}{1:10:26}.
+
+\begin{finance}[From the Q\&A]
+\emph{Rates outlook} \ts{24}{7}{1:15:32}. The Fed balances inflation, pushed up by COVID-era stimulus and by the
+energy shock after Russia's invasion of Ukraine, against employment. High rates discourage borrowing (business
+start-ups, and above all housing, the largest purchase in most lives), and a cutting cycle had just begun.
+\emph{Two kinds of fixed-income research} \ts{24}{7}{1:16:39}: client-facing economics research makes forecasts
+and trade recommendations; internal quant research on pricing and hedging makes no predictions at all. It only
+needs to know how to hedge (``if I knew where rates are going, I would be on my Caribbean island'').
+\emph{Muni analytics} \ts{24}{7}{1:17:42}: revenue bonds depend on project cash flows (toll roads lost their revenue
+in COVID); all munis depend on future tax policy, since the value of the exemption moves with the tax rate
+(\cref{ch06:ex-muni}); and the practical problem is \emph{sourcing}: finding who holds the bonds a client wants,
+which is why munis are still voice-driven \ts{24}{7}{1:18:43}.
+\end{finance}
+
+% ------------------------------------------------------------------
+\begin{keyformulas}
+\begin{align*}
+&\text{Simple interest, deposit:} && I=Nr\Delta t,\\
+& && Z(t)=1/\bigl(1+r(t)\Delta\bigr)\\
+&\text{SOFR term rates:} && R^{\mathrm{comp}}=\tfrac{360}{d}\bigl[\textstyle\prod_i(1+\tfrac{r_id_i}{360})-1\bigr],\\
+& && R^{\mathrm{avg}}=\tfrac1d\sum_ir_id_i\\
+&\text{Discounting:} && r_d=r_b\ \text{(discount at the funding rate)}\\
+&\text{Forward rate:} && f(t_1,t_2)=\tfrac1\Delta\bigl(Z(t_1)/Z(t_2)-1\bigr)\\
+&\text{Futures:} && f=100-F-\mathrm{Cvx},\\
+& && \mathrm{Cvx}\approx\tfrac12\sigma^2t_1t_2\ \text{(Ho--Lee)}\\
+&\text{Swap legs:} && \mathrm{PV}_{\mathrm{fix}}=NK\textstyle\sum_i\Delta_iZ(t_i)=NKA,\\
+& && \mathrm{PV}_{\mathrm{float}}=N\bigl[Z(t_0)-Z(t_n)\bigr]\\
+&\text{Par rate, MTM:} && S=\bigl(Z(t_0)-Z(t_n)\bigr)/A,\\
+& && V_{\mathrm{payer}}=NA(S-K),\quad \mathrm{DV01}\approx NA\cdot10^{-4}\\
+&\text{CDF interpolation:} && \ln Z\ \text{linear between knots}\iff\\
+& && f(t)\ \text{piecewise constant}\\
+&\text{Calibration:} && E_i=P_i(Z)-P_i^{\mathrm{obs}}=0\quad\text{or}\quad\min\textstyle\sum_iE_i^2\\
+&\text{PV01, gamma:} && \tfrac{\mathrm{PV}(r+\epsilon)-\mathrm{PV}(r-\epsilon)}{2\epsilon},\\
+& && \Gamma=\tfrac{\mathrm{PV}(r+\epsilon)-2\mathrm{PV}(r)+\mathrm{PV}(r-\epsilon)}{\epsilon}\\
+&\text{Hedge with inputs:} && x_k=-\delta_k/A_k\\
+&\text{P\&L explain:} && \mathrm{PnL}=\text{portfolio}+\Theta\,\Delta t\\
+& && +\textstyle\sum_i\delta_i\Delta x_i+\tfrac12\sum_{ij}\Gamma_{ij}\Delta x_i\Delta x_j+\text{unexplained}\\
+&\text{Bonds:} && D_{\mathrm{Mac}}=D_{\mathrm{mod}}(1+y/f),\\
+& && P_D=\textstyle\sum_iC_iZ(t_i)e^{-st_i}+Z(t_n)e^{-st_n}\\
+&\text{Munis:} && y_m=(1-\tau)\,y_T
+\end{align*}
+\end{keyformulas}
+
+% ------------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+No problem set covers this lecture; all exercises are \emph{not from the course}.
+
+\begin{exercise}[not from the course]\label{ch06:ex-sofr}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Show that $R^{\mathrm{comp}}\ge R^{\mathrm{avg}}$ in \eqref{ch06:eq-sofr} whenever all $r_i\ge0$.
+  \item For a constant rate $r$ fixed every day for $n$ days ($d_i=1$), show that
+      $R^{\mathrm{comp}}-r=\frac{(n-1)r^2}{720}+O(r^3)$. Evaluate for $r=5.2\%$, $n=91$ and compare with the example of
+      \cref{ch06:sec-rates}.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course]
+(a) Show that a note paying compounded SOFR in arrears on $N$,
+plus $N$ at maturity, is worth $N$ at every reset date when
+discounting is on the SOFR curve.
+
+(b) Deduce \eqref{ch06:eq-float} again.
+
+(c) USD SOFR swaps pay two business days after the end of each
+period. Write the value of one floating period with this payment
+lag and explain why the telescoping is no longer exact.
+\end{exercise}
+
+\bigskip
+
+\begin{exercise}[not from the course]
+Using the quotes of \cref{ch06:ex-boot}:
+
+(a) bootstrap $Z_1,Z_2,Z_3$ by hand;
+
+(b) show that CDF gives $Z_4=\sqrt{Z_3Z_5}$, write the scalar
+equation for $Z_5$ and solve it numerically;
+
+(c) compute the one-year forward rates $f(k-1,k)$,
+$k=1,\dots,5$, and the 4-year par rate;
+
+(d) prove \cref{ch06:prop-cdf} directly from the daily compounding
+definition, and show that the forward curve jumps at a knot unless
+the two adjacent segments have equal slopes of $\ln Z$.
+\end{exercise}
+
+\bigskip
+
+\begin{exercise}[not from the course]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Explain, without formulas, why the convexity adjustment makes
+      the futures rate \emph{higher} than the forward rate, and what
+      would change if margin balances earned a fixed rate instead of the
+      overnight rate.
+  \item With $\sigma=0.8\%$ per year, evaluate
+      $\frac12\sigma^2t_1t_2$ for 3-month contracts expiring in 2, 5 and
+      10 years. From which maturity does it exceed a bid--offer of
+      0.25\,bp?
+\end{enumerate}
+\end{exercise}
+\par\medskip
+
+\begin{exercise}[not from the course]
+A company has a 5-year \$50M floating-rate loan at
+SOFR$+150$\,bp and wants to fix its cost.
+\begin{enumerate}[(a)]
+  \item Should it pay or receive fixed on a swap?
+  \item With the 5-year par rate at 3.40\%, what all-in fixed
+      rate does it lock in (ignore day-count and payment-date
+      differences)?
+  \item One year later the 4-year par rate is 3.90\% and
+      $A_4=3.60$. What is the swap's value to the company,
+      and where does the offsetting loss appear?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course]\label{ch06:ex-compadv}
+Firm A can borrow fixed at 4.00\% or floating at SOFR$+0.30\%$;
+firm B at 5.20\% fixed or SOFR$+1.00\%$. A wants floating, B fixed.
+\begin{enumerate}[(a)]
+  \item Show that A has an absolute advantage in both markets but a
+      comparative advantage in fixed.
+  \item Design a swap through a bank earning 0.10\% that splits the
+      remaining gain equally between A and B.
+  \item Which risk does each firm take on in exchange (think of
+      \cref{ch06:sec-clearing})?
+\end{enumerate}
+\end{exercise}
+\par\medskip
+
+\begin{exercise}[not from the course]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Show that the gamma of slide 31 equals
+      $\epsilon\,\partial^2\mathrm{PV}/\partial r^2+O(\epsilon^3)$.
+  \item For a 10-year zero-coupon bond with continuously compounded
+      rate 4\% and notional \$100M, compute the PV01 and this gamma for
+      $\epsilon=1$\,bp.
+  \item How many revaluations does a full central-difference
+      cross-gamma matrix need for $N$ curve inputs?
+  \item Why does a Monte Carlo pricer need a larger $\epsilon$
+      (\cref{ch:markets})?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course]\label{ch06:ex-theta}
+Annual-compounding zero rates are 3\% (1 year) and 4\% (2 years).
+\begin{enumerate}[(a)]
+  \item Price a 2-year zero-coupon bond.
+  \item Value it one year later if the forwards are realised, and if
+      the curve by tenor is unchanged.
+  \item Split the one-year return in (b) into carry and roll-down,
+      and relate each to the two theta conventions of
+      \cref{ch06:sec-pnl}.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course]
+Using the bond of the example in \cref{ch06:sec-bonds} (DV01
+$0.0454$ per 100) and the 5-year swap annuity $A_5=4.5178$:
+\begin{enumerate}[(a)]
+  \item which swap and which notional make \$10M face of the bond
+      DV01-neutral?
+  \item Show that for small $s$,
+      $s\approx(P'_D-P_D)/\sum_it_i\mathrm{CF}_iZ(t_i)$, and check it
+      against $s=25.6$\,bp.
+  \item Which risk remains after the hedge?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course]\label{ch06:ex-muni}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item At which tax rate is a 2.8\% muni equivalent to a 4\%
+      taxable bond?
+  \item A 10-year muni is priced to yield 70\% of a 4\%
+      taxable yield. If investors come to expect the tax rate to
+      fall from 30\% to 20\%, estimate the price change with a
+      modified duration of 8, all else equal. Connect this to the
+      Q\&A remark on tax policy.
+\end{enumerate}
+\end{exercise}

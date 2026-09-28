@@ -1,0 +1,4831 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.994 align:middle line:90%
+[SQUEAKING]
+
+00:00:02.994 --> 00:00:04.491 align:middle line:90%
+[RUSTLING]
+
+00:00:04.491 --> 00:00:07.485 align:middle line:90%
+[CLICKING]
+
+00:00:07.485 --> 00:00:16.280 align:middle line:90%
+
+
+00:00:16.280 --> 00:00:18.590 align:middle line:84%
+JAKE XIA: So today,
+we'll be talking
+
+00:00:18.590 --> 00:00:24.200 align:middle line:84%
+about portfolio management as
+one of the application lectures.
+
+00:00:24.200 --> 00:00:29.000 align:middle line:84%
+So I will share some
+of my research work
+
+00:00:29.000 --> 00:00:32.960 align:middle line:84%
+from a practitioner's
+point of view,
+
+00:00:32.960 --> 00:00:35.450 align:middle line:84%
+rather than from pure
+theoretical or math
+
+00:00:35.450 --> 00:00:36.530 align:middle line:90%
+point of view.
+
+00:00:36.530 --> 00:00:40.490 align:middle line:84%
+So as we mentioned at the
+beginning of the term,
+
+00:00:40.490 --> 00:00:45.090 align:middle line:84%
+we've been teaching
+this class since 2012.
+
+00:00:45.090 --> 00:00:52.310 align:middle line:84%
+And in 2013, this class was
+recorded for MIT OpenCourseWare.
+
+00:00:52.310 --> 00:00:54.740 align:middle line:90%
+The link, I put it here.
+
+00:00:54.740 --> 00:00:58.400 align:middle line:90%
+It's the lecture from 2013.
+
+00:00:58.400 --> 00:01:01.030 align:middle line:84%
+Some of you may have
+watched that lecture.
+
+00:01:01.030 --> 00:01:06.230 align:middle line:84%
+It actually turned out to be one
+of the top most viewed courses.
+
+00:01:06.230 --> 00:01:08.290 align:middle line:84%
+Our course is one of
+the top five, actually,
+
+00:01:08.290 --> 00:01:10.450 align:middle line:90%
+on the OpenCourseWare.
+
+00:01:10.450 --> 00:01:14.420 align:middle line:84%
+So I want to promise
+you, in today's lecture,
+
+00:01:14.420 --> 00:01:17.680 align:middle line:84%
+I will give you a
+lot of new content.
+
+00:01:17.680 --> 00:01:24.950 align:middle line:84%
+So you will make showing up,
+your presence here, worthwhile.
+
+00:01:24.950 --> 00:01:29.530 align:middle line:84%
+So we can also make
+it interactive.
+
+00:01:29.530 --> 00:01:34.270 align:middle line:84%
+So this is the outline of what
+I will be talking about today.
+
+00:01:34.270 --> 00:01:38.680 align:middle line:84%
+So first, I'll talk about
+what really all this portfolio
+
+00:01:38.680 --> 00:01:42.170 align:middle line:84%
+construction is about, coming
+from a very basic level.
+
+00:01:42.170 --> 00:01:45.680 align:middle line:84%
+Then we'll talk about what
+is the endowment model.
+
+00:01:45.680 --> 00:01:48.970 align:middle line:84%
+How do we manage
+the endowment fund?
+
+00:01:48.970 --> 00:01:51.520 align:middle line:84%
+Then I'll talk about
+the portfolio theory
+
+00:01:51.520 --> 00:01:56.260 align:middle line:84%
+and illustrate it in some really
+special and simple cases for you
+
+00:01:56.260 --> 00:01:58.180 align:middle line:90%
+to understand the math.
+
+00:01:58.180 --> 00:02:03.790 align:middle line:84%
+Then I will really switch gears
+and talk about the limitations
+
+00:02:03.790 --> 00:02:05.290 align:middle line:90%
+of this theory.
+
+00:02:05.290 --> 00:02:08.150 align:middle line:84%
+The theory was
+proposed in the 1950s.
+
+00:02:08.150 --> 00:02:10.419 align:middle line:84%
+I mean, of course,
+a lot of people
+
+00:02:10.419 --> 00:02:15.340 align:middle line:84%
+have worked in the field, tried
+to overcome the shortcomings
+
+00:02:15.340 --> 00:02:16.580 align:middle line:90%
+of these theories.
+
+00:02:16.580 --> 00:02:20.710 align:middle line:84%
+So I myself have been
+spending a lot of time
+
+00:02:20.710 --> 00:02:22.520 align:middle line:90%
+thinking about these problems.
+
+00:02:22.520 --> 00:02:26.410 align:middle line:84%
+So I will talk about
+my own research work,
+
+00:02:26.410 --> 00:02:30.770 align:middle line:84%
+in terms of how to improve the
+portfolio construction theory--
+
+00:02:30.770 --> 00:02:35.050 align:middle line:84%
+for example, how to improve
+the risk measurement using
+
+00:02:35.050 --> 00:02:41.540 align:middle line:84%
+volatility and Sharpe ratio and
+how to model crowding behavior.
+
+00:02:41.540 --> 00:02:45.670 align:middle line:84%
+And also, you probably
+heard the power law,
+
+00:02:45.670 --> 00:02:50.770 align:middle line:84%
+how this behavior actually
+originated from the crowding
+
+00:02:50.770 --> 00:02:51.680 align:middle line:90%
+behavior.
+
+00:02:51.680 --> 00:02:54.460 align:middle line:90%
+Now, I will summarize.
+
+00:02:54.460 --> 00:02:57.900 align:middle line:84%
+So before we start
+the lecture, I
+
+00:02:57.900 --> 00:03:00.160 align:middle line:84%
+want to do an exercise
+with all of you.
+
+00:03:00.160 --> 00:03:04.860 align:middle line:84%
+I'm going to hand over a
+piece of paper to all of you.
+
+00:03:04.860 --> 00:03:06.310 align:middle line:90%
+Please pass it down.
+
+00:03:06.310 --> 00:03:09.240 align:middle line:84%
+Make sure everyone gets
+one piece of paper.
+
+00:03:09.240 --> 00:03:14.940 align:middle line:84%
+Now, what I want you to do is to
+write down your own investment
+
+00:03:14.940 --> 00:03:16.320 align:middle line:90%
+portfolio.
+
+00:03:16.320 --> 00:03:23.280 align:middle line:84%
+Just hypothetically, think about
+you have $10,000 to manage.
+
+00:03:23.280 --> 00:03:29.050 align:middle line:84%
+And put down investments you'd
+like to have in the portfolio.
+
+00:03:29.050 --> 00:03:32.250 align:middle line:84%
+Put down the percentage
+of each investment.
+
+00:03:32.250 --> 00:03:38.130 align:middle line:84%
+And I also want you not to
+think too hard and also too long
+
+00:03:38.130 --> 00:03:38.920 align:middle line:90%
+on this.
+
+00:03:38.920 --> 00:03:40.750 align:middle line:90%
+Just use your intuition.
+
+00:03:40.750 --> 00:03:43.770 align:middle line:84%
+Imagine you're now a
+fund manager sitting
+
+00:03:43.770 --> 00:03:48.090 align:middle line:84%
+at a pension fund, or
+endowment fund, or hedge fund.
+
+00:03:48.090 --> 00:03:50.850 align:middle line:84%
+I'm just asking you to
+pick a few investments.
+
+00:03:50.850 --> 00:03:56.370 align:middle line:84%
+And then just hand it back
+to me after you finish.
+
+00:03:56.370 --> 00:04:00.260 align:middle line:84%
+Then we will talk about,
+from where you started, how
+
+00:04:00.260 --> 00:04:02.460 align:middle line:90%
+to do the portfolio management.
+
+00:04:02.460 --> 00:04:06.020 align:middle line:90%
+
+
+00:04:06.020 --> 00:04:08.220 align:middle line:84%
+So just spend a
+couple of minutes.
+
+00:04:08.220 --> 00:04:09.840 align:middle line:90%
+Don't over spend your time.
+
+00:04:09.840 --> 00:04:15.350 align:middle line:84%
+So while I'm talking, so you
+can write down your choices.
+
+00:04:15.350 --> 00:04:19.850 align:middle line:84%
+So when you received that
+blank sheet of paper,
+
+00:04:19.850 --> 00:04:24.060 align:middle line:84%
+you must be thinking, what are
+the criteria for me to do this?
+
+00:04:24.060 --> 00:04:26.060 align:middle line:90%
+What are the considerations?
+
+00:04:26.060 --> 00:04:30.800 align:middle line:84%
+So this is exactly how I
+want to lead you into how
+
+00:04:30.800 --> 00:04:32.517 align:middle line:90%
+to think about these problems.
+
+00:04:32.517 --> 00:04:34.100 align:middle line:84%
+First of all, you
+need to think about,
+
+00:04:34.100 --> 00:04:36.690 align:middle line:84%
+what's the objective
+of doing this exercise?
+
+00:04:36.690 --> 00:04:40.400 align:middle line:84%
+So always say, oh, I want
+to get a great return
+
+00:04:40.400 --> 00:04:41.520 align:middle line:90%
+for the investment.
+
+00:04:41.520 --> 00:04:42.200 align:middle line:90%
+Sure.
+
+00:04:42.200 --> 00:04:44.550 align:middle line:90%
+So you have a return objective.
+
+00:04:44.550 --> 00:04:46.440 align:middle line:84%
+But is that what is
+the great return?
+
+00:04:46.440 --> 00:04:50.820 align:middle line:90%
+Is that 10%, 50%, or 100%?
+
+00:04:50.820 --> 00:04:54.640 align:middle line:84%
+What is the time horizon
+we are talking about?
+
+00:04:54.640 --> 00:04:59.710 align:middle line:84%
+And because the investment
+is highly uncertain,
+
+00:04:59.710 --> 00:05:01.970 align:middle line:90%
+what's your loss tolerance?
+
+00:05:01.970 --> 00:05:03.130 align:middle line:90%
+You think about it.
+
+00:05:03.130 --> 00:05:05.030 align:middle line:90%
+You have a $10,000.
+
+00:05:05.030 --> 00:05:08.480 align:middle line:90%
+How much can you afford to lose?
+
+00:05:08.480 --> 00:05:11.890 align:middle line:90%
+So those are the questions.
+
+00:05:11.890 --> 00:05:14.060 align:middle line:84%
+Then when you pick
+those investments,
+
+00:05:14.060 --> 00:05:17.170 align:middle line:84%
+you should also ask
+yourself, what's
+
+00:05:17.170 --> 00:05:19.790 align:middle line:84%
+your own ability of
+picking a winner?
+
+00:05:19.790 --> 00:05:24.850 align:middle line:84%
+Why do you think you have an
+edge in predicting that market
+
+00:05:24.850 --> 00:05:27.130 align:middle line:90%
+or investment?
+
+00:05:27.130 --> 00:05:29.320 align:middle line:84%
+Then of course, how
+many investments
+
+00:05:29.320 --> 00:05:30.970 align:middle line:84%
+you should have
+in the portfolio?
+
+00:05:30.970 --> 00:05:36.340 align:middle line:90%
+Is that 1, 5, or 50, or 100?
+
+00:05:36.340 --> 00:05:41.170 align:middle line:84%
+How diversified
+or how well-mixed
+
+00:05:41.170 --> 00:05:45.130 align:middle line:84%
+that investment
+portfolio should be?
+
+00:05:45.130 --> 00:05:48.130 align:middle line:84%
+Then ultimately, the
+most important question
+
+00:05:48.130 --> 00:05:52.920 align:middle line:84%
+is, how do you your size
+each of the investments?
+
+00:05:52.920 --> 00:05:55.870 align:middle line:90%
+It comes all down to sizing.
+
+00:05:55.870 --> 00:05:59.770 align:middle line:84%
+So portfolio construction,
+I will show you later,
+
+00:05:59.770 --> 00:06:03.270 align:middle line:84%
+is really about, when you
+have a list of investments
+
+00:06:03.270 --> 00:06:06.720 align:middle line:84%
+you like, how do you
+size them accordingly
+
+00:06:06.720 --> 00:06:12.670 align:middle line:84%
+in relative amounts to each
+other, to the whole portfolio?
+
+00:06:12.670 --> 00:06:18.360 align:middle line:84%
+So now, please hand
+it back because I
+
+00:06:18.360 --> 00:06:21.360 align:middle line:84%
+want you to listen to me,
+not just spending the time
+
+00:06:21.360 --> 00:06:23.860 align:middle line:90%
+on writing down your portfolio.
+
+00:06:23.860 --> 00:06:27.374 align:middle line:90%
+
+
+00:06:27.374 --> 00:06:29.335 align:middle line:84%
+STUDENT: Do we put
+our names on it?
+
+00:06:29.335 --> 00:06:30.460 align:middle line:90%
+JAKE XIA: It's your choice.
+
+00:06:30.460 --> 00:06:31.870 align:middle line:90%
+Name or no name is fine.
+
+00:06:31.870 --> 00:06:34.090 align:middle line:84%
+Yeah, I'm not going
+to call your names.
+
+00:06:34.090 --> 00:06:37.110 align:middle line:84%
+But I will probably use
+some of your answers
+
+00:06:37.110 --> 00:06:43.110 align:middle line:84%
+as examples to talk
+about investments.
+
+00:06:43.110 --> 00:06:52.430 align:middle line:84%
+So as we are collecting
+these portfolio choices,
+
+00:06:52.430 --> 00:06:59.150 align:middle line:84%
+I'm also going to talk about, in
+your decision making process--
+
+00:06:59.150 --> 00:07:01.550 align:middle line:84%
+so when you choose
+investments, you probably
+
+00:07:01.550 --> 00:07:03.870 align:middle line:84%
+were thinking
+about what markets,
+
+00:07:03.870 --> 00:07:08.510 align:middle line:84%
+first of all, you will be
+selecting your investments from.
+
+00:07:08.510 --> 00:07:11.876 align:middle line:90%
+And what are the instruments?
+
+00:07:11.876 --> 00:07:17.435 align:middle line:90%
+
+
+00:07:17.435 --> 00:07:20.240 align:middle line:90%
+Are we mostly finished?
+
+00:07:20.240 --> 00:07:22.520 align:middle line:84%
+So by the way, for
+you, we are doing
+
+00:07:22.520 --> 00:07:26.240 align:middle line:84%
+an exercise, where we ask you
+to put down your investment
+
+00:07:26.240 --> 00:07:27.060 align:middle line:90%
+portfolio.
+
+00:07:27.060 --> 00:07:31.250 align:middle line:84%
+Just put down the percentage,
+whatever you can do.
+
+00:07:31.250 --> 00:07:33.097 align:middle line:90%
+So anyway--
+
+00:07:33.097 --> 00:07:33.680 align:middle line:90%
+STUDENT: Here.
+
+00:07:33.680 --> 00:07:34.530 align:middle line:90%
+JAKE XIA: You're done?
+
+00:07:34.530 --> 00:07:35.030 align:middle line:90%
+OK.
+
+00:07:35.030 --> 00:07:38.840 align:middle line:90%
+
+
+00:07:38.840 --> 00:07:41.220 align:middle line:84%
+For the rest of you, if you
+want to take a longer time,
+
+00:07:41.220 --> 00:07:41.970 align:middle line:90%
+that's fine.
+
+00:07:41.970 --> 00:07:43.890 align:middle line:84%
+I'm just going to use
+some of the examples.
+
+00:07:43.890 --> 00:07:49.550 align:middle line:84%
+So the decision making process
+I was talking about-- you
+
+00:07:49.550 --> 00:07:52.610 align:middle line:84%
+need to decide which market
+to pick your investment.
+
+00:07:52.610 --> 00:07:55.550 align:middle line:84%
+Then you need to think
+about what data to collect,
+
+00:07:55.550 --> 00:07:58.230 align:middle line:84%
+what kind of signals
+you can derive,
+
+00:07:58.230 --> 00:08:00.360 align:middle line:84%
+and what models
+you need to build,
+
+00:08:00.360 --> 00:08:04.130 align:middle line:84%
+what factors you need to
+take into consideration, what
+
+00:08:04.130 --> 00:08:06.710 align:middle line:84%
+predictions you
+need to make, then
+
+00:08:06.710 --> 00:08:09.300 align:middle line:90%
+assemble them into strategies.
+
+00:08:09.300 --> 00:08:13.130 align:middle line:84%
+Then we're talking about sizing
+and allocating your capital
+
+00:08:13.130 --> 00:08:16.110 align:middle line:84%
+portfolio construction,
+then optimize it,
+
+00:08:16.110 --> 00:08:19.610 align:middle line:84%
+then at the end really
+to manage the risk.
+
+00:08:19.610 --> 00:08:25.130 align:middle line:84%
+So now, you can see what
+we really come down to is
+
+00:08:25.130 --> 00:08:28.110 align:middle line:84%
+how to compare
+different investments.
+
+00:08:28.110 --> 00:08:32.210 align:middle line:84%
+To understand the relationship
+between different investments
+
+00:08:32.210 --> 00:08:36.110 align:middle line:84%
+is to understand the return
+and the risk profiles of all
+
+00:08:36.110 --> 00:08:37.400 align:middle line:90%
+the investments.
+
+00:08:37.400 --> 00:08:39.270 align:middle line:90%
+So what is risk?
+
+00:08:39.270 --> 00:08:42.360 align:middle line:84%
+So in this chart we
+are talking about here,
+
+00:08:42.360 --> 00:08:45.440 align:middle line:84%
+I'm using volatility
+for the time being,
+
+00:08:45.440 --> 00:08:50.710 align:middle line:84%
+which represents
+uncertainty of the outcome.
+
+00:08:50.710 --> 00:08:55.810 align:middle line:84%
+Later on, I will come
+back and tell you
+
+00:08:55.810 --> 00:08:59.650 align:middle line:84%
+volatility is not really
+the best measure for risk.
+
+00:08:59.650 --> 00:09:02.090 align:middle line:90%
+But let's save that for later.
+
+00:09:02.090 --> 00:09:05.810 align:middle line:84%
+But before we talk about
+the investment choices,
+
+00:09:05.810 --> 00:09:09.940 align:middle line:84%
+let me look at some of
+what you have written down.
+
+00:09:09.940 --> 00:09:18.980 align:middle line:84%
+So one portfolio here has
+half in S&P straddle--
+
+00:09:18.980 --> 00:09:21.050 align:middle line:84%
+so this is actually
+option strategy--
+
+00:09:21.050 --> 00:09:26.530 align:middle line:84%
+and then 30% in
+VIX related ETFs,
+
+00:09:26.530 --> 00:09:30.890 align:middle line:90%
+and 20% in dollar index futures.
+
+00:09:30.890 --> 00:09:35.860 align:middle line:84%
+So it sounds like someone has
+done an internship somewhere
+
+00:09:35.860 --> 00:09:37.426 align:middle line:90%
+knowing option strategies.
+
+00:09:37.426 --> 00:09:39.940 align:middle line:90%
+
+
+00:09:39.940 --> 00:09:45.180 align:middle line:84%
+So this portfolio has
+about eight investments.
+
+00:09:45.180 --> 00:09:50.820 align:middle line:84%
+The largest one is
+cash, 20%, and 20%
+
+00:09:50.820 --> 00:09:53.773 align:middle line:90%
+in QQQ, which is NASDAQ ETF.
+
+00:09:53.773 --> 00:09:57.180 align:middle line:90%
+
+
+00:09:57.180 --> 00:09:59.670 align:middle line:90%
+Let me see.
+
+00:09:59.670 --> 00:10:04.330 align:middle line:84%
+This one is 70%
+bonds, 30% stocks.
+
+00:10:04.330 --> 00:10:08.490 align:middle line:84%
+This one is quite interesting
+because, when we normally talk
+
+00:10:08.490 --> 00:10:16.230 align:middle line:84%
+about 60/40 or 70/30 portfolios,
+the bigger piece tends to be
+
+00:10:16.230 --> 00:10:17.550 align:middle line:90%
+the equity piece.
+
+00:10:17.550 --> 00:10:24.090 align:middle line:84%
+But this one probably has more
+risk neutral or risk parity type
+
+00:10:24.090 --> 00:10:25.275 align:middle line:90%
+of construction.
+
+00:10:25.275 --> 00:10:26.150 align:middle line:90%
+So we'll get to that.
+
+00:10:26.150 --> 00:10:28.800 align:middle line:90%
+
+
+00:10:28.800 --> 00:10:31.110 align:middle line:84%
+This has many
+single name stocks,
+
+00:10:31.110 --> 00:10:33.610 align:middle line:90%
+Microsoft being on the top.
+
+00:10:33.610 --> 00:10:43.700 align:middle line:84%
+And this is a 50% S&P,
+50% Vanguard Pell fund.
+
+00:10:43.700 --> 00:10:45.720 align:middle line:90%
+Probably that's what is written.
+
+00:10:45.720 --> 00:10:50.870 align:middle line:84%
+And this 100% S&P.
+Yeah, very much
+
+00:10:50.870 --> 00:10:53.030 align:middle line:90%
+representing the average market.
+
+00:10:53.030 --> 00:11:02.250 align:middle line:84%
+And so this one probably
+has five stocks, 20% cash.
+
+00:11:02.250 --> 00:11:10.560 align:middle line:84%
+Yeah, 50% US Treasury bonds,
+25% S&P. So fairly similar.
+
+00:11:10.560 --> 00:11:13.160 align:middle line:90%
+So now, you've got the idea.
+
+00:11:13.160 --> 00:11:18.050 align:middle line:84%
+And Peter and I used to
+review, over the years,
+
+00:11:18.050 --> 00:11:21.210 align:middle line:84%
+year to year change of
+the investment selection.
+
+00:11:21.210 --> 00:11:26.690 align:middle line:84%
+Only three years ago, in
+2021, most of the class
+
+00:11:26.690 --> 00:11:31.250 align:middle line:90%
+chose some cryptocurrencies.
+
+00:11:31.250 --> 00:11:35.850 align:middle line:84%
+And Dogecoin's being the top
+one being selected by everyone.
+
+00:11:35.850 --> 00:11:39.830 align:middle line:84%
+I haven't seen any
+crypto investments today.
+
+00:11:39.830 --> 00:11:43.210 align:middle line:84%
+So that just tells you
+the index investing
+
+00:11:43.210 --> 00:11:47.152 align:middle line:84%
+ETF seems to be the
+theme of this year.
+
+00:11:47.152 --> 00:11:48.170 align:middle line:90%
+I don't blame you.
+
+00:11:48.170 --> 00:11:50.060 align:middle line:90%
+I think it's a pretty good idea.
+
+00:11:50.060 --> 00:11:55.330 align:middle line:84%
+S&P, if you don't have
+particular edge you
+
+00:11:55.330 --> 00:11:57.940 align:middle line:84%
+feel you like to have,
+Investing in index
+
+00:11:57.940 --> 00:12:00.160 align:middle line:90%
+is a pretty good choice.
+
+00:12:00.160 --> 00:12:03.130 align:middle line:84%
+So on this graph,
+I'm showing you
+
+00:12:03.130 --> 00:12:06.050 align:middle line:90%
+here return versus volatility.
+
+00:12:06.050 --> 00:12:11.020 align:middle line:84%
+So we already touched upon--
+a lot of people chose cash.
+
+00:12:11.020 --> 00:12:15.040 align:middle line:84%
+Cash, basically, you can
+view it as 0 volatility,
+
+00:12:15.040 --> 00:12:17.720 align:middle line:90%
+as some minimum return.
+
+00:12:17.720 --> 00:12:19.960 align:middle line:90%
+The Fed just cut interest rate.
+
+00:12:19.960 --> 00:12:26.750 align:middle line:84%
+It's still over 4%, close
+to 5% And they may cut more.
+
+00:12:26.750 --> 00:12:29.500 align:middle line:84%
+But compared to
+the interest rate
+
+00:12:29.500 --> 00:12:31.850 align:middle line:84%
+where it has been in
+the last 10 years,
+
+00:12:31.850 --> 00:12:36.220 align:middle line:84%
+this is actually not a bad
+place to park your capital.
+
+00:12:36.220 --> 00:12:39.760 align:middle line:84%
+Bonds have slightly higher
+return, a little more
+
+00:12:39.760 --> 00:12:43.000 align:middle line:90%
+uncertainty of return.
+
+00:12:43.000 --> 00:12:47.230 align:middle line:84%
+Stocks definitely have more, but
+the index has less volatility.
+
+00:12:47.230 --> 00:12:51.130 align:middle line:84%
+And the index, return
+wise, it may not
+
+00:12:51.130 --> 00:12:55.500 align:middle line:84%
+be lagging the
+broad stock market.
+
+00:12:55.500 --> 00:12:58.150 align:middle line:84%
+I mean, as you
+know, the index now
+
+00:12:58.150 --> 00:13:03.620 align:middle line:84%
+is heavily weighted towards
+large cap tech stocks.
+
+00:13:03.620 --> 00:13:06.760 align:middle line:84%
+And lately, those
+large cap tech stocks
+
+00:13:06.760 --> 00:13:08.750 align:middle line:90%
+have been doing really well.
+
+00:13:08.750 --> 00:13:12.280 align:middle line:84%
+So if you're long
+QQQ or S&P, you're
+
+00:13:12.280 --> 00:13:15.560 align:middle line:84%
+essentially long the
+Magnificent Seven stocks.
+
+00:13:15.560 --> 00:13:19.690 align:middle line:84%
+And so the ETF
+investment choice here
+
+00:13:19.690 --> 00:13:23.170 align:middle line:84%
+is not a bad choice
+or index investment.
+
+00:13:23.170 --> 00:13:27.850 align:middle line:84%
+Further up on the right is
+the private equity and venture
+
+00:13:27.850 --> 00:13:32.270 align:middle line:84%
+capital choice, which I haven't
+seen anyone put it down.
+
+00:13:32.270 --> 00:13:37.960 align:middle line:84%
+So you may be more thinking
+about the public markets.
+
+00:13:37.960 --> 00:13:40.320 align:middle line:84%
+But private equity
+and venture capital
+
+00:13:40.320 --> 00:13:44.250 align:middle line:84%
+are basically investing in
+private companies not publicly
+
+00:13:44.250 --> 00:13:46.390 align:middle line:90%
+listed on stock exchanges.
+
+00:13:46.390 --> 00:13:49.510 align:middle line:84%
+So those companies
+tend to be illiquid.
+
+00:13:49.510 --> 00:13:51.760 align:middle line:84%
+You cannot get your
+money out easily.
+
+00:13:51.760 --> 00:13:54.850 align:middle line:84%
+You have to stay with
+them for a very long time.
+
+00:13:54.850 --> 00:13:58.170 align:middle line:84%
+But a lot of times,
+you have more influence
+
+00:13:58.170 --> 00:14:02.940 align:middle line:84%
+on the company's
+operation and venture.
+
+00:14:02.940 --> 00:14:06.460 align:middle line:84%
+For example, you invest
+in start-up companies.
+
+00:14:06.460 --> 00:14:13.260 align:middle line:84%
+Those companies can grow very
+fast, can also fail very fast.
+
+00:14:13.260 --> 00:14:17.410 align:middle line:84%
+So the outcome, the
+uncertainty range, is very big.
+
+00:14:17.410 --> 00:14:20.130 align:middle line:84%
+But overall, over
+the years they tend
+
+00:14:20.130 --> 00:14:25.800 align:middle line:84%
+to produce higher returns to
+justify the uncertainty or risk
+
+00:14:25.800 --> 00:14:30.660 align:middle line:90%
+premium you are dealing with.
+
+00:14:30.660 --> 00:14:36.020 align:middle line:84%
+So coming back to the return
+objective and loss tolerance,
+
+00:14:36.020 --> 00:14:40.290 align:middle line:84%
+we should think about when
+you write down your portfolio.
+
+00:14:40.290 --> 00:14:43.410 align:middle line:84%
+So you try to maximize
+your return for sure.
+
+00:14:43.410 --> 00:14:48.500 align:middle line:84%
+Does anyone here disagree with
+you should maximize your return?
+
+00:14:48.500 --> 00:14:49.350 align:middle line:90%
+Probably not.
+
+00:14:49.350 --> 00:14:53.520 align:middle line:84%
+At the same time, you
+should minimize your risk.
+
+00:14:53.520 --> 00:14:56.370 align:middle line:84%
+In this case, minimize
+your uncertainty.
+
+00:14:56.370 --> 00:15:00.990 align:middle line:84%
+So you want to maximize the
+ratio of return over volatility.
+
+00:15:00.990 --> 00:15:03.350 align:middle line:90%
+That's one of the objectives.
+
+00:15:03.350 --> 00:15:06.420 align:middle line:84%
+But you may have
+constraints as well.
+
+00:15:06.420 --> 00:15:08.900 align:middle line:84%
+There are certain
+investments you may not
+
+00:15:08.900 --> 00:15:12.110 align:middle line:90%
+want to participate in.
+
+00:15:12.110 --> 00:15:16.760 align:middle line:84%
+For example, many
+universities declared
+
+00:15:16.760 --> 00:15:19.230 align:middle line:84%
+we don't want to
+invest in fossil fuels
+
+00:15:19.230 --> 00:15:21.540 align:middle line:90%
+for the environmental concerns.
+
+00:15:21.540 --> 00:15:24.740 align:middle line:84%
+And in the past, like
+tobacco companies
+
+00:15:24.740 --> 00:15:28.010 align:middle line:84%
+or some kind of
+weapon companies,
+
+00:15:28.010 --> 00:15:33.940 align:middle line:84%
+people have, in principle,
+reasons to go against them.
+
+00:15:33.940 --> 00:15:38.740 align:middle line:84%
+And so there are constraints
+of what your investment
+
+00:15:38.740 --> 00:15:40.780 align:middle line:90%
+universe should be.
+
+00:15:40.780 --> 00:15:46.280 align:middle line:84%
+Then there's liquidity, how
+much you need to use the money.
+
+00:15:46.280 --> 00:15:50.590 align:middle line:84%
+The $10,000 you had
+in the portfolio,
+
+00:15:50.590 --> 00:15:54.670 align:middle line:84%
+you may not want to use it all
+in the investment or illiquid
+
+00:15:54.670 --> 00:15:56.030 align:middle line:90%
+investment all the time.
+
+00:15:56.030 --> 00:16:00.500 align:middle line:84%
+So you may want to spend
+5% a year, for example.
+
+00:16:00.500 --> 00:16:05.200 align:middle line:84%
+So you need to take into
+account your spending needs.
+
+00:16:05.200 --> 00:16:10.940 align:middle line:84%
+And also on the down side, how
+much you can afford to lose
+
+00:16:10.940 --> 00:16:12.800 align:middle line:84%
+is really a very
+important question.
+
+00:16:12.800 --> 00:16:16.740 align:middle line:84%
+So if your $10,000
+becomes $5,000,
+
+00:16:16.740 --> 00:16:18.860 align:middle line:90%
+will you feel really bad?
+
+00:16:18.860 --> 00:16:24.250 align:middle line:84%
+You would just say, I'm going
+to stop investing altogether.
+
+00:16:24.250 --> 00:16:25.930 align:middle line:90%
+I cannot afford to lose.
+
+00:16:25.930 --> 00:16:30.507 align:middle line:84%
+Maybe that's the tuition I saved
+for next year, I put aside.
+
+00:16:30.507 --> 00:16:31.840 align:middle line:90%
+I just want to earn some return.
+
+00:16:31.840 --> 00:16:32.840 align:middle line:90%
+I don't want to lose it.
+
+00:16:32.840 --> 00:16:37.420 align:middle line:84%
+So then your risk
+tolerance is very low.
+
+00:16:37.420 --> 00:16:39.390 align:middle line:90%
+It's very different.
+
+00:16:39.390 --> 00:16:42.990 align:middle line:84%
+So for many asset
+owners, inflation
+
+00:16:42.990 --> 00:16:47.400 align:middle line:84%
+is also an important concern
+because wealth represents
+
+00:16:47.400 --> 00:16:50.340 align:middle line:90%
+relative purchasing power.
+
+00:16:50.340 --> 00:16:53.610 align:middle line:84%
+So how much wealth
+you have is not really
+
+00:16:53.610 --> 00:16:56.520 align:middle line:84%
+just the dollar amount you
+have in your bank account.
+
+00:16:56.520 --> 00:16:59.850 align:middle line:90%
+It's how much you can buy.
+
+00:16:59.850 --> 00:17:03.700 align:middle line:84%
+So when the price of goods
+and services are going up,
+
+00:17:03.700 --> 00:17:06.119 align:middle line:84%
+your purchasing
+power is going down.
+
+00:17:06.119 --> 00:17:07.569 align:middle line:90%
+So that's inflation.
+
+00:17:07.569 --> 00:17:12.930 align:middle line:84%
+And it's also relative to the
+next group of people or person,
+
+00:17:12.930 --> 00:17:14.319 align:middle line:90%
+how much they can buy.
+
+00:17:14.319 --> 00:17:19.599 align:middle line:84%
+So for universities, that means
+you want to hire a professor.
+
+00:17:19.599 --> 00:17:22.980 align:middle line:84%
+If there are competing
+offers, how much more
+
+00:17:22.980 --> 00:17:27.780 align:middle line:84%
+you can offer to the
+professor to get them
+
+00:17:27.780 --> 00:17:30.930 align:middle line:90%
+to come to your university.
+
+00:17:30.930 --> 00:17:35.700 align:middle line:84%
+So there's definitely absolute
+return angle for the requirement
+
+00:17:35.700 --> 00:17:37.680 align:middle line:90%
+of the portfolio.
+
+00:17:37.680 --> 00:17:40.530 align:middle line:84%
+And there's also a
+lot of people nowadays
+
+00:17:40.530 --> 00:17:44.880 align:middle line:84%
+talk about beating a
+benchmark, beating an index.
+
+00:17:44.880 --> 00:17:48.760 align:middle line:84%
+Many of you have
+chosen S&P as an index.
+
+00:17:48.760 --> 00:17:53.790 align:middle line:84%
+But if you can produce more
+return on top of S&P return,
+
+00:17:53.790 --> 00:17:57.210 align:middle line:84%
+that's called the
+alpha, relative return.
+
+00:17:57.210 --> 00:18:01.050 align:middle line:84%
+That's also often being used
+as a measurement of investment
+
+00:18:01.050 --> 00:18:01.990 align:middle line:90%
+skills.
+
+00:18:01.990 --> 00:18:06.640 align:middle line:84%
+So you don't just put in a beta
+or broad market investment.
+
+00:18:06.640 --> 00:18:10.500 align:middle line:84%
+You actually can
+extract more return.
+
+00:18:10.500 --> 00:18:15.880 align:middle line:84%
+So asset liability matching,
+cash flow is very important.
+
+00:18:15.880 --> 00:18:20.940 align:middle line:84%
+So 2008 taught many asset
+owners a big lesson.
+
+00:18:20.940 --> 00:18:25.490 align:middle line:84%
+When you don't have the
+right asset liability
+
+00:18:25.490 --> 00:18:29.280 align:middle line:84%
+match, when your
+portfolio has a drawdown,
+
+00:18:29.280 --> 00:18:32.180 align:middle line:84%
+your liability
+side will basically
+
+00:18:32.180 --> 00:18:34.800 align:middle line:90%
+dominate on your balance sheet.
+
+00:18:34.800 --> 00:18:38.270 align:middle line:84%
+You need to cut your
+spending budget,
+
+00:18:38.270 --> 00:18:42.810 align:middle line:84%
+stop your building projects,
+and lay off people.
+
+00:18:42.810 --> 00:18:46.460 align:middle line:90%
+So those are painful lessons.
+
+00:18:46.460 --> 00:18:49.170 align:middle line:84%
+You need to have the
+cash flow well planned.
+
+00:18:49.170 --> 00:18:51.750 align:middle line:84%
+So time horizon, I
+mentioned, is very important.
+
+00:18:51.750 --> 00:18:53.280 align:middle line:84%
+When I gave you
+that piece of paper,
+
+00:18:53.280 --> 00:18:56.700 align:middle line:84%
+I didn't say time
+horizon on purpose.
+
+00:18:56.700 --> 00:18:57.980 align:middle line:90%
+I want you to think about it.
+
+00:18:57.980 --> 00:19:01.730 align:middle line:84%
+You should ask the question--
+this portfolio is for how long?
+
+00:19:01.730 --> 00:19:06.810 align:middle line:84%
+Is that for one day, or for
+a year, or for 10 years?
+
+00:19:06.810 --> 00:19:13.730 align:middle line:84%
+So in the investment world,
+people always compare returns,
+
+00:19:13.730 --> 00:19:17.990 align:middle line:84%
+like year to year, sometimes
+even quarter to quarter.
+
+00:19:17.990 --> 00:19:20.900 align:middle line:84%
+Peers try to say,
+oh, I outperformed--
+
+00:19:20.900 --> 00:19:23.930 align:middle line:84%
+A outperformed B.
+So therefore, A
+
+00:19:23.930 --> 00:19:27.460 align:middle line:84%
+is better than B.
+So this is actually,
+
+00:19:27.460 --> 00:19:32.320 align:middle line:84%
+a lot of times, unhealthy
+exercise because, for long term
+
+00:19:32.320 --> 00:19:35.600 align:middle line:84%
+investors, you should really
+focus on long term return.
+
+00:19:35.600 --> 00:19:38.330 align:middle line:84%
+But inevitably,
+in the real world,
+
+00:19:38.330 --> 00:19:41.030 align:middle line:84%
+people look at
+short term returns.
+
+00:19:41.030 --> 00:19:42.830 align:middle line:90%
+So you cannot ignore it.
+
+00:19:42.830 --> 00:19:47.570 align:middle line:84%
+But that's the peer pressure for
+a lot of investment managers.
+
+00:19:47.570 --> 00:19:50.600 align:middle line:84%
+That's the career risk
+because their board may think,
+
+00:19:50.600 --> 00:19:52.190 align:middle line:84%
+in the short term
+they are not good.
+
+00:19:52.190 --> 00:19:55.330 align:middle line:90%
+They try to replace them.
+
+00:19:55.330 --> 00:20:03.790 align:middle line:84%
+So coming back more on why
+investing, so on the left,
+
+00:20:03.790 --> 00:20:08.650 align:middle line:84%
+on your left, if you look
+at the personal income
+
+00:20:08.650 --> 00:20:15.940 align:middle line:84%
+and spending as one person's
+age, as age as the function,
+
+00:20:15.940 --> 00:20:19.930 align:middle line:84%
+so your income
+level kind of peaks
+
+00:20:19.930 --> 00:20:23.704 align:middle line:90%
+somewhere in your mid-career.
+
+00:20:23.704 --> 00:20:27.070 align:middle line:84%
+So let's call it
+around the age of 50.
+
+00:20:27.070 --> 00:20:29.430 align:middle line:90%
+So you're earning the most.
+
+00:20:29.430 --> 00:20:31.780 align:middle line:84%
+You're probably also
+spending the most.
+
+00:20:31.780 --> 00:20:36.070 align:middle line:84%
+But you as a student, you
+probably don't earn that much.
+
+00:20:36.070 --> 00:20:38.830 align:middle line:84%
+You don't spend
+that much either.
+
+00:20:38.830 --> 00:20:43.840 align:middle line:84%
+I mean, same is true when
+you're over the peak point.
+
+00:20:43.840 --> 00:20:46.420 align:middle line:84%
+You're getting into
+the retirement stage.
+
+00:20:46.420 --> 00:20:47.860 align:middle line:90%
+So you don't earn that much.
+
+00:20:47.860 --> 00:20:49.180 align:middle line:90%
+You don't spend that much.
+
+00:20:49.180 --> 00:20:53.980 align:middle line:84%
+So you need to plan accordingly
+of your personal portfolio.
+
+00:20:53.980 --> 00:20:57.060 align:middle line:84%
+So that's related to the
+question of time horizon.
+
+00:20:57.060 --> 00:21:01.530 align:middle line:84%
+And also, the marginal benefit
+of having more wealth and money
+
+00:21:01.530 --> 00:21:07.780 align:middle line:84%
+starts to diminish when you
+have had certain minimum amount.
+
+00:21:07.780 --> 00:21:10.590 align:middle line:90%
+So that's the bottom curve.
+
+00:21:10.590 --> 00:21:14.440 align:middle line:90%
+Your benefits start to plateau.
+
+00:21:14.440 --> 00:21:19.360 align:middle line:84%
+And so also, do you want to take
+more risk or not at that point?
+
+00:21:19.360 --> 00:21:23.750 align:middle line:84%
+But for organization or
+endowment on the right,
+
+00:21:23.750 --> 00:21:28.950 align:middle line:84%
+it's a little different because
+it's a perpetual portfolio.
+
+00:21:28.950 --> 00:21:31.920 align:middle line:90%
+It's a very long time horizon.
+
+00:21:31.920 --> 00:21:37.800 align:middle line:84%
+And the spending keeps going
+up as inflation goes up.
+
+00:21:37.800 --> 00:21:43.410 align:middle line:84%
+So you cannot basically
+be complacent and say,
+
+00:21:43.410 --> 00:21:46.610 align:middle line:84%
+I just put all the portfolio
+into some conservative
+
+00:21:46.610 --> 00:21:47.700 align:middle line:90%
+investments.
+
+00:21:47.700 --> 00:21:52.520 align:middle line:84%
+You have to keep producing
+those kind of returns.
+
+00:21:52.520 --> 00:21:55.830 align:middle line:84%
+So the endowment is
+setup for university--
+
+00:21:55.830 --> 00:22:01.580 align:middle line:84%
+typically, they spend
+5% of the portfolio.
+
+00:22:01.580 --> 00:22:06.570 align:middle line:84%
+And on top of that, there's
+an expected 3% inflation.
+
+00:22:06.570 --> 00:22:12.740 align:middle line:84%
+So the nominal
+return target is 8%.
+
+00:22:12.740 --> 00:22:15.860 align:middle line:84%
+So as you know,
+it's probably not
+
+00:22:15.860 --> 00:22:19.550 align:middle line:84%
+always easy to make
+8% consistently year
+
+00:22:19.550 --> 00:22:24.080 align:middle line:84%
+over year, especially
+when interest rate is low.
+
+00:22:24.080 --> 00:22:25.340 align:middle line:90%
+You don't have a bond.
+
+00:22:25.340 --> 00:22:28.490 align:middle line:84%
+There's safety bond
+that you can put in.
+
+00:22:28.490 --> 00:22:34.460 align:middle line:84%
+Also, endowment tends to have
+a long time horizon, definitely
+
+00:22:34.460 --> 00:22:35.580 align:middle line:90%
+more than 10 years.
+
+00:22:35.580 --> 00:22:38.880 align:middle line:84%
+That's what the
+people always say.
+
+00:22:38.880 --> 00:22:42.270 align:middle line:84%
+Universities have hundreds
+of years of history
+
+00:22:42.270 --> 00:22:48.230 align:middle line:84%
+and looking to have another
+many more hundreds of years.
+
+00:22:48.230 --> 00:22:51.480 align:middle line:84%
+And on the university's
+spending budget,
+
+00:22:51.480 --> 00:22:57.860 align:middle line:84%
+operating budget, now, roughly
+about 40% of the budget
+
+00:22:57.860 --> 00:23:01.050 align:middle line:84%
+is coming from
+endowment spending.
+
+00:23:01.050 --> 00:23:05.540 align:middle line:84%
+So you can see universities
+are now more and more relying
+
+00:23:05.540 --> 00:23:07.830 align:middle line:90%
+on endowment returns.
+
+00:23:07.830 --> 00:23:15.320 align:middle line:84%
+And that's because the research
+grants from federal agencies
+
+00:23:15.320 --> 00:23:17.750 align:middle line:84%
+and the industries
+are coming down.
+
+00:23:17.750 --> 00:23:22.510 align:middle line:84%
+So this has to be made up
+from the investment portfolio.
+
+00:23:22.510 --> 00:23:27.160 align:middle line:84%
+And so this is just a
+list of the strategies
+
+00:23:27.160 --> 00:23:29.690 align:middle line:90%
+endowments tend to invest in.
+
+00:23:29.690 --> 00:23:33.370 align:middle line:84%
+I mentioned cash, government
+bonds, corporate bonds,
+
+00:23:33.370 --> 00:23:36.260 align:middle line:84%
+and the credit products,
+meaning the issuer,
+
+00:23:36.260 --> 00:23:40.280 align:middle line:84%
+unlike the US government, it
+has the risk of defaulting.
+
+00:23:40.280 --> 00:23:45.010 align:middle line:84%
+So therefore, it will
+pay you higher interest.
+
+00:23:45.010 --> 00:23:48.950 align:middle line:84%
+So there are hedge funds
+betting on the macro markets,
+
+00:23:48.950 --> 00:23:53.410 align:middle line:84%
+betting on the Fed or stock
+market, the general direction.
+
+00:23:53.410 --> 00:23:57.980 align:middle line:84%
+There are also quantitative
+funds doing the trend following.
+
+00:23:57.980 --> 00:24:02.110 align:middle line:84%
+People usually call it CTA,
+commodity trading advisors,
+
+00:24:02.110 --> 00:24:09.430 align:middle line:84%
+or stat arb, which is to
+capture the relative value
+
+00:24:09.430 --> 00:24:13.700 align:middle line:84%
+between a pair of stocks or
+actually many pairs of stocks.
+
+00:24:13.700 --> 00:24:17.350 align:middle line:84%
+So it's statistical
+arbitrage, they call it,
+
+00:24:17.350 --> 00:24:23.190 align:middle line:84%
+which is really to find
+statistical patterns to generate
+
+00:24:23.190 --> 00:24:24.070 align:middle line:90%
+returns.
+
+00:24:24.070 --> 00:24:27.750 align:middle line:84%
+So this is heavily
+computer driven strategies.
+
+00:24:27.750 --> 00:24:32.910 align:middle line:84%
+And many big quantitative shops
+are still doing a lot of these.
+
+00:24:32.910 --> 00:24:35.920 align:middle line:84%
+So there are fundamental
+equity hedge funds.
+
+00:24:35.920 --> 00:24:40.710 align:middle line:84%
+They buy stocks and
+also sell short stocks.
+
+00:24:40.710 --> 00:24:44.430 align:middle line:84%
+And they are also the
+platforms you probably
+
+00:24:44.430 --> 00:24:46.890 align:middle line:84%
+heard-- the big
+platforms, they're
+
+00:24:46.890 --> 00:24:52.900 align:middle line:84%
+called multi strat or multi PM,
+portfolio manager, platforms.
+
+00:24:52.900 --> 00:24:58.800 align:middle line:84%
+They hire hundreds of
+different teams trading
+
+00:24:58.800 --> 00:25:03.090 align:middle line:84%
+on the same platform in a
+very different wide range
+
+00:25:03.090 --> 00:25:08.100 align:middle line:84%
+of strategies, but achieve a
+high degree of diversification.
+
+00:25:08.100 --> 00:25:13.280 align:middle line:84%
+And they can level up the
+portfolio quite a bit.
+
+00:25:13.280 --> 00:25:17.430 align:middle line:84%
+And so I mentioned
+private equity earlier.
+
+00:25:17.430 --> 00:25:20.760 align:middle line:84%
+There are also real asset
+investments-- real estate,
+
+00:25:20.760 --> 00:25:23.490 align:middle line:84%
+natural resources,
+farmland, timberland,
+
+00:25:23.490 --> 00:25:26.210 align:middle line:90%
+those type of investments--
+
+00:25:26.210 --> 00:25:29.390 align:middle line:84%
+and the new assets,
+such as crypto,
+
+00:25:29.390 --> 00:25:33.870 align:middle line:84%
+or intellectual properties,
+or legal claims, and so on.
+
+00:25:33.870 --> 00:25:38.100 align:middle line:84%
+So basically, anything you can
+think of can generate a return.
+
+00:25:38.100 --> 00:25:42.380 align:middle line:90%
+It can also be considered.
+
+00:25:42.380 --> 00:25:45.260 align:middle line:84%
+At the first lecture,
+I already highlighted
+
+00:25:45.260 --> 00:25:48.810 align:middle line:84%
+some of the features
+of the endowment model.
+
+00:25:48.810 --> 00:25:51.590 align:middle line:84%
+So endowment model
+nowadays tends
+
+00:25:51.590 --> 00:25:55.130 align:middle line:84%
+to focus on hiring
+external managers
+
+00:25:55.130 --> 00:25:59.120 align:middle line:84%
+and doing both public
+and private investing.
+
+00:25:59.120 --> 00:26:02.480 align:middle line:84%
+And we hire both
+generalists, who
+
+00:26:02.480 --> 00:26:06.410 align:middle line:84%
+look at everything, and also
+specialists in certain domains,
+
+00:26:06.410 --> 00:26:12.250 align:middle line:90%
+such as biotech, AI, and so on.
+
+00:26:12.250 --> 00:26:16.630 align:middle line:84%
+We focus on both absolute
+return and also relative
+
+00:26:16.630 --> 00:26:19.060 align:middle line:90%
+return to the benchmark.
+
+00:26:19.060 --> 00:26:22.010 align:middle line:84%
+So we are mostly
+active managers.
+
+00:26:22.010 --> 00:26:27.110 align:middle line:84%
+So we have some passive
+beta index investments.
+
+00:26:27.110 --> 00:26:29.630 align:middle line:84%
+But it's a minority
+of the investment.
+
+00:26:29.630 --> 00:26:32.870 align:middle line:90%
+It's also not always permanent.
+
+00:26:32.870 --> 00:26:36.910 align:middle line:84%
+So whenever we can find an
+active strategy or manager
+
+00:26:36.910 --> 00:26:40.540 align:middle line:84%
+to beat a benchmark or
+index, we will always
+
+00:26:40.540 --> 00:26:43.356 align:middle line:90%
+go for the active investment.
+
+00:26:43.356 --> 00:26:46.000 align:middle line:90%
+
+
+00:26:46.000 --> 00:26:51.070 align:middle line:84%
+Yeah, so as you can see,
+this investment process
+
+00:26:51.070 --> 00:26:54.140 align:middle line:84%
+is centered around
+manager selection,
+
+00:26:54.140 --> 00:27:00.140 align:middle line:84%
+selecting the good
+investing fund managers.
+
+00:27:00.140 --> 00:27:03.250 align:middle line:84%
+And Harvard, actually
+in the old days,
+
+00:27:03.250 --> 00:27:06.950 align:middle line:84%
+used to have a lot of
+internal fund managers.
+
+00:27:06.950 --> 00:27:10.240 align:middle line:84%
+But that model has changed
+from seven years ago
+
+00:27:10.240 --> 00:27:15.100 align:middle line:84%
+to focus more on
+external managers.
+
+00:27:15.100 --> 00:27:18.880 align:middle line:84%
+So now, I'm going to
+shift gears a little bit
+
+00:27:18.880 --> 00:27:22.970 align:middle line:84%
+to talk about portfolio
+construction problems,
+
+00:27:22.970 --> 00:27:25.240 align:middle line:84%
+so shifting towards
+the math part
+
+00:27:25.240 --> 00:27:27.760 align:middle line:90%
+of the discussion a little bit.
+
+00:27:27.760 --> 00:27:30.850 align:middle line:84%
+So the classic portfolio
+construction problem
+
+00:27:30.850 --> 00:27:32.570 align:middle line:90%
+is stated as such--
+
+00:27:32.570 --> 00:27:35.900 align:middle line:84%
+assume you know your
+return objectives.
+
+00:27:35.900 --> 00:27:38.000 align:middle line:90%
+You have a loss tolerance.
+
+00:27:38.000 --> 00:27:43.250 align:middle line:84%
+And you can predict each
+investment's return volatility,
+
+00:27:43.250 --> 00:27:47.770 align:middle line:84%
+which is the standard deviation,
+and also the correlation
+
+00:27:47.770 --> 00:27:51.130 align:middle line:90%
+matrix of these investments.
+
+00:27:51.130 --> 00:27:54.820 align:middle line:84%
+The question is what
+percentage you should
+
+00:27:54.820 --> 00:27:57.020 align:middle line:90%
+put in each of the investments.
+
+00:27:57.020 --> 00:28:00.820 align:middle line:84%
+So that's the portfolio
+construction problem.
+
+00:28:00.820 --> 00:28:04.760 align:middle line:84%
+And the objective of that,
+as we mentioned earlier,
+
+00:28:04.760 --> 00:28:09.060 align:middle line:84%
+is to maximize the return
+for the whole portfolio,
+
+00:28:09.060 --> 00:28:12.010 align:middle line:84%
+while minimizing
+the portfolio risk.
+
+00:28:12.010 --> 00:28:16.260 align:middle line:84%
+In this classic problem,
+it's to minimize
+
+00:28:16.260 --> 00:28:21.960 align:middle line:84%
+the uncertainty or volatility
+of the whole portfolio.
+
+00:28:21.960 --> 00:28:26.490 align:middle line:84%
+So as you can see, the
+portfolio construction problem
+
+00:28:26.490 --> 00:28:30.960 align:middle line:84%
+really is a sizing
+problem of investments
+
+00:28:30.960 --> 00:28:32.680 align:middle line:90%
+at all different levels.
+
+00:28:32.680 --> 00:28:36.250 align:middle line:84%
+You can relate that to
+asset allocation problems.
+
+00:28:36.250 --> 00:28:38.560 align:middle line:84%
+So what is the asset
+allocation problem?
+
+00:28:38.560 --> 00:28:43.120 align:middle line:84%
+So you group those investments
+into different asset classes.
+
+00:28:43.120 --> 00:28:48.070 align:middle line:84%
+So as I showed you earlier,
+the list of these strategies,
+
+00:28:48.070 --> 00:28:51.870 align:middle line:84%
+you can also think of them
+as lists of different asset
+
+00:28:51.870 --> 00:28:52.810 align:middle line:90%
+classes.
+
+00:28:52.810 --> 00:28:57.150 align:middle line:84%
+So from top down, the
+discussion needs to be had
+
+00:28:57.150 --> 00:29:00.780 align:middle line:84%
+is how much you want to be in
+each category or each asset
+
+00:29:00.780 --> 00:29:02.880 align:middle line:90%
+class.
+
+00:29:02.880 --> 00:29:06.330 align:middle line:84%
+And sometimes, people
+will say, well,
+
+00:29:06.330 --> 00:29:09.270 align:middle line:84%
+that's still way too
+many asset classes.
+
+00:29:09.270 --> 00:29:12.660 align:middle line:84%
+If you have 10 to
+15 asset classes,
+
+00:29:12.660 --> 00:29:15.990 align:middle line:84%
+that makes the optimization
+problem very hard.
+
+00:29:15.990 --> 00:29:22.130 align:middle line:84%
+So people tend to reduce
+them to big risk factors,
+
+00:29:22.130 --> 00:29:28.730 align:middle line:84%
+sometimes, say, 3 to 5 risk
+factors, usually equity, bonds,
+
+00:29:28.730 --> 00:29:35.460 align:middle line:84%
+plus one of the other
+things could be inflation.
+
+00:29:35.460 --> 00:29:36.900 align:middle line:90%
+It could be currency.
+
+00:29:36.900 --> 00:29:42.630 align:middle line:84%
+It could be credit
+and other dimensions.
+
+00:29:42.630 --> 00:29:46.670 align:middle line:84%
+But the factor analysis
+can also expand
+
+00:29:46.670 --> 00:29:49.320 align:middle line:90%
+into many detailed levels.
+
+00:29:49.320 --> 00:29:54.750 align:middle line:84%
+You can have 50 factors or
+even hundreds of factors.
+
+00:29:54.750 --> 00:29:57.770 align:middle line:84%
+But it's just different
+ways of grouping
+
+00:29:57.770 --> 00:30:01.310 align:middle line:84%
+the investments to
+make the optimization
+
+00:30:01.310 --> 00:30:03.754 align:middle line:90%
+problem a little easier.
+
+00:30:03.754 --> 00:30:06.940 align:middle line:84%
+So then what is
+the risk management
+
+00:30:06.940 --> 00:30:08.630 align:middle line:90%
+problem of a portfolio?
+
+00:30:08.630 --> 00:30:12.820 align:middle line:84%
+So risk management
+problem, in many ways,
+
+00:30:12.820 --> 00:30:15.860 align:middle line:84%
+is actually the same problem
+as portfolio construction.
+
+00:30:15.860 --> 00:30:17.540 align:middle line:90%
+It's the sizing problem.
+
+00:30:17.540 --> 00:30:21.430 align:middle line:84%
+But in addition, you
+need to think about how
+
+00:30:21.430 --> 00:30:23.750 align:middle line:90%
+to avoid concentration.
+
+00:30:23.750 --> 00:30:27.550 align:middle line:84%
+Concentration, of course, is
+also a sizing problem and also
+
+00:30:27.550 --> 00:30:28.900 align:middle line:90%
+illiquidity.
+
+00:30:28.900 --> 00:30:34.270 align:middle line:84%
+And what's unacceptable
+losses and unwanted risks
+
+00:30:34.270 --> 00:30:36.916 align:middle line:90%
+To constrain the portfolio?
+
+00:30:36.916 --> 00:30:39.820 align:middle line:90%
+
+
+00:30:39.820 --> 00:30:42.790 align:middle line:84%
+So I'm going to
+spend a few minutes
+
+00:30:42.790 --> 00:30:51.220 align:middle line:84%
+on the portfolio theory, which
+is illustrated in two assets.
+
+00:30:51.220 --> 00:30:56.170 align:middle line:84%
+Asset 1 has a return,
+R1; volatility, sigma 1;
+
+00:30:56.170 --> 00:31:00.430 align:middle line:84%
+and will have a weight
+in the portfolio of w1,
+
+00:31:00.430 --> 00:31:02.440 align:middle line:90%
+similarly for asset 2.
+
+00:31:02.440 --> 00:31:04.740 align:middle line:84%
+So the sum of the
+two weights should
+
+00:31:04.740 --> 00:31:08.130 align:middle line:90%
+be equal to 1, w1 plus w2.
+
+00:31:08.130 --> 00:31:13.530 align:middle line:84%
+And the portfolio return, which
+is denoted here as R sub p,
+
+00:31:13.530 --> 00:31:18.720 align:middle line:84%
+is the weighted
+return of R1 and R2.
+
+00:31:18.720 --> 00:31:25.030 align:middle line:84%
+And the variance-- or in this
+here, it's the sigma p squared,
+
+00:31:25.030 --> 00:31:28.410 align:middle line:84%
+the volatility squared,
+can be expressed
+
+00:31:28.410 --> 00:31:34.140 align:middle line:84%
+in terms of the weights and the
+volatility of each of the two
+
+00:31:34.140 --> 00:31:38.130 align:middle line:84%
+investments, as well as
+the correlation, rho,
+
+00:31:38.130 --> 00:31:39.700 align:middle line:90%
+between the two investments.
+
+00:31:39.700 --> 00:31:42.510 align:middle line:84%
+So this is a very
+common equation
+
+00:31:42.510 --> 00:31:46.350 align:middle line:84%
+you probably have
+seen many times
+
+00:31:46.350 --> 00:31:52.202 align:middle line:84%
+in any probability or
+statistics classes.
+
+00:31:52.202 --> 00:31:54.780 align:middle line:90%
+
+
+00:31:54.780 --> 00:32:00.540 align:middle line:84%
+So let's look at
+some special cases.
+
+00:32:00.540 --> 00:32:05.280 align:middle line:84%
+So when the correlation,
+rho, is positive 1,
+
+00:32:05.280 --> 00:32:10.900 align:middle line:84%
+meaning the two assets
+are perfectly correlated,
+
+00:32:10.900 --> 00:32:15.670 align:middle line:84%
+one moves up, the other moves up
+at the same time, one goes down,
+
+00:32:15.670 --> 00:32:17.740 align:middle line:84%
+the other one goes
+down at the same time.
+
+00:32:17.740 --> 00:32:22.050 align:middle line:84%
+So that's called
+perfect correlation.
+
+00:32:22.050 --> 00:32:31.290 align:middle line:84%
+So if rho equals to 1 and we
+can simplify the sigma p, which
+
+00:32:31.290 --> 00:32:34.710 align:middle line:84%
+is the portfolio volatility,
+it becomes the weighted sum
+
+00:32:34.710 --> 00:32:39.630 align:middle line:84%
+of the two volatilities-- w1
+times sigma 1 plus w2 times
+
+00:32:39.630 --> 00:32:40.800 align:middle line:90%
+sigma 2.
+
+00:32:40.800 --> 00:32:47.590 align:middle line:84%
+Or you can also express the
+w1 in terms of 1 minus w2.
+
+00:32:47.590 --> 00:32:53.100 align:middle line:84%
+So therefore, solving for
+w2 in terms of sigma p
+
+00:32:53.100 --> 00:32:56.160 align:middle line:90%
+and the sigma 1 and sigma 2.
+
+00:32:56.160 --> 00:33:03.320 align:middle line:84%
+So then you can derive the
+overall return of the portfolio,
+
+00:33:03.320 --> 00:33:11.340 align:middle line:84%
+R sub p, in terms of w2,
+because w2 above is a function,
+
+00:33:11.340 --> 00:33:14.690 align:middle line:90%
+is a linear function of sigma p.
+
+00:33:14.690 --> 00:33:19.970 align:middle line:84%
+So you know, in this case, the
+return of the portfolio, Rp,
+
+00:33:19.970 --> 00:33:26.300 align:middle line:90%
+is a linear function of sigma p.
+
+00:33:26.300 --> 00:33:31.010 align:middle line:84%
+So on this chart, you can
+see that straight line
+
+00:33:31.010 --> 00:33:32.670 align:middle line:90%
+when rho equals to 1.
+
+00:33:32.670 --> 00:33:34.700 align:middle line:90%
+That's the special case.
+
+00:33:34.700 --> 00:33:41.330 align:middle line:84%
+When rho equals to minus 1,
+that means they are perfectly
+
+00:33:41.330 --> 00:33:43.260 align:middle line:90%
+negatively correlated.
+
+00:33:43.260 --> 00:33:46.520 align:middle line:84%
+So one goes up, the
+other one goes down.
+
+00:33:46.520 --> 00:33:51.920 align:middle line:84%
+So when that is the case, you
+will actually easily derive
+
+00:33:51.920 --> 00:33:55.610 align:middle line:84%
+that this sigma p
+is actually-- you
+
+00:33:55.610 --> 00:33:58.190 align:middle line:90%
+have two branches of solutions.
+
+00:33:58.190 --> 00:34:04.930 align:middle line:84%
+So it depends on the value of w1
+sigma 1 compared to w2 sigma 2.
+
+00:34:04.930 --> 00:34:11.800 align:middle line:84%
+So that's the two separate
+lines on the left.
+
+00:34:11.800 --> 00:34:13.550 align:middle line:90%
+That's the other solution.
+
+00:34:13.550 --> 00:34:16.540 align:middle line:84%
+In the middle is
+the other values
+
+00:34:16.540 --> 00:34:20.830 align:middle line:84%
+of the correlation between
+negative 1 and plus 1,
+
+00:34:20.830 --> 00:34:25.740 align:middle line:84%
+including 0 correlation,
+rho equal to 0.
+
+00:34:25.740 --> 00:34:29.199 align:middle line:90%
+
+
+00:34:29.199 --> 00:34:35.949 align:middle line:84%
+So what if the first asset has 0
+volatility, sigma 1 equals to 0?
+
+00:34:35.949 --> 00:34:40.940 align:middle line:84%
+So then from the equation
+earlier, we can derive sigma p,
+
+00:34:40.940 --> 00:34:45.460 align:middle line:84%
+the portfolio volatility
+is simply w2 times sigma 2
+
+00:34:45.460 --> 00:34:47.650 align:middle line:90%
+because sigma 1 is 0.
+
+00:34:47.650 --> 00:34:52.239 align:middle line:84%
+And therefore, w2, the
+weighting on the asset 2,
+
+00:34:52.239 --> 00:34:57.060 align:middle line:90%
+is sigma p divided by sigma 2.
+
+00:34:57.060 --> 00:35:01.080 align:middle line:90%
+That's a straightforward result.
+
+00:35:01.080 --> 00:35:05.760 align:middle line:84%
+And the portfolio
+return, R sub p,
+
+00:35:05.760 --> 00:35:11.250 align:middle line:84%
+now can be written
+as R1, which is
+
+00:35:11.250 --> 00:35:14.880 align:middle line:84%
+the first asset with 0
+volatility, which you
+
+00:35:14.880 --> 00:35:16.960 align:middle line:90%
+can think of as a cash right.
+
+00:35:16.960 --> 00:35:19.480 align:middle line:84%
+We mentioned earlier,
+cash has zero volatility.
+
+00:35:19.480 --> 00:35:23.590 align:middle line:84%
+So this cash or riskless
+asset has return R1.
+
+00:35:23.590 --> 00:35:26.400 align:middle line:90%
+
+
+00:35:26.400 --> 00:35:33.810 align:middle line:84%
+Its Rp is still a linear
+function of sigma p.
+
+00:35:33.810 --> 00:35:37.360 align:middle line:84%
+But it's a straight
+line, in this case.
+
+00:35:37.360 --> 00:35:41.130 align:middle line:84%
+You can see the
+slope of that line
+
+00:35:41.130 --> 00:35:45.930 align:middle line:84%
+is determined by the
+difference of R2 minus R1
+
+00:35:45.930 --> 00:35:50.280 align:middle line:90%
+and divided by sigma 2.
+
+00:35:50.280 --> 00:35:56.180 align:middle line:84%
+So by the way, this is so-called
+capital allocation line
+
+00:35:56.180 --> 00:35:59.700 align:middle line:90%
+in the portfolio theory.
+
+00:35:59.700 --> 00:36:04.890 align:middle line:84%
+So we can look at, let's
+say, a constructed portfolio.
+
+00:36:04.890 --> 00:36:06.770 align:middle line:84%
+You already have a
+sigma p, which has
+
+00:36:06.770 --> 00:36:10.310 align:middle line:90%
+many assets in it, and also Rp.
+
+00:36:10.310 --> 00:36:19.040 align:middle line:84%
+By adding one riskless asset,
+or cash, which returns Rf.
+
+00:36:19.040 --> 00:36:23.880 align:middle line:84%
+Rf is basically like
+a risk free return.
+
+00:36:23.880 --> 00:36:30.120 align:middle line:84%
+You can draw a tangent line
+over the sigma P point.
+
+00:36:30.120 --> 00:36:35.280 align:middle line:84%
+You pick the one point on
+that efficient frontier.
+
+00:36:35.280 --> 00:36:37.260 align:middle line:84%
+I should explain
+efficient frontier,
+
+00:36:37.260 --> 00:36:41.210 align:middle line:84%
+meaning on that return
+versus volatility chart,
+
+00:36:41.210 --> 00:36:44.130 align:middle line:84%
+because you have
+different weightings--
+
+00:36:44.130 --> 00:36:46.790 align:middle line:90%
+so let's come back to this.
+
+00:36:46.790 --> 00:36:51.590 align:middle line:90%
+Let's look at this curve here.
+
+00:36:51.590 --> 00:36:54.680 align:middle line:84%
+So for different
+w1 and w2's, you
+
+00:36:54.680 --> 00:36:57.380 align:middle line:84%
+can have different
+resulting portfolio return
+
+00:36:57.380 --> 00:36:59.070 align:middle line:90%
+and the portfolio volatility.
+
+00:36:59.070 --> 00:37:03.230 align:middle line:84%
+So this line, the
+upper part of this
+
+00:37:03.230 --> 00:37:08.420 align:middle line:84%
+is called the efficient frontier
+because by lowering your risk
+
+00:37:08.420 --> 00:37:12.780 align:middle line:84%
+and moving your return
+up, that's your objective.
+
+00:37:12.780 --> 00:37:14.670 align:middle line:90%
+You are improving the portfolio.
+
+00:37:14.670 --> 00:37:19.460 align:middle line:84%
+So any point on this line
+is a potential solution
+
+00:37:19.460 --> 00:37:22.550 align:middle line:90%
+of that portfolio construction.
+
+00:37:22.550 --> 00:37:31.850 align:middle line:84%
+So when we add the risk
+free asset on this Rf point,
+
+00:37:31.850 --> 00:37:35.900 align:middle line:84%
+we can basically combine
+that risk free asset
+
+00:37:35.900 --> 00:37:42.680 align:middle line:84%
+with the existing portfolio
+to further improve the risk--
+
+00:37:42.680 --> 00:37:47.810 align:middle line:84%
+the efficient frontier to
+move up to that straight line.
+
+00:37:47.810 --> 00:37:52.540 align:middle line:84%
+So that slope, Rp minus
+RF divided by sigma p
+
+00:37:52.540 --> 00:37:54.550 align:middle line:90%
+is so-called Sharpe ratio.
+
+00:37:54.550 --> 00:37:59.000 align:middle line:84%
+In simple terms, think about
+your return over volatility.
+
+00:37:59.000 --> 00:38:05.080 align:middle line:84%
+So that's the Sharpe
+ratio definition.
+
+00:38:05.080 --> 00:38:09.370 align:middle line:84%
+Sometimes, you also hear
+the term alpha and beta.
+
+00:38:09.370 --> 00:38:12.020 align:middle line:84%
+That's compared
+with a benchmark.
+
+00:38:12.020 --> 00:38:15.790 align:middle line:84%
+So in this case,
+you can write down
+
+00:38:15.790 --> 00:38:19.270 align:middle line:84%
+the portfolio return minus
+the risk-free asset in terms
+
+00:38:19.270 --> 00:38:22.600 align:middle line:84%
+of alpha plus beta
+times benchmark
+
+00:38:22.600 --> 00:38:25.030 align:middle line:90%
+minus the risk-free return.
+
+00:38:25.030 --> 00:38:30.280 align:middle line:84%
+And the beta is a
+function of correlation
+
+00:38:30.280 --> 00:38:32.080 align:middle line:84%
+of the portfolio
+to the benchmark
+
+00:38:32.080 --> 00:38:34.610 align:middle line:90%
+and the ratio of the volatility.
+
+00:38:34.610 --> 00:38:38.470 align:middle line:90%
+
+
+00:38:38.470 --> 00:38:46.510 align:middle line:84%
+What if you want to level up
+the portfolio and borrow more,
+
+00:38:46.510 --> 00:38:50.490 align:middle line:84%
+meaning make the weight of
+the first risk-free asset
+
+00:38:50.490 --> 00:38:56.920 align:middle line:84%
+to be minus 100% and make
+the other asset be 200%,
+
+00:38:56.920 --> 00:38:59.020 align:middle line:90%
+so still sum up to 1?
+
+00:38:59.020 --> 00:39:04.710 align:middle line:84%
+So that means you're
+borrowing money in cash.
+
+00:39:04.710 --> 00:39:09.040 align:middle line:84%
+You're putting the proceeds
+into the risky asset.
+
+00:39:09.040 --> 00:39:16.080 align:middle line:84%
+So you're moving the
+volatility up to this point
+
+00:39:16.080 --> 00:39:19.260 align:middle line:84%
+by investing more
+into the second asset.
+
+00:39:19.260 --> 00:39:21.550 align:middle line:90%
+So that's also possible.
+
+00:39:21.550 --> 00:39:27.430 align:middle line:84%
+That's a typical exercise people
+do in risk parity portfolios.
+
+00:39:27.430 --> 00:39:31.660 align:middle line:84%
+By the way, if you don't follow
+any of those, that's fine.
+
+00:39:31.660 --> 00:39:33.480 align:middle line:84%
+The reason I want
+to talk about this
+
+00:39:33.480 --> 00:39:37.620 align:middle line:84%
+is really to give you some
+flavors of what the portfolio
+
+00:39:37.620 --> 00:39:44.130 align:middle line:84%
+theory is about because then I'm
+going to tell you, in practice,
+
+00:39:44.130 --> 00:39:48.200 align:middle line:84%
+a lot of these need
+to be improved.
+
+00:39:48.200 --> 00:39:52.040 align:middle line:84%
+So the example of portfolio with
+two assets that we talked about
+
+00:39:52.040 --> 00:39:54.720 align:middle line:90%
+is the 60/40 equity bonds.
+
+00:39:54.720 --> 00:40:00.500 align:middle line:84%
+Some of you wrote down
+70 bonds, 30% stocks.
+
+00:40:00.500 --> 00:40:05.420 align:middle line:84%
+That's very much similar to the
+risk parity portfolio, which
+
+00:40:05.420 --> 00:40:09.020 align:middle line:84%
+they try to make equal
+risk contribution coming
+
+00:40:09.020 --> 00:40:13.790 align:middle line:84%
+from the bonds and
+equity by borrowing more
+
+00:40:13.790 --> 00:40:18.110 align:middle line:84%
+to invest in the bonds because
+bonds typically have lower
+
+00:40:18.110 --> 00:40:19.710 align:middle line:90%
+volatility than equity.
+
+00:40:19.710 --> 00:40:24.350 align:middle line:84%
+So you need to have more to
+make them have equal risk
+
+00:40:24.350 --> 00:40:25.230 align:middle line:90%
+contribution.
+
+00:40:25.230 --> 00:40:26.400 align:middle line:90%
+So that's the idea.
+
+00:40:26.400 --> 00:40:30.320 align:middle line:84%
+Again, today, I'm not
+going into the math.
+
+00:40:30.320 --> 00:40:33.390 align:middle line:84%
+In the previous years, sometimes
+I spent more time on that.
+
+00:40:33.390 --> 00:40:40.010 align:middle line:84%
+But I feel I want to talk about
+other things a bit more today.
+
+00:40:40.010 --> 00:40:44.050 align:middle line:84%
+But before we move away, I want
+to talk about the importance
+
+00:40:44.050 --> 00:40:47.560 align:middle line:90%
+of rebalancing.
+
+00:40:47.560 --> 00:40:53.900 align:middle line:84%
+Because we had this 2013 OCW
+video, just two weeks ago,
+
+00:40:53.900 --> 00:40:58.810 align:middle line:84%
+I think somebody made a
+clip out of that class,
+
+00:40:58.810 --> 00:41:06.310 align:middle line:84%
+sped it up to 1.5 times,
+and made it a 3-minute video
+
+00:41:06.310 --> 00:41:10.760 align:middle line:84%
+of the only free lunch
+of diversification,
+
+00:41:10.760 --> 00:41:13.400 align:middle line:90%
+which is exactly this example.
+
+00:41:13.400 --> 00:41:16.490 align:middle line:84%
+So I'm going to go through
+it with you quickly.
+
+00:41:16.490 --> 00:41:22.540 align:middle line:84%
+Just think about
+you have two assets,
+
+00:41:22.540 --> 00:41:24.460 align:middle line:90%
+assets in a two-year period.
+
+00:41:24.460 --> 00:41:27.550 align:middle line:84%
+In year 1, the
+first one doubles.
+
+00:41:27.550 --> 00:41:30.380 align:middle line:90%
+And then in year 2, it halves.
+
+00:41:30.380 --> 00:41:35.240 align:middle line:84%
+So I think it's a little easier
+to show on the blackboard.
+
+00:41:35.240 --> 00:41:39.460 align:middle line:84%
+But the other one
+does the opposite.
+
+00:41:39.460 --> 00:41:46.930 align:middle line:90%
+
+
+00:41:46.930 --> 00:41:49.130 align:middle line:90%
+So they both started here.
+
+00:41:49.130 --> 00:41:53.290 align:middle line:84%
+The first asset
+doubles, then halves.
+
+00:41:53.290 --> 00:41:56.170 align:middle line:90%
+So this is year 1.
+
+00:41:56.170 --> 00:41:58.120 align:middle line:90%
+This is year 2.
+
+00:41:58.120 --> 00:42:03.460 align:middle line:84%
+The second asset halves
+first, then doubles.
+
+00:42:03.460 --> 00:42:07.180 align:middle line:90%
+So those were the R1 and R2's.
+
+00:42:07.180 --> 00:42:13.900 align:middle line:84%
+So if you start as equal weight
+of the two, and after year 1,
+
+00:42:13.900 --> 00:42:15.310 align:middle line:90%
+you can calculate.
+
+00:42:15.310 --> 00:42:18.880 align:middle line:90%
+The portfolio is up 25%.
+
+00:42:18.880 --> 00:42:21.020 align:middle line:90%
+So this is just simple math.
+
+00:42:21.020 --> 00:42:25.520 align:middle line:90%
+The first asset 1 is 50% weight.
+
+00:42:25.520 --> 00:42:27.550 align:middle line:90%
+Asset 2 is also 50% weight.
+
+00:42:27.550 --> 00:42:29.200 align:middle line:90%
+One doubles, one halves.
+
+00:42:29.200 --> 00:42:35.470 align:middle line:84%
+So total, you made 25% But
+if you don't do anything
+
+00:42:35.470 --> 00:42:40.710 align:middle line:84%
+at this point, asset 1 will
+be dominating the portfolio.
+
+00:42:40.710 --> 00:42:44.520 align:middle line:84%
+Asset 2 will be just
+a small portion.
+
+00:42:44.520 --> 00:42:47.320 align:middle line:84%
+Then because asset
+2 then doubles,
+
+00:42:47.320 --> 00:42:49.390 align:middle line:84%
+you're coming back
+to the same point.
+
+00:42:49.390 --> 00:42:52.170 align:middle line:84%
+After two years, your
+portfolio's return
+
+00:42:52.170 --> 00:42:56.340 align:middle line:84%
+is exactly 0%,
+even though you had
+
+00:42:56.340 --> 00:42:59.970 align:middle line:84%
+a diversified portfolio
+with perfectly
+
+00:42:59.970 --> 00:43:03.360 align:middle line:90%
+negatively correlated assets.
+
+00:43:03.360 --> 00:43:09.780 align:middle line:84%
+But if you rebalance at
+this point to equal weight,
+
+00:43:09.780 --> 00:43:12.690 align:middle line:84%
+then your portfolio
+in year 2 will make
+
+00:43:12.690 --> 00:43:16.800 align:middle line:90%
+another 25% return in year 2.
+
+00:43:16.800 --> 00:43:19.800 align:middle line:84%
+So you're making
+compounded return
+
+00:43:19.800 --> 00:43:23.880 align:middle line:90%
+of 25% two years in a row.
+
+00:43:23.880 --> 00:43:28.410 align:middle line:84%
+So some of you may point out
+that isn't this just betting
+
+00:43:28.410 --> 00:43:32.040 align:middle line:90%
+on mean reversion?
+
+00:43:32.040 --> 00:43:37.050 align:middle line:84%
+And if you think it's a trend
+trade, you shouldn't do this.
+
+00:43:37.050 --> 00:43:39.410 align:middle line:90%
+That's right.
+
+00:43:39.410 --> 00:43:41.550 align:middle line:84%
+The question you
+should ask yourself,
+
+00:43:41.550 --> 00:43:47.970 align:middle line:84%
+what is the basis of your sizing
+or weighting of the two assets?
+
+00:43:47.970 --> 00:43:51.420 align:middle line:84%
+So you started with
+an equal weighting,
+
+00:43:51.420 --> 00:43:54.410 align:middle line:84%
+meaning that you think
+the two assets have
+
+00:43:54.410 --> 00:43:57.890 align:middle line:84%
+the same likelihood
+of performing
+
+00:43:57.890 --> 00:43:59.430 align:middle line:90%
+and the same amount of risk.
+
+00:43:59.430 --> 00:44:02.600 align:middle line:84%
+That's why you
+size them equally.
+
+00:44:02.600 --> 00:44:07.370 align:middle line:84%
+And of course, you also know
+they are negatively correlated.
+
+00:44:07.370 --> 00:44:12.350 align:middle line:84%
+So at the end of year 1, do
+you maintain that view or not?
+
+00:44:12.350 --> 00:44:18.090 align:middle line:84%
+If you think it's still the same
+projection of risk and return,
+
+00:44:18.090 --> 00:44:20.880 align:middle line:84%
+then you should maintain
+the equal weight.
+
+00:44:20.880 --> 00:44:25.880 align:middle line:84%
+You should not change the
+weighting unless, at the year 1,
+
+00:44:25.880 --> 00:44:28.320 align:middle line:84%
+your projection has
+totally changed.
+
+00:44:28.320 --> 00:44:34.130 align:middle line:84%
+You think asset 1 will
+continue to outperform asset 2.
+
+00:44:34.130 --> 00:44:38.580 align:middle line:84%
+Yes, in that case, you can
+change to a non-equal weighting.
+
+00:44:38.580 --> 00:44:39.960 align:middle line:90%
+So that's the point.
+
+00:44:39.960 --> 00:44:44.780 align:middle line:84%
+If you believe they have
+the same probability
+
+00:44:44.780 --> 00:44:49.980 align:middle line:84%
+distribution, then there's no
+reason for you not to rebalance.
+
+00:44:49.980 --> 00:44:51.840 align:middle line:84%
+So people say
+there's a free lunch.
+
+00:44:51.840 --> 00:44:54.180 align:middle line:84%
+The only free lunch
+is diversification.
+
+00:44:54.180 --> 00:44:57.560 align:middle line:84%
+But you have to
+rebalance to eat it.
+
+00:44:57.560 --> 00:45:00.440 align:middle line:90%
+So that's on that.
+
+00:45:00.440 --> 00:45:02.840 align:middle line:84%
+So then I'm going
+to shift the gear
+
+00:45:02.840 --> 00:45:07.910 align:middle line:84%
+to talk about the limitations
+of so-called modern portfolio
+
+00:45:07.910 --> 00:45:10.760 align:middle line:90%
+theory, in short MPT.
+
+00:45:10.760 --> 00:45:14.870 align:middle line:84%
+I mentioned this was mostly
+developed in the 1950s.
+
+00:45:14.870 --> 00:45:19.740 align:middle line:84%
+And Harry Markowitz
+pioneered in this area.
+
+00:45:19.740 --> 00:45:22.620 align:middle line:84%
+He actually got a Nobel
+Prize in the, I think,
+
+00:45:22.620 --> 00:45:26.420 align:middle line:90%
+early '90s for his work.
+
+00:45:26.420 --> 00:45:31.260 align:middle line:84%
+So all I have just
+described to you so far,
+
+00:45:31.260 --> 00:45:36.194 align:middle line:84%
+the mathematical part, has
+a lot to do with his work.
+
+00:45:36.194 --> 00:45:40.480 align:middle line:84%
+But you can tell
+already, a lot of
+
+00:45:40.480 --> 00:45:44.860 align:middle line:84%
+these depend on your confidence
+in the capital market
+
+00:45:44.860 --> 00:45:50.440 align:middle line:84%
+assumptions, which is the
+projections of return volatility
+
+00:45:50.440 --> 00:45:54.871 align:middle line:84%
+and the correlation matrix
+of these investments.
+
+00:45:54.871 --> 00:45:58.690 align:middle line:84%
+And the mean variance
+optimization problem
+
+00:45:58.690 --> 00:46:02.030 align:middle line:84%
+often has unlimited
+number of solutions.
+
+00:46:02.030 --> 00:46:05.470 align:middle line:84%
+And you have to put
+artificial constraints
+
+00:46:05.470 --> 00:46:07.460 align:middle line:90%
+to bound the solutions.
+
+00:46:07.460 --> 00:46:12.850 align:middle line:84%
+They are very sensitive to small
+change of these capital market
+
+00:46:12.850 --> 00:46:15.280 align:middle line:90%
+assumptions.
+
+00:46:15.280 --> 00:46:18.440 align:middle line:84%
+So in practice, it's
+very hard to use it.
+
+00:46:18.440 --> 00:46:21.880 align:middle line:90%
+Probably not many people use it.
+
+00:46:21.880 --> 00:46:27.010 align:middle line:84%
+So with those
+questions, I myself
+
+00:46:27.010 --> 00:46:29.050 align:middle line:84%
+have always been
+curious about this
+
+00:46:29.050 --> 00:46:33.790 align:middle line:84%
+and have done various
+research work in this.
+
+00:46:33.790 --> 00:46:37.440 align:middle line:84%
+So today, I'm going
+to highlight a few.
+
+00:46:37.440 --> 00:46:41.400 align:middle line:84%
+The first one is more related
+to the sizing question,
+
+00:46:41.400 --> 00:46:43.753 align:middle line:90%
+using a different approach.
+
+00:46:43.753 --> 00:46:46.410 align:middle line:90%
+
+
+00:46:46.410 --> 00:46:50.490 align:middle line:90%
+I call it a gain-loss ratio.
+
+00:46:50.490 --> 00:46:52.710 align:middle line:84%
+The second part,
+I will talk a bit
+
+00:46:52.710 --> 00:46:58.030 align:middle line:84%
+about the effect of crowding
+behavior and how to model it.
+
+00:46:58.030 --> 00:47:05.460 align:middle line:84%
+And lastly, I will talk about
+the power law distribution
+
+00:47:05.460 --> 00:47:08.500 align:middle line:84%
+coming out of these
+crowd interactions,
+
+00:47:08.500 --> 00:47:14.220 align:middle line:84%
+why these are all relevant
+to portfolio construction.
+
+00:47:14.220 --> 00:47:19.170 align:middle line:84%
+So issue number 1 for
+the MPT, volatility
+
+00:47:19.170 --> 00:47:21.210 align:middle line:90%
+is a poor measure of risk.
+
+00:47:21.210 --> 00:47:22.750 align:middle line:90%
+Why do I say that?
+
+00:47:22.750 --> 00:47:28.320 align:middle line:84%
+Because volatility is just
+the standard deviation
+
+00:47:28.320 --> 00:47:31.220 align:middle line:90%
+or the range of uncertainties.
+
+00:47:31.220 --> 00:47:36.480 align:middle line:84%
+So if I am long, out of
+the money call option--
+
+00:47:36.480 --> 00:47:37.230 align:middle line:90%
+think about it.
+
+00:47:37.230 --> 00:47:39.030 align:middle line:90%
+You have one investment.
+
+00:47:39.030 --> 00:47:42.930 align:middle line:84%
+And Steven, you
+worked on options.
+
+00:47:42.930 --> 00:47:46.550 align:middle line:84%
+You probably can
+get this easily.
+
+00:47:46.550 --> 00:47:48.840 align:middle line:84%
+If I'm not out of
+the money option,
+
+00:47:48.840 --> 00:47:52.615 align:middle line:84%
+do I wish the volatility
+to go up or down?
+
+00:47:52.615 --> 00:47:56.240 align:middle line:90%
+
+
+00:47:56.240 --> 00:47:59.190 align:middle line:84%
+Do I want my portfolio to
+have high vol or low vol?
+
+00:47:59.190 --> 00:48:02.050 align:middle line:90%
+I want my portfolio-- yes, yeah?
+
+00:48:02.050 --> 00:48:03.050 align:middle line:90%
+STUDENT: The higher vol.
+
+00:48:03.050 --> 00:48:04.290 align:middle line:90%
+JAKE XIA: Yes, right.
+
+00:48:04.290 --> 00:48:05.610 align:middle line:90%
+The higher vol, the better.
+
+00:48:05.610 --> 00:48:11.810 align:middle line:84%
+So on the other hand, if I'm
+short on the money option,
+
+00:48:11.810 --> 00:48:14.780 align:middle line:84%
+I probably want to have
+lower vol because I
+
+00:48:14.780 --> 00:48:17.270 align:middle line:90%
+don't want to get exercised.
+
+00:48:17.270 --> 00:48:23.720 align:middle line:84%
+So it really depends on your
+gain situation, your payout,
+
+00:48:23.720 --> 00:48:26.450 align:middle line:90%
+or your potential loss.
+
+00:48:26.450 --> 00:48:30.830 align:middle line:84%
+And the Sharpe ratio is
+derived from volatility.
+
+00:48:30.830 --> 00:48:34.240 align:middle line:84%
+So basically, it suffers
+from the same issue.
+
+00:48:34.240 --> 00:48:36.445 align:middle line:84%
+So over the years,
+there are methods,
+
+00:48:36.445 --> 00:48:41.830 align:middle line:84%
+like the Sortino ratio,
+that try to differentiate
+
+00:48:41.830 --> 00:48:45.970 align:middle line:84%
+the upside range and
+the downside range.
+
+00:48:45.970 --> 00:48:48.490 align:middle line:90%
+I think it's a good measurement.
+
+00:48:48.490 --> 00:48:55.010 align:middle line:84%
+But it doesn't give you
+a direct link to sizing.
+
+00:48:55.010 --> 00:48:57.690 align:middle line:84%
+The ultimate question we
+need to answer is sizing.
+
+00:48:57.690 --> 00:49:00.220 align:middle line:90%
+
+
+00:49:00.220 --> 00:49:04.870 align:middle line:84%
+So the new way to compare
+different investments
+
+00:49:04.870 --> 00:49:09.970 align:middle line:84%
+I'm basically using,
+or I came up with,
+
+00:49:09.970 --> 00:49:13.910 align:middle line:84%
+is to use expected
+gain and expected loss.
+
+00:49:13.910 --> 00:49:18.470 align:middle line:84%
+I call the G and L. Here are
+both use positive numbers.
+
+00:49:18.470 --> 00:49:22.150 align:middle line:84%
+So when I say loss, these
+are absolute numbers.
+
+00:49:22.150 --> 00:49:27.360 align:middle line:84%
+So we are looking for
+the best skill, which
+
+00:49:27.360 --> 00:49:33.330 align:middle line:84%
+is getting much bigger
+expected gain, much bigger
+
+00:49:33.330 --> 00:49:36.370 align:middle line:90%
+than the expected loss.
+
+00:49:36.370 --> 00:49:40.530 align:middle line:84%
+Or written in different
+forms, in the G minus
+
+00:49:40.530 --> 00:49:45.720 align:middle line:84%
+L, which is the return,
+divided by GA plus L.
+
+00:49:45.720 --> 00:49:48.370 align:middle line:84%
+And you change the
+format a little bit.
+
+00:49:48.370 --> 00:49:52.530 align:middle line:84%
+It becomes 1 minus 2L
+divided by G plus L.
+
+00:49:52.530 --> 00:49:59.070 align:middle line:84%
+This is really exactly
+the sizing percentage from
+
+00:49:59.070 --> 00:50:04.440 align:middle line:84%
+Kelly's criteria in
+the binary betting.
+
+00:50:04.440 --> 00:50:09.370 align:middle line:84%
+So this number is bounded
+from minus 1 to plus 1.
+
+00:50:09.370 --> 00:50:15.060 align:middle line:84%
+So it can be directly
+translated into sizing.
+
+00:50:15.060 --> 00:50:19.320 align:middle line:84%
+And so let me give
+you a few examples
+
+00:50:19.320 --> 00:50:21.940 align:middle line:90%
+to help you understand this.
+
+00:50:21.940 --> 00:50:26.400 align:middle line:84%
+So if you are
+flipping a coin, you
+
+00:50:26.400 --> 00:50:30.630 align:middle line:84%
+know the head has a
+certain probability
+
+00:50:30.630 --> 00:50:32.920 align:middle line:84%
+and the tail has a
+certain probability.
+
+00:50:32.920 --> 00:50:37.600 align:middle line:84%
+And when it's a head, it has
+a payout you will get or lose.
+
+00:50:37.600 --> 00:50:40.000 align:middle line:84%
+And when it's tail, you
+have a payout or lose.
+
+00:50:40.000 --> 00:50:42.570 align:middle line:84%
+So expected gain
+is the probability
+
+00:50:42.570 --> 00:50:45.670 align:middle line:84%
+of the head times the
+payout, if you bet on head.
+
+00:50:45.670 --> 00:50:49.560 align:middle line:84%
+Expected loss is the
+probability of the tail
+
+00:50:49.560 --> 00:50:52.540 align:middle line:90%
+times the payout on that side.
+
+00:50:52.540 --> 00:50:56.710 align:middle line:84%
+So in that discrete example,
+it's fairly easy to understand.
+
+00:50:56.710 --> 00:51:01.950 align:middle line:84%
+But in the continuous example,
+it's the terminal distribution.
+
+00:51:01.950 --> 00:51:07.800 align:middle line:84%
+Let's say you have a probability
+density function describing
+
+00:51:07.800 --> 00:51:09.750 align:middle line:90%
+all the outcomes.
+
+00:51:09.750 --> 00:51:12.570 align:middle line:84%
+Then you need to use
+that probability density
+
+00:51:12.570 --> 00:51:18.600 align:middle line:84%
+function times the payout
+integrated over all the losing
+
+00:51:18.600 --> 00:51:21.330 align:middle line:84%
+parts and integrated
+over all the
+
+00:51:21.330 --> 00:51:25.010 align:middle line:84%
+gaining parts to get the
+expected loss and the expected
+
+00:51:25.010 --> 00:51:25.770 align:middle line:90%
+gain.
+
+00:51:25.770 --> 00:51:32.490 align:middle line:84%
+So it doesn't have to be
+always separated by 0.
+
+00:51:32.490 --> 00:51:37.680 align:middle line:84%
+If you have a target return,
+you integrate over, say,
+
+00:51:37.680 --> 00:51:41.580 align:middle line:84%
+from minus infinity to
+the targeted return,
+
+00:51:41.580 --> 00:51:43.980 align:middle line:90%
+that's your expected loss.
+
+00:51:43.980 --> 00:51:47.900 align:middle line:84%
+That is what needs
+to be included in L.
+
+00:51:47.900 --> 00:51:52.430 align:middle line:84%
+So when you do this,
+your optimization problem
+
+00:51:52.430 --> 00:51:56.910 align:middle line:84%
+is no longer return
+versus volatility.
+
+00:51:56.910 --> 00:52:00.200 align:middle line:84%
+But in the vertical
+axis is gain.
+
+00:52:00.200 --> 00:52:03.870 align:middle line:84%
+In the horizontal
+axis, L is loss.
+
+00:52:03.870 --> 00:52:09.020 align:middle line:84%
+So you need to
+basically maximize G
+
+00:52:09.020 --> 00:52:16.370 align:middle line:84%
+while minimizing L. So this is
+all relevant because, as I just
+
+00:52:16.370 --> 00:52:20.840 align:middle line:84%
+explained earlier, minimizing
+volatility is not always
+
+00:52:20.840 --> 00:52:22.210 align:middle line:90%
+for your benefit.
+
+00:52:22.210 --> 00:52:25.960 align:middle line:84%
+When you are long option, you
+need to have higher volatility.
+
+00:52:25.960 --> 00:52:30.200 align:middle line:84%
+But in this case, when
+you specify expected loss,
+
+00:52:30.200 --> 00:52:36.400 align:middle line:84%
+that's what you need to budget
+and control your investment.
+
+00:52:36.400 --> 00:52:41.530 align:middle line:84%
+So in the investment game we
+gave you at the beginning,
+
+00:52:41.530 --> 00:52:46.630 align:middle line:84%
+I hope you all have submitted
+your choices in September.
+
+00:52:46.630 --> 00:52:51.880 align:middle line:84%
+And some of you
+rebalanced in October.
+
+00:52:51.880 --> 00:52:57.010 align:middle line:84%
+I wanted you to track the
+daily gain and the loss
+
+00:52:57.010 --> 00:52:59.320 align:middle line:90%
+in dollar amount.
+
+00:52:59.320 --> 00:53:04.670 align:middle line:84%
+And at the end of the game,
+which is mid-November,
+
+00:53:04.670 --> 00:53:10.210 align:middle line:84%
+I want you to summarize
+all the daily gains
+
+00:53:10.210 --> 00:53:15.890 align:middle line:84%
+and also summarize the daily
+losses to derive the G and L.
+
+00:53:15.890 --> 00:53:19.250 align:middle line:84%
+So some of you said, in
+order to win this game,
+
+00:53:19.250 --> 00:53:21.360 align:middle line:84%
+why don't I just pick
+the highest volatility
+
+00:53:21.360 --> 00:53:29.380 align:middle line:84%
+stock to have the best potential
+to produce highest return?
+
+00:53:29.380 --> 00:53:30.840 align:middle line:90%
+Yes.
+
+00:53:30.840 --> 00:53:34.440 align:middle line:84%
+But your higher
+volatility investment
+
+00:53:34.440 --> 00:53:40.290 align:middle line:84%
+will suffer on the denominator,
+which the G plus L--
+
+00:53:40.290 --> 00:53:45.180 align:middle line:84%
+this ratio will indicate the
+quality of your investment,
+
+00:53:45.180 --> 00:53:47.820 align:middle line:84%
+even though your G minus
+L, which is the return,
+
+00:53:47.820 --> 00:53:48.910 align:middle line:90%
+may be good.
+
+00:53:48.910 --> 00:53:51.210 align:middle line:84%
+But the denominator
+will normalize
+
+00:53:51.210 --> 00:53:57.360 align:middle line:84%
+it to make it basically
+comparable to other investments.
+
+00:53:57.360 --> 00:53:59.740 align:middle line:90%
+So the optimization problem--
+
+00:53:59.740 --> 00:54:01.200 align:middle line:90%
+yes, please.
+
+00:54:01.200 --> 00:54:03.510 align:middle line:84%
+STUDENT: So in
+practice, what do you
+
+00:54:03.510 --> 00:54:05.560 align:middle line:84%
+use to estimate
+the expected gain?
+
+00:54:05.560 --> 00:54:06.810 align:middle line:90%
+[SNEEZE]
+
+00:54:06.810 --> 00:54:08.010 align:middle line:90%
+JAKE XIA: Yeah, bless you.
+
+00:54:08.010 --> 00:54:12.480 align:middle line:84%
+STUDENT: [INAUDIBLE] estimate
+the distribution of the pricing?
+
+00:54:12.480 --> 00:54:13.590 align:middle line:90%
+JAKE XIA: Yes.
+
+00:54:13.590 --> 00:54:18.930 align:middle line:84%
+But no more difficult than
+getting the return and standard
+
+00:54:18.930 --> 00:54:20.760 align:middle line:90%
+deviation.
+
+00:54:20.760 --> 00:54:23.310 align:middle line:84%
+Yeah, so it's the
+same amount of work.
+
+00:54:23.310 --> 00:54:25.800 align:middle line:84%
+It's just that you're
+separating the numbers.
+
+00:54:25.800 --> 00:54:28.170 align:middle line:84%
+You're calculating half
+distribution instead
+
+00:54:28.170 --> 00:54:30.810 align:middle line:90%
+of the whole distribution.
+
+00:54:30.810 --> 00:54:31.920 align:middle line:90%
+So it is.
+
+00:54:31.920 --> 00:54:36.450 align:middle line:84%
+So especially when you do the
+optimization problem, as I'm
+
+00:54:36.450 --> 00:54:40.200 align:middle line:90%
+about to explain, these lines--
+
+00:54:40.200 --> 00:54:45.060 align:middle line:84%
+basically, for example, the
+45-degree line indicates G minus
+
+00:54:45.060 --> 00:54:47.950 align:middle line:90%
+L equal to 0, so 0 return line.
+
+00:54:47.950 --> 00:54:54.240 align:middle line:84%
+So you don't want to pick any
+investments below that 45-degree
+
+00:54:54.240 --> 00:54:55.000 align:middle line:90%
+line.
+
+00:54:55.000 --> 00:54:59.070 align:middle line:84%
+You want the lines that have
+higher slope, indicating
+
+00:54:59.070 --> 00:55:01.620 align:middle line:90%
+higher G over L ratio.
+
+00:55:01.620 --> 00:55:04.590 align:middle line:84%
+But when you combine
+them, combine,
+
+00:55:04.590 --> 00:55:09.480 align:middle line:84%
+let's say, two assets
+into one, calculating
+
+00:55:09.480 --> 00:55:13.320 align:middle line:84%
+the combined portfolio G
+and L, which is actually
+
+00:55:13.320 --> 00:55:17.420 align:middle line:84%
+path dependent, which
+actually should be because,
+
+00:55:17.420 --> 00:55:22.070 align:middle line:84%
+when you have two
+investments, the final outcome
+
+00:55:22.070 --> 00:55:24.740 align:middle line:84%
+of the expected
+gain and the loss
+
+00:55:24.740 --> 00:55:27.553 align:middle line:90%
+indeed will be path dependent.
+
+00:55:27.553 --> 00:55:28.970 align:middle line:84%
+That means you
+probably need to do
+
+00:55:28.970 --> 00:55:33.390 align:middle line:84%
+a lot of Monte Carlo
+simulation to derive that.
+
+00:55:33.390 --> 00:55:35.840 align:middle line:84%
+Yeah, but it's no
+more work amount
+
+00:55:35.840 --> 00:55:40.946 align:middle line:84%
+than the traditional
+distribution calculation.
+
+00:55:40.946 --> 00:55:42.537 align:middle line:90%
+
+
+00:55:42.537 --> 00:55:44.720 align:middle line:90%
+Yeah.
+
+00:55:44.720 --> 00:55:52.400 align:middle line:84%
+OK, let's move on to modern
+portfolio theory issue number 2.
+
+00:55:52.400 --> 00:55:55.650 align:middle line:84%
+How do we predict the
+future based on the past?
+
+00:55:55.650 --> 00:56:01.280 align:middle line:84%
+How confident can we be in the
+capital market assumptions--
+
+00:56:01.280 --> 00:56:04.970 align:middle line:84%
+return, volatility,
+and the correlation?
+
+00:56:04.970 --> 00:56:08.960 align:middle line:84%
+So because we human
+thinking process--
+
+00:56:08.960 --> 00:56:12.350 align:middle line:84%
+our thinking process is
+always extracting patterns
+
+00:56:12.350 --> 00:56:13.800 align:middle line:90%
+from the data.
+
+00:56:13.800 --> 00:56:15.520 align:middle line:90%
+So we have observations.
+
+00:56:15.520 --> 00:56:18.380 align:middle line:84%
+I'm just outlining the
+typical thinking process.
+
+00:56:18.380 --> 00:56:20.620 align:middle line:90%
+You have observation.
+
+00:56:20.620 --> 00:56:22.790 align:middle line:90%
+You have measurable data.
+
+00:56:22.790 --> 00:56:24.260 align:middle line:90%
+Try to quantify them.
+
+00:56:24.260 --> 00:56:27.730 align:middle line:84%
+Then you try to extract
+useful information
+
+00:56:27.730 --> 00:56:30.760 align:middle line:90%
+or recognize patterns.
+
+00:56:30.760 --> 00:56:34.870 align:middle line:84%
+Then you try to build the
+models, having inputs, outputs
+
+00:56:34.870 --> 00:56:36.280 align:middle line:90%
+and conditions.
+
+00:56:36.280 --> 00:56:41.560 align:middle line:84%
+Then you predict output from
+the inputs and the conditions.
+
+00:56:41.560 --> 00:56:44.620 align:middle line:84%
+Then you repeat
+your observation.
+
+00:56:44.620 --> 00:56:49.270 align:middle line:84%
+Then you iterate, try to
+calibrate your model parameters.
+
+00:56:49.270 --> 00:56:50.830 align:middle line:84%
+When you are very
+good at it, you
+
+00:56:50.830 --> 00:56:53.110 align:middle line:84%
+can actually control
+conditions and inputs
+
+00:56:53.110 --> 00:56:56.270 align:middle line:90%
+to get the desired outcome.
+
+00:56:56.270 --> 00:57:01.490 align:middle line:90%
+So that's true for any subject--
+
+00:57:01.490 --> 00:57:05.810 align:middle line:90%
+physics, engineering, finance.
+
+00:57:05.810 --> 00:57:09.590 align:middle line:84%
+But finance involves
+human behaviors,
+
+00:57:09.590 --> 00:57:12.540 align:middle line:90%
+which is much more complicated.
+
+00:57:12.540 --> 00:57:17.170 align:middle line:84%
+So the historical patterns
+may not be repeatable.
+
+00:57:17.170 --> 00:57:21.660 align:middle line:84%
+And also, the crowding behavior
+and also adaptive behavior
+
+00:57:21.660 --> 00:57:26.010 align:middle line:84%
+of human players will make the
+process much more complicated.
+
+00:57:26.010 --> 00:57:27.783 align:middle line:90%
+So I want to show you a video.
+
+00:57:27.783 --> 00:57:30.600 align:middle line:90%
+
+
+00:57:30.600 --> 00:57:32.105 align:middle line:90%
+Let's see if this works.
+
+00:57:32.105 --> 00:58:03.000 align:middle line:90%
+
+
+00:58:03.000 --> 00:58:08.790 align:middle line:84%
+So you are watching is
+a video of birds or bats
+
+00:58:08.790 --> 00:58:18.950 align:middle line:84%
+in a totally is self-organized
+way to form a group behavior.
+
+00:58:18.950 --> 00:58:23.090 align:middle line:84%
+What they do is they
+watch their neighbors.
+
+00:58:23.090 --> 00:58:27.020 align:middle line:90%
+They adjust their actions.
+
+00:58:27.020 --> 00:58:33.593 align:middle line:84%
+And the group as a whole
+displays certain patterns.
+
+00:58:33.593 --> 00:58:38.390 align:middle line:90%
+
+
+00:58:38.390 --> 00:58:46.610 align:middle line:84%
+The financial market is very
+similar to this, except there's
+
+00:58:46.610 --> 00:58:50.450 align:middle line:84%
+a central observation
+you can actually see,
+
+00:58:50.450 --> 00:58:52.640 align:middle line:90%
+which is the stock price.
+
+00:58:52.640 --> 00:58:56.640 align:middle line:84%
+You can also look at
+your neighbors, too.
+
+00:58:56.640 --> 00:58:58.610 align:middle line:84%
+But nowadays, it's
+much easier to look
+
+00:58:58.610 --> 00:59:00.376 align:middle line:90%
+at the central observation.
+
+00:59:00.376 --> 00:59:05.690 align:middle line:90%
+
+
+00:59:05.690 --> 00:59:12.260 align:middle line:84%
+In the past, I've also shown
+the London Bridge video.
+
+00:59:12.260 --> 00:59:16.420 align:middle line:84%
+How many of you have heard the
+Millennium Bridge of London?
+
+00:59:16.420 --> 00:59:17.230 align:middle line:90%
+Yes?
+
+00:59:17.230 --> 00:59:17.960 align:middle line:90%
+OK.
+
+00:59:17.960 --> 00:59:21.830 align:middle line:84%
+It opened, the Millennium
+Bridge, around 2000.
+
+00:59:21.830 --> 00:59:27.590 align:middle line:84%
+On the first day, when people
+walked on it, it starts to sway.
+
+00:59:27.590 --> 00:59:31.430 align:middle line:84%
+And then people tried
+to keep their balance.
+
+00:59:31.430 --> 00:59:33.430 align:middle line:84%
+They become
+synchronized in steps.
+
+00:59:33.430 --> 00:59:36.400 align:middle line:90%
+That made the sway even bigger.
+
+00:59:36.400 --> 00:59:39.830 align:middle line:90%
+So market does the same thing.
+
+00:59:39.830 --> 00:59:45.110 align:middle line:84%
+When panic feeds into panic
+or greed feeds into greed,
+
+00:59:45.110 --> 00:59:48.460 align:middle line:84%
+market can form bubbles
+and the crashing.
+
+00:59:48.460 --> 00:59:55.640 align:middle line:84%
+And these kind of behaviors
+are not easily predictable.
+
+00:59:55.640 --> 00:59:59.500 align:middle line:84%
+But it's part of
+crowding behavior.
+
+00:59:59.500 --> 01:00:05.200 align:middle line:84%
+So how to understand and
+model this kind of behavior?
+
+01:00:05.200 --> 01:00:08.450 align:middle line:84%
+So we can look at it
+as a feedback loop.
+
+01:00:08.450 --> 01:00:14.410 align:middle line:90%
+So S here is the agent's action.
+
+01:00:14.410 --> 01:00:16.810 align:middle line:90%
+O is the observation.
+
+01:00:16.810 --> 01:00:22.810 align:middle line:84%
+A is kind of an amplifier or
+agent's action fed through
+
+01:00:22.810 --> 01:00:25.310 align:middle line:90%
+into the observation.
+
+01:00:25.310 --> 01:00:28.150 align:middle line:84%
+As you can see, the
+change of the observation
+
+01:00:28.150 --> 01:00:34.610 align:middle line:84%
+is the sum of the agent's action
+times the power they have,
+
+01:00:34.610 --> 01:00:40.540 align:middle line:84%
+which is A. Then agent's action,
+the change of agent's action,
+
+01:00:40.540 --> 01:00:44.720 align:middle line:84%
+dS, is influenced
+by external force,
+
+01:00:44.720 --> 01:00:48.910 align:middle line:84%
+as well as the feedback
+loop of the observation
+
+01:00:48.910 --> 01:00:51.220 align:middle line:90%
+plus some random noise.
+
+01:00:51.220 --> 01:00:57.490 align:middle line:84%
+So that's the basic
+framework of crowd modeling.
+
+01:00:57.490 --> 01:01:02.630 align:middle line:84%
+When the agents behave
+in normal conditions,
+
+01:01:02.630 --> 01:01:04.190 align:middle line:90%
+they are more rational.
+
+01:01:04.190 --> 01:01:08.530 align:middle line:84%
+So they are less reactive
+to the observations.
+
+01:01:08.530 --> 01:01:10.470 align:middle line:84%
+Or you can call it
+the feedback loop.
+
+01:01:10.470 --> 01:01:13.900 align:middle line:84%
+Parameter B is actually
+taking a lower value.
+
+01:01:13.900 --> 01:01:20.230 align:middle line:84%
+But when observation changes
+in a more volatile fashion,
+
+01:01:20.230 --> 01:01:23.230 align:middle line:90%
+the agents tend to react more.
+
+01:01:23.230 --> 01:01:26.100 align:middle line:90%
+They get into a reactive state.
+
+01:01:26.100 --> 01:01:31.410 align:middle line:84%
+So more agents in the crowd
+get into reactive state.
+
+01:01:31.410 --> 01:01:35.970 align:middle line:84%
+The crowd actually
+becomes more synchronized.
+
+01:01:35.970 --> 01:01:40.110 align:middle line:84%
+So if we look at the
+order parameter, which
+
+01:01:40.110 --> 01:01:46.890 align:middle line:84%
+I defined as the ratio of the
+sum of all the actions together
+
+01:01:46.890 --> 01:01:51.990 align:middle line:84%
+divided by the sum of the
+absolute number of the actions,
+
+01:01:51.990 --> 01:01:56.860 align:middle line:84%
+if they are all synchronized,
+that number should be 1.
+
+01:01:56.860 --> 01:02:00.180 align:middle line:84%
+If they are not
+synchronized at all,
+
+01:02:00.180 --> 01:02:03.170 align:middle line:84%
+that number can be
+very close to 0.
+
+01:02:03.170 --> 01:02:06.170 align:middle line:84%
+So what the first
+chart on the left shows
+
+01:02:06.170 --> 01:02:10.100 align:middle line:84%
+is the order parameter
+as a function
+
+01:02:10.100 --> 01:02:15.170 align:middle line:84%
+of number of agents in the
+crowd in the reactive state.
+
+01:02:15.170 --> 01:02:21.110 align:middle line:84%
+So then when more agents become
+reactive to the observation,
+
+01:02:21.110 --> 01:02:25.730 align:middle line:84%
+the order parameter
+can become very high.
+
+01:02:25.730 --> 01:02:28.640 align:middle line:90%
+The crowd gets synchronized.
+
+01:02:28.640 --> 01:02:33.920 align:middle line:84%
+And on the right, you can see
+the order parameter is also
+
+01:02:33.920 --> 01:02:39.330 align:middle line:84%
+a function of the random noise
+term in the previous page.
+
+01:02:39.330 --> 01:02:44.390 align:middle line:84%
+The higher the noise, the
+less likely the agents--
+
+01:02:44.390 --> 01:02:46.490 align:middle line:90%
+the crowd will be synchronized.
+
+01:02:46.490 --> 01:02:51.170 align:middle line:84%
+So this type of behavior, by
+the way, is not new in physics.
+
+01:02:51.170 --> 01:02:54.060 align:middle line:90%
+
+
+01:02:54.060 --> 01:02:58.710 align:middle line:84%
+In some of the circuit
+engineering systems,
+
+01:02:58.710 --> 01:03:01.150 align:middle line:84%
+when you inject a
+noise, you can also
+
+01:03:01.150 --> 01:03:04.070 align:middle line:84%
+reduce the order of
+parameter synchronization.
+
+01:03:04.070 --> 01:03:07.960 align:middle line:84%
+But in social
+science, this actually
+
+01:03:07.960 --> 01:03:12.040 align:middle line:90%
+is also a similar behavior.
+
+01:03:12.040 --> 01:03:16.910 align:middle line:84%
+So I further simulated
+the bubble b process.
+
+01:03:16.910 --> 01:03:21.040 align:middle line:84%
+So when you have an external
+force showing on the upper left,
+
+01:03:21.040 --> 01:03:27.670 align:middle line:84%
+it's kind of ramping up, then
+coming down, then oscillate.
+
+01:03:27.670 --> 01:03:31.930 align:middle line:84%
+The number of agents
+in reactive state
+
+01:03:31.930 --> 01:03:35.500 align:middle line:84%
+starts to peak up,
+then also drop when
+
+01:03:35.500 --> 01:03:39.370 align:middle line:90%
+the external shock diminishes.
+
+01:03:39.370 --> 01:03:42.850 align:middle line:84%
+The observation,
+as a result, also
+
+01:03:42.850 --> 01:03:46.520 align:middle line:90%
+follows, but then comes down.
+
+01:03:46.520 --> 01:03:50.000 align:middle line:84%
+But if the external
+shock, on the other hand,
+
+01:03:50.000 --> 01:03:54.190 align:middle line:84%
+maintains at a
+higher level forever,
+
+01:03:54.190 --> 01:04:00.750 align:middle line:84%
+eventually, all the members
+of the crowd, all the agents,
+
+01:04:00.750 --> 01:04:02.820 align:middle line:90%
+get into the reactive state.
+
+01:04:02.820 --> 01:04:06.730 align:middle line:84%
+So the whole crowd
+becomes synchronized.
+
+01:04:06.730 --> 01:04:11.290 align:middle line:84%
+The observation basically
+shoots through the roof.
+
+01:04:11.290 --> 01:04:14.650 align:middle line:84%
+So it becomes a very
+unstable system.
+
+01:04:14.650 --> 01:04:16.230 align:middle line:90%
+So that's the bubble.
+
+01:04:16.230 --> 01:04:18.700 align:middle line:84%
+At that point, when the
+system becomes unstable,
+
+01:04:18.700 --> 01:04:19.745 align:middle line:90%
+your bubble will burst.
+
+01:04:19.745 --> 01:04:24.210 align:middle line:90%
+
+
+01:04:24.210 --> 01:04:28.000 align:middle line:84%
+So that's the part of
+the crowding behavior.
+
+01:04:28.000 --> 01:04:32.730 align:middle line:84%
+So the purpose of showing that
+is, when we look at portfolio
+
+01:04:32.730 --> 01:04:37.680 align:middle line:84%
+management, this type of bubble
+forming and bursting process
+
+01:04:37.680 --> 01:04:42.450 align:middle line:84%
+is a very important aspect
+of our understanding
+
+01:04:42.450 --> 01:04:45.250 align:middle line:90%
+beyond the fundamental analysis.
+
+01:04:45.250 --> 01:04:49.533 align:middle line:84%
+This is all about
+behavioral finance.
+
+01:04:49.533 --> 01:04:52.800 align:middle line:90%
+
+
+01:04:52.800 --> 01:04:55.710 align:middle line:84%
+It has nothing to do with the
+fundamental of the economy
+
+01:04:55.710 --> 01:04:58.320 align:middle line:90%
+or the fundamental of a company.
+
+01:04:58.320 --> 01:05:03.660 align:middle line:84%
+But then you probably also have
+heard power law distribution.
+
+01:05:03.660 --> 01:05:05.820 align:middle line:84%
+So what is power
+law distribution?
+
+01:05:05.820 --> 01:05:08.910 align:middle line:84%
+It's the winner take
+all, the 80-20 rule,
+
+01:05:08.910 --> 01:05:13.320 align:middle line:84%
+or the Matthews effect, many
+different terms describing
+
+01:05:13.320 --> 01:05:21.390 align:middle line:84%
+essentially a social phenomenon
+that there are a small number
+
+01:05:21.390 --> 01:05:26.730 align:middle line:84%
+or percentage of the agents
+taking a majority share
+
+01:05:26.730 --> 01:05:30.070 align:middle line:90%
+of something in the group.
+
+01:05:30.070 --> 01:05:33.220 align:middle line:84%
+So let's think about
+wealth distribution.
+
+01:05:33.220 --> 01:05:38.110 align:middle line:84%
+So 20% of the people probably
+have 80% of the wealth.
+
+01:05:38.110 --> 01:05:41.560 align:middle line:90%
+And this is also true.
+
+01:05:41.560 --> 01:05:44.160 align:middle line:90%
+You look at the top 20%.
+
+01:05:44.160 --> 01:05:49.180 align:middle line:84%
+Within that 20%, the top
+20% has 80% of the wealth.
+
+01:05:49.180 --> 01:05:51.940 align:middle line:84%
+Then within that,
+it's still true.
+
+01:05:51.940 --> 01:05:56.390 align:middle line:84%
+This is so-called scale
+free or scale invariance.
+
+01:05:56.390 --> 01:06:01.110 align:middle line:84%
+This is the unique property
+of power law distribution.
+
+01:06:01.110 --> 01:06:07.910 align:middle line:84%
+So in mathematical terms, the
+probability of b times x-- x
+
+01:06:07.910 --> 01:06:09.240 align:middle line:90%
+is the random variable.
+
+01:06:09.240 --> 01:06:11.150 align:middle line:90%
+b is the scaling factor--
+
+01:06:11.150 --> 01:06:17.000 align:middle line:84%
+equal to some function of g of
+b times the probability of x.
+
+01:06:17.000 --> 01:06:20.390 align:middle line:84%
+So this you can
+prove mathematically.
+
+01:06:20.390 --> 01:06:25.970 align:middle line:84%
+If and only if this p of x
+is a power law distribution,
+
+01:06:25.970 --> 01:06:30.170 align:middle line:84%
+that scale-free
+property maintains.
+
+01:06:30.170 --> 01:06:33.410 align:middle line:84%
+So an example of power
+law distribution,
+
+01:06:33.410 --> 01:06:35.900 align:middle line:84%
+I mentioned the
+wealth distribution.
+
+01:06:35.900 --> 01:06:38.490 align:middle line:90%
+Venture capital funds returns--
+
+01:06:38.490 --> 01:06:44.300 align:middle line:84%
+the top tier funds tend to
+get the majority of the profit
+
+01:06:44.300 --> 01:06:46.310 align:middle line:90%
+of the startup companies.
+
+01:06:46.310 --> 01:06:49.020 align:middle line:84%
+There's a book
+published two years ago.
+
+01:06:49.020 --> 01:06:55.640 align:middle line:84%
+It's called Power Law,
+by Sebastian Mallaby.
+
+01:06:55.640 --> 01:06:57.020 align:middle line:90%
+You should check it out.
+
+01:06:57.020 --> 01:06:58.160 align:middle line:90%
+It's very interesting.
+
+01:06:58.160 --> 01:06:59.720 align:middle line:90%
+It's not mathematical.
+
+01:06:59.720 --> 01:07:04.600 align:middle line:84%
+But it talks about how
+the top tier VC firms
+
+01:07:04.600 --> 01:07:07.840 align:middle line:90%
+winner take all phenomenon.
+
+01:07:07.840 --> 01:07:10.630 align:middle line:90%
+City sizes, same thing.
+
+01:07:10.630 --> 01:07:12.700 align:middle line:90%
+Big cities get bigger.
+
+01:07:12.700 --> 01:07:13.510 align:middle line:90%
+Why?
+
+01:07:13.510 --> 01:07:17.350 align:middle line:84%
+In the network theory,
+because all the nodes
+
+01:07:17.350 --> 01:07:20.080 align:middle line:84%
+want to connect to
+a more popular node
+
+01:07:20.080 --> 01:07:22.090 align:middle line:90%
+to attract more traffic.
+
+01:07:22.090 --> 01:07:27.760 align:middle line:84%
+So the network space, internet
+connections, web pages
+
+01:07:27.760 --> 01:07:33.610 align:middle line:84%
+or social media posts, this type
+of power law is very common.
+
+01:07:33.610 --> 01:07:40.700 align:middle line:84%
+But in nature, we've observed
+a lot of normal distributions,
+
+01:07:40.700 --> 01:07:42.940 align:middle line:90%
+such as height.
+
+01:07:42.940 --> 01:07:46.030 align:middle line:84%
+So a lot of people are
+probably centered around
+
+01:07:46.030 --> 01:07:55.350 align:middle line:84%
+call it between 5 to around 6
+feet, maybe just under 6 feet.
+
+01:07:55.350 --> 01:07:59.520 align:middle line:84%
+This is the majority
+of the population.
+
+01:07:59.520 --> 01:08:02.110 align:middle line:84%
+It's not like most
+people are very short,
+
+01:08:02.110 --> 01:08:06.030 align:middle line:84%
+but there are a few giants,
+really, just much taller.
+
+01:08:06.030 --> 01:08:07.150 align:middle line:90%
+So that's power law.
+
+01:08:07.150 --> 01:08:12.450 align:middle line:84%
+Power law does not exist
+in the height distribution.
+
+01:08:12.450 --> 01:08:17.130 align:middle line:84%
+So now, we commented on many
+social phenomena obey power law
+
+01:08:17.130 --> 01:08:17.890 align:middle line:90%
+distribution.
+
+01:08:17.890 --> 01:08:19.109 align:middle line:90%
+But why?
+
+01:08:19.109 --> 01:08:24.870 align:middle line:84%
+This is the question that
+always makes me very curious.
+
+01:08:24.870 --> 01:08:32.490 align:middle line:84%
+So what's the cause of such
+skewed wealth distribution?
+
+01:08:32.490 --> 01:08:36.029 align:middle line:84%
+So eventually, I
+realized this actually
+
+01:08:36.029 --> 01:08:38.800 align:middle line:84%
+has a lot to do with
+the crowd interaction.
+
+01:08:38.800 --> 01:08:45.330 align:middle line:84%
+So the same mechanism we
+looked at earlier, the agents
+
+01:08:45.330 --> 01:08:47.200 align:middle line:90%
+have the feedback loop.
+
+01:08:47.200 --> 01:08:51.529 align:middle line:84%
+That's the reason of the cause
+of this type of power law.
+
+01:08:51.529 --> 01:08:56.300 align:middle line:84%
+In nature, you don't have that
+kind of a feedback mechanism.
+
+01:08:56.300 --> 01:08:59.040 align:middle line:84%
+Once you are born, you
+grow to a certain height.
+
+01:08:59.040 --> 01:09:01.130 align:middle line:90%
+Your height doesn't change.
+
+01:09:01.130 --> 01:09:07.490 align:middle line:84%
+But in social phenomena,
+that keeps changing.
+
+01:09:07.490 --> 01:09:10.370 align:middle line:84%
+So agents have different
+powers influencing
+
+01:09:10.370 --> 01:09:13.460 align:middle line:90%
+the market in financial market.
+
+01:09:13.460 --> 01:09:15.710 align:middle line:90%
+The rich can get richer.
+
+01:09:15.710 --> 01:09:18.960 align:middle line:84%
+So we need to model
+each agent differently.
+
+01:09:18.960 --> 01:09:21.700 align:middle line:84%
+So we call it
+heterogeneous agents.
+
+01:09:21.700 --> 01:09:24.770 align:middle line:90%
+
+
+01:09:24.770 --> 01:09:29.600 align:middle line:84%
+So for a random variable
+x, the normal distribution
+
+01:09:29.600 --> 01:09:34.040 align:middle line:84%
+we're all familiar with is
+the e to the x minus the mean
+
+01:09:34.040 --> 01:09:36.380 align:middle line:90%
+divided by 2 sigma squared.
+
+01:09:36.380 --> 01:09:39.979 align:middle line:84%
+But for power law,
+people, a lot of times,
+
+01:09:39.979 --> 01:09:43.010 align:middle line:84%
+get confused about
+the terminologies.
+
+01:09:43.010 --> 01:09:49.250 align:middle line:84%
+The Pareto law talks about
+the cumulative density
+
+01:09:49.250 --> 01:09:52.970 align:middle line:90%
+function of the probability.
+
+01:09:52.970 --> 01:10:02.610 align:middle line:84%
+And Zipf's law talks about
+the rank of that outcome.
+
+01:10:02.610 --> 01:10:04.820 align:middle line:84%
+So basically, the
+random variable x
+
+01:10:04.820 --> 01:10:11.810 align:middle line:84%
+versus the rank of X, which is
+more displayed in this chart.
+
+01:10:11.810 --> 01:10:13.730 align:middle line:90%
+But they are all related.
+
+01:10:13.730 --> 01:10:18.080 align:middle line:84%
+When we normally look at the
+power law in a probability
+
+01:10:18.080 --> 01:10:23.090 align:middle line:84%
+density function,
+that behaves like this
+
+01:10:23.090 --> 01:10:25.260 align:middle line:90%
+versus the normal distribution.
+
+01:10:25.260 --> 01:10:30.530 align:middle line:84%
+So even distribution, of
+course, is a delta function.
+
+01:10:30.530 --> 01:10:34.670 align:middle line:84%
+So the parameters of
+these three different ways
+
+01:10:34.670 --> 01:10:39.900 align:middle line:84%
+of representing power law, they
+are all linked by that formula.
+
+01:10:39.900 --> 01:10:43.130 align:middle line:84%
+So power law probability
+density function
+
+01:10:43.130 --> 01:10:46.652 align:middle line:90%
+is C over x to the power of a.
+
+01:10:46.652 --> 01:10:53.270 align:middle line:84%
+a is related to the cumulative
+density function, power k,
+
+01:10:53.270 --> 01:10:58.430 align:middle line:84%
+as well as the Zipf's
+law of parameter b.
+
+01:10:58.430 --> 01:11:01.060 align:middle line:90%
+
+
+01:11:01.060 --> 01:11:05.290 align:middle line:84%
+So if we look at the
+feedback mechanism,
+
+01:11:05.290 --> 01:11:13.540 align:middle line:84%
+we can derive that the agents
+with more power, in this case,
+
+01:11:13.540 --> 01:11:18.020 align:middle line:84%
+which is represented by
+a, varying over time,
+
+01:11:18.020 --> 01:11:22.420 align:middle line:84%
+can gain more power when they
+bet in the right direction,
+
+01:11:22.420 --> 01:11:24.700 align:middle line:84%
+when the observation
+shows their betting is
+
+01:11:24.700 --> 01:11:27.160 align:middle line:90%
+in the right direction.
+
+01:11:27.160 --> 01:11:28.730 align:middle line:90%
+So that's how rich get richer.
+
+01:11:28.730 --> 01:11:33.670 align:middle line:84%
+So that's how concentration
+of power is formed.
+
+01:11:33.670 --> 01:11:37.635 align:middle line:84%
+Super agents will be
+born, in this case.
+
+01:11:37.635 --> 01:11:42.190 align:middle line:84%
+The system may or may not
+become stable when that happens.
+
+01:11:42.190 --> 01:11:45.270 align:middle line:84%
+And I mean, this
+actually can be expanded
+
+01:11:45.270 --> 01:11:47.710 align:middle line:90%
+into a discussion of entropy.
+
+01:11:47.710 --> 01:11:49.690 align:middle line:90%
+What is order?
+
+01:11:49.690 --> 01:11:51.250 align:middle line:90%
+What is stable?
+
+01:11:51.250 --> 01:11:55.620 align:middle line:84%
+But this is beyond the
+scope of this lecture.
+
+01:11:55.620 --> 01:11:59.880 align:middle line:84%
+Just to come back, this is
+all relevant to portfolio
+
+01:11:59.880 --> 01:12:01.350 align:middle line:90%
+management.
+
+01:12:01.350 --> 01:12:07.710 align:middle line:84%
+So I want to summarize, in this
+page, of what we learned today.
+
+01:12:07.710 --> 01:12:12.330 align:middle line:84%
+So portfolio management is about
+how to size each investment.
+
+01:12:12.330 --> 01:12:15.100 align:middle line:84%
+You need to clarify
+your objectives.
+
+01:12:15.100 --> 01:12:18.270 align:middle line:84%
+You need to know
+your loss tolerance.
+
+01:12:18.270 --> 01:12:19.920 align:middle line:90%
+Diversification helps.
+
+01:12:19.920 --> 01:12:22.710 align:middle line:90%
+But you need to rebalance.
+
+01:12:22.710 --> 01:12:24.550 align:middle line:90%
+Volatility is not risk.
+
+01:12:24.550 --> 01:12:28.540 align:middle line:84%
+Sharpe ratio doesn't capture
+skill nor provide sizing.
+
+01:12:28.540 --> 01:12:32.880 align:middle line:84%
+We should use the new
+ratio I presented to you.
+
+01:12:32.880 --> 01:12:35.790 align:middle line:84%
+Capital market assumptions
+are not reliable.
+
+01:12:35.790 --> 01:12:40.140 align:middle line:84%
+And the crowding behavior
+can push markets to extremes.
+
+01:12:40.140 --> 01:12:44.060 align:middle line:84%
+You should pay attention
+to powerful super agents.
+
+01:12:44.060 --> 01:12:49.730 align:middle line:84%
+Who are the most powerful super
+agents you can think about?
+
+01:12:49.730 --> 01:12:52.500 align:middle line:84%
+Anybody has any
+idea in the market?
+
+01:12:52.500 --> 01:12:54.320 align:middle line:90%
+STUDENT: The Fed.
+
+01:12:54.320 --> 01:12:56.030 align:middle line:90%
+JAKE XIA: Yes, the Fed.
+
+01:12:56.030 --> 01:12:56.660 align:middle line:90%
+Yes.
+
+01:12:56.660 --> 01:12:58.827 align:middle line:84%
+So when you invest
+in the market,
+
+01:12:58.827 --> 01:13:00.410 align:middle line:84%
+you have to pay
+attention because they
+
+01:13:00.410 --> 01:13:06.140 align:middle line:84%
+have such a big power to change
+the direction of markets.
+
+01:13:06.140 --> 01:13:09.120 align:middle line:84%
+And in the old days, some
+hedge funds have more power.
+
+01:13:09.120 --> 01:13:12.560 align:middle line:84%
+But I would say, nowadays, it's
+definitely the governments.
+
+01:13:12.560 --> 01:13:17.750 align:middle line:84%
+So you need to understand the
+key drivers of your portfolio.
+
+01:13:17.750 --> 01:13:21.110 align:middle line:84%
+So I want to stop
+the lecture here.
+
+01:13:21.110 --> 01:13:23.010 align:middle line:90%
+I want to take some questions.
+
+01:13:23.010 --> 01:13:25.790 align:middle line:84%
+Then I will save a
+couple of minutes
+
+01:13:25.790 --> 01:13:27.480 align:middle line:84%
+to talk about the
+investment game.
+
+01:13:27.480 --> 01:13:33.080 align:middle line:84%
+But before I get there,
+let's open up for questions.
+
+01:13:33.080 --> 01:13:35.370 align:middle line:84%
+I packed in a lot of
+content for today.
+
+01:13:35.370 --> 01:13:37.220 align:middle line:90%
+I know.
+
+01:13:37.220 --> 01:13:42.220 align:middle line:84%
+The idea is not
+necessary to ask you
+
+01:13:42.220 --> 01:13:45.160 align:middle line:84%
+to follow in
+details because some
+
+01:13:45.160 --> 01:13:47.440 align:middle line:84%
+of the math you probably
+need to derive it yourself
+
+01:13:47.440 --> 01:13:48.710 align:middle line:90%
+to get a feel.
+
+01:13:48.710 --> 01:13:52.330 align:middle line:84%
+But I want to give you the
+concepts of what the portfolio
+
+01:13:52.330 --> 01:13:53.930 align:middle line:90%
+construction is all about.
+
+01:13:53.930 --> 01:13:56.570 align:middle line:84%
+It's about sizing
+of investments.
+
+01:13:56.570 --> 01:14:00.320 align:middle line:84%
+Sizing is about comparison
+about investments.
+
+01:14:00.320 --> 01:14:06.430 align:middle line:84%
+So how to compare them, that's
+what it really comes down to.
+
+01:14:06.430 --> 01:14:12.370 align:middle line:90%
+So for that, please, questions.
+
+01:14:12.370 --> 01:14:13.570 align:middle line:90%
+Yes?
+
+01:14:13.570 --> 01:14:17.650 align:middle line:84%
+STUDENT: [INAUDIBLE]
+that can influence
+
+01:14:17.650 --> 01:14:21.880 align:middle line:84%
+investments is taxes that you
+have to pay on capital gains
+
+01:14:21.880 --> 01:14:24.640 align:middle line:84%
+or how long you own
+something can vary
+
+01:14:24.640 --> 01:14:27.880 align:middle line:84%
+[INAUDIBLE] certain
+types of investments
+
+01:14:27.880 --> 01:14:31.190 align:middle line:84%
+might be more tax
+sensitive than others.
+
+01:14:31.190 --> 01:14:35.890 align:middle line:84%
+Is that something that
+is considered heavily
+
+01:14:35.890 --> 01:14:39.670 align:middle line:84%
+in terms of investment
+supports [INAUDIBLE]?
+
+01:14:39.670 --> 01:14:43.350 align:middle line:84%
+JAKE XIA: Yeah, so
+that's a great question.
+
+01:14:43.350 --> 01:14:45.800 align:middle line:84%
+Endowments are tax
+free, by the way.
+
+01:14:45.800 --> 01:14:46.910 align:middle line:90%
+So don't consider that.
+
+01:14:46.910 --> 01:14:49.090 align:middle line:84%
+But if you run a
+family office, you
+
+01:14:49.090 --> 01:14:54.230 align:middle line:84%
+have to be very careful to
+plan your capital gains.
+
+01:14:54.230 --> 01:14:57.520 align:middle line:84%
+So the family offices,
+or private investors,
+
+01:14:57.520 --> 01:15:00.790 align:middle line:84%
+tend to invest more in
+long term private equity
+
+01:15:00.790 --> 01:15:03.050 align:middle line:84%
+because they don't have
+to realize those gains.
+
+01:15:03.050 --> 01:15:07.070 align:middle line:84%
+They invest less in public
+equity for the tax reason.
+
+01:15:07.070 --> 01:15:10.240 align:middle line:84%
+So it is a very
+important parameter.
+
+01:15:10.240 --> 01:15:12.880 align:middle line:90%
+Yeah.
+
+01:15:12.880 --> 01:15:14.000 align:middle line:90%
+Any other questions?
+
+01:15:14.000 --> 01:15:14.990 align:middle line:90%
+Yes?
+
+01:15:14.990 --> 01:15:17.920 align:middle line:84%
+STUDENT: What is the
+best risk measure?
+
+01:15:17.920 --> 01:15:19.510 align:middle line:84%
+What should you
+measuree risk with?
+
+01:15:19.510 --> 01:15:22.300 align:middle line:84%
+JAKE XIA: So I still
+think we should
+
+01:15:22.300 --> 01:15:27.100 align:middle line:84%
+try to understand the potential
+loss or expected loss--
+
+01:15:27.100 --> 01:15:31.390 align:middle line:84%
+so that's the L I
+discussed earlier--
+
+01:15:31.390 --> 01:15:38.200 align:middle line:84%
+because people tend to think
+gain and loss are symmetrical.
+
+01:15:38.200 --> 01:15:41.190 align:middle line:84%
+But normally, it's not
+the case because you
+
+01:15:41.190 --> 01:15:45.610 align:middle line:84%
+can construct your positions
+of very asymmetrical payouts.
+
+01:15:45.610 --> 01:15:49.020 align:middle line:84%
+So you need to understand, when
+you buy an option, of course,
+
+01:15:49.020 --> 01:15:52.810 align:middle line:84%
+your maximum loss is the
+option premium you paid.
+
+01:15:52.810 --> 01:15:54.100 align:middle line:90%
+It's very clear.
+
+01:15:54.100 --> 01:15:58.060 align:middle line:84%
+But when you buy a stock,
+that may not be so clear.
+
+01:15:58.060 --> 01:16:01.020 align:middle line:84%
+So you need to understand
+how much the stock can lose.
+
+01:16:01.020 --> 01:16:02.310 align:middle line:90%
+It can move down.
+
+01:16:02.310 --> 01:16:05.850 align:middle line:84%
+And what's the likely
+range it can move down
+
+01:16:05.850 --> 01:16:08.290 align:middle line:90%
+to and those kind of things.
+
+01:16:08.290 --> 01:16:12.810 align:middle line:84%
+So I think the risk measurement
+should be shifted or focused
+
+01:16:12.810 --> 01:16:15.040 align:middle line:90%
+more on the downside protection.
+
+01:16:15.040 --> 01:16:19.924 align:middle line:84%
+Understand your downside,
+which is really expected loss.
+
+01:16:19.924 --> 01:16:22.170 align:middle line:84%
+STUDENT: [INAUDIBLE]
+the question expected
+
+01:16:22.170 --> 01:16:24.900 align:middle line:90%
+loss versus worst-case loss.
+
+01:16:24.900 --> 01:16:26.220 align:middle line:90%
+How do you--
+
+01:16:26.220 --> 01:16:28.570 align:middle line:84%
+JAKE XIA: Yeah, those
+are two different things.
+
+01:16:28.570 --> 01:16:32.190 align:middle line:84%
+So roughly, you can think
+about worst loss may be
+
+01:16:32.190 --> 01:16:35.160 align:middle line:90%
+a few standard deviations away.
+
+01:16:35.160 --> 01:16:38.870 align:middle line:84%
+I mean, expected loss
+probably is really
+
+01:16:38.870 --> 01:16:43.010 align:middle line:84%
+the weighted average
+of outcome times
+
+01:16:43.010 --> 01:16:45.860 align:middle line:90%
+the payout, that kind of thing.
+
+01:16:45.860 --> 01:16:51.350 align:middle line:84%
+So you cannot construct your
+portfolio all based on worst
+
+01:16:51.350 --> 01:16:51.960 align:middle line:90%
+case.
+
+01:16:51.960 --> 01:16:53.970 align:middle line:84%
+Then you will not
+be doing anything.
+
+01:16:53.970 --> 01:16:58.610 align:middle line:84%
+So that's why expected loss
+is probably a better way
+
+01:16:58.610 --> 01:17:02.640 align:middle line:84%
+to measure for sizing
+your investments.
+
+01:17:02.640 --> 01:17:05.750 align:middle line:84%
+But you need to be aware
+of your worst loss, yeah,
+
+01:17:05.750 --> 01:17:07.560 align:middle line:90%
+in case something happens.
+
+01:17:07.560 --> 01:17:08.060 align:middle line:90%
+Yeah?
+
+01:17:08.060 --> 01:17:08.720 align:middle line:90%
+Yes?
+
+01:17:08.720 --> 01:17:10.303 align:middle line:84%
+STUDENT: I was going
+to say, going off
+
+01:17:10.303 --> 01:17:13.080 align:middle line:84%
+the worst-case loss, [INAUDIBLE]
+implement stop losses?
+
+01:17:13.080 --> 01:17:15.370 align:middle line:84%
+How effective have
+you found those?
+
+01:17:15.370 --> 01:17:18.020 align:middle line:90%
+[INAUDIBLE] as well?
+
+01:17:18.020 --> 01:17:18.830 align:middle line:90%
+JAKE XIA: Yeah.
+
+01:17:18.830 --> 01:17:23.510 align:middle line:84%
+So yeah, I think it's a very
+good question both of you
+
+01:17:23.510 --> 01:17:25.250 align:middle line:90%
+brought up.
+
+01:17:25.250 --> 01:17:27.930 align:middle line:84%
+Stop loss is an
+interesting concept.
+
+01:17:27.930 --> 01:17:32.160 align:middle line:84%
+So stop loss typically is
+not set at the worst loss.
+
+01:17:32.160 --> 01:17:36.820 align:middle line:84%
+It's set usually quite
+close, probably even closer
+
+01:17:36.820 --> 01:17:39.430 align:middle line:90%
+than the expected loss.
+
+01:17:39.430 --> 01:17:42.710 align:middle line:84%
+If you're trading at the
+hedge fund platforms,
+
+01:17:42.710 --> 01:17:46.330 align:middle line:84%
+they give you a very tight
+stop loss for the reason
+
+01:17:46.330 --> 01:17:50.586 align:middle line:84%
+that they try to
+artificially construct
+
+01:17:50.586 --> 01:17:53.500 align:middle line:84%
+an asymmetric payout
+for the portfolio
+
+01:17:53.500 --> 01:17:55.190 align:middle line:90%
+managers or the traders.
+
+01:17:55.190 --> 01:17:58.400 align:middle line:84%
+When you lose a little bit,
+they cut your position in half.
+
+01:17:58.400 --> 01:18:00.980 align:middle line:84%
+Then you lose another
+few percentage points,
+
+01:18:00.980 --> 01:18:02.780 align:middle line:84%
+cut another half,
+then get you out.
+
+01:18:02.780 --> 01:18:07.780 align:middle line:84%
+So when you make money, they
+try to let you ride on the winds
+
+01:18:07.780 --> 01:18:11.600 align:middle line:84%
+to create that kind of
+asymmetric optionality.
+
+01:18:11.600 --> 01:18:16.030 align:middle line:84%
+But that forces you
+to pick investment
+
+01:18:16.030 --> 01:18:19.820 align:middle line:84%
+that has that kind of a
+probability distribution.
+
+01:18:19.820 --> 01:18:23.560 align:middle line:84%
+So if you think an investment
+has a worst case loss which
+
+01:18:23.560 --> 01:18:28.640 align:middle line:84%
+is very bad, but has a
+very low probability,
+
+01:18:28.640 --> 01:18:34.020 align:middle line:84%
+let's just say, you need
+to think about if that--
+
+01:18:34.020 --> 01:18:37.260 align:middle line:84%
+almost like the firm
+takes that risk for you
+
+01:18:37.260 --> 01:18:40.900 align:middle line:84%
+because they are
+responsible to cut you out.
+
+01:18:40.900 --> 01:18:43.840 align:middle line:84%
+But if you think the
+upside is very big,
+
+01:18:43.840 --> 01:18:46.650 align:middle line:90%
+then you should take that bet.
+
+01:18:46.650 --> 01:18:48.330 align:middle line:90%
+You get it.
+
+01:18:48.330 --> 01:18:49.290 align:middle line:90%
+Yeah.
+
+01:18:49.290 --> 01:18:51.550 align:middle line:90%
+STUDENT: [INAUDIBLE]
+
+01:18:51.550 --> 01:18:54.600 align:middle line:90%
+JAKE XIA: Yeah, right.
+
+01:18:54.600 --> 01:19:01.000 align:middle line:84%
+Yeah, that's a lot of the
+issues with hedge funds.
+
+01:19:01.000 --> 01:19:05.340 align:middle line:84%
+They get a cut on the profit,
+but they don't bear the downside
+
+01:19:05.340 --> 01:19:06.870 align:middle line:90%
+responsibilities.
+
+01:19:06.870 --> 01:19:11.250 align:middle line:84%
+So they are long a
+free call option.
+
+01:19:11.250 --> 01:19:11.837 align:middle line:90%
+Yeah.
+
+01:19:11.837 --> 01:19:14.420 align:middle line:84%
+So that's why a lot of people
+want to be a hedge fund manager.
+
+01:19:14.420 --> 01:19:17.280 align:middle line:90%
+
+
+01:19:17.280 --> 01:19:20.740 align:middle line:84%
+So I will just touch
+upon the investment game.
+
+01:19:20.740 --> 01:19:24.300 align:middle line:90%
+We already talked about it.
+
+01:19:24.300 --> 01:19:29.220 align:middle line:84%
+When we pass November
+15, you should
+
+01:19:29.220 --> 01:19:32.680 align:middle line:84%
+keep track of G and
+L numbers and let
+
+01:19:32.680 --> 01:19:34.460 align:middle line:90%
+us know how you performed.
+
+01:19:34.460 --> 01:19:36.980 align:middle line:90%
+And I will try to verify.
+
+01:19:36.980 --> 01:19:40.100 align:middle line:84%
+But last slide, I want to
+just coming back to the point,
+
+01:19:40.100 --> 01:19:42.960 align:middle line:84%
+a lot of people ask how to
+become a hedge fund manager.
+
+01:19:42.960 --> 01:19:45.760 align:middle line:90%
+
+
+01:19:45.760 --> 01:19:50.470 align:middle line:84%
+Maybe I want to poll the
+audience here a little bit.
+
+01:19:50.470 --> 01:19:54.640 align:middle line:84%
+Is there a value, you think,
+from that trading or investment
+
+01:19:54.640 --> 01:19:57.530 align:middle line:84%
+game to do some
+paper trading games?
+
+01:19:57.530 --> 01:20:01.690 align:middle line:84%
+Or do you think you want
+more lectures on the research
+
+01:20:01.690 --> 01:20:05.860 align:middle line:84%
+process, how to do data
+collection, signal generation,
+
+01:20:05.860 --> 01:20:09.850 align:middle line:84%
+backtesting, and all the things
+and the portfolio optimization,
+
+01:20:09.850 --> 01:20:11.320 align:middle line:90%
+as we talk about today?
+
+01:20:11.320 --> 01:20:16.630 align:middle line:84%
+Or some people say, I just
+want to learn more about how
+
+01:20:16.630 --> 01:20:19.220 align:middle line:84%
+to become a manager,
+how to do fundraising,
+
+01:20:19.220 --> 01:20:22.360 align:middle line:84%
+how to build a team, how
+to negotiate the terms
+
+01:20:22.360 --> 01:20:26.570 align:middle line:84%
+and how to assemble
+systems and a back office,
+
+01:20:26.570 --> 01:20:29.420 align:middle line:90%
+legal taxes, and so on.
+
+01:20:29.420 --> 01:20:35.750 align:middle line:84%
+So I'm actually thinking
+maybe there's something we,
+
+01:20:35.750 --> 01:20:40.430 align:middle line:84%
+as an organization, or some
+other people should really just
+
+01:20:40.430 --> 01:20:45.860 align:middle line:84%
+help the younger potential
+PMs a little more
+
+01:20:45.860 --> 01:20:50.570 align:middle line:84%
+to incubate them to become
+a better fund manager.
+
+01:20:50.570 --> 01:20:55.830 align:middle line:84%
+If any one of you think that's
+something valid, this idea,
+
+01:20:55.830 --> 01:21:01.760 align:middle line:84%
+you can talk to me, email me,
+or just come to me after class.
+
+01:21:01.760 --> 01:21:05.150 align:middle line:84%
+Maybe there's
+something beyond what
+
+01:21:05.150 --> 01:21:11.360 align:middle line:84%
+we talk in this class that could
+be useful to any one of you.
+
+01:21:11.360 --> 01:21:15.525 align:middle line:84%
+So with that, thank
+you very much.
+
+01:21:15.525 --> 01:21:28.000 align:middle line:90%
