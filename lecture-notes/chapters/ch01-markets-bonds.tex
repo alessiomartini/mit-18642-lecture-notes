@@ -667,6 +667,16 @@ constant rate,
 \]
 and the present value of a cash flow $N$ at time $t$ is $N\Lambda_t$ \ts{24}{1-III}{8:09}.
 \end{definition}\note{am i right if i say: given X money now, its value in the future is computet via the interest rate, while its value in the past is computed via the discount factor [we consider time as having an intrinsic value - different if we compound or not]. I AM RIGHT! look at: $X_{now} = X_{future} \cdot e^{-rt}$ and notice you can easily invert it to get $X_{future} = X_{now} \cdot e^{rt}$. [it is even simpler if you allow time to be negative, then you can use the same formula for both past and future]}
+\begin{answer}[Moving money along the time axis]
+Yes. With a constant rate, $\Lambda_t = e^{-rt}$ moves a value \emph{back} from time $t$ to today and its
+inverse $1/\Lambda_t = e^{rt}$ (the growth or compounding factor) moves it \emph{forward}; with signed time
+the single formula $X_{t_2} = X_{t_1}e^{r(t_2-t_1)}$ does both. Two refinements. First, the value is not
+intrinsic to time: it is set by the rate the market pays for lending over that period. Second, when the
+rate depends on maturity (a yield curve, \cref{sec:bonds}) the factor between two dates is
+$\Lambda_{t_2}/\Lambda_{t_1}$, not a single exponential, and this ratio is exactly the forward rate of
+\cref{prop:forward}. Reading every pricing formula as ``price now $=\Lambda\times$ payoff later'' is the
+habit to keep: $\Lambda$ carries values back in time.
+\end{answer}
 
 \begin{intuition}[No probabilities needed]
 The argument never uses probabilities or preferences: only the existence of a riskless strategy
@@ -693,6 +703,17 @@ periodic coupons $C$ and the notional at maturity; US Treasuries pay coupons sem
 \end{tikzpicture}
 \end{center}
 
+\begin{answer}[Bond vs forward; coupon frequency elsewhere]
+A bond is a loan, not a forward. The buyer pays the price $P$ \emph{today} and from then on only the
+issuer has obligations (to pay coupons and notional). In a forward or future nothing is paid today and
+\emph{both} parties are obliged at $T$, one to buy and one to sell. Coupon frequency by issuer:
+\begin{itemize}
+  \item annual: Germany (Bund), France (OAT), Spain (Bonos), Netherlands (DSL);
+  \item semi-annual: Italy (BTP), United Kingdom (gilts), Japan (JGB), United States (Treasury notes and bonds).
+\end{itemize}
+The pricing formulas are the same with $n$ periods and the rate per period ($r/2$ for semi-annual coupons).
+\end{answer}
+
 \begin{proposition}[Bond prices at a flat rate]\label{prop:bondprice}
 With annual coupons and a constant annual rate $r$,
 \begin{align}
@@ -701,6 +722,11 @@ With annual coupons and a constant annual rate $r$,
    = C\,\frac{(1+r)^n-1}{r(1+r)^n} + \frac{N}{(1+r)^n}.\label{eq:couponbond}
 \end{align}
 \end{proposition} \note{credo che il discount rate sulla parte del coupon debba essere divisa per n. no non e' vero, n e' il numero di anni, e noi calcoliamo il valore al tempo zero se riceviamo soldi al tempo k, dato un certo tasso di interesse.}
+\begin{answer}[Why the coupon is not divided by $n$]
+Your second thought is right. Each coupon $C$ is a separate payment at time $k$ and is discounted
+by its own factor $(1+r)^{-k}$; $n$ only fixes how many coupons there are and when the notional comes
+back. Nothing is shared out over the $n$ years.
+\end{answer}
 \begin{proof}
 Each cash flow is discounted with its discount factor. With $v = 1/(1+r)$ the coupon part is the
 geometric sum $C\sum_{k=1}^n v^k = C\,v\,\frac{1-v^n}{1-v} = C\,\frac{1-(1+r)^{-n}}{r}$, which equals
@@ -710,6 +736,11 @@ the stated expression.
 \begin{corollary}[Par bonds]\label{cor:par}
 A bond trades \emph{at par} ($P=N$) iff its coupon rate equals the rate: $C = rN$.
 \end{corollary} \note{does par stand for parity?}
+\begin{answer}[Par]
+Not parity: \emph{par} is the face (nominal) value of the bond, from Latin \emph{par}, ``equal''. ``At par''
+means $P=N$; above par is a \emph{premium}, below par a \emph{discount}. Prices are quoted per 100 of
+nominal, so a par bond is quoted at 100.
+\end{answer}
 \begin{proof}
 Set $C = cN$ in \eqref{eq:couponbond}:
 $P/N = \frac{c}{r}\bigl(1-(1+r)^{-n}\bigr) + (1+r)^{-n} = 1 + \bigl(\tfrac{c}{r}-1\bigr)\bigl(1-(1+r)^{-n}\bigr)$,
@@ -729,11 +760,47 @@ price: $P = \sum_k \mathrm{CF}_k (1+y)^{-t_k}$. For an $n$-year zero-coupon bond
 \]
 For coupon bonds the equation is a polynomial in $(1+y)^{-1}$ and is inverted numerically
 \ts{24}{1-III}{12:14}.
-\end{definition}\note{C is the coupon, what is $F_k$? e' giusta la formula di P? perche' non usiamo continuous framework, sembra molto piu semplice-pulito? coupon non funzionerebbe! aggiungi valori tipici di yueld to maturity (e sopraa anche di coupon, prezzo di un bond, discount rate)}
+\end{definition}\note*{C is the coupon, what is $F_k$? e' giusta la formula di P? perche' non usiamo continuous framework, sembra molto piu semplice-pulito? coupon non funzionerebbe! aggiungi valori tipici di yueld to maturity (e sopraa anche di coupon, prezzo di un bond, discount rate)}
+\begin{answer}[Cash flows, continuous yield, typical values]
+$\mathrm{CF}_k$ (one symbol, ``cash flow'') is the $k$-th payment: $C$ at the coupon dates and $C+N$ at maturity.
+The formula is right: it is \eqref{eq:couponbond} with a rate $y$ that is \emph{solved for} instead of given.
+
+The continuous framework works equally well with coupons. The payments stay discrete, only the
+discounting changes: $P=\sum_k \mathrm{CF}_k\,e^{-y_c t_k}$ with $y_c=\ln(1+y)$ (for $y=5\%$, $y_c=4.88\%$). Both
+describe the same price. Markets quote the annual (or semi-annual) compounded yield by convention;
+theory (\cref{ch:sde,ch:hjm}) prefers $y_c$ because exponentials compose and differentiate cleanly.
+
+Typical values (official data, September 2026):
+
+\begin{center}\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+quantity & typical value \\
+\midrule
+yield to maturity & US: 4.2\% (3 months) to 5.5\% (30 years), 25 Sep 2026 \\
+ & Germany 10 y: 3.4\%, Italy 10 y: 4.0\% (August 2026 averages) \\
+coupon rate & close to the yield at issue: 3--5\% for new bonds, 0--1.5\% for 2020--21 issues \\
+price & quoted per 100 of nominal, near 100 at issue; e.g.\ 5 years left, yield 4.9\%: \\
+ & coupon 1.5\% $\to$ 85.2,\ \ coupon 4\% $\to$ 96.1,\ \ coupon 5.5\% $\to$ 102.6 \\
+discount factor & $\Lambda_{10}\approx 1.0517^{-10}=0.60$ at the 10-year US yield \\
+\bottomrule
+\end{tabular}
+\end{center}
+Sources: US Treasury Daily Par Yield Curve Rates; Deutsche Bundesbank (BBSIS);
+Banca d'Italia (BTP benchmark gross yields, BMK0100).
+\end{answer}
 
 Since every cash flow is positive, $P(y)$ is strictly decreasing and strictly convex in $y$, so the
 yield is unique. Price decreases with yield and increases with coupon
 (\cref{fig:priceyield}); by \cref{cor:par} the yield of a par bond equals its coupon.\note{l'idea e' che un bond verra' pagato una certa quantita X il giorno Y, e magari restituisce coupon C. Il problema e' trovare quale sia il prezzo adesso. [per me yield=interest rate=discount rate]}
+\begin{answer}[Yield, interest rate, discount rate]
+Your reading of the problem is exactly right: known future payments, unknown price today. The three
+words coincide only when the curve is flat. In general each date has its own rate (the yield curve
+below). The \emph{discount rate} is the rate used for one specific date, and the \emph{yield} is the
+single constant rate that gives the right total price, a cash-flow-weighted average of the curve's
+rates. Two bonds of the same issuer with the same maturity but different coupons can therefore have
+slightly different yields.
+\end{answer}
 
 \begin{figure}[ht]
 \centering
@@ -761,27 +828,90 @@ want more yield for longer commitments); when short yields exceed long yields th
 is widely (though not infallibly) read as a recession signal \ts{24}{1-III}{16:24}. \note{what is the definition of recession?} The short end
 is anchored by the central bank's policy rate \ts{24}{1-II}{14:41}; the long end reflects
 expectations, risk premia, supply and demand.
+\begin{answer}[Recession]
+A common rule of thumb is two consecutive quarters of falling real GDP. In the US the official
+dating is done by the NBER's Business Cycle Dating Committee: a significant decline in economic activity
+that is spread across the economy and lasts more than a few months (it looks at employment, income,
+spending and production, not GDP alone). The 2020 recession, for example, lasted only two months
+(February--April 2020) but was dated as one because it was so deep and widespread.
+\end{answer}
 
 \begin{figure}[ht]
 \centering
 \begin{tikzpicture}
 \begin{axis}[width=0.8\linewidth,height=6.2cm,xlabel={maturity (years)},ylabel={yield (\%)},
-  xmin=0,xmax=30,ymin=0,ymax=8,legend pos=south east,legend style={font=\small},
+  xmin=0,xmax=30,ymin=0,ymax=8,legend style={font=\small,at={(0.5,-0.3)},anchor=north},legend columns=3,
   grid=major,grid style={black!10},mark size=1.2pt]
-  \addplot[thick,black!50,mark=*] coordinates {(0.25,2.95) (1,3.2) (5,5.3) (7,5.9) (10,6.35) (30,7.3)};
+  \addplot[thick,black!50,mark=*] coordinates {(0.25,2.98) (0.5,3.04) (1,3.19) (2,3.87) (3,4.39) (5,5.33) (7,5.91) (10,6.37) (30,7.30)};
   \addlegendentry{11 Sep 1992}
-  \addplot[thick,cscol,mark=*] coordinates {(0.25,3.95) (0.5,4.2) (1,4.15) (2,3.9) (3,3.95) (5,4.1) (7,4.25) (10,4.4) (20,4.7) (30,4.65)};
+  \addplot[thick,cscol,mark=*] coordinates {(0.083,4.00) (0.25,4.03) (0.5,4.20) (1,4.12) (2,3.95) (3,3.99) (5,4.11) (7,4.23) (10,4.41) (20,4.72) (30,4.68)};
   \addlegendentry{12 Sep 2007}
-  \addplot[thick,defcol,mark=*] coordinates {(0.25,0.05) (0.5,0.05) (1,0.07) (2,0.21) (3,0.43) (5,0.8) (7,1.1) (10,1.33) (20,1.85) (30,1.92)};
+  \addplot[thick,defcol,mark=*] coordinates {(0.083,0.06) (0.25,0.05) (0.5,0.06) (1,0.08) (2,0.23) (3,0.45) (5,0.82) (7,1.12) (10,1.35) (20,1.86) (30,1.94)};
   \addlegendentry{10 Sep 2021}
-  \addplot[very thick,fincol,mark=*] coordinates {(0.1,5.3) (0.25,5.2) (0.5,4.8) (1,4.35) (2,3.85) (3,3.75) (5,3.65) (7,3.7) (10,3.8) (20,4.2) (30,4.1)};
+  \addplot[thick,fincol,mark=*] coordinates {(0.083,5.38) (0.25,5.19) (0.5,4.80) (1,4.35) (2,3.88) (3,3.73) (5,3.65) (7,3.73) (10,3.84) (20,4.21) (30,4.13)};
   \addlegendentry{3 Sep 2024}
+  \addplot[very thick,thmcol,mark=*] coordinates {(0.083,4.04) (0.25,4.24) (0.5,4.33) (1,4.50) (2,4.81) (3,4.94) (5,4.98) (7,5.06) (10,5.17) (20,5.54) (30,5.49)};
+  \addlegendentry{25 Sep 2026}
 \end{axis}
 \end{tikzpicture}
-\caption{US Treasury yield curves (values read approximately from slide~23 of \file{lec01_1};
-source treasury.gov). 1992 and 2021: normal upward slope, at very different levels; 2007 and
-2024: inverted short end.}\label{fig:yieldcurve}
-\end{figure}\note{non capisco, se la maturity e' zero allora yield dovrebbe essere zero, no? non e' veramente a zero! perche' un prestito per un anno dovrebbe avere tasso di interesse piu alto che di due? cosi incentivi a comprare bond a scadenza breve, perche'?}\note{vorrei aggiungere yield curves of italian bonds}\note{fai il check con dati ufficiali di queste yield curves e aggiungi quella piu aggiornata di oggi}\note{i found this nice picture to see correlation with fed interest rate (?) https://www.gwkinvest.com/wp-content/uploads/Figure1-GP-June26.svg}
+\caption{US Treasury par yield curves (official Daily Treasury Par Yield Curve Rates, treasury.gov;
+the first four dates are those of slide~23 of \file{lec01_1}). 1992, 2021 and 2026: normal upward slope,
+at very different levels; 2007 and 2024: inverted short end.}\label{fig:yieldcurve}
+\end{figure}\note{non capisco, se la maturity e' zero allora yield dovrebbe essere zero, no? non e' veramente a zero! perche' un prestito per un anno dovrebbe avere tasso di interesse piu alto che di due? cosi incentivi a comprare bond a scadenza breve, perche'?}\note*{vorrei aggiungere yield curves of italian bonds}\note*{fai il check con dati ufficiali di queste yield curves e aggiungi quella piu aggiornata di oggi}\note*{i found this nice picture to see correlation with fed interest rate (?) https://www.gwkinvest.com/wp-content/uploads/Figure1-GP-June26.svg}
+\begin{answer}[The short end; why a curve can invert]
+Yields are \emph{annualised}. A loan for one day earns almost nothing in euros or dollars, but its
+rate per year does not go to zero: as maturity $\to 0$ the yield tends to the overnight rate,
+which the central bank steers with its policy rate (in \cref{fig:fedrates} the 2-year yield follows
+the Fed funds rate closely). So the curve starts at the policy rate, not at zero.
+
+An inverted curve does not reward short bonds in a way anyone can exploit. A long yield is roughly
+the average of the short rates expected over its life, plus a premium for tying money up. If the market
+expects the central bank to \emph{cut} rates (typically because a slowdown is coming), rolling over
+short bonds is expected to earn the high short rate only for a while and then less. The 2-year yield
+therefore sits below today's 1-year yield, and investors are indifferent. That is also why inversions
+are read as recession signals: they encode expected rate cuts.
+\end{answer}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.8\linewidth,height=5.6cm,xlabel={maturity (years)},ylabel={yield (\%)},
+  xmin=0,xmax=31,ymin=1.5,ymax=5,xtick={3,5,10,30},legend style={font=\small,at={(0.5,-0.36)},anchor=north},legend columns=2,
+  grid=major,grid style={black!10},mark size=1.4pt]
+  \addplot[thick,fincol,dashed,mark=*] coordinates {(3,2.65) (5,2.93) (10,3.57) (30,4.22)};
+  \addlegendentry{Italy (BTP), Sep 2024}
+  \addplot[thick,black!60,dashed,mark=square*] coordinates {(3,1.92) (5,1.93) (10,2.21) (30,2.49)};
+  \addlegendentry{Germany (Bund), Sep 2024}
+  \addplot[very thick,fincol,mark=*] coordinates {(3,3.15) (5,3.38) (10,3.99) (30,4.78)};
+  \addlegendentry{Italy (BTP), Aug 2026}
+  \addplot[very thick,black!60,mark=square*] coordinates {(3,2.93) (5,3.02) (10,3.37) (30,3.90)};
+  \addlegendentry{Germany (Bund), Aug 2026}
+\end{axis}
+\end{tikzpicture}
+\caption{Italian and German government yield curves, monthly averages at 3, 5, 10 and 30 years.
+Sources: Banca d'Italia, gross yields of benchmark BTPs (table BMK0100); Deutsche Bundesbank,
+yield curve of listed Federal securities (BBSIS). Both curves slope upward. The gap between them
+is the BTP--Bund \emph{spread}, the extra yield investors ask to hold Italian rather than German debt:
+about 135\,bp at 10 years in September 2024 and 60\,bp in August 2026.}\label{fig:itde}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.9\linewidth,height=5.6cm,xmin=1990,xmax=2026.8,ymin=0,ymax=10,
+  xtick={1990,1995,...,2025},xticklabel style={/pgf/number format/1000 sep={}},xlabel={year},
+  ylabel={rate (\%)},legend pos=north east,legend style={font=\small},grid=major,grid style={black!10},
+  every axis plot/.append style={thin}]
+  \addplot[thick,thmcol] table[x=t,y=ff] {data/fm_fed.dat}; \addlegendentry{Fed funds rate}
+  \addplot[defcol] table[x=t,y=y2] {data/fm_fed.dat}; \addlegendentry{2-year Treasury}
+  \addplot[intcol] table[x=t,y=y10] {data/fm_fed.dat}; \addlegendentry{10-year Treasury}
+\end{axis}
+\end{tikzpicture}
+\caption{Fed funds rate and 2- and 10-year Treasury yields, monthly averages 1990--September 2026
+(FRED series DFF, DGS2, DGS10; re-drawn after the chart linked in the margin). The 2-year yield
+tracks the \emph{expected} path of the policy rate and moves before it. The 10-year yield moves much less.
+When the Fed funds rate is above the 10-year yield (e.g.\ 2000, 2006--07, 2019, 2023--24) the curve is inverted.}\label{fig:fedrates}
+\end{figure}
 
 \paragraph{Bootstrapping.} ``Discount factors for all times can be bootstrapped from the yield
 curve'' (slide 23). Concretely, suppose we observe par yields $c_1, c_2, \dots$ of annual-coupon
@@ -793,10 +923,38 @@ bonds with maturities $1,2,\dots$ years. A par bond with maturity $n$ has price 
 \]
 which determines $\Lambda_1,\Lambda_2,\ldots$ recursively. Real curve construction (many instrument
 types, interpolation, day-count conventions) is the subject of \cref{ch:rates}. \note{i need some more intuition on what is the discount factor and what is the yield, yield curve}
+\begin{answer}[Discount factor, yield, yield curve: one picture]
+\begin{itemize}
+  \item The \emph{discount factor} $\Lambda_t$ is a price: what \$1 delivered at time $t$ costs today.
+        It starts at $\Lambda_0=1$ and decreases, because waiting costs money.
+  \item The \emph{zero yield} $y(t)$ is the same information written as a rate. It is defined by
+        $\Lambda_t=e^{-y(t)\,t}$, i.e.\ $y(t)=-\ln\Lambda_t/t$, the average speed at which $\Lambda$ decays up to $t$.
+  \item The \emph{yield curve} is $t\mapsto y(t)$. A flat curve means $\Lambda_t$ is a pure exponential;
+        an upward curve means $\Lambda_t$ falls faster and faster at long horizons.
+\end{itemize}
+Prices ($\Lambda$) are what you use to compute; rates ($y$) are what you use to compare different maturities,
+the way a physicist compares decay constants rather than surviving fractions.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=0.72\linewidth,height=4.6cm,xlabel={maturity $t$ (years)},ylabel={$\Lambda_t$},
+  domain=0:30,samples=60,xmin=0,xmax=30,ymin=0,ymax=1.05,legend pos=north east,
+  legend style={font=\scriptsize},grid=major,grid style={black!10}]
+  \addplot[thick,defcol] {exp(-0.05*x)}; \addlegendentry{flat curve, $y=5\%$}
+  \addplot[thick,fincol] {exp(-(0.03+0.03*(1-exp(-x/8)))*x)}; \addlegendentry{upward curve, $y$ from 3\% to 6\%}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\end{answer}
 
 \subsection{Duration and convexity}\label{sec:duration}
 A bondholder is exposed to yield changes, and the dependence is non-linear \ts{24}{1-III}{19:29}.
 The sensitivities are derivatives, conventionally scaled by the price. \note{so they are dimensionless?}
+\begin{answer}[Units of duration and convexity]
+No. $y$ is a rate per year, so $D=-P'/P$ has units of years and $\mathcal C=P''/P$ of years$^2$
+(the Macaulay duration is literally an average time). What is dimensionless is the product:
+$D\,\Delta y$ and $\mathcal C\,(\Delta y)^2$, and hence $\Delta P/P$. Example: $D=4.3$ years and
+$\Delta y=+1\,\text{bp}=0.0001$ per year give $\Delta P/P\approx-0.043\%$.
+\end{answer}
 
 \begin{definition}[Duration and convexity]
 \[
@@ -808,6 +966,10 @@ so that, by Taylor expansion,
   \frac{\Delta P}{P} \approx -D\,\Delta y + \tfrac12\,\mathcal C\,(\Delta y)^2 .
 \end{equation}
 \end{definition}\note{the convention for the signs is beacuse we expect D and C to be positive. look at fig 1.2}
+\begin{answer}[Signs]
+Correct. In \cref{fig:priceyield} every curve decreases ($P'<0$) and bends upward ($P''>0$), so the minus sign
+in $D$ and the plus sign in $\mathcal C$ make both numbers positive for ordinary bonds.
+\end{answer}
 
 \begin{coursenote}[Erratum in the slides]
 On slide 24 of \file{lec01_1} convexity is written with the same letter and sign as duration,
@@ -854,15 +1016,28 @@ $\mathcal C = 110/1.04^2 = 101.7$. If the yield rises by $\Delta y = 1\%$:
 first order $-9.62\%$; adding convexity $+\tfrac12\cdot 101.7\cdot 0.0001 = +0.51\%$ gives $-9.11\%$;
 the exact change is $(1.04/1.05)^{10}-1 = -9.13\%$.
 \end{example}\note{we are still considering the yield to be fixed along the duration of the bond maturity, right?}
+\begin{answer}[Flat yield, parallel shifts]
+Right. One yield $y$ discounts all the cash flows (a flat curve), and $\Delta y$ moves it by the same amount at
+every maturity (a \emph{parallel shift}). Real curves also steepen and twist. Desks therefore also use
+\emph{key-rate durations}, the sensitivity to the yield at each single maturity, and the principal
+components of curve moves (level, slope, curvature, \cref{ch:pca}).
+\end{answer}
 
 \begin{finance}[Why convexity is valuable]
 Because $\mathcal C>0$, the price rises more when yields fall than it drops when yields rise by the
 same amount. Two portfolios with the same price and duration but different convexity are
 therefore not equivalent: the more convex one gains from large rate moves in either direction.
-Trading desks hedge duration (first order, like delta) and monitor convexity (second order, like
-gamma).
-\end{finance}\note{first appearence of the Greeks, right? use the symbols $\Delta$, $\Gamma$, etc.}
-\note{in general, i'd like to have graphs and conceptual maps when possible}
+Trading desks hedge duration (first order, like the delta $\Delta=\partial V/\partial S$ of an option) and
+monitor convexity (second order, like the gamma $\Gamma=\partial^2 V/\partial S^2$). For a bond the
+``underlying'' is the yield: $\partial P/\partial y=-DP$ plays the role of $\Delta$ and
+$\partial^2P/\partial y^2=\mathcal C P$ that of $\Gamma$.
+\end{finance}\note*{first appearence of the Greeks, right? use the symbols $\Delta$, $\Gamma$, etc.}
+\note*{in general, i'd like to have graphs and conceptual maps when possible}
+\begin{answer}[The Greeks]
+Yes, this is their first appearance, as an analogy. The Greeks ($\Delta$, $\Gamma$, $\Theta=\partial V/\partial t$,
+$\mathcal V$ ``vega'' $=\partial V/\partial\sigma$, $\rho=\partial V/\partial r$) are defined properly with the
+Black--Scholes formula in \cref{ch:bs}. A conceptual map of this chapter is at the end, before the key formulas.
+\end{answer}
 
 \subsection{Forward rates}\label{sec:forward}
 \begin{definition}[Forward rate agreement]
@@ -873,7 +1048,7 @@ $N(1+F_{tT})$ at $T$.
 
 \begin{proposition}\label{prop:forward}
 In the absence of arbitrage, $F_{tT} = \dfrac{\Lambda_t}{\Lambda_T} - 1$.
-\end{proposition}\note{reminder: price now = Lambda payoff at maturity. Lambda serve a trasportare il valore lungo il tempo - nel passato}
+\end{proposition}\note*{reminder: price now = Lambda payoff at maturity. Lambda serve a trasportare il valore lungo il tempo - nel passato}
 \begin{proof}
 Entering an FRA costs nothing today, so the present value of its cash flows must be zero:
 $-N\Lambda_t + N(1+F_{tT})\Lambda_T = 0$. Equivalently (the form on the slide),
@@ -888,6 +1063,13 @@ $f(0,T) = -\partial_T \ln \Lambda_T$, so that $\Lambda_T = \exp\bigl(-\int_0^T f
 continuously compounded zero yield $-\frac1T\ln\Lambda_T$ is the \emph{average} of the forward rates
 up to $T$. Modelling the dynamics of the whole curve $f(t,T)$ is the HJM framework (\cref{ch:hjm}).
 \end{remark}\note{it feels that f plays the role of r, the interest rate. and Lambda is the correspective of the compount rate, right?}
+\begin{answer}[$f$ vs $r$, $\Lambda$ vs compounding]
+Yes. $f(0,s)$ is the interest rate agreed today for the infinitesimal period $[s,s+\dd s]$. With a constant
+rate $f(0,s)=r$ for every $s$ and $\Lambda_T=e^{-rT}$, so $f$ is ``$r$ allowed to depend on the future date''.
+$\Lambda_T$ is the \emph{inverse} of the compounding factor: $1/\Lambda_T=\exp\bigl(\int_0^T f(0,s)\dd s\bigr)$ is
+what \$1 grows to by $T$ if you lock in all the forward rates today (continuous compounding at a
+time-varying rate).
+\end{answer}
 
 % ------------------------------------------------------------------
 \section{Working with data: R and RStudio}\label{sec:R}
@@ -984,6 +1166,30 @@ price with a Kalman filter \ts{13}{1}{57:41}. State-space models and the Kalman 
 time-series analysis (\cref{ch:timeseries}).
 
 % ------------------------------------------------------------------
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[font=\small,
+  box/.style={draw=#1,fill=#1!10,thick,rounded corners=2pt,align=center,inner sep=4pt,minimum height=10mm,minimum width=30mm},
+  arr/.style={->,>=Stealth,thick,black!60}, lab/.style={font=\scriptsize,black!70}]
+  \node[box=srccol]  (r) at (0,0)      {interest rate $r$\\(or curve $f(0,s)$)};
+  \node[box=defcol]  (L) at (4.8,0)    {discount factor\\$\Lambda_t$};
+  \node[box=intcol]  (P) at (9.6,0)    {bond price\\$P=\sum_k \mathrm{CF}_k\Lambda_{t_k}$};
+  \node[box=fincol]  (y) at (9.6,-2.6) {yield $y$,\\yield curve $y(t)$};
+  \node[box=thmcol]  (D) at (9.6,-5.2) {duration $D$,\\convexity $\mathcal C$};
+  \node[box=keycol]  (F) at (2.4,-2.6) {forward rates\\$F_{tT}=\Lambda_t/\Lambda_T-1$};
+  \node[box=exercol] (H) at (2.4,-5.2) {curve dynamics\\HJM, \cref{ch:hjm}};
+  \draw[arr] (r) -- node[lab,above]{discount} (L);
+  \draw[arr] (L) -- node[lab,above]{price} (P);
+  \draw[arr] (P) -- node[lab,right]{invert} (y);
+  \draw[arr] (y) -- node[lab,right]{$\partial_y,\ \partial_y^2$} (D);
+  \draw[arr] (L) -- node[lab,above left]{no arbitrage} (F);
+  \draw[arr] (F) -- node[lab,left]{let it move} (H);
+  \draw[arr,dashed] (y) -- node[lab,below left]{bootstrap} (L);
+\end{tikzpicture}
+\caption{Conceptual map of the chapter: one object, the discount factor, and what is derived from it.}
+\label{fig:ch1map}
+\end{figure}
+
 \begin{keyformulas}
 \begin{align*}
 &\text{Compounding:} && (1+r)^n,\quad (1+r/m)^{mn},\quad e^{rt}\\
@@ -995,9 +1201,12 @@ time-series analysis (\cref{ch:timeseries}).
 &\text{Zero-coupon:} && D_Z=T/(1+y),\ \ \mathcal C_Z=T(T+1)/(1+y)^2\\
 &\text{Continuous par bond:} && D_p=(1-e^{-yT})/y\\
 &\text{Forward rate:} && F_{tT}=\Lambda_t/\Lambda_T-1\\
-&\text{Alpha, beta:} && R_a=\alpha+\beta R_b+\varepsilon
+&\text{Alpha, beta:} && R_a=\alpha+\beta R_b+\varepsilon\\[3pt]
+&\text{Units:} && r,\ y,\ c,\ f \ [\text{year}^{-1}];\quad t,\ T,\ n,\ D,\ D_{\mathrm{Mac}}\ [\text{years}];\quad \mathcal C\ [\text{years}^2]\\
+& && \Lambda,\ F_{tT},\ P/N,\ \Delta P/P \ [\text{dimensionless}]\\
+& && 1\,\text{bp}=0.01\%=10^{-4}\,\text{year}^{-1}
 \end{align*}
-\end{keyformulas}\note{forse aiuterebbe aggiungere le unita' di misura, tipo $T^{-1}$ per r }
+\end{keyformulas}\note*{forse aiuterebbe aggiungere le unita' di misura, tipo $T^{-1}$ per r }
 
 % ------------------------------------------------------------------
 \section*{Exercises}
@@ -1018,12 +1227,20 @@ the ratio $(G-L)/(G+L)$. Repeat the game on any two-month window of your choice.
         path with the same final P\&L?
 \end{enumerate}
 \end{exercise}
-\note{a) easy to se, imposta le due disuguaglianze, sono ripettate trivialmente. b) il rateo e' profitto totale didiso per il valore assoluto di tutte le variazioni, quindi grandi variazioni implicano piccolo rateo e piccole variazioni grande rateo. inoltre, grande profitto implica grande rateo, piccolo profitto piccolo rateo. quindi questa e' una metrica di quanto profittevole e con bassa volatilita linvestimento e' stato}
+\note*{My solution moved into the box below.}
+\begin{mysolution}
+(a) Easy to see: imposta le due disuguaglianze, sono rispettate trivialmente.
+
+(b) Il rateo è il profitto totale diviso per il valore assoluto di tutte le variazioni, quindi grandi
+variazioni implicano piccolo rateo e piccole variazioni grande rateo. Inoltre, grande profitto implica
+grande rateo, piccolo profitto piccolo rateo. Quindi questa è una metrica di quanto profittevole e con
+bassa volatilità l'investimento è stato.
+\end{mysolution}
 
 \begin{exercise}[2013, optional homework]\label{ex:glossary}
 Build your own financial glossary: list every term of this chapter you could not define precisely and
 look it up \ts{13}{1}{53:27}.
-\end{exercise}
+\end{exercise}\note{did it using the notes}
 
 
 \begin{exercise}[not from the course]
@@ -1033,7 +1250,22 @@ A 5-year bond pays annual coupons of 6\% on $N=100$.
   \item Compute its
       Macaulay and modified duration at $y=5\%$ and check them against the price change for $\Delta y=\pm 1$\,bp.
 \end{enumerate}
-\end{exercise}\note{$a. P_5 = 0.06*-5,526 + 100*1.276 = 127.3 ; P_5 = 0.06*-5,751 + 100*1.402 = 139.8 ; b. D_Mac = 0.06*100*(1*1.05^(-1) + 2*1.05^(-2) + 3*1.05^(-3) + 4*1.05^(-4) + 5*1.05^(-5)) / 127.3 = 0.592 ; D_mod = 0.592 / 1.05 = 0.564 ; TODO $}
+\end{exercise}\note*{My solution moved into the box below.}\note{bp stands for basis point and it is 0.01\%}
+\begin{mysolution}
+(a)
+\begin{align*}
+P_{y=0.05} &= 6\,\frac{1-(1+0.05)^{-5}}{0.05} + \frac{100}{(1+0.05)^{5}} = 104.33,\\
+P_{y=0.07} &= 6\,\frac{1-(1+0.07)^{-5}}{0.07} + \frac{100}{(1+0.07)^{5}} = 95.90.
+\end{align*}
+(b)
+\begin{align*}
+D_{\mathrm{Mac}} &= \frac{1}{104.33}\left(1\cdot 6\cdot 1.05^{-1} + 2\cdot6\cdot 1.05^{-2} + 3\cdot6\cdot 1.05^{-3} + 4\cdot6\cdot 1.05^{-4} + 5\cdot (6+100)\cdot 1.05^{-5} \right) = 4.48y,\\
+D_{\mathrm{mod}} &= 4.48y/1.05 = 4.27y,\\
+P_{\text{Taylor}} &= P - P\,D\,\Delta y = P \cdot (1-D \Delta y),\\
+P^{\pm 0.01\%} &= 104.33\,\bigl(1-4.27\cdot(\pm 0.0001)\bigr) = 103.61 \ \&\ 104.28,\\
+P_{\text{exact}} &= 104.285 \ \&\ 104.37.
+\end{align*}
+\end{mysolution}
 
 \begin{exercise}[not from the course]
 Par yields are $c_1 = 4\%$, $c_2 = 4.5\%$, $c_3 = 5\%$ (annual coupons). Bootstrap $\Lambda_1,\Lambda_2,\Lambda_3$,

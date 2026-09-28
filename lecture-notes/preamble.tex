@@ -145,6 +145,10 @@
 % Answer to a reader's \note, placed right below the paragraph carrying the note
 \newtcolorbox{answer}[1][]{notebox=notecol,colback=notecol!12,coltitle=black,
   fontupper=\small,title={\boxtitle{Answer}{#1}}}
+% The reader's own solution to an exercise, placed right below the exercise
+%   \begin{mysolution}[optional topic] ... \end{mysolution}
+\newtcolorbox{mysolution}[1][]{notebox=exercol,colback=exercol!5,fontupper=\small,
+  title={\boxtitle{My solution}{#1}}}
 
 % ============================================================
 %  Annotation macro (for the reader)

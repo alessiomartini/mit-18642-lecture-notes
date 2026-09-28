@@ -138,6 +138,15 @@
     ],
     "description": "Exercise environment (numbered by chapter)"
   },
+  "mysolution": {
+    "prefix": "sol",
+    "body": [
+      "\\begin{mysolution}",
+      "$1",
+      "\\end{mysolution}"
+    ],
+    "description": "My own solution to the exercise above (small, indigo box)"
+  },
   "keyformulas": {
     "prefix": "keyform",
     "body": [
