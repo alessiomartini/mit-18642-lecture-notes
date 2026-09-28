@@ -740,7 +740,7 @@ A bond trades \emph{at par} ($P=N$) iff its coupon rate equals the rate: $C = rN
 Not parity: \emph{par} is the face (nominal) value of the bond, from Latin \emph{par}, ``equal''. ``At par''
 means $P=N$; above par is a \emph{premium}, below par a \emph{discount}. Prices are quoted per 100 of
 nominal, so a par bond is quoted at 100.
-\end{answer}
+\end{answer}\note{good! in general, when a new term is introduced, explain why it has been given the name it has}
 \begin{proof}
 Set $C = cN$ in \eqref{eq:couponbond}:
 $P/N = \frac{c}{r}\bigl(1-(1+r)^{-n}\bigr) + (1+r)^{-n} = 1 + \bigl(\tfrac{c}{r}-1\bigr)\bigl(1-(1+r)^{-n}\bigr)$,
@@ -870,7 +870,7 @@ expects the central bank to \emph{cut} rates (typically because a slowdown is co
 short bonds is expected to earn the high short rate only for a while and then less. The 2-year yield
 therefore sits below today's 1-year yield, and investors are indifferent. That is also why inversions
 are read as recession signals: they encode expected rate cuts.
-\end{answer}
+\end{answer}\note{what happens to economy after rate cut? people are not incentivised to invest, right?}
 
 \begin{figure}[ht]
 \centering
@@ -893,7 +893,7 @@ Sources: Banca d'Italia, gross yields of benchmark BTPs (table BMK0100); Deutsch
 yield curve of listed Federal securities (BBSIS). Both curves slope upward. The gap between them
 is the BTP--Bund \emph{spread}, the extra yield investors ask to hold Italian rather than German debt:
 about 135\,bp at 10 years in September 2024 and 60\,bp in August 2026.}\label{fig:itde}
-\end{figure}
+\end{figure}\note{la figura fig:fedrates e molto bella, non esisiste qualcosa di simile per italia germania? mi sembra abbia lo stesso contenuto se non di piu, mi sbaglio?}
 
 \begin{figure}[ht]
 \centering
@@ -915,12 +915,12 @@ When the Fed funds rate is above the 10-year yield (e.g.\ 2000, 2006--07, 2019, 
 
 \paragraph{Bootstrapping.} ``Discount factors for all times can be bootstrapped from the yield
 curve'' (slide 23). Concretely, suppose we observe par yields $c_1, c_2, \dots$ of annual-coupon
-bonds with maturities $1,2,\dots$ years. A par bond with maturity $n$ has price $1$, so
+bonds with maturities $1,2,\dots$ years. A par bond with maturity $n$ has price $1$, \note{it doesn't have to, right? it is just a choice P=N imposed to 1} so
 \[
   1 = c_n\sum_{k=1}^{n}\Lambda_k + \Lambda_n
   \qquad\Longrightarrow\qquad
   \Lambda_n = \frac{1 - c_n\sum_{k=1}^{n-1}\Lambda_k}{1+c_n},
-\]
+\]\note{non capisco da dove viene questa formula con i $c_k$, al loro posto dovrebbe esserci $C$ il coupon, giusto?}
 which determines $\Lambda_1,\Lambda_2,\ldots$ recursively. Real curve construction (many instrument
 types, interpolation, day-count conventions) is the subject of \cref{ch:rates}. \note{i need some more intuition on what is the discount factor and what is the yield, yield curve}
 \begin{answer}[Discount factor, yield, yield curve: one picture]
@@ -1259,25 +1259,41 @@ P_{y=0.07} &= 6\,\frac{1-(1+0.07)^{-5}}{0.07} + \frac{100}{(1+0.07)^{5}} = 95.90
 \end{align*}
 (b)
 \begin{align*}
-D_{\mathrm{Mac}} &= \frac{1}{104.33}\left(1\cdot 6\cdot 1.05^{-1} + 2\cdot6\cdot 1.05^{-2} + 3\cdot6\cdot 1.05^{-3} + 4\cdot6\cdot 1.05^{-4} + 5\cdot (6+100)\cdot 1.05^{-5} \right) = 4.48y,\\
-D_{\mathrm{mod}} &= 4.48y/1.05 = 4.27y,\\
+D_{\mathrm{Mac}} &= \frac{1}{104.33}\left(1\cdot 6\cdot 1.05^{-1} + 2\cdot6\cdot 1.05^{-2} + 3\cdot6\cdot 1.05^{-3} + 4\cdot6\cdot 1.05^{-4} + 5\cdot (6+100)\cdot 1.05^{-5} \right) = 4.48\ \text{years},\\
+D_{\mathrm{mod}} &= 4.48/1.05 = 4.27\ \text{years},\\
 P_{\text{Taylor}} &= P - P\,D\,\Delta y = P \cdot (1-D \Delta y),\\
-P^{\pm 0.01\%} &= 104.33\,\bigl(1-4.27\cdot(\pm 0.0001)\bigr) = 103.61 \ \&\ 104.28,\\
-P_{\text{exact}} &= 104.285 \ \&\ 104.37.
+P^{\pm 0.01\%} &= 104.33\,\bigl(1-4.27\cdot(\pm 0.0001)\bigr) = 104.285 \ (+1\,\mathrm{bp}) \ \&\ 104.375 \ (-1\,\mathrm{bp}),\\
+P_{\text{exact}} &\approx 104.285 \ (+1\,\mathrm{bp}) \ \&\ 104.375 \ (-1\,\mathrm{bp}).
 \end{align*}
 \end{mysolution}
 
 \begin{exercise}[not from the course]
-Par yields are $c_1 = 4\%$, $c_2 = 4.5\%$, $c_3 = 5\%$ (annual coupons). Bootstrap $\Lambda_1,\Lambda_2,\Lambda_3$,
+Three bonds with maturities $1,2,3$ years all trade at par (price $1$ per unit of nominal). The bond of
+maturity $n$ pays the \emph{same} annual coupon $c_n$ every year (not a coupon that changes over time), with
+$c_1 = 4\%$, $c_2 = 4.5\%$, $c_3 = 5\%$; these $c_n$ are the par yields. Bootstrap $\Lambda_1,\Lambda_2,\Lambda_3$,
 the zero yields and the one-year forward rates $F_{1,2}$, $F_{2,3}$. Why is the zero curve above the par curve
 when the curve slopes upward?
-\end{exercise}
+\end{exercise}\note*{non capisco se il coupon e' variabile nel tempo, nel senso che il primo anno riceviamo 4\% di N il nominal, il secondo 4.5, il terzo 5.}
+\begin{mysolution}\note{come faccio a calcoalre lo zero yield per i tre bonds senza il rapporto P/N ? se la premessa e' che sono par bond non capisco. L'esercizio e' scritto male, non e' chiaro.}
+      Recursively, 
+      \[ 1.  \Lambda_{c_1} = \frac{1}{1+c_1} = 0.9615\]
+      \[ 2. \Lambda_{c_2}^1 = \frac{1}{1+c_2} = 0.9569 ; \Lambda_{c_2}^2 = \frac{1  -c_2 \cdot \Lambda_{c_2}^1}{1+c_2} = 0,9157\]
+      \[ 3. \Lambda_{c_3}^1 = \frac{1}{1+c_3} = 0.9524 ; \Lambda_{c_3}^2 = \frac{1  - c_3 \cdot \Lambda_{c_3}^1}{1+c_3} = 0.9070 ; \Lambda_{c_3}^3 = \frac{1 - c_3 \cdot (\Lambda_{c_3}^1 + \Lambda_{c_3}^2)}{1+c_3} = 0.8638 \]
+      
+      Forward rate: \[F_{12}^{c_2} = \frac{\Lambda_{c_2}^1}{\Lambda_{c_2}^2} - 1 = ... ; \]
+\end{mysolution}
 
 \begin{exercise}[not from the course]\label{ex:fra}
 Complete the proof of \cref{prop:forward}: if the market quotes an FRA rate $F > \Lambda_t/\Lambda_T - 1$, write
 down an explicit zero-cost strategy with zero-coupon bonds and the FRA that has a positive payoff at $T$.
 \end{exercise}
+\begin{mysolution}
+      I borrow N from a commercial bank, given to me at a r interest rate, i land N with the F bigger that it should, when i am payied back i repay N plus interests to the back and i am left with money.
+\end{mysolution}
 
 \begin{exercise}[not from the course]
 Compute the convexity of the continuous par bond of \cref{prop:duration}(iii) and its limit as $T\to\infty$.
 \end{exercise}
+\begin{mysolution}
+      \[C = \frac{1}{P}\frac{d^2 P}{dy^2} = -\frac{dD}{dy} = \frac{e^{-yT}(Ty+1)-1}{y^2} \to_{T \to \infty} -\frac{1}{y^2}\]
+\end{mysolution}
