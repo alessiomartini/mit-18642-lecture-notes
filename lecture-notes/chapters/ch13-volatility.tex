@@ -159,7 +159,9 @@ so that a spike is kept for exactly $21$ days and then dropped; the exponential 
 \end{figure}
 \begin{finance}[RiskMetrics]\label{ch13:fin-riskmetrics}
 The exponential average is the workhorse of the RiskMetrics methodology that J.P.~Morgan published in the 1990s
-(Kempthorne was in the Sloan School's sponsoring research centre at the time) \ts{24}{19}{10:39}. Its technical document
+\ts{24}{19}{10:39}.\begin{aside}[RiskMetrics and the lecturer]
+Kempthorne was in the Sloan School's sponsoring research centre at the time.
+\end{aside} Its technical document
 tabulates decay factors for foreign exchange, zero-coupon yields, equity indices and other assets, chosen by comparing the
 mean squared error of the resulting volatility forecasts: they are generally well above $0.9$, more like $0.95$,
 which says that volatility changes slowly \ts{24}{19}{11:41}; the 2013 lecture translates this into an averaging
@@ -363,6 +365,7 @@ the slides. (In the same way the composite of the gap and the session range, who
 $(H-L)^2/(4\ln2\,(1-f))$, has $a=0.17$ and efficiency $5.9$.)
 
 \subsection{Rogers--Satchell and Yang--Zhang}\label{ch13:sec-rsyz}
+\begin{secondary}[Estimators robust to drift and opening jumps]
 All estimators so far assume no drift, and the composite one assumes that the only jump is the opening gap. Two later refinements are
 listed in the slides as extensions and used in the case study.
 \begin{itemize}
@@ -384,6 +387,7 @@ listed in the slides as extensions and used in the case study.
         and, because the first two are \emph{sample} variances, it does not depend on the drift. For $n=21$, $k=0.139$. It is the
         version recommended ``these days'' \ts{24}{19}{31:13}.
 \end{itemize}
+\end{secondary}
 
 \begin{coursenote}[Names and efficiencies in the case study]\label{ch13:cn-names}
 The R function \texttt{volatility()} of the package \texttt{TTR} (through \texttt{tidyquant}) offers six estimators:
@@ -397,6 +401,7 @@ $k=(\alpha-1)/(\alpha+(n+1)/(n-1))$, identical to \eqref{ch13:eq-yz}.
 \end{coursenote}
 
 \subsection{Checking the efficiencies by simulation}
+\begin{secondary}[Monte Carlo check]
 The claims of the previous subsections can be verified with a Monte Carlo experiment: $2\times10^5$ Brownian paths on $[0,1]$ ($\sigma=1$, $f=0$), with the high and low of each of $400$ steps drawn exactly from the Brownian bridge so that discretisation does not bias the range.
 \begin{center}\small
 \begin{tabular}{@{}lcccc@{}}
@@ -413,6 +418,7 @@ best analytic \eqref{ch13:eq-gkbest} & $1.00$ & $7.40$ & $1.29$ & \\
 \end{center}
 With real data the high and low are recorded from discrete trades and quotes, so range estimators are biased downwards; this is
 not discussed in the course.
+\end{secondary}
 
 \subsection{Case study: volatility of the S\&P~500 and of ARKK (2024)}\label{ch13:sec-gkcs}
 \begin{casestudy}[Historical volatility with R: S\&P~500 (lecture) and ARKK (problem set)]\label{ch13:cs-ohlc}
@@ -480,6 +486,7 @@ hard-coded text left over from another run; in the knitted S\&P~500 PDF of the p
 generated from the output ($1.905$ against $3.626$). The values quoted above are those of the lecture PDF.
 \end{coursenote}
 
+\begin{secondary}[Why lag 21: the window itself]
 \begin{proposition}[Why the residuals of a rolling volatility have an autocorrelation at the window length]\label{ch13:prop-lag21}
 Let $x_t$ be i.i.d.\ with variance $s^2$ and let $v_t=\frac1m\sum_{j=0}^{m-1}x_{t-j}$ be the rolling mean of window $m$. Then the first differences (the
 residuals of the naive model) satisfy $\Delta v_t=(x_t-x_{t-m})/m$, so
@@ -494,6 +501,7 @@ i.i.d.\ chi-squared terms gives $\rho(21)=-0.501$. It also shows that the good p
 from the past, so a model with a seasonal moving-average term can predict it, and the variance of the one-step error falls to that of $x_t/m$,
 half of $\Var(\Delta v_t)$; the root-mean-square error should drop by the factor $1/\sqrt2=0.71$, and it drops from $0.0051$ to $0.0039$ for Yang--Zhang. Part of the
 ``predictability of volatility'' in the case study is the predictability of the estimator's own window, not of the market (our remark).
+\end{secondary}
 
 
 % ==================================================================
@@ -540,7 +548,11 @@ If a Brownian motion is observed not at equally spaced times but after random, \
 \begin{equation}\label{ch13:eq-laplace}
   f(x\mid\mu,b)=\frac1{2b}\,e^{-|x-\mu|/b},\qquad \E X=\mu,\quad \Var X=2b^2,\quad \kappa=6 .
 \end{equation}
+\begin{history}[Laplace's first law of errors]
 Laplace himself introduced it in 1774 as the ``first law of errors''.
+
+\textbf{References.} P.-S.~Laplace, ``Mémoire sur la probabilité des causes par les événements'', \emph{Mémoires de l'Académie royale des sciences présentés par divers savans} 6 (1774) 621--656; S.~M.~Stigler, \emph{The History of Statistics}, Harvard University Press, 1986, ch.~3.
+\end{history}
 
 \begin{proposition}\label{ch13:prop-laplace}
 Let $\tau$ be exponential with mean $s$ and $X=\mu+\sigma B_\tau$ with $B$ a standard Brownian motion independent of $\tau$. Then $X\sim\mathrm{Laplace}(\mu,b)$ with $b^2=\sigma^2s/2$.
@@ -709,12 +721,14 @@ one has
 \]
 }
 
+\begin{secondary}[The root condition]
 \begin{lemma}[Stationarity of the ARMA]\label{ch13:lem-roots}
 For $c_i=\alpha_i+\beta_i\ge0$ the roots of $A(z)=1-\sum_ic_iz^i$ lie outside the closed unit disc iff $\sum_ic_i<1$.
 \end{lemma}
 \begin{proof}
 If $\sum c_i<1$, then for $|z|\le1$, $|\sum c_iz^i|\le\sum c_i<1$, so $A(z)\ne0$. If $\sum c_i\ge1$, then $A(0)=1>0\ge A(1)$, and $A$ is continuous, so it has a root in $(0,1]$.
 \end{proof}
+\end{secondary}
 Consequently the ARMA of \eqref{ch13:eq-armasq} is covariance stationary iff $\sum(\alpha_i+\beta_i)<1$; for the $(1,1)$ case, $\alpha_1+\beta_1<1$
 \ts{24}{19}{1:13:09}\ts{13}{11}{6:19}. When $\E\varepsilon^4<\infty$ (\cref{ch13:thm-kurt}) the noise $u_t$ has constant variance and is uncorrelated, and the ARMA formulas of
 \cref{ch09:sec-arma11} give the autocorrelation function of the squares:
@@ -895,7 +909,9 @@ $(0.12,\,0.87)$ & $0.99$ & $-0.0089$ & $\infty$\\
 \end{tabular}
 \end{center}
 Persistence close to $1$ makes the fourth moment barely exist, and then sample kurtosis is an unreliable estimator of the theoretical one: sample fourth moments of such a process converge very slowly.
+\begin{secondary}[Power-law tails]
 (A tail-index refinement, not discussed: $\P(|\varepsilon|>x)\sim x^{-\xi}$ with $\xi$ solving $\E a_t^{\xi/2}=1$, so GARCH tails are power laws, as in the empirical ``inverse cubic'' law of \cref{ch03:sec-heavy}.)
+\end{secondary}
 
 \subsection{The RiskMetrics limit: IGARCH}\label{ch13:sec-igarch}
 The RiskMetrics exponential average with decay factor $\beta$ is the GARCH$(1,1)$ with $\alpha_0=0$, $\alpha_1=1-\beta$, $\beta_1=\beta$, that is $\phi=1$:
@@ -903,11 +919,14 @@ The RiskMetrics exponential average with decay factor $\beta$ is the GARCH$(1,1)
   \sigma_{t+1}^2=(1-\beta)\,\varepsilon_t^2+\beta\,\sigma_t^2,
 \end{equation}
 an \emph{integrated} GARCH (IGARCH). It has no long-run variance, and by \eqref{ch13:eq-forecast} with $\phi=1$ its forecast is flat, $\E_t\sigma^2_{t+h}=\sigma^2_{t+1}$ for all $h$, so it scales volatility with $\sqrt H$
-\ts{13}{11}{27:33}. The lecturer describes the advantage: one tracks a possibly non-stationary volatility without presuming that a long-run average consistent with the past exists. Two caveats, not
+\ts{13}{11}{27:33}. The lecturer describes the advantage: one tracks a possibly non-stationary volatility without presuming that a long-run average consistent with the past exists.
+\begin{secondary}[Two caveats on IGARCH]
+Two caveats, not
 discussed: as a \emph{generating} process the IGARCH with $\alpha_0=0$ is degenerate, since $\ln\sigma_t^2=\ln\sigma_0^2+\sum_{j\le t}\ln a_j$ has i.i.d.\ increments of strictly negative mean
 $\E\ln a<\ln\E a=0$ (Jensen), so $\sigma_t^2\to0$ almost surely; for $\alpha_1=0.06$ and Gaussian $z$ the drift is $\E\ln a=-0.0032$ per day, slow enough to be invisible in a sample of a few hundred days. And the
 recursion \eqref{ch13:eq-igarch} is exactly the steady-state Kalman filter of a local-level model (\cref{ch09:sec-ss}), which is a better way to think of it: a \emph{filter} for the current level of volatility, not a
 model of its evolution.
+\end{secondary}
 
 
 % ==================================================================
@@ -939,8 +958,11 @@ $\log\frac x{1-x}$ for a parameter in $(0,1)$ \ts{13}{11}{10:39}\ts{13}{11}{11:3
 \[
   \alpha_0=e^{a},\qquad \alpha_1=\phi\,s,\quad\beta_1=\phi\,(1-s),\quad \phi=\frac1{1+e^{-u}},\quad s=\frac1{1+e^{-v}},
 \]
-with $(a,u,v)\in\R^3$ free; then $\alpha_0>0$, $\alpha_1,\beta_1>0$ and $\alpha_1+\beta_1=\phi\in(0,1)$ hold automatically. (This particular map is our example.) A second trick, not discussed, is \emph{variance targeting}:
+with $(a,u,v)\in\R^3$ free; then $\alpha_0>0$, $\alpha_1,\beta_1>0$ and $\alpha_1+\beta_1=\phi\in(0,1)$ hold automatically. (This particular map is our example.)
+\begin{secondary}[Variance targeting]
+A second trick, not discussed, is \emph{variance targeting}:
 replace $\alpha_0$ by $(1-\phi)\hat s^2$, with $\hat s^2$ the sample variance of the returns, which removes one parameter and enforces the long-run level \eqref{ch13:eq-longrun}.
+\end{secondary}
 
 \begin{remark}[Estimation problems]\label{ch13:rem-ident}
 If $\alpha_1=0$ the parameter $\beta_1$ disappears from the model (since $\sigma_t^2$ is constant), so the likelihood is flat in $\beta_1$ and the estimators of $\alpha_1,\beta_1$ are badly behaved near this boundary; and when $\alpha_1+\beta_1\approx1$ the
@@ -1074,8 +1096,10 @@ $\ell_{\max}-\ell(\nu)$ & $33.1$ & $15.3$ & $7.1$ & $1.0$ & $0$ & $0.6$ & $2.4$ 
 \textbf{Lesson.} Volatility clustering is strongly present, a parsimonious GARCH$(1,1)$ describes it better than a high-order ARCH, the Gaussian assumption is inadequate in the tails
 but the volatility estimates are robust to it, and the $t$ law with about $10$ degrees of freedom fits the standardised residuals.
 \end{casestudy}
+\begin{secondary}[A confidence interval for $\nu$]
 The profile above is one number per $\nu$ from the note. Our own reading, not made in class: since $2[\ell_{\max}-\ell(\nu)]$ is approximately $\chi^2_1$, the values of $\nu$ with $\ell_{\max}-\ell<1.92$ form an approximate $95\%$ confidence interval, $\nu\in[8,14]$; the Gaussian
 limit is rejected (for $\nu=30$, $2\times10.3=20.7$, and the normal, $\nu=\infty$, is worse still).
+\end{secondary}
 
 \begin{coursenote}[The $9$ degrees of freedom and ``spherical symmetry'']\label{ch13:cn-nine}
 In 2024 the lecturer read $9$ degrees of freedom off the plot and gave a heuristic explanation: a $t$ law arises as the projection of a spherically symmetric law in a space of dimension equal to the degrees of freedom, so
@@ -1131,6 +1155,7 @@ volatility depends on the estimator and on the time scale & trading against cloc
 \end{center}
 The slides close with a list of extensions, only named \ts{13}{11}{28:35}: EGARCH (Nelson, 1991/1992), TGARCH (Glosten, Jagannathan and Runkle, 1993), PGARCH (Ding, Engle and Granger), GARCH-in-mean, and non-Gaussian innovations
 (Student $t$, generalised error distribution, GED). The lecturer's advice is to master the specification under Gaussian and $t$ assumptions first; the extensions are reading for a final paper \ts{13}{11}{28:35}\ts{24}{19}{1:21:36}.
+\begin{secondary}[The extensions in formulas]
 To make the names concrete (the formulas are not in the lectures):
 \begin{align}
   \text{GJR/TGARCH:}&\quad \sigma_t^2=\alpha_0+\bigl(\alpha_1+\gamma\,\ind_{\{\varepsilon_{t-1}<0\}}\bigr)\varepsilon_{t-1}^2+\beta_1\sigma_{t-1}^2,\notag\\
@@ -1139,6 +1164,7 @@ To make the names concrete (the formulas are not in the lectures):
 \end{align}
 The parameter $\gamma$ captures the \emph{leverage effect}, the observation that a negative return raises future volatility more than a positive return of the same size (a fall in the price of a firm raises its leverage); EGARCH has no positivity constraints because it models $\log\sigma_t^2$. GARCH-in-mean lets the
 expected return depend on the risk. All these keep the GARCH$(1,1)$ recursion as their core.
+\end{secondary}
 
 \begin{finance}[Realised, implied and stochastic volatility]
 Volatility is also \emph{implied} by option prices: the number that, inserted into a formula such as that of \cref{ch:bs}, reproduces the market price. The implied volatility is a forward-looking quantity and typically exceeds the subsequently realised one (a risk premium); the models of this chapter
