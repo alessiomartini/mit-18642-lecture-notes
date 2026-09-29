@@ -117,6 +117,15 @@
 \newcolumntype{L}{>{\raggedright\arraybackslash}X}
 % Note on course material (errata, missing lectures, differences 2013/2024)
 \newtcolorbox{coursenote}[1][]{notebox=srccol,title={\boxtitle{Course note}{#1}}}
+% Secondary material ("beyond the core"): can be skipped on a first reading
+\newtcolorbox{secondary}[1][]{enhanced,breakable,colback=white,colframe=white,boxrule=0pt,
+  borderline west={1.5pt}{0pt}{srccol!60},sharp corners,left=8pt,right=0pt,top=1pt,bottom=1pt,
+  before skip=6pt,after skip=6pt,fontupper=\small,
+  title={\footnotesize\sffamily$\diamond$\ \boxtitle{Beyond the core}{#1}},
+  coltitle=srccol,colbacktitle=white,fonttitle=\bfseries,titlerule=0pt,toptitle=0pt,bottomtitle=0pt,
+  before upper={\csname note@inboxtrue\endcsname},note queue}
+% Aside: an anecdote or curiosity that is not history proper (history goes in the history box)
+\newtcolorbox{aside}[1][]{notebox=histcol,fontupper=\small,title={\boxtitle{Aside}{#1}}}
 % History: a fact from the history of finance/mathematics, framed like a classical
 % temple front: a dentilled entablature (the title) on two Ionic columns (not breakable)
 \newcommand{\histcolumn}[2]{% #1 = foot of the column, #2 = top of the capital (coordinate names)
@@ -160,11 +169,15 @@
 \makeatletter
 \NewDocumentCommand{\note}{s +m}{%
   \ifnote@inbox\gappto\note@queue{\note@put{#1}{#2}}\else\note@put{#1}{#2}\fi}
-\newcommand{\note@put}[2]{%
-  \marginpar{\begin{tcolorbox}[colback=notecol!25,colframe=notecol,boxrule=0.5pt,arc=1pt,
+\newcommand{\note@put}[2]{\note@box{notecol}{\IfBooleanT{#1}{\colorbox{okcol}{\textcolor{white}{\bfseries\tiny DONE}}\par}#2}}
+%  \feedback{...} a comment on one of the reader's own solutions (errors, hints), same place, indigo
+\newcommand{\feedback}[1]{%
+  \ifnote@inbox\gappto\note@queue{\feedback@put{#1}}\else\feedback@put{#1}\fi}
+\newcommand{\feedback@put}[1]{\note@box{exercol}{\colorbox{exercol}{\textcolor{white}{\bfseries\tiny FEEDBACK}}\par#1}}
+\newcommand{\note@box}[2]{%
+  \marginpar{\begin{tcolorbox}[colback=#1!25,colframe=#1,boxrule=0.5pt,arc=1pt,
     left=3pt,right=3pt,top=2pt,bottom=2pt,before skip=0pt,after skip=0pt,
-    fontupper=\scriptsize\sffamily\raggedright]%
-    \IfBooleanT{#1}{\colorbox{okcol}{\textcolor{white}{\bfseries\scriptsize DONE}}\par}#2\end{tcolorbox}}}
+    fontupper=\tiny\sffamily\raggedright]#2\end{tcolorbox}}}
 \makeatother
 
 
