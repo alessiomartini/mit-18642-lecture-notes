@@ -7,7 +7,12 @@
 \usepackage{newpxtext,newpxmath} % provides the AMS symbols: do not load amssymb
 \usepackage{bm}
 \usepackage{microtype}
-\usepackage[a4paper,top=2.6cm,bottom=2.6cm,inner=2.4cm,outer=3.6cm,marginparwidth=3.0cm,marginparsep=0.3cm,headheight=23pt]{geometry}
+% Screen layout (read on a laptop, not printed): the text column keeps the width it had on A4
+% (15 cm) and a wide right column holds notes, answers, feedback, history, asides, short examples.
+% The old A4 print layout was: a4paper,inner=2.4cm,outer=3.6cm,marginparwidth=3.0cm,marginparsep=0.3cm (twoside).
+\usepackage[paperwidth=25cm,paperheight=29.7cm,top=2.6cm,bottom=2.6cm,left=2cm,textwidth=15cm,
+  marginparsep=0.5cm,marginparwidth=6.5cm,headheight=23pt]{geometry}
+\usepackage{marginfix} % a margin column that overflows the page continues on the next one
 \usepackage{booktabs,array,tabularx,longtable}
 \usepackage[dvipsnames]{xcolor}
 \usepackage[shortlabels,inline]{enumitem}
@@ -29,8 +34,9 @@
 % ---------- headers ----------
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[LE]{\small\thepage\quad\leftmark}
-\fancyhead[RO]{\small\rightmark\quad\thepage}
+\fancyhead[L]{\small\leftmark}
+\fancyhead[R]{\small\makebox[\marginparwidth][r]{\rightmark\quad\thepage}}
+\fancyheadoffset[R]{\dimexpr\marginparsep+\marginparwidth\relax}
 \renewcommand{\headrulewidth}{0.3pt}
 \fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\small\thepage}\renewcommand{\headrulewidth}{0pt}}
 
@@ -82,7 +88,7 @@
 \makeatletter
 \newif\ifnote@inbox
 \def\note@queue{}
-\newcommand{\note@flush}{\note@queue\gdef\note@queue{}}
+\newcommand{\note@flush}{\let\note@tmp\note@queue\gdef\note@queue{}\note@tmp}
 \tcbset{note queue/.code={\appto\kvtcb@afterbox{\note@flush}}}
 \makeatother
 \tcbset{thmbox/.style={enhanced,breakable,colback=#1!7,colframe=#1!7,borderline west={3pt}{0pt}{#1},
@@ -124,8 +130,43 @@
   title={\footnotesize\sffamily$\diamond$\ \boxtitle{Beyond the core}{#1}},
   coltitle=srccol,colbacktitle=white,fonttitle=\bfseries,titlerule=0pt,toptitle=0pt,bottomtitle=0pt,
   before upper={\csname note@inboxtrue\endcsname},note queue}
-% Aside: an anecdote or curiosity that is not history proper (history goes in the history box)
-\newtcolorbox{aside}[1][]{notebox=histcol,fontupper=\small,title={\boxtitle{Aside}{#1}}}
+% ============================================================
+%  The right column: everything below is printed in the margin, in \tiny
+% ============================================================
+%  \note{...}     the reader's comment/doubt, NEW (not yet read by Claude)
+%  \note*{...}    a request that has been carried out (green DONE tag)
+%  \note+{...}    a comment that has been read and needs no answer (blue SEEN tag)
+%  \begin{answer}{question}[topic] ... \end{answer}
+%                 a doubt and its answer in one box: the question on top, then a dark yellow
+%                 bar "ANSWER n: topic" and the answer; \answerpart{topic} starts a further
+%                 answer in the same box (one per question); \label{ans:...} makes it citable
+%  \feedback{...} a comment on one of the reader's own solutions (indigo)
+%  \begin{history}[topic], \begin{aside}[topic], \begin{sideexample}[topic]
+%  Inside a coloured box of the main text, margin items appear right after the box.
+\makeatletter
+\newcommand{\side@put}[1]{%
+  \ifnote@inbox\gappto\note@queue{\marginpar{#1}\note@flush}\else\marginpar{#1}\note@flush\fi}
+\tcbset{sidebox/.style={enhanced,colback=#1!25,colframe=#1,boxrule=0.5pt,arc=1pt,
+    left=3pt,right=3pt,top=2pt,bottom=2pt,before skip=0pt,after skip=0pt,
+    fontupper=\tiny\sffamily\raggedright,fonttitle=\tiny\sffamily\bfseries,
+    before upper={\note@inboxtrue}}}
+\newcommand{\side@tag}[2]{\colorbox{#1}{\textcolor{white}{\bfseries\tiny #2}}\par}
+\NewDocumentCommand{\note}{s t+ +m}{\side@put{\begin{tcolorbox}[sidebox=notecol]%
+  \IfBooleanT{#1}{\side@tag{okcol}{DONE}}\IfBooleanT{#2}{\side@tag{defcol}{SEEN}}#3\end{tcolorbox}}}
+\newcommand{\feedback}[1]{\side@put{\begin{tcolorbox}[sidebox=exercol]\side@tag{exercol}{FEEDBACK}#1\end{tcolorbox}}}
+\newcounter{answer}[chapter]
+\renewcommand{\theanswer}{\thechapter.\arabic{answer}}
+\crefname{answer}{answer}{answers}
+\newcommand{\answerpart}[1]{\refstepcounter{answer}%
+  \tcbsubtitle[colback=anscol,colframe=anscol,coltext=black,fontupper=\tiny\sffamily\bfseries,
+    left=3pt,top=0.5pt,bottom=0.5pt,before skip=2pt,after skip=2pt]{ANSWER \theanswer\ifx&#1&\else: #1\fi}}
+\NewDocumentEnvironment{answer}{m O{} +b}{\side@put{\begin{tcolorbox}[sidebox=notecol,colback=notecol!12]%
+  #1\answerpart{#2}#3\end{tcolorbox}}}{}
+\NewDocumentEnvironment{aside}{O{} +b}{\side@put{\begin{tcolorbox}[sidebox=histcol,colback=histcol!6,
+  coltitle=white,colbacktitle=histcol,title={\boxtitle{Aside}{#1}}]#2\end{tcolorbox}}}{}
+\NewDocumentEnvironment{sideexample}{O{} +b}{\side@put{\begin{tcolorbox}[sidebox=intcol,colback=intcol!6]%
+  \refstepcounter{definition}{\bfseries\color{intcol}Example \thedefinition\ifx&#1&\else\ (#1)\fi.}\ #2\end{tcolorbox}}}{}
+\makeatother
 % History: a fact from the history of finance/mathematics, framed like a classical
 % temple front: a dentilled entablature (the title) on two Ionic columns (not breakable)
 \newcommand{\histcolumn}[2]{% #1 = foot of the column, #2 = top of the capital (coordinate names)
@@ -139,10 +180,13 @@
     \draw[histcol,line width=0.8pt,fill=white] ([xshift=\dx pt,yshift=-4.5pt]#2) circle (1.9pt);
     \fill[histcol] ([xshift=\dx pt,yshift=-4.5pt]#2) circle (0.6pt);}
   \fill[histcol] ([xshift=-6.5pt,yshift=-2.5pt]#2) rectangle ([xshift=6.5pt]#2);}
-\newtcolorbox{history}[1][]{enhanced,colback=histcol!6,colframe=histcol,boxrule=0.8pt,sharp corners,
-  fonttitle=\bfseries,coltitle=white,colbacktitle=histcol,title={\boxtitle{History}{#1}},
-  left=20pt,right=20pt,top=8pt,bottom=4pt,before skip=10pt,after skip=10pt,
-  before upper={\csname note@inboxtrue\endcsname},note queue,
+\makeatletter
+\NewDocumentEnvironment{history}{O{} +b}{\side@put{\begin{tcolorbox}[histbox,title={\boxtitle{History}{#1}}]#2\end{tcolorbox}}}{}
+\makeatother
+\tcbset{histbox/.style={enhanced,colback=histcol!6,colframe=histcol,boxrule=0.8pt,sharp corners,
+  fonttitle=\tiny\sffamily\bfseries,fontupper=\tiny\sffamily\raggedright,coltitle=white,colbacktitle=histcol,
+  left=18pt,right=18pt,top=6pt,bottom=3pt,before skip=0pt,after skip=0pt,
+  before upper={\csname note@inboxtrue\endcsname},
   overlay={
     \draw[histcol,line width=2.5pt,dash pattern=on 2.5pt off 2pt]
       ([yshift=-1.25pt]title.south west) -- ([yshift=-1.25pt]title.south east);
@@ -150,35 +194,42 @@
     \coordinate (htL) at ([xshift=9pt,yshift=-2.5pt]title.south west);
     \coordinate (hfR) at ([xshift=-9pt]frame.south east);
     \coordinate (htR) at ([xshift=-9pt,yshift=-2.5pt]title.south east);
-    \histcolumn{hfL}{htL}\histcolumn{hfR}{htR}}}
-% Answer to a reader's \note, placed right below the paragraph carrying the note
-\newtcolorbox{answer}[1][]{notebox=notecol,colback=notecol!12,coltitle=black,
-  fontupper=\small,title={\boxtitle{Answer}{#1}}}
+    \histcolumn{hfL}{htL}\histcolumn{hfR}{htR}}}}
 % The reader's own solution to an exercise, placed right below the exercise
 %   \begin{mysolution}[optional topic] ... \end{mysolution}
 \newtcolorbox{mysolution}[1][]{notebox=exercol,colback=exercol!5,fontupper=\small,
   title={\boxtitle{My solution}{#1}}}
-
-% ============================================================
-%  Annotation macro (for the reader)
-% ============================================================
-%  \note{...}   a comment (doubt, idea, reminder) printed in the margin
-%               next to the text where it is written
-%  \note*{...}  the same, marked DONE (request or reminder carried out)
-%  Inside a coloured box the note appears in the margin just below the box.
+% A request about the notes themselves (collected in the "Requests" chapter)
+%   \request{done|open|noted}{where it was written}{the request}{what was done}
 \makeatletter
-\NewDocumentCommand{\note}{s +m}{%
-  \ifnote@inbox\gappto\note@queue{\note@put{#1}{#2}}\else\note@put{#1}{#2}\fi}
-\newcommand{\note@put}[2]{\note@box{notecol}{\IfBooleanT{#1}{\colorbox{okcol}{\textcolor{white}{\bfseries\tiny DONE}}\par}#2}}
-%  \feedback{...} a comment on one of the reader's own solutions (errors, hints), same place, indigo
-\newcommand{\feedback}[1]{%
-  \ifnote@inbox\gappto\note@queue{\feedback@put{#1}}\else\feedback@put{#1}\fi}
-\newcommand{\feedback@put}[1]{\note@box{exercol}{\colorbox{exercol}{\textcolor{white}{\bfseries\tiny FEEDBACK}}\par#1}}
-\newcommand{\note@box}[2]{%
-  \marginpar{\begin{tcolorbox}[colback=#1!25,colframe=#1,boxrule=0.5pt,arc=1pt,
-    left=3pt,right=3pt,top=2pt,bottom=2pt,before skip=0pt,after skip=0pt,
-    fontupper=\tiny\sffamily\raggedright]#2\end{tcolorbox}}}
+\newcommand{\request}[4]{\ifstrequal{#1}{done}{\def\req@col{okcol}}{\ifstrequal{#1}{open}{\def\req@col{thmcol}}{\def\req@col{defcol}}}%
+  \begin{tcolorbox}[sidebox=notecol,colback=notecol!12,fontupper=\small\sffamily\raggedright,
+  before skip=5pt,after skip=5pt]%
+  \side@tag{\req@col}{\MakeUppercase{#1}}%
+  {\itshape #2.}\ #3%
+  \tcbsubtitle[colback=anscol,colframe=anscol,coltext=black,fontupper=\scriptsize\sffamily\bfseries,
+    left=3pt,top=0.5pt,bottom=0.5pt,before skip=2pt,after skip=2pt]{WHAT WAS DONE}#4\end{tcolorbox}}
 \makeatother
+
+% ---------- fast (one-chapter) build: links to other chapters open the full book ----------
+% .vscode/build.py compiles only the saved chapter and defines \fastbuild as that chapter's .aux.
+% The target of a link into another chapter is not in that PDF, so such links are sent to
+% build/book.pdf, the copy of the last full build, at the same place.
+\ifdefined\fastbuild
+\makeatletter
+\let\fb@file\@empty
+\def\fb@main{main.aux}
+\let\fb@input\@input
+\def\@input#1{\edef\fb@file{#1}\fb@input{#1}\let\fb@file\@empty}
+\def\fb@mark#1#2#3#4#5\@nil{%
+  \ifx\fb@file\@empty\else\ifx\fb@file\fb@main\else\ifx\fb@file\fastbuild\else
+    \ifx\relax#4\relax\else\global\@namedef{fb@ext@#4}{}\fi\fi\fi\fi}
+\AddToHook{begindocument/before}{\let\fb@newlabel\newlabel
+  \def\newlabel#1#2{\fb@newlabel{#1}{#2}\fb@mark#2{}{}{}{}{}\@nil}}
+\AtBeginDocument{\let\fb@hlink\hyper@link@
+  \def\hyper@link@[#1]#2#3#4{\ifcsname fb@ext@#3\endcsname\fb@hlink[#1]{book.pdf}{#3}{#4}\else\fb@hlink[#1]{#2}{#3}{#4}\fi}}
+\makeatother
+\fi
 
 
 % ---------- video timestamps ----------

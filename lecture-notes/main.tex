@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper,openany]{book}
+\documentclass[11pt,oneside,openany]{book}
 \input{preamble}
 
 % Compile only some chapters while working on them, e.g.:
@@ -51,14 +51,22 @@ Part~\ref{part:2013}. Every chapter opens with a \textbf{Sources} box listing th
   \item \textcolor{cscol}{\textbf{Case study}} boxes summarise the R case studies distributed with the course.
   \item \textcolor{srccol}{\textbf{Course notes}} flag errata in the slides, differences between the
         2013 and 2024 versions, and material that was not recorded.
-  \item \textcolor{anscol}{\textbf{Answer}} boxes reply to the doubts in your margin notes (below).
+  \item \textbf{Beyond the core} blocks (grey bar on the left, smaller type) hold material that can be
+        skipped on a first reading: auxiliary derivations, numerical checks, 2013-vs-2024 details.
 \end{itemize}
+
+\paragraph{The right column.} The page is laid out for a screen: the text is always on the left and a
+wide column on the right holds your \textcolor{notecol!80!black}{\textbf{notes}} with their
+\textcolor{anscol}{\textbf{answers}}, \textcolor{exercol}{\textbf{feedback}} on your solutions,
+\textcolor{histcol}{\textbf{history}} boxes and \textcolor{histcol}{\textbf{asides}} (curiosities).
 
 \paragraph{Video timestamps.} A tag such as \ts{24}{12}{23:10} means: lecture~12 of the 2024
 course, at minute 23:10 of the video, is where the point is explained in class. The 2024
 lecture~1 is split into three videos, written \ts{24}{1-II}{12:36}.
 
-\paragraph{Your annotations.} While reading, write directly in the chapter files. The macro \verb|\note{...}| prints a comment in the margin next to the text where it is written: a doubt, an idea, a reminder. For example \verb|\note{Why is duration divided by $1+y$?}| produces the box in the margin here. A doubt is answered in an \textbf{Answer} box right below the paragraph carrying the note; a request or reminder that has been carried out stays in the margin, marked DONE (\verb|\note*{...}|).\note{Why is the duration of a zero-coupon bond $T/(1+y)$ and not simply $T$? \emph{(Example: delete it from \file{main.tex}.)}}
+\paragraph{Your annotations.} While reading, write directly in the chapter files. The macro \verb|\note{...}| prints a comment in the margin next to the text where it is written: a doubt, an idea, a reminder. For example \verb|\note{Why is duration divided by $1+y$?}| produces the box in the margin here. When a doubt is answered, the note and its answer become one box in the right column. Requests about the notes themselves are collected in the chapter \emph{Requests about these notes}, which also lists how read and unread notes are marked.\note{Why is the duration of a zero-coupon bond $T/(1+y)$ and not simply $T$? \emph{(Example: delete it from \file{main.tex}.)}}
+
+\include{chapters/ch00-requests}
 
 \tableofcontents
 

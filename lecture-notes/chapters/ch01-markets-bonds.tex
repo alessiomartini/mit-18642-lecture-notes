@@ -30,24 +30,24 @@ instruments: bonds. Everything in this chapter is elementary mathematically; wha
 the way of reasoning. The discounting argument of \cref{sec:discounting} is the ancestor of
 the replication argument behind Black--Scholes (\cref{ch:bs}) and the forward-rate formula
 of \cref{sec:forward} is the seed of the HJM framework (\cref{ch:hjm}).
-\note{What are the discounting argument? and the replication argument? and the forward-rate formula? and the HJM framework?}
-\begin{answer}[Four arguments announced here]
+\begin{answer}{What are the discounting argument? and the replication argument? and the forward-rate formula? and the HJM framework?}[Discounting argument]
 The sentence is a roadmap; each item is developed later.
-\begin{itemize}
-  \item \textbf{Discounting argument} (\cref{sec:discounting}): the price today of \$1 paid in one
+\Cref{sec:discounting}: the price today of \$1 paid in one
         year is fixed by comparison with riskless borrowing and lending, $x=1/(1+r)$; any other
         price gives a riskless profit.
-  \item \textbf{Replication argument}: if a portfolio of traded assets pays exactly what a contract
+\answerpart{Replication argument}
+If a portfolio of traded assets pays exactly what a contract
         pays in every state of the world, the contract must cost what the portfolio costs.
         Discounting is the simplest case (the claim to \$1 is replicated by lending $1/(1+r)$);
         Black--Scholes (\cref{ch:bs}) replicates an option with a continuously rebalanced position
         of $\Delta$ shares plus cash.
-  \item \textbf{Forward-rate formula} (\cref{prop:forward}): the interest fixed today for a loan
+\answerpart{Forward-rate formula}
+\Cref{prop:forward}: the interest fixed today for a loan
         from $t$ to $T$ is read off today's discount factors, $F_{tT}=\Lambda_t/\Lambda_T-1$.
-  \item \textbf{HJM framework} (Heath--Jarrow--Morton, \cref{ch:hjm}): a model for the random
+\answerpart{HJM framework}
+Heath--Jarrow--Morton, \cref{ch:hjm}: a model for the random
         evolution of the whole forward curve $f(t,T)$; no-arbitrage fixes its drift in terms of its
         volatility.
-\end{itemize}
 \end{answer}
 
 % ------------------------------------------------------------------
@@ -59,7 +59,7 @@ P.~Kempthorne and C.~Lee in 2013) with \emph{application lectures} by practition
 because it is used on trading floors, not for its own sake \ts{24}{1-I}{8:17}.
 Illustrations and case studies are written in R; organisational details (problem sets, group
 project, final paper, investment game, grading) are collected in \cref{app:logistics}.
-\note{Nowadays everyone uses Python, so I will use it to illustrate the maths.}
+
 
 \begin{history}[The course]
 The class grew out of recruiting trips of J.~Xia and V.~Strela (then at Morgan Stanley) to MIT:
@@ -87,30 +87,30 @@ editions are on MIT OpenCourseWare (\url{https://ocw.mit.edu}).}
   \item \textbf{Electronic communication networks (ECN)}: electronic platforms acting as
         distributed exchanges \ts{24}{1-II}{9:25}.
 \end{itemize}
-\note{Difference between stock, equity, security? Define future, forward, option and swap. What are the exchange rules? Intuition behind counterparty risk?}
-\begin{answer}[Securities, derivatives, exchanges, counterparty risk]
-\begin{itemize}
-  \item \textbf{Security}: any tradable financial claim (share, bond, note, \dots).
+\begin{answer}{Difference between stock, equity, security? Define future, forward, option and swap. What are the exchange rules? Intuition behind counterparty risk?}[Stock, equity, security]
+\textbf{Security}: any tradable financial claim (share, bond, note, \dots).
         \textbf{Equity}: ownership of a company, as opposed to debt. A \textbf{stock} (share) is the
         security that represents equity; in market jargon ``equities'' simply means stocks.
-  \item \textbf{Forward}: private (OTC) agreement to buy or sell an asset at a date $T$ at a price
+\answerpart{Future, forward, option, swap}\label{ans:derivatives}
+\textbf{Forward}: private (OTC) agreement to buy or sell an asset at a date $T$ at a price
         $K$ fixed today; nothing is paid today, everything is settled at $T$.
         \textbf{Future}: the same, but standardised (size, dates) and exchange-traded, with gains and
         losses settled daily through margin accounts. \textbf{Option}: the right, not the
         obligation, to buy (call, payoff $(S_T-K)^+$) or sell (put, payoff $(K-S_T)^+$); the buyer
         pays a premium today. \textbf{Swap}: exchange of two streams of cash flows on a notional,
         e.g.\ fixed vs floating interest; it is a portfolio of forwards.
-  \item \textbf{Exchange rules}: standardised contracts; only members trade directly (others go
+\answerpart{Exchange rules}
+Standardised contracts; only members trade directly (others go
         through brokers); orders are matched in an order book by price, then time; tick sizes,
         trading hours, circuit breakers and reporting duties. Trades are cleared by a central
         counterparty that collects margin from both sides, which is what removes bilateral
         counterparty risk.
-  \item \textbf{Counterparty risk}: in an OTC contract your gain is only a promise of the other
+\answerpart{Counterparty risk}
+In an OTC contract your gain is only a promise of the other
         side. If they default when the contract is worth something to you, you lose that value
         (the cost of replacing the contract). It is like having lent money to them: the exposure is
         what they would owe you if they disappeared now, and it matters only when the contract has
         positive value to you. Collateral and clearing reduce it (\cref{ch:counterparty}).
-\end{itemize}
 \end{answer}
 
 \subsection{What is traded}
@@ -134,7 +134,7 @@ Derivatives & Contracts whose payoff depends on another asset: forwards, futures
 \bottomrule
 \end{tabularx}
 \end{table}
-\note*{Leave some space between lines in the table.}
+
 
 A few points from the lectures deserve emphasis.
 \begin{itemize}
@@ -156,12 +156,12 @@ A few points from the lectures deserve emphasis.
         \emph{swap} exchanges two streams of cash flows (e.g.\ fixed vs floating interest)
         \ts{24}{1-II}{15:41}.
 \end{itemize}
-\note{Is the primary market an actual market? what is a market?}
-\begin{answer}[Primary market; what a market is]
+\begin{answer}{Is the primary market an actual market? what is a market?}[Primary market]
 The primary market is not a place but a process: the first sale of newly issued securities by
 the issuer to investors (an IPO for shares, auctions or bank syndicates for bonds). The money goes to
 the issuer, and investment banks organise the sale (underwriting, book-building). In the secondary
 market investors trade existing securities among themselves and the issuer receives nothing.
+\answerpart{What a market is}
 In general a \emph{market} is any mechanism that brings buyers and sellers together and lets a price
 form: an exchange with an order book, a network of dealers quoting prices (OTC), or an auction.
 \end{answer}
@@ -190,12 +190,21 @@ assumptions, not facts.
 2011--2024, with the zero line in red: re-drawn from the data of the course notebook
 \file{FM_Intro1.Rmd} (\cref{sec:R}), shown in class \ts{24}{1-I}{14:54}.}\label{fig:wti}
 \end{figure}
-\note*{Here I am sure there were picture from the presentation. We should include them to make the presentation clearer and more interesting.}
+
 
 % ------------------------------------------------------------------
 \section{Market participants}\label{sec:participants}
 
-\note{repeal? liabilities?}
+\begin{answer}{repeal? liabilities?}[Repeal]
+To \emph{repeal} a law is to abolish it with a later law: the Gramm--Leach--Bliley Act (1999) removed
+the Glass--Steagall separation, so commercial and investment banks could merge again (e.g.\
+Citigroup).
+\answerpart{Liabilities}
+\emph{Liabilities} are what an entity owes: for a bank, its deposits; for a pension fund,
+the pensions it has promised; for an insurer, future claims. ``Invested to meet liabilities'' means
+choosing assets whose cash flows match those future payments (asset--liability management), e.g.\ long
+bonds against long-dated pensions, with matching durations (\cref{sec:duration}).
+\end{answer}
 \begin{itemize}
   \item \textbf{Commercial banks} take deposits and lend. \textbf{Investment banks} raise
         capital and trade. The two were separated in the US by the Glass--Steagall Act (1933);
@@ -216,16 +225,7 @@ assumptions, not facts.
   \item \textbf{Retail investors}, \textbf{central banks} (policy-driven: set short rates,
         provide liquidity, intervene in FX) and \textbf{corporates} (mostly hedgers).
 \end{itemize}
-\begin{answer}[Repeal; liabilities]
-To \emph{repeal} a law is to abolish it with a later law: the Gramm--Leach--Bliley Act (1999) removed
-the Glass--Steagall separation, so commercial and investment banks could merge again (e.g.\
-Citigroup). \emph{Liabilities} are what an entity owes: for a bank, its deposits; for a pension fund,
-the pensions it has promised; for an insurer, future claims. ``Invested to meet liabilities'' means
-choosing assets whose cash flows match those future payments (asset--liability management), e.g.\ long
-bonds against long-dated pensions, with matching durations (\cref{sec:duration}).
-\end{answer}
-\note*{Central bank decides interest rate. Right now in 2024 the interest curve is inverted! The central bank of US is Federal Reserve Bank.}\note{what is a typical shape of interest curve?}
-\begin{answer}[Central banks and the yield curve]
+\note*{Central bank decides interest rate. Right now in 2024 the interest curve is inverted! The central bank of US is Federal Reserve Bank.}\begin{answer}{what is a typical shape of interest curve?}[Central banks and the yield curve]
 The central bank sets only the \emph{short-term} policy rate (in the US the federal funds target
 range, decided by the FOMC; in the eurozone the ECB deposit rate). Longer yields are set by the
 market: expectations of future policy rates plus a term premium. The US central bank is the
@@ -247,8 +247,7 @@ under uncertainty. The fundamental trade is between \emph{lenders} (have money, 
 manager). Whether markets are a zero-sum game depends on the product: many trades net to zero,
 but markets exist because they transfer capital from those who have it to those who can use it
 productively \ts{13}{1}{20:53}.
-\note{Nice point: what is the point of a (financial) market?}
-\begin{answer}[What financial markets are for]
+\begin{answer}{Nice point: what is the point of a (financial) market?}[What financial markets are for]
 \begin{itemize}
   \item \emph{Capital allocation}: savings flow to those who can use them productively;
   \item \emph{risk transfer}: hedgers pass risks to those willing to bear them for a premium;
@@ -267,12 +266,13 @@ they start from different exposures and preferences.
 Hedgers already have an exposure and want to \emph{reduce} it \ts{13}{1}{26:13}: a homeowner
 with a floating-rate mortgage who locks in a fixed rate; an exporter with future euro revenues
 who sells euros forward; a company in an M\&A deal hedging currency and rate exposure.
-\note{Exposure = risk? what is M\&A?}
-\begin{answer}[Exposure; M\&A]
+\begin{answer}{Exposure = risk? what is M\&A?}[Exposure]
 \emph{Exposure} is the amount of value that moves when a risk factor moves: an exporter expecting
 EUR~10 million of revenues has a EUR~10 million EUR/USD exposure. \emph{Risk} combines the exposure
 with how much the factor moves: roughly, the size of the typical loss is exposure $\times$ volatility
-of the factor. Exposure is thus a sensitivity (for derivatives, the delta). \emph{M\&A} = mergers and
+of the factor. Exposure is thus a sensitivity (for derivatives, the delta).
+\answerpart{M\&A}
+\emph{M\&A} = mergers and
 acquisitions: one company buying another, or two merging. In a cross-border deal the buyer has to
 pay in a foreign currency at a future closing date, hence the FX and rate hedges.
 \end{answer}
@@ -322,22 +322,22 @@ Beyond the Greeks, a dealer book is managed through tail-risk measures such as
 \emph{Value at Risk} (\cref{ch:var}), capital usage, balance sheet and leverage. Before 2008 many
 banks were levered about 40 times: with \$1 of capital and \$40 of exposure, a 2.5\% move wipes
 out the capital \ts{13}{1}{35:47}.
-\note{def of liquidity, residual inventory of risk. Dealer book = order book? tail-risk measures?}
-\begin{answer}[Liquidity, inventory, dealer book, tail risk]
-\begin{itemize}
-  \item \textbf{Liquidity}: the ability to trade a large size quickly without moving the price much;
+\begin{answer}{def of liquidity, residual inventory of risk. Dealer book = order book? tail-risk measures?}[Liquidity]
+The ability to trade a large size quickly without moving the price much;
         measured by the bid--ask spread, the depth of the market and traded volume.
-  \item \textbf{Residual inventory of risk}: after buying an option from a client the market maker
+\answerpart{Residual inventory of risk}
+After buying an option from a client the market maker
         holds a position it did not choose, and cannot sell the same option on at once (it is
         illiquid). It hedges what it can with liquid instruments (shares for delta, other options for
         vega); what is left is the residual risk it carries in inventory.
-  \item \textbf{Dealer book $\neq$ order book}. An order book is the exchange's list of pending buy
+\answerpart{Dealer book $\neq$ order book}
+An order book is the exchange's list of pending buy
         and sell orders at each price. A dealer's \emph{book} is its portfolio of positions, managed
         as a whole.
-  \item \textbf{Tail-risk measures} describe the extreme losses of the profit-and-loss distribution:
+\answerpart{Tail-risk measures}
+They describe the extreme losses of the profit-and-loss distribution:
         \emph{Value at Risk} (the loss exceeded with probability 1\%, say, over one day),
         \emph{Expected Shortfall} (the average loss beyond the VaR), stress tests (\cref{ch:var}).
-\end{itemize}
 \end{answer}
 
 \begin{coursenote}[Vega or kappa?]
@@ -351,7 +351,10 @@ finance is as a discipline (the Black--Scholes model dates to 1973) \ts{13}{1}{9
 Risk takers deliberately take positions to earn a return \ts{13}{1}{36:50}. Styles include:
 \begin{itemize}
   \item \textbf{Directional}: long or short on a view (including ``gut'' trading).
-  \note{what is gut trading?}
+  \begin{answer}{what is gut trading?}[Gut trading]
+Trading on instinct (``gut feeling'') and experience rather than on a model or a fixed rule: the
+extreme form of \emph{discretionary} trading, as opposed to \emph{systematic} trading.
+\end{answer}
   \item \textbf{Arbitrage}: exploit violations of \emph{deterministic} price relationships,
         e.g.\ the same gold priced differently in two markets, or a spot price inconsistent with
         the forward price \ts{13}{1}{37:50}.
@@ -362,10 +365,6 @@ Risk takers deliberately take positions to earn a return \ts{13}{1}{36:50}. Styl
   \item \textbf{Fundamental / global macro}: trade balances, earnings, policy changes
         \ts{13}{1}{40:00}; \textbf{special situations}: distressed companies.
 \end{itemize}
-\begin{answer}[Gut trading]
-Trading on instinct (``gut feeling'') and experience rather than on a model or a fixed rule: the
-extreme form of \emph{discretionary} trading, as opposed to \emph{systematic} trading.
-\end{answer}
 
 \begin{definition}[Alpha and beta]\label{def:alphabeta}
 Let $R_b$ be the return of a benchmark (e.g.\ an S\&P~500 index fund) and $R_a$ the return of a
@@ -379,11 +378,12 @@ return $\alpha$ (\emph{alpha}, the manager's skill) \ts{13}{1}{28:21}. The least
 $\hat\beta = \widehat{\Cov}(R_a,R_b)/\widehat{\Var}(R_b)$; regression is developed in
 \cref{ch:regression} and the CAPM interpretation in \cref{ch:portfolio}.
 \end{definition}
-\note{def of what is a return. what is CAPM interpretation?}
-\begin{answer}[Returns; CAPM]
+\begin{answer}{def of what is a return. what is CAPM interpretation?}[Return]
 Over one period, with price $P_t$ and dividend $D_t$, the \emph{simple return} is
 $R_t=(P_t+D_t-P_{t-1})/P_{t-1}$ and the \emph{log return} is $r_t=\ln(1+R_t)$; log returns add up
-over time and $r_t\approx R_t$ for small moves. The CAPM (\cref{ch:portfolio}) states that in
+over time and $r_t\approx R_t$ for small moves.
+\answerpart{CAPM interpretation}
+The CAPM (\cref{ch:portfolio}) states that in
 equilibrium expected \emph{excess} returns are proportional to beta with respect to the market
 portfolio $M$: $\E[R_a]-r_f=\beta_a\bigl(\E[R_M]-r_f\bigr)$. Written for excess returns with the
 market as benchmark, the regression above then has $\alpha=0$: a non-zero alpha is return that
@@ -434,7 +434,17 @@ and memories short: people over-weight recent experience \ts{13}{1}{51:23}.
 \begin{enumerate}[(A)]
   \item win \$500 with probability $0.8$, lose \$500 with probability $0.2$;
   \item win \$280 for sure.
-      \note{I dont understand what's the question. whats the best strategy? }
+      \begin{answer}{I dont understand what's the question. whats the best strategy? }[What the quiz asks]
+Each framing asks: \emph{which of the two would you choose?} It is a question about your
+preferences, and there is no single right answer. Xia says so explicitly: he is not telling the class which
+choice is right \ts{13}{1}{47:49}.
+\answerpart{The ``best'' strategy}
+A pure expected-value maximiser picks B in the loss framing
+($-280>-300$) and A in the gain framing ($300>280$). Most people do the opposite in both. The
+point is that the \emph{framing} (losing vs winning the same kind of bet) flips the choice, while a
+rational choice should depend only on the payoffs, one's utility and one's wealth (see the
+intuition box below).
+\end{answer}
 \end{enumerate}
 
 \smallskip
@@ -443,15 +453,6 @@ expectation; yet many people choose A, to avoid ``locking in'' a loss. In the ga
 $\E[A] = +300 > 280 = \E[B]$, but most people choose B. A student's answer for B in class was
 ``higher Sharpe'': indeed $\operatorname{sd}(A) = 1000\sqrt{0.8\cdot 0.2} = 400$ while B is riskless.
 \end{example}
-\begin{answer}[What the quiz asks]
-Each framing asks: \emph{which of the two would you choose?} It is a question about your
-preferences, and there is no single right answer. Xia says so explicitly: he is not telling the class which
-choice is right \ts{13}{1}{47:49}. A pure expected-value maximiser picks B in the loss framing
-($-280>-300$) and A in the gain framing ($300>280$). Most people do the opposite in both. The
-point is that the \emph{framing} (losing vs winning the same kind of bet) flips the choice, while a
-rational choice should depend only on the payoffs, one's utility and one's wealth (see the
-intuition box below).
-\end{answer}
 \note*{Brief def of Sharpe ratio, and mention the other metrics to assess an investment strategy.}
 
 \paragraph{Sharpe ratio and other performance metrics.} For a strategy with return $R$ (per period),
@@ -486,7 +487,7 @@ stop-loss rules are part of risk management \ts{13}{1}{46:10}. With a concave ut
 the answer depends on wealth: a student with \$800 in the bank and an investor with \$100{,}000
 should not answer the same way \ts{13}{1}{50:20}.
 \end{intuition}
-\note*{the titles of the boxes should be given more importance. here id call it something like: INTUITION: KT prospect theory, reflection effect and utility (this is just an idea)}
+
 
 % ------------------------------------------------------------------
 \section{Choosing an investment strategy}\label{sec:strategies}
@@ -535,8 +536,7 @@ What Xia said about each choice:
         to simply extrapolate \ts{24}{1-II}{31:09}.
 \end{itemize}
 Here $P$ is the current price and $V(t)$ the (estimated) value of the company at time $t$: a value
-investor buys what is cheap relative to today's value, a growth investor buys expected growth. \note{This is just a different time-scale approach: connection to renormalization.}
-\begin{answer}[Value vs growth as time scales]
+investor buys what is cheap relative to today's value, a growth investor buys expected growth. \begin{answer}{This is just a different time-scale approach: connection to renormalization.}[Value vs growth as time scales]
 Partly right. Both styles bet that price converges to value; they differ in \emph{which} value and
 over what horizon. Value bets that the gap $V(0)-P$ closes (a mean-reversion time, typically
 years). Growth bets on the drift of $V(t)$ itself up to a distant $T$. So the choice is indeed about
@@ -550,8 +550,7 @@ renormalization-like ideas do appear.
 \end{answer}
 The key message \ts{24}{1-II}{31:28}: understand your own objectives and constraints (what the
 money is for, how much you can afford to lose, your horizon), pick the area where you have an edge
-over the rest of the market, and ``if math is your strength, make math your edge''. \note{what is an edge?}
-\begin{answer}[Edge]
+over the rest of the market, and ``if math is your strength, make math your edge''. \begin{answer}{what is an edge?}[Edge]
 An \emph{edge} is a persistent advantage that makes your expected return, after costs, positive,
 and that you can explain: ``you need to understand why you should make money. Other people
 should give you the money'' \ts{24}{1-II}{32:10}. Typical sources:
@@ -569,13 +568,7 @@ If you cannot say who is on the other side and why they lose, you probably have 
 \section{Time value of money}\label{sec:tvm}
 
 \subsection{Compounding}
-Invest \$1 at a constant annual interest rate $r$ \ts{24}{1-III}{1:00}. \note{what are tipical values of r?} With annual compounding
-(interest earns interest) it grows to $1+r$ after one year and to $(1+r)^n$ after $n$ years. If
-interest is paid and reinvested $m$ times a year, each period earns $r/m$ and
-\begin{equation}\label{eq:mcompound}
-  1 \;\longmapsto\; \Bigl(1+\frac{r}{m}\Bigr)^{mn} \quad\text{after $n$ years.}
-\end{equation}
-\begin{answer}[Typical values of $r$]
+Invest \$1 at a constant annual interest rate $r$ \ts{24}{1-III}{1:00}. \begin{answer}{what are tipical values of r?}[Typical values of $r$]
 A few percent per year, but the range is wide:
 \begin{itemize}
   \item US policy rate (federal funds): $0$--$0.25\%$ in 2008--2015 and 2020--2022, then
@@ -587,7 +580,12 @@ A few percent per year, but the range is wide:
   \item borrowers pay more than governments: mortgages, corporate bonds and credit cards carry a
         credit spread on top (from $1\%$ to more than $20\%$ a year for credit cards).
 \end{itemize}
-\end{answer}
+\end{answer} With annual compounding
+(interest earns interest) it grows to $1+r$ after one year and to $(1+r)^n$ after $n$ years. If
+interest is paid and reinvested $m$ times a year, each period earns $r/m$ and
+\begin{equation}\label{eq:mcompound}
+  1 \;\longmapsto\; \Bigl(1+\frac{r}{m}\Bigr)^{mn} \quad\text{after $n$ years.}
+\end{equation}
 Letting $m\to\infty$ (continuous compounding) \ts{24}{1-III}{3:02},
 \begin{equation}\label{eq:contcompound}
   \lim_{m\to\infty}\Bigl(1+\frac{r}{m}\Bigr)^{mt} = e^{rt},
@@ -615,14 +613,13 @@ different dates with present-value calculations (W.~N.~Goetzmann).
 J.~J.~O'Connor and E.~F.~Robertson, ``The number $e$'', MacTutor History of Mathematics
 (\url{https://mathshistory.st-andrews.ac.uk/HistTopics/e/});
 W.~N.~Goetzmann, ``Fibonacci and the Financial Revolution'', NBER Working Paper 10352 (2004).}
-\end{history}\note*{I love history facts! can we implement a special box for them? like something that looks like old, antique. Furthermore, factcheck them and add references.}
+\end{history}
 
 \begin{remark}[Equivalent rates]
 The same growth can be quoted with different conventions: a rate $r_m$ compounded $m$ times a year
 and a continuously compounded rate $r_c$ are equivalent iff $(1+r_m/m)^m = e^{r_c}$, i.e.
 $r_c = m\ln(1+r_m/m)$. A rate is meaningless without its compounding convention.
-\end{remark}\note{is there any situation where is not allowed mathematically to use continuous compound? or where we get totally different results and we should be careful which one to use?}
-\begin{answer}[When the compounding convention matters]
+\end{remark}\begin{answer}{is there any situation where is not allowed mathematically to use continuous compound? or where we get totally different results and we should be careful which one to use?}[When the compounding convention matters]
 Mathematically nothing forbids continuous compounding. Every positive growth factor $G$ over a year
 can be written as $e^{r_c}$ with $r_c=\ln G$. Once rates are converted with the formula above, all
 conventions give the \emph{same} prices. Trouble comes from forgetting to convert:
@@ -642,21 +639,22 @@ conventions give the \emph{same} prices. Trouble comes from forgetting to conver
 
 \subsection{Discounting by no-arbitrage}\label{sec:discounting}
 How much should one pay today for the right to receive \$1 in one year \ts{24}{1-III}{5:03}? Call
-the price $x$ and consider the strategy: \emph{borrow $x$ today and buy the claim}.\note{what does it mean buy the claim?} Today the
-net cash flow is zero.\note{what is net cash flow?} In one year we receive \$1 and repay $x(1+r)$, so the final profit is
+the price $x$ and consider the strategy: \emph{borrow $x$ today and buy the claim}.\begin{answer}{what does it mean buy the claim?}[Claim]
+A \emph{claim} is a contract that entitles its holder to a payment: here, the right to receive
+\$1 in one year (a zero-coupon bond, \cref{sec:bonds}). \emph{Buying the claim} means paying its price $x$
+today to become the one who will be paid.
+\end{answer} Today the
+net cash flow is zero.\begin{answer}{what is net cash flow?}[Net cash flow]
+The \emph{net cash flow} at a date is money in minus money
+out at that date. Today we receive $+x$ from the loan and pay $-x$ for the claim: net $0$, so the
+strategy needs no capital of our own. In one year: $+1$ from the claim, $-x(1+r)$ to repay the loan.
+\end{answer} In one year we receive \$1 and repay $x(1+r)$, so the final profit is
 \[
   \Pi = 1 - x(1+r) \quad\text{with certainty.}
 \]
 If $\Pi>0$ we would do this on a huge scale (riskless profit from nothing); if $\Pi<0$ the
 counterparty would do the opposite. Absence of arbitrage forces $\Pi = 0$, i.e.
 $x = 1/(1+r)$ \ts{24}{1-III}{6:08}.
-\begin{answer}[Claim; net cash flow]
-A \emph{claim} is a contract that entitles its holder to a payment: here, the right to receive
-\$1 in one year (a zero-coupon bond, \cref{sec:bonds}). \emph{Buying the claim} means paying its price $x$
-today to become the one who will be paid. The \emph{net cash flow} at a date is money in minus money
-out at that date. Today we receive $+x$ from the loan and pay $-x$ for the claim: net $0$, so the
-strategy needs no capital of our own. In one year: $+1$ from the claim, $-x(1+r)$ to repay the loan.
-\end{answer}
 
 \begin{definition}[Discount factor]
 The present value of \$1 received at time $t$ is the \emph{discount factor} $\Lambda_t$. With a
@@ -666,8 +664,7 @@ constant rate,
   \Lambda_t = e^{-rt} \ \text{(continuous compounding)},
 \]
 and the present value of a cash flow $N$ at time $t$ is $N\Lambda_t$ \ts{24}{1-III}{8:09}.
-\end{definition}\note{am i right if i say: given X money now, its value in the future is computet via the interest rate, while its value in the past is computed via the discount factor [we consider time as having an intrinsic value - different if we compound or not]. I AM RIGHT! look at: $X_{now} = X_{future} \cdot e^{-rt}$ and notice you can easily invert it to get $X_{future} = X_{now} \cdot e^{rt}$. [it is even simpler if you allow time to be negative, then you can use the same formula for both past and future]}
-\begin{answer}[Moving money along the time axis]
+\end{definition}\begin{answer}{am i right if i say: given X money now, its value in the future is computet via the interest rate, while its value in the past is computed via the discount factor [we consider time as having an intrinsic value - different if we compound or not]. I AM RIGHT! look at: $X_{now} = X_{future} \cdot e^{-rt}$ and notice you can easily invert it to get $X_{future} = X_{now} \cdot e^{rt}$. [it is even simpler if you allow time to be negative, then you can use the same formula for both past and future]}[Moving money along the time axis]
 Yes. With a constant rate, $\Lambda_t = e^{-rt}$ moves a value \emph{back} from time $t$ to today and its
 inverse $1/\Lambda_t = e^{rt}$ (the growth or compounding factor) moves it \emph{forward}; with signed time
 the single formula $X_{t_2} = X_{t_1}e^{r(t_2-t_1)}$ does both. Two refinements. First, the value is not
@@ -689,9 +686,20 @@ whose profit must vanish. The same logic, applied to a portfolio that is riskles
 
 \subsection{Zero-coupon and coupon bonds}
 A \emph{zero-coupon} (discount) bond pays the notional $N$ at maturity $T$ and nothing else: it is
-exactly ``the right to receive $N$ at $T$'' \ts{24}{1-III}{9:09}.  \note{id say that the contract is an obligation, for the other party to pay you in the future: a future/forward contract?} A \emph{coupon bond} pays
+exactly ``the right to receive $N$ at $T$'' \ts{24}{1-III}{9:09}.  \begin{answer}{id say that the contract is an obligation, for the other party to pay you in the future: a future/forward contract?}[Bond vs forward]
+A bond is a loan, not a forward. The buyer pays the price $P$ \emph{today} and from then on only the
+issuer has obligations (to pay coupons and notional). In a forward or future nothing is paid today and
+\emph{both} parties are obliged at $T$, one to buy and one to sell.
+\end{answer} A \emph{coupon bond} pays
 periodic coupons $C$ and the notional at maturity; US Treasuries pay coupons semi-annually
-\ts{24}{1-III}{10:10}. \note{what about other countries and eu?} The cash flows from the buyer's point of view (the buyer lends $P$) are:
+\ts{24}{1-III}{10:10}. \begin{answer}{what about other countries and eu?}[Coupon frequency elsewhere]
+Coupon frequency by issuer:
+\begin{itemize}
+  \item annual: Germany (Bund), France (OAT), Spain (Bonos), Netherlands (DSL);
+  \item semi-annual: Italy (BTP), United Kingdom (gilts), Japan (JGB), United States (Treasury notes and bonds).
+\end{itemize}
+The pricing formulas are the same with $n$ periods and the rate per period ($r/2$ for semi-annual coupons).
+\end{answer} The cash flows from the buyer's point of view (the buyer lends $P$) are:
 
 \begin{center}
 \begin{tikzpicture}[x=1.05cm,y=0.5cm,>=Stealth]
@@ -703,16 +711,6 @@ periodic coupons $C$ and the notional at maturity; US Treasuries pay coupons sem
 \end{tikzpicture}
 \end{center}
 
-\begin{answer}[Bond vs forward; coupon frequency elsewhere]
-A bond is a loan, not a forward. The buyer pays the price $P$ \emph{today} and from then on only the
-issuer has obligations (to pay coupons and notional). In a forward or future nothing is paid today and
-\emph{both} parties are obliged at $T$, one to buy and one to sell. Coupon frequency by issuer:
-\begin{itemize}
-  \item annual: Germany (Bund), France (OAT), Spain (Bonos), Netherlands (DSL);
-  \item semi-annual: Italy (BTP), United Kingdom (gilts), Japan (JGB), United States (Treasury notes and bonds).
-\end{itemize}
-The pricing formulas are the same with $n$ periods and the rate per period ($r/2$ for semi-annual coupons).
-\end{answer}
 
 \begin{proposition}[Bond prices at a flat rate]\label{prop:bondprice}
 With annual coupons and a constant annual rate $r$,
@@ -721,8 +719,7 @@ With annual coupons and a constant annual rate $r$,
   P_{\text{coupon}} &= \sum_{k=1}^{n}\frac{C}{(1+r)^k} + \frac{N}{(1+r)^n}
    = C\,\frac{(1+r)^n-1}{r(1+r)^n} + \frac{N}{(1+r)^n}.\label{eq:couponbond}
 \end{align}
-\end{proposition} \note{credo che il discount rate sulla parte del coupon debba essere divisa per n. no non e' vero, n e' il numero di anni, e noi calcoliamo il valore al tempo zero se riceviamo soldi al tempo k, dato un certo tasso di interesse.}
-\begin{answer}[Why the coupon is not divided by $n$]
+\end{proposition} \begin{answer}{credo che il discount rate sulla parte del coupon debba essere divisa per n. no non e' vero, n e' il numero di anni, e noi calcoliamo il valore al tempo zero se riceviamo soldi al tempo k, dato un certo tasso di interesse.}[Why the coupon is not divided by $n$]
 Your second thought is right. Each coupon $C$ is a separate payment at time $k$ and is discounted
 by its own factor $(1+r)^{-k}$; $n$ only fixes how many coupons there are and when the notional comes
 back. Nothing is shared out over the $n$ years.
@@ -735,13 +732,11 @@ the stated expression.
 
 \begin{corollary}[Par bonds]\label{cor:par}
 A bond trades \emph{at par} ($P=N$) iff its coupon rate equals the rate: $C = rN$.
-\end{corollary} \note{does par stand for parity?}
-\begin{answer}[Par]
+\end{corollary} \begin{answer}{does par stand for parity?}[Par]
 Not parity: \emph{par} is the face (nominal) value of the bond, from Latin \emph{par}, ``equal''. ``At par''
 means $P=N$; above par is a \emph{premium}, below par a \emph{discount}. Prices are quoted per 100 of
 nominal, so a par bond is quoted at 100.
-\end{answer}\note*{good! in general, when a new term is introduced, explain why it has been given the name it has}
-\begin{answer}[Where the names of this chapter come from]
+\end{answer}\begin{answer}{good! in general, when a new term is introduced, explain why it has been given the name it has}[Where the names of this chapter come from]
 \begin{itemize}
   \item \emph{Coupon}: French for ``piece cut off'' (\emph{couper}). Paper bonds carried detachable
         coupons, one per payment date, which the holder cut off and handed in to be paid; hence
@@ -784,40 +779,32 @@ price: $P = \sum_k \mathrm{CF}_k (1+y)^{-t_k}$. For an $n$-year zero-coupon bond
 \]
 For coupon bonds the equation is a polynomial in $(1+y)^{-1}$ and is inverted numerically
 \ts{24}{1-III}{12:14}.
-\end{definition}\note*{C is the coupon, what is $F_k$? e' giusta la formula di P? perche' non usiamo continuous framework, sembra molto piu semplice-pulito? coupon non funzionerebbe! aggiungi valori tipici di yueld to maturity (e sopraa anche di coupon, prezzo di un bond, discount rate)}
-\begin{answer}[Cash flows, continuous yield, typical values]
+\end{definition}\begin{answer}{C is the coupon, what is $F_k$? e' giusta la formula di P? perche' non usiamo continuous framework, sembra molto piu semplice-pulito? coupon non funzionerebbe! aggiungi valori tipici di yueld to maturity (e sopraa anche di coupon, prezzo di un bond, discount rate)}[What is $\mathrm{CF}_k$]
 $\mathrm{CF}_k$ (one symbol, ``cash flow'') is the $k$-th payment: $C$ at the coupon dates and $C+N$ at maturity.
+\answerpart{Is the formula for $P$ right?}
 The formula is right: it is \eqref{eq:couponbond} with a rate $y$ that is \emph{solved for} instead of given.
-
+\answerpart{Why not the continuous framework? Would coupons break it?}
 The continuous framework works equally well with coupons. The payments stay discrete, only the
 discounting changes: $P=\sum_k \mathrm{CF}_k\,e^{-y_c t_k}$ with $y_c=\ln(1+y)$ (for $y=5\%$, $y_c=4.88\%$). Both
 describe the same price. Markets quote the annual (or semi-annual) compounded yield by convention;
 theory (\cref{ch:sde,ch:hjm}) prefers $y_c$ because exponentials compose and differentiate cleanly.
-
-Typical values (official data, September 2026):
-
-\begin{center}\small
-\begin{tabular}{@{}ll@{}}
-\toprule
-quantity & typical value \\
-\midrule
-yield to maturity & US: 4.2\% (3 months) to 5.5\% (30 years), 25 Sep 2026 \\
- & Germany 10 y: 3.4\%, Italy 10 y: 4.0\% (August 2026 averages) \\
-coupon rate & close to the yield at issue: 3--5\% for new bonds, 0--1.5\% for 2020--21 issues \\
-price & quoted per 100 of nominal, near 100 at issue; e.g.\ 5 years left, yield 4.9\%: \\
- & coupon 1.5\% $\to$ 85.2,\ \ coupon 4\% $\to$ 96.1,\ \ coupon 5.5\% $\to$ 102.6 \\
-discount factor & $\Lambda_{10}\approx 1.0517^{-10}=0.60$ at the 10-year US yield \\
-\bottomrule
-\end{tabular}
-\end{center}
+\answerpart{Typical values}
+Official data, September 2026:
+\begin{itemize}
+  \item \textbf{yield to maturity}: US 4.2\% (3 months) to 5.5\% (30 years), 25 Sep 2026;
+        Germany 10 y: 3.4\%, Italy 10 y: 4.0\% (August 2026 averages);
+  \item \textbf{coupon rate}: close to the yield at issue: 3--5\% for new bonds, 0--1.5\% for 2020--21 issues;
+  \item \textbf{price}: quoted per 100 of nominal, near 100 at issue; e.g.\ 5 years left, yield 4.9\%:
+        coupon 1.5\% $\to$ 85.2, coupon 4\% $\to$ 96.1, coupon 5.5\% $\to$ 102.6;
+  \item \textbf{discount factor}: $\Lambda_{10}\approx 1.0517^{-10}=0.60$ at the 10-year US yield.
+\end{itemize}
 Sources: US Treasury Daily Par Yield Curve Rates; Deutsche Bundesbank (BBSIS);
 Banca d'Italia (BTP benchmark gross yields, BMK0100).
 \end{answer}
 
 Since every cash flow is positive, $P(y)$ is strictly decreasing and strictly convex in $y$, so the
 yield is unique. Price decreases with yield and increases with coupon
-(\cref{fig:priceyield}); by \cref{cor:par} the yield of a par bond equals its coupon.\note{l'idea e' che un bond verra' pagato una certa quantita X il giorno Y, e magari restituisce coupon C. Il problema e' trovare quale sia il prezzo adesso. [per me yield=interest rate=discount rate]}
-\begin{answer}[Yield, interest rate, discount rate]
+(\cref{fig:priceyield}); by \cref{cor:par} the yield of a par bond equals its coupon.\begin{answer}{l'idea e' che un bond verra' pagato una certa quantita X il giorno Y, e magari restituisce coupon C. Il problema e' trovare quale sia il prezzo adesso. [per me yield=interest rate=discount rate]}[Yield, interest rate, discount rate]
 Your reading of the problem is exactly right: known future payments, unknown price today. The three
 words coincide only when the curve is flat. In general each date has its own rate (the yield curve
 below). The \emph{discount rate} is the rate used for one specific date, and the \emph{yield} is the
@@ -849,16 +836,15 @@ In reality bonds of different maturities have different yields: the \emph{term s
 interest rates}, or \emph{yield curve} \ts{24}{1-III}{14:19}. Normally it slopes upward (lenders
 want more yield for longer commitments); when short yields exceed long yields the curve is
 \emph{inverted}. Inversions preceded the 2008 and 2020 recessions, which is why an inverted curve
-is widely (though not infallibly) read as a recession signal \ts{24}{1-III}{16:24}. \note{what is the definition of recession?} The short end
-is anchored by the central bank's policy rate \ts{24}{1-II}{14:41}; the long end reflects
-expectations, risk premia, supply and demand.
-\begin{answer}[Recession]
+is widely (though not infallibly) read as a recession signal \ts{24}{1-III}{16:24}. \begin{answer}{what is the definition of recession?}[Recession]
 A common rule of thumb is two consecutive quarters of falling real GDP. In the US the official
 dating is done by the NBER's Business Cycle Dating Committee: a significant decline in economic activity
 that is spread across the economy and lasts more than a few months (it looks at employment, income,
 spending and production, not GDP alone). The 2020 recession, for example, lasted only two months
 (February--April 2020) but was dated as one because it was so deep and widespread.
-\end{answer}
+\end{answer} The short end
+is anchored by the central bank's policy rate \ts{24}{1-II}{14:41}; the long end reflects
+expectations, risk premia, supply and demand.
 
 \begin{figure}[ht]
 \centering
@@ -881,21 +867,19 @@ spending and production, not GDP alone). The 2020 recession, for example, lasted
 \caption{US Treasury par yield curves (official Daily Treasury Par Yield Curve Rates, treasury.gov;
 the first four dates are those of slide~23 of \file{lec01_1}). 1992, 2021 and 2026: normal upward slope,
 at very different levels; 2007 and 2024: inverted short end.}\label{fig:yieldcurve}
-\end{figure}\note{non capisco, se la maturity e' zero allora yield dovrebbe essere zero, no? non e' veramente a zero! perche' un prestito per un anno dovrebbe avere tasso di interesse piu alto che di due? cosi incentivi a comprare bond a scadenza breve, perche'?}\note*{vorrei aggiungere yield curves of italian bonds}\note*{fai il check con dati ufficiali di queste yield curves e aggiungi quella piu aggiornata di oggi}\note*{i found this nice picture to see correlation with fed interest rate (?) https://www.gwkinvest.com/wp-content/uploads/Figure1-GP-June26.svg}
-\begin{answer}[The short end; why a curve can invert]
+\end{figure}\begin{answer}{non capisco, se la maturity e' zero allora yield dovrebbe essere zero, no? non e' veramente a zero! perche' un prestito per un anno dovrebbe avere tasso di interesse piu alto che di due? cosi incentivi a comprare bond a scadenza breve, perche'?}[Yield at maturity zero]
 Yields are \emph{annualised}. A loan for one day earns almost nothing in euros or dollars, but its
 rate per year does not go to zero: as maturity $\to 0$ the yield tends to the overnight rate,
 which the central bank steers with its policy rate (in \cref{fig:fedrates} the 2-year yield follows
 the Fed funds rate closely). So the curve starts at the policy rate, not at zero.
-
+\answerpart{Why would 1 year pay more than 2? Does it push people to short bonds?}
 An inverted curve does not reward short bonds in a way anyone can exploit. A long yield is roughly
 the average of the short rates expected over its life, plus a premium for tying money up. If the market
 expects the central bank to \emph{cut} rates (typically because a slowdown is coming), rolling over
 short bonds is expected to earn the high short rate only for a while and then less. The 2-year yield
 therefore sits below today's 1-year yield, and investors are indifferent. That is also why inversions
 are read as recession signals: they encode expected rate cuts.
-\end{answer}\note{what happens to economy after rate cut? people are not incentivised to invest, right?}
-\begin{answer}[What a rate cut does]
+\end{answer}\note*{vorrei aggiungere yield curves of italian bonds}\note*{fai il check con dati ufficiali di queste yield curves e aggiungi quella piu aggiornata di oggi}\note*{i found this nice picture to see correlation with fed interest rate (?) https://www.gwkinvest.com/wp-content/uploads/Figure1-GP-June26.svg}\begin{answer}{what happens to economy after rate cut? people are not incentivised to invest, right?}[What a rate cut does]
 The other way round: a cut \emph{encourages} investment. Lower rates make borrowing cheaper, so firms
 invest in projects that did not pay at the old rate, households take mortgages and consumer loans,
 and existing debt costs less. What is rewarded less is \emph{saving} in deposits and short bonds.
@@ -926,7 +910,18 @@ Sources: Banca d'Italia, gross yields of benchmark BTPs (table BMK0100); Deutsch
 yield curve of listed Federal securities (BBSIS). Both curves slope upward. The gap between them
 is the BTP--Bund \emph{spread}, the extra yield investors ask to hold Italian rather than German debt:
 about 135\,bp at 10 years in September 2024 and 60\,bp in August 2026.}\label{fig:itde}
-\end{figure}\note*{la figura fig:fedrates e molto bella, non esisiste qualcosa di simile per italia germania? mi sembra abbia lo stesso contenuto se non di piu, mi sbaglio?}
+\end{figure}\begin{answer}{la figura fig:fedrates e molto bella, non esisiste qualcosa di simile per italia germania? mi sembra abbia lo stesso contenuto se non di piu, mi sbaglio?}[An Italian--German version of \cref{fig:fedrates}]
+The two figures contain different things. \Cref{fig:itde} is a \emph{snapshot} of the curve on two
+dates: yield against maturity. \Cref{fig:fedrates} is a \emph{time series}: a few maturities over 36
+years, next to the central-bank rate. The euro analogue is \cref{fig:ecbrates}. It uses the ECB
+deposit rate, the rate that anchors overnight euro rates since the banking system holds ample
+reserves, and the 10-year yields of BTPs and Bunds. Three things stand out:
+\begin{itemize}
+  \item the 2011--12 sovereign-debt crisis, when the BTP--Bund spread peaked at about 520\,bp (November 2011);
+  \item negative deposit rates from June 2014 to July 2022, with the Bund yield below zero for long stretches (2016, 2019--21);
+  \item the 2022--23 hiking cycle: from 2023 to early 2025 the deposit rate stayed above the 10-year Bund yield, an inverted curve.
+\end{itemize}
+\end{answer}
 
 \begin{figure}[ht]
 \centering
@@ -945,18 +940,6 @@ about 135\,bp at 10 years in September 2024 and 60\,bp in August 2026.}\label{fi
 tracks the \emph{expected} path of the policy rate and moves before it. The 10-year yield moves much less.
 When the Fed funds rate is above the 10-year yield (e.g.\ 2000, 2006--07, 2019, 2023--24) the curve is inverted.}\label{fig:fedrates}
 \end{figure}
-\begin{answer}[An Italian--German version of \cref{fig:fedrates}]
-The two figures contain different things. \Cref{fig:itde} is a \emph{snapshot} of the curve on two
-dates: yield against maturity. \Cref{fig:fedrates} is a \emph{time series}: a few maturities over 36
-years, next to the central-bank rate. The euro analogue is \cref{fig:ecbrates}. It uses the ECB
-deposit rate, the rate that anchors overnight euro rates since the banking system holds ample
-reserves, and the 10-year yields of BTPs and Bunds. Three things stand out:
-\begin{itemize}
-  \item the 2011--12 sovereign-debt crisis, when the BTP--Bund spread peaked at about 520\,bp (November 2011);
-  \item negative deposit rates from June 2014 to July 2022, with the Bund yield below zero for long stretches (2016, 2019--21);
-  \item the 2022--23 hiking cycle: from 2023 to early 2025 the deposit rate stayed above the 10-year Bund yield, an inverted curve.
-\end{itemize}
-\end{answer}
 \begin{figure}[ht]
 \centering
 \begin{tikzpicture}
@@ -978,17 +961,16 @@ between the two yields is the BTP--Bund spread.}\label{fig:ecbrates}
 
 \paragraph{Bootstrapping.} ``Discount factors for all times can be bootstrapped from the yield
 curve'' (slide 23). Concretely, suppose we observe par yields $c_1, c_2, \dots$ of annual-coupon
-bonds with maturities $1,2,\dots$ years. A par bond with maturity $n$ has price $1$, \note{it doesn't have to, right? it is just a choice P=N imposed to 1} so
+bonds with maturities $1,2,\dots$ years. A par bond with maturity $n$ has price $1$, \begin{answer}{it doesn't have to, right? it is just a choice P=N imposed to 1}[Par price $1$]
+Yes, this is a normalisation: at par $P=N$, and we measure money in units of the
+nominal, so $N=1$ and $P=1$. With $N=100$ everything is multiplied by $100$ and cancels.
+\end{answer} so
 \[
   1 = c_n\sum_{k=1}^{n}\Lambda_k + \Lambda_n
   \qquad\Longrightarrow\qquad
   \Lambda_n = \frac{1 - c_n\sum_{k=1}^{n-1}\Lambda_k}{1+c_n},
-\]\note{non capisco da dove viene questa formula con i $c_k$, al loro posto dovrebbe esserci $C$ il coupon, giusto?}
-\begin{answer}[Par price $1$; where the $c_n$ come from]
-\textbf{Price $1$.} Yes, this is a normalisation: at par $P=N$, and we measure money in units of the
-nominal, so $N=1$ and $P=1$. With $N=100$ everything is multiplied by $100$ and cancels.
-
-\textbf{The $c_n$.} There is not one bond but a \emph{family}, one for each maturity $n=1,2,\dots$, and
+\]\begin{answer}{non capisco da dove viene questa formula con i $c_k$, al loro posto dovrebbe esserci $C$ il coupon, giusto?}[Where the $c_n$ come from]
+There is not one bond but a \emph{family}, one for each maturity $n=1,2,\dots$, and
 each has its own coupon: $c_n$ is the coupon rate of the $n$-year bond, i.e.\ $C=c_nN=c_n$ for that bond.
 Since the bond is at par, its coupon equals its yield (\cref{cor:par}), hence ``par yields''. The
 discount factors, on the other hand, are the \emph{same} for every bond: \$1 paid in year $k$ is worth
@@ -1001,8 +983,7 @@ and solving for $\Lambda_n$ gives the formula. The 1-year bond gives $\Lambda_1=
 bond contains $\Lambda_1$ (known) and $\Lambda_2$ (unknown), and so on: each new maturity adds one unknown.
 \end{answer}
 which determines $\Lambda_1,\Lambda_2,\ldots$ recursively. Real curve construction (many instrument
-types, interpolation, day-count conventions) is the subject of \cref{ch:rates}. \note{i need some more intuition on what is the discount factor and what is the yield, yield curve}
-\begin{answer}[Discount factor, yield, yield curve: one picture]
+types, interpolation, day-count conventions) is the subject of \cref{ch:rates}. \begin{answer}{i need some more intuition on what is the discount factor and what is the yield, yield curve}[Discount factor, yield, yield curve: one picture]
 \begin{itemize}
   \item The \emph{discount factor} $\Lambda_t$ is a price: what \$1 delivered at time $t$ costs today.
         It starts at $\Lambda_0=1$ and decreases, because waiting costs money.
@@ -1015,7 +996,7 @@ Prices ($\Lambda$) are what you use to compute; rates ($y$) are what you use to 
 the way a physicist compares decay constants rather than surviving fractions.
 \begin{center}
 \begin{tikzpicture}
-\begin{axis}[width=0.72\linewidth,height=4.6cm,xlabel={maturity $t$ (years)},ylabel={$\Lambda_t$},
+\begin{axis}[width=\linewidth,height=4.6cm,xlabel={maturity $t$ (years)},ylabel={$\Lambda_t$},
   domain=0:30,samples=60,xmin=0,xmax=30,ymin=0,ymax=1.05,legend pos=north east,
   legend style={font=\scriptsize},grid=major,grid style={black!10}]
   \addplot[thick,defcol] {exp(-0.05*x)}; \addlegendentry{flat curve, $y=5\%$}
@@ -1027,8 +1008,7 @@ the way a physicist compares decay constants rather than surviving fractions.
 
 \subsection{Duration and convexity}\label{sec:duration}
 A bondholder is exposed to yield changes, and the dependence is non-linear \ts{24}{1-III}{19:29}.
-The sensitivities are derivatives, conventionally scaled by the price. \note{so they are dimensionless?}
-\begin{answer}[Units of duration and convexity]
+The sensitivities are derivatives, conventionally scaled by the price. \begin{answer}{so they are dimensionless?}[Units of duration and convexity]
 No. $y$ is a rate per year, so $D=-P'/P$ has units of years and $\mathcal C=P''/P$ of years$^2$
 (the Macaulay duration is literally an average time). What is dimensionless is the product:
 $D\,\Delta y$ and $\mathcal C\,(\Delta y)^2$, and hence $\Delta P/P$. Example: $D=4.3$ years and
@@ -1044,8 +1024,7 @@ so that, by Taylor expansion,
 \begin{equation}\label{eq:durconv}
   \frac{\Delta P}{P} \approx -D\,\Delta y + \tfrac12\,\mathcal C\,(\Delta y)^2 .
 \end{equation}
-\end{definition}\note{the convention for the signs is beacuse we expect D and C to be positive. look at fig 1.2}
-\begin{answer}[Signs]
+\end{definition}\begin{answer}{the convention for the signs is beacuse we expect D and C to be positive. look at fig 1.2}[Signs]
 Correct. In \cref{fig:priceyield} every curve decreases ($P'<0$) and bends upward ($P''>0$), so the minus sign
 in $D$ and the plus sign in $\mathcal C$ make both numbers positive for ordinary bonds.
 \end{answer}
@@ -1094,8 +1073,7 @@ A 10-year zero at $y = 4\%$: $P = 1.04^{-10} = 0.6756$, $D = 10/1.04 = 9.615$,
 $\mathcal C = 110/1.04^2 = 101.7$. If the yield rises by $\Delta y = 1\%$:
 first order $-9.62\%$; adding convexity $+\tfrac12\cdot 101.7\cdot 0.0001 = +0.51\%$ gives $-9.11\%$;
 the exact change is $(1.04/1.05)^{10}-1 = -9.13\%$.
-\end{example}\note{we are still considering the yield to be fixed along the duration of the bond maturity, right?}
-\begin{answer}[Flat yield, parallel shifts]
+\end{example}\begin{answer}{we are still considering the yield to be fixed along the duration of the bond maturity, right?}[Flat yield, parallel shifts]
 Right. One yield $y$ discounts all the cash flows (a flat curve), and $\Delta y$ moves it by the same amount at
 every maturity (a \emph{parallel shift}). Real curves also steepen and twist. Desks therefore also use
 \emph{key-rate durations}, the sensitivity to the yield at each single maturity, and the principal
@@ -1110,13 +1088,12 @@ Trading desks hedge duration (first order, like the delta $\Delta=\partial V/\pa
 monitor convexity (second order, like the gamma $\Gamma=\partial^2 V/\partial S^2$). For a bond the
 ``underlying'' is the yield: $\partial P/\partial y=-DP$ plays the role of $\Delta$ and
 $\partial^2P/\partial y^2=\mathcal C P$ that of $\Gamma$.
-\end{finance}\note*{first appearence of the Greeks, right? use the symbols $\Delta$, $\Gamma$, etc.}
-\note*{in general, i'd like to have graphs and conceptual maps when possible}
-\begin{answer}[The Greeks]
+\end{finance}\begin{answer}{first appearence of the Greeks, right? use the symbols $\Delta$, $\Gamma$, etc.}[The Greeks]
 Yes, this is their first appearance, as an analogy. The Greeks ($\Delta$, $\Gamma$, $\Theta=\partial V/\partial t$,
 $\mathcal V$ ``vega'' $=\partial V/\partial\sigma$, $\rho=\partial V/\partial r$) are defined properly with the
 Black--Scholes formula in \cref{ch:bs}. A conceptual map of this chapter is at the end, before the key formulas.
 \end{answer}
+
 
 \subsection{Forward rates}\label{sec:forward}
 \begin{definition}[Forward rate agreement]
@@ -1141,8 +1118,7 @@ $F_{tT}/(T-t)$. In continuous time one defines the \emph{instantaneous forward r
 $f(0,T) = -\partial_T \ln \Lambda_T$, so that $\Lambda_T = \exp\bigl(-\int_0^T f(0,s)\dd s\bigr)$: the
 continuously compounded zero yield $-\frac1T\ln\Lambda_T$ is the \emph{average} of the forward rates
 up to $T$. Modelling the dynamics of the whole curve $f(t,T)$ is the HJM framework (\cref{ch:hjm}).
-\end{remark}\note{it feels that f plays the role of r, the interest rate. and Lambda is the correspective of the compount rate, right?}
-\begin{answer}[$f$ vs $r$, $\Lambda$ vs compounding]
+\end{remark}\begin{answer}{it feels that f plays the role of r, the interest rate. and Lambda is the correspective of the compount rate, right?}[$f$ vs $r$, $\Lambda$ vs compounding]
 Yes. $f(0,s)$ is the interest rate agreed today for the infinitesimal period $[s,s+\dd s]$. With a constant
 rate $f(0,s)=r$ for every $s$ and $\Lambda_T=e^{-rT}$, so $f$ is ``$r$ allowed to depend on the future date''.
 $\Lambda_T$ is the \emph{inverse} of the compounding factor: $1/\Lambda_T=\exp\bigl(\int_0^T f(0,s)\dd s\bigr)$ is
@@ -1285,7 +1261,7 @@ time-series analysis (\cref{ch:timeseries}).
 & && \Lambda,\ F_{tT},\ P/N,\ \Delta P/P \ [\text{dimensionless}]\\
 & && 1\,\text{bp}=0.01\%=10^{-4}\,\text{year}^{-1}
 \end{align*}
-\end{keyformulas}\note*{forse aiuterebbe aggiungere le unita' di misura, tipo $T^{-1}$ per r }
+\end{keyformulas}
 
 % ------------------------------------------------------------------
 \section*{Exercises}
@@ -1306,7 +1282,7 @@ the ratio $(G-L)/(G+L)$. Repeat the game on any two-month window of your choice.
         path with the same final P\&L?
 \end{enumerate}
 \end{exercise}
-\note*{My solution moved into the box below.}
+
 \begin{mysolution}
 (a) Easy to see: imposta le due disuguaglianze, sono rispettate trivialmente.
 
@@ -1319,7 +1295,7 @@ bassa volatilità l'investimento è stato.
 \begin{exercise}[2013, optional homework]\label{ex:glossary}
 Build your own financial glossary: list every term of this chapter you could not define precisely and
 look it up \ts{13}{1}{53:27}.
-\end{exercise}\note{did it using the notes}
+\end{exercise}\note+{did it using the notes}
 
 
 \begin{exercise}[not from the course]
@@ -1329,7 +1305,7 @@ A 5-year bond pays annual coupons of 6\% on $N=100$.
   \item Compute its
       Macaulay and modified duration at $y=5\%$ and check them against the price change for $\Delta y=\pm 1$\,bp.
 \end{enumerate}
-\end{exercise}\note*{My solution moved into the box below.}\note{bp stands for basis point and it is 0.01\%}
+\end{exercise}\note+{bp stands for basis point and it is 0.01\%}
 \begin{mysolution}
 (a)
 \begin{align*}
@@ -1355,7 +1331,12 @@ discount factors $\Lambda_k$ are common to all three bonds. Bootstrap $\Lambda_1
 the zero yields and the one-year forward rates $F_{1,2}$, $F_{2,3}$. Why is the zero curve above the par curve
 when the curve slopes upward?
 \end{exercise}\note*{non capisco se il coupon e' variabile nel tempo, nel senso che il primo anno riceviamo 4\% di N il nominal, il secondo 4.5, il terzo 5.}
-\begin{mysolution}\note{come faccio a calcoalre lo zero yield per i tre bonds senza il rapporto P/N ? se la premessa e' che sono par bond non capisco. L'esercizio e' scritto male, non e' chiaro.}
+\begin{mysolution}\begin{answer}{come faccio a calcoalre lo zero yield per i tre bonds senza il rapporto P/N ? se la premessa e' che sono par bond non capisco. L'esercizio e' scritto male, non e' chiaro.}[P/N is known]
+You are right that the statement was unclear; it now says so explicitly. ``At par'' \emph{means} $P=N$,
+so $P/N=1$ for all three bonds. The only other data are the coupons $c_n$, and the discount factors
+$\Lambda_k$ are common to the three bonds. The zero yield of maturity $n$ is then $y_n=\Lambda_n^{-1/n}-1$
+(see the feedback below).
+\end{answer}
       Recursively, 
       \[ 1.  \Lambda_{c_1} = \frac{1}{1+c_1} = 0.9615\]
       \[ 2. \Lambda_{c_2}^1 = \frac{1}{1+c_2} = 0.9569 ; \Lambda_{c_2}^2 = \frac{1  -c_2 \cdot \Lambda_{c_2}^1}{1+c_2} = 0,9157\]

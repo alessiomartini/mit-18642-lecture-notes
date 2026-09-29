@@ -43,18 +43,17 @@ The basic material (vector spaces, rank, determinants) is only recalled; a physi
 \section{Vectors as portfolios}\label{sec:la-portfolios}
 
 Let $\bm p(t)\in\R^{501}_{+}$ collect the closing prices on day $t$ of the 500 stocks of the S\&P~500
-plus \emph{cash} as asset $0$ with $p_0(t)\equiv 1$ \ts{24}{2}{3:21}.\note{prices at the beginning vs end of the day, is the end of the day price equal to the beginning price of the day after?} A portfolio is a vector of holdings
-$\bm q(t)$ (shares, and dollars of cash), and its value is the dot product
-\[
-  V_t = \bm q\T\bm p(t) = \sum_{j=0}^{500} q_j\,p_j(t).
-\]
-\begin{answer}[Close of one day, open of the next]
+plus \emph{cash} as asset $0$ with $p_0(t)\equiv 1$ \ts{24}{2}{3:21}.\begin{answer}{prices at the beginning vs end of the day, is the end of the day price equal to the beginning price of the day after?}[Close of one day, open of the next]
 In general they differ. News that arrives overnight (earnings are usually released after the close)
 and trading in after-hours sessions and on foreign exchanges move the price, so the next day opens
 at a different level: the \emph{overnight gap}, often a sizeable part of the daily move. Here only
 closing prices are used, so the daily return $p(t+1)/p(t)-1$ is close-to-close and the gap is
 simply part of it.
-\end{answer}
+\end{answer} A portfolio is a vector of holdings
+$\bm q(t)$ (shares, and dollars of cash), and its value is the dot product
+\[
+  V_t = \bm q\T\bm p(t) = \sum_{j=0}^{500} q_j\,p_j(t).
+\]
 
 \paragraph{Timing and rebalancing.} The holdings $\bm q(t+1)$ carried through day $t+1$ are chosen at
 the end of day $t$, using only information available then \ts{24}{2}{8:43}. Rebalancing by trading
@@ -76,7 +75,7 @@ point'' rule is exactly the discrete version of the Itô integral $\int \theta_t
 \paragraph{Long/short and zero-cost portfolios.} Holdings may be negative. To \emph{sell short}
 means to borrow shares through the broker (who must ``locate'' them), sell them now and buy
 them back later \ts{24}{2}{11:44}; the sale proceeds are credited to the (margin) account, which allows long positions
-worth more than 100\% of one's capital.\note{cool!} For two portfolios $\bm q,\bm w$ the difference $\bm d=\bm q-\bm w$
+worth more than 100\% of one's capital.\note+{cool!} For two portfolios $\bm q,\bm w$ the difference $\bm d=\bm q-\bm w$
 is a long/short portfolio with $\mathrm{PnL}(\bm d)=\mathrm{PnL}(\bm q)-\mathrm{PnL}(\bm w)$.
 A \emph{zero-cost} portfolio has $\bm d\T\bm p(t-1)=0$; an \emph{arbitrage} would be a zero-cost
 portfolio whose P\&L is positive \ts{24}{2}{13:45}. The catch: at the time of the decision
@@ -86,8 +85,7 @@ be (\cref{sec:oneperiod}); strategies whose random P\&L merely tends to be posit
 
 \paragraph{Geometry.} $\|\bm v\| = \sqrt{\bm v\T\bm v}$, $\bm v\T\bm w = \|\bm v\|\|\bm w\|\cos\theta$;
 $\bm v\T\bm w/\|\bm w\|$ is the length of the projection of $\bm v$ on the direction of $\bm w$
-\ts{24}{2}{17:50}. Orthogonal projections are the geometry of least squares (\cref{ch:regression}).\note{i am a bit concerner by the dot product d.p because it is not an inner product, d and p dont live in the same space. i'd rather have a function value that eats them and give the value, am i wrong?}
-\begin{answer}[Holdings and prices are dual objects]
+\ts{24}{2}{17:50}. Orthogonal projections are the geometry of least squares (\cref{ch:regression}).\begin{answer}{i am a bit concerner by the dot product d.p because it is not an inner product, d and p dont live in the same space. i'd rather have a function value that eats them and give the value, am i wrong?}[Holdings and prices are dual objects]
 You are right. Holdings (units: shares) and prices (units: dollars per share) are different kinds of
 vectors: a holding vector $\bm q$ is best read as a \emph{linear functional} on price vectors,
 $\bm p\mapsto V(\bm p)=\langle\bm q,\bm p\rangle$, which returns dollars. In the standard basis, where
@@ -112,14 +110,13 @@ $\bm 1$ the vector of ones, $J=\bm 1\bm 1\T$ the matrix of ones, $\diag(d_1,\dot
 \paragraph{Linear systems} \ts{24}{2}{1:14:25}. For $A\bm x=\bm b$ with $A\in\R^{m\times n}$: if
 $m=n=\rank A$ then $\det A\ne0$ and $\bm x=A^{-1}\bm b$; otherwise the system is under-determined
 ($m<n$), over-determined ($m>n$, solved in the least-squares sense in \cref{ch:regression}) or
-rank-deficient. Solvability: $\bm b\in\operatorname{col}(A)$; \note{what is col(A)?} uniqueness: $\ker A=\{0\}$. These two
-facts are exactly what decides \emph{replicability} of derivatives in \cref{sec:oneperiod}.
-\begin{answer}[Column space]
+rank-deficient. Solvability: $\bm b\in\operatorname{col}(A)$; \begin{answer}{what is col(A)?}[Column space]
 $\operatorname{col}(A)=\{A\bm x:\bm x\in\R^n\}=\operatorname{span}(\bm a_1,\dots,\bm a_n)\subseteq\R^m$, the
 \emph{column space} (image, range) of $A$. By the first reading of $A\bm v$ above, $A\bm x=\bm b$ asks
 for a combination of the columns equal to $\bm b$, so it has a solution iff $\bm b$ lies in their span.
 Its dimension is $\rank A$.
-\end{answer}
+\end{answer} uniqueness: $\ker A=\{0\}$. These two
+facts are exactly what decides \emph{replicability} of derivatives in \cref{sec:oneperiod}.
 
 % ------------------------------------------------------------------
 \section{Stochastic matrices and Markov chains}\label{sec:markov}
@@ -134,15 +131,14 @@ $\bm\pi(t)=(\Prob(S_t=1),\dots,\Prob(S_t=m))\T$ as
 \]
 A \emph{stationary distribution} is a probability vector with $\bm\pi^*=A\bm\pi^*$, i.e.\ an
 eigenvector of eigenvalue $1$ \ts{24}{2}{35:53}.
-\end{definition}\note{cool! i've never seen the definition before. but the distribution can be non stationary, right? when you have cycles, periodic}\note*{it would be nice to have a picture of a markov chain, the usual one: oriented graph with weights}
-\begin{answer}[Stationary distribution vs distribution at time $t$]
+\end{definition}\begin{answer}{cool! i've never seen the definition before. but the distribution can be non stationary, right? when you have cycles, periodic}[Stationary distribution vs distribution at time $t$]
 Yes. $\bm\pi(t)$ is in general \emph{not} stationary: it changes with $t$ until it (possibly)
 settles. A finite chain always \emph{has} at least one stationary $\bm\pi^*$ (\cref{prop:stochastic} and
 Perron--Frobenius), but $\bm\pi(t)$ need not converge to it. The periodic chain just below the
 proposition is the standard counterexample: it has $\bm\pi^*=(\frac12,\frac12)\T$, yet starting from
 state~1 the distribution flips between $(1,0)\T$ and $(0,1)\T$ forever. Convergence needs the chain
 to be irreducible \emph{and} aperiodic; this is the condition ``some $A^k>0$'' below.
-\end{answer}
+\end{answer}\note*{it would be nice to have a picture of a markov chain, the usual one: oriented graph with weights}
 \begin{figure}[ht]
 \centering
 \begin{tikzpicture}[>=Stealth,node distance=3.4cm,
@@ -169,18 +165,17 @@ transposes.
 If $A$ is column-stochastic then $1$ is an eigenvalue and every eigenvalue satisfies $|\lambda|\le1$.
 \end{proposition}
 \begin{proof}
-$\bm 1\T A=\bm 1\T$, so $1$ is an eigenvalue of $A\T$, hence of $A$ (same characteristic polynomial).\note{remind me what is the characteristic polynomial}
-If $A\bm v=\lambda\bm v$ then $|\lambda|\sum_i|v_i| = \sum_i|\sum_j a_{ij}v_j|\le\sum_j|v_j|\sum_i a_{ij}
-= \sum_j|v_j|$.
-\end{proof}
-\begin{answer}[Characteristic polynomial]
+$\bm 1\T A=\bm 1\T$, so $1$ is an eigenvalue of $A\T$, hence of $A$ (same characteristic polynomial).\begin{answer}{remind me what is the characteristic polynomial}[Characteristic polynomial]
 $\chi_A(\lambda)=\det(A-\lambda I)$, a polynomial of degree $n$ in $\lambda$. Its roots are the
 eigenvalues, because $A\bm v=\lambda\bm v$ has a solution $\bm v\ne0$ iff $A-\lambda I$ is singular. For
 $n=2$: $\chi_A(\lambda)=\lambda^2-(\tr A)\lambda+\det A$. Since $\det M\T=\det M$,
 $\chi_{A\T}(\lambda)=\det\bigl((A-\lambda I)\T\bigr)=\chi_A(\lambda)$. So $A$ and $A\T$ have the same
 eigenvalues, although in general not the same eigenvectors: here $\bm 1$ is an eigenvector of $A\T$,
 while the eigenvector of $A$ is $\bm\pi^*$.
-\end{answer}\note{vorrei che le answers fossero strutturate in modo diverso: cioe', che nel box della nota a lato venga attaccato sotto un altro box con la risposta [magari lo stesso box divisto dalla barra gialla piu scura "ANSWER", sopra domanda e sotto risposta]}\note{penso potrebbe essere una buona idea avere il pdf in formato draft, e non impaginato come se fosse la versione finale, in modo tale che la colonna di testo principale stia sulla sinistra (non come ora che le pagine pari stanno da un lato e le dispari dall'altro) e che le note, commenti, answers, historical notex, curiosities stiano tutte dall'altro a destra. in modo tale che ottimizzo meglio l'uso dello spazio sul mio schermo del laptop. forse metteri a lato anche gli esempi}
+\end{answer}
+If $A\bm v=\lambda\bm v$ then $|\lambda|\sum_i|v_i| = \sum_i|\sum_j a_{ij}v_j|\le\sum_j|v_j|\sum_i a_{ij}
+= \sum_j|v_j|$.
+\end{proof}
 
 A stationary distribution need not be the limit of $\bm\pi(t)$: for $A=\bigl(\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\bigr)$
 the chain alternates deterministically and $\bm\pi(t)$ oscillates (a periodic chain, eigenvalue $-1$)
@@ -192,36 +187,35 @@ $\bm\pi(t)\to\bm\pi^*$ from any start \ts{24}{2}{37:54}.
 Let $p=\Prob(1\to2)$, $q=\Prob(2\to1)$, $0<p,q<1$:
 $A=\bigl(\begin{smallmatrix}1-p & q\\ p & 1-q\end{smallmatrix}\bigr)$. From $\tr A=2-p-q$ and
 $\det A=1-p-q$ the eigenvalues are $1$ and $\lambda_2=1-p-q$, with eigenvectors
-$\bm\pi^*=\frac{1}{p+q}(q,p)\T$ and $(1,-1)\T$.\note{how do you get eigenvalues and vectors from tr and det?} Since $\bm\pi(0)-\bm\pi^*$ has zero sum it is a multiple of
-$(1,-1)\T$, hence
-\[
-  \bm\pi(t) = \bm\pi^* + (1-p-q)^t\,\bigl(\bm\pi(0)-\bm\pi^*\bigr).
-\]
-Convergence is geometric with relaxation time $\tau=-1/\ln|1-p-q|$: the spectral gap $1-|\lambda_2|$
-controls how fast the chain forgets its initial state.
-\end{example}\note{non ho capito molto bene questo esempio}
-\begin{answer}[The two-state chain step by step]
-\textbf{Eigenvalues from $\tr$ and $\det$.} For a $2\times2$ matrix, $\chi_A(\lambda)=\lambda^2-(\tr A)\lambda+\det A$,
+$\bm\pi^*=\frac{1}{p+q}(q,p)\T$ and $(1,-1)\T$.\begin{answer}{how do you get eigenvalues and vectors from tr and det?}[Eigenvalues from $\tr$ and $\det$]
+For a $2\times2$ matrix, $\chi_A(\lambda)=\lambda^2-(\tr A)\lambda+\det A$,
 so $\lambda_1+\lambda_2=\tr A$ and $\lambda_1\lambda_2=\det A$. We already know $\lambda_1=1$
 (\cref{prop:stochastic}), hence $\lambda_2=\det A=1-p-q$; check: $1+(1-p-q)=2-p-q=\tr A$.
-
-\textbf{Eigenvectors} solve $(A-\lambda I)\bm v=0$:
+\answerpart{Eigenvectors}
+They solve $(A-\lambda I)\bm v=0$:
 \begin{itemize}
   \item $\lambda=1$: $\bigl(\begin{smallmatrix}-p&q\\ p&-q\end{smallmatrix}\bigr)\bm v=0$ gives $pv_1=qv_2$,
         so $\bm v\propto(q,p)\T$. Normalising to sum $1$ gives $\bm\pi^*=\frac1{p+q}(q,p)\T$.
   \item $\lambda=1-p-q$: $\bigl(\begin{smallmatrix}q&q\\ p&p\end{smallmatrix}\bigr)\bm v=0$ gives $v_1+v_2=0$,
         so $\bm v\propto(1,-1)\T$.
 \end{itemize}
-
-\textbf{The idea.} Split the starting distribution into the stationary part and a deviation,
+\end{answer} Since $\bm\pi(0)-\bm\pi^*$ has zero sum it is a multiple of
+$(1,-1)\T$, hence
+\[
+  \bm\pi(t) = \bm\pi^* + (1-p-q)^t\,\bigl(\bm\pi(0)-\bm\pi^*\bigr).
+\]
+Convergence is geometric with relaxation time $\tau=-1/\ln|1-p-q|$: the spectral gap $1-|\lambda_2|$
+controls how fast the chain forgets its initial state.
+\end{example}\begin{answer}{non ho capito molto bene questo esempio}[The idea]
+Split the starting distribution into the stationary part and a deviation,
 $\bm\pi(0)=\bm\pi^*+\bm d$. Both $\bm\pi(0)$ and $\bm\pi^*$ sum to $1$, so $\bm d$ sums to $0$: it is a
 multiple of $(1,-1)\T$, an eigenvector of $\lambda_2$. Each step leaves $\bm\pi^*$ unchanged and
 multiplies $\bm d$ by $\lambda_2$, hence $\bm\pi(t)=\bm\pi^*+\lambda_2^t\bm d$. Because $|\lambda_2|<1$, the
 deviation dies out geometrically, like the decay of a normal mode.
-
-\textbf{Numbers.} $p=0.1$, $q=0.3$: $\lambda_2=0.6$ and $\bm\pi^*=(0.75,0.25)\T$. Starting in state~1,
+\answerpart{Numbers}
+$p=0.1$, $q=0.3$: $\lambda_2=0.6$ and $\bm\pi^*=(0.75,0.25)\T$. Starting in state~1,
 $\bm\pi(0)=(1,0)\T$ and $\bm d=(0.25,-0.25)\T$, so $\pi_1(t)=0.75+0.25\cdot0.6^t$:
-$1,\ 0.90,\ 0.84,\ 0.804,\dots\to0.75$. The first step can be checked directly: $A(1,0)\T=(1-p,p)\T=(0.9,0.1)\T$.
+$1,\ 0.90,\ 0.84,\ 0.804,\dots\to0.75$ (\cref{fig:twostate-conv}). The first step can be checked directly: $A(1,0)\T=(1-p,p)\T=(0.9,0.1)\T$.
 The relaxation time is $\tau=-1/\ln0.6\approx2$ steps.
 \end{answer}
 \begin{figure}[ht]
@@ -247,8 +241,7 @@ in state~1 approaches $\pi_1^*=q/(p+q)=0.75$, and the distance shrinks by the fa
 In PS1 (2024) the side (buy/sell) of successive market orders is modelled as a two-state chain:
 buys tend to follow buys and sells follow sells. The stationary distribution gives the long-run
 fraction of buy orders; $\lambda_2$ measures the persistence of order flow \ts{24}{2}{38:56}.
-\end{finance}\note{cos'e' ps1?}
-\begin{answer}[PS1]
+\end{finance}\begin{answer}{cos'e' ps1?}[PS1]
 PS1 is \emph{Problem Set 1}, the first homework of the 2024 course (18.642). Its problems are at the end
 of this chapter; the order-flow chain is \cref{ex:ps1-3}. In these notes ``PS$n$ (2024)'' and
 ``PS$n$ (2013)'' always mean the problem sets of the two course editions, and the Sources box of
@@ -263,24 +256,25 @@ This section follows the lecture note \emph{One-Period Financial Models} (\file{
 \subsection{Two assets, two states}\label{sec:binomial}
 One period $[0,T]$ and two assets \ts{24}{2}{43:17}:
 \begin{itemize}
-  \item a \emph{bond} (risk-free asset) with $B_T = B_0(1+r_fT)$ known in advance;\note{the professor made a parenthesis about risk-free rate, which doesn't exist, but...}
-  \item a \emph{stock} with known $S_0$ and random $S_T\in\{S_T^d, S_T^u\}$, $S_T^d<S_T^u$, depending on
-        the state $\omega\in\{d,u\}$ of the economy at $T$.
-\end{itemize}
-No probabilities of $u$ and $d$ are specified: they will turn out to be irrelevant for pricing. \note{crazy! is this true? maybe for risk it would be important!}
-\begin{answer}[``Risk-free''; why probabilities do not enter the price]
-\textbf{The professor's parenthesis} \ts{24}{2}{46:45}: nothing in the world is risk-free, but a
+  \item a \emph{bond} (risk-free asset) with $B_T = B_0(1+r_fT)$ known in advance;\begin{answer}{the professor made a parenthesis about risk-free rate, which doesn't exist, but...}[``Risk-free'']
+The professor's parenthesis \ts{24}{2}{46:45}: nothing in the world is risk-free, but a
 government that can print money to pay its debts is essentially risk-free, and one worries less about
 countries with stronger economies. In practice ``the'' risk-free rate is a short-term
 government-bill rate or an overnight interbank rate (SOFR in dollars, ESTR in euros). Such an asset
 has no default risk in nominal terms. It still has inflation risk, and a country borrowing in a
 currency it cannot print (e.g.\ euro-area members) can default.
-
-\textbf{Probabilities.} Yes, it is true, and it is the central surprise of derivative pricing. The
+\end{answer}
+  \item a \emph{stock} with known $S_0$ and random $S_T\in\{S_T^d, S_T^u\}$, $S_T^d<S_T^u$, depending on
+        the state $\omega\in\{d,u\}$ of the economy at $T$.
+\end{itemize}
+No probabilities of $u$ and $d$ are specified: they will turn out to be irrelevant for pricing. \begin{answer}{crazy! is this true? maybe for risk it would be important!}[Is it true?]
+Yes, and it is the central surprise of derivative pricing. The
 claim can be \emph{replicated} exactly with the bond and the stock, in both states. Its price must
 then equal the cost of the replicating portfolio, whatever the chances of $u$ and $d$; otherwise
 there is an arbitrage. The probabilities are not lost: they are already in $S_0$, since the market set
-the stock price knowing them. You are right that they matter for \emph{risk}: the expected return,
+the stock price knowing them.
+\answerpart{And for risk?}
+You are right that they matter for \emph{risk}: the expected return,
 the variance and the probability of losing money all depend on them (real-world measure $\Prob$). The
 $q_u,q_d$ that appear below look like probabilities but are only pricing weights (the
 \emph{risk-neutral} measure, \cref{ch:bs}).
@@ -288,7 +282,19 @@ $q_u,q_d$ that appear below look like probabilities but are only pricing weights
 A portfolio $\bm\theta=(\theta_B,\theta_S)\T$ costs $V_0=\theta_BB_0+\theta_SS_0$ and pays
 $V_T(\omega)=\theta_BB_T+\theta_SS_T(\omega)$.
 
-A \emph{contingent claim} $C$ pays $C_T^u$ or $C_T^d$ at $T$.\note{what is a contingent claim? richiedere i soldi al tempo T? l'ho cercato e dovrei aver capito. ma l'obiettivo ora e' capire quale sia il prezzo di acquisto a tempo 0 se c'e' la contingent claim C, giusto?} A portfolio \emph{replicates} $C$ if
+A \emph{contingent claim} $C$ pays $C_T^u$ or $C_T^d$ at $T$.\begin{answer}{what is a contingent claim? richiedere i soldi al tempo T? l'ho cercato e dovrei aver capito. ma l'obiettivo ora e' capire quale sia il prezzo di acquisto a tempo 0 se c'e' la contingent claim C, giusto?}[Contingent claim]\label{ans:claim}
+A \emph{claim} is a right to receive a payment. It is \emph{contingent} because the amount depends on
+which state occurs at $T$ (from Latin \emph{contingere}, ``to happen''). It is just a contract that
+pays $C_T^u$ if the stock goes up and $C_T^d$ if it goes down. Examples: a call pays
+$(S_T-K)^+$, a forward pays $S_T-K$, a digital pays $1$ if $S_T>K$.
+\answerpart{Asking for the money at $T$?}
+You do not ``claim'' the money:
+you hold the contract, and it pays automatically at $T$.
+\answerpart{The goal is its price at time 0?}
+Exactly as you say: find the
+fair price $C_0$ to pay at time $0$ for this contract. The answer is the cost of the portfolio of bond
+and stock that pays the same in both states.
+\end{answer} A portfolio \emph{replicates} $C$ if
 \begin{equation}\label{eq:replic2}
   \begin{pmatrix} B_T & S_T^d\\ B_T & S_T^u\end{pmatrix}
   \begin{pmatrix}\theta_B\\ \theta_S\end{pmatrix}
@@ -299,43 +305,51 @@ The determinant is $B_T(S_T^u-S_T^d)\neq0$, so every claim is replicable, unique
   \theta_S = \frac{C_T^u-C_T^d}{S_T^u-S_T^d},\qquad
   \theta_B = \frac{C_T^dS_T^u-C_T^uS_T^d}{B_T\,(S_T^u-S_T^d)} .
 \end{equation}
-$\theta_S$ is a finite-difference \emph{delta}, the hedge ratio of \cref{sec:tradertypes}.\note*{problem: links to other chapters don't work. furthermore, i want the note's text smaller} If the claim
+$\theta_S$ is a finite-difference \emph{delta}, the hedge ratio of \cref{sec:tradertypes}. If the claim
 trades at a price different from the cost of its replicating portfolio, buying the cheap one and
-selling the expensive one is an arbitrage; so $C_0 = \theta_BB_0+\theta_SS_0$.\note{non capisco cos'e' la claim} Substituting
+selling the expensive one is an arbitrage; so $C_0 = \theta_BB_0+\theta_SS_0$.\begin{answer}{non capisco cos'e' la claim}[Same question as before]
+You asked this above: see \cref{ans:claim}. In one line: the claim is the contract $C$, which pays
+$C_T^u$ or $C_T^d$ at $T$, and $C_0$ is its price today.
+\end{answer} Substituting
 \eqref{eq:delta} and rearranging:
 \begin{equation}\label{eq:rnbinomial}
   C_0 = \frac{1}{1+r_fT}\bigl[q_u\,C_T^u + q_d\,C_T^d\bigr],\qquad
   q_u = \frac{(1+r_fT)S_0-S_T^d}{S_T^u-S_T^d},\quad q_d = 1-q_u .
-\end{equation}\note{quindi, abbiamo creato un portafoglio binario con l'outcome desiderato tra due valori a scelta al tempo T, giusto?}
-\begin{answer}[Contingent claim]
-A \emph{claim} is a right to receive a payment. It is \emph{contingent} because the amount depends on
-which state occurs at $T$ (from Latin \emph{contingere}, ``to happen''). It is just a contract that
-pays $C_T^u$ if the stock goes up and $C_T^d$ if it goes down. Examples: a call pays
-$(S_T-K)^+$, a forward pays $S_T-K$, a digital pays $1$ if $S_T>K$. You do not ``claim'' the money:
-you hold the contract, and it pays automatically at $T$. The goal is exactly as you say: find the
-fair price $C_0$ to pay at time $0$ for this contract. The answer is the cost of the portfolio of bond
-and stock that pays the same in both states.
-\end{answer}\note{qualche volta scrivo piu di una domanda nella stessa nota, e qualche volta scrivo la stessa domanda in piu note diverse. scrivi una risposta per ogni domanda, separandole, e metti un link alla risposta che hai gia a una domanda dato se e' la seconda volta che ti chiedo la stessa cosa}
-\note{trova il modo di differenziare le note che hai gia letto e a cui hai gia dato una risposta o hai gia risolto il problema che chiedevo di risolvere, da quelle nuove, in modo tale che quando ti chiedo di leggere le note vai a guardare quelle nuove e eviti di modificare cose che andavano gia bene}
-\note{direi che ci sono due tipi di note che scrivo, quelle riferite al contenuto delle leture notes e quelle riferite alla struttura delle lecture notes. siccome quelle della struttura non penso siano strettamente legate a dove le scrivo, pensavo che sarebbe una buona idea raggrupparle in un punto specifico delle lecture notes senza lasciarle lungo il testo, cosi' la seconda lettura dovrebbe risoltare piu facile e scorrevole}
-\begin{answer}[Links to other chapters; smaller notes]
-The notes are now smaller (\texttt{\textbackslash tiny}). The links to other chapters work in the full build but
-not in the build that runs on save. That build compiles only the chapter you saved, so the PDF has
-no page to jump to. The number (e.g.\ Section~1.5) is still right, because it is read from
-the other chapters' files. Adding the referenced chapters to the save build would make it almost as
-slow as the whole book, since every chapter cites 3--16 others. So: to follow links, run the
-recipe \emph{Whole book (latexmk)} once in LaTeX Workshop (about 2--4 minutes) and read that PDF.
-\end{answer}\note{non so se ha senso e se e' fattibile, ma ho pensato che potrebbe essere utile avere sempre una copia delle build di ogni capitolo e/o una dell'intero book. e quando sono in un capitolo e clicco il link a un altro semplicemente mi apre un altro pdf}
+\end{equation}\begin{answer}{quindi, abbiamo creato un portafoglio binario con l'outcome desiderato tra due valori a scelta al tempo T, giusto?}[Any pair of payoffs]
+Yes. With the bond and the stock we can build a portfolio that pays \emph{any} pair $(C_T^d,C_T^u)$ we
+choose, because the $2\times2$ matrix in \eqref{eq:replic2} is invertible: the payoffs of the two
+assets span all of $\R^2$. A market where every claim can be replicated is called \emph{complete}.
+The portfolio is not ``binary'' in itself: it takes two values only because the model has two states.
+With three states and two assets the matrix is $3\times2$, and not every claim can be replicated
+(\cref{sec:la-matrices}: $\bm b$ must lie in the column space).
+\end{answer}
+
+
 
 \begin{proposition}[No arbitrage in the binomial model]\label{prop:binomial-na}
 The two-asset model is arbitrage-free iff $S_T^d < S_0(1+r_fT) < S_T^u$, i.e.\ iff $0<q_u<1$.
 \end{proposition}
 The ``only if'' part is PS1 Problem~5 (\cref{ex:ps1-5}); both directions follow from the general
-theorem below.
+theorem below.\begin{answer}{ovvio: se sono tutti e due piu grandi allora ti fai prestare soldi a risk-free interest e compri stock, se sono tutti e due piu bassi, vai in short, e compri il bond}[Right: that is the proof]
+Correct, and this is exactly the ``only if'' proof. If $S_T^d\ge S_0(1+r_fT)$, borrow $S_0$ and buy the
+stock: the cost is $0$, and at $T$ you hold $S_T-S_0(1+r_fT)\ge0$, which is $>0$ at least in state $u$.
+If $S_T^u\le S_0(1+r_fT)$, do the reverse: short the stock and lend the proceeds. One detail matters:
+an arbitrage needs \emph{no loss in any state and a gain in at least one}. This is why the
+inequalities in \cref{prop:binomial-na} are strict.
+\end{answer}
 
 \begin{example}[Pricing a call]\label{ex:call}
 Take the numbers of the lecture note: $B_0=100$, $B_T=103$ ($r_fT=3\%$), $S_0=100$, $S_T^u=130$,
-$S_T^d=90$, and a call with strike $K=100$: $C_T^u=30$, $C_T^d=0$. Then
+$S_T^d=90$, and a call with strike $K=100$\begin{answer}{cos'e' questa call? K lho visto usare per options, futures e forwards, e' lo stesso K?}[What a call is]
+A (European) \emph{call} is the right, not the obligation, to \emph{buy} the stock at time $T$ at the
+price $K$ fixed today. You exercise it only if $S_T>K$, so it pays $(S_T-K)^+=\max(S_T-K,0)$: here $130-100=30$ in state $u$
+and $0$ in state $d$. The \emph{put} is the right to sell, paying $(K-S_T)^+$. See also \cref{ans:derivatives}.
+\answerpart{Is it the same $K$?}
+Same role, different contract. $K$ is always the price fixed today at which the exchange happens at $T$.
+For an option it is the \emph{strike} (exercise price), and only the holder decides whether to trade. For
+a forward or a future it is the \emph{delivery price}, and both sides must trade. A forward is usually
+struck at the $K$ that makes it cost $0$ today, the forward price.
+\end{answer}: $C_T^u=30$, $C_T^d=0$. Then
 $\theta_S = 30/40 = 0.75$ shares, $\theta_B = -0.75\cdot 90/103 = -0.6553$ bonds, and
 $C_0 = -65.53+75 = 9.466$. Equivalently $q_u = (103-90)/40 = 0.325$ and
 $C_0 = 0.325\cdot 30/1.03 = 9.466$. Note that $q_u$ has nothing to do with how likely the up move
@@ -365,7 +379,19 @@ Figure~1 of \file{lec02_2}. Bond and stock span $\R^2$, so every claim, e.g.\ th
 From \eqref{eq:rnbinomial} applied to the stock itself,
 $q_uS_T^u+q_dS_T^d=(1+r_fT)S_0$: under $Q=(q_u,q_d)$ \emph{every} asset earns the risk-free rate on
 average, as it would in a world of risk-neutral investors. The real-world probabilities and
-investors' risk preferences are already encoded in the \emph{current price} $S_0$; given $S_0$,
+investors' risk preferences are already encoded in the \emph{current price} $S_0$;\begin{answer}{is this the concept of martingale?}[Almost: the discounted price is a $Q$-martingale]
+Very close, but the martingale is the formula just before, not the sentence about $S_0$. Divide
+$q_uS_T^u+q_dS_T^d=(1+r_fT)S_0$ by $B_T/B_0=1+r_fT$:
+\[
+  \E_Q\Bigl[\frac{S_T}{B_T}\Bigr]=\frac{S_0}{B_0}.
+\]
+The price measured in units of the bond has, under $Q$, expected future value equal to its value today.
+Over one period this is the defining property of a \emph{martingale}: a fair game with no drift
+(\cref{ch04:sec-mart}). In general: in an arbitrage-free market there is a measure $Q$ under which all
+discounted prices are martingales. This is the \emph{fundamental theorem of asset pricing}: \cref{thm:ftap}
+for $n$ assets, and \cref{ch:bs} for continuous time. Under the real probabilities $\Prob$ the
+discounted stock is usually \emph{not} a martingale: it drifts up by the risk premium.
+\end{answer} given $S_0$,
 replication makes them irrelevant for the claim. This is why option prices do not depend on the
 stock's expected return, a fact that will reappear as the absence of the drift $\mu$ from the
 Black--Scholes formula.

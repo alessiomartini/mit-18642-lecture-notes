@@ -63,11 +63,25 @@ Based on Fall 2024 (18.642) and Fall 2013 (18.S096).
 | Open PDF manually | `Ctrl+Shift+P` → "Tasks: Run Task" → "LaTeX: Open PDF" |
 | Toggle spell check | `Ctrl+Shift+P` → "Toggle Spell Checker" |
 
+## Layout
+
+Screen layout, not print: 25 cm wide pages, text always on the left (15 cm, the old A4 text width),
+a 6.5 cm right column for notes, answers, feedback, history, asides and short examples (`marginfix`
+carries an overflowing column to the next page). The old A4 two-sided geometry is in a comment in
+`preamble.tex`. Every full build copies the book to `build/book.pdf`; in the fast one-chapter build
+(`.vscode/build.py`) links into other chapters open that file.
+
 ## Annotation Macros (defined in `preamble.tex`)
 
 | Macro | Purpose | Appears in |
 |-------|---------|------------|
-| `\note{...}` | Comment (doubt, idea, reminder) printed in the margin | Margin, next to the text |
+| `\note{...}` | New comment (doubt, idea, reminder), not yet read | Right column, next to the text |
+| `\note*{...}` / `\note+{...}` | Request carried out (DONE) / read, no answer needed (SEEN) | Right column |
+| `\begin{answer}{question}[topic] ... \end{answer}` | A note and its answer in one box; `\answerpart{topic}` for each further question; `\label{ans:...}` to link a repeated question | Right column |
+| `\feedback{...}` | Comment on one of your own `mysolution`s | Right column |
+| `\begin{history}`, `\begin{aside}`, `\begin{sideexample}` | History fact, curiosity, short example | Right column |
+| `\begin{secondary}[topic] ... \end{secondary}` | "Beyond the core": can be skipped on a first reading | Text column, grey bar |
+| `\request{done/open/noted}{where}{request}{what was done}` | A request about the notes themselves | Chapter "Requests about these notes" (`chapters/ch00-requests.tex`) |
 | `\ts{24}{L}{time}` | 2024 lecture timestamp | Inline (▶ 2024 L12 @ 23:10) |
 | `\ts{13}{L}{time}` | 2013 lecture timestamp | Inline (▶ 2013 L18 @ 5:02) |
 

@@ -1,0 +1,83 @@
+% !TEX root = ../main.tex
+\chapter*{Requests about these notes}\label{ch:requests}
+\addcontentsline{toc}{chapter}{Requests about these notes}
+\markboth{Requests about these notes}{}
+
+Your margin notes are of two kinds: notes on the \emph{content} (a doubt, an idea about a formula),
+which stay next to the text they refer to, and requests about the \emph{notes themselves} (layout,
+boxes, conventions), which do not depend on where they were written. The second kind is collected here,
+with what was done about it, so that the chapters read more smoothly. Write new ones anywhere with
+\verb|\note{...}| and they will be moved here, or add them directly at the end of this list.
+
+\paragraph{How the margin notes are marked.}
+\begin{itemize}
+  \item \verb|\note{...}|: a \emph{new} note, not yet read. ``Read my notes'' means these, and only these.
+  \item A note that has been answered becomes one box with the question on top and a dark yellow
+        \textbf{ANSWER} bar below it (\verb|\begin{answer}{question}[topic]| \dots\ \verb|\end{answer}|). A note with
+        several questions gets one ANSWER bar per question. A question asked a second time gets a short
+        answer that links to the first one.
+  \item \verb|\note*{...}|: a request that has been carried out (green DONE tag).
+  \item \verb|\note+{...}|: a comment that has been read and needs no answer (blue SEEN tag).
+  \item \verb|\feedback{...}|: a comment on one of your own solutions (indigo).
+\end{itemize}
+
+\section*{The list}
+
+\request{done}{Chapter 2, Markov chains}{vorrei che le answers fossero strutturate in modo diverso: cioe', che nel box della nota a lato venga attaccato sotto un altro box con la risposta [magari lo stesso box divisto dalla barra gialla piu scura "ANSWER", sopra domanda e sotto risposta]}
+{Question and answer are now one box in the right column: your note on top, then a dark yellow bar
+``ANSWER $n$: topic'' and the answer, in \texttt{\textbackslash tiny}. All the answers of chapters 1--2 were converted.}
+
+\request{done}{Chapter 2, Markov chains}{penso potrebbe essere una buona idea avere il pdf in formato draft, e non impaginato come se fosse la versione finale, in modo tale che la colonna di testo principale stia sulla sinistra (non come ora che le pagine pari stanno da un lato e le dispari dall'altro) e che le note, commenti, answers, historical notex, curiosities stiano tutte dall'altro a destra. in modo tale che ottimizzo meglio l'uso dello spazio sul mio schermo del laptop. forse metteri a lato anche gli esempi}
+{Screen layout: the page is 25\,cm wide instead of 21, the text column is always on the left and keeps its
+old width (15\,cm, so no formula or figure changes), and a 6.5\,cm column on the right holds notes,
+answers, feedback, history boxes and asides. A column that overflows continues on the next page.
+Short examples will move to the right column with the \texttt{sideexample} box during the core/secondary
+pass through the chapters; long ones stay in the text.}
+
+\request{done}{Chapter 2, one-period model}{problem: links to other chapters don't work. furthermore, i want the note's text smaller}
+{Notes are now in \texttt{\textbackslash tiny}. Links to other chapters: see the last request below.}
+
+\request{done}{Chapter 2, one-period model}{qualche volta scrivo piu di una domanda nella stessa nota, e qualche volta scrivo la stessa domanda in piu note diverse. scrivi una risposta per ogni domanda, separandole, e metti un link alla risposta che hai gia a una domanda dato se e' la seconda volta che ti chiedo la stessa cosa}
+{One ANSWER bar per question, also in the old answers of chapter~1. A repeated question gets a
+one-line answer with a link, e.g.\ ``non capisco cos'e' la claim'' points to \cref{ans:claim}.}
+
+\request{done}{Chapter 2, one-period model}{trova il modo di differenziare le note che hai gia letto e a cui hai gia dato una risposta o hai gia risolto il problema che chiedevo di risolvere, da quelle nuove, in modo tale che quando ti chiedo di leggere le note vai a guardare quelle nuove e eviti di modificare cose che andavano gia bene}
+{Every note that has been read is now marked: answered (ANSWER box), DONE or SEEN, as listed above. A
+plain \texttt{\textbackslash note\{...\}} is always new, and only those are read when you ask.}
+
+\request{done}{Chapter 2, one-period model}{direi che ci sono due tipi di note che scrivo, quelle riferite al contenuto delle leture notes e quelle riferite alla struttura delle lecture notes. siccome quelle della struttura non penso siano strettamente legate a dove le scrivo, pensavo che sarebbe una buona idea raggrupparle in un punto specifico delle lecture notes senza lasciarle lungo il testo, cosi' la seconda lettura dovrebbe risoltare piu facile e scorrevole}
+{This chapter.}
+
+\request{open}{Chapter 2, one-period model}{non so se ha senso e se e' fattibile, ma ho pensato che potrebbe essere utile avere sempre una copia delle build di ogni capitolo e/o una dell'intero book. e quando sono in un capitolo e clicco il link a un altro semplicemente mi apre un altro pdf}
+{Every full build keeps a copy of the whole book as \file{build/book.pdf}. In the fast build that runs on
+save (only the saved chapter), a link to another chapter now points to the same place in
+\file{book.pdf}. To be tested: whether the PDF viewer inside VS Code opens a second PDF from a link
+(an external viewer such as SumatraPDF does).}
+
+\request{noted}{Chapter 1, the course at a glance}{Nowadays everyone uses Python, so I will use it to illustrate the maths.}
+{The numerical checks in these notes are done in Python; the course's own code is R and is quoted as
+it is. Python snippets next to the formulas can be added on request.}
+
+\request{done}{Chapter 1, what is traded}{Leave some space between lines in the table.}
+{Every table in the notes has its rows spaced (\texttt{\textbackslash arraystretch} 1.35).}
+
+\request{done}{Chapter 1, what is traded}{Here I am sure there were picture from the presentation. We should include them to make the presentation clearer and more interesting.}
+{The figures of the chapter-1 slides are redrawn in TikZ. Doing the same for all chapters is planned
+(``more figures like the slides'').}
+
+\request{done}{Chapter 1, where mathematics enters}{the titles of the boxes should be given more importance. here id call it something like: INTUITION: KT prospect theory, reflection effect and utility (this is just an idea)}
+{Every box title reads ``TYPE: topic'' in bold capitals, and every content box has a topic.}
+
+\request{done}{Chapter 1, compounding}{I love history facts! can we implement a special box for them? like something that looks like old, antique. Furthermore, factcheck them and add references.}
+{History box framed as a classical temple front, fact-checked, with a References line; now in the
+right column.}
+
+\request{done}{Chapter 1, duration and convexity}{in general, i'd like to have graphs and conceptual maps when possible}
+{More figures and a conceptual map at the end of chapter~1; continued chapter by chapter.}
+
+\request{done}{Chapter 1, key formulas}{forse aiuterebbe aggiungere le unita' di misura, tipo $T^{-1}$ per r}
+{Units added to the key formulas of chapter~1 (e.g.\ $r$ in year$^{-1}$).}
+
+\request{done}{Chapter 1, exercises (twice)}{My solution moved into the box below.}
+{Your own solutions go in a \textbf{My solution} box (snippet \texttt{sol}) right below the exercise;
+comments on them are \textbf{Feedback} boxes in the right column.}

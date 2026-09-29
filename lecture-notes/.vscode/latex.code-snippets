@@ -14,7 +14,75 @@
     "body": [
       "\\note*{$1}"
     ],
-    "description": "Margin comment marked ESEGUITO"
+    "description": "Margin comment marked DONE (request carried out)"
+  },
+  "note-seen": {
+    "prefix": "note+",
+    "body": [
+      "\\note+{$1}"
+    ],
+    "description": "Margin comment marked SEEN (read, no answer needed)"
+  },
+  "answer": {
+    "prefix": "ans",
+    "body": [
+      "\\begin{answer}{$1}[$2]",
+      "$3",
+      "\\end{answer}"
+    ],
+    "description": "Question (the note) and its answer in one right-column box"
+  },
+  "answerpart": {
+    "prefix": "ansp",
+    "body": [
+      "\\answerpart{$1}"
+    ],
+    "description": "Next ANSWER bar inside an answer box (one per question)"
+  },
+  "feedback": {
+    "prefix": "fb",
+    "body": [
+      "\\feedback{$1}"
+    ],
+    "description": "Comment on the reader's own solution (indigo, right column)"
+  },
+  "secondary": {
+    "prefix": "sec",
+    "body": [
+      "\\begin{secondary}[$1]",
+      "$2",
+      "\\end{secondary}"
+    ],
+    "description": "Beyond the core: material to skip on a first reading"
+  },
+  "aside": {
+    "prefix": "aside",
+    "body": [
+      "\\begin{aside}[$1]",
+      "$2",
+      "\\end{aside}"
+    ],
+    "description": "Aside (curiosity, anecdote) in the right column"
+  },
+  "sideexample": {
+    "prefix": "sidex",
+    "body": [
+      "\\begin{sideexample}[$1]",
+      "$2",
+      "\\end{sideexample}"
+    ],
+    "description": "Short example in the right column"
+  },
+  "history": {
+    "prefix": "hist",
+    "body": [
+      "\\begin{history}[$1]",
+      "$2",
+      "",
+      "\\textbf{References.} $3",
+      "\\end{history}"
+    ],
+    "description": "History box (right column), fact-checked with references"
   },
   "timestamp-24": {
     "prefix": "ts24",

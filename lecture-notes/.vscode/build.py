@@ -61,8 +61,9 @@ else:
     # ponytail: one pdflatex pass; a label added in this chapter resolves on the next save or full build
     chapter = newest[:-4].replace(os.sep, '/')
     print(f'Fast build: {chapter} only (run the "full" recipe for the whole book)', flush=True)
+    # \fastbuild tells the preamble to send links into other chapters to build/book.pdf
     cmd = ['pdflatex', *common, '-output-directory=build', '-jobname=main',
-           rf'\includeonly{{{chapter}}}\input{{main}}']
+           rf'\def\fastbuild{{{chapter}.aux}}\includeonly{{{chapter}}}\input{{main}}']
 
 code = subprocess.call(cmd)
 try:
@@ -77,6 +78,13 @@ if code and re.search(r'\.(aux|out|toc):\d+:', log):
         if os.path.exists(f):
             os.remove(f)
     code = subprocess.call(full_cmd)
+
+# Keep the last whole book next to the fast builds: their links into other chapters open it
+if cmd is full_cmd and code == 0:
+    try:
+        shutil.copyfile('build/main.pdf', 'build/book.pdf')
+    except OSError as e:  # book.pdf open in a viewer that locks it
+        print(f'Could not update build/book.pdf: {e}', flush=True)
 
 # Snapshot the aux files once they are all complete, for the restore above
 if all(complete(aux) for aux in auxes):
