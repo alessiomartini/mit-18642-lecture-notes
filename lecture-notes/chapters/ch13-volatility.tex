@@ -1,8 +1,8 @@
 % !TEX root = ../main.tex
 \chapter{Volatility Modeling}\label{ch:volatility}
+\begin{paracol}{2}
 
 \begin{sources}
-\small
 \begin{tabularx}{\linewidth}{@{}l l L@{}}
 \toprule
 \textbf{Lecture} & \textbf{Speaker} & \textbf{Content}\\
@@ -237,7 +237,9 @@ information inside the day sharpens $\sigma$ but not $\mu$.
 Case Study~4 of 2013 fits \eqref{ch13:eq-gbmret} to daily EUR/USD and GBP/USD returns from 1999 to September 2013 (3\,708 returns) on two time
 scales \ts{13}{9}{36:48}. In \emph{trading time} every return is one period, $\Delta_j=1$. In \emph{clock (calendar) time}
 $\Delta_j$ is the number of calendar days between the two quotes, so that the Monday return, which spans a weekend, has a variance
-three times larger. The annualised estimates printed by the case study are
+three times larger.
+\begin{secondary}[The fitted numbers]
+The annualised estimates printed by the case study are
 
 \begin{center}\small
 \begin{tabular}{@{}lcccc@{}}
@@ -250,13 +252,17 @@ GBP/USD & $-0.00185$ & $0.0946$ & $-5.1\times10^{-6}$ & $0.1119$\\
 \bottomrule
 \end{tabular}
 \end{center}
-The volatility depends on the model of time: $10.25\%$ against $12.2\%$ for the euro \ts{13}{9}{40:02}. The
+\end{secondary}
+The volatility depends on the model of time: $10.25\%$ against $12.2\%$ for the euro \ts{13}{9}{40:02}.
+\begin{secondary}[Diagnostics: Q--Q plot and fitted percentiles]
+The
 diagnostic used to decide is the \emph{normal Q--Q plot} (sorted returns against the expected order statistics
 $x_j=\E[X_{[j]}]$ of a standard normal sample; a straight line means Gaussian) and the histogram of the \emph{fitted percentiles}
 $\hat F(R_j)$, which is uniform on $(0,1)$ if the model is right \ts{13}{9}{42:08}\ts{13}{9}{44:12}. Both show
 \emph{leptokurtic} returns (slender centre, fat tails): the extreme fitted percentile bins are over-populated, the middle
 under-populated \ts{13}{9}{45:14}. In calendar time the $1\%$ percentile is exceeded about as often as it should, so the
 tail fit is slightly better, but not the centre \ts{13}{9}{46:20}.
+\end{secondary}
 
 \begin{intuition}[Subordinated clocks]\label{ch13:int-clock}
 If a Brownian motion looks wrong when observed against calendar time, it may still be a Brownian motion against another
@@ -361,8 +367,11 @@ best analytic estimator of the session, normalised by its length $1-f$:
 \end{equation}
 Both terms are unbiased for $\sigma^2$ and independent (disjoint increments), with efficiencies $1$ and $7.4$, so
 \cref{ch13:lem-comb} gives the optimal weight $a=1/(1+7.4)=0.119\approx0.12$ and the efficiency $1+7.4=8.4$ \ts{24}{19}{31:13}\ts{13}{9}{58:56}, exactly the values of
-the slides. (In the same way the composite of the gap and the session range, whose second term is
+the slides.
+\begin{secondary}[Gap plus range]
+(In the same way the composite of the gap and the session range, whose second term is
 $(H-L)^2/(4\ln2\,(1-f))$, has $a=0.17$ and efficiency $5.9$.)
+\end{secondary}
 
 \subsection{Rogers--Satchell and Yang--Zhang}\label{ch13:sec-rsyz}
 \begin{secondary}[Estimators robust to drift and opening jumps]
@@ -423,7 +432,12 @@ not discussed in the course.
 \subsection{Case study: volatility of the S\&P~500 and of ARKK (2024)}\label{ch13:sec-gkcs}
 \begin{casestudy}[Historical volatility with R: S\&P~500 (lecture) and ARKK (problem set)]\label{ch13:cs-ohlc}
 \textbf{Goal.} Compare the six estimators on real bars and ask which is more \emph{predictable}
-\ts{24}{19}{32:16}\ts{24}{19}{33:25}. \textbf{Data.} Daily OHLC bars from Yahoo Finance through \texttt{tidyquant::tq\_get}:
+\ts{24}{19}{32:16}\ts{24}{19}{33:25}.
+\textbf{Lesson.} The efficient estimator (Yang--Zhang) is also the more predictable, the estimates of the same asset differ noticeably with the
+estimator, and volatility levels differ across assets by an order of magnitude; the conclusions above are only descriptive.
+\end{casestudy}
+\begin{secondary}[The S\&P~500 and ARKK case study in detail]
+\textbf{Data.} Daily OHLC bars from Yahoo Finance through \texttt{tidyquant::tq\_get}:
 the S\&P~500 index from 2014-01-02 to 2024-11-04 (2\,729 days) and the ARKK exchange-traded fund (Cathie Wood) from 2014-10-31 to 2024-10-30
 (2\,516 days) \ts{24}{19}{34:26}. \textbf{Method.} Rolling windows of $n=21$ days and $N=252$, with the formulas
 \begin{gather*}
@@ -474,10 +488,8 @@ $\hat\phi=0.876$, $\hat\theta=-0.799$, MAPE $3.55$; Yang--Zhang naive $Q^*=13.5$
 $\hat\phi=0.780$, $\hat\theta=-0.697$, MAPE $1.99$; seasonal ARIMA$(0,1,1)(2,0,2)_{[21]}$ with drift, $Q^*=37.5$ ($p=0.44$), MAPE $1.78$. For the
 close-to-close series \texttt{auto.arima} on the differences selects no seasonal term at all and the Ljung--Box test still rejects
 ($Q^*=124.6$, df~40).
-\textbf{Lesson.} The efficient estimator (Yang--Zhang) is also the more predictable, the estimates of the same asset differ noticeably with the
-estimator, and volatility levels differ across assets by an order of magnitude; the conclusions above are only descriptive.
 The scatter of YZ against close-to-close for ARKK lies around the diagonal, with YZ below it at high volatility.
-\end{casestudy}
+\end{secondary}
 
 \begin{coursenote}[Erratum: stale numbers in a note of the slides]\label{ch13:cn-mape}
 Page~31 of \file{lec17_2} says ``the MAPE of the seasonal ARIMA model of the YZ volatility is $1.746$ versus $3.58$ for the naive
@@ -536,9 +548,12 @@ $\kappa=3\bigl(1+\Var V/(\E V)^2\bigr)$.
 \end{proof}
 For $\lambda=0.3$ per day, $\gamma=3$ and $\Delta=1$ day, $\kappa=8.3$ (simulation: $8.32$). The excess kurtosis decays as $1/\Delta$: on longer horizons many jumps are added
 and the central limit theorem restores normality, in accordance with the empirical observation that monthly returns are closer to Gaussian than daily ones.
+\begin{secondary}[Estimation by the EM algorithm]
 Estimation by maximum likelihood is hard because the likelihood is a product of infinite series, but the model has a natural latent variable, the number of jumps in each period; the
 \emph{EM algorithm} of Dempster, Laird and Rubin then has closed-form steps and returns, as a by-product, the posterior number of jumps per period
-\ts{24}{19}{1:01:19}\ts{13}{9}{1:04:18}\ts{13}{9}{1:05:24} (Pickard, Kempthorne and Zakaria, 1987). A finding reported in class: when fitted to stock returns, the jump rate came out very high, a jump every
+\ts{24}{19}{1:01:19}\ts{13}{9}{1:04:18}\ts{13}{9}{1:05:24} (Pickard, Kempthorne and Zakaria, 1987).
+\end{secondary}
+A finding reported in class: when fitted to stock returns, the jump rate came out very high, a jump every
 couple of days, so the model was not detecting rare crashes but mimicking a fat-tailed distribution by a mixture of a plain normal, a normal with one jump, with two jumps, and so on
 \ts{24}{19}{1:02:28}.
 
@@ -590,7 +605,10 @@ $\alpha_0>0$, $\alpha_i\ge0$. Then $\sigma_t^2=\Var(y_t\mid\mathcal F_{t-1})$ is
 \end{definition}
 The name says it all: \emph{conditional heteroskedasticity} means that the variance given the past changes over time; \emph{autoregressive} refers to its dependence on lagged squares. If $\varepsilon_{t-1}$ was
 large, the variance of $\varepsilon_t$ is large and $\varepsilon_t$ is likely to be large too. The constraints have a reason: if some $\alpha_i$ were negative, a large past shock could make $\sigma_t^2$ negative
-\ts{13}{9}{1:08:30}\ts{24}{19}{1:12:05}. (The slides write $\alpha_j\ge0$ for $j=0,\dots,p$, i.e.\ allow $\alpha_0=0$, in which case the variance can shrink to zero and the model degenerates; we take $\alpha_0>0$.)
+\ts{13}{9}{1:08:30}\ts{24}{19}{1:12:05}.
+\begin{secondary}[Why $\alpha_0>0$]
+(The slides write $\alpha_j\ge0$ for $j=0,\dots,p$, i.e.\ allow $\alpha_0=0$, in which case the variance can shrink to zero and the model degenerates; we take $\alpha_0>0$.)
+\end{secondary}
 
 \begin{proposition}[ARCH innovations are uncorrelated but not independent]\label{ch13:prop-mds}
 Let $\varepsilon_t=\sigma_tz_t$ with $\sigma_t>0$ $\mathcal F_{t-1}$-measurable, $\E\sigma_t^2<\infty$, and $z_t$ as in \cref{ch13:def-arch}. Then
@@ -637,9 +655,12 @@ $\hat\varepsilon_t^2$ on a constant and $\hat\varepsilon^2_{t-1},\dots,\hat\vare
 \end{equation}
 {\emergencystretch=3em with $R^2$ the coefficient of determination of that regression \ts{24}{19}{1:09:55}\ts{13}{9}{1:10:34}\ts{13}{9}{1:11:40}. Under $H_0$ the squares $\hat\varepsilon_t^2$ have
 no linear dependence on the past and $R^2$ is small; for $p=1$, $R^2$ is the squared sample correlation between $\hat\varepsilon_t^2$ and $\hat\varepsilon^2_{t-1}$, so
-$nR^2\approx n\hat r_1^2$ with $\sqrt n\hat r_1\to N(0,1)$, as in \cref{ch09:eq-bp}. For general $p$ the statistic is asymptotically equivalent to the
+$nR^2\approx n\hat r_1^2$ with $\sqrt n\hat r_1\to N(0,1)$, as in \cref{ch09:eq-bp}.
+\begin{secondary}[McLeod--Li and quasi-maximum likelihood]
+For general $p$ the statistic is asymptotically equivalent to the
 Box--Pierce statistic of the squared residuals (the McLeod--Li test; this remark is not from the class). The regression uses least squares, whose assumptions are not those of a Gaussian likelihood; its estimates are
-\emph{quasi-maximum-likelihood} estimates, consistent but not efficient \ts{13}{9}{1:11:40}\ts{13}{9}{1:12:42}.\par}
+\emph{quasi-maximum-likelihood} estimates, consistent but not efficient \ts{13}{9}{1:11:40}\ts{13}{9}{1:12:42}.
+\end{secondary}\par}
 
 \begin{finance}[Volatility clustering and prediction]
 An ARCH model predicts nothing about the \emph{sign} of tomorrow's return but a lot about its size, and size is what matters for risk: the conditional variance $\sigma_t^2$ that it produces is a one-step-ahead
@@ -713,7 +734,10 @@ $\varepsilon_t^2=\alpha_0+(\alpha_1+\beta_1)\varepsilon_{t-1}^2+u_t-\beta_1u_{t-
 \begin{proof}
 From $\sigma_{t-j}^2=\varepsilon_{t-j}^2-u_{t-j}$ substitute in \eqref{ch13:eq-garch}: $\varepsilon_t^2-u_t=\alpha_0+\sum_i\alpha_i\varepsilon^2_{t-i}+\sum_j\beta_j(\varepsilon_{t-j}^2-u_{t-j})$; collect terms.
 \end{proof}
-{\emergencystretch=3em This is the statement announced in \cref{ch09:sec-arma11} \ts{24}{19}{1:13:09}\ts{13}{11}{4:15}\ts{13}{11}{5:15} (the transcript of 2013 writes $-\beta_1u_t$ for $-\beta_1u_{t-1}$).
+{\emergencystretch=3em This is the statement announced in \cref{ch09:sec-arma11} \ts{24}{19}{1:13:09}\ts{13}{11}{4:15}\ts{13}{11}{5:15}.
+\begin{secondary}[A slip in the 2013 transcript]
+(the transcript of 2013 writes $-\beta_1u_t$ for $-\beta_1u_{t-1}$).
+\end{secondary}
 With the AR polynomial $A(L)=1-\sum_i(\alpha_i+\beta_i)L^i$ and the MA polynomial $B(L)=1-\sum_j\beta_jL^j$
 one has
 \[
@@ -736,9 +760,11 @@ Consequently the ARMA of \eqref{ch13:eq-armasq} is covariance stationary iff $\s
   \rho_{\varepsilon^2}(1)=\frac{\alpha_1(1-\alpha_1\beta_1-\beta_1^2)}{1-2\alpha_1\beta_1-\beta_1^2},\qquad
   \rho_{\varepsilon^2}(k)=(\alpha_1+\beta_1)^{k-1}\rho_{\varepsilon^2}(1),\ k\ge2 .
 \end{equation}
+\begin{secondary}[Checking the formula]
 (Insert $\phi=\alpha_1+\beta_1$, $\theta=-\beta_1$ in \cref{ch09:eq-arma11}: $1+\phi\theta=1-\alpha_1\beta_1-\beta_1^2$, $\phi+\theta=\alpha_1$, $1+2\phi\theta+\theta^2=1-2\alpha_1\beta_1-\beta_1^2$.) The lag-one
 correlation does not depend on the kurtosis of $z_t$. For $\alpha_1=0.10$, $\beta_1=0.85$: $\rho(1)=0.179$, $\rho(5)=0.146$ (simulation, $2\times10^6$ days: $0.181$ and
 $0.146$); for $\alpha_1=0.05$, $\beta_1=0.85$ one gets $\rho(1)=0.061$ with slow decay, the ``small first correlation but long memory'' example of \cref{ch09:sec-arma11}.
+\end{secondary}
 The slow geometric decay at rate $\alpha_1+\beta_1$, near $1$, is what the significant autocorrelations of squared returns at many lags (the case studies) require, and what a low-order ARCH
 cannot produce.
 
@@ -894,6 +920,7 @@ The mechanism is that of \cref{ch03:prop-mixture}: given the past, $\varepsilon_
 Gaussians with kurtosis $\kappa_z\E\sigma^4/(\E\sigma^2)^2\ge\kappa_z$, strictly unless $\sigma_t$ is constant \ts{13}{11}{24:19}; the slides describe GARCH as a ``stochastic mixture of Gaussians with higher kurtosis''.
 For $\beta_1=0$ one recovers the ARCH$(1)$ formulas of 2013 PS5 Problem~3 (\cref{ch13:ex-ps5-3}): $\E\varepsilon^4=\kappa_z\alpha_0^2(1+\alpha_1)/\bigl[(1-\alpha_1)(1-\kappa_z\alpha_1^2)\bigr]$, finite iff $\alpha_1<1/\sqrt3=0.577$ for Gaussian $z$.
 
+\begin{secondary}[Kurtosis for typical parameters]
 \begin{center}\small
 \begin{tabular}{@{}lccc@{}}
 \toprule
@@ -908,6 +935,7 @@ $(0.12,\,0.87)$ & $0.99$ & $-0.0089$ & $\infty$\\
 \bottomrule
 \end{tabular}
 \end{center}
+\end{secondary}
 Persistence close to $1$ makes the fourth moment barely exist, and then sample kurtosis is an unreliable estimator of the theoretical one: sample fourth moments of such a process converge very slowly.
 \begin{secondary}[Power-law tails]
 (A tail-index refinement, not discussed: $\P(|\varepsilon|>x)\sim x^{-\xi}$ with $\xi$ solving $\E a_t^{\xi/2}=1$, so GARCH tails are power laws, as in the empirical ``inverse cubic'' law of \cref{ch03:sec-heavy}.)
@@ -946,8 +974,12 @@ If $z_t$ is $N(0,1)$ then $y_t\mid\mathcal F_{t-1}\sim N(c,\sigma_t^2)$, where $
 \begin{proof}
 $p(y_1,\dots,y_T)=\prod_tp(y_t\mid y_{t-1},\dots,y_1)$ and, given $\mathcal F_{t-1}$, both $c$ and $\sigma_t^2$ are known numbers, so the conditional law is the stated normal. Take logarithms.
 \end{proof}
-Two points. First, the recursion needs starting values ($\varepsilon_0^2$ and $\sigma_0^2$): common choices are the sample variance for both, or the long-run variance $\alpha_0/(1-\phi)$; the effect fades out
-geometrically at rate $\beta_1$ (\cref{ch13:prop-archinf}) but is felt for a long time when $\beta_1\approx1$ (not discussed in class). Second, the likelihood is \emph{not} a quadratic function of $\theta$
+Two points.
+\begin{secondary}[Starting values]
+First, the recursion needs starting values ($\varepsilon_0^2$ and $\sigma_0^2$): common choices are the sample variance for both, or the long-run variance $\alpha_0/(1-\phi)$; the effect fades out
+geometrically at rate $\beta_1$ (\cref{ch13:prop-archinf}) but is felt for a long time when $\beta_1\approx1$ (not discussed in class).
+\end{secondary}
+Second, the likelihood is \emph{not} a quadratic function of $\theta$
 and has no closed-form maximiser (unlike the regression of \cref{ch:regression}); the maximum is found numerically. The two terms have a clear meaning: $\log\sigma_t^2$ penalises a large predicted variance,
 $\varepsilon_t^2/\sigma_t^2$ penalises a variance too small for the return that occurred, and the maximum balances them, exactly as in the Gaussian estimate of the scale of an i.i.d.\ sample
 (where $\sigma_t^2\equiv\hat\sigma^2$ gives \eqref{ch13:eq-gbmmle}).
@@ -1043,6 +1075,10 @@ After fitting, the standardised residuals $\hat z_t=\hat\varepsilon_t/\hat\sigma
 % ------------------------------------------------------------------
 \subsection{Case study: EUR/USD returns, ARCH and GARCH fits (2013)}\label{ch13:sec-fxcs}
 \begin{casestudy}[EUR/USD returns with ARCH, GARCH and $t$ GARCH models]\label{ch13:cs-fx}
+\textbf{Lesson.} Volatility clustering is strongly present, a parsimonious GARCH$(1,1)$ describes it better than a high-order ARCH, the Gaussian assumption is inadequate in the tails
+but the volatility estimates are robust to it, and the $t$ law with about $10$ degrees of freedom fits the standardised residuals.
+\end{casestudy}
+\begin{secondary}[The EUR/USD case study in detail]
 \textbf{Data.} The daily returns of the euro in dollars, from the Federal Reserve series used in \cref{ch13:sec-clock} (3\,708 log returns, 1999 to September 2013). The lecture of 2024 shows the same pages of the note for the
 dollar--pound series; the numbers below are those of the note, which uses EUR/USD \ts{13}{9}{1:16:58}\ts{24}{19}{1:15:15}.
 \textbf{Step 1: dependence in the squares.} The ACF and PACF of the returns show only marginal dependence, those of the \emph{squared} returns have highly significant, slowly decaying autocorrelations and a very significant PACF at low lags, which
@@ -1093,9 +1129,7 @@ $\ell_{\max}-\ell(\nu)$ & $33.1$ & $15.3$ & $7.1$ & $1.0$ & $0$ & $0.6$ & $2.4$ 
 \bottomrule
 \end{tabular}
 \end{center}
-\textbf{Lesson.} Volatility clustering is strongly present, a parsimonious GARCH$(1,1)$ describes it better than a high-order ARCH, the Gaussian assumption is inadequate in the tails
-but the volatility estimates are robust to it, and the $t$ law with about $10$ degrees of freedom fits the standardised residuals.
-\end{casestudy}
+\end{secondary}
 \begin{secondary}[A confidence interval for $\nu$]
 The profile above is one number per $\nu$ from the note. Our own reading, not made in class: since $2[\ell_{\max}-\ell(\nu)]$ is approximately $\chi^2_1$, the values of $\nu$ with $\ell_{\max}-\ell<1.92$ form an approximate $95\%$ confidence interval, $\nu\in[8,14]$; the Gaussian
 limit is rejected (for $\nu=30$, $2\times10.3=20.7$, and the normal, $\nu=\infty$, is worse still).
@@ -1125,7 +1159,10 @@ ratio & $0.99$ & $1.02$ & $1.06$ & $1.20$\\
 \end{tabular}
 \end{center}
 At $5\%$ the $t$ quantile is actually \emph{smaller}, because the standardised $t$ has a more peaked centre (\cref{ch13:fig-tails}). In the case study the $2.5\%$ limits of the AR$(7)$--GARCH$(1,1)$--$t_{10}$ model were exceeded by $107$ of the $3\,708$ returns on the lower side ($2.89\%$) and by $92$ on the upper side
-($2.48\%$), against $92.7$ expected on each side \ts{13}{11}{27:33}. (With this frequency the lower exceedances are consistent with $2.5\%$: the one-sided binomial $p$-value is $0.076$; our computation.)
+($2.48\%$), against $92.7$ expected on each side \ts{13}{11}{27:33}.
+\begin{secondary}[Is 2.89\% compatible with 2.5\%?]
+(With this frequency the lower exceedances are consistent with $2.5\%$: the one-sided binomial $p$-value is $0.076$; our computation.)
+\end{secondary}
 
 \begin{coursenote}[A detail of the case-study code]\label{ch13:cn-varcode}
 In the R code the limits are first computed around the fitted conditional mean and then \emph{overwritten} by limits around the constant long-term mean $\hat c_0/(1-\sum\hat\phi_i)$ of the AR part (the second assignment replaces the first).

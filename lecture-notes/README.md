@@ -65,10 +65,14 @@ Based on Fall 2024 (18.642) and Fall 2013 (18.S096).
 
 ## Layout
 
-Screen layout, not print: 25 cm wide pages, text always on the left (15 cm, the old A4 text width),
-a 6.5 cm right column for notes, answers, feedback, history, asides and short examples (`marginfix`
-carries an overflowing column to the next page). The old A4 two-sided geometry is in a comment in
-`preamble.tex`. Links between chapters work only in the full build: the fast one-chapter
+Screen layout, not print: 25 cm wide pages, two parallel columns (`paracol`; every chapter file is
+one `paracol` environment, opened and closed by `include` hooks in `preamble.tex`). Left: the text,
+15 cm (the old A4 text width). Right, 6.5 cm: proofs, examples, course notes, history, asides
+(`\scriptsize`) and the reader's notes, answers and feedback (`\tiny`). Right-column items are queued
+and written at the end of the paragraph (or box, or list) they belong to, level with it; when the
+right column is still busy the text waits, leaving a gap. With the 2026 kernel `\globalcounter` breaks
+for `chapter`/`section`/`table`: sectioning counters are copied to the right column with
+`\synccounter` instead. The old A4 two-sided geometry is in a comment in `preamble.tex`. Links between chapters work only in the full build: the fast one-chapter
 build (`.vscode/build.py`) contains only the saved chapter, and the LaTeX Workshop viewer cannot open a
 second PDF from a link (tried and removed). Every full build keeps a copy of the whole book in
 `build/book.pdf`, which fast builds never overwrite: open it to consult other chapters.
@@ -81,7 +85,8 @@ second PDF from a link (tried and removed). Every full build keeps a copy of the
 | `\note*{...}` / `\note+{...}` | Request carried out (DONE) / read, no answer needed (SEEN) | Right column |
 | `\begin{answer}{question}[topic] ... \end{answer}` | A note and its answer in one box; `\answerpart{topic}` for each further question; `\label{ans:...}` to link a repeated question | Right column |
 | `\feedback{...}` | Comment on one of your own `mysolution`s | Right column |
-| `\begin{history}`, `\begin{aside}`, `\begin{sideexample}` | History fact, curiosity, short example | Right column |
+| `\begin{history}`, `\begin{aside}` | History fact (fact-checked, References), curiosity or anecdote | Right column |
+| `example`, `proof`, `coursenote` (`sideexample` = `example`) | Examples, proofs, course notes: same syntax as before | Right column (`\scriptsize`) |
 | `\begin{secondary}[topic] ... \end{secondary}` | "Beyond the core": can be skipped on a first reading | Text column, grey bar |
 | `\request{done/open/noted}{where}{request}{what was done}` | A request about the notes themselves | Chapter "Requests about these notes" (`chapters/ch00-requests.tex`) |
 | `\ts{24}{L}{time}` | 2024 lecture timestamp | Inline (▶ 2024 L12 @ 23:10) |

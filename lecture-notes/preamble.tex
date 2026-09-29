@@ -7,12 +7,19 @@
 \usepackage{newpxtext,newpxmath} % provides the AMS symbols: do not load amssymb
 \usepackage{bm}
 \usepackage{microtype}
-% Screen layout (read on a laptop, not printed): the text column keeps the width it had on A4
-% (15 cm) and a wide right column holds notes, answers, feedback, history, asides, short examples.
+% Screen layout (read on a laptop, not printed): two parallel columns (paracol), the text column
+% with the width it had on A4 (15 cm) and a 6.5 cm right column for notes, answers, feedback,
+% examples, proofs, course notes, history and asides. Every right-column item starts level with the
+% paragraph it belongs to; if the right column is still busy, the text waits (white space).
 % The old A4 print layout was: a4paper,inner=2.4cm,outer=3.6cm,marginparwidth=3.0cm,marginparsep=0.3cm (twoside).
-\usepackage[paperwidth=25cm,paperheight=29.7cm,top=2.6cm,bottom=2.6cm,left=2cm,textwidth=15cm,
+\usepackage[paperwidth=25cm,paperheight=29.7cm,top=2.6cm,bottom=2.6cm,left=2cm,textwidth=22cm,
   marginparsep=0.5cm,marginparwidth=6.5cm,headheight=23pt]{geometry}
-\usepackage{marginfix} % a margin column that overflows the page continues on the next one
+\usepackage{paracol}
+\setcolumnwidth{15cm/0.5cm,6.5cm}
+% counters shared by the two columns (equations in a proof, examples, answers ... in the right column)
+% (sectioning counters cannot be global with this kernel: they are copied to the right column by
+% \synccounter before each switch, see \side@emit)
+\globalcounter{equation}\globalcounter{footnote}\globalcounter{figure}
 \usepackage{booktabs,array,tabularx,longtable}
 \usepackage[dvipsnames]{xcolor}
 \usepackage[shortlabels,inline]{enumitem}
@@ -36,7 +43,6 @@
 \fancyhf{}
 \fancyhead[L]{\small\leftmark}
 \fancyhead[R]{\small\makebox[\marginparwidth][r]{\rightmark\quad\thepage}}
-\fancyheadoffset[R]{\dimexpr\marginparsep+\marginparwidth\relax}
 \renewcommand{\headrulewidth}{0.3pt}
 \fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\small\thepage}\renewcommand{\headrulewidth}{0pt}}
 
@@ -82,14 +88,30 @@
 \theoremstyle{colrem}
 \newtheorem{remark}[definition]{Remark}
 \crefname{exercise}{Exercise}{Exercises}
+\globalcounter{definition}\globalcounter{exercise}
 
-% A \marginpar cannot live inside a box: a \note written in a box is queued and
-% printed in the margin right after the box (see \note below)
+% Right-column items are queued and written into the right column at the next point where the
+% text column is between paragraphs at top level (end of the paragraph, end of a box, end of a
+% list): there the columns are synchronised, the queued items are typeset in the right column,
+% and the text continues from where it was.
 \makeatletter
 \newif\ifnote@inbox
+\newif\ifside@inright
 \def\note@queue{}
-\newcommand{\note@flush}{\let\note@tmp\note@queue\gdef\note@queue{}\note@tmp}
+\def\side@pcname{paracol}
+\newcommand{\side@emit}{\ifx\note@queue\@empty\else
+  \let\note@tmp\note@queue\gdef\note@queue{}%
+  \synccounter{chapter}\synccounter{section}\synccounter{subsection}\synccounter{subsubsection}%
+  \switchcolumn*\side@inrighttrue\note@tmp\par\side@inrightfalse\switchcolumn\fi}
+\newcommand{\note@flush}{\ifvmode\ifnote@inbox\else\ifside@inright\else
+  \ifx\@currenvir\side@pcname\side@emit\fi\fi\fi\fi}
+\newcommand{\side@put}[1]{\gappto\note@queue{#1}\note@flush}
+\AddToHook{para/after}{\note@flush}
 \tcbset{note queue/.code={\appto\kvtcb@afterbox{\note@flush}}}
+% every chapter/appendix file is one paracol environment: it starts right after the \chapter
+% line of the file (\begin{paracol}{2}) and is closed here
+\AddToHook{include/end}{\par\note@flush\end{paracol}}
+\newcommand{\flushside}{\par\note@flush}
 \makeatother
 \tcbset{thmbox/.style={enhanced,breakable,colback=#1!7,colframe=#1!7,borderline west={3pt}{0pt}{#1},
   sharp corners,left=6pt,right=4pt,top=2pt,bottom=2pt,before skip=8pt,after skip=8pt,
@@ -99,7 +121,7 @@
 \tcolorboxenvironment{proposition}{thmbox=thmcol}
 \tcolorboxenvironment{lemma}{thmbox=thmcol}
 \tcolorboxenvironment{corollary}{thmbox=thmcol}
-\tcolorboxenvironment{example}{thmbox=intcol}
+% (examples are boxed in the right column, see \begin{example} below)
 \tcolorboxenvironment{exercise}{thmbox=exercol}
 \tcolorboxenvironment{remark}{thmbox=srccol}
 
@@ -117,12 +139,11 @@
 % Case study: summary of an R case study / notebook
 \newtcolorbox{casestudy}[1][]{notebox=cscol,title={\boxtitle{Case study}{#1}}}
 % Summary / key formulas
-\newtcolorbox{keyformulas}{notebox=keycol,title={\boxtitle{Key formulas}{}}}
+\newtcolorbox{keyformulas}{notebox=keycol,fontupper=\small,title={\boxtitle{Key formulas}{}}}
 % Sources: which lectures, videos and files a chapter is built on
-\newtcolorbox{sources}{notebox=srccol,title={\boxtitle{Sources for this chapter}{}},before upper=\raggedright}
+\newtcolorbox{sources}{notebox=srccol,fontupper=\footnotesize,title={\boxtitle{Sources for this chapter}{}},before upper=\raggedright}
 \newcolumntype{L}{>{\raggedright\arraybackslash}X}
-% Note on course material (errata, missing lectures, differences 2013/2024)
-\newtcolorbox{coursenote}[1][]{notebox=srccol,title={\boxtitle{Course note}{#1}}}
+% Note on course material (errata, missing lectures, differences 2013/2024): right column, see below
 % Secondary material ("beyond the core"): can be skipped on a first reading
 \newtcolorbox{secondary}[1][]{enhanced,breakable,colback=white,colframe=white,boxrule=0pt,
   borderline west={1.5pt}{0pt}{srccol!60},sharp corners,left=8pt,right=0pt,top=1pt,bottom=1pt,
@@ -131,7 +152,8 @@
   coltitle=srccol,colbacktitle=white,fonttitle=\bfseries,titlerule=0pt,toptitle=0pt,bottomtitle=0pt,
   before upper={\csname note@inboxtrue\endcsname},note queue}
 % ============================================================
-%  The right column: everything below is printed in the margin, in \tiny
+%  The right column: the reader's notes/answers/feedback in \tiny; examples, proofs, course notes,
+%  history and asides in \scriptsize
 % ============================================================
 %  \note{...}     the reader's comment/doubt, NEW (not yet read by Claude)
 %  \note*{...}    a request that has been carried out (green DONE tag)
@@ -141,11 +163,10 @@
 %                 bar "ANSWER n: topic" and the answer; \answerpart{topic} starts a further
 %                 answer in the same box (one per question); \label{ans:...} makes it citable
 %  \feedback{...} a comment on one of the reader's own solutions (indigo)
-%  \begin{history}[topic], \begin{aside}[topic], \begin{sideexample}[topic]
+%  \begin{history}[topic], \begin{aside}[topic], \begin{coursenote}[topic]
+%  example and proof environments are also printed here (sideexample = example)
 %  Inside a coloured box of the main text, margin items appear right after the box.
 \makeatletter
-\newcommand{\side@put}[1]{%
-  \ifnote@inbox\gappto\note@queue{\marginpar{#1}\note@flush}\else\marginpar{#1}\note@flush\fi}
 \tcbset{sidebox/.style={enhanced,colback=#1!25,colframe=#1,boxrule=0.5pt,arc=1pt,
     left=3pt,right=3pt,top=2pt,bottom=2pt,before skip=0pt,after skip=0pt,
     fontupper=\tiny\sffamily\raggedright,fonttitle=\tiny\sffamily\bfseries,
@@ -157,15 +178,30 @@
 \newcounter{answer}[chapter]
 \renewcommand{\theanswer}{\thechapter.\arabic{answer}}
 \crefname{answer}{answer}{answers}
+\globalcounter{answer}
 \newcommand{\answerpart}[1]{\refstepcounter{answer}%
   \tcbsubtitle[colback=anscol,colframe=anscol,coltext=black,fontupper=\tiny\sffamily\bfseries,
     left=3pt,top=0.5pt,bottom=0.5pt,before skip=2pt,after skip=2pt]{ANSWER \theanswer\ifx&#1&\else: #1\fi}}
 \NewDocumentEnvironment{answer}{m O{} +b}{\side@put{\begin{tcolorbox}[sidebox=notecol,colback=notecol!12]%
   #1\answerpart{#2}#3\end{tcolorbox}}}{}
-\NewDocumentEnvironment{aside}{O{} +b}{\side@put{\begin{tcolorbox}[sidebox=histcol,colback=histcol!6,
-  coltitle=white,colbacktitle=histcol,title={\boxtitle{Aside}{#1}}]#2\end{tcolorbox}}}{}
-\NewDocumentEnvironment{sideexample}{O{} +b}{\side@put{\begin{tcolorbox}[sidebox=intcol,colback=intcol!6]%
-  \refstepcounter{definition}{\bfseries\color{intcol}Example \thedefinition\ifx&#1&\else\ (#1)\fi.}\ #2\end{tcolorbox}}}{}
+% Content boxes of the right column (examples, proofs, course notes, history, asides): \scriptsize,
+% one step above the \tiny of the reader's notes
+\tcbset{sidecontent/.style={sidebox=#1,colback=#1!6,breakable,
+    fontupper=\scriptsize\raggedright,fonttitle=\scriptsize\sffamily\bfseries,coltitle=white,colbacktitle=#1}}
+\NewDocumentEnvironment{aside}{O{} +b}{\side@put{\begin{tcolorbox}[sidecontent=histcol,
+  title={\boxtitle{Aside}{#1}}]#2\end{tcolorbox}}}{}
+\NewDocumentEnvironment{coursenote}{O{} +b}{\side@put{\begin{tcolorbox}[sidecontent=srccol,
+  title={\boxtitle{Course note}{#1}}]#2\end{tcolorbox}}}{}
+% Examples and proofs keep their theorem-like look (numbering, labels, QED) but go to the right column
+\let\origexample\example \let\endorigexample\endexample
+\RenewDocumentEnvironment{example}{o +b}{\side@put{\begin{tcolorbox}[thmbox=intcol,
+  fontupper=\scriptsize,before skip=0pt,after skip=0pt]%
+  \IfValueTF{#1}{\begin{origexample}[#1]}{\begin{origexample}}#2\end{origexample}\end{tcolorbox}}}{}
+\NewDocumentEnvironment{sideexample}{o +b}{\IfValueTF{#1}{\begin{example}[#1]}{\begin{example}}#2\end{example}}{}
+\let\origproof\proof \let\endorigproof\endproof
+\RenewDocumentEnvironment{proof}{o +b}{\side@put{\begin{tcolorbox}[thmbox=thmcol,colback=thmcol!3,
+  fontupper=\scriptsize,before skip=0pt,after skip=0pt]%
+  \IfValueTF{#1}{\begin{origproof}[#1]}{\begin{origproof}}#2\end{origproof}\end{tcolorbox}}}{}
 \makeatother
 % History: a fact from the history of finance/mathematics, framed like a classical
 % temple front: a dentilled entablature (the title) on two Ionic columns (not breakable)
@@ -184,7 +220,7 @@
 \NewDocumentEnvironment{history}{O{} +b}{\side@put{\begin{tcolorbox}[histbox,title={\boxtitle{History}{#1}}]#2\end{tcolorbox}}}{}
 \makeatother
 \tcbset{histbox/.style={enhanced,colback=histcol!6,colframe=histcol,boxrule=0.8pt,sharp corners,
-  fonttitle=\tiny\sffamily\bfseries,fontupper=\tiny\sffamily\raggedright,coltitle=white,colbacktitle=histcol,
+  fonttitle=\scriptsize\sffamily\bfseries,fontupper=\scriptsize\raggedright,coltitle=white,colbacktitle=histcol,
   left=18pt,right=18pt,top=6pt,bottom=3pt,before skip=0pt,after skip=0pt,
   before upper={\csname note@inboxtrue\endcsname},
   overlay={

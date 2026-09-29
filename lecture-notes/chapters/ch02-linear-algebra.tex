@@ -1,8 +1,8 @@
 % !TEX root = ../main.tex
 \chapter{Linear Algebra and One-Period Financial Models}\label{ch:linalg}
+\begin{paracol}{2}
 
 \begin{sources}
-\small
 \begin{tabularx}{\linewidth}{@{}l l L@{}}
 \toprule
 \textbf{Lecture} & \textbf{Speaker} & \textbf{Content}\\
@@ -294,7 +294,7 @@ you hold the contract, and it pays automatically at $T$.
 Exactly as you say: find the
 fair price $C_0$ to pay at time $0$ for this contract. The answer is the cost of the portfolio of bond
 and stock that pays the same in both states.
-\end{answer} A portfolio \emph{replicates} $C$ if
+\end{answer}\note{the professor here intriduced 2 new concepts: contingent claim and replicating portfolios, whenever you introduce new concept, reserve few line or maybe a dedicated box for new concepts to introduce it, remarking that it is a new concept. maybe you should use the definition box} A portfolio \emph{replicates} $C$ if
 \begin{equation}\label{eq:replic2}
   \begin{pmatrix} B_T & S_T^d\\ B_T & S_T^u\end{pmatrix}
   \begin{pmatrix}\theta_B\\ \theta_S\end{pmatrix}
@@ -336,7 +336,7 @@ stock: the cost is $0$, and at $T$ you hold $S_T-S_0(1+r_fT)\ge0$, which is $>0$
 If $S_T^u\le S_0(1+r_fT)$, do the reverse: short the stock and lend the proceeds. One detail matters:
 an arbitrage needs \emph{no loss in any state and a gain in at least one}. This is why the
 inequalities in \cref{prop:binomial-na} are strict.
-\end{answer}
+\end{answer}\note{volgio che le note siano numerate, in stile footnote, in modo tale che possa vedere velocemente qual'e' il punto nel testo a cui fanno riferimento}
 
 \begin{example}[Pricing a call]\label{ex:call}
 Take the numbers of the lecture note: $B_0=100$, $B_T=103$ ($r_fT=3\%$), $S_0=100$, $S_T^u=130$,
@@ -399,7 +399,7 @@ Black--Scholes formula.
 
 \subsection{\texorpdfstring{$n$}{n} assets, \texorpdfstring{$m$}{m} states}
 Generalise to $n$ assets and $m$ possible states $\omega_1,\dots,\omega_m$ at time $T$
-\ts{24}{2}{1:06:57}:
+\ts{24}{2}{1:06:57}:\note{voglio che queste indicazioni di video e minuto siano link effettivi al video e al minuto-secondo giusto}
 \begin{itemize}
   \item $A_0=(P_0^1,\dots,P_0^n)\in\R^{1\times n}$: known prices at $t=0$;
   \item $A\in\R^{m\times n}$ with $A_{ij}=P_T^j(\omega_i)$: price of asset $j$ in state $i$. Column $j$ is the
@@ -444,7 +444,7 @@ otherwise (when it is replicable). If a riskless bond exists, $B_0=\bm\psi\T\bm 
 $\beta=1/(1+r_fT)$, the ordinary discount factor.
 
 \begin{lemma}[Stiemke]\label{lem:stiemke}
-Let $L\subset\R^k$ be a linear subspace. Then $L\cap\R^k_{+}=\{\bm 0\}$ iff there exists $\bm y\in\R^k$ with
+Let $L\subset\R^k$ be a linear subspace [not affine]. Then $L\cap\R^k_{+}=\{\bm 0\}$ iff there exists $\bm y\in\R^k$ with
 all $y_i>0$ and $\bm y\perp L$.
 \end{lemma}
 \begin{proof}
@@ -511,21 +511,21 @@ $(V_T^d,V_T^u)$ of many portfolios \ts{24}{2}{1:01:39}:
       that avoids the positive quadrant: no zero-cost portfolio pays off in both states, i.e.\ no arbitrage
       \ts{24}{2}{1:04:48}.
 \end{itemize}
-\end{casestudy}
+\end{casestudy}\note{aggiungi i grafici di cui stai parlando}
 
 \begin{finance}[From the binomial tree to Black--Scholes]
 The binomial model iterated over many periods is the Cox--Ross--Rubinstein tree; letting the step go
 to zero gives Black--Scholes (\cref{ch:bs}). Part~2 of the theorem explains why stochastic-volatility
 or jump models, which have more sources of randomness than traded assets, are incomplete: prices there
 depend on a choice of pricing measure calibrated to market option prices.
-\end{finance}
+\end{finance}\note{i need to get familiar with the definitions before being able to understand this and the theorem}
 
 % ------------------------------------------------------------------
 \section{Eigenvalues and diagonalisation}\label{sec:eigen}
 $\lambda\in\mathbb C$ is an eigenvalue of $A\in\R^{n\times n}$ with eigenvector $\bm v\neq0$ if
 $A\bm v=\lambda\bm v$, i.e.\ iff $\det(A-\lambda I)=0$, a polynomial equation of degree $n$: there is
 always at least one (complex) eigenvalue \ts{13}{2}{6:17}. Eigenvectors are the directions in which $A$
-acts as a pure rescaling.
+acts as a pure rescaling.\note{nice insight!}
 
 If $A$ has $n$ linearly independent eigenvectors, $S=[\bm v_1\cdots\bm v_n]$ is invertible and
 \[
@@ -536,10 +536,10 @@ equation of a Kalman filter, \cref{ch:timeseries}), expand the initial state in 
 $\bm u_0=\sum_ic_i\bm v_i$ with $\bm c=S^{-1}\bm u_0$; then
 \[
   \bm u_t = A^t\bm u_0 = \sum_{i=1}^n c_i\,\lambda_i^t\,\bm v_i .
-\]
+\]\note{quello che hai fatto e' stato diagonalizzare l'hamiltoniana/l'evoluzione temporale. l'equazione e' uno step/infinitesima (NO NON E' VERO! e' un tempo finito: all'esponenziale)}
 Modes with $|\lambda_i|<1$ die out, those with $|\lambda_i|>1$ explode, and if the largest eigenvalue is
 $1$ and simple, $\bm u_t$ converges to a multiple of its eigenvector \ts{24}{4}{6:21}. (For a physicist:
-normal-mode decomposition of a linear discrete-time system.)
+normal-mode decomposition of a linear discrete-time system.)\note{bello, mi piace!}
 
 \begin{coursenote}[Erratum in the slides]
 Slide ``Eigenvalues and Eigenvectors'' of \file{lec02_1} states
