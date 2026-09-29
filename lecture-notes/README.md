@@ -70,7 +70,8 @@ a 6.5 cm right column for notes, answers, feedback, history, asides and short ex
 carries an overflowing column to the next page). The old A4 two-sided geometry is in a comment in
 `preamble.tex`. Links between chapters work only in the full build: the fast one-chapter
 build (`.vscode/build.py`) contains only the saved chapter, and the LaTeX Workshop viewer cannot open a
-second PDF from a link (tried and removed).
+second PDF from a link (tried and removed). Every full build keeps a copy of the whole book in
+`build/book.pdf`, which fast builds never overwrite: open it to consult other chapters.
 
 ## Annotation Macros (defined in `preamble.tex`)
 

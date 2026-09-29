@@ -78,6 +78,13 @@ if code and re.search(r'\.(aux|out|toc):\d+:', log):
             os.remove(f)
     code = subprocess.call(full_cmd)
 
+# Keep the last whole book: fast builds overwrite build/main.pdf with one chapter only
+if cmd is full_cmd and code == 0:
+    try:
+        shutil.copyfile('build/main.pdf', 'build/book.pdf')
+    except OSError as e:  # book.pdf open in a viewer that locks it
+        print(f'Could not update build/book.pdf: {e}', flush=True)
+
 # Snapshot the aux files once they are all complete, for the restore above
 if all(complete(aux) for aux in auxes):
     for aux in auxes:

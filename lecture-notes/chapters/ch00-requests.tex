@@ -51,8 +51,9 @@ plain \texttt{\textbackslash note\{...\}} is always new, and only those are read
 \request{noted}{Chapter 2, one-period model}{non so se ha senso e se e' fattibile, ma ho pensato che potrebbe essere utile avere sempre una copia delle build di ogni capitolo e/o una dell'intero book. e quando sono in un capitolo e clicco il link a un altro semplicemente mi apre un altro pdf}
 {Tried and removed (29 Sep 2026): in the fast build that runs on save, links into other chapters were
 sent to a copy of the whole book, but the PDF viewer inside VS Code (LaTeX Workshop) cannot open a
-second PDF from a link. To follow links between chapters, run the recipe \emph{Whole book (latexmk)}
-and read that PDF.}
+second PDF from a link. What remains: every full build (recipe \emph{Whole book (latexmk)}) keeps a copy of the whole book in
+\file{build/book.pdf}, which the fast builds never overwrite, so it is always there to consult the other
+chapters.}
 
 \request{noted}{Chapter 1, the course at a glance}{Nowadays everyone uses Python, so I will use it to illustrate the maths.}
 {The numerical checks in these notes are done in Python; the course's own code is R and is quoted as
