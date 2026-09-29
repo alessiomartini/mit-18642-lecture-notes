@@ -68,8 +68,9 @@ Based on Fall 2024 (18.642) and Fall 2013 (18.S096).
 Screen layout, not print: 25 cm wide pages, text always on the left (15 cm, the old A4 text width),
 a 6.5 cm right column for notes, answers, feedback, history, asides and short examples (`marginfix`
 carries an overflowing column to the next page). The old A4 two-sided geometry is in a comment in
-`preamble.tex`. Every full build copies the book to `build/book.pdf`; in the fast one-chapter build
-(`.vscode/build.py`) links into other chapters open that file.
+`preamble.tex`. Links between chapters work only in the full build: the fast one-chapter
+build (`.vscode/build.py`) contains only the saved chapter, and the LaTeX Workshop viewer cannot open a
+second PDF from a link (tried and removed).
 
 ## Annotation Macros (defined in `preamble.tex`)
 

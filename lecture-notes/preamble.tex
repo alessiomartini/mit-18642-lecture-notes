@@ -211,25 +211,6 @@
     left=3pt,top=0.5pt,bottom=0.5pt,before skip=2pt,after skip=2pt]{WHAT WAS DONE}#4\end{tcolorbox}}
 \makeatother
 
-% ---------- fast (one-chapter) build: links to other chapters open the full book ----------
-% .vscode/build.py compiles only the saved chapter and defines \fastbuild as that chapter's .aux.
-% The target of a link into another chapter is not in that PDF, so such links are sent to
-% build/book.pdf, the copy of the last full build, at the same place.
-\ifdefined\fastbuild
-\makeatletter
-\let\fb@file\@empty
-\def\fb@main{main.aux}
-\let\fb@input\@input
-\def\@input#1{\edef\fb@file{#1}\fb@input{#1}\let\fb@file\@empty}
-\def\fb@mark#1#2#3#4#5\@nil{%
-  \ifx\fb@file\@empty\else\ifx\fb@file\fb@main\else\ifx\fb@file\fastbuild\else
-    \ifx\relax#4\relax\else\global\@namedef{fb@ext@#4}{}\fi\fi\fi\fi}
-\AddToHook{begindocument/before}{\let\fb@newlabel\newlabel
-  \def\newlabel#1#2{\fb@newlabel{#1}{#2}\fb@mark#2{}{}{}{}{}\@nil}}
-\AtBeginDocument{\let\fb@hlink\hyper@link@
-  \def\hyper@link@[#1]#2#3#4{\ifcsname fb@ext@#3\endcsname\fb@hlink[#1]{book.pdf}{#3}{#4}\else\fb@hlink[#1]{#2}{#3}{#4}\fi}}
-\makeatother
-\fi
 
 
 % ---------- video timestamps ----------

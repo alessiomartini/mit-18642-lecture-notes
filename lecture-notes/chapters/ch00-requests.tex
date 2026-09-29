@@ -48,11 +48,11 @@ plain \texttt{\textbackslash note\{...\}} is always new, and only those are read
 \request{done}{Chapter 2, one-period model}{direi che ci sono due tipi di note che scrivo, quelle riferite al contenuto delle leture notes e quelle riferite alla struttura delle lecture notes. siccome quelle della struttura non penso siano strettamente legate a dove le scrivo, pensavo che sarebbe una buona idea raggrupparle in un punto specifico delle lecture notes senza lasciarle lungo il testo, cosi' la seconda lettura dovrebbe risoltare piu facile e scorrevole}
 {This chapter.}
 
-\request{open}{Chapter 2, one-period model}{non so se ha senso e se e' fattibile, ma ho pensato che potrebbe essere utile avere sempre una copia delle build di ogni capitolo e/o una dell'intero book. e quando sono in un capitolo e clicco il link a un altro semplicemente mi apre un altro pdf}
-{Every full build keeps a copy of the whole book as \file{build/book.pdf}. In the fast build that runs on
-save (only the saved chapter), a link to another chapter now points to the same place in
-\file{book.pdf}. To be tested: whether the PDF viewer inside VS Code opens a second PDF from a link
-(an external viewer such as SumatraPDF does).}
+\request{noted}{Chapter 2, one-period model}{non so se ha senso e se e' fattibile, ma ho pensato che potrebbe essere utile avere sempre una copia delle build di ogni capitolo e/o una dell'intero book. e quando sono in un capitolo e clicco il link a un altro semplicemente mi apre un altro pdf}
+{Tried and removed (29 Sep 2026): in the fast build that runs on save, links into other chapters were
+sent to a copy of the whole book, but the PDF viewer inside VS Code (LaTeX Workshop) cannot open a
+second PDF from a link. To follow links between chapters, run the recipe \emph{Whole book (latexmk)}
+and read that PDF.}
 
 \request{noted}{Chapter 1, the course at a glance}{Nowadays everyone uses Python, so I will use it to illustrate the maths.}
 {The numerical checks in these notes are done in Python; the course's own code is R and is quoted as
