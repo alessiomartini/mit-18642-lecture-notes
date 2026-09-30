@@ -109,8 +109,9 @@
 \AddToHook{para/after}{\note@flush}
 \tcbset{note queue/.code={\appto\kvtcb@afterbox{\note@flush}}}
 % every chapter/appendix file is one paracol environment: it starts right after the \chapter
-% line of the file (\begin{paracol}{2}) and is closed here
-\AddToHook{include/end}{\par\note@flush\end{paracol}}
+% line of the file (\begin{paracol}{2}) and is closed here (appendix A, only long tables, has none:
+% longtable does not work inside paracol)
+\AddToHook{include/end}{\par\note@flush\ifx\@currenvir\side@pcname\end{paracol}\fi}
 \newcommand{\flushside}{\par\note@flush}
 \makeatother
 \tcbset{thmbox/.style={enhanced,breakable,colback=#1!7,colframe=#1!7,borderline west={3pt}{0pt}{#1},
