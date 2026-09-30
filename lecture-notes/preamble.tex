@@ -200,9 +200,26 @@
   \IfValueTF{#1}{\begin{origexample}[#1]}{\begin{origexample}}#2\end{origexample}\end{tcolorbox}}}{}
 \NewDocumentEnvironment{sideexample}{o +b}{\IfValueTF{#1}{\begin{example}[#1]}{\begin{example}}#2\end{example}}{}
 \let\origproof\proof \let\endorigproof\endproof
-\RenewDocumentEnvironment{proof}{o +b}{\side@put{\begin{tcolorbox}[thmbox=thmcol,colback=thmcol!3,
+% A proof must start level with the top of its theorem: a theorem directly followed by \begin{proof}
+% is held back (\thm@pend) and typeset by the proof, right after the proof has been queued.
+\def\thm@pend{}
+\newtoks\thm@tk
+\newcommand{\thm@typeset}{{\edef\@currenvir{\side@pcname}\begin{tcolorbox}[thmbox=thmcol]\expandafter\IfValueTF\expandafter{\thm@opt}%
+  {\begin{orig\thm@cur}[\thm@opt]\the\thm@tk\end{orig\thm@cur}}{\begin{orig\thm@cur}\the\thm@tk\end{orig\thm@cur}}\end{tcolorbox}}}
+\newcommand{\thm@peek}[3]{\def\thm@a{proof}\def\thm@b{#3}%
+  \ifx\thm@a\thm@b\gdef\thm@pend{\thm@typeset}\else\thm@typeset\fi#1#2{#3}}
+\newcommand{\thm@look}[2]{\@ifnextchar\begin{\thm@peek{#1{#2}}}{\thm@typeset#1{#2}}}
+\RenewDocumentEnvironment{proof}{o +b}{\par{\edef\@currenvir{\side@pcname}\side@put{\begin{tcolorbox}[thmbox=thmcol,colback=thmcol!3,
   fontupper=\scriptsize,before skip=0pt,after skip=0pt]%
-  \IfValueTF{#1}{\begin{origproof}[#1]}{\begin{origproof}}#2\end{origproof}\end{tcolorbox}}}{}
+  \IfValueTF{#1}{\begin{origproof}[#1]}{\begin{origproof}}#2\end{origproof}\end{tcolorbox}}%
+  \thm@pend}\gdef\thm@pend{}}{}
+\@for\thm@n:=theorem,proposition,lemma,corollary\do{%
+  \RemoveFromHook{env/\thm@n/before}[tcolorbox]\RemoveFromHook{env/\thm@n/after}[tcolorbox]%
+  \expandafter\let\csname orig\thm@n\expandafter\endcsname\csname\thm@n\endcsname
+  \expandafter\let\csname endorig\thm@n\expandafter\endcsname\csname end\thm@n\endcsname
+  \expandafter\edef\csname thm@def@\thm@n\endcsname{\noexpand\RenewDocumentEnvironment{\thm@n}{o +b}%
+    {\noexpand\global\noexpand\thm@tk{##2}\noexpand\gdef\noexpand\thm@cur{\thm@n}\noexpand\gdef\noexpand\thm@opt{##1}\noexpand\thm@look}{}}%
+  \csname thm@def@\thm@n\endcsname}
 \makeatother
 % History: a fact from the history of finance/mathematics, framed like a classical
 % temple front: a dentilled entablature (the title) on two Ionic columns (not breakable)
