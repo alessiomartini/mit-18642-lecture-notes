@@ -149,6 +149,7 @@
   },
 
   // --- Editor experience ---
+  "editor.lineNumbers": "off",
   "editor.wordWrap": "on",
   "editor.renderWhitespace": "boundary",
   "editor.tabSize": 2,
@@ -159,7 +160,11 @@
 
   // --- Explorer: hide build artifacts ---
   "files.exclude": {
-    "**/build": true,
+    // build/ stays visible for book.pdf (whole book) and main.pdf; only technical files are hidden
+    "**/build/good": true,
+    "**/build/chapters": true,
+    "**/build/appendices": true,
+    "**/build/.build.lock": true,
     "**/.history": true,
     "**/*.aux": true,
     "**/*.bbl": true,
