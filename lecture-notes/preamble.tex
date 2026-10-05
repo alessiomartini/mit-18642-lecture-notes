@@ -170,11 +170,20 @@
 \makeatletter
 \tcbset{sidebox/.style={enhanced,colback=#1!25,colframe=#1,boxrule=0.5pt,arc=1pt,
     left=3pt,right=3pt,top=2pt,bottom=2pt,before skip=0pt,after skip=0pt,
-    fontupper=\tiny\sffamily\raggedright,fonttitle=\tiny\sffamily\bfseries,
+    fontupper=\tiny\sffamily\mdseries\upshape\raggedright,fonttitle=\tiny\sffamily\bfseries,
     before upper={\note@inboxtrue}}}
 \newcommand{\side@tag}[2]{\colorbox{#1}{\textcolor{white}{\bfseries\tiny #2}}\par}
-\NewDocumentCommand{\note}{s t+ +m}{\side@put{\begin{tcolorbox}[sidebox=notecol]%
-  \IfBooleanT{#1}{\side@tag{okcol}{DONE}}\IfBooleanT{#2}{\side@tag{defcol}{SEEN}}#3\end{tcolorbox}}}
+% Notes and answered notes are numbered per chapter like footnotes: a small dark-yellow number in
+% the text marks the point where the note was written, the same number starts its box.
+\newcounter{sidenote}[chapter]
+\globalcounter{sidenote}
+\newcommand{\side@numput}[1]{\stepcounter{sidenote}%
+  \ifhmode\ifdim\lastkern=0.01pt\textsuperscript{\sffamily\bfseries\color{anscol!75!black},}\fi
+    \textsuperscript{\sffamily\bfseries\color{anscol!75!black}\thesidenote}\kern0.01pt\fi
+  \begingroup\edef\x{\endgroup\noexpand\side@put{\def\noexpand\side@num{\thesidenote}\unexpanded{#1}}}\x}
+\newcommand{\side@numtag}{{\bfseries\color{anscol!75!black}\side@num}\enspace}
+\NewDocumentCommand{\note}{s t+ +m}{\side@numput{\begin{tcolorbox}[sidebox=notecol]%
+  \IfBooleanT{#1}{\side@tag{okcol}{DONE}}\IfBooleanT{#2}{\side@tag{defcol}{SEEN}}\side@numtag#3\end{tcolorbox}}}
 \newcommand{\feedback}[1]{\side@put{\begin{tcolorbox}[sidebox=exercol]\side@tag{exercol}{FEEDBACK}#1\end{tcolorbox}}}
 \newcounter{answer}[chapter]
 \renewcommand{\theanswer}{\thechapter.\arabic{answer}}
@@ -183,12 +192,12 @@
 \newcommand{\answerpart}[1]{\refstepcounter{answer}%
   \tcbsubtitle[colback=anscol,colframe=anscol,coltext=black,fontupper=\tiny\sffamily\bfseries,
     left=3pt,top=0.5pt,bottom=0.5pt,before skip=2pt,after skip=2pt]{ANSWER \theanswer\ifx&#1&\else: #1\fi}}
-\NewDocumentEnvironment{answer}{m O{} +b}{\side@put{\begin{tcolorbox}[sidebox=notecol,colback=notecol!12]%
-  #1\answerpart{#2}#3\end{tcolorbox}}}{}
+\NewDocumentEnvironment{answer}{m O{} +b}{\side@numput{\begin{tcolorbox}[sidebox=notecol,colback=notecol!12]%
+  \side@numtag#1\answerpart{#2}#3\end{tcolorbox}}}{}
 % Content boxes of the right column (examples, proofs, course notes, history, asides): \scriptsize,
 % one step above the \tiny of the reader's notes
 \tcbset{sidecontent/.style={sidebox=#1,colback=#1!6,breakable,
-    fontupper=\scriptsize\raggedright,fonttitle=\scriptsize\sffamily\bfseries,coltitle=white,colbacktitle=#1}}
+    fontupper=\scriptsize\mdseries\upshape\raggedright,fonttitle=\scriptsize\sffamily\bfseries,coltitle=white,colbacktitle=#1}}
 \NewDocumentEnvironment{aside}{O{} +b}{\side@put{\begin{tcolorbox}[sidecontent=histcol,
   title={\boxtitle{Aside}{#1}}]#2\end{tcolorbox}}}{}
 \NewDocumentEnvironment{coursenote}{O{} +b}{\side@put{\begin{tcolorbox}[sidecontent=srccol,
@@ -270,8 +279,45 @@
 % ---------- video timestamps ----------
 %  \ts{24}{12}{23:10}  -> lecture 12 of the 2024 course, at 23:10
 %  \ts{13}{18}{5:02}   -> lecture 18 of the 2013 course
+%  Each tag is a link to the lecture's YouTube video at that second (IDs from the OCW course
+%  data, 18.642-fall-2024/ and 18.s096-fall-2013/resources/*/data.json); a lecture without a
+%  video (or a non-numeric time) prints the tag without link.
+\ExplSyntaxOn
+\cs_new_protected:Npn \__ts_def:w #1 = #2 \q_stop { \tl_const:cx { c__ts_#1_tl } { \tl_to_str:n {#2} } }
+\clist_map_inline:nn
+  {
+    24@1-I=b8u2CQLQBVU, 24@1-II=z4p87TPCnQc, 24@1-III=NZ3Mva95UsQ, 24@2=0uimNNIuUyY,
+    24@4=mtXTs2U1uMA, 24@5=wMGEKMHsOKE, 24@6=yIn8Y_CSwPk, 24@7=RvXwSoGDYvg, 24@8=cMF_c2WNPyU,
+    24@9=CechARGinR4, 24@10=VbtXo62ROC4, 24@11=RruxdEjIvv0, 24@12=qlytPllimpQ,
+    24@13=o7OnkMdmjLg, 24@14=VM29JyI1sio, 24@18=_e2nDnV7FQs, 24@19=zapp8smQKhg,
+    24@20=8XrYjnDHmE4, 24@21=2UCHztlWuZg, 24@23=kTsieIl_YBA, 24@24=5cruqmIF6l0,
+    24@25=H4V29wkHYb4,
+    13@1=wvXDB9dMdEo, 13@2=9YtmGy-wfE4, 13@3=f9XFM8YLccg, 13@5=TuTmC8aOQJE, 13@6=l1kLCrxL9Hk,
+    13@7=92WaNz9mPeY, 13@8=uBeM1FUk4Ps, 13@9=cDlbEQz1PQk, 13@10=aga-Tak3c3M, 13@11=_IFUfFuyQlU,
+    13@12=9G1IDAqrWkg, 13@13=nmehlS-8b3Y, 13@14=ywl3pq6yc54, 13@15=ro07evEWbCE,
+    13@16=8TJQhQ2GZ0Y, 13@17=PPl-7_RL0Ko, 13@18=Z5yRMMVUC5w, 13@19=TnS8kI_KuJc,
+    13@20=eG_aRPy1KVE, 13@21=qdbkvD4N-us, 13@23=55OXxe_ix2o, 13@24=D2Jn1VrqjWI,
+    13@25=vc5dotshPZc, 13@26=bKmcRfE3I6E
+  }
+  { \__ts_def:w #1 \q_stop }
+\int_new:N \l__ts_int
+\seq_new:N \l__ts_seq
+\cs_new_protected:Npn \tslink #1#2#3#4
+  {
+    \tl_if_exist:cTF { c__ts_#1@#2_tl }
+      { \regex_match:nnTF { \A\d+(:\d+)*\Z } {#3} { \__ts_href:nnnn {#1} {#2} {#3} {#4} } {#4} }
+      {#4}
+  }
+\cs_new_protected:Npn \__ts_href:nnnn #1#2#3#4
+  {
+    \int_zero:N \l__ts_int
+    \exp_args:NNV \seq_set_split:Nnn \l__ts_seq \c_colon_str {#3}
+    \seq_map_inline:Nn \l__ts_seq { \int_set:Nn \l__ts_int { 60*\l__ts_int + ##1 } }
+    \exp_args:Ne \href { \tl_to_str:n { https://youtu.be/ } \tl_use:c { c__ts_#1@#2_tl } \tl_to_str:n { ?t= } \int_use:N \l__ts_int } {#4}
+  }
+\ExplSyntaxOff
 \makeatletter % consecutive tags may break between them, but never before punctuation
-\DeclareRobustCommand{\ts}[3]{\mbox{\footnotesize\sffamily\color{srccol}[$\blacktriangleright$\,20#1\,L#2\,@\,#3]}\@ifnextchar\ts{\allowbreak}{}}
+\DeclareRobustCommand{\ts}[3]{\mbox{\footnotesize\sffamily\color{srccol}\tslink{#1}{#2}{#3}{\color{srccol}[$\blacktriangleright$\,20#1\,L#2\,@\,#3]}}\@ifnextchar\ts{\allowbreak}{}}
 \makeatother
 
 % ---------- listings (short R snippets) ----------
