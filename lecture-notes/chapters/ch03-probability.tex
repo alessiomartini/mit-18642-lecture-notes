@@ -50,10 +50,15 @@ moment-generating functions, conditional expectation, Stein's lemma and the CAPM
 % ------------------------------------------------------------------
 \section{Random variables and distribution functions}\label{ch03:sec-rv}
 
-Financial random variables come in three kinds \ts{24}{4}{28:47}:
+Financial random variables come in three kinds \ts{24}{4}{28:47}:\note{voglio che le note appaiano a lato di dove le scrivo, non alla fine del paragrafo}
 \begin{itemize}
   \item \emph{discrete}: default (1) or no default (0) of a counterparty, the FOMC decision on the Fed
-        funds rate, the side (buy/sell) and the share size of the next market order in AAPL;
+        funds rate, the side (buy/sell) and the share size of the next market order in AAPL;\begin{answer}{what is FOMC?}[FOMC]
+The \emph{Federal Open Market Committee}: the body of the US Federal Reserve that sets the target for the
+Fed funds rate (the overnight rate between banks). It meets eight times a year; each decision (cut, hold,
+hike, usually by 0.25\%) is a discrete random variable for markets. ``Open market'' because the Fed
+implements the decision by buying and selling bonds in the open market.
+\end{answer}
   \item \emph{continuous}: the value of an asset, the waiting time until the next market order
         \ts{24}{4}{29:49};
   \item \emph{mixed}: the value of a stock in six months, which is continuous except for an atom at
@@ -87,7 +92,7 @@ pmf/pdf factorises, $f_{X,Y}(x,y)=f_X(x)f_Y(y)$ \ts{13}{3}{6:16}. For $n$ variab
 \ts{13}{3}{7:17}: $X_1,\dots,X_n$ are \emph{mutually independent} if
 $\Prob(\bigcap_i\{X_i\in A_i\})=\prod_i\Prob(X_i\in A_i)$ for all $A_1,\dots,A_n$, and \emph{pairwise
 independent} if every pair is independent. Mutual implies pairwise, not conversely
-(\cref{ch03:ex-pairwise}). ``Independent'' always means mutually independent.
+(\cref{ch03:ex-pairwise}). \note+{interesting new subtelty}``Independent'' always means mutually independent.\note{avrebbe senso che nella fase di studio (quando leggo, faccio gli esercizio, scrivo annotazioni) il pdf non sia diviso in pagine ma sia una unica pagina lunghissima? e' possibile? me lo consigli?}
 
 \begin{proposition}[Probability integral transform]\label{ch03:prop-pit}
 Let $X$ have a continuous CDF $F$. Then $U=F(X)$ is uniform on $(0,1)$ \ts{24}{4}{32:57}. Conversely, if
@@ -107,11 +112,17 @@ $\Prob(F^{-1}(U)\le x)=\Prob(U\le F(x))=F(x)$.
   \item \emph{Model checking} \ts{24}{4}{33:57}: if a risk model predicts that tomorrow's return has CDF
         $F_t$, the numbers $u_t=F_t(x_t)$ computed from realised returns should look like an i.i.d.\
         uniform sample. A histogram of the $u_t$ piling up near $0$ and $1$ reveals tails that are too
-        thin: this is how value-at-risk and density forecasts are back-tested (\cref{ch:var}).
+        thin: this is how value-at-risk and density forecasts are back-tested (\cref{ch:var}).\note+{cool way to spot the heavy tails}
   \item \emph{Simulation}: $F^{-1}(U)$ turns uniform random numbers into draws from any distribution
         (inverse-transform sampling).
   \item \emph{Copulas} (not discussed in class): applying $F_i$ to each coordinate of a random vector
-        separates the marginal laws from the dependence structure.
+        separates the marginal laws from the dependence structure.\begin{answer}{non credo di aver capito quest'ultima}[Copulas]
+Take two returns $(X,Y)$ and set $U=F_X(X)$, $V=F_Y(Y)$. By \cref{ch03:prop-pit} each of $U,V$ is uniform:
+all the information about the \emph{marginal} laws (fat tails, skew) has been removed. What is left, the joint
+law of $(U,V)$ on the unit square, is the pure \emph{dependence}: the \emph{copula} (Latin, ``link''). Sklar's
+theorem: $F_{X,Y}(x,y)=C(F_X(x),F_Y(y))$. So one can model each asset's tails and their co-movement
+separately, e.g.\ fat-tailed marginals glued with a Gaussian copula (the model blamed for CDO losses in 2008).
+\end{answer}
 \end{itemize}
 \end{finance}
 
@@ -155,7 +166,7 @@ annualised). Equity-index returns are typically negatively skewed (crashes are s
 gradual) and daily returns of almost all assets are strongly leptokurtic. Both facts matter for risk:
 a model matched only to mean and variance underestimates the probability of large losses
 (\cref{ch03:sec-heavy}), and they are visible in option markets as the volatility smile (\cref{ch:volatility}).
-\end{finance}
+\end{finance}\note{can you include some graphs of: a typical probability distribution of an equity index, of a daily return of an asset. what is the valatility smile?}
 
 % ------------------------------------------------------------------
 \section{Normal and lognormal distributions}\label{ch03:sec-normal}
@@ -166,12 +177,16 @@ $X\sim N(\mu,\sigma^2)$, $\mu\in\R$, $\sigma>0$, if
 \[
   f(x)=\frac{1}{\sigma\sqrt{2\pi}}\exp\Bigl(-\frac{(x-\mu)^2}{2\sigma^2}\Bigr),\qquad x\in\R .
 \]
-$\phi$ and $\Phi$ denote the density and CDF of the standard normal $N(0,1)$; $\Phi(-x)=1-\Phi(x)$.
+$\phi$ and $\Phi$ denote the density and CDF of the standard normal $N(0,1)$; $\Phi(-x)=1-\Phi(x)$.\begin{answer}{perche' non restiamo con una notazione unica? $\phi$ = $f_normal$ e $\Phi$ = $F_normal$}[Why $\phi,\Phi$]
+Because $\phi$ and $\Phi$ are universal: every paper and the Black--Scholes formula use them, so you must
+recognise them. They are also a special case, not a different notation: for $Z\sim N(0,1)$, $f_Z=\phi$
+and $F_Z=\Phi$; for $X\sim N(\mu,\sigma^2)$, $F_X(x)=\Phi((x-\mu)/\sigma)$.
+\end{answer}
 \end{definition}
 The density is symmetric about $\mu$, maximal at $\mu$, with inflection points at $\mu\pm\sigma$
 \ts{24}{4}{39:29}; the probabilities of lying within $1,2,3$ standard deviations are
 $0.6827$, $0.9545$, $0.9973$ \ts{24}{4}{40:31}. That $f$ integrates to $1$ is the Gaussian integral
-(2013 PS2 B-2, \cref{ch03:ex-b2}).
+(2013 PS2 B-2, \cref{ch03:ex-b2}).\note{insert a graph of the distribution. in general, whenever it can be useful plot graphs and functions.}
 
 \subsection{Why prices are not normal}
 Suppose daily price changes $P_n-P_{n-1}$ were i.i.d.\ normal \ts{13}{3}{10:28}. Two things go wrong
@@ -227,7 +242,7 @@ $Y$ is lognormal$(\mu,\sigma^2)$ if $\ln Y\sim N(\mu,\sigma^2)$, i.e.\ $Y=e^X$ w
   \item quantiles map to quantiles: $q_p(Y)=e^{\mu+\sigma z_p}$ with $z_p=\Phi^{-1}(p)$; the median is $e^\mu$;
   \item the mode is $e^{\mu-\sigma^2}$;
   \item $\E[Y^k]=e^{k\mu+k^2\sigma^2/2}$ for every real $k$ (\cref{ch03:sec-mgf}); in particular
-        $\E Y=e^{\mu+\sigma^2/2}$, so mode $<$ median $<$ mean: the law is skewed to the right;
+        $\E [Y]=e^{\mu+\sigma^2/2}$, so mode $<$ median $<$ mean: the law is skewed to the right;
   \item products and powers: if $Y_1,Y_2$ are independent lognormal, $Y_1Y_2$ and $Y_1^c$ are lognormal.
 \end{itemize}
 The parameters $\mu,\sigma$ are the mean and standard deviation of $\ln Y$, \emph{not} of $Y$
@@ -276,13 +291,17 @@ $\mu_d$ and variance $\sigma_d^2$, the $T$-day log-return has mean $T\mu_d$ and 
 $\sigma_d\sqrt T$. This is why volatilities are quoted annualised and scaled by $\sqrt t$ (as in 2024 PS2
 Problem~2(c), where $\sigma=\sqrt t\,\ln1.3$), and why the Black--Scholes model takes $S_T$ lognormal
 (\cref{ch:bs}). For small moves the simple return $e^{r}-1\approx r$.
-\end{finance}
+\end{finance}\begin{answer}{vorrei che la notazione fosse consistente per tutto il libro. S e' il prezzo della stock, giusto? cos'e' P allora? B e' il prezzo del bond?}[$S$, $P$, $B$]
+Yes: $S$ = stock price, $B$ = bond (risk-free asset) price. $P$ is a \emph{generic} asset price, any asset;
+above it comes from the 2013 lecture, which uses $P_n$ for the price on day $n$ of an unspecified asset
+(as $P^j$ in \cref{def:onepmodel}). Here $P_n$ and $S_n$ are the same thing.
+\end{answer}
 
 % ------------------------------------------------------------------
 \section{Expected option payoffs}\label{ch03:sec-call}
 
 A European call gives the right to buy the asset at time $T$ at the strike $K$; if $X$ is the price at $T$,
-the payoff is the ``hockey stick'' $C=(X-K)^+=\max(0,X-K)$ \ts{24}{4}{50:01}.
+the payoff is the ``hockey stick'' $C=(X-K)^+=\max(0,X-K)$ \ts{24}{4}{50:01}.\note{plot it}
 
 \begin{theorem}[Expected call payoff]\label{ch03:thm-call}
 Let $X$ have density $f$, CDF $F$ and $\E|X|<\infty$. For every constant $K$,
@@ -306,7 +325,13 @@ This is the familiar fact that for a non-negative variable $\E W=\int_0^\infty\P
 $C(K)=\E[(X-K)^+]$ satisfies $C'(K)=-\Prob(X>K)$ and $C''(K)=f(K)$.
 \end{corollary}
 So call prices across strikes determine the distribution of $X$ (under the pricing measure): this is
-the Breeden--Litzenberger formula behind \cref{ch:duality,ch:ross}.
+the Breeden--Litzenberger formula behind \cref{ch:duality,ch:ross}.\begin{answer}{questa parte non l'ho capita}[Breeden--Litzenberger]
+Read $C(K)$ as the (undiscounted) price of a call, for every strike $K$. Differentiate twice in $K$: the
+corollary gives $C''(K)=f(K)$. So if the market quotes calls at many strikes, the curvature of the price
+curve \emph{is} the density of $S_T$ (under $Q$, \cref{ans:pricingQ}). Intuition: a ``butterfly''
+(buy calls at $K-h$ and $K+h$, sell two at $K$) pays a small triangle around $K$, i.e.\ roughly
+$h$ dollars if $S_T\approx K$; its price $\approx h^2C''(K)$ is the price of ``$S_T$ near $K$''.
+\end{answer}\note{stai attento che teoremi e dimostrazioni non sono perfettamente allineati}
 
 \begin{corollary}[Normal and lognormal payoffs, slide 18 of \file{lec04_1}]\label{ch03:cor-normal}
 \leavevmode
@@ -321,7 +346,9 @@ the Breeden--Litzenberger formula behind \cref{ch:duality,ch:ross}.
       \]
       \ts{24}{4}{53:14}.
 \end{enumerate}
-\end{corollary}
+\end{corollary}\begin{answer}{non c'e' un errore nell'ultima uguaglianza di (i)?}[No error]
+It is correct: $\phi(d)=e^{-d^2/2}/\sqrt{2\pi}$ with $d^2=(\mu-K)^2/\sigma^2$, and $(\mu-K)^2=(K-\mu)^2$.
+\end{answer}
 \begin{proof}
 (i) Write $X=\mu+\sigma Z$: $(X-K)^+=(\mu-K+\sigma Z)\ind\{Z>-d\}$. Then $\Prob(Z>-d)=\Phi(d)$ and
 $\E[Z\ind\{Z>a\}]=\int_a^\infty z\phi(z)\dd z=\phi(a)$, with $\phi(-d)=\phi(d)$.
@@ -331,13 +358,22 @@ $\E[Z\ind\{Z>a\}]=\int_a^\infty z\phi(z)\dd z=\phi(a)$, with $\phi(-d)=\phi(d)$.
 \end{proof}
 
 \begin{finance}[From expected payoffs to option prices]
-A price is a \emph{discounted} expectation under a \emph{pricing} measure (\cref{thm:ftap}):
+A price is a \emph{discounted} expectation under a \emph{pricing} measure (\cref{thm:ftap}):\begin{answer}{cos'e' una pricing measure Q?}[Pricing measure]\label{ans:pricingQ}
+The weights $q_i=\psi_i/\sum\psi$ of \cref{def:onepmodel}: positive numbers summing to 1, so they
+\emph{look} like probabilities, chosen so that every price is a discounted average of payoffs,
+$P_0=\beta\E_Q[P_T]$. They are not the real chances: they also include risk aversion (bad states get more
+weight). Also called the \emph{risk-neutral} measure, see \cref{ch:bs}.
+\end{answer}
 $C_0=e^{-rT}\E_Q[(S_T-K)^+]$. In the Black--Scholes model, under $Q$, $\ln S_T\sim N(\ln S_0+(r-\sigma^2/2)T,\
 \sigma^2T)$; inserting these parameters in \cref{ch03:cor-normal}(ii) gives $e^{\mu+\sigma^2T/2}=S_0e^{rT}$, $d=d_2$,
 $d+\sigma\sqrt T=d_1$ and hence $C_0=S_0\Phi(d_1)-Ke^{-rT}\Phi(d_2)$ (\cref{ch:bs}). Part~(1) is the
 \emph{Bachelier} model (1900), still used for interest rates and spreads, which can be negative. At the
 money ($K=\mu$) it gives $\sigma/\sqrt{2\pi}\approx0.4\,\sigma$: the traders' rule of thumb ``an at-the-money
-option is worth about 0.4 standard deviations of the underlying at expiry'' (not discussed in class).
+option is worth about 0.4 standard deviations of the underlying at expiry'' (not discussed in class).\begin{answer}{can you give a brief example?}[Rule of thumb]
+A stock at \$100 with volatility 20\%/year; a 3-month at-the-money option. The standard deviation of $S_T$
+is about $100\cdot0.2\cdot\sqrt{0.25}=\$10$, so the option is worth about $0.4\cdot10=\$4$. Black--Scholes
+($r=0$) gives \$3.99.
+\end{answer}
 \end{finance}
 
 % ------------------------------------------------------------------
@@ -349,7 +385,11 @@ It always satisfies $M_X(0)=1$, and the set where it is finite is an interval co
 convexity of $t\mapsto e^{tx}$). We say that $X$ \emph{has an MGF} if $M_X$ is finite on some
 $(-\delta,\delta)$. The \emph{characteristic function} $\varphi_X(t)=\E[e^{itX}]=\E[\cos tX]+i\,\E[\sin tX]$
 is finite for every $X$ and $t$, since $|e^{itX}|=1$ \ts{24}{4}{56:28}.
-\end{definition}
+\end{definition}\begin{answer}{they are related by analitical continuation. posso dire che una e' la laplace transform e l'altra la fourier transform?}[Yes]
+Yes: $M_X(t)$ is the (two-sided) Laplace transform of the density at $-t$, $\varphi_X(t)$ its Fourier
+transform (up to the sign convention), and $\varphi_X(t)=M_X(it)$ when $M_X$ is finite near 0. As in
+physics, the Fourier version always exists, the Laplace one only with enough decay.
+\end{answer}
 
 \begin{proposition}[Moments from the MGF]
 If $M_X$ is finite on $(-\delta,\delta)$, all moments are finite, $\E[X^k]=M_X^{(k)}(0)$ and
@@ -360,7 +400,7 @@ For $|s|<\delta$, $e^{s|x|}\le e^{sx}+e^{-sx}$, so $\E e^{s|X|}<\infty$; this do
 $|t|\le s$, so expectation and series (and derivatives) can be exchanged.
 \end{proof}
 
-\paragraph{The MGF need not exist} \ts{24}{4}{55:21}. For the Cauchy density $f(x)=1/(\pi(1+x^2))$, $\E|X|=\infty$
+\paragraph{The MGF need not exist} \ts{24}{4}{55:21}. For the Cauchy density $f(x)=1/(\pi(1+x^2))$,\note{plot it} $\E|X|=\infty$
 and $M_X(t)=\infty$ for every $t\ne0$; its characteristic function is $e^{-|t|}$. The \emph{lognormal} law has
 all moments but no MGF \ts{13}{3}{37:09}: for $t>0$ and every $k$, $e^{tY}\ge(tY)^k/k!$, hence
 \[
@@ -391,7 +431,13 @@ assumption. (Not proved in class; see Durrett, \emph{Probability: Theory and Exa
 Slide~19 of \file{lec04_1} and Theorem~2.2 of \file{lecnote3} assume equality or convergence ``for all $t$''.
 The neighbourhood version above is the standard one and is the one needed in practice: the MGF of a
 $\chi^2$ variable, for instance, is finite only for $t<1/2$ (\cref{ch03:sec-chisq}).
-\end{coursenote}
+\end{coursenote}\begin{answer}{per ovviare al fatto che alcune distribuzioni non hanno i momenti ben definiti, perche' non aggiungiamo un weight esponenziale all'integrale cosi' abbiamo quantita' finite per caratterizzare le nostre distribuzioni heavy-tailed?}[It is done]
+Good idea, and it is used. A damping $e^{-a|x|}$ makes every ``moment'' finite, but the numbers then
+depend on $a$ and lose their meaning (mean, variance). The bounded weight $e^{itx}$ is the standard
+answer: the characteristic function always exists and determines the law. Practitioners also use
+quantile-based measures (median, interquartile range) and the tail index $\alpha$ of $\Prob(|X|>x)\sim x^{-\alpha}$.
+In option pricing, damped transforms $e^{-ax}$ are the Carr--Madan (1999) method of pricing options by FFT.
+\end{answer}
 
 \begin{remark}[Moments do not determine a distribution]
 If two variables have the same moments of all orders, they need not have the same law: the hole in the
@@ -404,7 +450,13 @@ With $y=e^u$, $\phi(u)e^{ku}=e^{k^2/2}\phi(u-k)$ and $v=u-k$,
   \qquad(k=0,1,2,\dots),
 \]
 since $\sin$ is odd. So every $f_a$ is a density with exactly the lognormal moments. (Not discussed in class.)
-\end{remark}
+\end{remark}\begin{answer}{pero' non c'e' il problema che la pdf non e' definita positiva? inoltre, i momenti non si possono ricavare dalla characteristic function che esiste sempre?}[Positivity]
+No: $|a\sin(\cdot)|\le1$, so $1+a\sin(2\pi\ln y)\ge0$ and $f_a\ge0$; it integrates to 1 (the $k=0$ case).
+\answerpart{Moments from $\varphi$?}
+Yes, $\E[X^k]=i^{-k}\varphi^{(k)}(0)$ when the moments exist. But the converse fails: the moments give only
+the Taylor coefficients of $\varphi$ at 0, and for the lognormal that Taylor series has radius 0, so it
+does not reconstruct $\varphi$. Different laws, different $\varphi$, same derivatives at 0.
+\end{answer}
 
 \paragraph{The normal MGF.} For $Z\sim N(0,1)$, complete the square, $tx-\tfrac12x^2=-\tfrac12(x-t)^2+\tfrac12t^2$
 \ts{24}{4}{58:34}\ts{24}{4}{1:00:40}:
@@ -424,7 +476,7 @@ Consequences:
         is $N(\sum\mu_i,\sum\sigma_i^2)$, by \cref{ch03:thm-mgf}(i).
   \item \emph{Normal moments}: $e^{t^2/2}=\sum_k t^{2k}/(2^kk!)$ gives $\E Z^{2k}=(2k)!/(2^kk!)$, e.g.\ $\E Z^4=3$:
         the normal kurtosis is $3$.
-\end{itemize}
+\end{itemize}\note{quando scrivi i valori di aspettazione usa sempre le parentesi quadre}
 
 \begin{intuition}[Partition function and cumulants (not discussed in class)]
 $M_X(t)$ is a Laplace transform, like a partition function $Z(\beta)$, and $K_X(t)=\ln M_X(t)$ plays the role of
@@ -433,7 +485,17 @@ a free energy. Its Taylor coefficients are the \emph{cumulants}: $K_X(t)=\mu t+\
 cumulants \emph{add}. The Gaussian is the ``free theory'': $K$ is exactly quadratic. For the standardised sum
 $S_n/\sqrt n$ of i.i.d.\ variables the $k$-th cumulant is $n\kappa_k/n^{k/2}\to0$ for $k\ge3$: all non-Gaussian
 features wash out, which is the central limit theorem in one line (\cref{ch03:thm-clt}).
-\end{intuition}
+\end{intuition}\begin{answer}{beautiful box. i want to know more.}[More on cumulants]
+Three directions:
+\begin{itemize}
+  \item \emph{Large deviations} (Cram\'er): $\Prob(S_n/n\approx x)\approx e^{-nI(x)}$ with $I$ the Legendre
+        transform of $K$, exactly free energy $\leftrightarrow$ entropy.
+  \item \emph{Edgeworth expansion}: corrections to the CLT in powers of $\kappa_3/\sqrt n$, $\kappa_4/n$.
+  \item \emph{Exponential tilting} $f_\theta(x)=e^{\theta x-K(\theta)}f(x)$ (the canonical ensemble): the Esscher
+        transform, a way to build a pricing measure.
+\end{itemize}
+Reference: Feller, vol.~2, ch.~XVI; Dembo--Zeitouni, \emph{Large Deviations}.
+\end{answer}
 
 \paragraph{Exponential families (2013).} A family of pdfs or pmfs indexed by a parameter vector $\theta$ is an
 \emph{exponential family} if \ts{13}{3}{26:24}
@@ -474,7 +536,7 @@ Cauchy & $1/(\pi(1+x^2))$ & a law without mean, variance or MGF\\
 \bottomrule
 \end{tabularx}
 \caption{Distributions used in the course.}\label{ch03:tab-laws}
-\end{table}
+\end{table}\note{plot all the mentioned distributions}
 
 % ------------------------------------------------------------------
 \section{Several random variables}\label{ch03:sec-multi}
