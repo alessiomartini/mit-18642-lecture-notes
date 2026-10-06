@@ -69,6 +69,10 @@ Warning against extrapolating the normal law, Abbott says that a three-standard-
 ``Step 2b: graph your data'' \ts{13}{7}{29:37}. Everybody's data contain errors, missing values, stale quotes, and Abbott's rule is that one may be fired for incompetence but not for using someone else's bad data. Sources named on the slides are the Federal Reserve (the H.15 series for yields and H.10 for exchange rates, free and going back decades), Bloomberg (the cleanest in his experience, precisely because every user reports errors) and commercial vendors (slide~46) \ts{13}{7}{51:31}\ts{13}{7}{52:37}. The same applies to software: he tells the story of a programmer who claimed that a matrix square root multiplied by itself reproduced the covariance matrix ``to $16$ decimals'', when the code was in fact passing a float to a fixed-point variable \ts{13}{7}{43:13}. The other 2013 case studies (\cref{ch:regression,ch:timeseries}) do the same first step in R.
 \end{finance}
 
+\begin{exercise}[not from the course: estimation error of a quantile]
+Using \cref{ch19:prop-quantile}, find the number of days of history needed to estimate the $99\%$ VaR of a normal loss with a relative standard error of $5\%$; and the same for the $99.9\%$ VaR. Repeat for a Laplace loss (density $\frac1{2b}e^{-|x|/b}$, quantile $b\ln\frac1{2(1-\beta)}$). (\emph{Answer for the first part:} about $1\,000$ days.)
+\end{exercise}
+
 % ==================================================================
 \section{Bonds: from yield changes to price changes}\label{ch19:sec-fi}
 Equities, currencies and commodities are quoted in prices, and the previous section applies directly. The time series available for bonds are \emph{yields} (slide~16) \ts{13}{7}{31:42}. To turn a yield move into a money move one needs the slope of the price--yield curve at the current yield: a ``poor man's Jacobian'', in Abbott's words, valid for small moves because the curve is non-linear and one uses its tangent \ts{13}{7}{31:42}\ts{13}{7}{32:44}.
@@ -104,6 +108,10 @@ Duration is the (present-value weighted) average time of the cash flows, measure
 \end{finance}
 
 \paragraph{Credit spread.} For a corporate or asset-backed bond the yield is a risk-free rate plus a credit spread (slide~24: $6\%=4.5\%+1.5\%$ in Abbott's example). One separates the interest-rate PV01 from the spread PV01 (CSPV01) and treats the two as different risk factors with their own volatilities and correlations; slide~23 states that the two coincide when the recovery rate is zero and are otherwise different, and lists calculated spreads, CDS and asset-swap spreads as sources \ts{13}{7}{36:52}\ts{13}{7}{37:56}. At spreads of $1\,000$--$1\,500$ bp the spread is mainly a default probability, and models of default, loss given default and recovery take over from the smooth sensitivity used here.
+
+\begin{exercise}[not from the course: PV01]
+A bond has a semi-annual coupon of $3\%$, five years to maturity, and yield $3\%$. Compute its price at yields $3\%$ and $3.01\%$, the PV01 per $100$ face value, the modified and Macaulay durations, and the one-day $99\%$ VaR of a position of face value $10^7$ if the daily volatility of the relative changes of the yield is $1.5\%$. Compare $\mathrm{PV01}$ with $-D_{\mathrm{mod}}\,P\cdot10^{-4}$.
+\end{exercise}
 
 % ==================================================================
 \section{The variance--covariance method}\label{ch19:sec-vc}
@@ -144,6 +152,15 @@ The daily volatilities are $0.61\%$, $1.79\%$ and $1.51\%$, and the correlations
 Nearly every mistake in this method is a sign or a unit \ts{13}{7}{43:13}\ts{13}{7}{58:51}: ``like physics, only worse, because if you get the units wrong in physics you blow up, and here it just costs money''. A short gold position is entered as a negative number. The exchange rate dollar/yen is quoted in yen per dollar (say $95$): a dollar investor who owns yen loses when the quote rises to $100$, so the position enters as $-100$, whereas if the covariance matrix measures yen in dollars per yen ($0.0105$) the same position is $+100$ \ts{13}{7}{48:22}\ts{13}{7}{49:25}. For a bond, similarly, the PV01 of a long position is negative because the yield is the factor \ts{13}{7}{49:25}. Positions must all be in the same currency and in the same scale (units or millions), and the covariance matrix must use the same convention for returns (percent or log changes). Volatilities and correlations must be for the same differencing interval as the VaR horizon.
 \end{finance}
 
+\begin{exercise}[not from the course: two assets]
+Two positions with daily volatilities $\sigma_1=1\%$, $\sigma_2=2\%$ (P\&L per unit of position value), correlation $\rho$, and values $V_1=100$, $V_2=50$ (long both).
+\begin{enumerate}[(a)]
+  \item Write the $99\%$ VaR as a function of $\rho$ using \cref{ch19:prop-vc}; for which $\rho$ is it equal to the sum of the stand-alone VaRs?
+  \item Find the position $V_2$ (possibly negative) that minimises the VaR for given $V_1$ and $\rho$, and show that it is the minimum-variance hedge $V_2=-\rho\,(\sigma_1/\sigma_2)V_1$.
+  \item Compute the component VaRs of the original portfolio for $\rho=0.5$ and check that they add up to the VaR.
+\end{enumerate}
+\end{exercise}
+
 \subsection{Where does the risk come from? Absolute, incremental and component VaR}
 A firm wants to attribute the portfolio VaR to desks or positions. The slides define (slides 59--62) the \emph{absolute VaR} of a bucket as its stand-alone VaR (the position vector with all other entries set to zero; equivalently its sensitivity times its volatility) and the \emph{marginal} (in today's language \emph{incremental}) VaR as the difference between the portfolio VaR and the VaR with that bucket removed, to see ``natural hedges'' and the effect of hedge portfolios \ts{13}{7}{49:25}. For the example: removing the CAD position lowers VaR by $0.096$ only, removing CHF by $1.508$ and removing DEM by $0.709$. These numbers add up to $2.31$, not to $3.03$: incremental VaRs depend on what else is in the book and are not additive. The slides later (77--80, see \cref{ch19:sec-hs}) use another notion, the \emph{component} VaR, which \emph{is} additive.
 
@@ -158,6 +175,10 @@ In the variance--covariance method $\mathrm{VaR}(\bm x)=z_\beta\sqrt{\bm x\T\Sig
 $\partial\sigma_P/\partial x_i=(\Sigma\bm x)_i/\sigma_P$ and $\sum_ix_i(\Sigma\bm x)_i=\bm x\T\Sigma\bm x=\sigma_P^2$. Also $(\Sigma\bm x)_i=\Cov(r_i,\bm x\T\bm r)$.
 \end{proof}
 For the currency example $C=(0.425,\ 1.852,\ 0.753)$, adding to $3.031$; the CAD position, nearly uncorrelated with the rest, contributes little, and $\partial\mathrm{VaR}/\partial x_i$ is the change of VaR per unit added of position $i$. A position with negative $C_i$ is a hedge of the rest of the book. Component VaRs are what one compares with limits by desk; the stand-alone VaRs are larger and add to $4.382>3.031$.
+
+\begin{exercise}[not from the course: incremental versus component VaR]
+In the variance--covariance method, show that the incremental VaR of position $i$, $\mathrm{VaR}(\bm x)-\mathrm{VaR}(\bm x-x_i\bm e_i)$, is at most the component VaR $C_i$ of \cref{ch19:prop-euler}. (\emph{Hint:} $\bm x\mapsto\sqrt{\bm x\T\Sigma\bm x}$ is a convex function.) Verify it on the numbers of \cref{ch19:ex-fx}: $(0.096,1.508,0.709)$ against $(0.425,1.852,0.753)$. When are the two equal?
+\end{exercise}
 
 \subsection{The choices behind the covariance matrix}\label{ch19:sec-assump}
 The lecture then goes through the assumptions that hide in $\Sigma$ (slides 45--56). We list them with Abbott's opinions.
@@ -277,6 +298,10 @@ so that a ratio of $0.5$--$0.6$ corresponds to a tail like that of a $t_3$--$t_4
 \caption{The ratio of the $95\%$ and $99\%$ quantiles for standardised Student-$t$ losses as a function of the degrees of freedom (the observable of slide~85).}\label{ch19:fig-ratio}
 \end{figure}
 
+\begin{exercise}[not from the course: the $95/99$ ratio]
+Show that for a Laplace distribution the ratio $q_{95}/q_{99}$ does not depend on the scale, and evaluate it: $\ln10/\ln50=0.589$. Compare with the table of \cref{ch19:sec-hs}: which Student-$t$ has the same ratio? What does the ratio become for a Pareto tail $\Prob(L>x)\sim x^{-\alpha}$, and how would you estimate $\alpha$ from the ratio observed on slide~85?
+\end{exercise}
+
 % ==================================================================
 \section{Monte Carlo simulation}\label{ch19:sec-mc}
 Instead of the closed form of \cref{ch19:prop-vc}, one can simulate: draw, say, $10\,000$ possible outcomes for tomorrow, reprice, sort, and take the $100$th worst for the $99\%$ level (the $500$th for $95\%$) \ts{13}{7}{1:00:53}. It is again an order statistic, but now of a sample that we generate, so the assumptions can be relaxed at will: the distribution need not be normal (a $t$, a customised law, mean reversion, jumps) \ts{13}{7}{1:01:58}. The method, named during the Manhattan Project after games of chance, needs only that the system be described by probability density functions (slide~86). Its financial uses (slide~87) are path-dependent products, the risk of convex portfolios in hedge analysis, portfolios with strong jump risk (insurance), credit exposure --- and VaR. The seven steps of slide~89, drawn as a diagram on slide~88, are:
@@ -327,6 +352,16 @@ which shows why $|\rho|\le1$ is necessary. Slides 94--95 list the trade-off: Cho
   \item The variance test on the same slide, $\hat\sigma_o^2/\sigma^2\sim F(m-1,k-1)$, is a comparison of two independent sample variances from samples of sizes $m$ and $k$ (original and simulated data).
 \end{itemize}
 \end{coursenote}
+
+\begin{exercise}[not from the course: correlated normals]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Derive the Cholesky factor of $\Sigma=\begin{pmatrix}4&2.4\\2.4&9\end{pmatrix}$ and give the two-line simulation recipe.
+  \item Show that $A=E\Lambda^{1/2}E\T$ (the symmetric square root) also satisfies $AA\T=\Sigma$ and relate it to $E\Lambda^{1/2}$ of \cref{ch19:prop-shocks}.
+  \item For three assets with $\rho_{12}=\rho_{23}=\rho$, show that $\rho_{13}$ must lie in $[2\rho^2-1,1]$, and find the eigenvalues of the matrix of \cref{ch19:ex-psd}.
+  \item Prove the Box--Muller formulas.
+\end{enumerate}
+\end{exercise}
 
 \subsection{When the covariance matrix is not positive semidefinite}
 A covariance matrix must be positive semidefinite, ``another of those high-school-maths things that suddenly matter'' \ts{13}{7}{1:08:33}. If different entries are estimated from different amounts of data (say $100$ observations for most pairs and $25$ for one of them), the estimated matrix can have a \emph{negative eigenvalue}; then $\Lambda^{1/2}$ is imaginary and the simulation cannot even start. Abbott reports that, in the 1990s, nobody he asked (including a chairman of a statistics department) knew why he was getting negative eigenvalues; the cure is to fill in the missing data so that every entry uses the same sample \ts{13}{7}{1:09:38}. A minimal example shows that it is not a matter of rounding.
@@ -413,6 +448,10 @@ The ``delta--gamma normal'' column matches the mean $\frac12\Gamma$ and variance
 \caption{P\&L of the short-gamma position $\delta=1$, $\Gamma=-0.5$ against the risk-factor move. The tangent (delta) sees a loss of $2.33$ at the $99\%$ move $x=-2.33$; the true P\&L there is $-3.68$, which is also the true $99\%$ VaR (the other root $x_+=6.33$ of \cref{ch19:prop-dg} is negligible). For a delta-neutral position the loss is even in $x$ and large moves of \emph{either} sign lose.}\label{ch19:fig-gamma}
 \end{figure}
 
+\begin{exercise}[not from the course: gamma]
+For the position $\Delta P=\delta x+\frac12\Gamma x^2$ with $x\sim N(0,1)$, $\delta=0$ and $\Gamma<0$, show that $\mathrm{VaR}_\beta=\frac12|\Gamma|\chi^2_{1,\beta}$, and that the expected shortfall is $\mathrm{ES}_\beta=\frac{|\Gamma|}{2(1-\beta)}\bigl(2z_\beta\varphi(z_\beta)+(1-\beta)\bigr)$, where $\varphi$ is the standard normal density and $z_\beta$ the $\frac{1+\beta}2$-quantile. Evaluate for $\Gamma=-0.5$, $\beta=99\%$ and compare with the value $2.11$ of the table. (\emph{Hint:} $\E[x^2\mid|x|>z]=1+z\varphi(z)/(1-\Phi(z))$.)
+\end{exercise}
+
 % ==================================================================
 \section{Back-testing, stress tests and use of VaR}\label{ch19:sec-bt}
 \subsection{Why a bank needs it}
@@ -437,6 +476,10 @@ Applications: the IPC example of \cref{ch19:rem-eight} ($N=8$, $n=520$): $\mathr
 \begin{finance}[The regulatory traffic light; not discussed in class]\label{ch19:fin-basel}
 The Basel back-test of the 1990s uses $n=250$ days of $99\%$ VaR. With $p=1\%$, $\Prob(N\le4)=89.2\%$, $\Prob(N\le9)=99.97\%$ and $\Prob(N\ge10)=0.025\%$ (our computation), so the \emph{green zone} is $0$--$4$ exceptions, the \emph{yellow zone} $5$--$9$ and the \emph{red zone} $10$ or more; the capital multiplier applied to the VaR increases from $3$ in the green zone through the yellow zone to $4$ in the red zone (from memory of the 1996 amendment; the reader should check the figures against the Basel text). The 10-day, $99\%$ horizon is obtained from one-day figures by $\sqrt{10}$, with the caveats of \cref{ch08:prop-autocorr}. The later tightening to stressed VaR and expected shortfall is in \cref{ch08:sec-estimation}.
 \end{finance}
+
+\begin{exercise}[not from the course: back-test]
+A desk reports a $99\%$ one-day VaR and records $7$ exceedances in $250$ days. Compute the likelihood-ratio statistic of \cref{ch19:prop-kupiec} and its $p$-value, the exact binomial tail probability $\Prob(N\ge7)$, and the Basel zone. Do the two tests agree? Why is a test with $250$ days not powerful against a true exceedance probability of $2\%$?
+\end{exercise}
 
 \subsection{Practical issues}
 Slides 102--103 list the practical issues: back-tests are done down to the desk level, where every outlier must be documented (``need to document outliers''), but one often needs to aggregate, and aggregation hides spikes; \emph{split books} (a position whose P\&L is shared across desks) are a problem; whether one compares with front-office or back-office P\&L, the timing of P\&L recognition, re-organisations, data maintenance, the frequency of updates, and whether upside jumps should count as exceptions (a VaR is one-sided). Slides 104--105 (repeated as 113--114) plot the daily revenue of a business as bars with the $99\%$ and $95\%$ VaR as lines below the axis. In the first, the revenue stays within the lines except for a few isolated days, as it should; in the second the revenue is calm for a long period and then, after a break, the bars fall far outside the VaR lines, which adapt only slowly. The slides on the next pages (106--111, without axis labels or commentary in the lecture) show more series of this kind, of a P\&L band with a horizontal level: they illustrate that the scale of the P\&L can change abruptly (a position is cut, a new product starts from zero, a data error produces a spike) and that the VaR, the limit, or the data process reacts with a delay.
@@ -470,50 +513,3 @@ A VaR is the location of a quantile of a distribution that one never sees and es
 &\text{Correlation error:} && \mathrm{sd}(\hat\rho)\approx(1-\rho^2)/\sqrt n
 \end{align*}
 \end{keyformulas}
-
-% ==================================================================
-\section*{Exercises}
-\addcontentsline{toc}{section}{Exercises}
-
-\begin{exercise}[not from the course: two assets]
-Two positions with daily volatilities $\sigma_1=1\%$, $\sigma_2=2\%$ (P\&L per unit of position value), correlation $\rho$, and values $V_1=100$, $V_2=50$ (long both).
-\begin{enumerate}[(a)]
-  \item Write the $99\%$ VaR as a function of $\rho$ using \cref{ch19:prop-vc}; for which $\rho$ is it equal to the sum of the stand-alone VaRs?
-  \item Find the position $V_2$ (possibly negative) that minimises the VaR for given $V_1$ and $\rho$, and show that it is the minimum-variance hedge $V_2=-\rho\,(\sigma_1/\sigma_2)V_1$.
-  \item Compute the component VaRs of the original portfolio for $\rho=0.5$ and check that they add up to the VaR.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: PV01]
-A bond has a semi-annual coupon of $3\%$, five years to maturity, and yield $3\%$. Compute its price at yields $3\%$ and $3.01\%$, the PV01 per $100$ face value, the modified and Macaulay durations, and the one-day $99\%$ VaR of a position of face value $10^7$ if the daily volatility of the relative changes of the yield is $1.5\%$. Compare $\mathrm{PV01}$ with $-D_{\mathrm{mod}}\,P\cdot10^{-4}$.
-\end{exercise}
-
-\begin{exercise}[not from the course: incremental versus component VaR]
-In the variance--covariance method, show that the incremental VaR of position $i$, $\mathrm{VaR}(\bm x)-\mathrm{VaR}(\bm x-x_i\bm e_i)$, is at most the component VaR $C_i$ of \cref{ch19:prop-euler}. (\emph{Hint:} $\bm x\mapsto\sqrt{\bm x\T\Sigma\bm x}$ is a convex function.) Verify it on the numbers of \cref{ch19:ex-fx}: $(0.096,1.508,0.709)$ against $(0.425,1.852,0.753)$. When are the two equal?
-\end{exercise}
-
-\begin{exercise}[not from the course: estimation error of a quantile]
-Using \cref{ch19:prop-quantile}, find the number of days of history needed to estimate the $99\%$ VaR of a normal loss with a relative standard error of $5\%$; and the same for the $99.9\%$ VaR. Repeat for a Laplace loss (density $\frac1{2b}e^{-|x|/b}$, quantile $b\ln\frac1{2(1-\beta)}$). (\emph{Answer for the first part:} about $1\,000$ days.)
-\end{exercise}
-
-\begin{exercise}[not from the course: back-test]
-A desk reports a $99\%$ one-day VaR and records $7$ exceedances in $250$ days. Compute the likelihood-ratio statistic of \cref{ch19:prop-kupiec} and its $p$-value, the exact binomial tail probability $\Prob(N\ge7)$, and the Basel zone. Do the two tests agree? Why is a test with $250$ days not powerful against a true exceedance probability of $2\%$?
-\end{exercise}
-
-\begin{exercise}[not from the course: correlated normals]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Derive the Cholesky factor of $\Sigma=\begin{pmatrix}4&2.4\\2.4&9\end{pmatrix}$ and give the two-line simulation recipe.
-  \item Show that $A=E\Lambda^{1/2}E\T$ (the symmetric square root) also satisfies $AA\T=\Sigma$ and relate it to $E\Lambda^{1/2}$ of \cref{ch19:prop-shocks}.
-  \item For three assets with $\rho_{12}=\rho_{23}=\rho$, show that $\rho_{13}$ must lie in $[2\rho^2-1,1]$, and find the eigenvalues of the matrix of \cref{ch19:ex-psd}.
-  \item Prove the Box--Muller formulas.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: gamma]
-For the position $\Delta P=\delta x+\frac12\Gamma x^2$ with $x\sim N(0,1)$, $\delta=0$ and $\Gamma<0$, show that $\mathrm{VaR}_\beta=\frac12|\Gamma|\chi^2_{1,\beta}$, and that the expected shortfall is $\mathrm{ES}_\beta=\frac{|\Gamma|}{2(1-\beta)}\bigl(2z_\beta\varphi(z_\beta)+(1-\beta)\bigr)$, where $\varphi$ is the standard normal density and $z_\beta$ the $\frac{1+\beta}2$-quantile. Evaluate for $\Gamma=-0.5$, $\beta=99\%$ and compare with the value $2.11$ of the table. (\emph{Hint:} $\E[x^2\mid|x|>z]=1+z\varphi(z)/(1-\Phi(z))$.)
-\end{exercise}
-
-\begin{exercise}[not from the course: the $95/99$ ratio]
-Show that for a Laplace distribution the ratio $q_{95}/q_{99}$ does not depend on the scale, and evaluate it: $\ln10/\ln50=0.589$. Compare with the table of \cref{ch19:sec-hs}: which Student-$t$ has the same ratio? What does the ratio become for a Pareto tail $\Prob(L>x)\sim x^{-\alpha}$, and how would you estimate $\alpha$ from the ratio observed on slide~85?
-\end{exercise}

@@ -18,8 +18,8 @@
 \textbf{Not recorded.} 2024 L22, \emph{The Spectrum of Systematic Trading Strategies in Liquid Instruments}
 (R.~Garon, Millennium Management), has no video and no slides: the guest did not grant permission to publish them, so there
 is nothing to summarise here; the next recorded lecture is L23 (machine learning, \cref{ch:ml}).
-\textbf{Exercises.} None of the course problem sets deals with this lecture; the exercises at the end of the
-chapter are all marked ``(not from the course)''.
+\textbf{Exercises.} None of the course problem sets deals with this lecture; the exercises (each after the section it practises)
+are all marked ``(not from the course)''.
 \end{sources}
 
 \section*{Motivation}
@@ -107,6 +107,11 @@ to the quiz ``which interest rate does the forward strike imply?'' a student ans
 repeats and then corrects on the fly: $80\to88.41$ is about $10\%$ over the two years of \cref{ch15:sec-payoffs}, i.e.\ $5\%$ per year
 continuously compounded, $80\,e^{0.05\cdot2}=88.41$ \ts{13}{19}{16:42}\ts{13}{19}{17:43}.
 \end{coursenote}
+
+\begin{exercise}[not from the course: the bookie]\label{ch15:ex-bookie}
+Pools of $A$ on horse~1 and $B$ on horse~2. Show that odds set to $B/A$ to $1$ on horse~1 (and $A/B$ to $1$ on horse~2) give the bookie the same profit whichever horse wins, and identify the ``risk-neutral probabilities'' $q_i$.
+Compute the standard deviation of the bookie's profit in the example if the odds are set from the true probabilities $(0.2,0.8)$, and compare with the pool odds.
+\end{exercise}
 
 % ==================================================================
 \section{Forwards, calls and puts}\label{ch15:sec-payoffs}
@@ -237,6 +242,15 @@ combination has zero ``noise'', i.e.\ $a=\Delta f/\Delta S$ is a discrete deriva
 used in the form ``riskless portfolio'' (\cref{ch15:sec-pde}). Which of the two forms is more convenient depends on the problem \ts{24}{21}{32:52}.
 \end{intuition}
 
+\begin{exercise}[not from the course: one-step market]\label{ch15:ex-onestep}
+$S_0=50$, $S_1=60$, $S_2=42$, $r\dd t=\ln1.02$.
+\begin{enumerate}[(a)]
+  \item Compute $q$, check the no-arbitrage condition and find the fair forward strike.
+  \item Price a call ($K=50$) and a put ($K=50$) by replication and by $\E_\Q$ and verify parity.
+  \item Let the real-world probability of ``up'' be $p=0.9$: compute $e^{-r\dd t}\E_{\Prob}[\text{call}]$ and the profit of a trader who sells the call at that price and hedges with $a$ shares.
+\end{enumerate}
+\end{exercise}
+
 
 % ==================================================================
 \section{Many steps: the binomial tree and its limit}\label{ch15:sec-tree}
@@ -330,6 +344,16 @@ in the next section by counting variances. The drift correction $-\tfrac12\sigma
 \cref{ch04:rem-logprice}: the tree has $\E_\Q[S_T]=S_0e^{rT}$ (the martingale property is exact), but $\ln S_T$ has mean
 $(r-\tfrac12\sigma^2)T$ because $\E[e^{X}]=e^{\E[X]+\Var X/2}$ for a normal variable.
 \end{intuition}
+
+\begin{exercise}[not from the course: the tree]\label{ch15:ex-tree}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Show that the CRR tree prices a forward $(S_T-K)$ exactly, for every $n$.
+  \item Write a program that prices the call of \cref{ch15:tab-crr} and reproduces the $1/n$ error and the odd--even oscillation; then choose the
+      strike lattice-aligned ($K=S_0u^{k}$) and observe the effect.
+  \item Show that with $u=e^{\sigma\sqrt{\dd t}+\nu\dd t}$, $d=e^{-\sigma\sqrt{\dd t}+\nu\dd t}$ (drift $\nu$ in the tree) one still converges to Black--Scholes provided $q$ is defined by the martingale condition.
+\end{enumerate}
+\end{exercise}
 
 % ==================================================================
 \section{Lognormal dynamics and a heuristic It\^o formula}\label{ch15:sec-lognormal}
@@ -480,6 +504,15 @@ $\sigma\sqrt\tau$ is the size of the ``typical move'' of the log-price until exp
 the strike is worth more than its intrinsic value because the price may still cross $K$ (the ``time value'' or convexity value).
 \end{intuition}
 
+\begin{exercise}[not from the course: the heat equation]\label{ch15:ex-heat}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Verify the change of variables of \cref{ch15:sec-heat} by direct substitution.
+  \item Solve $u_\tau=\frac12\sigma^2u_{xx}$ for $u(x,0)=\ind\{x>\ln K\}$ and show that $f=e^{-r\tau}\Phi(d_2)$ (the digital).
+  \item The slide's normalisation is $u_\tau=u_{xx}$: find the rescaling of $\tau$.
+\end{enumerate}
+\end{exercise}
+
 
 % ==================================================================
 \section{Risk-neutral valuation}\label{ch15:sec-rn}
@@ -595,6 +628,16 @@ with $\sigma=20\%$ formula \eqref{ch15:eq-digital} gives $0.528$. All figures in
 \end{itemize}
 \end{intuition}
 
+\begin{exercise}[not from the course: the formula by expectation]\label{ch15:ex-formula}
+Derive the put formula \eqref{ch15:eq-put} directly from $P=e^{-r\tau}\E_\Q[(K-S_T)^+]$ and check parity. Evaluate the call and the put for $S=100$, $K=90$, $\tau=0.5$, $r=3\%$, $\sigma=25\%$.
+Show that $C$ is increasing and convex in $S$, increasing in $\sigma$ and $\tau$, and that $(S-Ke^{-r\tau})^+\le C\le S$ (the no-arbitrage bounds).
+\end{exercise}
+
+\begin{exercise}[not from the course: risk-neutral drift]\label{ch15:ex-girsanov}
+Apply \eqref{ch15:eq-ito} to $e^{-rt}S_t$ to show that $\dd(e^{-rt}S_t)=(\mu-r)e^{-rt}S_t\dd t+\sigma e^{-rt}S_t\dd W$ and, with $W^{\Q}_t=W_t+\lambda t$, that it is a martingale for $\lambda=(\mu-r)/\sigma$. Compute
+$\E_{\Prob}[C_T]$ and $\E_{\Q}[C_T]$ for the call of \cref{ch15:ex-atm} with $\mu=12\%$ and explain why $e^{-rT}\E_{\Prob}[C_T]$ is not the price.
+\end{exercise}
+
 % ==================================================================
 \section{Put--call parity: a model-free replication}\label{ch15:sec-parity}
 The lecture illustrates replication with a relation that requires \emph{no} assumption on the stock dynamics \ts{24}{21}{1:10:22}\ts{13}{19}{38:07}\ts{13}{19}{39:11}.
@@ -659,6 +702,11 @@ is ``practically impossible'' for vanilla options, but was done ``25 years ago''
 \ts{13}{19}{49:42}; static replications like parity and the call spread below are the exceptions, and the most robust.
 \end{finance}
 
+\begin{exercise}[not from the course: put--call parity]\label{ch15:ex-parity}
+Prove parity when the stock pays a known cash dividend $D$ at $t_D\in(t,T)$: $C-P=S-De^{-r(t_D-t)}-Ke^{-r\tau}$. Using the numbers of \cref{ch15:tab-ibm} choose an interest rate $r$ that best fits the four strikes by least squares, and comment on the residuals.
+Design an arbitrage (list the trades and the guaranteed profit) if the call in the $K=100$ row of \cref{ch15:tab-aapl} were quoted at 14.50 instead of 14.00.
+\end{exercise}
+
 % ==================================================================
 \section{Digital options and call spreads}\label{ch15:sec-digital}
 The lecture ends with a challenge \ts{24}{21}{1:15:43}\ts{24}{21}{1:16:44}, which in 2013 was posed as an interview question \ts{13}{19}{43:24}: \emph{price and hedge a digital (all-or-nothing) option}, which pays $1$
@@ -706,6 +754,17 @@ difference is caused by the \emph{skew} of the smile ($\partial\sigma/\partial K
 Any smooth payoff $g(S_T)$ is a continuous portfolio of calls, $g(S_T)=g(0)+g'(0)S_T+\int_0^\infty g''(K)(S_T-K)^+\dd K$ (a Taylor formula with integral remainder in $K$; not discussed in class), so its price
 is a fixed combination of call prices with no model at all. The Black--Scholes dynamic hedge is what one needs when the instruments are \emph{not} available at all strikes.
 \end{intuition}
+
+\begin{exercise}[not from the course: digital options]\label{ch15:ex-digital}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Prove $D=-\partial C/\partial K$ for any model where $C(K)=e^{-r\tau}\E_\Q[(S_T-K)^+]$.
+  \item Show that a call spread with strikes $K$ and $K+\varepsilon$, scaled by $1/\varepsilon$, \emph{super-replicates} the digital,
+      so that the dealer's ask for the digital is $\le[C(K)-C(K+\varepsilon)]/\varepsilon$, and find the sub-replicating spread giving a bid.
+  \item In a model with a smile, $\sigma=\sigma(K)$, show that $D=e^{-r\tau}\Phi(d_2)-\mathcal V\,\sigma'(K)$ and explain the sign
+      of the correction for the AAPL data of \cref{ch15:tab-smile}.
+\end{enumerate}
+\end{exercise}
 
 
 % ==================================================================
@@ -805,6 +864,15 @@ Discrete hedging and transaction costs (above); jumps and gaps, for which no hed
 Black--Scholes remains the language in which prices are \emph{quoted}.
 \end{finance}
 
+\begin{exercise}[not from the course: Greeks]\label{ch15:ex-greeks}
+Prove $S\varphi(d_1)=Ke^{-r\tau}\varphi(d_2)$, derive $\Delta,\Gamma,\mathcal V,\Theta$ and check that they satisfy the Black--Scholes PDE. For an at-the-money-forward option show that $C\approx0.4\,S\sigma\sqrt\tau$; prove in general that $\mathcal V=S^2\sigma\tau\,\Gamma$. What is the $\Delta$ of a call with $S$ very large? Of a call very close to expiry, at the money?
+\end{exercise}
+
+\begin{exercise}[not from the course: delta hedging by simulation]\label{ch15:ex-hedge}
+Reproduce \cref{ch15:tab-hedge}: simulate GBM with drift $\mu$, sell a call at the Black--Scholes price, rebalance the delta at $n$ dates, and record the terminal error. Check that the distribution does not depend on $\mu$ (for large $n$),
+that its width scales as $n^{-1/2}$, and add a proportional transaction cost $c|\Delta a|S$ to find the $n$ that minimises the cost-plus-risk for your favourite risk penalty. What changes if you hedge with a wrong $\sigma$ (say $15\%$ when the true one is $20\%$)?
+\end{exercise}
+
 % ==================================================================
 \section{Implied volatility and the smile}\label{ch15:sec-smile}
 The formula has one input that is not observed, $\sigma$. Since $\partial C/\partial\sigma=\mathcal V>0$ and $C\to(S-Ke^{-r\tau})^+$ as $\sigma\to0$, $C\to S$ as $\sigma\to\infty$, the map $\sigma\mapsto C_{BS}(\sigma)$ is a strictly increasing
@@ -851,6 +919,10 @@ of \cref{ch15:sec-digital}, the skew enters. The lecturer's conclusion \ts{24}{2
 (the volatility itself follows an SDE; \cref{ch:volatility,ch:sde}) or \emph{jump-diffusion}. With jumps ``life becomes more complicated'': the market is incomplete and martingale
 techniques for continuous paths no longer suffice. The risk-neutral \emph{method} is unchanged: find the measure(s) $\Q$ under which discounted traded assets are martingales, and price by discounted expectation; what changes is that (for stochastic volatility and jumps) $\Q$
 is no longer unique (\cref{thm:ftap}, part~2), and calibration to the observed option prices (the smile) is what selects it.
+
+\begin{exercise}[not from the course: implied volatility]\label{ch15:ex-iv}
+Implement Newton's method for $\sigma_{\mathrm{imp}}$ with the vega as derivative, starting from $\sigma_0=\sqrt{2|\ln(S/K)+r\tau|/\tau}$. Recompute the last column of \cref{ch15:tab-smile}. Why does the iteration fail for deep out-of-the-money options and what is a safer alternative (bisection, Brent)?
+\end{exercise}
 
 % ==================================================================
 \section{The two lectures compared, and errata}\label{ch15:sec-compare}
@@ -906,80 +978,3 @@ In 2013 the lecturer also remarks that the two-year rate was then about $32.5$ b
 \end{gather*}
 \textbf{Digital and call spread:} $D=e^{-r\tau}\Phi(d_2)=-\partial C/\partial K=\lim_{\varepsilon\to0}\dfrac{C(K-\varepsilon)-C(K+\varepsilon)}{2\varepsilon}$.
 \end{keyformulas}
-
-% ==================================================================
-\section*{Exercises}
-\addcontentsline{toc}{section}{Exercises}
-None of the exercises below comes from a course problem set: the lecture has no problem set in either year.
-
-\begin{exercise}[not from the course: the bookie]\label{ch15:ex-bookie}
-Pools of $A$ on horse~1 and $B$ on horse~2. Show that odds set to $B/A$ to $1$ on horse~1 (and $A/B$ to $1$ on horse~2) give the bookie the same profit whichever horse wins, and identify the ``risk-neutral probabilities'' $q_i$.
-Compute the standard deviation of the bookie's profit in the example if the odds are set from the true probabilities $(0.2,0.8)$, and compare with the pool odds.
-\end{exercise}
-
-\begin{exercise}[not from the course: one-step market]\label{ch15:ex-onestep}
-$S_0=50$, $S_1=60$, $S_2=42$, $r\dd t=\ln1.02$.
-\begin{enumerate}[(a)]
-  \item Compute $q$, check the no-arbitrage condition and find the fair forward strike.
-  \item Price a call ($K=50$) and a put ($K=50$) by replication and by $\E_\Q$ and verify parity.
-  \item Let the real-world probability of ``up'' be $p=0.9$: compute $e^{-r\dd t}\E_{\Prob}[\text{call}]$ and the profit of a trader who sells the call at that price and hedges with $a$ shares.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: the tree]\label{ch15:ex-tree}
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Show that the CRR tree prices a forward $(S_T-K)$ exactly, for every $n$.
-  \item Write a program that prices the call of \cref{ch15:tab-crr} and reproduces the $1/n$ error and the odd--even oscillation; then choose the
-      strike lattice-aligned ($K=S_0u^{k}$) and observe the effect.
-  \item Show that with $u=e^{\sigma\sqrt{\dd t}+\nu\dd t}$, $d=e^{-\sigma\sqrt{\dd t}+\nu\dd t}$ (drift $\nu$ in the tree) one still converges to Black--Scholes provided $q$ is defined by the martingale condition.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: the heat equation]\label{ch15:ex-heat}
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Verify the change of variables of \cref{ch15:sec-heat} by direct substitution.
-  \item Solve $u_\tau=\frac12\sigma^2u_{xx}$ for $u(x,0)=\ind\{x>\ln K\}$ and show that $f=e^{-r\tau}\Phi(d_2)$ (the digital).
-  \item The slide's normalisation is $u_\tau=u_{xx}$: find the rescaling of $\tau$.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: the formula by expectation]\label{ch15:ex-formula}
-Derive the put formula \eqref{ch15:eq-put} directly from $P=e^{-r\tau}\E_\Q[(K-S_T)^+]$ and check parity. Evaluate the call and the put for $S=100$, $K=90$, $\tau=0.5$, $r=3\%$, $\sigma=25\%$.
-Show that $C$ is increasing and convex in $S$, increasing in $\sigma$ and $\tau$, and that $(S-Ke^{-r\tau})^+\le C\le S$ (the no-arbitrage bounds).
-\end{exercise}
-
-\begin{exercise}[not from the course: Greeks]\label{ch15:ex-greeks}
-Prove $S\varphi(d_1)=Ke^{-r\tau}\varphi(d_2)$, derive $\Delta,\Gamma,\mathcal V,\Theta$ and check that they satisfy the Black--Scholes PDE. For an at-the-money-forward option show that $C\approx0.4\,S\sigma\sqrt\tau$; prove in general that $\mathcal V=S^2\sigma\tau\,\Gamma$. What is the $\Delta$ of a call with $S$ very large? Of a call very close to expiry, at the money?
-\end{exercise}
-
-\begin{exercise}[not from the course: delta hedging by simulation]\label{ch15:ex-hedge}
-Reproduce \cref{ch15:tab-hedge}: simulate GBM with drift $\mu$, sell a call at the Black--Scholes price, rebalance the delta at $n$ dates, and record the terminal error. Check that the distribution does not depend on $\mu$ (for large $n$),
-that its width scales as $n^{-1/2}$, and add a proportional transaction cost $c|\Delta a|S$ to find the $n$ that minimises the cost-plus-risk for your favourite risk penalty. What changes if you hedge with a wrong $\sigma$ (say $15\%$ when the true one is $20\%$)?
-\end{exercise}
-
-\begin{exercise}[not from the course: put--call parity]\label{ch15:ex-parity}
-Prove parity when the stock pays a known cash dividend $D$ at $t_D\in(t,T)$: $C-P=S-De^{-r(t_D-t)}-Ke^{-r\tau}$. Using the numbers of \cref{ch15:tab-ibm} choose an interest rate $r$ that best fits the four strikes by least squares, and comment on the residuals.
-Design an arbitrage (list the trades and the guaranteed profit) if the call in the $K=100$ row of \cref{ch15:tab-aapl} were quoted at 14.50 instead of 14.00.
-\end{exercise}
-
-\begin{exercise}[not from the course: digital options]\label{ch15:ex-digital}
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Prove $D=-\partial C/\partial K$ for any model where $C(K)=e^{-r\tau}\E_\Q[(S_T-K)^+]$.
-  \item Show that a call spread with strikes $K$ and $K+\varepsilon$, scaled by $1/\varepsilon$, \emph{super-replicates} the digital,
-      so that the dealer's ask for the digital is $\le[C(K)-C(K+\varepsilon)]/\varepsilon$, and find the sub-replicating spread giving a bid.
-  \item In a model with a smile, $\sigma=\sigma(K)$, show that $D=e^{-r\tau}\Phi(d_2)-\mathcal V\,\sigma'(K)$ and explain the sign
-      of the correction for the AAPL data of \cref{ch15:tab-smile}.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: implied volatility]\label{ch15:ex-iv}
-Implement Newton's method for $\sigma_{\mathrm{imp}}$ with the vega as derivative, starting from $\sigma_0=\sqrt{2|\ln(S/K)+r\tau|/\tau}$. Recompute the last column of \cref{ch15:tab-smile}. Why does the iteration fail for deep out-of-the-money options and what is a safer alternative (bisection, Brent)?
-\end{exercise}
-
-\begin{exercise}[not from the course: risk-neutral drift]\label{ch15:ex-girsanov}
-Apply \eqref{ch15:eq-ito} to $e^{-rt}S_t$ to show that $\dd(e^{-rt}S_t)=(\mu-r)e^{-rt}S_t\dd t+\sigma e^{-rt}S_t\dd W$ and, with $W^{\Q}_t=W_t+\lambda t$, that it is a martingale for $\lambda=(\mu-r)/\sigma$. Compute
-$\E_{\Prob}[C_T]$ and $\E_{\Q}[C_T]$ for the call of \cref{ch15:ex-atm} with $\mu=12\%$ and explain why $e^{-rT}\E_{\Prob}[C_T]$ is not the price.
-\end{exercise}

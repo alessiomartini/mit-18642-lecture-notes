@@ -13,7 +13,7 @@
 
 \smallskip
 \textbf{Files.} Slides \file{MIT18_S096F13_lecnote10.pdf} (51 pages, no incremental builds).
-\textbf{Problem sets.} None. The exercises at the end of the chapter are all ``(not from the course)''.
+\textbf{Problem sets.} None. The exercises (each after the section it practises) are all ``(not from the course)''.
 \textbf{Not published.} The talk has no 2024 counterpart. The slides give the numerical tables and figures
 of the swap-book example, but no data or code; the toy computations of this chapter (a swap-curve
 Jacobian, a one-dimensional calibration) are my own and are marked as such.
@@ -217,6 +217,15 @@ between $10$ and $30$~bp at $9$--$10$~years, about $70$~bp at $12$, $150$~bp at 
 curve is genuinely unstable in the sparse long end; the lecture's curve (ripple confined to $\pm14$~bp) shows that the design of the interpolation matters.
 \end{remark}
 
+\begin{exercise}[(not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item For a swap with equally spaced payment dates show $C=(1-\Lambda_n)/\sum_i\delta_i\Lambda_i$ and that $C$ lies between the smallest and the largest forward rate.
+  \item In the piecewise-constant toy of \cref{ch20:sec-curve} derive $\Delta f_i$ for a shift of the $j$-th par rate and show that its entries are $T_j/(T_j-T_{j-1})$ and $-T_j/(T_{j+1}-T_j)$; what is the largest absolute value over all $j$ for the 15 maturities of the lecture?
+  \item The matrix $M$ is lower triangular: compute its determinant.
+\end{enumerate}
+\end{exercise}
+
 % ==================================================================
 \section{Hedging a swap book: PCA and the smoothness-regularised model}\label{ch20:sec-hedge}
 
@@ -377,6 +386,14 @@ market, but always \emph{some} model \ts{13}{10}{47:12}. The lecture's argument 
 \ts{13}{10}{1:26:24}. The two ideas can also be combined (a PCA regulariser inside the smoothness model).
 \end{finance}
 
+\begin{exercise}[(not from the course)]
+Let $J=I_4$, $L$ the first-difference matrix ($3\times4$) and $H=(\bm e_1,\bm e_4)$ (hedges in buckets 1 and 4) in \eqref{ch20:eq-regR}. Show that the smoothest scenarios are the linear interpolations $R_{\cdot1}=(1,\tfrac23,\tfrac13,0)\T$ and $R_{\cdot2}=(0,\tfrac13,\tfrac23,1)\T$, compute the translated risk $\bm x=R\T\bm r$ for $\bm r=(0,1,1,0)\T$, and check that $\mathsf M=(LJ)\T LJ$ is singular with kernel spanned by $(1,1,1,1)\T$ (and that \cref{ch20:prop-reghedge} still applies). What would the second-difference matrix give?
+\end{exercise}
+
+\begin{exercise}[(not from the course)]
+Prove the push-through identity $(\lambda^2\mathsf M+HH\T)^{-1}H=\mathsf M^{-1}H(\lambda^2I+H\T\mathsf M^{-1}H)^{-1}$ used in \cref{ch20:prop-reghedge}, and use it to show that $H\T R_\lambda\to I$ with $R_\lambda=(HH\T+\lambda^2\mathsf M)^{-1}H$ and that $H\T R_\lambda=H\T\mathsf M^{-1}H(\lambda^2I+H\T\mathsf M^{-1}H)^{-1}$ (so the deviation from $I$ is of order $\lambda^2$).
+\end{exercise}
+
 % ==================================================================
 \section{Linear inverse problems, the SVD and Tikhonov regularisation}\label{ch20:sec-inverse}
 
@@ -438,6 +455,16 @@ the instruments are independent, for any $N\ge M$. Then \emph{every} data vector
 instruments \emph{not} used in the calibration, and $B\bm x^\dagger$ inherits the amplified error $B\,\delta\bm x$. Slide~47 has the same misprint for the regularised repricing matrix, see \eqref{ch20:eq-influence}.
 \end{coursenote}
 
+\begin{exercise}[(not from the course)]
+Consider $A=\begin{psmallmatrix}1&1\\1&1.01\end{psmallmatrix}$.
+\begin{enumerate}[(a)]
+  \item Solve $A\bm x=\bm y$ for $\bm y=(2,2.01)\T$ and for $\bm y'=(2,2.02)\T$; by what fraction do data and solution change?
+  \item Compute the singular values and $\kappa(A)$ (about $4\times10^2$) and
+      check that the change of (a) is compatible with the bound of \cref{ch20:sec-noise}.
+  \item Compute the Tikhonov solutions \eqref{ch20:eq-tikh} for $\lambda=0.1$ for both $\bm y$ and $\bm y'$ and compare.
+\end{enumerate}
+\end{exercise}
+
 \subsection{Truncated SVD and Tikhonov regularisation}\label{ch20:sec-tikh}
 Both methods multiply each term of \eqref{ch20:eq-pinv} by a \emph{filter factor} $w_i\in[0,1]$:
 \begin{equation}\label{ch20:eq-filter}
@@ -494,6 +521,16 @@ the corrected form of the ``$A\T(A\T A+\lambda^2I)^{-1}A\neq I$'' of slide~47 \t
 (1\% price noise; my computation). From mode 4 on the coefficients stop tracking $s_i$ and stay within one to four times the noise floor $\|\bm\varepsilon\|/\sqrt M$ (dashed), whereas $s_i$ keeps falling: the terms $\bm u_i\T\bm y/s_i$ of \eqref{ch20:eq-pinv} are then dominated by noise.}\label{ch20:fig-spectral}
 \end{figure}
 
+\begin{exercise}[(not from the course)]
+Prove the following for Tikhonov regularisation with $L=I$:
+\begin{enumerate}[(a)]
+  \item $\rho(\lambda)=\|A\bm x_\lambda-\bm y\|$ is non-decreasing and $\|\bm x_\lambda\|$ non-increasing in $\lambda$;
+  \item as $\lambda\to0$, $\bm x_\lambda\to A^\dagger\bm y$ (\cref{ch20:prop-pinv}), also when $A$ is rank-deficient;
+  \item as $\lambda\to\infty$, $\bm x_\lambda\approx A\T\bm y/\lambda^2$;
+  \item $0\le\operatorname{tr}H_\lambda\le r$ and it decreases from $r$ to $0$.
+\end{enumerate}
+\end{exercise}
+
 \subsection{General form: weights, smoothness matrices and several penalties}\label{ch20:sec-general}
 Penalising the amplitude $\|\bm x\|$ is rarely what one wants. The general problem, with a diagonal weight matrix $W$ and a penalty matrix $L$, is
 \begin{equation}\label{ch20:eq-gen}
@@ -528,6 +565,10 @@ Bias grows and variance falls with $\lambda$; at $\lambda=0$ the variance $\sigm
 \end{equation}
 a Wiener filter, i.e.\ Tikhonov with a mode-dependent $\lambda_i^2=\sigma^2/\xi_i^2$: a mode is kept if the signal it contributes to the data, $s_i|\xi_i|$, exceeds the noise $\sigma$, and suppressed otherwise. TSVD is the $0/1$ version of this filter and a single $\lambda^2=\sigma^2/\tau^2$
 (with $\tau^2$ a typical size of $\xi_i^2$) is the ridge--Bayes value of \cref{ch05:prop-ridgebayes}. The optimum cannot be used as it stands, since $\xi_i$ is unknown, but it says what $\lambda$ \emph{is}: a noise-to-signal ratio for the parameters.
+
+\begin{exercise}[(not from the course)]
+Take $N=M=1$: $y=ax+\varepsilon$, $\varepsilon\sim N(0,\sigma^2)$. Find the Tikhonov estimator, its bias and variance, and the $\lambda$ that minimises the mean-square error as a function of $x$; compare with \eqref{ch20:eq-wiener}. What happens if one substitutes the ridge--Bayes value $\lambda^2=\sigma^2/\tau^2$ and the true $|x|$ is much larger or much smaller than $\tau$?
+\end{exercise}
 
 % ==================================================================
 \section{Choosing the regularisation parameter (not covered in class)}\label{ch20:sec-lambda}
@@ -593,6 +634,10 @@ $0.063$ with all ten: an unsuitable penalty (here: the minimum norm, which pulls
 \end{tikzpicture}
 \caption{The toy calibration of \cref{ch20:cs-toy} (my computation). (a) The formal exact solution is the ``skyline''; the smoothness-regularised one follows the truth to $0.003$. (b) Error, GCV and residual against $\lambda$ (each normalised as indicated; dotted line: $\rho=\delta$, the discrepancy principle). The minima of the error and of GCV are broad and lie within a factor two of each other.}\label{ch20:fig-toy}
 \end{figure}
+
+\begin{exercise}[(not from the course)]
+Reproduce the toy of \cref{ch20:cs-toy} (any language): choose your own smooth $v$ on $[0,10]$, ten Gaussian-window instruments, $1\%$ noise; compute the formal solution, the Tikhonov solution for a grid of $\lambda$, the discrepancy and GCV parameters. Vary the penalty ($L=I$, first difference, second difference) and the noise level, and report which choice is most sensitive to $\lambda$.
+\end{exercise}
 
 % ==================================================================
 \section{Calibrating a volatility surface}\label{ch20:sec-vol}
@@ -705,51 +750,6 @@ slides' references are the Wikipedia pages on the HJM model, the yield curve, in
 \end{itemize}
 \end{keyformulas}
 
-% ==================================================================
-\section*{Exercises}
-\addcontentsline{toc}{section}{Exercises}
-
-\begin{exercise}[(not from the course)]
-Consider $A=\begin{psmallmatrix}1&1\\1&1.01\end{psmallmatrix}$.
-\begin{enumerate}[(a)]
-  \item Solve $A\bm x=\bm y$ for $\bm y=(2,2.01)\T$ and for $\bm y'=(2,2.02)\T$; by what fraction do data and solution change?
-  \item Compute the singular values and $\kappa(A)$ (about $4\times10^2$) and
-      check that the change of (a) is compatible with the bound of \cref{ch20:sec-noise}.
-  \item Compute the Tikhonov solutions \eqref{ch20:eq-tikh} for $\lambda=0.1$ for both $\bm y$ and $\bm y'$ and compare.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[(not from the course)]
-Prove the following for Tikhonov regularisation with $L=I$:
-\begin{enumerate}[(a)]
-  \item $\rho(\lambda)=\|A\bm x_\lambda-\bm y\|$ is non-decreasing and $\|\bm x_\lambda\|$ non-increasing in $\lambda$;
-  \item as $\lambda\to0$, $\bm x_\lambda\to A^\dagger\bm y$ (\cref{ch20:prop-pinv}), also when $A$ is rank-deficient;
-  \item as $\lambda\to\infty$, $\bm x_\lambda\approx A\T\bm y/\lambda^2$;
-  \item $0\le\operatorname{tr}H_\lambda\le r$ and it decreases from $r$ to $0$.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[(not from the course)]
-Take $N=M=1$: $y=ax+\varepsilon$, $\varepsilon\sim N(0,\sigma^2)$. Find the Tikhonov estimator, its bias and variance, and the $\lambda$ that minimises the mean-square error as a function of $x$; compare with \eqref{ch20:eq-wiener}. What happens if one substitutes the ridge--Bayes value $\lambda^2=\sigma^2/\tau^2$ and the true $|x|$ is much larger or much smaller than $\tau$?
-\end{exercise}
-
-\begin{exercise}[(not from the course)]
-Let $J=I_4$, $L$ the first-difference matrix ($3\times4$) and $H=(\bm e_1,\bm e_4)$ (hedges in buckets 1 and 4) in \eqref{ch20:eq-regR}. Show that the smoothest scenarios are the linear interpolations $R_{\cdot1}=(1,\tfrac23,\tfrac13,0)\T$ and $R_{\cdot2}=(0,\tfrac13,\tfrac23,1)\T$, compute the translated risk $\bm x=R\T\bm r$ for $\bm r=(0,1,1,0)\T$, and check that $\mathsf M=(LJ)\T LJ$ is singular with kernel spanned by $(1,1,1,1)\T$ (and that \cref{ch20:prop-reghedge} still applies). What would the second-difference matrix give?
-\end{exercise}
-
-\begin{exercise}[(not from the course)]
-Prove the push-through identity $(\lambda^2\mathsf M+HH\T)^{-1}H=\mathsf M^{-1}H(\lambda^2I+H\T\mathsf M^{-1}H)^{-1}$ used in \cref{ch20:prop-reghedge}, and use it to show that $H\T R_\lambda\to I$ with $R_\lambda=(HH\T+\lambda^2\mathsf M)^{-1}H$ and that $H\T R_\lambda=H\T\mathsf M^{-1}H(\lambda^2I+H\T\mathsf M^{-1}H)^{-1}$ (so the deviation from $I$ is of order $\lambda^2$).
-\end{exercise}
-
-\begin{exercise}[(not from the course)]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item For a swap with equally spaced payment dates show $C=(1-\Lambda_n)/\sum_i\delta_i\Lambda_i$ and that $C$ lies between the smallest and the largest forward rate.
-  \item In the piecewise-constant toy of \cref{ch20:sec-curve} derive $\Delta f_i$ for a shift of the $j$-th par rate and show that its entries are $T_j/(T_j-T_{j-1})$ and $-T_j/(T_{j+1}-T_j)$; what is the largest absolute value over all $j$ for the 15 maturities of the lecture?
-  \item The matrix $M$ is lower triangular: compute its determinant.
-\end{enumerate}
-\end{exercise}
-
 \begin{exercise}[(not from the course)]
 \leavevmode
 \begin{enumerate}[(a)]
@@ -757,8 +757,4 @@ Prove the push-through identity $(\lambda^2\mathsf M+HH\T)^{-1}H=\mathsf M^{-1}H
   \item With a tensor-product cubic B-spline basis of $m$ functions per direction, how many coefficients, and what is the size of the matrix $K$ in \eqref{ch20:eq-volsol}?
   \item Explain why $J\T W^2J$ has rank at most the number of instruments, and why $K$ nevertheless exists.
 \end{enumerate}
-\end{exercise}
-
-\begin{exercise}[(not from the course)]
-Reproduce the toy of \cref{ch20:cs-toy} (any language): choose your own smooth $v$ on $[0,10]$, ten Gaussian-window instruments, $1\%$ noise; compute the formal solution, the Tikhonov solution for a grid of $\lambda$, the discrepancy and GCV parameters. Vary the penalty ($L=I$, first difference, second difference) and the noise level, and report which choice is most sensitive to $\lambda$.
 \end{exercise}

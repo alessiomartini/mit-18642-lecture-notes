@@ -96,6 +96,19 @@ of $12\%$ annual volatility is uncertain by about $\pm1.9$ percentage points; wi
 heavy-tailed series with $\kappa=6$ the variance of $\hat\sigma^2$ is $2.5$ times larger than in the Gaussian case.
 (This is the quantitative content of the ``trade-off'' below and of 2013 PS5 Problem~4.)
 
+\begin{exercise}[PS5 (2013), Problem 4: are year-to-year differences in volatility significant?]\label{ch13:ex-ps5-4}
+The annual sample variances of the daily log returns of the S\&P~500 close are (year: daily variance, number of days)
+2006: $3.981\times10^{-5}$, 251; 2007: $1.019\times10^{-4}$, 251; 2008: $6.677\times10^{-4}$, 253; 2009: $2.950\times10^{-4}$, 252; 2010: $1.295\times10^{-4}$, 252; 2011: $2.164\times10^{-4}$, 252; 2012: $6.459\times10^{-5}$, 250.
+Model the returns of one year as an i.i.d.\ sample from $N(\mu,\sigma^2)$ and let $\hat\sigma^2$ be the unbiased sample variance.
+\begin{enumerate}[(a)]
+  \item Prove that $\hat\sigma^2\sim\frac{\sigma^2}{n-1}\chi^2_{n-1}$.
+  \item Invert the $\chi^2$ percentiles $q_{0.025},q_{0.975}$ to obtain a two-sided $95\%$ confidence interval for $\sigma^2$ (the problem gives the percentiles for $249$ to $252$ degrees of freedom): compute it for 2008, express it as an annualised volatility ($\sqrt{253}\,\sigma$),
+      and say whether the sample volatility of any other year falls inside it.
+  \item Under the null hypothesis of equal daily variances in two years, show that $S=\hat\sigma^2_{2008}/\hat\sigma^2_{2007}$ has an $F$ distribution (state its degrees of freedom); the problem gives $q_{0.025}=0.7804$, $q_{0.975}=1.2815$ for $F_{252,250}$. Compute $S$ for 2008 against 2007, find the
+      $P$-value (the $\alpha$ at which the test is on the boundary), and repeat for 2008 against 2006.
+\end{enumerate}
+\end{exercise}
+
 \subsection{Historical predictors: simple and exponential averages}\label{ch13:sec-ewma}
 To \emph{predict} volatility one needs a single-period sample estimate $\hat\sigma_t^2$ for each period
 $t$. If $t$ indexes months and the data are daily, it is the sample variance of the daily returns of month $t$; if $t$
@@ -340,6 +353,11 @@ efficiency $1+4.91=5.91$, not $6.2$. So $a\approx0.17$ is consistent with the ex
 statistical conclusions are unaffected, and the figures $7.4$ and $8.4$ below are reproduced exactly. This is my check, not a statement of the course.
 \end{coursenote}
 
+\begin{exercise}[PS5 (2024), Problem 3: the extreme-value estimator of Parkinson (1980)]\label{ch13:ex-ps5-p3}
+Read M.~Parkinson, ``The extreme value method for estimating the variance of the rate of return'', \emph{J.\ Business} 53(1) (1980) 61--65. (b) Explain the definition of the estimator $D_x$ of Section~II. (c) Explain the definition of $D_l$ of Section~III. (d) Using the results of Section~IV,
+explain why the improvement obtained with $D_l$ as an estimate of the variance $V$ (Section~V) could matter particularly in studies of the dependence of $V$ on time and on price, if there is any. (Part (a), ``read the article'', has no answer.) The estimator of \cref{ch13:sec-parkinson} is the one in question.
+\end{exercise}
+
 \subsection{Garman--Klass, and the ``best analytic'' estimator}\label{ch13:sec-gk}
 Garman and Klass (1980) found the estimator of minimal variance among those that are \emph{scale invariant}, i.e.\ that
 scale as $\lambda^2$ when the price is multiplied by $\lambda$, hence expressible in the normalised prices
@@ -372,6 +390,10 @@ the slides.
 (In the same way the composite of the gap and the session range, whose second term is
 $(H-L)^2/(4\ln2\,(1-f))$, has $a=0.17$ and efficiency $5.9$.)
 \end{secondary}
+
+\begin{exercise}[(not from the course): unbiasedness of a range estimator]\label{ch13:ex-extra2}
+Using $\E[(H-L)^2]=4\ln2\,\sigma^2$ and $\E[c^2]=\sigma^2$, verify that the Garman--Klass estimator \eqref{ch13:eq-gk} is unbiased, and that with a drift $\mu_*\ne0$ the close-to-close estimator $c^2$ has expectation $\sigma^2+\mu_*^2$ (units of a day). Why does this not contradict the estimator being unbiased for a driftless process?
+\end{exercise}
 
 \subsection{Rogers--Satchell and Yang--Zhang}\label{ch13:sec-rsyz}
 \begin{secondary}[Estimators robust to drift and opening jumps]
@@ -514,6 +536,27 @@ from the past, so a model with a seasonal moving-average term can predict it, an
 half of $\Var(\Delta v_t)$; the root-mean-square error should drop by the factor $1/\sqrt2=0.71$, and it drops from $0.0051$ to $0.0039$ for Yang--Zhang. Part of the
 ``predictability of volatility'' in the case study is the predictability of the estimator's own window, not of the market (our remark).
 \end{secondary}
+
+\begin{exercise}[PS5 (2024), Problem 4: volatility case studies]\label{ch13:ex-ps5-p4}
+The R Markdown files
+\begin{itemize}\item \file{Case_Study_Estimating__SP500_Historical_Volatility.Rmd}, \item \file{Case_Study_Estimating__ARKK_Historical_Volatility.Rmd}\end{itemize}
+produce the S\&P~500 and ARKK case studies (\cref{ch13:cs-ohlc}), which use the naive, ARIMA and seasonal ARIMA methods of Hyndman and Athanasopoulos,
+\emph{Forecasting: Principles and Practice} (2nd ed.), Chapter~3 (naive method, residual diagnostics) and Chapter~8 (automatic ARIMA).
+\begin{enumerate}[(a)]
+  \item Comment on the S\&P~500 results you find interesting or significant.
+  \item The same for ARKK.
+  \item Compare the volatility findings for ARKK and the S\&P~500.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS5 (2024), Problem 5, optional (extra credit): your own stock]\label{ch13:ex-ps5-p5}
+Choose a stock symbol and edit the ARKK file to run the same analysis.
+\begin{enumerate}[(a)]
+  \item Produce the PDF of the case study.
+  \item Comment on results you find interesting.
+  \item Compare your stock with the S\&P~500 and ARKK.
+\end{enumerate}
+\end{exercise}
 
 
 % ==================================================================
@@ -667,6 +710,18 @@ An ARCH model predicts nothing about the \emph{sign} of tomorrow's return but a 
 volatility forecast that reacts to the latest shock. This is the improvement over the historical averages of \cref{ch13:sec-ewma}, whose weights are chosen by hand
 instead of being estimated.
 \end{finance}
+
+\begin{exercise}[PS5 (2013), Problem 3: properties of the ARCH$(1)$ model]\label{ch13:ex-ps5-3}
+Let $y_t=\mu_t+\varepsilon_t$, $\varepsilon_t=z_t\sigma_t$, $\sigma_t^2=\alpha_0+\alpha_1\varepsilon_{t-1}^2$, with $z_t$ i.i.d., $\E[z_t]=0$, $\Var z_t=1$, $\E[z_t^3]=0$, $\E[z_t^4]=\kappa_z$ ($=3$ if Gaussian). Prove:
+\begin{enumerate}[(a)]
+  \item $\E[\varepsilon_t^2]=\alpha_0/(1-\alpha_1)$;
+  \item $\E[\varepsilon_t^3]=0$;
+  \item $\E[\varepsilon_t^4]=\kappa_z\alpha_0^2(1+\alpha_1)/[(1-\alpha_1)(1-\kappa_z\alpha_1^2)]$;
+  \item which constraints on $\alpha_0,\alpha_1$ does (c) require for the fourth moment to be finite and stationary;
+  \item the kurtosis of $\varepsilon_t$: for Gaussian $z_t$, is the unconditional distribution of $\varepsilon_t$ heavier-tailed than the Gaussian?
+      (The problem as printed writes the constant $\kappa_z$ in (c) without naming it; it is the kurtosis of $z_t$ stated just before.)
+\end{enumerate}
+\end{exercise}
 
 
 % ==================================================================
@@ -895,6 +950,10 @@ factor $1.7$. This is the failure of the square-root-of-time rule announced in \
 annualised volatility expected over the next $H$ days after the shock of \cref{ch13:ex-forecast}, from \eqref{ch13:eq-hday}; the dotted lines are the $\sqrt H$ extrapolation of today's volatility and the long-run level $15.9\%$.}\label{ch13:fig-forecast}
 \end{figure}
 
+\begin{exercise}[(not from the course): forecasting]\label{ch13:ex-extra1}
+For a GARCH$(1,1)$ with $\alpha_1=0.08$, $\beta_1=0.90$, long-run daily volatility $1\%$, and $\sigma_{t+1}=1.6\%$, compute the expected annualised volatility over the next $21$ and $252$ days from \eqref{ch13:eq-hday}, and the half-life of a variance shock. Check by simulation.
+\end{exercise}
+
 \subsection{Fourth moment and kurtosis}\label{ch13:sec-kurt}
 GARCH reproduces the fat tails of returns even when the innovations $z_t$ are Gaussian, and one can say by how much.
 \begin{theorem}[Kurtosis of the GARCH$(1,1)$]\label{ch13:thm-kurt}
@@ -1003,6 +1062,10 @@ asymptotic theory is delicate as well. Standard errors in \cref{ch13:sec-fxcs} a
 the remark on the LM test in \cref{ch13:sec-arch-ar}.
 \end{remark}
 
+\begin{exercise}[(not from the course): estimation]\label{ch13:ex-extra4}
+Simulate $2000$ returns of a Gaussian GARCH$(1,1)$ with $(\alpha_0,\alpha_1,\beta_1)=(2\times10^{-6},0.08,0.90)$, write the log-likelihood \eqref{ch13:eq-loglik} in the reparametrisation of \cref{ch13:sec-lik} and maximise it; compare the estimates with the truth over $200$ replications and comment on the bias and dispersion of $\hat\alpha_1+\hat\beta_1$.
+\end{exercise}
+
 \subsection{Innovations with the Student $t$ distribution}\label{ch13:sec-t}
 The Gaussian assumption leaves two symptoms in the residuals of the case study: standardised residuals with values six standard deviations from the mean, and a bend of the Q--Q plot at the extremes
 \ts{13}{11}{14:47}\ts{13}{11}{15:54}. A natural heavier-tailed alternative is the Student $t$ law. Because $\Var z_t$ must be $1$, one takes the \emph{standardised} $t$ with $\nu>2$ degrees of freedom:
@@ -1061,6 +1124,10 @@ Compared with \eqref{ch13:eq-loglik}, the quadratic penalty $\varepsilon_t^2/\si
 volatilities of the two fits in the case study are nearly identical for this reason and because the parameters of $\sigma_t^2$ are largely determined by the bulk of the data). The degrees of freedom $\nu$ is estimated like any other parameter, most simply by \emph{profiling}: fit the model for a grid of $\nu$ and
 compare the maximised log-likelihoods \ts{13}{11}{23:17}\ts{24}{19}{1:19:31}. The tail heaviness is inherited by the returns twice, from $z_t$ and from the fluctuation of $\sigma_t$: by \cref{ch13:thm-kurt} the GARCH$(1,1)$ with $t_\nu$ innovations has kurtosis
 $\kappa_z(1-\phi^2)/[1-\phi^2-(\kappa_z-1)\alpha_1^2]$ with $\kappa_z=3+6/(\nu-4)$.
+
+\begin{exercise}[(not from the course): kurtosis with $t$ innovations]\label{ch13:ex-extra3}
+For which $(\alpha_1,\beta_1)$ is the kurtosis of a GARCH$(1,1)$ with $t_6$ innovations finite? Compare with the Gaussian case for $\alpha_1+\beta_1=0.95$. Prove that the maximum $\alpha_1$ for an ARCH$(1)$ with fourth moment decreases from $1/\sqrt3$ to $1/\sqrt{\kappa_z}$.
+\end{exercise}
 
 \subsection{Diagnostics and model choice}\label{ch13:sec-diag}
 After fitting, the standardised residuals $\hat z_t=\hat\varepsilon_t/\hat\sigma_t$ should behave like i.i.d.\ draws of the assumed law with unit variance. Hence \ts{24}{19}{1:14:13}\ts{13}{11}{11:39}\ts{13}{11}{12:40}:
@@ -1245,6 +1312,7 @@ Everything in the chapter follows from this: the stationary level is the balance
 % ==================================================================
 \section*{Exercises}
 \addcontentsline{toc}{section}{Exercises}
+Standalone exercises follow the section they practise. 2013 PS5 Problems~1--2 are a connected series (Problem~2 generalises the equal sampling intervals of Problem~1 and they share the set-up below), so they stay together here.
 
 \subsection*{From 2013 Problem Set 5 (its Problems 1 and 2 are Problems 3 and 4 of 2024 Problem Set 4)}
 In the first two problems $X(t)$ follows $\dd X/X=\mu\dd t+\sigma\dd W$ and the price is sampled on $[0,T]$, so that the log returns $Y_i=\log(X_i/X_{i-1})$ are independent $N(\mu_*h_i,\sigma^2h_i)$ with $\mu_*=\mu-\tfrac12\sigma^2$ (this is given).
@@ -1269,70 +1337,4 @@ Now the increments $h_i>0$ are arbitrary with $\sum_ih_i=T$.
   \item With only $n+1$ price points allowed (including $X_0$ and $X_T$), prove that: the MLE of $\sigma^2$
       depends on the spacing, but its \emph{variance} is the same for every spacing; and the MLE of $\mu_*$ is the same, with the same variance, for every spacing. (In the 2024 statement the parts of Problem~4 are mislabelled 3(a)--3(c).)
 \end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS5 (2013), Problem 3: properties of the ARCH$(1)$ model]\label{ch13:ex-ps5-3}
-Let $y_t=\mu_t+\varepsilon_t$, $\varepsilon_t=z_t\sigma_t$, $\sigma_t^2=\alpha_0+\alpha_1\varepsilon_{t-1}^2$, with $z_t$ i.i.d., $\E[z_t]=0$, $\Var z_t=1$, $\E[z_t^3]=0$, $\E[z_t^4]=\kappa_z$ ($=3$ if Gaussian). Prove:
-\begin{enumerate}[(a)]
-  \item $\E[\varepsilon_t^2]=\alpha_0/(1-\alpha_1)$;
-  \item $\E[\varepsilon_t^3]=0$;
-  \item $\E[\varepsilon_t^4]=\kappa_z\alpha_0^2(1+\alpha_1)/[(1-\alpha_1)(1-\kappa_z\alpha_1^2)]$;
-  \item which constraints on $\alpha_0,\alpha_1$ does (c) require for the fourth moment to be finite and stationary;
-  \item the kurtosis of $\varepsilon_t$: for Gaussian $z_t$, is the unconditional distribution of $\varepsilon_t$ heavier-tailed than the Gaussian?
-      (The problem as printed writes the constant $\kappa_z$ in (c) without naming it; it is the kurtosis of $z_t$ stated just before.)
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS5 (2013), Problem 4: are year-to-year differences in volatility significant?]\label{ch13:ex-ps5-4}
-The annual sample variances of the daily log returns of the S\&P~500 close are (year: daily variance, number of days)
-2006: $3.981\times10^{-5}$, 251; 2007: $1.019\times10^{-4}$, 251; 2008: $6.677\times10^{-4}$, 253; 2009: $2.950\times10^{-4}$, 252; 2010: $1.295\times10^{-4}$, 252; 2011: $2.164\times10^{-4}$, 252; 2012: $6.459\times10^{-5}$, 250.
-Model the returns of one year as an i.i.d.\ sample from $N(\mu,\sigma^2)$ and let $\hat\sigma^2$ be the unbiased sample variance.
-\begin{enumerate}[(a)]
-  \item Prove that $\hat\sigma^2\sim\frac{\sigma^2}{n-1}\chi^2_{n-1}$.
-  \item Invert the $\chi^2$ percentiles $q_{0.025},q_{0.975}$ to obtain a two-sided $95\%$ confidence interval for $\sigma^2$ (the problem gives the percentiles for $249$ to $252$ degrees of freedom): compute it for 2008, express it as an annualised volatility ($\sqrt{253}\,\sigma$),
-      and say whether the sample volatility of any other year falls inside it.
-  \item Under the null hypothesis of equal daily variances in two years, show that $S=\hat\sigma^2_{2008}/\hat\sigma^2_{2007}$ has an $F$ distribution (state its degrees of freedom); the problem gives $q_{0.025}=0.7804$, $q_{0.975}=1.2815$ for $F_{252,250}$. Compute $S$ for 2008 against 2007, find the
-      $P$-value (the $\alpha$ at which the test is on the boundary), and repeat for 2008 against 2006.
-\end{enumerate}
-\end{exercise}
-
-\subsection*{From 2024 Problem Set 5 (Problems 1--2, L\'evy processes, are in \cref{ch:sp2})}
-\begin{exercise}[PS5 (2024), Problem 3: the extreme-value estimator of Parkinson (1980)]\label{ch13:ex-ps5-p3}
-Read M.~Parkinson, ``The extreme value method for estimating the variance of the rate of return'', \emph{J.\ Business} 53(1) (1980) 61--65. (b) Explain the definition of the estimator $D_x$ of Section~II. (c) Explain the definition of $D_l$ of Section~III. (d) Using the results of Section~IV,
-explain why the improvement obtained with $D_l$ as an estimate of the variance $V$ (Section~V) could matter particularly in studies of the dependence of $V$ on time and on price, if there is any. (Part (a), ``read the article'', has no answer.) The estimator of \cref{ch13:sec-parkinson} is the one in question.
-\end{exercise}
-
-\begin{exercise}[PS5 (2024), Problem 4: volatility case studies]\label{ch13:ex-ps5-p4}
-The R Markdown files
-\begin{itemize}\item \file{Case_Study_Estimating__SP500_Historical_Volatility.Rmd}, \item \file{Case_Study_Estimating__ARKK_Historical_Volatility.Rmd}\end{itemize}
-produce the S\&P~500 and ARKK case studies (\cref{ch13:cs-ohlc}), which use the naive, ARIMA and seasonal ARIMA methods of Hyndman and Athanasopoulos,
-\emph{Forecasting: Principles and Practice} (2nd ed.), Chapter~3 (naive method, residual diagnostics) and Chapter~8 (automatic ARIMA).
-\begin{enumerate}[(a)]
-  \item Comment on the S\&P~500 results you find interesting or significant.
-  \item The same for ARKK.
-  \item Compare the volatility findings for ARKK and the S\&P~500.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS5 (2024), Problem 5, optional (extra credit): your own stock]\label{ch13:ex-ps5-p5}
-Choose a stock symbol and edit the ARKK file to run the same analysis.
-\begin{enumerate}[(a)]
-  \item Produce the PDF of the case study.
-  \item Comment on results you find interesting.
-  \item Compare your stock with the S\&P~500 and ARKK.
-\end{enumerate}
-\end{exercise}
-
-\subsection*{Additional exercises (not from the course)}
-\begin{exercise}[(not from the course): forecasting]\label{ch13:ex-extra1}
-For a GARCH$(1,1)$ with $\alpha_1=0.08$, $\beta_1=0.90$, long-run daily volatility $1\%$, and $\sigma_{t+1}=1.6\%$, compute the expected annualised volatility over the next $21$ and $252$ days from \eqref{ch13:eq-hday}, and the half-life of a variance shock. Check by simulation.
-\end{exercise}
-\begin{exercise}[(not from the course): unbiasedness of a range estimator]\label{ch13:ex-extra2}
-Using $\E[(H-L)^2]=4\ln2\,\sigma^2$ and $\E[c^2]=\sigma^2$, verify that the Garman--Klass estimator \eqref{ch13:eq-gk} is unbiased, and that with a drift $\mu_*\ne0$ the close-to-close estimator $c^2$ has expectation $\sigma^2+\mu_*^2$ (units of a day). Why does this not contradict the estimator being unbiased for a driftless process?
-\end{exercise}
-\begin{exercise}[(not from the course): kurtosis with $t$ innovations]\label{ch13:ex-extra3}
-For which $(\alpha_1,\beta_1)$ is the kurtosis of a GARCH$(1,1)$ with $t_6$ innovations finite? Compare with the Gaussian case for $\alpha_1+\beta_1=0.95$. Prove that the maximum $\alpha_1$ for an ARCH$(1)$ with fourth moment decreases from $1/\sqrt3$ to $1/\sqrt{\kappa_z}$.
-\end{exercise}
-\begin{exercise}[(not from the course): estimation]\label{ch13:ex-extra4}
-Simulate $2000$ returns of a Gaussian GARCH$(1,1)$ with $(\alpha_0,\alpha_1,\beta_1)=(2\times10^{-6},0.08,0.90)$, write the log-likelihood \eqref{ch13:eq-loglik} in the reparametrisation of \cref{ch13:sec-lik} and maximise it; compare the estimates with the truth over $200$ replications and comment on the bias and dispersion of $\hat\alpha_1+\hat\beta_1$.
 \end{exercise}

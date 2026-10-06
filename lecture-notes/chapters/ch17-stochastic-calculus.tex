@@ -19,7 +19,7 @@
 average log return); 2013 note \file{MIT18_S096F13_lecnote18.pdf} (7 pages).
 \textbf{Problem sets.} 2013 PS8, all problems (A-1 to A-5, B-1 to B-3); Problem~A-2 also opens 2024 PS4 and is treated
 in \cref{ch:sp2}, where its solution is developed. 2024 PS5 (L\'evy processes, simulations) belongs to \cref{ch:sp2}; there is no 2024 problem set on
-stochastic calculus. The exercises are at the end of the chapter.
+stochastic calculus. Each exercise follows the section it practises.
 \textbf{Not covered in class.} 2024 does not treat change of measure, 2013 does not construct the integral (the isometry is
 stated without proof); the construction of \cref{ch17:sec-general}, the proof sketch of It\^o's lemma with control of the
 remainder, the multi-dimensional formula and the Stratonovich integral are additions of these notes (marked as such).
@@ -120,6 +120,15 @@ share): it is admissible only if the sign is decided from past information \ts{1
 daily P\&L of \cref{eq:pnl}, where the holdings $\bm q(t+1)$ are chosen at the end of day $t$: the
 sum $\sum_tq(t+1)\Delta p(t)$ is a left-point sum.
 \end{finance}
+
+\begin{exercise}[PS8 (2013), Problem A-3: adapted processes]\label{ch17:ex-a3}
+Let $X_t$ be a given stochastic process. Which of the following processes $Y_t$ are adapted to $X_t$?
+\begin{enumerate}[(a)]
+  \item $Y_t=X_{T-t}$ for $t\le T$, for a fixed $T$.
+  \item $Y_t=\max_{0\le s\le2t}X_s$.
+  \item $Y_t=|\{i\in[0,t]:X_i\ge0\}|$ (the amount of time in $[0,t]$ during which $X$ is non-negative; the printed set-notation is ambiguous).
+\end{enumerate}
+\end{exercise}
 
 \subsection{Integrals of step processes}\label{ch17:sec-stepint}
 The lecture builds the integral $I(f)=\int_0^Tf\,\dd B$ in stages of increasing generality
@@ -354,6 +363,14 @@ fine path). The left-point sums converge (slowly, at rate $n^{-1/2}$) to the It\
 right-point sums tend to $\tfrac12(B_1^2+1)=1.032$; the three limits are the tick labels of the vertical axis.}\label{ch17:fig-sums}
 \end{figure}
 
+\begin{exercise}[PS8 (2013), Problem B-2: It\^o isometry]\label{ch17:ex-b2}
+Use the It\^o isometry to calculate $\E[X_t^2]$, where $X_t=\int_0^tB_s\,\dd B_s$.
+\end{exercise}
+
+\begin{exercise}[not from the course: Stratonovich]\label{ch17:ex-x1}
+Show that the mid-point sums $\sum_i\bigl[\tfrac12(B_{t_i}+B_{t_{i+1}})\bigr]^{2}\Delta_iB$ converge to $\tfrac13B_T^3$ as the mesh tends to zero, and compare with the left-point (It\^o) limit $\int_0^TB^2\,\dd B=\tfrac13B_T^3-\int_0^TB_s\,\dd s$ from \eqref{ch17:eq-antider}. (Hint: compare each term with $\tfrac13(B_{t_{i+1}}^3-B_{t_i}^3)$.)
+\end{exercise}
+
 % ==================================================================
 \section{It\^o's lemma}\label{ch17:sec-lemma}
 
@@ -476,6 +493,27 @@ which is the pair of formulas of \cref{ch17:sec-strat}. Consequently a Langevin 
 in finance the It\^o reading is used because prices must be martingales when there is no drift.
 \end{remark}
 
+\begin{exercise}[PS8 (2013), Problem A-4: It\^o's formula]\label{ch17:ex-a4}
+Use It\^o's formula to compute the differentials of the following ($B_t$ is a Brownian motion):
+\begin{enumerate}[(a)]
+  \item $f(t,B_t)=B_t^3$;
+  \item $\sin B_t$;
+  \item $\cos(t^3+B_t^2)$;
+  \item $e^{B_t^2}$;
+  \item $f(t,B_t)=\int B_t^2\,\dd B_t$;
+  \item $f(t,B_t)=\int B_t\,\dd t$;
+  \item $f(t,X_t)=X_t^2$, where $\dd X_t=\mu\,\dd t+\sigma\,\dd B_t$ with $\mu,\sigma$ constants. (Parts (e) and (f) are printed as indefinite integrals; interpret them as the processes $\int_0^tB_s^2\,\dd B_s$ and $\int_0^tB_s\,\dd s$.)
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS8 (2013), Problem B-3: integration by parts]\label{ch17:ex-b3}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Prove the integration by parts formula for the It\^o integral, $\int_0^th(s)\,\dd B_s=h(t)B_t-\int_0^th'(s)B_s\,\dd s$ (for a deterministic differentiable $h$).
+  \item Using (a), prove that for each fixed $T$ the random variable $\int_0^TB_s\,\dd s$ is normally distributed.
+\end{enumerate}
+\end{exercise}
+
 % ==================================================================
 \section{Examples: martingales, moments, exponentials}\label{ch17:sec-examples}
 
@@ -562,6 +600,22 @@ is $\mu h'+\tfrac12\sigma^2h''=0$; the lecture obtains it through $f(t,x)=h(\mu 
 \ts{24}{24}{1:21:11}. This is the formula \eqref{ch11:eq-ruin} of \cref{ch11:sec-ruin} with $a=-B'$, $b=A$ and starting point $0$; there it was obtained by the infinitesimal argument and by
 optional stopping applied to $e^{-2\mu X/\sigma^2}$, which is the exponential martingale \eqref{ch17:eq-expmart} with $\theta=-2\mu/\sigma^2$.
 It\^o's lemma gives the same result in one line, and shows why $\mu h'+\tfrac12\sigma^2h''=0$ is the right equation: the operator $\mu\partial_x+\tfrac12\sigma^2\partial_x^2$ is the \emph{generator} of $X$.
+
+\begin{exercise}[PS8 (2013), Problem A-1: identify martingales]\label{ch17:ex-a1}
+Which of the following are martingales (with respect to their natural filtration)?
+\begin{enumerate}[(a)]
+  \item A simple random walk.
+  \item $X_t=|S_t|$ where $S_t$ is a simple random walk.
+  \item $X_0=0$ and $X_{t+1}=X_t+(Y_t-\tfrac1\lambda)$ for $t\ge0$, where the $Y_t$ are i.i.d.\ exponential
+      random variables with parameter $\lambda$.
+  \item $X_0=0$ and $X_{t+1}=X_t+Z_tZ_{t-1}\cdots Z_0$ for $t\ge0$, where the $Z_t$ are i.i.d.\ lognormal.
+  \item $X_t=B^{(1)}_tB^{(2)}_t$, the product of two independent Brownian motions.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS8 (2013), Problem A-2]\label{ch17:ex-a2}
+This problem (conditional mean and variance of Brownian motion, of Brownian motion with drift, and $\E\exp(\sigma(B(t)-B(s)))$) is 2024 PS4 Problem~1 and is stated with the other Brownian-motion exercises in \cref{ch11:ex-cond}.
+\end{exercise}
 
 % ==================================================================
 \section{Geometric Brownian motion}\label{ch17:sec-gbm}
@@ -707,6 +761,22 @@ Let $\bm B=(B^{(1)},\dots,B^{(n)})$ be an $n$-dimensional Brownian motion (indep
         and $(\dd W)^2=\sum_iB_i^2/|\bm B|^2\,\dd t=\dd t$; by L\'evy's characterisation (not proved here) $W$ is a Brownian motion. The drift $(n-1)/(2R)$ is the ``centrifugal'' push of a random walk in the plane away from the origin. As a check for $n=2$: $\E[R_t]=\sqrt{\pi t/2}$ from the Rayleigh law of \cref{ch11:sec-2d}, and $\tfrac{\dd}{\dd t}\E[R_t]=\E\tfrac1{2R_t}=\tfrac12\sqrt{\pi/(2t)}$, the derivative of $\sqrt{\pi t/2}$ (using $\E 1/R_t=\sqrt{\pi/(2t)}$).
 \end{itemize}
 
+\begin{exercise}[PS8 (2013), Problem B-1: two-dimensional Brownian motion]\label{ch17:ex-b1}
+Let $Y(t)=(X_1(t),X_2(t))$ where $X_1,X_2$ are independent Brownian motions (a $2$-dimensional Brownian motion).
+\begin{enumerate}[(a)]
+  \item For fixed $t$, find the probability density function of $Y(t)$.
+  \item Let $D_\rho=\{x\in\R^2:|x|<\rho\}$ and compute $\Prob(Y(t)\in D_\rho)$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: exit from a disc]\label{ch17:ex-x4}
+For a $2$-dimensional Brownian motion started at the origin, let $\tau=\inf\{t:|\bm B_t|=\rho\}$. Use $|\bm B_t|^2-2t$ (\cref{ch17:sec-multi}) and optional stopping (\cref{ch04:sec-stopping}) to find $\E[\tau]$.
+\end{exercise}
+
+\begin{exercise}[not from the course: discounted price]\label{ch17:ex-x2}
+Let $\dd P=rP\,\dd t+\sigma P\,\dd B$. Show that $\dd(e^{-rt}P_t)=\sigma e^{-rt}P_t\,\dd B_t$ using the product rule, so that the discounted price is a martingale, and compute $\Var P_T$.
+\end{exercise}
+
 % ==================================================================
 \section{Change of measure and Girsanov's theorem}\label{ch17:sec-girsanov}
 
@@ -725,6 +795,10 @@ $\widetilde\Prob$ is equivalent to $\Prob$ if and only if there is a random vari
 \end{theorem}
 \ts{13}{18}{1:04:17}\ts{13}{18}{1:07:28}\ts{13}{18}{1:08:32}\ \noindent
 In the finite example $Z=(2,\tfrac12,\tfrac12)$. A mapping of paths in general destroys equivalence: the law of the \emph{square} $B(t)^2$ is not equivalent to that of $B(t)$, because $B^2$ never takes negative values and $B$ does \file{lecnote18}, \S3 (this is essentially PS8 Problem~A-5).
+
+\begin{exercise}[PS8 (2013), Problem A-5: non-equivalent laws]\label{ch17:ex-a5}
+Let $B(t)$ be a Brownian motion. Prove that the probability distributions of $B(t)$ and of $B(t)^2$ are not equivalent (two probability distributions $\Prob$ and $\Q$ are equivalent if for every set $X$, $\Prob(X)>0$ if and only if $\Q(X)>0$).
+\end{exercise}
 
 \subsection{Girsanov's theorem}
 \begin{theorem}[Girsanov, simple version]\label{ch17:thm-girsanov1}
@@ -788,6 +862,10 @@ walk with up-probability $p=\tfrac12(1+\varepsilon)$ against the fair one has, o
 with steps $\pm\sqrt h$ and $\varepsilon=\mu\sqrt h$ this tends to $e^{-\mu X_T+\mu^2T/2}$, the density \eqref{ch17:eq-Z} (own computation).
 \end{remark}
 
+\begin{exercise}[not from the course: Girsanov by simulation]\label{ch17:ex-x3}
+For $\mu=0.5$, $T=1$ let $X_T\sim N(\mu,1)$ under $\Prob$ and $Z=e^{-\mu X_T+\mu^2/2}$. Compute (exactly, and by simulation) $\E[Z]$, $\E[Z\ind_{\{X_T>1\}}]$ and $\E[Z\,X_T^2]$, and explain the results using \cref{ch17:thm-girsanov1}.
+\end{exercise}
+
 % ==================================================================
 \section{Errata and the two lectures compared}\label{ch17:sec-compare}
 
@@ -828,85 +906,3 @@ links the PDE condition of \cref{ch17:thm-pde} to expectations. \Cref{ch:bs} use
 & && \Rightarrow\ X\text{ is driftless under }Z\cdot\Prob
 \end{align*}
 \end{keyformulas}
-
-% ==================================================================
-\section*{Exercises}
-\addcontentsline{toc}{section}{Exercises}
-
-\begin{exercise}[PS8 (2013), Problem A-1: identify martingales]\label{ch17:ex-a1}
-Which of the following are martingales (with respect to their natural filtration)?
-\begin{enumerate}[(a)]
-  \item A simple random walk.
-  \item $X_t=|S_t|$ where $S_t$ is a simple random walk.
-  \item $X_0=0$ and $X_{t+1}=X_t+(Y_t-\tfrac1\lambda)$ for $t\ge0$, where the $Y_t$ are i.i.d.\ exponential
-      random variables with parameter $\lambda$.
-  \item $X_0=0$ and $X_{t+1}=X_t+Z_tZ_{t-1}\cdots Z_0$ for $t\ge0$, where the $Z_t$ are i.i.d.\ lognormal.
-  \item $X_t=B^{(1)}_tB^{(2)}_t$, the product of two independent Brownian motions.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS8 (2013), Problem A-2]\label{ch17:ex-a2}
-This problem (conditional mean and variance of Brownian motion, of Brownian motion with drift, and $\E\exp(\sigma(B(t)-B(s)))$) is 2024 PS4 Problem~1 and is stated with the other Brownian-motion exercises in \cref{ch11:ex-cond}.
-\end{exercise}
-
-\begin{exercise}[PS8 (2013), Problem A-3: adapted processes]\label{ch17:ex-a3}
-Let $X_t$ be a given stochastic process. Which of the following processes $Y_t$ are adapted to $X_t$?
-\begin{enumerate}[(a)]
-  \item $Y_t=X_{T-t}$ for $t\le T$, for a fixed $T$.
-  \item $Y_t=\max_{0\le s\le2t}X_s$.
-  \item $Y_t=|\{i\in[0,t]:X_i\ge0\}|$ (the amount of time in $[0,t]$ during which $X$ is non-negative; the printed set-notation is ambiguous).
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS8 (2013), Problem A-4: It\^o's formula]\label{ch17:ex-a4}
-Use It\^o's formula to compute the differentials of the following ($B_t$ is a Brownian motion):
-\begin{enumerate}[(a)]
-  \item $f(t,B_t)=B_t^3$;
-  \item $\sin B_t$;
-  \item $\cos(t^3+B_t^2)$;
-  \item $e^{B_t^2}$;
-  \item $f(t,B_t)=\int B_t^2\,\dd B_t$;
-  \item $f(t,B_t)=\int B_t\,\dd t$;
-  \item $f(t,X_t)=X_t^2$, where $\dd X_t=\mu\,\dd t+\sigma\,\dd B_t$ with $\mu,\sigma$ constants. (Parts (e) and (f) are printed as indefinite integrals; interpret them as the processes $\int_0^tB_s^2\,\dd B_s$ and $\int_0^tB_s\,\dd s$.)
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS8 (2013), Problem A-5: non-equivalent laws]\label{ch17:ex-a5}
-Let $B(t)$ be a Brownian motion. Prove that the probability distributions of $B(t)$ and of $B(t)^2$ are not equivalent (two probability distributions $\Prob$ and $\Q$ are equivalent if for every set $X$, $\Prob(X)>0$ if and only if $\Q(X)>0$).
-\end{exercise}
-
-\begin{exercise}[PS8 (2013), Problem B-1: two-dimensional Brownian motion]\label{ch17:ex-b1}
-Let $Y(t)=(X_1(t),X_2(t))$ where $X_1,X_2$ are independent Brownian motions (a $2$-dimensional Brownian motion).
-\begin{enumerate}[(a)]
-  \item For fixed $t$, find the probability density function of $Y(t)$.
-  \item Let $D_\rho=\{x\in\R^2:|x|<\rho\}$ and compute $\Prob(Y(t)\in D_\rho)$.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS8 (2013), Problem B-2: It\^o isometry]\label{ch17:ex-b2}
-Use the It\^o isometry to calculate $\E[X_t^2]$, where $X_t=\int_0^tB_s\,\dd B_s$.
-\end{exercise}
-
-\begin{exercise}[PS8 (2013), Problem B-3: integration by parts]\label{ch17:ex-b3}
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Prove the integration by parts formula for the It\^o integral, $\int_0^th(s)\,\dd B_s=h(t)B_t-\int_0^th'(s)B_s\,\dd s$ (for a deterministic differentiable $h$).
-  \item Using (a), prove that for each fixed $T$ the random variable $\int_0^TB_s\,\dd s$ is normally distributed.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: Stratonovich]\label{ch17:ex-x1}
-Show that the mid-point sums $\sum_i\bigl[\tfrac12(B_{t_i}+B_{t_{i+1}})\bigr]^{2}\Delta_iB$ converge to $\tfrac13B_T^3$ as the mesh tends to zero, and compare with the left-point (It\^o) limit $\int_0^TB^2\,\dd B=\tfrac13B_T^3-\int_0^TB_s\,\dd s$ from \eqref{ch17:eq-antider}. (Hint: compare each term with $\tfrac13(B_{t_{i+1}}^3-B_{t_i}^3)$.)
-\end{exercise}
-
-\begin{exercise}[not from the course: discounted price]\label{ch17:ex-x2}
-Let $\dd P=rP\,\dd t+\sigma P\,\dd B$. Show that $\dd(e^{-rt}P_t)=\sigma e^{-rt}P_t\,\dd B_t$ using the product rule, so that the discounted price is a martingale, and compute $\Var P_T$.
-\end{exercise}
-
-\begin{exercise}[not from the course: Girsanov by simulation]\label{ch17:ex-x3}
-For $\mu=0.5$, $T=1$ let $X_T\sim N(\mu,1)$ under $\Prob$ and $Z=e^{-\mu X_T+\mu^2/2}$. Compute (exactly, and by simulation) $\E[Z]$, $\E[Z\ind_{\{X_T>1\}}]$ and $\E[Z\,X_T^2]$, and explain the results using \cref{ch17:thm-girsanov1}.
-\end{exercise}
-
-\begin{exercise}[not from the course: exit from a disc]\label{ch17:ex-x4}
-For a $2$-dimensional Brownian motion started at the origin, let $\tau=\inf\{t:|\bm B_t|=\rho\}$. Use $|\bm B_t|^2-2t$ (\cref{ch17:sec-multi}) and optional stopping (\cref{ch04:sec-stopping}) to find $\E[\tau]$.
-\end{exercise}

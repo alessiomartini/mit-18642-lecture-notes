@@ -206,6 +206,11 @@ size of the coefficients: ridge regression, whose effective number of parameters
 (\cref{ch05:sec-shrink}). \Cref{ch:regularized} uses the same idea to calibrate pricing and risk models.
 \end{remark}
 
+\begin{exercise}[not from the course: optimism of any linear smoother]
+Let $\hat{\bm y}=S\bm y$ for a fixed matrix $S$ (ridge regression, \cref{ch05:sec-shrink}, is an example with $S=X(X\T X+\lambda I)^{-1}X\T$), $\bm y=\bm f+\bm\varepsilon$, $\Cov\bm\varepsilon=\sigma^2I$. Show that $\frac1n\E[\|\bm y^*-\hat{\bm y}\|^2]-\frac1n\E[\|\bm y-\hat{\bm y}\|^2]=\frac{2\sigma^2}{n}\tr S$, where
+$\bm y^*=\bm f+\bm\varepsilon^*$ is an independent copy, so that $\tr S$ plays the role of the number of parameters in \cref{ch16:prop-bv}. Evaluate $\tr S$ for ridge in terms of the singular values.
+\end{exercise}
+
 % ==================================================================
 \section{Unsupervised learning: clustering}\label{ch16:sec-unsup}
 The lecture spends one slide on unsupervised learning \ts{24}{23}{14:53}--\ts{24}{23}{15:58}: give the software a list of
@@ -247,6 +252,15 @@ proved here) that a continuous relaxation of the $k$-means objective is solved b
 so PCA is often used to reduce the features before clustering. Unlike PCA, $J$ has many local minima; one restarts from different
 initial centres.
 \end{intuition}
+
+\begin{exercise}[not from the course: $k$-means]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Show that the mean minimises $\sum_{i\in C}\|\bm x_i-\bm m\|^2$ and that the minimum equals $\frac1{2|C|}\sum_{i,j\in C}\|\bm x_i-\bm x_j\|^2$.
+  \item Take the four points $(0,0),(4,0),(0,1),(4,1)$ and $K=2$. Show that ``left pair/right pair'' and ``bottom pair/top pair'' are both stable
+      under Lloyd's algorithm, and compute $J$ for each ($1$ and $16$): a local minimum need not be a global one.
+\end{enumerate}
+\end{exercise}
 
 % ==================================================================
 \section{Optimisation: gradient descent}\label{ch16:sec-gd}
@@ -329,6 +343,17 @@ With $n$ in the millions one computes the gradient of \eqref{ch16:eq-gd} on a ra
 the learning rate \ts{24}{23}{37:28} without naming them (adaptive schemes such as Adam belong there).
 \end{remark}
 
+\begin{exercise}[not from the course: gradient descent on an ill-conditioned quadratic]
+Let $f(\bm\theta)=\tfrac12(\theta_1^2+10\theta_2^2)$.
+\begin{enumerate}[(a)]
+  \item For which $\eta$ does gradient descent converge?
+  \item Find the $\eta$ that minimises the contraction factor and this factor.
+  \item Starting at $(1,1)$, how many steps are needed to bring $\|\bm\theta\|$ below $10^{-3}$ with that $\eta$,
+      and with $\eta=0.05$?
+  \item Rescale $\theta_2=\theta_2'/\sqrt{10}$ and repeat: what has changed?
+\end{enumerate}
+\end{exercise}
+
 \subsection{Early stopping is a form of ridge regression (not discussed in class)}
 Hull's stopping rule, ``continue until the validation results diverge from the training results'' \ts{24}{23}{36:26}, has a precise meaning in the linear model. Let $X=UDV\T$ be the thin SVD as in \cref{ch05:sec-shrink}
 and run \eqref{ch16:eq-gd} on $\tfrac12\|\bm y-X\bm\beta\|^2$ from $\bm\beta_0=\bm 0$. Along the $j$-th right singular vector the error contracts by $(1-\eta d_j^2)$ per step, so after $k$ steps the fitted values are
@@ -409,6 +434,11 @@ $\delta^{(l)}_j=\sum_i\delta^{(l+1)}_i\,\partial z^{(l+1)}_i/\partial z^{(l)}_j=
 The name is the direction of the recursion: the error signal is propagated from the output layer to the input layer, and each layer's derivative reuses the one above. (The formulas were checked against a finite-difference derivative for a $3\to4\to1$ sigmoid network: the derivative of a weight agrees to
 $8$ digits.) For sigmoid layers $\varphi'=a(1-a)\le\tfrac14$, so the product of $\varphi'$ along many layers shrinks the signal, the \emph{vanishing-gradient} problem, one reason why ReLU ($\varphi'\in\{0,1\}$) is popular in deep networks. Hull reports that all the
 activation functions he tried behaved similarly well, and that sigmoid worked best in his two applications \ts{24}{23}{1:12:20}.
+
+\begin{exercise}[not from the course: backpropagation]
+A network has one input, one hidden layer with two $\tanh$ neurons, and a linear output, $h=w_1\tanh(u_1x+c_1)+w_2\tanh(u_2x+c_2)+d$, with loss $\ell=\tfrac12(h-y)^2$. Using \cref{ch16:prop-bp}, compute $\partial\ell/\partial u_1$, $\partial\ell/\partial c_1$, $\partial\ell/\partial w_1$ and check with a finite-difference in
+python for random values of the parameters.
+\end{exercise}
 
 % ==================================================================
 \section{Application: learning the Black--Scholes--Merton price}\label{ch16:sec-bsm}
@@ -545,6 +575,23 @@ trials, the Monte Carlo rule in about ten times more (compare the tables of slid
 In our simulation of $200$ independent runs, the fraction of runs in which the greedy move at $s=8$ is $3$ after $1{,}000$, $5{,}000$, $10{,}000$ trials is $62.5\%,\,95\%,\,100\%$ for the Monte Carlo rule and $100\%$ at all three horizons for temporal-difference learning. This matches the lecture's remark that with Monte Carlo the machine is not yet sure after $1{,}000$ trials, is
 fairly sure after $5{,}000$ and certain after $10{,}000$, and that temporal difference is faster \ts{24}{23}{1:01:52}--\ts{24}{23}{1:02:54}. Hull adds that when the opponent also learns, moves $1$ and $2$ from $8$ turn negative \ts{24}{23}{1:03:55}: against a perfect opponent $Q(8,1)$ and $Q(8,2)$ are $-1$, because $7$ and $6$ leave a winning position.
 
+\begin{exercise}[not from the course: Nim]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Verify \cref{ch16:prop-nim} for $s\le13$ by listing the winning moves.
+  \item Verify by hand the exact values $Q^*(5,\cdot)=(\tfrac13,\tfrac13,0)$ and $Q^*(7,\cdot)=(\tfrac79,1,\tfrac13)$ of \cref{ch16:ex-nim}.
+  \item For which starting number of matches $n\le13$ is there a first move that wins even if the opponent plays perfectly?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: one $Q$-learning step]
+In Nim with $\alpha=0.05$, $\gamma=1$, let $Q(8,3)=0.5$ and $Q(4,\cdot)=(0.1,0.2,0.4)$. A trial goes $8\xrightarrow{3}5\to4$ (opponent takes $1$). Compute the updated $Q(8,3)$ by
+\begin{enumerate}[(a)]
+  \item the temporal-difference rule and
+  \item the Monte Carlo rule, if the trial ends with a win.
+\end{enumerate}
+\end{exercise}
+
 \subsection{Deep $Q$-learning}
 When there are many states or actions the table is filled only partly \ts{24}{23}{1:03:55}--\ts{24}{23}{1:05:00}, so $Q$ is estimated as a function by a network $Q_{\bm\theta}(S,A)$, trained to minimise the sum of squared differences between the network and the target \ts{24}{23}{1:05:00} (slide~37):
 \[
@@ -572,6 +619,11 @@ when $0.2c$ exceeds the value put on this variance, i.e.\ when transaction costs
 Explaining the objective functions, Hull says that with VaR$_{95}$ one wants ``the 95th percentile point of the loss distribution to be as high as possible'' \ts{24}{23}{1:09:13}. A risk manager wants it \emph{as low as possible}: the objective is to \emph{minimise} the
 95th percentile of the loss (as for the CVaR$_{95}$ described in the next sentence, the average loss beyond that percentile, ``as low as possible''). The definitions and the properties of both measures are in \cref{ch:var}.
 \end{coursenote}
+
+\begin{exercise}[not from the course: minimum-variance delta]
+A call has $\delta=0.60$ and vega $\nu=25$ (price change per unit change of $\sigma$ in absolute terms, e.g.\ $0.01$ of volatility is $0.25$). Suppose over a day $\Delta\sigma=-0.008\,\Delta S+\epsilon$ ($\Delta S$ in dollars). Compute $\delta_{\mathrm{MV}}$.
+How does the variance of the hedged position change when $h=\delta_{\mathrm{MV}}$ replaces $h=\delta$, if $\Var(\Delta S)=1$ and $\Var(\epsilon)=10^{-5}$?
+\end{exercise}
 
 % ==================================================================
 \section{The questions at the end}
@@ -609,53 +661,3 @@ Toronto website \ts{24}{23}{1:13:20}, and, asked how the objective function is c
 &\text{Exploration:} && \varepsilon_n=\varepsilon_{n-1}\cdot\text{decay},\quad \varepsilon_n=0.9995^n
 \end{align*}
 \end{keyformulas}
-
-% ==================================================================
-\section*{Exercises}
-\addcontentsline{toc}{section}{Exercises}
-
-\begin{exercise}[not from the course: gradient descent on an ill-conditioned quadratic]
-Let $f(\bm\theta)=\tfrac12(\theta_1^2+10\theta_2^2)$.
-\begin{enumerate}[(a)]
-  \item For which $\eta$ does gradient descent converge?
-  \item Find the $\eta$ that minimises the contraction factor and this factor.
-  \item Starting at $(1,1)$, how many steps are needed to bring $\|\bm\theta\|$ below $10^{-3}$ with that $\eta$,
-      and with $\eta=0.05$?
-  \item Rescale $\theta_2=\theta_2'/\sqrt{10}$ and repeat: what has changed?
-\end{enumerate}
-\end{exercise}
-\begin{exercise}[not from the course: backpropagation]
-A network has one input, one hidden layer with two $\tanh$ neurons, and a linear output, $h=w_1\tanh(u_1x+c_1)+w_2\tanh(u_2x+c_2)+d$, with loss $\ell=\tfrac12(h-y)^2$. Using \cref{ch16:prop-bp}, compute $\partial\ell/\partial u_1$, $\partial\ell/\partial c_1$, $\partial\ell/\partial w_1$ and check with a finite-difference in
-python for random values of the parameters.
-\end{exercise}
-\begin{exercise}[not from the course: optimism of any linear smoother]
-Let $\hat{\bm y}=S\bm y$ for a fixed matrix $S$ (ridge regression, \cref{ch05:sec-shrink}, is an example with $S=X(X\T X+\lambda I)^{-1}X\T$), $\bm y=\bm f+\bm\varepsilon$, $\Cov\bm\varepsilon=\sigma^2I$. Show that $\frac1n\E[\|\bm y^*-\hat{\bm y}\|^2]-\frac1n\E[\|\bm y-\hat{\bm y}\|^2]=\frac{2\sigma^2}{n}\tr S$, where
-$\bm y^*=\bm f+\bm\varepsilon^*$ is an independent copy, so that $\tr S$ plays the role of the number of parameters in \cref{ch16:prop-bv}. Evaluate $\tr S$ for ridge in terms of the singular values.
-\end{exercise}
-\begin{exercise}[not from the course: $k$-means]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Show that the mean minimises $\sum_{i\in C}\|\bm x_i-\bm m\|^2$ and that the minimum equals $\frac1{2|C|}\sum_{i,j\in C}\|\bm x_i-\bm x_j\|^2$.
-  \item Take the four points $(0,0),(4,0),(0,1),(4,1)$ and $K=2$. Show that ``left pair/right pair'' and ``bottom pair/top pair'' are both stable
-      under Lloyd's algorithm, and compute $J$ for each ($1$ and $16$): a local minimum need not be a global one.
-\end{enumerate}
-\end{exercise}
-\begin{exercise}[not from the course: Nim]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Verify \cref{ch16:prop-nim} for $s\le13$ by listing the winning moves.
-  \item Verify by hand the exact values $Q^*(5,\cdot)=(\tfrac13,\tfrac13,0)$ and $Q^*(7,\cdot)=(\tfrac79,1,\tfrac13)$ of \cref{ch16:ex-nim}.
-  \item For which starting number of matches $n\le13$ is there a first move that wins even if the opponent plays perfectly?
-\end{enumerate}
-\end{exercise}
-\begin{exercise}[not from the course: one $Q$-learning step]
-In Nim with $\alpha=0.05$, $\gamma=1$, let $Q(8,3)=0.5$ and $Q(4,\cdot)=(0.1,0.2,0.4)$. A trial goes $8\xrightarrow{3}5\to4$ (opponent takes $1$). Compute the updated $Q(8,3)$ by
-\begin{enumerate}[(a)]
-  \item the temporal-difference rule and
-  \item the Monte Carlo rule, if the trial ends with a win.
-\end{enumerate}
-\end{exercise}
-\begin{exercise}[not from the course: minimum-variance delta]
-A call has $\delta=0.60$ and vega $\nu=25$ (price change per unit change of $\sigma$ in absolute terms, e.g.\ $0.01$ of volatility is $0.25$). Suppose over a day $\Delta\sigma=-0.008\,\Delta S+\epsilon$ ($\Delta S$ in dollars). Compute $\delta_{\mathrm{MV}}$.
-How does the variance of the hedged position change when $h=\delta_{\mathrm{MV}}$ replaces $h=\delta$, if $\Var(\Delta S)=1$ and $\Var(\epsilon)=10^{-5}$?
-\end{exercise}

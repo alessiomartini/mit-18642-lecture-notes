@@ -22,7 +22,7 @@ panels), \file{lec14_9} (quadratic variation, 201 frames); 2013 note \file{MIT18
 maximum-likelihood estimation of a geometric Brownian motion, \cref{ch:volatility}); 2024 PS5 Problems~1--2 (L\'evy processes:
 Brownian motion with drift and the Poisson process, with simulations; Problems~3--5 are volatility estimation,
 \cref{ch:volatility}). 2013 PS8 Problem~A-2 is 2024 PS4 Problem~1 and Problem~B-1 is on two-dimensional Brownian motion; PS8
-belongs to \cref{ch:stochcalc}, see the course note in \cref{ch11:sec-ahead}. The exercises are at the end of the chapter.
+belongs to \cref{ch:stochcalc}, see the course note in \cref{ch11:sec-ahead}. Standalone exercises follow the section they practise.
 \textbf{Not covered.} The construction of Brownian motion (the existence theorem is only quoted in both years), the
 proofs of Donsker's theorem and of nowhere differentiability, and the law of the iterated logarithm.
 The R code that generated the figure decks is not part of the download; the figures of this chapter are recomputed from formulas.
@@ -215,6 +215,20 @@ with added variances. In other disciplines \eqref{ch11:eq-heat} is the \emph{hea
 density drops at the centre and rises in the tails; the dots mark the inflection points $y=\pm\sqrt t$, where the curvature
 changes sign, so that $\partial_tp<0$ inside and $>0$ outside \ts{24}{14}{14:08}\ts{24}{14}{15:14}.}\label{ch11:fig-heat}
 \end{figure}
+
+\begin{exercise}[PS4 (2024), Problem 2: Brownian scaling]\label{ch11:ex-scaling}
+Let $B$ be a standard Brownian motion. Prove:
+\begin{enumerate}[(a)]
+  \item if $B(0)=0$, then for every $t>0$, $\{B(st),s\ge0\}\eqd\{t^{1/2}B(s),s\ge0\}$ as processes;
+  \item more precisely, the two families have the same finite-dimensional distributions: for $s_1<\dots<s_n$,
+      $(B(s_1t),\dots,B(s_nt))\eqd(t^{1/2}B(s_1),\dots,t^{1/2}B(s_n))$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: time inversion]\label{ch11:ex-inversion}
+Prove that $W(t)=tB(1/t)$ ($t>0$), $W(0)=0$, is a standard Brownian motion (check that it is centred Gaussian with covariance $\min(s,t)$; for continuity at $0$ use
+$B(u)/u\to0$ as $u\to\infty$). Deduce that $B(t)/t\to0$ as $t\to\infty$ from the continuity of $W$ at $0$.
+\end{exercise}
 
 
 % ==================================================================
@@ -523,6 +537,11 @@ of \cref{ch:volatility}); in the 2013 lecture Kempthorne, from the audience, rem
 \ts{13}{17}{39:05}\ts{13}{17}{40:08}.
 \end{finance}
 
+\begin{exercise}[not from the course: reflection and the minimum]\label{ch11:ex-refl}
+Let $m(t)=\min_{u\le t}B(u)$. Show $\Prob[m(t)\le-a]=2\Prob[B(t)<-a]$ and that $M(t)-B(t)\eqd M(t)\eqd|B(t)|$ at a fixed time $t$ (hint: use \cref{ch11:rem-joint} or the
+time-reversed path $B(t-u)-B(t)$). What is the probability that a driftless log price with $\sigma=25\%$ never falls below $-10\%$ during one year?
+\end{exercise}
+
 \subsection{First hitting time}
 By \eqref{ch11:eq-tauM} and \cref{ch11:prop-max},
 \begin{equation}\label{ch11:eq-hitcdf}
@@ -588,6 +607,11 @@ $B(\tau_a)=a\ne0=\E[B(0)]$ and the stopped process is not uniformly bounded).
 The scaling $\tau_a\eqd a^2\tau_1$ is diffusion again: time to travel $a$ grows like $a^2$.
 \end{intuition}
 
+\begin{exercise}[not from the course: a hitting time with infinite mean]\label{ch11:ex-tau}
+Show $\Prob[\tau_a<\infty]=1$ and $\E[\tau_a]=\infty$ from \eqref{ch11:eq-hitcdf}. Why does optional stopping ($\E[B(\tau_a)]=0$)
+fail? Use $\tau_a\eqd a^2\tau_1$ to show that the median of $\tau_a$ scales like $a^2$; compute the median of $\tau_1$.
+\end{exercise}
+
 \subsection{Reflected and absorbed Brownian motion}\label{ch11:sec-absorbed}
 Two modifications of $B$ appear in the lecture \ts{24}{14}{33:44}\ts{24}{14}{34:50}.
 
@@ -627,6 +651,11 @@ once bankrupt \ts{24}{14}{34:50}. Structural credit models (Merton, Black--Cox; 
 probability of default before $t$ is a hitting probability, and the survival probability with $\sigma$-volatile assets started $x$ above the barrier
 is $2\Phi(x/(\sigma\sqrt t))-1$, a straightforward application of \eqref{ch11:eq-hitcdf}.
 \end{finance}
+
+\begin{exercise}[not from the course: absorbed Brownian motion]\label{ch11:ex-abs}
+For absorbed Brownian motion $A$ started at $x>0$ (\cref{ch11:def-refabs}) show that \eqref{ch11:eq-absorbed} and the mass $2[1-\Phi(x/\sqrt t)]$ at $0$ sum to $1$, and that $\E[A(t)]=x$.
+Is $A(t)^2-t\wedge\tau$ a martingale?
+\end{exercise}
 
 
 % ==================================================================
@@ -745,6 +774,19 @@ starting point, however long one waits, is $e^{-2\cdot0.30\cdot0.2/0.16}=e^{-0.7
 $30\%$ per year. Positive drift protects in the long run but not from drawdowns: the minimum of the path is exponential with mean $\sigma^2/(2\mu)=0.27$.
 \end{finance}
 
+\begin{exercise}[PS4 (2024), Problem 1; PS8 (2013), Problem A-2: conditional moments]\label{ch11:ex-cond}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Let $B(t)$ be a standard Brownian motion and $t>s\ge0$ fixed. Compute $\E[B(t)\mid B(s)]$ and $\Var[B(t)\mid B(s)]$.
+  \item Let $X(t)$ be a Brownian motion with drift $\mu$ and volatility $\sigma=2$ (the 2013 version has no volatility). Compute $\E[X(t)\mid X(s)]$ and $\Var[X(t)\mid X(s)]$.
+  \item For a standard Brownian motion and fixed reals $t>s>0$, compute $\E\bigl[\exp\bigl(\sigma(B(t)-B(s))\bigr)\bigr]$, for a real constant $\sigma$ (the multiplier of the increment inside the exponential).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: exit time and ruin]\label{ch11:ex-exit}
+For $X=\mu t+\sigma B$ with $\mu\ne0$ compute $\E[\tau]$ for the exit time of $(a,b)$ (hint: the martingale $X(t)-\mu t$ and \eqref{ch11:eq-ruin}). Check that the limit $\mu\to0$ is $(x-a)(b-x)/\sigma^2$.
+\end{exercise}
+
 % ==================================================================
 \section{Geometric Brownian motion and the first look at It\^o's lemma}\label{ch11:sec-gbm}
 
@@ -794,6 +836,11 @@ path grows with $\sigma^2t$, exactly as for the multiplicative martingales of \c
 gambler's-ruin formulas of \cref{ch11:sec-ruin} apply to log-prices and log-levels.
 \end{finance}
 
+\begin{exercise}[not from the course: geometric Brownian motion]\label{ch11:ex-gbm}
+For $S_t$ in \eqref{ch11:eq-gbm} compute $\E[S_t]$, $\Var S_t$, and $\Prob[S_t<S_0]$. With $\mu=0.08$, $\sigma=0.2$ find the horizon at which the probability of a loss falls below $5\%$.
+Show that $\E[e^{\lambda B(t)}]=e^{\lambda^2t/2}$ and use it to explain why $e^{B}$ is not a martingale.
+\end{exercise}
+
 % ==================================================================
 \section{Processes built from Brownian motion}\label{ch11:sec-variants}
 
@@ -838,6 +885,10 @@ the sense of \cref{ch03:prop-mixture}, $B(T)=\sqrt T\,Z$, with variance $\E[T]=1
 lecture reports that a Laplace model fits S\&P~500 returns much better \ts{24}{14}{1:15:44}. The economic reading: the useful clock for prices
 is not calendar time but a random \emph{business time} (trades, information arrivals), and the process is a Brownian motion \emph{subordinated} to a
 random clock. Time-changed and stochastic-volatility models take this idea further (\cref{ch:volatility}).
+
+\begin{exercise}[not from the course: the Laplace mixture]\label{ch11:ex-laplace}
+Derive \eqref{ch11:eq-laplace} (hint: $\int_0^\infty t^{-1/2}e^{-\lambda t-x^2/2t}\dd t=\sqrt{\pi/\lambda}\,e^{-\sqrt{2\lambda}|x|}$), verify that the density integrates to one, and compute its variance and excess kurtosis.
+\end{exercise}
 
 \subsection{Two-dimensional Brownian motion}\label{ch11:sec-2d}
 The lecture opens with the animation of a particle moving in the plane, where each coordinate takes independent Gaussian steps,
@@ -901,6 +952,23 @@ $N(t)-\lambda t$ is a martingale with variance $\lambda t$, and $(N(t)-\lambda t
 Realised variance (\cref{ch11:sec-paths}) measures both: the quadratic variation of the diffusive part plus the sum of the squared jumps.
 \end{intuition}
 
+\begin{exercise}[PS5 (2024), Problem 1: Brownian motion with drift as a L\'evy process]\label{ch11:ex-levy-bm}
+Let $W$ be a Brownian motion with drift $\mu\in\R$ and volatility $\sigma>0$.
+\begin{enumerate}[(a)]
+  \item Prove that $W$ is a L\'evy process in the sense of \cref{ch11:def-levy}.
+  \item Simulate the path of $W$ with $T=1$ year, $\mu=0.30$, $\sigma=0.40$ and $m=252$ increments, $t_i=iT/m$, and plot five simulated paths (the process values at the time increments).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS5 (2024), Problem 2: the Poisson process]\label{ch11:ex-levy-poisson}
+A stochastic process $\{N(t),t\ge0\}$ is a Poisson process of intensity (jump rate) $\lambda$ if for any $0=t_0<t_1<\dots<t_n$ the increments $N(t_k)-N(t_{k-1})$ are independent,
+and $N(t)-N(s)$ is Poisson with mean $\lambda(t-s)$ for all $0\le s<t$.
+\begin{enumerate}[(a)]
+  \item Prove that $N$ is a L\'evy process.
+  \item Simulate the path of a Poisson process with $T=1$ year, $\lambda=24$ events per year and $m=252$ increments, $t_i=iT/m$, and plot five simulated paths.
+\end{enumerate}
+\end{exercise}
+
 % ==================================================================
 \section{Looking ahead and the two lectures compared}\label{ch11:sec-ahead}
 \begin{itemize}
@@ -952,77 +1020,3 @@ PS8; \cref{ch11:sec-2d} gives the results it needs. 2024 PS4 Problems~3--4 (MLE 
 &\text{Laplace:} && B(T),\ T\sim\mathrm{Exp}(\lambda):\ f(x)=\sqrt{\lambda/2}\,e^{-\sqrt{2\lambda}|x|}
 \end{align*}
 \end{keyformulas}
-
-% ==================================================================
-\section*{Exercises}
-\addcontentsline{toc}{section}{Exercises}
-
-\subsection*{From the problem sets}
-\begin{exercise}[PS4 (2024), Problem 1; PS8 (2013), Problem A-2: conditional moments]\label{ch11:ex-cond}
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Let $B(t)$ be a standard Brownian motion and $t>s\ge0$ fixed. Compute $\E[B(t)\mid B(s)]$ and $\Var[B(t)\mid B(s)]$.
-  \item Let $X(t)$ be a Brownian motion with drift $\mu$ and volatility $\sigma=2$ (the 2013 version has no volatility). Compute $\E[X(t)\mid X(s)]$ and $\Var[X(t)\mid X(s)]$.
-  \item For a standard Brownian motion and fixed reals $t>s>0$, compute $\E\bigl[\exp\bigl(\sigma(B(t)-B(s))\bigr)\bigr]$, for a real constant $\sigma$ (the multiplier of the increment inside the exponential).
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS4 (2024), Problem 2: Brownian scaling]\label{ch11:ex-scaling}
-Let $B$ be a standard Brownian motion. Prove:
-\begin{enumerate}[(a)]
-  \item if $B(0)=0$, then for every $t>0$, $\{B(st),s\ge0\}\eqd\{t^{1/2}B(s),s\ge0\}$ as processes;
-  \item more precisely, the two families have the same finite-dimensional distributions: for $s_1<\dots<s_n$,
-      $(B(s_1t),\dots,B(s_nt))\eqd(t^{1/2}B(s_1),\dots,t^{1/2}B(s_n))$.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS5 (2024), Problem 1: Brownian motion with drift as a L\'evy process]\label{ch11:ex-levy-bm}
-Let $W$ be a Brownian motion with drift $\mu\in\R$ and volatility $\sigma>0$.
-\begin{enumerate}[(a)]
-  \item Prove that $W$ is a L\'evy process in the sense of \cref{ch11:def-levy}.
-  \item Simulate the path of $W$ with $T=1$ year, $\mu=0.30$, $\sigma=0.40$ and $m=252$ increments, $t_i=iT/m$, and plot five simulated paths (the process values at the time increments).
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS5 (2024), Problem 2: the Poisson process]\label{ch11:ex-levy-poisson}
-A stochastic process $\{N(t),t\ge0\}$ is a Poisson process of intensity (jump rate) $\lambda$ if for any $0=t_0<t_1<\dots<t_n$ the increments $N(t_k)-N(t_{k-1})$ are independent,
-and $N(t)-N(s)$ is Poisson with mean $\lambda(t-s)$ for all $0\le s<t$.
-\begin{enumerate}[(a)]
-  \item Prove that $N$ is a L\'evy process.
-  \item Simulate the path of a Poisson process with $T=1$ year, $\lambda=24$ events per year and $m=252$ increments, $t_i=iT/m$, and plot five simulated paths.
-\end{enumerate}
-\end{exercise}
-
-\subsection*{Additional exercises (not from the course)}
-\begin{exercise}[not from the course: time inversion]\label{ch11:ex-inversion}
-Prove that $W(t)=tB(1/t)$ ($t>0$), $W(0)=0$, is a standard Brownian motion (check that it is centred Gaussian with covariance $\min(s,t)$; for continuity at $0$ use
-$B(u)/u\to0$ as $u\to\infty$). Deduce that $B(t)/t\to0$ as $t\to\infty$ from the continuity of $W$ at $0$.
-\end{exercise}
-
-\begin{exercise}[not from the course: reflection and the minimum]\label{ch11:ex-refl}
-Let $m(t)=\min_{u\le t}B(u)$. Show $\Prob[m(t)\le-a]=2\Prob[B(t)<-a]$ and that $M(t)-B(t)\eqd M(t)\eqd|B(t)|$ at a fixed time $t$ (hint: use \cref{ch11:rem-joint} or the
-time-reversed path $B(t-u)-B(t)$). What is the probability that a driftless log price with $\sigma=25\%$ never falls below $-10\%$ during one year?
-\end{exercise}
-
-\begin{exercise}[not from the course: a hitting time with infinite mean]\label{ch11:ex-tau}
-Show $\Prob[\tau_a<\infty]=1$ and $\E[\tau_a]=\infty$ from \eqref{ch11:eq-hitcdf}. Why does optional stopping ($\E[B(\tau_a)]=0$)
-fail? Use $\tau_a\eqd a^2\tau_1$ to show that the median of $\tau_a$ scales like $a^2$; compute the median of $\tau_1$.
-\end{exercise}
-
-\begin{exercise}[not from the course: absorbed Brownian motion]\label{ch11:ex-abs}
-For absorbed Brownian motion $A$ started at $x>0$ (\cref{ch11:def-refabs}) show that \eqref{ch11:eq-absorbed} and the mass $2[1-\Phi(x/\sqrt t)]$ at $0$ sum to $1$, and that $\E[A(t)]=x$.
-Is $A(t)^2-t\wedge\tau$ a martingale?
-\end{exercise}
-
-\begin{exercise}[not from the course: exit time and ruin]\label{ch11:ex-exit}
-For $X=\mu t+\sigma B$ with $\mu\ne0$ compute $\E[\tau]$ for the exit time of $(a,b)$ (hint: the martingale $X(t)-\mu t$ and \eqref{ch11:eq-ruin}). Check that the limit $\mu\to0$ is $(x-a)(b-x)/\sigma^2$.
-\end{exercise}
-
-\begin{exercise}[not from the course: geometric Brownian motion]\label{ch11:ex-gbm}
-For $S_t$ in \eqref{ch11:eq-gbm} compute $\E[S_t]$, $\Var S_t$, and $\Prob[S_t<S_0]$. With $\mu=0.08$, $\sigma=0.2$ find the horizon at which the probability of a loss falls below $5\%$.
-Show that $\E[e^{\lambda B(t)}]=e^{\lambda^2t/2}$ and use it to explain why $e^{B}$ is not a martingale.
-\end{exercise}
-
-\begin{exercise}[not from the course: the Laplace mixture]\label{ch11:ex-laplace}
-Derive \eqref{ch11:eq-laplace} (hint: $\int_0^\infty t^{-1/2}e^{-\lambda t-x^2/2t}\dd t=\sqrt{\pi/\lambda}\,e^{-\sqrt{2\lambda}|x|}$), verify that the density integrates to one, and compute its variance and excess kurtosis.
-\end{exercise}

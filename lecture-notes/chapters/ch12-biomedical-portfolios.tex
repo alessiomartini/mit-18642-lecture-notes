@@ -16,7 +16,7 @@
 \file{18642-lecture-18-version-5_transcript.pdf} in \file{18.642-fall-2024/static_resources}. There are no slides, no
 problem set and no other file for this lecture; everything said about the slides below is therefore unknown, and the
 chapter is built on the spoken text.
-\textbf{Problem sets.} None. The exercises at the end are all \emph{not from the course}.
+\textbf{Problem sets.} None. The exercises (each after the section it practises) are all \emph{not from the course}.
 \textbf{Not from the lecture.} Every derivation marked ``Reconstruction'' (correlated projects, binomial and
 beta-binomial counts, securitisation, ML for trial success) is my own mathematics behind the numbers quoted by
 Lo; the numerics were checked by a short Python script. The 2024 L1 slides list a past final-project paper,
@@ -143,6 +143,12 @@ Lo's conclusion is that few investors take this bet \ts{24}{18}{28:23}. The scal
 volatility is the usual rule for independent yearly increments; how the expected return is annualised is a convention
 (the simple average $207.5\%/10\approx21\%$ would give another number), so the pair $(12\%,423.5\%)$ is best taken as
 the lecturer's stated input to the next step.
+
+\begin{exercise}[not from the course]
+Verify \eqref{ch12:eq-annuity}: find the discount rate for which \$2 billion in each of years 11--20 is worth
+\$12.3 billion at year 10, and compute the value at year 0 (in units of the \$200M cost) of the project of
+\cref{ch12:ex-single}, using its expected payoff.
+\end{exercise}
 
 % ==================================================================
 \section{A portfolio of independent projects}\label{ch12:sec-portfolio}
@@ -276,6 +282,12 @@ keeping: finance cannot turn a bad drug into a good one, but the wrong financing
 comes first \ts{24}{18}{41:57}. (Facts about the company are as stated in class; they were not checked.)
 \end{finance}
 
+\begin{exercise}[not from the course]
+With $R_P=\frac1N\sum_iR_i$ and general covariance matrix $\Sigma$, the variance is $\frac{1}{N^2}\mathbf 1\T\Sigma\mathbf 1$
+(\cref{ch:portfolio}). Show that for the common-correlation matrix $\Sigma=\sigma^2[(1-\rho)I+\rho\,\mathbf 1\mathbf 1\T]$ this reproduces
+\eqref{ch12:eq-varcorr}, and find its eigenvalues. Which eigenvector carries the ``undiversifiable'' part?
+\end{exercise}
+
 % ==================================================================
 \section{Counting successes}\label{ch12:sec-counts}
 
@@ -343,6 +355,22 @@ someone who has to repay creditors. This is why the lecture insists on the near-
 \ts{24}{18}{33:36} and why the portfolio manager's key parameter is a correlation, not a mean.
 \end{intuition}
 
+\begin{exercise}[not from the course]
+Prove \eqref{ch12:eq-varK}. Then compute the standard deviation of $K$ for $N=150$, $p=0.05$ and $\rho\in\{0,0.02,0.05\}$
+and compare it with the mean $7.5$.
+\end{exercise}
+
+\begin{exercise}[not from the course]
+Show that in the beta-binomial model of \cref{ch12:sec-counts}(b), $\rho=1/(\alpha+\beta+1)$, and that after observing
+$s$ successes in $n$ historical trials of a common process the posterior correlation between two future projects is
+$1/(\alpha+\beta+n+1)$. What sample size $n$ makes it fall below $0.005$ starting from $\alpha+\beta=49$?
+\end{exercise}
+
+\begin{exercise}[not from the course]
+Simulate the one-factor Gaussian model of \cref{ch12:sec-counts}(a) for $N=150$, $p=0.05$, $a=0.1$ and estimate
+$\Prob(K\ge3)$ by Monte Carlo with $10^5$ paths; compare with \cref{ch12:tab-counts}.
+\end{exercise}
+
 % ==================================================================
 \section{From portfolio to structure: a securitisation sketch}\label{ch12:sec-tranche}
 
@@ -366,6 +394,12 @@ The moral of \cref{ch12:ex-tranche} is that securitisation transforms one risk p
 (the same principle as in structured credit), and that a rating of the senior tranche is a statement about the joint
 law of the project outcomes. The correlation input is exactly what the two rare-disease and fusion arguments in the
 lecture are about.
+
+\begin{exercise}[not from the course]
+In \cref{ch12:ex-tranche} let the senior debt be only a fraction $f$ of the \$30 billion, with face value $30f\times1.05^{10}$.
+Find, for the independent model, the smallest $f$ such that the senior tranche is repaid with probability at least $0.99$.
+(The rest of the capital is equity and absorbs the first losses.)
+\end{exercise}
 
 % ==================================================================
 \section{Where the data science and AI enter}\label{ch12:sec-ml}
@@ -438,6 +472,11 @@ about \$5.9 billion, not \$30 billion; reaching \$30 billion at \$1,500 each nee
 speech in the transcript; the intended meaning is clear.)
 \end{coursenote}
 
+\begin{exercise}[not from the course]
+Erratum check: with the numbers of \cref{ch12:sec-fusion}, what fraction of the 130 million households must contribute \$1,500
+to raise \$30 billion? What one-time contribution per household would be needed from $3\%$ of them?
+\end{exercise}
+
 \section{The rest of the lecture}\label{ch12:sec-rest}
 
 \paragraph{The Harvey Lodish story} \ts{24}{18}{58:45}. As a young faculty member in 1983 Lodish was
@@ -476,45 +515,3 @@ zero-sum: ``doing well by doing good'' \ts{24}{18}{1:02:57}.
   \item Unknown $p\sim\mathrm{Beta}(\alpha,\beta)$: $\rho=1/(\alpha+\beta+1)$.
 \end{itemize}
 \end{keyformulas}
-
-\section*{Exercises}
-\addcontentsline{toc}{section}{Exercises}
-
-\begin{exercise}[not from the course]
-Verify \eqref{ch12:eq-annuity}: find the discount rate for which \$2 billion in each of years 11--20 is worth
-\$12.3 billion at year 10, and compute the value at year 0 (in units of the \$200M cost) of the project of
-\cref{ch12:ex-single}, using its expected payoff.
-\end{exercise}
-
-\begin{exercise}[not from the course]
-Prove \eqref{ch12:eq-varK}. Then compute the standard deviation of $K$ for $N=150$, $p=0.05$ and $\rho\in\{0,0.02,0.05\}$
-and compare it with the mean $7.5$.
-\end{exercise}
-
-\begin{exercise}[not from the course]
-With $R_P=\frac1N\sum_iR_i$ and general covariance matrix $\Sigma$, the variance is $\frac{1}{N^2}\mathbf 1\T\Sigma\mathbf 1$
-(\cref{ch:portfolio}). Show that for the common-correlation matrix $\Sigma=\sigma^2[(1-\rho)I+\rho\,\mathbf 1\mathbf 1\T]$ this reproduces
-\eqref{ch12:eq-varcorr}, and find its eigenvalues. Which eigenvector carries the ``undiversifiable'' part?
-\end{exercise}
-
-\begin{exercise}[not from the course]
-Show that in the beta-binomial model of \cref{ch12:sec-counts}(b), $\rho=1/(\alpha+\beta+1)$, and that after observing
-$s$ successes in $n$ historical trials of a common process the posterior correlation between two future projects is
-$1/(\alpha+\beta+n+1)$. What sample size $n$ makes it fall below $0.005$ starting from $\alpha+\beta=49$?
-\end{exercise}
-
-\begin{exercise}[not from the course]
-In \cref{ch12:ex-tranche} let the senior debt be only a fraction $f$ of the \$30 billion, with face value $30f\times1.05^{10}$.
-Find, for the independent model, the smallest $f$ such that the senior tranche is repaid with probability at least $0.99$.
-(The rest of the capital is equity and absorbs the first losses.)
-\end{exercise}
-
-\begin{exercise}[not from the course]
-Erratum check: with the numbers of \cref{ch12:sec-fusion}, what fraction of the 130 million households must contribute \$1,500
-to raise \$30 billion? What one-time contribution per household would be needed from $3\%$ of them?
-\end{exercise}
-
-\begin{exercise}[not from the course]
-Simulate the one-factor Gaussian model of \cref{ch12:sec-counts}(a) for $N=150$, $p=0.05$, $a=0.1$ and estimate
-$\Prob(K\ge3)$ by Monte Carlo with $10^5$ paths; compare with \cref{ch12:tab-counts}.
-\end{exercise}

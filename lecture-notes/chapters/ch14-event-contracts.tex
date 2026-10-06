@@ -18,7 +18,7 @@ tags \ts{24}{20}{0:00}~point into the video. The company facts (volumes, fees, d
 are the speaker's own statements in late 2024 and are reported as such, without independent
 verification. \textbf{Not from the course.} The mathematics of event contracts (Sections~\ref{ch14:sec-binary} to
 \ref{ch14:sec-info}) is a reconstruction added for these notes: the lecture contains no formulas.
-Every such section says so, and all exercises are marked ``(not from the course)''.
+Every such section says so, and all exercises (each after the section it practises) are marked ``(not from the course)''.
 \end{sources}
 
 \section*{Motivation}
@@ -194,6 +194,11 @@ contracts against crypto and the S\&P \ts{24}{20}{13:39}, which is exactly a bet
 outcome is correlated with those assets.
 \end{finance}
 
+\begin{exercise}[not from the course]\label{ch14:ex-digital}
+In the Black--Scholes model with $r=0$, $C(K)=S\,\Phi(d_1)-K\,\Phi(d_2)$ (\cref{ch:bs}), where $\Phi$ is the standard normal
+distribution function. Show that $D(K)=-C'(K)=\Phi(d_2)$, and interpret it as $\Q(S_T>K)$.
+\end{exercise}
+
 % ==================================================================
 \section{No-arbitrage constraints between contracts}\label{ch14:sec-noarb}
 
@@ -253,6 +258,17 @@ rule is that the collateral of a portfolio is its worst-case loss $-\min_\omega 
 program over the finite state space.)
 \end{finance}
 
+\begin{exercise}[not from the course]\label{ch14:ex-arb}
+Four candidates have asks $0.40,\ 0.30,\ 0.15,\ 0.10$ and bids $0.38,\ 0.28,\ 0.13,\ 0.08$. Is there an arbitrage without fees? With a fee of $1$ cent per
+contract bought, how much must the sum of asks fall below $1$ for buying one of each to be profitable?
+\end{exercise}
+
+\begin{exercise}[not from the course]\label{ch14:ex-portfolio-margin}
+Two independent events $A,B$ with $\Prob=\tfrac12$ each. Under full cash collateral, a trader sells Yes on both at price $0.5$. Compute the
+locked collateral and the maximum loss of the portfolio. Do the same when $B=A^c$ (compare \cref{ch14:fin-margin}). Explain why the
+difference in the required collateral is due to the correlation.
+\end{exercise}
+
 % ==================================================================
 \section{Market making, spread and adverse selection}\label{ch14:sec-mm}
 
@@ -311,6 +327,11 @@ both quotes converge to $0$ and $1$: the market ``goes to the boundary'' and quo
 \label{ch14:fig-quotes}
 \end{figure}
 
+\begin{exercise}[not from the course]\label{ch14:ex-gm}
+Generalise \cref{ch14:prop-gm} to a prior $\Prob(V=1)=\pi_0\neq\tfrac12$ and derive the ask and bid. Show that the spread
+is $\alpha$ times a factor depending on $\pi_0$, and identify the factor.
+\end{exercise}
+
 % ==================================================================
 \section{Sizing a bet: the Kelly criterion}\label{ch14:sec-kelly}
 
@@ -361,6 +382,11 @@ is a genuine Bernoulli variable and the odds are read directly from the price. T
 $f^\star$ is sensitive to it ($\partial f^\star/\partial p=1/(1-c)$), which is why practitioners use a fraction of Kelly.
 \end{finance}
 
+\begin{exercise}[not from the course]\label{ch14:ex-kellyfee}
+A trader believes $p=0.70$ and can buy Yes at $c=0.60$, paying a fee of $0.01$ per contract at purchase. Compute the Kelly fraction with and without the fee (treat the fee as an
+increase of the price, $c\to0.61$). By how much does the fee reduce the optimal log growth $g(f^\star)$?
+\end{exercise}
+
 % ==================================================================
 \section{Scoring rules, calibration and aggregation}\label{ch14:sec-info}
 
@@ -400,36 +426,6 @@ in practice is an empirical claim, not a theorem: it needs enough liquidity, the
   \item From the lecture: cash collateral $100\%$, fee of order $\$1$--$\$2$ per $\$100$, election quotes $\$0.01$ wide with $\$1$M per side.
 \end{itemize}
 \end{keyformulas}
-
-% ==================================================================
-\section*{Exercises}
-\addcontentsline{toc}{section}{Exercises}
-
-\begin{exercise}[not from the course]\label{ch14:ex-digital}
-In the Black--Scholes model with $r=0$, $C(K)=S\,\Phi(d_1)-K\,\Phi(d_2)$ (\cref{ch:bs}), where $\Phi$ is the standard normal
-distribution function. Show that $D(K)=-C'(K)=\Phi(d_2)$, and interpret it as $\Q(S_T>K)$.
-\end{exercise}
-
-\begin{exercise}[not from the course]\label{ch14:ex-arb}
-Four candidates have asks $0.40,\ 0.30,\ 0.15,\ 0.10$ and bids $0.38,\ 0.28,\ 0.13,\ 0.08$. Is there an arbitrage without fees? With a fee of $1$ cent per
-contract bought, how much must the sum of asks fall below $1$ for buying one of each to be profitable?
-\end{exercise}
-
-\begin{exercise}[not from the course]\label{ch14:ex-gm}
-Generalise \cref{ch14:prop-gm} to a prior $\Prob(V=1)=\pi_0\neq\tfrac12$ and derive the ask and bid. Show that the spread
-is $\alpha$ times a factor depending on $\pi_0$, and identify the factor.
-\end{exercise}
-
-\begin{exercise}[not from the course]\label{ch14:ex-kellyfee}
-A trader believes $p=0.70$ and can buy Yes at $c=0.60$, paying a fee of $0.01$ per contract at purchase. Compute the Kelly fraction with and without the fee (treat the fee as an
-increase of the price, $c\to0.61$). By how much does the fee reduce the optimal log growth $g(f^\star)$?
-\end{exercise}
-
-\begin{exercise}[not from the course]\label{ch14:ex-portfolio-margin}
-Two independent events $A,B$ with $\Prob=\tfrac12$ each. Under full cash collateral, a trader sells Yes on both at price $0.5$. Compute the
-locked collateral and the maximum loss of the portfolio. Do the same when $B=A^c$ (compare \cref{ch14:fin-margin}). Explain why the
-difference in the required collateral is due to the correlation.
-\end{exercise}
 
 \begin{exercise}[not from the course]\label{ch14:ex-brier}
 Show that the logarithmic score $-\ln q$ (if $A$) and $-\ln(1-q)$ (if $A^c$) is also proper, and compute its expected value for true probability $p$, in terms of the binary entropy and the Kullback--Leibler divergence.

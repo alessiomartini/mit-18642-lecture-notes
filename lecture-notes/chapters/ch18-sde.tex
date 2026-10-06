@@ -15,7 +15,7 @@
 \smallskip
 \textbf{Files.} Slides \file{mit18\_642\_f24\_lec24.pdf} (21 slides, this is Lecture~25, not 24; slides 2--4 Black--Scholes, 5--12 heat equation, 13--20 SDEs, 21 numerical methods and references);
 2013 note \file{MIT18\_S096F13\_lecnote21.pdf} (7 pages).
-\textbf{Problem sets.} 2013 PS9 (\file{pset9.pdf}: Problems A-1, A-2, A-3; there is no Part~B), and Exercise~3.2 of \file{lecnote21}. 2024 has no problem set on this topic. The exercises are at the end of the chapter.
+\textbf{Problem sets.} 2013 PS9 (\file{pset9.pdf}: Problems A-1, A-2, A-3; there is no Part~B), and Exercise~3.2 of \file{lecnote21}. 2024 has no problem set on this topic. The 2013 problem set (due 12/5/13, ``no need to turn in'') has only Part~A, which ``straightforwardly follows from the definition''. Each exercise follows the section it practises.
 \textbf{Additions of these notes} (marked as such where they occur): the proof of existence and uniqueness by Picard iteration, generators, the Feynman--Kac formula, the Fokker--Planck equation, the exact AR(1) sampling of the Ornstein--Uhlenbeck process, the Vasicek bond price, the Euler--Maruyama and Milstein convergence experiments, and the CIR process. The lectures state only that the Black--Scholes PDE and expectations are two faces of one object; the Feynman--Kac formula that proves it is here.
 \end{sources}
 
@@ -82,6 +82,22 @@ Under only \emph{local} Lipschitz continuity one still has uniqueness and existe
 \begin{coursenote}[Misprints in the 2013 note, Theorem 1.1]
 \file{lecnote21} introduces the equation ``for given functions $a$ and $b$'' although the coefficients are called $\mu,\sigma$; writes the solution as ``$X(T)=\int_0^T\dots$'', omitting the initial value $x_0$ (it is \eqref{ch18:eq-sdeint} with $t=T$); and leaves the placeholder ``such that (L2 bound)'', which the 2024 slide 13 spells out as $\sup_{0\le t\le T}\E[X_t^2]<\infty$, as in \cref{ch18:thm-eu}.
 \end{coursenote}
+
+\begin{exercise}[PS9 (2013), Problem A-1: verify solutions]\label{ch18:ex-a1}
+Verify that the given process solves the given SDE (use It\^o's formula, \cref{ch:stochcalc}).
+\begin{enumerate}[(a)]
+  \item $X_t=\exp(B_t)$ solves $\dd X_t=\tfrac12X_t\,\dd t+X_t\,\dd B_t$.
+  \item $X_t=B_t/(1+t)$ solves $\dd X_t=-\frac1{1+t}X_t\,\dd t+\frac1{1+t}\,\dd B_t$.
+  \item $X_t=\sin B_t$ solves $\dd X_t=-\tfrac12X_t\,\dd t+\sqrt{1-X_t^2}\,\dd B_t$.
+\end{enumerate}
+\end{exercise}
+\begin{coursenote}[Erratum in Problem A-1(c)]
+It\^o's formula gives $\dd\sin B_t=-\tfrac12\sin B_t\,\dd t+\cos B_t\,\dd B_t$, and $\sqrt{1-\sin^2B_t}=|\cos B_t|$, which equals $\cos B_t$ only while $\cos B_t\ge0$, i.e.\ up to the first time $|B|$ reaches $\pi/2$. The stated equation therefore holds until that time; afterwards it holds only in law, with $\dd\widetilde B_t=\operatorname{sgn}(\cos B_t)\dd B_t$ (again a Brownian motion, by L\'evy's characterisation). The verification asked in the problem is exactly the computation above.
+\end{coursenote}
+
+\begin{exercise}[PS9 (2013), Problem A-2: a cube-root SDE]\label{ch18:ex-a2}
+Let $a>0$ and $\dd X_t=\tfrac13X_t^{1/3}\dd t+X_t^{2/3}\dd B_t$, $X_0=a$. Show that $X_t=\bigl(a^{1/3}+\tfrac13B_t\bigr)^3$, $t\ge0$, solves it. (Where do the conditions of \cref{ch18:thm-eu} fail? See \cref{ch18:ex-fail}.)
+\end{exercise}
 
 % ==================================================================
 \section{Solving by coefficient matching: geometric Brownian motion}\label{ch18:sec-cm}
@@ -199,6 +215,10 @@ The solution of \eqref{ch18:eq-ou} is
 \end{proposition}
 The \emph{integrating factor} makes the same computation transparent (own remark). Since $e^{\kappa t}$ is deterministic, the product rule gives $\dd\bigl(e^{\kappa t}(X_t-m)\bigr)=e^{\kappa t}\bigl(\dd X_t+\kappa(X_t-m)\dd t\bigr)=\sigma e^{\kappa t}\dd B_t$, and integrating from $0$ to $t$ yields \eqref{ch18:eq-ousol}. This is the stochastic version of the method for a linear ODE $\dot x=-\kappa x+f(t)$, and it also solves the linear SDE with time-dependent coefficients $\dd X=(-\kappa(t)X+f(t))\dd t+\sigma(t)\dd B$ (the Hull--White extension) by replacing $e^{\kappa t}$ with $e^{\int_0^t\kappa}$. That this is a solution can also be checked directly; verifying the formula for the Vasicek form of the model is PS9 Problem~A-3 (\cref{ch18:ex-a3}).
 
+\begin{exercise}[PS9 (2013), Problem A-3: the Vasicek model]\label{ch18:ex-a3}
+(Vasicek interest-rate model.) Prove that $R(t)=e^{-\beta t}R(0)+\frac\alpha\beta\bigl(1-e^{-\beta t}\bigr)+\sigma e^{-\beta t}\int_0^te^{\beta s}\dd B_s$ solves the SDE $\dd R(t)=(\alpha-\beta R(t))\,\dd t+\sigma\,\dd B_t$.
+\end{exercise}
+
 \subsection{Properties}
 The stochastic integral in \eqref{ch18:eq-ousol} has a deterministic integrand, so it is a Gaussian random variable with mean $0$ and, by the It\^o isometry, variance $\sigma^2\int_0^te^{-2\kappa(t-s)}\dd s$ (\cref{ch:stochcalc}). This gives:
 
@@ -263,6 +283,19 @@ The intercept of the AR(1) in the usual form $X_{i+1}=c+\phi X_i+\varepsilon$ is
   \item \emph{Simulation.} Paths of the OU process on any grid are generated exactly (no discretisation error) by iterating \eqref{ch18:eq-ar1}; this was done for \cref{ch18:fig-ou}. The same holds for geometric Brownian motion, $X_{t+h}=X_t\exp((\mu-\sigma^2/2)h+\sigma\sqrt hZ)$; for most SDEs there is no such scheme (\cref{ch18:sec-num}).
 \end{itemize}
 
+\begin{exercise}[not from the course: OU covariance and estimation]\label{ch18:ex-ou}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Derive \eqref{ch18:eq-oucov} and check it against \eqref{ch18:eq-ouvar} at $s=t$.
+  \item Show that the OU process is the only stationary Gaussian Markov process with continuous paths, up to parameters (hint: $\rho(\tau)$ must satisfy $\rho(\tau+\tau')=\rho(\tau)\rho(\tau')$).
+  \item Daily data ($h=1/252$) of a spread give an AR(1) fit with $\hat\phi=0.995$ and residual standard deviation $0.02$. Compute $\hat\kappa$, the half-life in days and the stationary standard deviation of the spread.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: exact versus Euler for OU]\label{ch18:ex-euler}
+Find the stationary variance of the Euler--Maruyama chain $X_{i+1}=X_i-\kappa(X_i-m)h+\sigma\sqrt hZ_i$ and compare it with $\sigma^2/(2\kappa)$. For which $h$ is the chain stationary? By what factor is the variance wrong for $\kappa h=0.5$? Write a short program that simulates both schemes and compares the empirical variance.
+\end{exercise}
+
 % ==================================================================
 \section{Systems of SDEs; position and velocity}\label{ch18:sec-sys}
 
@@ -309,6 +342,15 @@ Let $\kappa\to\infty$ with $\sigma^2/\kappa^2=2D$ fixed: the velocity forgets it
 \begin{finance}[Mean-reverting spreads; not discussed in class]
 A relative-value (``pairs'') trade models a spread $S_t=\ln P^1_t-\beta\ln P^2_t$ between two related assets as an OU process. Estimating the AR(1) coefficient of the sampled spread gives $\kappa$ and the half-life of \cref{ch18:sec-ar1}; the stationary standard deviation $\sigma/\sqrt{2\kappa}$ sets the scale of the signal (trade when $|S-m|$ exceeds a multiple of it). If $\hat\phi$ is close to $1$ the spread is indistinguishable from a random walk (unit root, \cref{ch:timeseries}) and the strategy has no edge: the OU model is only as good as the mean reversion is real.
 \end{finance}
+
+\begin{exercise}[not from the course: position and velocity]\label{ch18:ex-posvel}
+For the system \eqref{ch18:eq-posvel} with $m=0$, $\sigma_1=0$:
+\begin{enumerate}[(a)]
+  \item derive \eqref{ch18:eq-posvar} without assuming stationarity of $V_0$, taking $V_0=v_0$ deterministic;
+  \item show that the diffusion coefficient in the long-time limit is $D=\sigma^2/(2\kappa^2)$ and relate it to $\gamma$ and $T$ in the physical parametrisation of the intuition box in \cref{ch18:sec-ou};
+  \item show that $X_t$ converges in law to $\sqrt{2D}\,B_t$ in the limit $\kappa\to\infty$ with $\sigma^2/\kappa^2=2D$ fixed.
+\end{enumerate}
+\end{exercise}
 
 % ==================================================================
 \section{Generators, Feynman--Kac and the Kolmogorov equations}\label{ch18:sec-fk}
@@ -373,6 +415,19 @@ and, with $b=(1-e^{-\kappa\tau})/\kappa$,
 The yield $-\ln P/\tau$ tends to $\theta-\sigma^2/(2\kappa^2)$ for long maturities, below the level $\theta$ by a convexity term. Example ($\Q$-parameters $\kappa=0.5$, $\theta=4\%$, $\sigma=1\%$, $r_0=3\%$, $\tau=5$): $P=0.8343$, yield $3.62\%$, long yield $3.98\%$; a Monte Carlo average of $e^{-\int R}$ over $2\times10^5$ exactly sampled paths gives $0.83429\pm0.00006$ (own computation; the formula is verified symbolically to satisfy the PDE). Under the real-world measure the drift is $\kappa(\theta_{\mathbb P}-r)$; with a constant market price of risk $\lambda$, Girsanov's theorem (\cref{ch17:thm-girsanov2}) replaces the level by $\theta=\theta_{\mathbb P}-\sigma\lambda/\kappa$ and leaves $\kappa,\sigma$ unchanged. This is a first example of the short-rate models of \cref{ch:hjm} (not discussed in class).
 \end{finance}
 
+\begin{exercise}[not from the course: Feynman--Kac]\label{ch18:ex-fk}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item For geometric Brownian motion $\dd S=rS\dd t+\sigma S\dd W$ and payoff $g(S)=S^p$ compute $u(t,S)=e^{-r\tau}\E[S_T^p\mid S_t=S]$ and verify \eqref{ch18:eq-fkpde}.
+  \item Check that $u=S$ (the stock) and $u=e^{-r\tau}$ (a bond) solve the Black--Scholes equation, and explain in words what this says.
+  \item For the OU process solve $u_t-\kappa(x-m)u_x+\tfrac12\sigma^2u_{xx}=0$, $u(T,x)=x$, with the ansatz $u=A(\tau)x+B(\tau)$ and compare with the mean \eqref{ch18:eq-oumean}.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course: Vasicek bond]\label{ch18:ex-vasbond}
+Derive the ODEs for $a(\tau),b(\tau)$ in \cref{ch18:fin-bond}, solve them and confirm \eqref{ch18:eq-vasbond}. Compute the yield curve for $\tau=1,2,5,10,30$ years for $\kappa=0.5$, $\theta=4\%$, $\sigma=1\%$, $r_0=3\%$. Show that the yield is a decreasing function of $\sigma$ at long maturities and interpret it.
+\end{exercise}
+
 \subsection{Transition densities: backward and forward equations}
 Let $p(s,x;t,y)$ be the density of $X_t$ given $X_s=x$. Feynman--Kac with $r=0$ and $g$ arbitrary says $u(s,x)=\E[g(X_t)\mid X_s=x]=\int g(y)p(s,x;t,y)\dd y$ solves $u_s+\mathcal L_su=0$; hence $p$ satisfies the \emph{Kolmogorov backward equation} in $(s,x)$. There is also an equation in the \emph{forward} variables $(t,y)$:
 
@@ -391,6 +446,15 @@ The Fokker--Planck equation is a conservation law, $\partial_tp+\partial_yJ=0$ w
   \item Stationary solution: $\partial_tp=0$ and zero current, $\mu p=\tfrac12(\sigma^2p)'$; for OU, $p'/p=-2\kappa(y-m)/\sigma^2$, so $p_{\mathrm{st}}\propto e^{-\kappa(y-m)^2/\sigma^2}$, the normal law $N(m,\sigma^2/(2\kappa))$ of \cref{ch18:prop-ouprop}. In general, for a drift $-U'(y)$ and constant $\sigma$, $p_{\mathrm{st}}\propto e^{-2U(y)/\sigma^2}$: a Boltzmann distribution at effective temperature $\sigma^2/2$.
   \item Geometric Brownian motion: the lognormal density of \cref{ch:bs} (\cref{ch15:eq-density}).
 \end{itemize}
+
+\begin{exercise}[not from the course: Fokker--Planck]\label{ch18:ex-fp}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item For $\dd X=-U'(X)\dd t+\sigma\dd B$ with $U(x)=\tfrac14x^4-\tfrac12x^2$ (double well) find the stationary density and show it is normalisable.
+  \item Derive the Fokker--Planck equation of geometric Brownian motion and check that the lognormal density solves it.
+  \item For $\sigma^2=0.5$ compute the ratio of the stationary density at a well bottom $x=1$ to that at the barrier top $x=0$.
+\end{enumerate}
+\end{exercise}
 
 % ==================================================================
 \section{The heat equation}\label{ch18:sec-heat}
@@ -457,6 +521,10 @@ Since $\partial_x$ commutes with the equation, $\partial_xu$ solves it whenever 
 \begin{coursenote}[2013 and 2024 on the heat equation; notation and misprints]
 2013 states the kernel and the superposition and asserts the link with Black--Scholes; the reduction is proposed as a final project \ts{13}{21}{54:18}\ts{13}{21}{55:22} (carried out in \cref{ch15:sec-heat}). 2024 derives the solution by similarity and adds the step-function construction. Normalisations differ: 2013 has $u_t=u_{xx}$ ($\lambda=1$), 2024 slide 5 has general $\lambda$ and slides 8--9 specialise to $\lambda=\tfrac12$, i.e.\ Brownian motion with unit variance rate. The 2013 note writes the initial condition sometimes as $u(0,x)$ and sometimes as $u_0(x,0)$; the arguments of $u$ appear in both orders ($u(x,t)$ and $u(0,x)$), which is only a notational slip. In the transcript of 2024 the argument of $\Phi$ is spoken as ``$y$ over $2\sqrt{2\lambda}$'' \ts{24}{25}{58:08}; the slide (and the calculation above) has $y/\sqrt{2\lambda}$.
 \end{coursenote}
+
+\begin{exercise}[\file{lecnote21}, Exercise 3.2: derivation of the heat kernel]\label{ch18:ex-32}
+Derive $u_\delta(x,t)=\frac1{2\sqrt{\pi t}}e^{-x^2/(4t)}$, the solution of $u_t=u_{xx}$ with $u(x,0)=\delta(x)$, by using the variable $\xi=x/\sqrt t$ and the function $U(\xi)=t^{1/2}u(x,t)$, and restating the heat equation as an ODE for $U$.
+\end{exercise}
 
 % ==================================================================
 \section{Numerical solution of SDEs}\label{ch18:sec-num}
@@ -537,6 +605,10 @@ Halving $h$ divides the Euler strong error by $\sqrt2$ (fitted slopes $0.49$--$0
 \caption{Errors of \cref{ch18:cs-em} against the step size: Euler strong error (slope $\tfrac12$, the dashed line is a slope-$\tfrac12$ reference), Milstein strong error and the weak error of $\E[X_T]$ (both slope $1$).}\label{ch18:fig-em}
 \end{figure}
 
+\begin{exercise}[not from the course: convergence experiment]\label{ch18:ex-conv}
+Repeat \cref{ch18:cs-em} for the OU process (where the exact solution is \eqref{ch18:eq-ar1}) and for the SDE $\dd X=\sin X\,\dd t+\cos X\,\dd B$ (no closed form: use a very fine Euler solution as reference). Fit the strong and weak orders of Euler--Maruyama and Milstein. Why does Milstein give no improvement for OU?
+\end{exercise}
+
 \subsection{The tree method}
 \emph{Trees} use the other picture of Brownian motion, as the limit of a random walk (\cref{ch:sp2}, Donsker) \ts{13}{21}{34:48}\ts{13}{21}{35:50}: replace $\Delta B_i$ in \eqref{ch18:eq-em} by $\pm\sqrt h$ with probability $\tfrac12$ each. Then $X_T$ takes only finitely many values, and their probabilities are known exactly: after $n$ steps of a recombining tree the node with $j$ up-moves has probability $\binom nj2^{-n}$ (in the lecture's picture with $n=5$ steps, $1,5,10,10,5,1$ over $32$) \ts{13}{21}{36:54}. So one \emph{computes} the expectation instead of sampling it: no statistical error. For geometric Brownian motion the multiplicative form $X_{i+1}=X_i(1+\mu h\pm\sigma\sqrt h)$ does recombine, and \eqref{ch18:eq-em} is Euler--Maruyama with two-point increments. Example (own computation; payoff $(X_T-1)^+$, same parameters, exact value $x_0e^{\mu T}\Phi(d_1)-K\Phi(d_2)=0.41012$ with $d_1=[\ln(x_0/K)+(\mu+\sigma^2/2)T]/(\sigma\sqrt T)$, $d_2=d_1-\sigma\sqrt T$):
 \begin{center}
@@ -568,6 +640,10 @@ The two examples solved in class have linear coefficients, hence Lipschitz. Two 
 (the variance from the second-moment equation $\tfrac{\dd}{\dd t}\E[X^2]=(2\kappa\theta+\sigma^2)\E[X]-2\kappa\E[X^2]$). Unlike OU the law is not normal: $X_t$ is $c$ times a noncentral $\chi^2$ variable with $d=4\kappa\theta/\sigma^2$ degrees of freedom, $c=\sigma^2(1-e^{-\kappa t})/(4\kappa)$ and noncentrality $x_0e^{-\kappa t}/c$, which allows exact sampling. Check ($\kappa=1.5$, $\theta=0.04$, $\sigma=0.2$, $x_0=0.09$, $t=1$; Feller ratio $2\kappa\theta/\sigma^2=3$): the formulas give mean $0.05116$ and variance $7.379\times10^{-4}$; $2\times10^6$ exact samples give $0.05114$ and $7.375\times10^{-4}$ (own computation). The Euler scheme \eqref{ch18:eq-em} may produce negative values, for which $\sqrt X$ is undefined; the standard cure is to truncate ($\sqrt{X^+}$), and the exact sampler above avoids the issue. In the same family, the squared radius $|\bm B|^2$ of an $n$-dimensional Brownian motion (\cref{ch17:sec-multi}) satisfies $\dd Z=n\,\dd t+2\sqrt Z\,\dd W$, a CIR process without mean reversion (the squared Bessel process).
 
 \paragraph{Other state-dependent volatilities.} The choice $\sigma(x)=\sigma x^{\beta}$ (CEV) interpolates between a normal model ($\beta=0$, the OU/Bachelier world) and geometric Brownian motion ($\beta=1$); local- and stochastic-volatility models, in which $\sigma$ is a function of the price or itself a diffusion, lead to SDEs that must be treated numerically (\cref{ch:volatility}). The theory of this chapter (existence, generator, Feynman--Kac, Fokker--Planck, Euler--Maruyama) applies to all of them.
+
+\begin{exercise}[not from the course: CIR moments]\label{ch18:ex-cir}
+Derive the moment equations of the CIR process from Dynkin's formula and solve for $\E[X_t]$. Verify the stationary mean $\theta$ and variance $\theta\sigma^2/(2\kappa)$, and check the Feller condition for a short-rate CIR model with $\kappa=0.3$, $\theta=3\%$, $\sigma=0.1$.
+\end{exercise}
 
 % ==================================================================
 \section{The two lectures compared, errata}\label{ch18:sec-compare}
@@ -616,88 +692,3 @@ The two examples solved in class have linear coefficients, hence Lipschitz. Two 
 &\text{Milstein:} && +\tfrac12\sigma\sigma'(\Delta B_i^2-h);\ \text{strong order }1
 \end{align*}
 \end{keyformulas}
-
-% ==================================================================
-\section*{Exercises}
-\addcontentsline{toc}{section}{Exercises}
-
-\subsection*{From 2013 Problem Set 9 (stochastic differential equations)}
-The problem set (\file{pset9.pdf}, due 12/5/13, ``no need to turn in'') has only Part~A, which ``straightforwardly follows from the definition''. There is no 2024 problem set on this topic.
-
-\begin{exercise}[PS9 (2013), Problem A-1: verify solutions]\label{ch18:ex-a1}
-Verify that the given process solves the given SDE (use It\^o's formula, \cref{ch:stochcalc}).
-\begin{enumerate}[(a)]
-  \item $X_t=\exp(B_t)$ solves $\dd X_t=\tfrac12X_t\,\dd t+X_t\,\dd B_t$.
-  \item $X_t=B_t/(1+t)$ solves $\dd X_t=-\frac1{1+t}X_t\,\dd t+\frac1{1+t}\,\dd B_t$.
-  \item $X_t=\sin B_t$ solves $\dd X_t=-\tfrac12X_t\,\dd t+\sqrt{1-X_t^2}\,\dd B_t$.
-\end{enumerate}
-\end{exercise}
-\begin{coursenote}[Erratum in Problem A-1(c)]
-It\^o's formula gives $\dd\sin B_t=-\tfrac12\sin B_t\,\dd t+\cos B_t\,\dd B_t$, and $\sqrt{1-\sin^2B_t}=|\cos B_t|$, which equals $\cos B_t$ only while $\cos B_t\ge0$, i.e.\ up to the first time $|B|$ reaches $\pi/2$. The stated equation therefore holds until that time; afterwards it holds only in law, with $\dd\widetilde B_t=\operatorname{sgn}(\cos B_t)\dd B_t$ (again a Brownian motion, by L\'evy's characterisation). The verification asked in the problem is exactly the computation above.
-\end{coursenote}
-
-\begin{exercise}[PS9 (2013), Problem A-2: a cube-root SDE]\label{ch18:ex-a2}
-Let $a>0$ and $\dd X_t=\tfrac13X_t^{1/3}\dd t+X_t^{2/3}\dd B_t$, $X_0=a$. Show that $X_t=\bigl(a^{1/3}+\tfrac13B_t\bigr)^3$, $t\ge0$, solves it. (Where do the conditions of \cref{ch18:thm-eu} fail? See \cref{ch18:ex-fail}.)
-\end{exercise}
-
-\begin{exercise}[PS9 (2013), Problem A-3: the Vasicek model]\label{ch18:ex-a3}
-(Vasicek interest-rate model.) Prove that $R(t)=e^{-\beta t}R(0)+\frac\alpha\beta\bigl(1-e^{-\beta t}\bigr)+\sigma e^{-\beta t}\int_0^te^{\beta s}\dd B_s$ solves the SDE $\dd R(t)=(\alpha-\beta R(t))\,\dd t+\sigma\,\dd B_t$.
-\end{exercise}
-
-\subsection*{From the 2013 lecture note}
-\begin{exercise}[\file{lecnote21}, Exercise 3.2: derivation of the heat kernel]\label{ch18:ex-32}
-Derive $u_\delta(x,t)=\frac1{2\sqrt{\pi t}}e^{-x^2/(4t)}$, the solution of $u_t=u_{xx}$ with $u(x,0)=\delta(x)$, by using the variable $\xi=x/\sqrt t$ and the function $U(\xi)=t^{1/2}u(x,t)$, and restating the heat equation as an ODE for $U$.
-\end{exercise}
-
-\subsection*{Additional exercises (not from the course)}
-\begin{exercise}[not from the course: OU covariance and estimation]\label{ch18:ex-ou}
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Derive \eqref{ch18:eq-oucov} and check it against \eqref{ch18:eq-ouvar} at $s=t$.
-  \item Show that the OU process is the only stationary Gaussian Markov process with continuous paths, up to parameters (hint: $\rho(\tau)$ must satisfy $\rho(\tau+\tau')=\rho(\tau)\rho(\tau')$).
-  \item Daily data ($h=1/252$) of a spread give an AR(1) fit with $\hat\phi=0.995$ and residual standard deviation $0.02$. Compute $\hat\kappa$, the half-life in days and the stationary standard deviation of the spread.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: exact versus Euler for OU]\label{ch18:ex-euler}
-Find the stationary variance of the Euler--Maruyama chain $X_{i+1}=X_i-\kappa(X_i-m)h+\sigma\sqrt hZ_i$ and compare it with $\sigma^2/(2\kappa)$. For which $h$ is the chain stationary? By what factor is the variance wrong for $\kappa h=0.5$? Write a short program that simulates both schemes and compares the empirical variance.
-\end{exercise}
-
-\begin{exercise}[not from the course: Feynman--Kac]\label{ch18:ex-fk}
-\leavevmode
-\begin{enumerate}[(a)]
-  \item For geometric Brownian motion $\dd S=rS\dd t+\sigma S\dd W$ and payoff $g(S)=S^p$ compute $u(t,S)=e^{-r\tau}\E[S_T^p\mid S_t=S]$ and verify \eqref{ch18:eq-fkpde}.
-  \item Check that $u=S$ (the stock) and $u=e^{-r\tau}$ (a bond) solve the Black--Scholes equation, and explain in words what this says.
-  \item For the OU process solve $u_t-\kappa(x-m)u_x+\tfrac12\sigma^2u_{xx}=0$, $u(T,x)=x$, with the ansatz $u=A(\tau)x+B(\tau)$ and compare with the mean \eqref{ch18:eq-oumean}.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: Fokker--Planck]\label{ch18:ex-fp}
-\leavevmode
-\begin{enumerate}[(a)]
-  \item For $\dd X=-U'(X)\dd t+\sigma\dd B$ with $U(x)=\tfrac14x^4-\tfrac12x^2$ (double well) find the stationary density and show it is normalisable.
-  \item Derive the Fokker--Planck equation of geometric Brownian motion and check that the lognormal density solves it.
-  \item For $\sigma^2=0.5$ compute the ratio of the stationary density at a well bottom $x=1$ to that at the barrier top $x=0$.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: position and velocity]\label{ch18:ex-posvel}
-For the system \eqref{ch18:eq-posvel} with $m=0$, $\sigma_1=0$:
-\begin{enumerate}[(a)]
-  \item derive \eqref{ch18:eq-posvar} without assuming stationarity of $V_0$, taking $V_0=v_0$ deterministic;
-  \item show that the diffusion coefficient in the long-time limit is $D=\sigma^2/(2\kappa^2)$ and relate it to $\gamma$ and $T$ in the physical parametrisation of the intuition box in \cref{ch18:sec-ou};
-  \item show that $X_t$ converges in law to $\sqrt{2D}\,B_t$ in the limit $\kappa\to\infty$ with $\sigma^2/\kappa^2=2D$ fixed.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: Vasicek bond]\label{ch18:ex-vasbond}
-Derive the ODEs for $a(\tau),b(\tau)$ in \cref{ch18:fin-bond}, solve them and confirm \eqref{ch18:eq-vasbond}. Compute the yield curve for $\tau=1,2,5,10,30$ years for $\kappa=0.5$, $\theta=4\%$, $\sigma=1\%$, $r_0=3\%$. Show that the yield is a decreasing function of $\sigma$ at long maturities and interpret it.
-\end{exercise}
-
-\begin{exercise}[not from the course: convergence experiment]\label{ch18:ex-conv}
-Repeat \cref{ch18:cs-em} for the OU process (where the exact solution is \eqref{ch18:eq-ar1}) and for the SDE $\dd X=\sin X\,\dd t+\cos X\,\dd B$ (no closed form: use a very fine Euler solution as reference). Fit the strong and weak orders of Euler--Maruyama and Milstein. Why does Milstein give no improvement for OU?
-\end{exercise}
-
-\begin{exercise}[not from the course: CIR moments]\label{ch18:ex-cir}
-Derive the moment equations of the CIR process from Dynkin's formula and solve for $\E[X_t]$. Verify the stationary mean $\theta$ and variance $\theta\sigma^2/(2\kappa)$, and check the Feller condition for a short-rate CIR model with $\kappa=0.3$, $\theta=3\%$, $\sigma=0.1$.
-\end{exercise}
