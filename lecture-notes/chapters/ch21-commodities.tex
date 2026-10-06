@@ -12,7 +12,7 @@
 \end{tabularx}
 
 \smallskip
-\textbf{Files.} Slides \file{MIT18_S096F13_lecnote13.pdf} (47 pages: 44 of content, then references and disclaimers). \textbf{Problem sets.} None; all exercises at the end
+\textbf{Files.} Slides \file{MIT18_S096F13_lecnote13.pdf} (47 pages: 44 of content, then references and disclaimers). \textbf{Problem sets.} None; all exercises (each after the section it practises)
 are \emph{not from the course}. \textbf{Year.} Part~II of these notes collects the 2013-only topics; there is no 2024 counterpart. The guest is Alexander Eydeland (the
 slides cite his book with K.~Wolyniec, \emph{Energy and Power Risk Management}, Wiley 2002, and a chapter with H.~Geman).
 \textbf{Not in the slides.} The whole discussion of the trade, of the bid for storage and of the correlation structure comes from the video; the slides give the formulas
@@ -76,6 +76,17 @@ On 15 January 2009 the WTI curve was in steep contango: about \$35 for the neare
 \caption{The WTI futures curve of 15 January 2009 (points read off slide~4 of the lecture) against the upper bound $S\,e^{rT}$ that a holder of free storage would impose with $r=10\%$
 (\cref{ch21:prop-carry}). The gap between the two is what the market charges for storage.}\label{ch21:fig-wti}
 \end{figure}
+
+\begin{exercise}[not from the course: implied convenience yield]\label{ch21:ex-impliedyield}
+On a given day $S_t=\$70$, $r=3\%$, and the one-year futures trades at $\$66$.
+\begin{enumerate}[(a)]
+  \item Using \eqref{ch21:eq-convenience} with negligible storage cost, find the implied convenience
+      yield $y$.
+  \item If storage actually costs $w=2\%$ per year, what is $y$ now?
+  \item Is the market in contango or backwardation, and is this consistent with a positive convenience
+      yield?
+\end{enumerate}
+\end{exercise}
 
 \subsection{The Trafigura trade}
 Suppose one owns storage. Then on 15 January 2009 one can, at no risk \ts{13}{13}{5:11}\ts{13}{13}{6:16}:
@@ -259,6 +270,16 @@ precise in \cref{ch21:sec-schwartz}.
 \end{itemize}
 \end{coursenote}
 
+\begin{exercise}[not from the course: Margrabe with correlated calendar legs]\label{ch21:ex-margrabe-num}
+Two futures $F_1=60$ (near), $F_2=63$ (far), $\sigma_1=\sigma_2=45\%$, $T=0.5$, $r=0$.
+\begin{enumerate}[(a)]
+  \item Compute the spread option value for $\rho=0.3,0.7,0.95$ using
+      \Cref{ch21:thm-margrabe} and comment on the monotonicity in $\rho$ found in \cref{ch21:tab-rho}.
+  \item Recompute for $\rho=1$: show the value reduces to the intrinsic
+      value $(F_2-F_1)^+$ and explain why in terms of \Cref{ch21:prop-props}.
+\end{enumerate}
+\end{exercise}
+
 % ==================================================================
 \section{Hedging the tank, and the real storage problem}\label{ch21:sec-storage}
 
@@ -356,6 +377,17 @@ withdraw $z_i$ & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 20 & 40 & 40\\
 and an intrinsic value of $5850-4316=1534$ dollars (average purchase price $43.16$, average sale price $58.50$). Without the rate limits one would fill the tank in February for $3540$ and empty it in January for $5910$ (value $2370$): the injection limit alone
 costs $836$, and the LP finds the cheapest way around it, filling in the cheap months first. (Computed for these notes with \texttt{scipy.optimize.linprog}.) The quant's value is this plus the value of the flexibility, the time value of the spread options.
 
+\begin{exercise}[not from the course: intrinsic vs extrinsic value of storage]\label{ch21:ex-intrinsic}
+A storage facility can inject/withdraw at most $10$ units per month and holds at most $50$ units, currently empty. Given monthly futures prices
+$F=(20,24,19,26,21,18,25,30,22,19,23,27)$ (a stylised seasonal curve)
+\begin{enumerate}[(a)]
+  \item find the intrinsic value \eqref{ch21:eq-storage-obj} by inspection (buy at the cheapest months
+      subject to the capacity/rate constraints, sell at the priciest)
+  \item explain qualitatively, without solving it, why the \emph{extrinsic} value (\cref{ch21:sec-methods}) would be
+      positive even if this particular forward curve were flat.
+\end{enumerate}
+\end{exercise}
+
 \subsection{Methods, robustness and calibration}\label{ch21:sec-methods}
 The lecture lists three ways to attack the full problem \ts{13}{13}{32:24}\ts{13}{13}{33:31}: approximate it by a linear or quadratic programme; Monte Carlo simulation of the prices; or \emph{stochastic control}, for which the reference is Carmona and Ludkovski (2010),
 ``Valuation of energy storage: an optimal switching approach'', \emph{Quantitative Finance} 10(4) (slide~18): the decision inject/withdraw/hold is a control chosen as a function of the current prices and inventory, and the value is the solution of a dynamic-programming equation. None of the methods is ``better'': the
@@ -404,6 +436,18 @@ Equation~\eqref{ch21:eq-spark} ignores start-up costs, minimum run times, ramp r
 Power cannot be stored, so there is no cash-and-carry argument (\cref{ch21:prop-carry}) linking the forward price of power for a given day to the spot price today. The only no-arbitrage requirement is that forward prices be martingales under \emph{some} pricing measure,
 $F(0,T)=\E_\Q[P_T]$, and the spot process does not have to be tied to the forward curve by a carry relation. This is the sense of the slide-31 objection ``no no-arbitrage argument: how to price forward contracts and options?''.
 \end{intuition}
+
+\begin{exercise}[not from the course: heat rate and the spark spread]\label{ch21:ex-heatrate}
+A gas plant has heat rate $H=8$ (MMBtu/MWh) and variable cost $c=\$2$/MWh.
+\begin{enumerate}[(a)]
+  \item At $F_{\mathrm{power}}=\$45$/MWh and $F_{\mathrm{gas}}=\$4$/MMBtu, is the plant in the
+      money on a forward basis?
+  \item Using Kirk's approximation \eqref{ch21:eq-kirk} with $\sigma_P=60\%$, $\sigma_G=35\%$, $\rho=0.5$, $T=1$\,month, price one spark-spread option
+      (one contract = one hour of capacity).
+  \item Explain, using \Cref{ch21:prop-stack}, why $\rho$ between power and gas should be expected to fall when demand is very high (the
+      top of the stack switches to oil or curtailment, decoupling power from the gas price).
+\end{enumerate}
+\end{exercise}
 
 % ==================================================================
 \section{Three assets, three spreads}\label{ch21:sec-assets}
@@ -462,6 +506,16 @@ Cumulants of independent sums add. The Gaussian part contributes only to $\kappa
 \end{proof}
 For $\lambda=20$ per year, $s=15\%$, $\sigma=40\%$ the excess kurtosis is $29.8$ for daily returns ($\Delta=1/365$: power trades every calendar day), $4.26$ weekly, $0.99$ monthly and $0.08$ yearly (Monte Carlo: $29.6$, $4.22$, $1.00$, $0.07$): a kurtosis of the size of the Nord Pool figures at the daily scale, disappearing on aggregation as the central limit
 theorem requires (\cref{ch:probability}). Fat tails of \emph{daily} power prices therefore do not contradict a normal law for annual returns; the spikes must be modelled at the daily (or hourly) scale, and it is there that the option payoffs~\eqref{ch21:eq-spark} live.
+
+\begin{exercise}[not from the course: jumps and aggregation]\label{ch21:ex-jumpagg}
+Using \Cref{ch21:prop-jumpkurt}'s formula for the excess kurtosis of a jump-diffusion's returns over an interval $\dd t$,
+\begin{enumerate}[(a)]
+  \item show that it vanishes as $\dd t\to\infty$ for
+      fixed jump intensity $\lambda$ and jump size distribution, i.e.\ that kurtosis is a \emph{high-frequency} phenomenon, consistent with the large \emph{daily} kurtosis of \cref{ch21:tab-kurt} and the aggregation numbers of \cref{ch21:sec-jumpkurt}.
+  \item Explain why the stack model's spikes (\cref{ch21:fig-stack}) can average away much more slowly than independent jumps when high demand is persistent (a heat wave lasting weeks keeps the system at the top of the stack), and what this implies
+      for someone trying to fit a constant-parameter jump-diffusion to both daily and monthly power returns.
+\end{enumerate}
+\end{exercise}
 
 \subsection{Mean reversion and the objections to spot models}
 The lecturer's step-by-step argument against the standard toolbox \ts{13}{13}{56:47}\ts{13}{13}{57:52}\ts{13}{13}{58:56}:
@@ -683,63 +737,6 @@ No specific numerical grid was given in the lecture.
 &\text{Stack price:} && P(D)=c_{(k)},\ \ \eqref{ch21:eq-stack}\ \ (\text{non-decreasing step function of }D)
 \end{align*}
 \end{keyformulas}
-
-\section*{Exercises}
-\addcontentsline{toc}{section}{Exercises}
-
-\begin{exercise}[not from the course: implied convenience yield]\label{ch21:ex-impliedyield}
-On a given day $S_t=\$70$, $r=3\%$, and the one-year futures trades at $\$66$.
-\begin{enumerate}[(a)]
-  \item Using \eqref{ch21:eq-convenience} with negligible storage cost, find the implied convenience
-      yield $y$.
-  \item If storage actually costs $w=2\%$ per year, what is $y$ now?
-  \item Is the market in contango or backwardation, and is this consistent with a positive convenience
-      yield?
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: Margrabe with correlated calendar legs]\label{ch21:ex-margrabe-num}
-Two futures $F_1=60$ (near), $F_2=63$ (far), $\sigma_1=\sigma_2=45\%$, $T=0.5$, $r=0$.
-\begin{enumerate}[(a)]
-  \item Compute the spread option value for $\rho=0.3,0.7,0.95$ using
-      \Cref{ch21:thm-margrabe} and comment on the monotonicity in $\rho$ found in \cref{ch21:tab-rho}.
-  \item Recompute for $\rho=1$: show the value reduces to the intrinsic
-      value $(F_2-F_1)^+$ and explain why in terms of \Cref{ch21:prop-props}.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: intrinsic vs extrinsic value of storage]\label{ch21:ex-intrinsic}
-A storage facility can inject/withdraw at most $10$ units per month and holds at most $50$ units, currently empty. Given monthly futures prices
-$F=(20,24,19,26,21,18,25,30,22,19,23,27)$ (a stylised seasonal curve)
-\begin{enumerate}[(a)]
-  \item find the intrinsic value \eqref{ch21:eq-storage-obj} by inspection (buy at the cheapest months
-      subject to the capacity/rate constraints, sell at the priciest)
-  \item explain qualitatively, without solving it, why the \emph{extrinsic} value (\cref{ch21:sec-methods}) would be
-      positive even if this particular forward curve were flat.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: heat rate and the spark spread]\label{ch21:ex-heatrate}
-A gas plant has heat rate $H=8$ (MMBtu/MWh) and variable cost $c=\$2$/MWh.
-\begin{enumerate}[(a)]
-  \item At $F_{\mathrm{power}}=\$45$/MWh and $F_{\mathrm{gas}}=\$4$/MMBtu, is the plant in the
-      money on a forward basis?
-  \item Using Kirk's approximation \eqref{ch21:eq-kirk} with $\sigma_P=60\%$, $\sigma_G=35\%$, $\rho=0.5$, $T=1$\,month, price one spark-spread option
-      (one contract = one hour of capacity).
-  \item Explain, using \Cref{ch21:prop-stack}, why $\rho$ between power and gas should be expected to fall when demand is very high (the
-      top of the stack switches to oil or curtailment, decoupling power from the gas price).
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: jumps and aggregation]\label{ch21:ex-jumpagg}
-Using \Cref{ch21:prop-jumpkurt}'s formula for the excess kurtosis of a jump-diffusion's returns over an interval $\dd t$,
-\begin{enumerate}[(a)]
-  \item show that it vanishes as $\dd t\to\infty$ for
-      fixed jump intensity $\lambda$ and jump size distribution, i.e.\ that kurtosis is a \emph{high-frequency} phenomenon, consistent with the large \emph{daily} kurtosis of \cref{ch21:tab-kurt} and the aggregation numbers of \cref{ch21:sec-jumpkurt}.
-  \item Explain why the stack model's spikes (\cref{ch21:fig-stack}) can average away much more slowly than independent jumps when high demand is persistent (a heat wave lasting weeks keeps the system at the top of the stack), and what this implies
-      for someone trying to fit a constant-parameter jump-diffusion to both daily and monthly power returns.
-\end{enumerate}
-\end{exercise}
 
 \begin{exercise}[not from the course: three-asset crack spread and the stack]\label{ch21:ex-crackstack}
 Consider a refinery (crack spread, \cref{ch21:sec-assets}) sitting downstream of a gas-fired power plant that competes for the same natural-gas supply.

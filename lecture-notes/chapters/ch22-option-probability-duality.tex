@@ -17,7 +17,7 @@ The following lecture, 2013 L22, ``Calculus of Variations and its Application in
 (E.~Pan, Morgan Stanley), has neither a transcript nor slides on OCW and is not covered anywhere in
 these notes.
 \end{coursenote}
-\textbf{Problem sets.} None. The exercises at the end of the chapter are all ``(not from the course)''.
+\textbf{Problem sets.} None. The exercises (each after the section it practises) are all ``(not from the course)''.
 \textbf{Reconstruction.} Blythe states the Breeden--Litzenberger relation and the spanning formula but
 proves neither in full generality (the spanning proof is done only for piecewise-linear $g$, by
 inspection). \cref{ch22:sec-bl-recap} is a two-line recap of the proof already given in
@@ -247,6 +247,22 @@ Black--Scholes log-normal density (same parameters as \cref{ch22:tab-butterfly})
 line to plotting accuracy. Computed for these notes.}\label{ch22:fig-density}
 \end{figure}
 
+\begin{exercise}[Butterfly width and bias]\label{ch22:ex-width}
+For the Black--Scholes parameters of \cref{ch22:tab-butterfly} ($S_0=80$, $r=5\%$, $\sigma=20\%$,
+$T=2$), let $\lambda=4$ (butterfly of half-width $1/\lambda=0.25$ around each wing, full base
+$0.5$). Compute $B_{80}(4)$ from the closed-form Black--Scholes call price \eqref{ch15:eq-call} and
+compare $\lambda B_{80}(4)$ to the exact value in \cref{ch22:tab-butterfly}. Express the leading-order
+error as a function of $\lambda$ using a fourth-order Taylor expansion of $C$ around $K=80$, and check
+it is consistent with the pattern in the table.
+\end{exercise}
+
+\begin{exercise}[Digital from a butterfly, not a call spread]\label{ch22:ex-digital-butterfly}
+Show that a digital option cannot be replicated as a \emph{limit of call butterflies} the way it was
+replicated as a limit of call spreads in \cref{ch22:sec-digital-twice}: compute
+$\lim_{\lambda\to\infty}B_K(\lambda;t,T)$ (not $\lambda B_K(\lambda;t,T)$) and interpret the result in
+terms of the payoff triangle of \cref{ch22:prop-triangle} shrinking to a point.
+\end{exercise}
+
 % ==================================================================
 \section{From the density to any price: FTAP the other way}\label{ch22:sec-density-to-price}
 
@@ -390,6 +406,15 @@ reconstruction $0.449329$: \eqref{ch22:eq-taylor-exact} is confirmed to $6$ digi
 whose second derivative is constant and for one that decays.
 \end{example}
 
+\begin{exercise}[Straddle via Carr--Madan]\label{ch22:ex-straddle}
+A straddle pays $g(S_T)=|S_T-K_0|$ for a fixed $K_0>0$. This $g$ is not $C^2$ at $K_0$ (it has a
+kink), so \eqref{ch22:eq-taylor-exact} must be applied with $g''$ interpreted as a Dirac mass
+$2\delta_{K_0}$ (the jump in $g'$ at $K_0$ is $2$). Using \eqref{ch22:eq-pwl-repl} directly instead
+(the straddle is piecewise linear with one kink), find the static replicating portfolio of zero-coupon
+bonds, stock and calls of a single strike, and check it agrees with formally substituting $g''=2\delta_{K_0}$
+into \eqref{ch22:eq-spanning}.
+\end{exercise}
+
 % ==================================================================
 \section{What the terminal distribution does not determine}\label{ch22:sec-process}
 
@@ -445,36 +470,6 @@ representation \cref{ch:ross} will use (state prices as a discrete matrix, recov
 Perron--Frobenius, \cref{sec:pf}) in a setting where the underlying state space is finite rather than
 a continuum of strikes.
 \end{remark}
-
-% ==================================================================
-\section*{Exercises}
-\addcontentsline{toc}{section}{Exercises}
-All exercises below are (not from the course).
-
-\begin{exercise}[Butterfly width and bias]\label{ch22:ex-width}
-For the Black--Scholes parameters of \cref{ch22:tab-butterfly} ($S_0=80$, $r=5\%$, $\sigma=20\%$,
-$T=2$), let $\lambda=4$ (butterfly of half-width $1/\lambda=0.25$ around each wing, full base
-$0.5$). Compute $B_{80}(4)$ from the closed-form Black--Scholes call price \eqref{ch15:eq-call} and
-compare $\lambda B_{80}(4)$ to the exact value in \cref{ch22:tab-butterfly}. Express the leading-order
-error as a function of $\lambda$ using a fourth-order Taylor expansion of $C$ around $K=80$, and check
-it is consistent with the pattern in the table.
-\end{exercise}
-
-\begin{exercise}[Straddle via Carr--Madan]\label{ch22:ex-straddle}
-A straddle pays $g(S_T)=|S_T-K_0|$ for a fixed $K_0>0$. This $g$ is not $C^2$ at $K_0$ (it has a
-kink), so \eqref{ch22:eq-taylor-exact} must be applied with $g''$ interpreted as a Dirac mass
-$2\delta_{K_0}$ (the jump in $g'$ at $K_0$ is $2$). Using \eqref{ch22:eq-pwl-repl} directly instead
-(the straddle is piecewise linear with one kink), find the static replicating portfolio of zero-coupon
-bonds, stock and calls of a single strike, and check it agrees with formally substituting $g''=2\delta_{K_0}$
-into \eqref{ch22:eq-spanning}.
-\end{exercise}
-
-\begin{exercise}[Digital from a butterfly, not a call spread]\label{ch22:ex-digital-butterfly}
-Show that a digital option cannot be replicated as a \emph{limit of call butterflies} the way it was
-replicated as a limit of call spreads in \cref{ch22:sec-digital-twice}: compute
-$\lim_{\lambda\to\infty}B_K(\lambda;t,T)$ (not $\lambda B_K(\lambda;t,T)$) and interpret the result in
-terms of the payoff triangle of \cref{ch22:prop-triangle} shrinking to a point.
-\end{exercise}
 
 \begin{exercise}[Two maturities, same terminal law, different paths]\label{ch22:ex-two-paths}
 Let $W$ be a Brownian motion and $Z\sim N(0,1)$. Show that $S_t=1+W_t$ and $\tilde S_t=1+\sqrt t\,Z$

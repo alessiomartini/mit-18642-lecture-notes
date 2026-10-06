@@ -13,7 +13,7 @@
 
 \smallskip
 \textbf{Files.} \file{MIT18\_S096F13\_lecnote24.pdf} (34 slides).
-\textbf{Problem sets.} None assigned on this topic in either year. The exercises below are marked \emph{(not from the course)}.
+\textbf{Problem sets.} None assigned on this topic in either year. The exercises (each after the section it practises) are marked \emph{(not from the course)}.
 \textbf{Additions of these notes} (marked as such where they occur): the full derivation of the HJM drift condition from Ito's lemma with every step spelled out (the slides state the result and sketch the computation in compressed notation); the explicit recovery of Ho--Lee, Vasicek/Hull--White and the impossibility of an exact CIR recovery as special cases of the HJM volatility structure; the real-world/risk-neutral distinction via Girsanov's theorem (\cref{ch:stochcalc}); a symmetric full derivation of the credit (hazard-rate) drift condition, of which the slides only pose the no-correlation special case as an exercise; and all numerical checks.
 \end{sources}
 
@@ -115,6 +115,10 @@ This matches the slide's result exactly \ts{13}{24}{1:04:40}\ts{13}{24}{1:05:15}
 \eqref{ch24:eq-hjmdrift} says the risk-neutral drift at $T$ equals the covariance between the shock at $T$ and the shock to \emph{every rate between $t$ and $T$}, summed up: $\alpha^{\Q}(t,T)=\Cov\bigl(\dd f(t,T),\,\dd X_t^T\bigr)/\dd t$ up to the sign convention. A bond price is a (negative) exponential of the accumulated curve, so its convexity (the $\tfrac12(\cdot)^2$ term from Ito's lemma, exactly the second-order term of \cref{ch18:ex-fail}'s microscope) must be compensated by a corresponding upward push in the curve's own drift for the bond's growth rate to stay pinned at $r_t$. This is the same mechanism as the $-\tfrac12\sigma^2$ correction between the drift of $\ln S_t$ and the drift of $S_t$ in \cref{ch18:ex-gbm}.
 \end{intuition}
 
+\begin{exercise}[not from the course]\label{ch24:ex-driftcheck}
+Verify \eqref{ch24:eq-hjmdrift} by direct substitution for the Ho--Lee case $\sigma(t,T)\equiv\sigma_0$: show $\int_t^T\alpha^{\Q}(t,s)\dd s=\tfrac12\sigma_0^2(T-t)^2$ two ways, first from $\alpha^{\Q}(t,s)=\sigma_0^2(s-t)$ integrated in $s$, then from $\tfrac12\bigl(\int_t^T\sigma_0\dd s\bigr)^2$, and confirm they agree.
+\end{exercise}
+
 \subsection{The real-world drift and Girsanov's theorem}
 \Cref{ch24:thm-hjm} pins down the drift only under $\Q$. Under the physical measure $\Prob$, Girsanov's theorem (\cref{ch17:thm-girsanov2}) allows an arbitrary (adapted, technically admissible) market price of risk $\lambda_t$, with $\dd B_t=\dd B_t^{\Q}+\lambda_t\,\dd t$, so that
 \begin{equation}\label{ch24:eq-realdrift}
@@ -182,6 +186,14 @@ The slides list CIR alongside Ho--Lee and Hull--White with no further comment \t
 As in the equity case (\cref{ch:bs}), the volatility $\sigma$ cannot be chosen freely and then forgotten: it is implied from the market prices of liquid options, here swaptions and caps/floors \ts{13}{24}{1:06:56}. An exponential $\sigma(t,T)=\sigma_0e^{-a(T-t)}$ has only two free parameters and typically cannot fit the whole swaption grid (all expiries and tenors) simultaneously; richer parametrisations, or several factors (\cref{ch24:rem-multi}), trade this off against tractability, exactly the local-versus-global tension of \cref{ch06:sec-curve}'s interpolation choice.
 \end{remark}
 
+\begin{exercise}[not from the course]\label{ch24:ex-holeeproof}
+Complete the differentiation step skipped in the proof of \cref{ch24:prop-holee}: starting from \eqref{ch24:eq-holeefwd}, apply Ito's formula to $r_t=f(0,t)+\tfrac12\sigma_0^2t^2+\sigma_0B_t$ directly (there is no hidden randomness in the deterministic part) and confirm the stated Ho--Lee SDE, including the exact form of $\theta(t)$ in terms of the initial curve.
+\end{exercise}
+
+\begin{exercise}[not from the course]\label{ch24:ex-hw}
+Fill in the differentiation step of \cref{ch24:prop-vasicek}: write $r_t=f(0,t)+\int_0^t\alpha^{\Q}(u,t)\dd u+\sigma_0\int_0^te^{-a(t-u)}\dd B_u$ (the $T=t$ specialisation, tracking the moving upper limit of both integrals as in \cref{ch24:lem-dX}), differentiate in $t$, and verify \eqref{ch24:eq-hw}.
+\end{exercise}
+
 % ==================================================================
 \section{Numerical check of the drift condition}\label{ch24:sec-numerics}
 
@@ -211,6 +223,10 @@ As a second, independent check, \cref{ch24:prop-vasicek} predicts that the short
 \end{tikzpicture}
 \caption{Four simulated forward curves $T\mapsto f(1,T)$ one year into the simulation of \cref{ch24:ex-mc} ($\sigma_0=1.2\%$, $a=0.5$, flat initial curve at 3\%), against the initial curve $f(0,T)$. All curves are driven by the same Brownian path within a curve but differ across paths; the exponential vol makes the short end move most (as $\sigma(t,T)\to\sigma_0$ when $T\to t$) while the long end is comparatively anchored (as $\sigma(t,T)\to0$ when $T-t\to\infty$), the familiar level/slope pattern of \cref{ch:pca}.}\label{ch24:fig-curves}
 \end{figure}
+
+\begin{exercise}[not from the course]\label{ch24:ex-mccode}
+Reproduce the Monte Carlo check of \cref{ch24:ex-mc} in your own code: simulate the exponential-volatility HJM curve on a daily grid, compute $\hat Z(0,T_h)$ for $T_h=1,2,5$ years, and compare with $e^{-f_0T_h}$. Then break the drift condition on purpose (set $\alpha\equiv0$, ``drift-free'' forward rates) and show that the simulated bond price no longer matches $Z(0,T_h)$: absence of arbitrage is not automatic, it is exactly what \eqref{ch24:eq-hjmdrift} enforces.
+\end{exercise}
 
 % ==================================================================
 \section{Extension to credit: hazard rates}\label{ch24:sec-credit}
@@ -262,6 +278,14 @@ $\int_t^T\alpha^h(t,s)\dd s=\tfrac12\bigl(\int_t^T\sigma^h\bigr)^2+\rho\bigl(\in
 When rates and hazard rates are correlated, a shock that raises $\sigma(t,s)$-driven forward rates on $[t,T]$ also moves (through $\rho$) the hazard curve on the same interval; the defaultable bond price is convex in the \emph{sum} $f+h$, so its quadratic-variation compensation, \eqref{ch24:eq-hjmcreditdrift}'s cross-term, mixes the two volatility kernels exactly as a two-asset Ito's lemma mixes $\sigma_1\sigma_2\rho$ into the drift of a product (\cref{ch17:sec-multi}). Setting $\rho=0$, as the slide does, isolates the credit-only piece and reproduces the interest-rate result \eqref{ch24:eq-hjmdrift} verbatim with $h$ in place of $f$.
 \end{intuition}
 
+\begin{exercise}[not from the course]\label{ch24:ex-credit0}
+Specialise \eqref{ch24:eq-hjmcreditdrift} to $\rho=0$ and $\sigma^h(t,T)\equiv\sigma_0^h$ constant (a ``Ho--Lee'' hazard-rate model). Derive the resulting SDE for the short hazard rate $h_t=h(t,t)$ and compare its form with \cref{ch24:prop-holee}.
+\end{exercise}
+
+\begin{exercise}[not from the course]\label{ch24:ex-corr}
+Redo \cref{ch24:ex-mc} with a second, correlated curve $h(t,T)=\sigma_0^he^{-b(T-t)}$-volatility hazard process ($\rho=0.5$ correlation with the rates driver) and the drift \eqref{ch24:eq-hjmcreditdrift}. Check numerically that $\E_\Q[\tilde Z(0,T_h)]$ from simulation matches $Z(0,T_h)\,p(0,T_h)$ from the input curves, as in \eqref{ch24:eq-defbond}.
+\end{exercise}
+
 \subsection{Why this matters: callable and structured credit}
 The slide motivates the credit HJM model with corporate \emph{callable bonds} \ts{13}{24}{1:14:51}\ts{13}{24}{1:16:56}: an issuer who can refinance at a lower all-in rate (risk-free plus credit spread) saves money by calling old, expensive debt, and pricing that option requires simulating \emph{both} $f(t,\cdot)$ and $h(t,\cdot)$ jointly, exactly the setting \eqref{ch24:eq-hjmcredit}--\eqref{ch24:eq-hjmcreditdrift} was built for.
 \begin{example}[Refinancing savings; slide numbers \ts{13}{24}{1:14:51}]
@@ -282,30 +306,3 @@ $\displaystyle\alpha^{\Q}(t,T)=\sigma(t,T)\int_t^T\sigma(t,s)\,\dd s$; with $n$ 
 \textbf{Credit.} $p(t,T)=\exp\bigl(-\int_t^Th(t,s)\dd s\bigr)$, $\dd h(t,T)=\alpha^h(t,T)\dd t+\sigma^h(t,T)\dd B^h_t$,
 $\displaystyle\alpha^h(t,T)=\sigma^h(t,T)\int_t^T\sigma^h(t,s)\,\dd s+\rho\Bigl[\sigma^h(t,T)\int_t^T\sigma(t,s)\,\dd s+\sigma(t,T)\int_t^T\sigma^h(t,s)\,\dd s\Bigr]$ ($\rho=\Corr(B,B^h)$; $\rho=0$ recovers the rates-only form with $h$ in place of $f$). Defaultable zero-recovery bond: $\tilde Z(t,T)=Z(t,T)p(t,T)$.
 \end{keyformulas}
-
-\section*{Exercises}
-\addcontentsline{toc}{section}{Exercises}
-
-\begin{exercise}[not from the course]\label{ch24:ex-driftcheck}
-Verify \eqref{ch24:eq-hjmdrift} by direct substitution for the Ho--Lee case $\sigma(t,T)\equiv\sigma_0$: show $\int_t^T\alpha^{\Q}(t,s)\dd s=\tfrac12\sigma_0^2(T-t)^2$ two ways, first from $\alpha^{\Q}(t,s)=\sigma_0^2(s-t)$ integrated in $s$, then from $\tfrac12\bigl(\int_t^T\sigma_0\dd s\bigr)^2$, and confirm they agree.
-\end{exercise}
-
-\begin{exercise}[not from the course]\label{ch24:ex-holeeproof}
-Complete the differentiation step skipped in the proof of \cref{ch24:prop-holee}: starting from \eqref{ch24:eq-holeefwd}, apply Ito's formula to $r_t=f(0,t)+\tfrac12\sigma_0^2t^2+\sigma_0B_t$ directly (there is no hidden randomness in the deterministic part) and confirm the stated Ho--Lee SDE, including the exact form of $\theta(t)$ in terms of the initial curve.
-\end{exercise}
-
-\begin{exercise}[not from the course]\label{ch24:ex-hw}
-Fill in the differentiation step of \cref{ch24:prop-vasicek}: write $r_t=f(0,t)+\int_0^t\alpha^{\Q}(u,t)\dd u+\sigma_0\int_0^te^{-a(t-u)}\dd B_u$ (the $T=t$ specialisation, tracking the moving upper limit of both integrals as in \cref{ch24:lem-dX}), differentiate in $t$, and verify \eqref{ch24:eq-hw}.
-\end{exercise}
-
-\begin{exercise}[not from the course]\label{ch24:ex-mccode}
-Reproduce the Monte Carlo check of \cref{ch24:ex-mc} in your own code: simulate the exponential-volatility HJM curve on a daily grid, compute $\hat Z(0,T_h)$ for $T_h=1,2,5$ years, and compare with $e^{-f_0T_h}$. Then break the drift condition on purpose (set $\alpha\equiv0$, ``drift-free'' forward rates) and show that the simulated bond price no longer matches $Z(0,T_h)$: absence of arbitrage is not automatic, it is exactly what \eqref{ch24:eq-hjmdrift} enforces.
-\end{exercise}
-
-\begin{exercise}[not from the course]\label{ch24:ex-credit0}
-Specialise \eqref{ch24:eq-hjmcreditdrift} to $\rho=0$ and $\sigma^h(t,T)\equiv\sigma_0^h$ constant (a ``Ho--Lee'' hazard-rate model). Derive the resulting SDE for the short hazard rate $h_t=h(t,t)$ and compare its form with \cref{ch24:prop-holee}.
-\end{exercise}
-
-\begin{exercise}[not from the course]\label{ch24:ex-corr}
-Redo \cref{ch24:ex-mc} with a second, correlated curve $h(t,T)=\sigma_0^he^{-b(T-t)}$-volatility hazard process ($\rho=0.5$ correlation with the rates driver) and the drift \eqref{ch24:eq-hjmcreditdrift}. Check numerically that $\E_\Q[\tilde Z(0,T_h)]$ from simulation matches $Z(0,T_h)\,p(0,T_h)$ from the input curves, as in \eqref{ch24:eq-defbond}.
-\end{exercise}

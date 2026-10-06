@@ -20,7 +20,7 @@ derivations (referenced repeatedly on the slides as ``see class notes'') were no
 for these notes, so every derivation below is reconstructed from the slides and from the blackboard work described
 in the lecture transcript, and re-checked numerically in a Python script written for these notes; reconstructions
 are flagged explicitly, and all such numerical checks are marked ``computed for these notes.''
-\textbf{Problem sets.} None; the exercises at the end of the chapter are all marked ``not from the course''.
+\textbf{Problem sets.} None; the exercises (each after the section it practises) are all marked ``not from the course''.
 \textbf{Not covered here.} The stochastic-hazard-rate, stochastic-interest-rate, correlated multi-factor version of
 the model is only sketched on the last slides (``Real Life''); \cref{ch:hjm} returns to term-structure modelling of
 credit.
@@ -217,6 +217,13 @@ possible downward jump (bankruptcy) must drift upward the rest of the time to ke
 level, a fact well known from equity jump-diffusion models.
 \end{intuition}
 
+\begin{exercise}[Compensator with two jump sizes, not from the course]\label{ch23:ex-twojumps}
+Suppose $S_t$ can jump on default to either $S_{\tau^-}e^{J_1}$ (probability $p$) or $S_{\tau^-}e^{J_2}$
+(probability $1-p$), independently drawn at $\tau$. Redo the proof of \cref{ch23:prop-compensator} to find the
+compensator drift $\mu_t$ that keeps $S_t$ a $\Q$-martingale, and check that it reduces to
+\cref{ch23:prop-compensator} when $p=1$.
+\end{exercise}
+
 \subsection{Explicit solution for \texorpdfstring{$S_t$}{S\_t}}\label{ch23:sec-explicit}
 \begin{proposition}[Path of the FX rate]\label{ch23:prop-Spath}
 Under \cref{ch23:eq-logS} with the compensator drift of \cref{ch23:prop-compensator},
@@ -284,6 +291,18 @@ local-currency bond should trade with a \emph{lower} USD-equivalent implied haza
 bond of the same issuer -- exactly the pattern the slides point to (EUR spread below USD spread once basis-adjusted).
 \end{intuition}
 
+\begin{exercise}[Sign of the quanto adjustment, not from the course]\label{ch23:ex-sign}
+Using \cref{ch23:eq-bondprices}, show that $P_e(0,T)/S_0>P_u(0,T)$ if and only if $J<0$ (devaluation on default),
+for every $h>0,T>0$. Interpret: does a devaluing local currency make the local-currency bond, expressed in hard
+currency, look safer or riskier than the equivalent hard-currency bond of the same issuer?
+\end{exercise}
+
+\begin{exercise}[Small-jump limit, not from the course]\label{ch23:ex-small}
+Expand $P_e(0,T)$ of \cref{ch23:eq-bondprices} to first order in $J$ around $J=0$ and show
+$P_e(0,T)\approx S_0e^{-hT}(1-hTJ)$. Compare with $P_u(0,T)=e^{-hT}$ and give a one-line rule of thumb for the
+size of the quanto adjustment to the credit spread (defined as $-\tfrac1T\log P$) when $J$ is small.
+\end{exercise}
+
 \subsection{The replicating portfolio}\label{ch23:sec-replicate}
 Sell one $U$ bond and buy $N_E(t)=P_u(t,T)/P_e(t,T)$ $E$-bonds so that the portfolio costs $0$ at every rebalancing
 date; by \cref{ch23:eq-bondprices} (evaluated at $t$ instead of $0$, since \cref{ch23:prop-bondprices} only uses
@@ -321,6 +340,19 @@ move it would trigger, not only on the current spot or forward FX rate. This is 
 FX forward, which prices only the correlation-free part of the FX/credit relationship, cannot replicate a
 credit-quanto payoff; only a model with an explicit joint dynamics for $(\tau,S)$ can.
 \end{remark}
+
+\begin{exercise}[No devaluation, not from the course]\label{ch23:ex-J0}
+Show that if $J=0$ (no FX jump on default), \cref{ch23:eq-bondprices} collapses to $P_u(0,T)=P_e(0,T)/S_0=e^{-hT}$
+and the hedge ratio \eqref{ch23:eq-hedgeratio} collapses to $N_E(t)=1/S_t$ -- the ordinary FX conversion, with no
+quanto correction, as expected when default carries no currency information.
+\end{exercise}
+
+\begin{exercise}[Monte Carlo verification, not from the course]\label{ch23:ex-mc-exercise}
+Reproduce \cref{ch23:ex-mc} in Python: simulate $N=10^6$ exponential default times with hazard rate $h=0.08$,
+$J=-0.15$, $T=2$, compute $S_T$ from \cref{ch23:eq-Spath}, and check numerically that $\widehat\E[S_T]\approx1$,
+$\widehat\E[\ind_{\{\tau>T\}}]\approx P_u(0,T)$ and $\widehat\E[S_T\ind_{\{\tau>T\}}]\approx P_e(0,T)/S_0$ from
+\cref{ch23:eq-bondprices}.
+\end{exercise}
 
 \section{Non-zero recovery}\label{ch23:sec-recovery}
 If the recovery rate is $R\in(0,1)$, the bond payoffs at $T$ become $1$ (USD, resp.\ EUR) if $\tau>T$ and $R$ if
@@ -395,6 +427,12 @@ proposed as a final-project topic.
 appreciates on default ($J>0$, unusual but not impossible for a safe-haven funding currency) makes it look
 \emph{more} risky ($P_e<P_u$). Coordinates computed for these notes in Python.}\label{ch23:fig-bonds}
 \end{figure}
+
+\begin{exercise}[Recovery limits, not from the course]\label{ch23:ex-recovery-limits}
+Check that \cref{ch23:eq-recovery} reduces to \cref{ch23:eq-bondprices} when $R=0$, and to $P_u^R=P_e^R/S_0=1$ for
+every $T$ when $R=1$ (a bond that always pays its notional regardless of default is riskless). Explain why the
+second limit no longer depends on $h$ or $J$.
+\end{exercise}
 \section{Change of numeraire view}\label{ch23:sec-numeraire}
 The pricing formula \eqref{ch23:eq-Pe-setup}, $P_e(0,T)/S_0=\E[e^{X_T}\ind_{\{\tau>T\}}]$, can be read as a change
 of numeraire in the sense of \cref{ch08:prop-numeraire}. Take $N_1(t)=S_t$ (EUR converted to USD, a traded USD
@@ -506,43 +544,3 @@ $-\rho\sigma_V\sigma_S$ in the Brownian case, $h(e^J-1)$ (via the jump-driven ch
 & && P_e^R(0,T)=S_0[R+(1-R)e^{-he^JT}]\quad\text{(\cref{ch23:eq-recovery})}
 \end{align*}
 \end{keyformulas}
-
-\section*{Exercises}
-\addcontentsline{toc}{section}{Exercises}
-\begin{exercise}[No devaluation, not from the course]\label{ch23:ex-J0}
-Show that if $J=0$ (no FX jump on default), \cref{ch23:eq-bondprices} collapses to $P_u(0,T)=P_e(0,T)/S_0=e^{-hT}$
-and the hedge ratio \eqref{ch23:eq-hedgeratio} collapses to $N_E(t)=1/S_t$ -- the ordinary FX conversion, with no
-quanto correction, as expected when default carries no currency information.
-\end{exercise}
-
-\begin{exercise}[Sign of the quanto adjustment, not from the course]\label{ch23:ex-sign}
-Using \cref{ch23:eq-bondprices}, show that $P_e(0,T)/S_0>P_u(0,T)$ if and only if $J<0$ (devaluation on default),
-for every $h>0,T>0$. Interpret: does a devaluing local currency make the local-currency bond, expressed in hard
-currency, look safer or riskier than the equivalent hard-currency bond of the same issuer?
-\end{exercise}
-
-\begin{exercise}[Small-jump limit, not from the course]\label{ch23:ex-small}
-Expand $P_e(0,T)$ of \cref{ch23:eq-bondprices} to first order in $J$ around $J=0$ and show
-$P_e(0,T)\approx S_0e^{-hT}(1-hTJ)$. Compare with $P_u(0,T)=e^{-hT}$ and give a one-line rule of thumb for the
-size of the quanto adjustment to the credit spread (defined as $-\tfrac1T\log P$) when $J$ is small.
-\end{exercise}
-
-\begin{exercise}[Recovery limits, not from the course]\label{ch23:ex-recovery-limits}
-Check that \cref{ch23:eq-recovery} reduces to \cref{ch23:eq-bondprices} when $R=0$, and to $P_u^R=P_e^R/S_0=1$ for
-every $T$ when $R=1$ (a bond that always pays its notional regardless of default is riskless). Explain why the
-second limit no longer depends on $h$ or $J$.
-\end{exercise}
-
-\begin{exercise}[Compensator with two jump sizes, not from the course]\label{ch23:ex-twojumps}
-Suppose $S_t$ can jump on default to either $S_{\tau^-}e^{J_1}$ (probability $p$) or $S_{\tau^-}e^{J_2}$
-(probability $1-p$), independently drawn at $\tau$. Redo the proof of \cref{ch23:prop-compensator} to find the
-compensator drift $\mu_t$ that keeps $S_t$ a $\Q$-martingale, and check that it reduces to
-\cref{ch23:prop-compensator} when $p=1$.
-\end{exercise}
-
-\begin{exercise}[Monte Carlo verification, not from the course]\label{ch23:ex-mc-exercise}
-Reproduce \cref{ch23:ex-mc} in Python: simulate $N=10^6$ exponential default times with hazard rate $h=0.08$,
-$J=-0.15$, $T=2$, compute $S_T$ from \cref{ch23:eq-Spath}, and check numerically that $\widehat\E[S_T]\approx1$,
-$\widehat\E[\ind_{\{\tau>T\}}]\approx P_u(0,T)$ and $\widehat\E[S_T\ind_{\{\tau>T\}}]\approx P_e(0,T)/S_0$ from
-\cref{ch23:eq-bondprices}.
-\end{exercise}
