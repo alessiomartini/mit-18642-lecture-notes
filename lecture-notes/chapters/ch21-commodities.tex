@@ -441,7 +441,7 @@ Nord Pool, 6~p.m.\ price & $238\%$ & $2.079$ & $76.82$\\
 DAX (equity index) & $23\%$ & $0.004$ & $3.33$\\
 \bottomrule
 \end{tabular}
-\caption{Distribution parameters of returns (slide 23, from A.~Werner, \emph{Risk Management in the Electricity Market}, 2003). Kurtosis is $\E(X-\mu)^4/\sigma^4$, equal to $3$ for a normal law.}\label{ch21:tab-kurt}
+\caption{Distribution parameters of returns (slide 23, from A.~Werner, \emph{Risk Management in the Electricity Market}, 2003). Kurtosis is $\E[(X-\mu)^4]/\sigma^4$, equal to $3$ for a normal law.}\label{ch21:tab-kurt}
 \end{table}
 
 The kurtosis of a normal variable is exactly~3; for the DAX it is $3.33$, for power $26$ to $77$ \ts{13}{13}{51:25}\ts{13}{13}{52:27}. And annual volatilities are in the hundreds of percent, against about 10\% for the S\&P at the time of the lecture
@@ -454,11 +454,11 @@ what a model must capture is: mean reversion, spikes, high kurtosis, regime swit
 \begin{proposition}[Excess kurtosis of jump-diffusion returns]\label{ch21:prop-jumpkurt}
 The cumulants of $X_\Delta$ are $\kappa_2=(\sigma^2+\lambda s^2)\Delta$ and $\kappa_4=3\lambda s^4\Delta$, so
 \[
-  \frac{\E(X_\Delta-\E X_\Delta)^4}{\Var(X_\Delta)^2}-3=\frac{\kappa_4}{\kappa_2^2}=\frac{3\lambda s^4}{(\sigma^2+\lambda s^2)^2}\,\frac1\Delta .
+  \frac{\E[(X_\Delta-\E X_\Delta)^4]}{\Var(X_\Delta)^2}-3=\frac{\kappa_4}{\kappa_2^2}=\frac{3\lambda s^4}{(\sigma^2+\lambda s^2)^2}\,\frac1\Delta .
 \]
 \end{proposition}
 \begin{proof}
-Cumulants of independent sums add. The Gaussian part contributes only to $\kappa_2$. For the compound Poisson sum, $\ln\E e^{\theta\sum J}=\lambda\Delta\bigl(\E e^{\theta J}-1\bigr)=\lambda\Delta\sum_{n\ge1}\theta^n\E J^n/n!$, so $\kappa_n=\lambda\Delta\,\E J^n$; here $\E J^2=s^2$, $\E J^4=3s^4$. The fourth cumulant of a variable with zero mean is $\E X^4-3(\E X^2)^2$.
+Cumulants of independent sums add. The Gaussian part contributes only to $\kappa_2$. For the compound Poisson sum, $\ln\E[e^{\theta\sum J}]=\lambda\Delta\bigl(\E[e^{\theta J}]-1\bigr)=\lambda\Delta\sum_{n\ge1}\theta^n\E[J^n]/n!$, so $\kappa_n=\lambda\Delta\,\E[J^n]$; here $\E[J^2]=s^2$, $\E[J^4]=3s^4$. The fourth cumulant of a variable with zero mean is $\E[X^4]-3(\E[X^2])^2$.
 \end{proof}
 For $\lambda=20$ per year, $s=15\%$, $\sigma=40\%$ the excess kurtosis is $29.8$ for daily returns ($\Delta=1/365$: power trades every calendar day), $4.26$ weekly, $0.99$ monthly and $0.08$ yearly (Monte Carlo: $29.6$, $4.22$, $1.00$, $0.07$): a kurtosis of the size of the Nord Pool figures at the daily scale, disappearing on aggregation as the central limit
 theorem requires (\cref{ch:probability}). Fat tails of \emph{daily} power prices therefore do not contradict a normal law for annual returns; the spikes must be modelled at the daily (or hourly) scale, and it is there that the option payoffs~\eqref{ch21:eq-spark} live.
@@ -474,7 +474,7 @@ $\kappa=63$ per year, with daily autocorrelation $0.50$ and $0.84$. The tension 
 
 \section{Spot models and forward curves}\label{ch21:sec-schwartz}
 \subsection{The models of the slides}
-Slide 29 lists the spot processes. All are written for the relative change $\dd S_t/S_t$ (here $W$ is a Brownian motion and $q$ a Poisson process of intensity $\lambda$ with jump size $Y_t$, $k=\E(Y-1)$):
+Slide 29 lists the spot processes. All are written for the relative change $\dd S_t/S_t$ (here $W$ is a Brownian motion and $q$ a Poisson process of intensity $\lambda$ with jump size $Y_t$, $k=\E[Y-1]$):
 \begin{align}
   \text{GBM:}\quad & \dd S_t/S_t=\mu\dd t+\sigma\dd W_t,\\
   \text{with mean reversion:}\quad & \dd S_t/S_t=\kappa(\theta-\ln S_t)\dd t+\sigma\dd W_t,\label{ch21:eq-mr}\\
@@ -508,7 +508,7 @@ Under~\eqref{ch21:eq-ou} with risk-neutral long-run mean $\alpha^*$, for $\tau=T
 Moreover $\dd F(t,T)/F(t,T)=\sigma e^{-\kappa(T-t)}\dd W^\Q_t$.
 \end{theorem}
 \begin{proof}
-Under $\Q$, $X_T$ given $\mathcal F_t$ is $N(m,v)$ with $m=\alpha^*+e^{-\kappa\tau}(X_t-\alpha^*)$ and $v=\sigma^2(1-e^{-2\kappa\tau})/(2\kappa)$. For a Gaussian $X_T$, $\E e^{X_T}=e^{m+v/2}$, which is~\eqref{ch21:eq-schwartz}. Since $F(t,T)$ is a $\Q$-martingale in $t$ with $F=\exp(\text{deterministic}+e^{-\kappa(T-t)}X_t)$, its
+Under $\Q$, $X_T$ given $\mathcal F_t$ is $N(m,v)$ with $m=\alpha^*+e^{-\kappa\tau}(X_t-\alpha^*)$ and $v=\sigma^2(1-e^{-2\kappa\tau})/(2\kappa)$. For a Gaussian $X_T$, $\E[e^{X_T}]=e^{m+v/2}$, which is~\eqref{ch21:eq-schwartz}. Since $F(t,T)$ is a $\Q$-martingale in $t$ with $F=\exp(\text{deterministic}+e^{-\kappa(T-t)}X_t)$, its
 differential has no drift and the diffusion coefficient $e^{-\kappa(T-t)}\sigma F$ (only $X_t$ is random, and $\dd X_t$ has diffusion $\sigma$).
 \end{proof}
 Three consequences:
@@ -573,7 +573,7 @@ and $\dd F(t,T)/F(t,T)=\sigma_1\dd W_1-\sigma_2B(T-t)\dd W_2$.
 \end{proposition}
 \begin{proof}
 Integrate: $\delta_s=\delta_0e^{-\kappa s}+\hat\alpha(1-e^{-\kappa s})+\sigma_2\int_0^se^{-\kappa(s-u)}\dd W_2(u)$, so $\int_0^T\delta_s\dd s=\delta_0B+\hat\alpha(T-B)+\sigma_2\int_0^TB(T-u)\dd W_2(u)$ (Fubini). Hence $\ln S_T$ is Gaussian with mean $m=\ln S_0+(r-\sigma_1^2/2)T-\delta_0B-\hat\alpha(T-B)$ and variance
-$v=\sigma_1^2T+\sigma_2^2\int_0^TB^2-2\rho\sigma_1\sigma_2\int_0^TB$, where $\int_0^TB(\tau)\dd\tau=(T-B)/\kappa$ and $\int_0^TB^2=\kappa^{-2}\bigl[T-2B+(1-e^{-2\kappa T})/(2\kappa)\bigr]$. Then $F=\E_\Q S_T=e^{m+v/2}$; collecting the coefficients of $T$, of $B$ and the exponential term gives~\eqref{ch21:eq-gs}. The
+$v=\sigma_1^2T+\sigma_2^2\int_0^TB^2-2\rho\sigma_1\sigma_2\int_0^TB$, where $\int_0^TB(\tau)\dd\tau=(T-B)/\kappa$ and $\int_0^TB^2=\kappa^{-2}\bigl[T-2B+(1-e^{-2\kappa T})/(2\kappa)\bigr]$. Then $F=\E_\Q[S_T]=e^{m+v/2}$; collecting the coefficients of $T$, of $B$ and the exponential term gives~\eqref{ch21:eq-gs}. The
 volatility statement follows from $F(t,T)=S_t\exp(-\delta_tB(T-t)+\text{deterministic})$.
 \end{proof}
 \emph{Checks} (ours): for $\sigma_2=0$ and constant $\delta$ one recovers $F=S_0e^{(r-\delta)T}$, the cost-of-carry formula~\eqref{ch21:eq-convenience} with $u=0$; and a Monte Carlo of the two SDEs for $S_0=50$, $\delta_0=0.08$, $r=0.03$, $\kappa=1.2$, $\hat\alpha=0.05$, $\sigma_1=0.35$, $\sigma_2=0.5$, $\rho=0.6$, $T=1$ gives $47.302$ against $47.304$ from~\eqref{ch21:eq-gs}

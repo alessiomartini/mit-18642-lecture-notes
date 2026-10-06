@@ -85,7 +85,7 @@ $(T-1)\hat\sigma^2/\sigma^2\sim\chi^2_{T-1}$ (\cref{ch03:sec-chisq}), so $\Var\h
 \]
 \end{proposition}
 \begin{proof}
-Put $\mu=\E R$ and $Y_t=(R_t-\mu)^2$, i.i.d.\ with mean $\sigma^2$ and variance $\E(R-\mu)^4-\sigma^4=(\kappa-1)\sigma^4$.
+Put $\mu=\E[R]$ and $Y_t=(R_t-\mu)^2$, i.i.d.\ with mean $\sigma^2$ and variance $\E[(R-\mu)^4]-\sigma^4=(\kappa-1)\sigma^4$.
 Then $\hat\sigma^2=\frac{T}{T-1}\bigl[\overline Y-(\bar R-\mu)^2\bigr]$, and $(\bar R-\mu)^2=O(1/T)$ does not affect the leading term, so
 the central limit theorem applied to $\overline Y$ gives $\Var\hat\sigma^2\approx(\kappa-1)\sigma^4/T$. For $\kappa=3$ this is $2\sigma^4/T$.
 The $\chi^2$ statement is the classical result for the sample variance of a normal sample, and $\Var\chi^2_{T-1}=2(T-1)$. Finally
@@ -299,7 +299,7 @@ variance $\sigma^4\Var\chi^2_1=2\sigma^4$ \ts{24}{19}{21:32}\ts{13}{9}{50:30}. T
 the two normalised gap and session estimators,
 \begin{equation}\label{ch13:eq-gk1}
   \hat\sigma_1^2=\frac{(O_1-C_0)^2}{f},\qquad \hat\sigma_2^2=\frac{(C_1-O_1)^2}{1-f},\qquad
-  \E\hat\sigma_i^2=\sigma^2,\quad\Var\hat\sigma_i^2=2\sigma^4\quad(i=0,1,2),
+  \E[\hat\sigma_i^2]=\sigma^2,\quad\Var\hat\sigma_i^2=2\sigma^4\quad(i=0,1,2),
 \end{equation}
 because $(O_1-C_0)/\sqrt f$ and $(C_1-O_1)/\sqrt{1-f}$ are again $\sigma Z$ \ts{24}{19}{22:41}\ts{24}{19}{23:44}\ts{13}{9}{51:33}.
 
@@ -323,9 +323,9 @@ Parkinson (1980) proposed to use the range $H-L$ of the Brownian path over the d
 \begin{equation}\label{ch13:eq-parkinson}
   \hat\sigma_3^2=\frac{(H_1-L_1)^2}{4\ln2}\qquad(f=0).
 \end{equation}
-It is unbiased because for a driftless Brownian motion of variance $\sigma^2$ on a unit interval, $\E(H-L)^2=4\ln2\,\sigma^2$.
+It is unbiased because for a driftless Brownian motion of variance $\sigma^2$ on a unit interval, $\E[(H-L)^2]=4\ln2\,\sigma^2$.
 The proof needs the joint law of the maximum and the minimum, obtained by the reflection principle (Feller, 1951) and not
-reproduced here; a check by simulation is given below. The same law gives the fourth moment $\E(H-L)^4=9\zeta(3)\sigma^4$, whence
+reproduced here; a check by simulation is given below. The same law gives the fourth moment $\E[(H-L)^4]=9\zeta(3)\sigma^4$, whence
 $\Var\hat\sigma_3^2=\bigl(9\zeta(3)-16\ln^22\bigr)\sigma^4/(16\ln^22)=0.4073\,\sigma^4$.
 A single day's range thus carries more than four days of close-to-close information: ``the high and low have a lot
 of information in them'' \ts{24}{19}{26:55}. Note that the estimator is positive whenever the range is positive, even on a day with a zero
@@ -353,7 +353,7 @@ forms and minimising them''. The coefficients are close to those of the simpler 
   \hat\sigma^2_{\mathrm{GK}}=\tfrac12(u-d)^2-(2\ln2-1)\,c^2,\qquad 2\ln2-1=0.386,
 \end{equation}
 which is the one implemented in the case study (formula of \cref{ch13:sec-gkcs} below, with $\ln(H/L)=u-d$, $\ln(C/O)=c$).
-It is unbiased because $\E\bigl[\tfrac12(H-L)^2\bigr]=2\ln2\,\sigma^2$ (from $\E(H-L)^2=4\ln2\,\sigma^2$) and $\E c^2=\sigma^2$: the two terms give
+It is unbiased because $\E\bigl[\tfrac12(H-L)^2\bigr]=2\ln2\,\sigma^2$ (from $\E[(H-L)^2]=4\ln2\,\sigma^2$) and $\E[c^2]=\sigma^2$: the two terms give
 $(2\ln2)-(2\ln2-1)=1$ times $\sigma^2$. This explains where the mysterious constant $2\ln2-1$ comes from: it is the coefficient that cancels the
 bias of the range term. Simulation: efficiency $7.40$ for both \eqref{ch13:eq-gkbest} and \eqref{ch13:eq-gk}.
 Why does one bother with efficiency? With an efficient estimator one can use a shorter window and still be precise, which allows
@@ -520,7 +520,7 @@ half of $\Var(\Delta v_t)$; the root-mean-square error should drop by the factor
 \section{Fat tails from mixtures: jumps and the Laplace law}\label{ch13:sec-mix}
 Geometric Brownian motion has returns that are exactly normal, in contrast with the histograms of \cref{ch13:sec-clock}.
 Two extensions keep independent returns but give them heavier tails; both are \emph{normal variance mixtures} in the sense of
-\cref{ch03:prop-mixture}, which will be used repeatedly: if $X\mid V\sim N(\mu,\sigma^2V)$, the kurtosis is $3\,\E V^2/(\E V)^2\ge3$.
+\cref{ch03:prop-mixture}, which will be used repeatedly: if $X\mid V\sim N(\mu,\sigma^2V)$, the kurtosis is $3\,\E[V^2]/(\E[V])^2\ge3$.
 
 \subsection{Poisson jump diffusion}\label{ch13:sec-pjd}
 The \emph{Poisson jump diffusion} adds to \eqref{ch13:eq-gbm} a compound Poisson process \ts{24}{19}{1:00:08}\ts{13}{9}{58:56}:
@@ -543,8 +543,8 @@ The variance of $R$ is $\sigma^2\Delta(1+\lambda\gamma^2)$ and its kurtosis is
 \]
 \end{proposition}
 \begin{proof}
-Apply \cref{ch03:prop-mixture} with $V=\Delta+N\gamma^2$: $\E V=\Delta(1+\lambda\gamma^2)$ and, since $\Var N=\lambda\Delta$, $\Var V=\gamma^4\lambda\Delta$. Then
-$\kappa=3\bigl(1+\Var V/(\E V)^2\bigr)$.
+Apply \cref{ch03:prop-mixture} with $V=\Delta+N\gamma^2$: $\E[V]=\Delta(1+\lambda\gamma^2)$ and, since $\Var N=\lambda\Delta$, $\Var V=\gamma^4\lambda\Delta$. Then
+$\kappa=3\bigl(1+\Var V/(\E[V])^2\bigr)$.
 \end{proof}
 For $\lambda=0.3$ per day, $\gamma=3$ and $\Delta=1$ day, $\kappa=8.3$ (simulation: $8.32$). The excess kurtosis decays as $1/\Delta$: on longer horizons many jumps are added
 and the central limit theorem restores normality, in accordance with the empirical observation that monthly returns are closer to Gaussian than daily ones.
@@ -561,7 +561,7 @@ couple of days, so the model was not detecting rare crashes but mimicking a fat-
 If a Brownian motion is observed not at equally spaced times but after random, \emph{exponentially distributed} increments of time, the increments of the process follow the
 \emph{Laplace} (two-sided exponential) law \ts{24}{19}{1:03:32}\ts{24}{19}{1:04:32}
 \begin{equation}\label{ch13:eq-laplace}
-  f(x\mid\mu,b)=\frac1{2b}\,e^{-|x-\mu|/b},\qquad \E X=\mu,\quad \Var X=2b^2,\quad \kappa=6 .
+  f(x\mid\mu,b)=\frac1{2b}\,e^{-|x-\mu|/b},\qquad \E[X]=\mu,\quad \Var X=2b^2,\quad \kappa=6 .
 \end{equation}
 \begin{history}[Laplace's first law of errors]
 Laplace himself introduced it in 1774 as the ``first law of errors''.
@@ -573,9 +573,9 @@ Laplace himself introduced it in 1774 as the ``first law of errors''.
 Let $\tau$ be exponential with mean $s$ and $X=\mu+\sigma B_\tau$ with $B$ a standard Brownian motion independent of $\tau$. Then $X\sim\mathrm{Laplace}(\mu,b)$ with $b^2=\sigma^2s/2$.
 \end{proposition}
 \begin{proof}
-Given $\tau$, $X\sim N(\mu,\sigma^2\tau)$, so the characteristic function is $\E e^{iu(X-\mu)}=\E e^{-\sigma^2u^2\tau/2}=\bigl(1+\sigma^2su^2/2\bigr)^{-1}$
+Given $\tau$, $X\sim N(\mu,\sigma^2\tau)$, so the characteristic function is $\E[e^{iu(X-\mu)}]=\E[e^{-\sigma^2u^2\tau/2}]=\bigl(1+\sigma^2su^2/2\bigr)^{-1}$
 (Laplace transform of the exponential law). The Laplace density has characteristic function $e^{iu\mu}/(1+b^2u^2)$; the two agree for $b^2=\sigma^2s/2$. As a mixture
-$V=\tau$ has $\E V^2/(\E V)^2=2$, whence $\kappa=6$ (\cref{ch03:prop-mixture}) and $\Var X=\sigma^2s=2b^2$.
+$V=\tau$ has $\E[V^2]/(\E[V])^2=2$, whence $\kappa=6$ (\cref{ch03:prop-mixture}) and $\Var X=\sigma^2s=2b^2$.
 \end{proof}
 It is a mixture with an exponentially distributed clock, the simplest ``subordinated'' process (\cref{ch13:int-clock}), and it has
 $P(|X-\mu|>4\sqrt{\Var X})=e^{-4\sqrt2}=0.35\%$ against $6.3\times10^{-5}$ for the normal.
@@ -600,7 +600,7 @@ Let $y_t=\log(S_t/S_{t-1})$ and $\mathcal F_t$ the information available at time
   y_t=\mu_t+\varepsilon_t,\qquad \varepsilon_t=\sigma_tz_t,\qquad
   \sigma_t^2=\alpha_0+\alpha_1\varepsilon_{t-1}^2+\dots+\alpha_p\varepsilon_{t-p}^2,
 \end{equation}
-where $\mu_t=\E[y_t\mid\mathcal F_{t-1}]$ is the conditional mean, $\{z_t\}$ are i.i.d.\ with $\E z_t=0$, $\Var z_t=1$, independent of $\mathcal F_{t-1}$, and
+where $\mu_t=\E[y_t\mid\mathcal F_{t-1}]$ is the conditional mean, $\{z_t\}$ are i.i.d.\ with $\E[z_t]=0$, $\Var z_t=1$, independent of $\mathcal F_{t-1}$, and
 $\alpha_0>0$, $\alpha_i\ge0$. Then $\sigma_t^2=\Var(y_t\mid\mathcal F_{t-1})$ is the \emph{conditional variance}.
 \end{definition}
 The name says it all: \emph{conditional heteroskedasticity} means that the variance given the past changes over time; \emph{autoregressive} refers to its dependence on lagged squares. If $\varepsilon_{t-1}$ was
@@ -611,19 +611,19 @@ large, the variance of $\varepsilon_t$ is large and $\varepsilon_t$ is likely to
 \end{secondary}
 
 \begin{proposition}[ARCH innovations are uncorrelated but not independent]\label{ch13:prop-mds}
-Let $\varepsilon_t=\sigma_tz_t$ with $\sigma_t>0$ $\mathcal F_{t-1}$-measurable, $\E\sigma_t^2<\infty$, and $z_t$ as in \cref{ch13:def-arch}. Then
+Let $\varepsilon_t=\sigma_tz_t$ with $\sigma_t>0$ $\mathcal F_{t-1}$-measurable, $\E[\sigma_t^2]<\infty$, and $z_t$ as in \cref{ch13:def-arch}. Then
 \begin{enumerate}[(i)]
   \item $\E[\varepsilon_t\mid\mathcal F_{t-1}]=0$ and $\E[\varepsilon_t^2\mid\mathcal F_{t-1}]=\sigma_t^2$;
   \item $\Cov(\varepsilon_t,\varepsilon_s)=0$ for $t\ne s$: the innovations form a martingale difference sequence and are uncorrelated;
-  \item for ARCH$(1)$ with $\E\varepsilon^4<\infty$, $\Cov(\varepsilon_t^2,\varepsilon_{t-1}^2)=\alpha_1\Var\varepsilon_t^2>0$: the squares are correlated, so the $\varepsilon_t$ are not independent.
+  \item for ARCH$(1)$ with $\E[\varepsilon^4]<\infty$, $\Cov(\varepsilon_t^2,\varepsilon_{t-1}^2)=\alpha_1\Var\varepsilon_t^2>0$: the squares are correlated, so the $\varepsilon_t$ are not independent.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(i) $z_t$ is independent of $\sigma_t$: $\E[\sigma_tz_t\mid\mathcal F_{t-1}]=\sigma_t\E z_t=0$, $\E[\sigma_t^2z_t^2\mid\mathcal F_{t-1}]=\sigma_t^2$.
+(i) $z_t$ is independent of $\sigma_t$: $\E[\sigma_tz_t\mid\mathcal F_{t-1}]=\sigma_t\E[z_t]=0$, $\E[\sigma_t^2z_t^2\mid\mathcal F_{t-1}]=\sigma_t^2$.
 
 (ii) For $s<t$, $\varepsilon_s$ is $\mathcal F_{t-1}$-measurable, so $\E[\varepsilon_t\varepsilon_s]=\E\bigl[\varepsilon_s\E[\varepsilon_t\mid\mathcal F_{t-1}]\bigr]=0$.
 
-(iii) $\E[\varepsilon_t^2\varepsilon_{t-1}^2]=\E[\sigma_t^2\varepsilon_{t-1}^2]=\alpha_0\E\varepsilon^2+\alpha_1\E\varepsilon^4$, while $\E\varepsilon_t^2\E\varepsilon^2_{t-1}=(\E\varepsilon^2)(\alpha_0+\alpha_1\E\varepsilon^2)$; subtract.
+(iii) $\E[\varepsilon_t^2\varepsilon_{t-1}^2]=\E[\sigma_t^2\varepsilon_{t-1}^2]=\alpha_0\E[\varepsilon^2]+\alpha_1\E[\varepsilon^4]$, while $\E[\varepsilon_t^2]\E[\varepsilon^2_{t-1}]=(\E[\varepsilon^2])(\alpha_0+\alpha_1\E[\varepsilon^2])$; subtract.
 \end{proof}
 This is the precise sense of the remark of \cref{ch09:sec-sacf} that residual whiteness is not the end of the story: the ACF of the returns is flat (the martingale
 difference), that of the squares is not \ts{24}{19}{1:09:55}. For the S\&P~500 the autocorrelations of the squared, de-meaned log returns
@@ -636,7 +636,7 @@ Put $u_t=\varepsilon_t^2-\sigma_t^2$ and add it to both sides of \eqref{ch13:eq-
   \varepsilon_t^2=\alpha_0+\alpha_1\varepsilon_{t-1}^2+\dots+\alpha_p\varepsilon_{t-p}^2+u_t,\qquad
   \E[u_t\mid\mathcal F_{t-1}]=0,\quad \Var[u_t\mid\mathcal F_{t-1}]=(\kappa_z-1)\sigma_t^4 ,
 \end{equation}
-where $\kappa_z=\E z^4$ (equal to $3$ for Gaussian $z$, so that the conditional variance of $u_t$ is $2\sigma_t^4$)
+where $\kappa_z=\E[z^4]$ (equal to $3$ for Gaussian $z$, so that the conditional variance of $u_t$ is $2\sigma_t^4$)
 \ts{24}{19}{1:09:55}\ts{13}{9}{1:09:31}. The squared innovations follow an AR$(p)$ whose noise $u_t$ has mean zero and a variance that
 changes with time. This yields a quick test for ARCH effects.
 
@@ -644,7 +644,7 @@ changes with time. This yields a quick test for ARCH effects.
 Slides~21 and~25 of \file{lec17_1} (slides~20 and~24 of 2013) write $\Var[u_t\mid\mathcal F_t]=\Var(\varepsilon_t^2)=2\sigma_t^4$, and later
 $u_t\sim\mathrm{WN}(0,2\sigma^4)$. Two corrections. First, the conditional variance is taken given $\mathcal F_{t-1}$ (given $\mathcal F_t$ the variable $u_t$ is known), and it equals
 $(\kappa_z-1)\sigma_t^4$, i.e.\ $2\sigma_t^4$ only for Gaussian $z_t$. Second, $\sigma_t^2$ is random, so $u_t$ is not white noise in the strong sense: it is a martingale difference
-(hence uncorrelated), and it has a constant \emph{unconditional} variance $(\kappa_z-1)\E\sigma_t^4$ only if $\E\varepsilon^4<\infty$ (\cref{ch13:thm-kurt}). The ARMA representation of GARCH below is therefore an
+(hence uncorrelated), and it has a constant \emph{unconditional} variance $(\kappa_z-1)\E[\sigma_t^4]$ only if $\E[\varepsilon^4]<\infty$ (\cref{ch13:thm-kurt}). The ARMA representation of GARCH below is therefore an
 ARMA with uncorrelated, not independent, innovations; the second-moment formulas of \cref{ch09:sec-arma11} apply verbatim.
 \end{coursenote}
 
@@ -697,7 +697,7 @@ If $\beta_1<1$ and the process is stationary (\cref{ch13:thm-stat}),
 \end{proposition}
 \begin{proof}
 Iterate \eqref{ch13:eq-garch11}: $\sigma_t^2=\alpha_0\sum_{j<n}\beta_1^j+\alpha_1\sum_{j<n}\beta_1^j\varepsilon^2_{t-1-j}+\beta_1^n\sigma^2_{t-n}$; the last term tends to $0$ in expectation
-because $\E\sigma^2_{t-n}$ is finite and constant and $\beta_1^n\to0$.
+because $\E[\sigma^2_{t-n}]$ is finite and constant and $\beta_1^n\to0$.
 \end{proof}
 So the conditional variance is an exponentially weighted average of past squared innovations plus a constant: the same structure as the EMA of
 \cref{ch13:prop-ewma}, with the decay factor $\beta_1$ and the weight $\alpha_1/(1-\beta_1)$ on the average. Two parameters $(\alpha_1,\beta_1)$ replace the ten or more coefficients of a high-order ARCH,
@@ -754,7 +754,7 @@ If $\sum c_i<1$, then for $|z|\le1$, $|\sum c_iz^i|\le\sum c_i<1$, so $A(z)\ne0$
 \end{proof}
 \end{secondary}
 Consequently the ARMA of \eqref{ch13:eq-armasq} is covariance stationary iff $\sum(\alpha_i+\beta_i)<1$; for the $(1,1)$ case, $\alpha_1+\beta_1<1$
-\ts{24}{19}{1:13:09}\ts{13}{11}{6:19}. When $\E\varepsilon^4<\infty$ (\cref{ch13:thm-kurt}) the noise $u_t$ has constant variance and is uncorrelated, and the ARMA formulas of
+\ts{24}{19}{1:13:09}\ts{13}{11}{6:19}. When $\E[\varepsilon^4]<\infty$ (\cref{ch13:thm-kurt}) the noise $u_t$ has constant variance and is uncorrelated, and the ARMA formulas of
 \cref{ch09:sec-arma11} give the autocorrelation function of the squares:
 \begin{equation}\label{ch13:eq-acfsq}
   \rho_{\varepsilon^2}(1)=\frac{\alpha_1(1-\alpha_1\beta_1-\beta_1^2)}{1-2\alpha_1\beta_1-\beta_1^2},\qquad
@@ -772,18 +772,18 @@ cannot produce.
 \begin{theorem}[Stationarity of the GARCH$(1,1)$]\label{ch13:thm-stat}
 Let $\alpha_0>0$ and $\phi=\alpha_1+\beta_1$. There is a covariance stationary solution of \eqref{ch13:eq-garch11} iff $\phi<1$, and then
 \begin{equation}\label{ch13:eq-longrun}
-  \sigma_*^2\;:=\;\E\varepsilon_t^2=\E\sigma_t^2=\frac{\alpha_0}{1-\alpha_1-\beta_1}.
+  \sigma_*^2\;:=\;\E[\varepsilon_t^2]=\E[\sigma_t^2]=\frac{\alpha_0}{1-\alpha_1-\beta_1}.
 \end{equation}
 More generally, a GARCH$(p,q)$ is covariance stationary iff $\sum_i(\alpha_i+\beta_i)<1$, with $\sigma_*^2=\alpha_0/\bigl[1-\sum_{i\le\max(p,q)}(\alpha_i+\beta_i)\bigr]$.
 \end{theorem}
 \begin{proof}
-Put $a_t=\alpha_1z_t^2+\beta_1$, an i.i.d.\ sequence with $\E a_t=\phi$; then \eqref{ch13:eq-garch11} reads $\sigma_t^2=\alpha_0+a_{t-1}\sigma_{t-1}^2$, where $a_{t-1}$ is independent of $\sigma_{t-1}^2$.
-\emph{Necessity.} If a stationary solution with $\E\sigma_t^2=m<\infty$ exists, taking expectations gives $m=\alpha_0+\phi m$, so $m=\alpha_0/(1-\phi)$, which is positive only if $\phi<1$.
+Put $a_t=\alpha_1z_t^2+\beta_1$, an i.i.d.\ sequence with $\E[a_t]=\phi$; then \eqref{ch13:eq-garch11} reads $\sigma_t^2=\alpha_0+a_{t-1}\sigma_{t-1}^2$, where $a_{t-1}$ is independent of $\sigma_{t-1}^2$.
+\emph{Necessity.} If a stationary solution with $\E[\sigma_t^2]=m<\infty$ exists, taking expectations gives $m=\alpha_0+\phi m$, so $m=\alpha_0/(1-\phi)$, which is positive only if $\phi<1$.
 \emph{Sufficiency.} Iterating $n$ times,
 $\sigma_t^2=\alpha_0\bigl(1+a_{t-1}+a_{t-1}a_{t-2}+\dots+a_{t-1}\cdots a_{t-n+1}\bigr)+a_{t-1}\cdots a_{t-n}\,\sigma^2_{t-n}$. If $\phi<1$ the series with $n=\infty$
 has non-negative terms and expectation $\alpha_0\sum_k\phi^k=\alpha_0/(1-\phi)<\infty$, hence converges almost surely and in $L^1$, and it defines a stationary solution (a function of
-$z_{t-1},z_{t-2},\dots$); the remainder term has expectation $\phi^n\E\sigma^2_{t-n}\to0$, so this is the only solution with finite mean. For the general $(p,q)$ case take expectations in
-\eqref{ch13:eq-garch} (with $\E\varepsilon^2=\E\sigma^2$) and use \cref{ch13:lem-roots} for the equivalence with the ARMA polynomial \ts{13}{11}{7:23}\ts{13}{11}{8:26}.
+$z_{t-1},z_{t-2},\dots$); the remainder term has expectation $\phi^n\E[\sigma^2_{t-n}]\to0$, so this is the only solution with finite mean. For the general $(p,q)$ case take expectations in
+\eqref{ch13:eq-garch} (with $\E[\varepsilon^2]=\E[\sigma^2]$) and use \cref{ch13:lem-roots} for the equivalence with the ARMA polynomial \ts{13}{11}{7:23}\ts{13}{11}{8:26}.
 \end{proof}
 Taking expectations of \eqref{ch13:eq-garch11} is how the lecture obtains the \emph{long-run variance} $\sigma_*^2=\alpha_0+(\alpha_1+\beta_1)\sigma_*^2$ \ts{24}{19}{1:14:13}. Conversely
 $\alpha_0=(1-\alpha_1-\beta_1)\sigma_*^2$: one can parametrise the model by $(\sigma_*^2,\alpha_1,\beta_1)$, and $\sigma_*^2$ is then simply the unconditional variance of the returns (which the
@@ -792,7 +792,7 @@ sample variance estimates).
 \begin{coursenote}[Erratum: typo in the general long-run variance; constraints]\label{ch13:cn-longrun}
 Slide~26 of \file{lec17_1} (slide~25 of 2013) writes $\sigma_*^2=\alpha_0+\bigl(\sum_1^p\alpha_j+\sum_1^q\beta_1\bigr)\sigma_*^2$; the last coefficient should read $\beta_j$. Slide~27 has a typo
 in the constraint $\sum\alpha_u$ for $\sum\alpha_i$. The strict stationarity of the process is a weaker condition than covariance stationarity (Nelson, 1990; not discussed in class):
-the GARCH$(1,1)$ has a strictly stationary solution iff $\E\ln(\alpha_1z_t^2+\beta_1)<0$, and by Jensen $\E\ln a_t\le\ln\phi$, so $\phi<1$ suffices but $\phi\ge1$ is not excluded: the model may be
+the GARCH$(1,1)$ has a strictly stationary solution iff $\E\ln(\alpha_1z_t^2+\beta_1)<0$, and by Jensen $\E[\ln a_t]\le\ln\phi$, so $\phi<1$ suffices but $\phi\ge1$ is not excluded: the model may be
 strictly stationary with infinite variance.
 \end{coursenote}
 
@@ -866,7 +866,7 @@ factor $1.7$. This is the failure of the square-root-of-time rule announced in \
 \centering
 \begin{tikzpicture}
 \begin{axis}[name=L,width=0.49\linewidth,height=5.6cm,xmin=1,xmax=150,ymin=0,ymax=4.3,
-  axis lines=left,xlabel={horizon $h$ (days)},ylabel={$\E_t\sigma^2_{t+h}/\sigma_*^2$},
+  axis lines=left,xlabel={horizon $h$ (days)},ylabel={$\E_t[\sigma^2_{t+h}]/\sigma_*^2$},
   legend style={font=\scriptsize,draw=none,fill=white,fill opacity=0.85,text opacity=1,legend pos=north east},
   tick label style={font=\small},label style={font=\small},title style={font=\small},title={variance forecast}]
   \addplot[very thick,defcol,domain=1:150,samples=100] {1+3*0.97^(x-1)};
@@ -891,34 +891,34 @@ factor $1.7$. This is the failure of the square-root-of-time rule announced in \
   \node[font=\scriptsize,gray,anchor=north west] at (axis cs:100,15.5) {long-run level};
 \end{axis}
 \end{tikzpicture}
-\caption{Left: expected conditional variance $\E_t\sigma^2_{t+h}$ in units of $\sigma_*^2$ after a shock ($\sigma_{t+1}=2\sigma_*$) and after a calm day ($\sigma_{t+1}=\sigma_*/2$), for two persistences, from \eqref{ch13:eq-forecast}. Right:
+\caption{Left: expected conditional variance $\E_t[\sigma^2_{t+h}]$ in units of $\sigma_*^2$ after a shock ($\sigma_{t+1}=2\sigma_*$) and after a calm day ($\sigma_{t+1}=\sigma_*/2$), for two persistences, from \eqref{ch13:eq-forecast}. Right:
 annualised volatility expected over the next $H$ days after the shock of \cref{ch13:ex-forecast}, from \eqref{ch13:eq-hday}; the dotted lines are the $\sqrt H$ extrapolation of today's volatility and the long-run level $15.9\%$.}\label{ch13:fig-forecast}
 \end{figure}
 
 \subsection{Fourth moment and kurtosis}\label{ch13:sec-kurt}
 GARCH reproduces the fat tails of returns even when the innovations $z_t$ are Gaussian, and one can say by how much.
 \begin{theorem}[Kurtosis of the GARCH$(1,1)$]\label{ch13:thm-kurt}
-Let $\kappa_z=\E z_t^4<\infty$, $\phi=\alpha_1+\beta_1<1$, and assume $\Delta:=1-\phi^2-(\kappa_z-1)\alpha_1^2>0$. Then $\E\varepsilon_t^4<\infty$ and the kurtosis of $\varepsilon_t$ is
+Let $\kappa_z=\E[z_t^4]<\infty$, $\phi=\alpha_1+\beta_1<1$, and assume $\Delta:=1-\phi^2-(\kappa_z-1)\alpha_1^2>0$. Then $\E[\varepsilon_t^4]<\infty$ and the kurtosis of $\varepsilon_t$ is
 \begin{equation}\label{ch13:eq-kurt}
-  \kappa_\varepsilon=\frac{\E\varepsilon_t^4}{(\E\varepsilon_t^2)^2}=\kappa_z\,\frac{1-\phi^2}{1-\phi^2-(\kappa_z-1)\alpha_1^2}\ >\ \kappa_z .
+  \kappa_\varepsilon=\frac{\E[\varepsilon_t^4]}{(\E[\varepsilon_t^2])^2}=\kappa_z\,\frac{1-\phi^2}{1-\phi^2-(\kappa_z-1)\alpha_1^2}\ >\ \kappa_z .
 \end{equation}
 If $\Delta\le0$ the fourth moment is infinite. For Gaussian $z$ the condition is $(\alpha_1+\beta_1)^2+2\alpha_1^2<1$, i.e.\ $3\alpha_1^2+2\alpha_1\beta_1+\beta_1^2<1$.
 \end{theorem}
 \begin{proof}
-With $a_t=\alpha_1z_t^2+\beta_1$ as before, $\E a_t=\phi$ and $\E a_t^2=\alpha_1^2\kappa_z+2\alpha_1\beta_1+\beta_1^2=\phi^2+(\kappa_z-1)\alpha_1^2$, so $\Delta=1-\E a_t^2$.
-\emph{Finite fourth moment iff $\E a^2<1$:} the series of \cref{ch13:thm-stat} has terms $\alpha_0\prod_{j\le k}a_{t-j}$ of $L^2$ norm $\alpha_0(\E a^2)^{k/2}$, summable iff $\E a^2<1$ (Minkowski's inequality gives sufficiency);
-if $\E\sigma^4<\infty$ and stationary, the identity below forces $\E a^2<1$.
+With $a_t=\alpha_1z_t^2+\beta_1$ as before, $\E[a_t]=\phi$ and $\E[a_t^2]=\alpha_1^2\kappa_z+2\alpha_1\beta_1+\beta_1^2=\phi^2+(\kappa_z-1)\alpha_1^2$, so $\Delta=1-\E[a_t^2]$.
+\emph{Finite fourth moment iff $\E[a^2]<1$:} the series of \cref{ch13:thm-stat} has terms $\alpha_0\prod_{j\le k}a_{t-j}$ of $L^2$ norm $\alpha_0(\E[a^2])^{k/2}$, summable iff $\E[a^2]<1$ (Minkowski's inequality gives sufficiency);
+if $\E[\sigma^4]<\infty$ and stationary, the identity below forces $\E[a^2]<1$.
 Squaring $\sigma_t^2=\alpha_0+a_{t-1}\sigma_{t-1}^2$ and using independence of $a_{t-1}$ and $\sigma_{t-1}^2$,
 \[
-  \E\sigma^4=\alpha_0^2+2\alpha_0\phi\,\sigma_*^2+\E a^2\,\E\sigma^4\ \Longrightarrow\
-  \E\sigma^4=\frac{\alpha_0^2(1+\phi)}{(1-\phi)\,\Delta},
+  \E[\sigma^4]=\alpha_0^2+2\alpha_0\phi\,\sigma_*^2+\E[a^2]\,\E[\sigma^4]\ \Longrightarrow\
+  \E[\sigma^4]=\frac{\alpha_0^2(1+\phi)}{(1-\phi)\,\Delta},
 \]
-because $\alpha_0^2+2\alpha_0\phi\cdot\alpha_0/(1-\phi)=\alpha_0^2(1+\phi)/(1-\phi)$. Since $\varepsilon_t=\sigma_tz_t$ with $z_t$ independent of $\sigma_t$, $\E\varepsilon^4=\kappa_z\E\sigma^4$ and
-$\kappa_\varepsilon=\kappa_z\E\sigma^4/\sigma_*^4=\kappa_z\dfrac{(1+\phi)(1-\phi)^2}{(1-\phi)\Delta}=\kappa_z\dfrac{1-\phi^2}{\Delta}>\kappa_z$.
+because $\alpha_0^2+2\alpha_0\phi\cdot\alpha_0/(1-\phi)=\alpha_0^2(1+\phi)/(1-\phi)$. Since $\varepsilon_t=\sigma_tz_t$ with $z_t$ independent of $\sigma_t$, $\E[\varepsilon^4]=\kappa_z\E[\sigma^4]$ and
+$\kappa_\varepsilon=\kappa_z\E[\sigma^4]/\sigma_*^4=\kappa_z\dfrac{(1+\phi)(1-\phi)^2}{(1-\phi)\Delta}=\kappa_z\dfrac{1-\phi^2}{\Delta}>\kappa_z$.
 \end{proof}
 The mechanism is that of \cref{ch03:prop-mixture}: given the past, $\varepsilon_t$ is normal with variance $\sigma_t^2$, and this variance fluctuates, so the marginal law is a mixture of
-Gaussians with kurtosis $\kappa_z\E\sigma^4/(\E\sigma^2)^2\ge\kappa_z$, strictly unless $\sigma_t$ is constant \ts{13}{11}{24:19}; the slides describe GARCH as a ``stochastic mixture of Gaussians with higher kurtosis''.
-For $\beta_1=0$ one recovers the ARCH$(1)$ formulas of 2013 PS5 Problem~3 (\cref{ch13:ex-ps5-3}): $\E\varepsilon^4=\kappa_z\alpha_0^2(1+\alpha_1)/\bigl[(1-\alpha_1)(1-\kappa_z\alpha_1^2)\bigr]$, finite iff $\alpha_1<1/\sqrt3=0.577$ for Gaussian $z$.
+Gaussians with kurtosis $\kappa_z\E[\sigma^4]/(\E[\sigma^2])^2\ge\kappa_z$, strictly unless $\sigma_t$ is constant \ts{13}{11}{24:19}; the slides describe GARCH as a ``stochastic mixture of Gaussians with higher kurtosis''.
+For $\beta_1=0$ one recovers the ARCH$(1)$ formulas of 2013 PS5 Problem~3 (\cref{ch13:ex-ps5-3}): $\E[\varepsilon^4]=\kappa_z\alpha_0^2(1+\alpha_1)/\bigl[(1-\alpha_1)(1-\kappa_z\alpha_1^2)\bigr]$, finite iff $\alpha_1<1/\sqrt3=0.577$ for Gaussian $z$.
 
 \begin{secondary}[Kurtosis for typical parameters]
 \begin{center}\small
@@ -938,7 +938,7 @@ $(0.12,\,0.87)$ & $0.99$ & $-0.0089$ & $\infty$\\
 \end{secondary}
 Persistence close to $1$ makes the fourth moment barely exist, and then sample kurtosis is an unreliable estimator of the theoretical one: sample fourth moments of such a process converge very slowly.
 \begin{secondary}[Power-law tails]
-(A tail-index refinement, not discussed: $\P(|\varepsilon|>x)\sim x^{-\xi}$ with $\xi$ solving $\E a_t^{\xi/2}=1$, so GARCH tails are power laws, as in the empirical ``inverse cubic'' law of \cref{ch03:sec-heavy}.)
+(A tail-index refinement, not discussed: $\P(|\varepsilon|>x)\sim x^{-\xi}$ with $\xi$ solving $\E[a_t^{\xi/2}]=1$, so GARCH tails are power laws, as in the empirical ``inverse cubic'' law of \cref{ch03:sec-heavy}.)
 \end{secondary}
 
 \subsection{The RiskMetrics limit: IGARCH}\label{ch13:sec-igarch}
@@ -946,12 +946,12 @@ The RiskMetrics exponential average with decay factor $\beta$ is the GARCH$(1,1)
 \begin{equation}\label{ch13:eq-igarch}
   \sigma_{t+1}^2=(1-\beta)\,\varepsilon_t^2+\beta\,\sigma_t^2,
 \end{equation}
-an \emph{integrated} GARCH (IGARCH). It has no long-run variance, and by \eqref{ch13:eq-forecast} with $\phi=1$ its forecast is flat, $\E_t\sigma^2_{t+h}=\sigma^2_{t+1}$ for all $h$, so it scales volatility with $\sqrt H$
+an \emph{integrated} GARCH (IGARCH). It has no long-run variance, and by \eqref{ch13:eq-forecast} with $\phi=1$ its forecast is flat, $\E_t[\sigma^2_{t+h}]=\sigma^2_{t+1}$ for all $h$, so it scales volatility with $\sqrt H$
 \ts{13}{11}{27:33}. The lecturer describes the advantage: one tracks a possibly non-stationary volatility without presuming that a long-run average consistent with the past exists.
 \begin{secondary}[Two caveats on IGARCH]
 Two caveats, not
 discussed: as a \emph{generating} process the IGARCH with $\alpha_0=0$ is degenerate, since $\ln\sigma_t^2=\ln\sigma_0^2+\sum_{j\le t}\ln a_j$ has i.i.d.\ increments of strictly negative mean
-$\E\ln a<\ln\E a=0$ (Jensen), so $\sigma_t^2\to0$ almost surely; for $\alpha_1=0.06$ and Gaussian $z$ the drift is $\E\ln a=-0.0032$ per day, slow enough to be invisible in a sample of a few hundred days. And the
+$\E[\ln a]<\ln\E[a]=0$ (Jensen), so $\sigma_t^2\to0$ almost surely; for $\alpha_1=0.06$ and Gaussian $z$ the drift is $\E[\ln a]=-0.0032$ per day, slow enough to be invisible in a sample of a few hundred days. And the
 recursion \eqref{ch13:eq-igarch} is exactly the steady-state Kalman filter of a local-level model (\cref{ch09:sec-ss}), which is a better way to think of it: a \emph{filter} for the current level of volatility, not a
 model of its evolution.
 \end{secondary}
@@ -1020,9 +1020,9 @@ Let $T_\nu=Z/\sqrt{V/\nu}$ with $Z\sim N(0,1)$ independent of $V\sim\chi^2_\nu$.
 and $\Prob(|T_\nu|>x)\sim c_\nu x^{-\nu}$ as $x\to\infty$: a power-law tail, with only the moments of order $<\nu$ finite.
 \end{proposition}
 \begin{proof}
-Conditionally on $V$, $T_\nu\sim N(0,\nu/V)$, so $T_\nu$ is a normal variance mixture (\cref{ch03:prop-mixture}) with mixing variable $\nu/V$. Now $\E V^{-1}=1/(\nu-2)$ and $\E V^{-2}=1/((\nu-2)(\nu-4))$ for the $\chi^2_\nu$ law
-(they follow from $\E V^{k}=2^k\Gamma(\nu/2+k)/\Gamma(\nu/2)$ for $k=-1,-2$, and are infinite for $\nu\le2$, resp.\ $\nu\le4$). Hence $\Var T_\nu=\nu\E V^{-1}=\nu/(\nu-2)$, $\E T_\nu^4=3\nu^2\E V^{-2}=3\nu^2/((\nu-2)(\nu-4))$ and
-$\kappa_t=\E T^4/(\Var T)^2=3(\nu-2)/(\nu-4)=3+6/(\nu-4)$. The tail follows from the density \eqref{ch13:eq-tstd}, which decays like $|z|^{-(\nu+1)}$.
+Conditionally on $V$, $T_\nu\sim N(0,\nu/V)$, so $T_\nu$ is a normal variance mixture (\cref{ch03:prop-mixture}) with mixing variable $\nu/V$. Now $\E[V^{-1}]=1/(\nu-2)$ and $\E[V^{-2}]=1/((\nu-2)(\nu-4))$ for the $\chi^2_\nu$ law
+(they follow from $\E[V^{k}]=2^k\Gamma(\nu/2+k)/\Gamma(\nu/2)$ for $k=-1,-2$, and are infinite for $\nu\le2$, resp.\ $\nu\le4$). Hence $\Var T_\nu=\nu\E[V^{-1}]=\nu/(\nu-2)$, $\E[T_\nu^4]=3\nu^2\E[V^{-2}]=3\nu^2/((\nu-2)(\nu-4))$ and
+$\kappa_t=\E[T^4]/(\Var T)^2=3(\nu-2)/(\nu-4)=3+6/(\nu-4)$. The tail follows from the density \eqref{ch13:eq-tstd}, which decays like $|z|^{-(\nu+1)}$.
 \end{proof}
 So $\nu=10$ has $\kappa_t=4$, $\nu=5$ has $9$, $\nu=30$ has $3.23$; as $\nu\to\infty$ the law tends to the normal. The value $\nu=30$ (or $25$--$40$, the answers of the students in class) is when the density and the distribution function are
 visually indistinguishable from the normal \ts{13}{11}{19:08}\ts{13}{11}{20:13}. What differs is the \emph{far tail}, best seen on a logarithmic scale \ts{13}{11}{20:13}\ts{13}{11}{21:15}, \cref{ch13:fig-tails}.
@@ -1230,7 +1230,7 @@ Everything in the chapter follows from this: the stationary level is the balance
 &\text{GARCH$(1,1)$:} && \sigma_t^2=\alpha_0+\alpha_1\varepsilon_{t-1}^2+\beta_1\sigma_{t-1}^2\\
 &\text{ARMA form:} && \varepsilon_t^2=\alpha_0+(\alpha_1+\beta_1)\varepsilon_{t-1}^2+u_t-\beta_1u_{t-1}\\
 &\text{Stationarity, long run:} && \phi=\alpha_1+\beta_1<1,\quad \sigma_*^2=\tfrac{\alpha_0}{1-\phi}\\
-&\text{Forecast:} && \E_t\sigma^2_{t+h}=\sigma_*^2+\phi^{h-1}(\sigma^2_{t+1}-\sigma_*^2)\\
+&\text{Forecast:} && \E_t[\sigma^2_{t+h}]=\sigma_*^2+\phi^{h-1}(\sigma^2_{t+1}-\sigma_*^2)\\
 & && \text{half-life }\ln(1/2)/\ln\phi\\
 &\text{ACF of squares:} && \rho(1)=\tfrac{\alpha_1(1-\alpha_1\beta_1-\beta_1^2)}{1-2\alpha_1\beta_1-\beta_1^2},\quad \rho(k)=\phi^{k-1}\rho(1)\\
 &\text{Kurtosis:} && \kappa_\varepsilon=\kappa_z\tfrac{1-\phi^2}{1-\phi^2-(\kappa_z-1)\alpha_1^2}\\
@@ -1272,11 +1272,11 @@ Now the increments $h_i>0$ are arbitrary with $\sum_ih_i=T$.
 \end{exercise}
 
 \begin{exercise}[PS5 (2013), Problem 3: properties of the ARCH$(1)$ model]\label{ch13:ex-ps5-3}
-Let $y_t=\mu_t+\varepsilon_t$, $\varepsilon_t=z_t\sigma_t$, $\sigma_t^2=\alpha_0+\alpha_1\varepsilon_{t-1}^2$, with $z_t$ i.i.d., $\E z_t=0$, $\Var z_t=1$, $\E z_t^3=0$, $\E z_t^4=\kappa_z$ ($=3$ if Gaussian). Prove:
+Let $y_t=\mu_t+\varepsilon_t$, $\varepsilon_t=z_t\sigma_t$, $\sigma_t^2=\alpha_0+\alpha_1\varepsilon_{t-1}^2$, with $z_t$ i.i.d., $\E[z_t]=0$, $\Var z_t=1$, $\E[z_t^3]=0$, $\E[z_t^4]=\kappa_z$ ($=3$ if Gaussian). Prove:
 \begin{enumerate}[(a)]
-  \item $\E\varepsilon_t^2=\alpha_0/(1-\alpha_1)$;
-  \item $\E\varepsilon_t^3=0$;
-  \item $\E\varepsilon_t^4=\kappa_z\alpha_0^2(1+\alpha_1)/[(1-\alpha_1)(1-\kappa_z\alpha_1^2)]$;
+  \item $\E[\varepsilon_t^2]=\alpha_0/(1-\alpha_1)$;
+  \item $\E[\varepsilon_t^3]=0$;
+  \item $\E[\varepsilon_t^4]=\kappa_z\alpha_0^2(1+\alpha_1)/[(1-\alpha_1)(1-\kappa_z\alpha_1^2)]$;
   \item which constraints on $\alpha_0,\alpha_1$ does (c) require for the fourth moment to be finite and stationary;
   \item the kurtosis of $\varepsilon_t$: for Gaussian $z_t$, is the unconditional distribution of $\varepsilon_t$ heavier-tailed than the Gaussian?
       (The problem as printed writes the constant $\kappa_z$ in (c) without naming it; it is the kurtosis of $z_t$ stated just before.)
@@ -1328,7 +1328,7 @@ Choose a stock symbol and edit the ARKK file to run the same analysis.
 For a GARCH$(1,1)$ with $\alpha_1=0.08$, $\beta_1=0.90$, long-run daily volatility $1\%$, and $\sigma_{t+1}=1.6\%$, compute the expected annualised volatility over the next $21$ and $252$ days from \eqref{ch13:eq-hday}, and the half-life of a variance shock. Check by simulation.
 \end{exercise}
 \begin{exercise}[(not from the course): unbiasedness of a range estimator]\label{ch13:ex-extra2}
-Using $\E(H-L)^2=4\ln2\,\sigma^2$ and $\E c^2=\sigma^2$, verify that the Garman--Klass estimator \eqref{ch13:eq-gk} is unbiased, and that with a drift $\mu_*\ne0$ the close-to-close estimator $c^2$ has expectation $\sigma^2+\mu_*^2$ (units of a day). Why does this not contradict the estimator being unbiased for a driftless process?
+Using $\E[(H-L)^2]=4\ln2\,\sigma^2$ and $\E[c^2]=\sigma^2$, verify that the Garman--Klass estimator \eqref{ch13:eq-gk} is unbiased, and that with a drift $\mu_*\ne0$ the close-to-close estimator $c^2$ has expectation $\sigma^2+\mu_*^2$ (units of a day). Why does this not contradict the estimator being unbiased for a driftless process?
 \end{exercise}
 \begin{exercise}[(not from the course): kurtosis with $t$ innovations]\label{ch13:ex-extra3}
 For which $(\alpha_1,\beta_1)$ is the kurtosis of a GARCH$(1,1)$ with $t_6$ innovations finite? Compare with the Gaussian case for $\alpha_1+\beta_1=0.95$. Prove that the maximum $\alpha_1$ for an ARCH$(1)$ with fourth moment decreases from $1/\sqrt3$ to $1/\sqrt{\kappa_z}$.

@@ -487,7 +487,7 @@ conditional expectation (\cref{ch:probability}), valid for integrable $Z$:
 A sequence $M_n=f_n(X_1,\dots,X_n)$, $n\ge1$, with $M_0$ a constant, is a \emph{martingale} with respect
 to $\{X_n\}$ (or to $\{\mathcal F_n\}$) if for all $n\ge1$
 \begin{equation}\label{ch04:eq-mart}
-  \E|M_n|<\infty\qquad\text{and}\qquad \E[M_n\mid\mathcal F_{n-1}]=M_{n-1}
+  \E[|M_n|]<\infty\qquad\text{and}\qquad \E[M_n\mid\mathcal F_{n-1}]=M_{n-1}
 \end{equation}
 \ts{24}{5}{1:13:28}. It is a \emph{submartingale} if $\E[M_n\mid\mathcal F_{n-1}]\ge M_{n-1}$ and a
 \emph{supermartingale} if $\le$ (terms not used in class).
@@ -514,7 +514,7 @@ they are uncorrelated, and $\Var(M_n)=\sum_{k=1}^n\E[D_k^2]$.
 \begin{proof}
 By the tower property, $\E[M_n\mid\mathcal F_m]=\E\bigl[\E[M_n\mid\mathcal F_{n-1}]\mid\mathcal F_m\bigr]
 =\E[M_{n-1}\mid\mathcal F_m]$, and induction on $n-m$ (2013 notes, Proposition~4.2). Taking $m=0$ gives
-$\E M_n=M_0$. For $j<k$, $D_j\in\mathcal F_{k-1}$, so
+$\E[M_n]=M_0$. For $j<k$, $D_j\in\mathcal F_{k-1}$, so
 $\E[D_jD_k]=\E\bigl[D_j\,\E[D_k\mid\mathcal F_{k-1}]\bigr]=0$; hence the variance of the sum is the sum of
 the variances.
 \end{proof}
@@ -523,9 +523,9 @@ the variances.
 The 2024 slides give four families; each one is used later.
 
 \begin{example}[Sums: random walks {\ts{24}{5}{1:13:28}}]\label{ch04:ex-m1}
-If $X_n$ are independent with $\E X_n=0$, then $S_n=X_1+\dots+X_n$ is a martingale:
+If $X_n$ are independent with $\E[X_n]=0$, then $S_n=X_1+\dots+X_n$ is a martingale:
 $\E[S_n\mid\mathcal F_{n-1}]=S_{n-1}+\E[X_n]=S_{n-1}$. In particular the SRW is a martingale
-\ts{13}{5}{1:01:24}. With non-zero means, the \emph{compensated} walk $S_n-\sum_{k\le n}\E X_k$ is a
+\ts{13}{5}{1:01:24}. With non-zero means, the \emph{compensated} walk $S_n-\sum_{k\le n}\E[X_k]$ is a
 martingale.
 \end{example}
 
@@ -541,7 +541,7 @@ motion, the origin of the extra term in It\^o's formula (\cref{ch:stochcalc}).
 \end{example}
 
 \begin{example}[Products {\ts{24}{6}{4:15}}]\label{ch04:ex-m3}
-If $X_n\ge0$ are independent with $\E X_n=1$ and $M_0=1$, then $M_n=X_1X_2\cdots X_n$ is a martingale:
+If $X_n\ge0$ are independent with $\E[X_n]=1$ and $M_0=1$, then $M_n=X_1X_2\cdots X_n$ is a martingale:
 $\E[M_n\mid\mathcal F_{n-1}]=M_{n-1}\E[X_n]=M_{n-1}$. The 2024 slides take $X_n\in\{0.5,\,1.5\}$ with
 probability $1/2$ each: the wealth of someone who stakes everything, every period, on a fair bet that gains
 or loses 50\% \ts{24}{6}{5:20}. The 2013 lecture takes $X_n=2$ with probability $1/3$ and $X_n=\tfrac12$
@@ -549,17 +549,17 @@ with probability $2/3$, again with mean $1$ \ts{13}{5}{1:03:24}.
 \end{example}
 
 The simulations in class show a few paths growing to 5--10 times the initial wealth, while most lose
-almost everything \ts{24}{6}{5:20}. The calculation behind the pictures (ours): $\E M_n=1$ for every $n$, but
-$\log M_n=\sum_k\log X_k$ is a random walk with drift $\E\log X=\tfrac12\ln0.75=-0.144$ per step, so
+almost everything \ts{24}{6}{5:20}. The calculation behind the pictures (ours): $\E[M_n]=1$ for every $n$, but
+$\log M_n=\sum_k\log X_k$ is a random walk with drift $\E[\log X]=\tfrac12\ln0.75=-0.144$ per step, so
 $M_n\to0$ almost surely by the law of large numbers. After 50 steps the median wealth is
 $0.75^{25}\approx7.5\times10^{-4}$, and $\Prob(M_{50}\ge1)=\Prob(\mathrm{Bin}(50,\tfrac12)\ge32)\approx0.032$;
 the mean $1$ is carried by rare paths (the largest possible value is $1.5^{50}\approx6\times10^8$). In the 2013
-example $\E\log X=\tfrac13\ln2-\tfrac23\ln2<0$ as well.
+example $\E[\log X]=\tfrac13\ln2-\tfrac23\ln2<0$ as well.
 
 \begin{intuition}[Mean versus typical behaviour]
-For multiplicative processes the mean and the typical value part ways: $\E M_n$ is dominated by
+For multiplicative processes the mean and the typical value part ways: $\E[M_n]$ is dominated by
 exponentially rare paths, much as a partition function can be dominated by rare configurations. The
-typical growth rate is $\E\log X$, not $\log\E X$; by Jensen's inequality $\E\log X<\log\E X=0$ unless $X$ is
+typical growth rate is $\E[\log X]$, not $\log\E[X]$; by Jensen's inequality $\E[\log X]<\log\E[X]=0$ unless $X$ is
 constant. In finance this is the gap between arithmetic and geometric mean returns (``volatility drag''),
 and the reason for the debate mentioned in class \ts{24}{5}{49:47} on whether an investor should maximise
 the expected \emph{logarithm} of wealth (the Kelly criterion, of which Paul Samuelson was the best-known
@@ -567,14 +567,14 @@ critic).
 \end{intuition}
 
 \begin{example}[Exponential martingales {\ts{24}{6}{6:28}}]\label{ch04:ex-m4}
-Let $Y_n$ be i.i.d.\ with moment generating function $\phi(\lambda)=\E\,e^{\lambda Y}<\infty$. Then
+Let $Y_n$ be i.i.d.\ with moment generating function $\phi(\lambda)=\E[e^{\lambda Y}]<\infty$. Then
 $X_n=e^{\lambda Y_n}/\phi(\lambda)$ are independent with mean $1$, so by \cref{ch04:ex-m3}
 \begin{equation}\label{ch04:eq-expmart}
   M_n=\frac{e^{\lambda S_n}}{\phi(\lambda)^n},\qquad S_n=Y_1+\dots+Y_n,
 \end{equation}
 is a martingale for every fixed $\lambda$ \ts{24}{6}{7:30}. If $\lambda_0\ne0$ solves $\phi(\lambda_0)=1$,
-then $M_n=e^{\lambda_0S_n}$ is a martingale. Since $\phi$ is convex with $\phi(0)=1$ and $\phi'(0)=\E Y$, such
-a root exists (with the sign opposite to $\E Y$) as soon as $\E Y\ne0$ and $\phi$ grows beyond $1$ on that side,
+then $M_n=e^{\lambda_0S_n}$ is a martingale. Since $\phi$ is convex with $\phi(0)=1$ and $\phi'(0)=\E[Y]$, such
+a root exists (with the sign opposite to $\E[Y]$) as soon as $\E[Y]\ne0$ and $\phi$ grows beyond $1$ on that side,
 e.g.\ for bounded steps taking both signs.
 \end{example}
 For $\pm1$ steps, $\phi(\lambda)=pe^\lambda+qe^{-\lambda}$ and $\phi(\lambda)=1$ is a quadratic equation in
@@ -593,8 +593,8 @@ Processes of neither kind are the rule rather than the exception.
 
 \begin{remark}[Prices or log-prices?]\label{ch04:rem-logprice}
 If $\log P_t$ is a random walk with i.i.d.\ steps $X_t$ (2024 PS3 Problem~3), the price itself satisfies
-$\E[P_t\mid\mathcal F_{t-1}]=P_{t-1}\E\,e^{X}$, so $P_t$ is a martingale iff $\E e^X=1$. For normal steps
-$\E e^X=e^{\mu+\sigma^2/2}$, i.e.\ iff $\mu=-\sigma^2/2$: a martingale log-price ($\mu=0$) gives an
+$\E[P_t\mid\mathcal F_{t-1}]=P_{t-1}\E[e^{X}]$, so $P_t$ is a martingale iff $\E[e^X]=1$. For normal steps
+$\E[e^X]=e^{\mu+\sigma^2/2}$, i.e.\ iff $\mu=-\sigma^2/2$: a martingale log-price ($\mu=0$) gives an
 \emph{upward}-drifting price. This lognormal correction (2024 PS2 Problem~2, \cref{ch:probability}) is the same
 $-\sigma^2/2$ that appears in the drift of $\log S_t$ under Black--Scholes.
 \end{remark}
@@ -620,7 +620,7 @@ $C_n$, then $\{\tilde M_n\}$ is a martingale with respect to $\{\mathcal F_n\}$ 
 \end{theorem}
 \begin{proof}
 $\tilde M_n$ is a function of $X_1,\dots,X_n$ and
-$\E|\tilde M_n|\le|M_0|+\sum_{k\le n}C_k\bigl(\E|M_k|+\E|M_{k-1}|\bigr)<\infty$. Taking out what is known,
+$\E[|\tilde M_n|]\le|M_0|+\sum_{k\le n}C_k\bigl(\E[|M_k|]+\E[|M_{k-1}|]\bigr)<\infty$. Taking out what is known,
 \[
   \E[\tilde M_n-\tilde M_{n-1}\mid\mathcal F_{n-1}]=A_n\,\E[M_n-M_{n-1}\mid\mathcal F_{n-1}]=A_n\cdot0=0 .
   \qedhere
@@ -694,7 +694,7 @@ which is a martingale by \cref{ch04:thm-transform} \ts{24}{6}{20:29}. Then apply
 \end{coursenote}
 
 \subsection{The optional stopping theorem}
-\cref{ch04:thm-stopped} gives $\E M_{n\wedge\tau}=M_0$ at every fixed $n$. The \emph{optional stopping theorem}
+\cref{ch04:thm-stopped} gives $\E[M_{n\wedge\tau}]=M_0$ at every fixed $n$. The \emph{optional stopping theorem}
 passes to the limit $n\to\infty$, where $M_{n\wedge\tau}\to M_\tau$ on $\{\tau<\infty\}$.
 
 \begin{theorem}[Optional stopping]\label{ch04:thm-ost}
@@ -704,16 +704,16 @@ cases:
   \item $\tau\le T$ for a constant $T$ (2013 notes, Theorem~5.3, ``Doob's optional stopping theorem, weak form'')
         \ts{13}{5}{1:14:06};
   \item $\tau<\infty$ almost surely and the stopped process is bounded, $|M_{n\wedge\tau}|\le K$ for all $n$;
-  \item $\E\tau<\infty$ and the increments are bounded, $|M_n-M_{n-1}|\le c$.
+  \item $\E[\tau]<\infty$ and the increments are bounded, $|M_n-M_{n-1}|\le c$.
 \end{enumerate}
 \end{theorem}
 \begin{proof}
-(i) For $n=T$, $M_{T\wedge\tau}=M_\tau$, so $\E M_\tau=\E M_0$ by \cref{ch04:thm-stopped}. (This is the 2013 proof:
+(i) For $n=T$, $M_{T\wedge\tau}=M_\tau$, so $\E[M_\tau]=\E[M_0]$ by \cref{ch04:thm-stopped}. (This is the 2013 proof:
 $M_\tau=M_0+\sum_{i=0}^{T-1}(M_{i+1}-M_i)\ind\{\tau\ge i+1\}$, and each term has zero mean after conditioning on
 $\mathcal F_i$, because $\{\tau\ge i+1\}$ is decided by time $i$.)
 
 (ii) Since $\tau<\infty$, $M_{n\wedge\tau}=M_\tau$ for all $n\ge\tau$, so $M_{n\wedge\tau}\to M_\tau$ almost surely; by
-bounded convergence $\E M_\tau=\lim_n\E M_{n\wedge\tau}=\E M_0$.
+bounded convergence $\E[M_\tau]=\lim_n\E[M_{n\wedge\tau}]=\E[M_0]$.
 
 (iii) $|M_{n\wedge\tau}|\le|M_0|+c\,\tau$, an integrable bound, so dominated convergence applies as in (ii).
 \end{proof}
@@ -722,12 +722,12 @@ bounded convergence $\E M_\tau=\lim_n\E M_{n\wedge\tau}=\E M_0$.
 quit, as long as it does not peek into the future and you cannot play for an unbounded time with unbounded credit,
 your expected final balance equals your initial one \ts{13}{5}{1:06:34}, \ts{13}{5}{1:15:08}. The hypotheses are
 not decorations: 2013 notes, Exercise~5.4 (\cref{ch04:ex-note54}), asks why stopping the SRW when it first
-reaches \$100 does not contradict the theorem although $\E S_\tau=100$.
+reaches \$100 does not contradict the theorem although $\E[S_\tau]=100$.
 
 \begin{finance}[The ``martingale'' betting system (not discussed in class)]
 Bet \$1 on a fair coin; after each loss double the stake; stop at the first win. With $A_k=2^{k-1}$ on
 $\{\tau\ge k\}$ and $\tau$ the first win, the net gain at $\tau$ is $2^{\tau-1}-(1+2+\dots+2^{\tau-2})=+1$ with
-certainty, although $\E\tau=2<\infty$. Condition (iii) fails because the stakes, i.e.\ the increments of the
+certainty, although $\E[\tau]=2<\infty$. Condition (iii) fails because the stakes, i.e.\ the increments of the
 transformed process, are unbounded, and so does (ii), since the loss before the first win is unbounded. At any fixed
 horizon $n$ the game is still fair: with probability $1-2^{-n}$ you have won \$1, with probability $2^{-n}$ you have lost
 $2^n-1$, and the mean is $0$. This doubling scheme is the historical meaning of ``martingale'' in gambling (the
@@ -747,33 +747,33 @@ a stopping time (a first hitting time), and I take all my opponent's money iff $
 
 \begin{lemma}\label{ch04:lem-finite}
 For a walk with steps $\pm1$ and $\Prob(X=+1)=p\in(0,1)$, $\Prob(\tau>n(A+B))\le(1-p^{A+B})^n$. Hence
-$\tau<\infty$ almost surely and $\E\tau<\infty$.
+$\tau<\infty$ almost surely and $\E[\tau]<\infty$.
 \end{lemma}
 \begin{proof}
 Split time into blocks of $A+B$ steps. If all steps of a block are $+1$ the walk, wherever it is in $(-B,A)$,
 leaves the interval during that block. Blocks are independent and each has only $+1$ steps with probability
 $p^{A+B}$, so surviving $n$ blocks has probability at most $(1-p^{A+B})^n$. Then
-$\E\tau=\sum_{m\ge0}\Prob(\tau>m)\le(A+B)\sum_{n\ge0}(1-p^{A+B})^n<\infty$.
+$\E[\tau]=\sum_{m\ge0}\Prob(\tau>m)\le(A+B)\sum_{n\ge0}(1-p^{A+B})^n<\infty$.
 \end{proof}
 
 \begin{proposition}[Fair gambler's ruin]\label{ch04:prop-ruin}
 For the SRW,
 \[
-  \Prob(S_\tau=+A)=\frac{B}{A+B},\qquad \Prob(S_\tau=-B)=\frac{A}{A+B},\qquad \E\tau=AB .
+  \Prob(S_\tau=+A)=\frac{B}{A+B},\qquad \Prob(S_\tau=-B)=\frac{A}{A+B},\qquad \E[\tau]=AB .
 \]
 \end{proposition}
 \begin{proof}
 $S_n$ is a martingale and $|S_{n\wedge\tau}|\le\max(A,B)$, so by \cref{ch04:lem-finite} and optional stopping (b),
-$0=\E S_\tau=A\,\Prob(S_\tau=A)-B\,\bigl(1-\Prob(S_\tau=A)\bigr)$ \ts{24}{6}{23:52}, \ts{24}{6}{24:54}, which gives the
+$0=\E[S_\tau]=A\,\Prob(S_\tau=A)-B\,\bigl(1-\Prob(S_\tau=A)\bigr)$ \ts{24}{6}{23:52}, \ts{24}{6}{24:54}, which gives the
 first formula. For the second, $M_n=S_n^2-n$ is a martingale (\cref{ch04:ex-m2} with $\sigma^2=1$), so by
 \cref{ch04:thm-stopped}
 \[
   \E\bigl[S_{n\wedge\tau}^2\bigr]=\E[n\wedge\tau]\qquad\text{for every }n.
 \]
-As $n\to\infty$ the left side tends to $\E S_\tau^2$ by bounded convergence ($S^2_{n\wedge\tau}\le\max(A^2,B^2)$) and the
-right side to $\E\tau$ by monotone convergence ($n\wedge\tau\uparrow\tau$). Hence \ts{24}{6}{29:13}
+As $n\to\infty$ the left side tends to $\E[S_\tau^2]$ by bounded convergence ($S^2_{n\wedge\tau}\le\max(A^2,B^2)$) and the
+right side to $\E[\tau]$ by monotone convergence ($n\wedge\tau\uparrow\tau$). Hence \ts{24}{6}{29:13}
 \[
-  \E\tau=\E S_\tau^2=A^2\,\frac{B}{A+B}+B^2\,\frac{A}{A+B}=AB .\qedhere
+  \E[\tau]=\E[S_\tau^2]=A^2\,\frac{B}{A+B}+B^2\,\frac{A}{A+B}=AB .\qedhere
 \]
 \end{proof}
 
@@ -786,9 +786,9 @@ $5000$ rounds on average. In a fair game the richer player is more likely to win
 \begin{itemize}
   \item ``Problem: Solve for $\Prob(\tau=+A)$'' (and the title of slide 25) should read $\Prob(S_\tau=+A)$: $\tau$ is a
         time, $S_\tau$ the level hit. A student pointed this out in class and the lecturer confirmed \ts{24}{6}{26:05}.
-  \item ``$\lim_{n\to\infty}\E(S_{n\wedge\tau})=S_\tau$ w.p.~1'' mixes a number and a random variable: the correct
+  \item ``$\lim_{n\to\infty}\E[S_{n\wedge\tau}]=S_\tau$ w.p.~1'' mixes a number and a random variable: the correct
         statement is $S_{n\wedge\tau}\to S_\tau$ almost surely (because $\Prob(\tau=\infty)=0$), and then
-        $\E S_\tau=\lim_n\E S_{n\wedge\tau}=0$ by bounded convergence.
+        $\E[S_\tau]=\lim_n\E[S_{n\wedge\tau}]=0$ by bounded convergence.
   \item Slide 26: ``$M_{n\wedge\tau}\le\max(A^2,B^2)+\tau$, bounded r.v.'' is not a valid justification, since $\tau$ is not
         bounded. The limit must be taken separately in the two terms of $M_{n\wedge\tau}=S^2_{n\wedge\tau}-n\wedge\tau$,
         with bounded and monotone convergence, as in the proof above.
@@ -835,16 +835,16 @@ With $r=q/p\ne1$,
 By \cref{ch04:ex-m4}, $M_n=r^{S_n}$ is a martingale with $M_0=1$. Since $-B\le S_{n\wedge\tau}\le A$, $M_{n\wedge\tau}$ lies
 between $r^{-B}$ and $r^{A}$, and optional stopping (b) with \cref{ch04:lem-finite} gives \ts{24}{6}{34:22}
 \[
-  1=\E\,r^{S_\tau}=r^{A}\,\Prob(S_\tau=A)+r^{-B}\bigl(1-\Prob(S_\tau=A)\bigr)
+  1=\E[r^{S_\tau}]=r^{A}\,\Prob(S_\tau=A)+r^{-B}\bigl(1-\Prob(S_\tau=A)\bigr)
   \quad\Longrightarrow\quad \Prob(S_\tau=A)=\frac{1-r^{-B}}{r^A-r^{-B}}=\frac{r^B-1}{r^{A+B}-1}.\qedhere
 \]
 \end{proof}
 As $p\to\tfrac12$, $r=1+\varepsilon$ with $\varepsilon\to0$, and the ratio tends to $B\varepsilon/((A+B)\varepsilon)=B/(A+B)$,
 recovering the fair case. The expected duration (not derived in class) follows from the martingale
-$S_n-n(p-q)$ (\cref{ch04:ex-m1}) and optional stopping (c) (bounded increments, $\E\tau<\infty$):
-$\E S_\tau=(p-q)\,\E\tau$ (Wald's identity), so
+$S_n-n(p-q)$ (\cref{ch04:ex-m1}) and optional stopping (c) (bounded increments, $\E[\tau]<\infty$):
+$\E[S_\tau]=(p-q)\,\E[\tau]$ (Wald's identity), so
 \[
-  \E\tau=\frac{A\,\Prob(S_\tau=A)-B\,\Prob(S_\tau=-B)}{p-q}.
+  \E[\tau]=\frac{A\,\Prob(S_\tau=A)-B\,\Prob(S_\tau=-B)}{p-q}.
 \]
 
 \begin{figure}[ht]
@@ -923,7 +923,7 @@ the link between stationary distributions and Perron--Frobenius, which 2024 does
 % ------------------------------------------------------------------
 \begin{keyformulas}
 \begin{align*}
-&\text{Random walk:} && \E S_n=n\mu,\quad \Var S_n=n\sigma^2,\\
+&\text{Random walk:} && \E[S_n]=n\mu,\quad \Var S_n=n\sigma^2,\\
 & && (S_n-n\mu)/(\sigma\sqrt n)\to N(0,1)\\
 &\text{Markov chain:} && \Prob(X_0=i_0,\dots,X_n=i_n)
   =p_{i_0}P_{i_0i_1}\cdots P_{i_{n-1}i_n},\\
@@ -931,16 +931,16 @@ the link between stationary distributions and Perron--Frobenius, which 2024 does
 &\text{Stationary dist.:} && \bm\pi P=\bm\pi;\quad P^k>0\ \Rightarrow\
   P^{(n)}_{ij}\to\pi_j\ \text{geometrically}\\
 &\text{Martingale:} && \E[M_n\mid\mathcal F_{n-1}]=M_{n-1},\\
-& && \E[M_n\mid\mathcal F_m]=M_m,\quad \E M_n=M_0\\
+& && \E[M_n\mid\mathcal F_m]=M_m,\quad \E[M_n]=M_0\\
 &\text{Examples:} && S_n,\quad S_n^2-n\sigma^2,\\
-& && \textstyle\prod_kX_k\ (\E X=1),\quad e^{\lambda S_n}/\phi(\lambda)^n\\
+& && \textstyle\prod_kX_k\ (\E[X]=1),\quad e^{\lambda S_n}/\phi(\lambda)^n\\
 &\text{Transform:} && \tilde M_n=M_0+\textstyle\sum_{k\le n}A_k\,\Delta M_k,\\
 & && A_k\in\mathcal F_{k-1}\ \Rightarrow\ \text{martingale}\\
-&\text{Opt. stopping:} && \E M_\tau=\E M_0\ \text{if $\tau$ bounded,}\\
-& && \text{or $M_{n\wedge\tau}$ bounded, or $\E\tau<\infty$ \& bounded steps}\\
-&\text{Fair ruin:} && \Prob(S_\tau=A)=\tfrac{B}{A+B},\quad \E\tau=AB\\
+&\text{Opt. stopping:} && \E[M_\tau]=\E[M_0]\ \text{if $\tau$ bounded,}\\
+& && \text{or $M_{n\wedge\tau}$ bounded, or $\E[\tau]<\infty$ \& bounded steps}\\
+&\text{Fair ruin:} && \Prob(S_\tau=A)=\tfrac{B}{A+B},\quad \E[\tau]=AB\\
 &\text{Biased ruin:} && \Prob(S_\tau=A)=\tfrac{(q/p)^B-1}{(q/p)^{A+B}-1},\\
-& && \E\tau=\tfrac{\E S_\tau}{p-q}
+& && \E[\tau]=\tfrac{\E[S_\tau]}{p-q}
 \end{align*}
 \end{keyformulas}
 
@@ -965,7 +965,7 @@ Let $X_n$ be i.i.d.\ steps with $\Prob(X_n=+1)=p$, $\Prob(X_n=0)=1-(p+q)$, $\Pro
 \end{exercise}
 
 \begin{exercise}[PS3 (2024), Problem 3: random walk for the log price]\label{ch04:ex-ps3-3}
-Let $P_t$ be an asset price, $S_t=\log P_t$ and $X_t=S_t-S_{t-1}=\log(P_t/P_{t-1})$, with the $X_t$ i.i.d., $\E X_t=\mu$
+Let $P_t$ be an asset price, $S_t=\log P_t$ and $X_t=S_t-S_{t-1}=\log(P_t/P_{t-1})$, with the $X_t$ i.i.d., $\E[X_t]=\mu$
 and $\Var X_t=\sigma^2>0$.
 \begin{enumerate}[(a)]
   \item For which $(\mu,\sigma^2)$ is $\{S_t\}$ a Markov process? Explain.
@@ -1020,7 +1020,7 @@ the definition, and check which of them survive if the steps are independent but
 \end{exercise}
 
 \begin{exercise}[\file{lecnote5}, Exercise 5.4]\label{ch04:ex-note54}
-In the coin-toss game the gambler stops the first time her balance reaches \$100. By construction $\E S_\tau=100$. Does
+In the coin-toss game the gambler stops the first time her balance reaches \$100. By construction $\E[S_\tau]=100$. Does
 this contradict the optional stopping theorem? Which hypothesis of \cref{ch04:thm-ost} fails?
 \end{exercise}
 

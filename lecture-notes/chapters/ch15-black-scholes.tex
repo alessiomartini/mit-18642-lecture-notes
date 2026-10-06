@@ -277,7 +277,7 @@ expansion of $q$. A step of $\ln S$ is $\sigma\sqrt{\dd t}\,\xi$ with $\xi=\pm1$
 $\sigma\sqrt{\dd t}(2q-1)=(r-\tfrac12\sigma^2)\dd t+O(\dd t^{3/2})$ and its variance $\sigma^2\dd t\,[1-(2q-1)^2]=\sigma^2\dd t\,(1+O(\dd t))$.
 Summing $n=T/\dd t$ independent steps, the mean tends to $(r-\tfrac12\sigma^2)T$ and the variance to $\sigma^2T$; the steps are bounded by $\sigma\sqrt{\dd t}\to0$,
 so the Lindeberg central limit theorem (\cref{ch:probability}) applies. The payoff is continuous with linear growth and
-$\E_\Q S_T=S_0e^{rT}$ exactly for every $n$, which supplies the uniform integrability needed to pass to the limit in the expectation.
+$\E_\Q[S_T]=S_0e^{rT}$ exactly for every $n$, which supplies the uniform integrability needed to pass to the limit in the expectation.
 
 (ii) By the definition of $q$, $q(u-1)+(1-q)(d-1)=e^{r\dd t}-1$ exactly, and $q(u-1)^2+(1-q)(d-1)^2=\sigma^2\dd t\,(1+O(\sqrt{\dd t}))$. Taylor-expanding
 $f(uS,t+\dd t)$ and $f(dS,t+\dd t)$ to second order in $(u-1)S$, $(d-1)S$ and first order in $\dd t$ and inserting in \eqref{ch15:eq-backward} gives
@@ -327,8 +327,8 @@ The steps of the tree are not independent of the time step: if the space step we
 and if it were larger than $\sqrt{\dd t}$ the variance would explode. The unique scaling that leaves a non-trivial limit is the diffusive one,
 $\text{step}\sim\sqrt{\dd t}$, as in Donsker's theorem (\cref{ch11:thm-donsker}); this is what the lecturer proves
 in the next section by counting variances. The drift correction $-\tfrac12\sigma^2$ in the exponent is the same lognormal correction as in
-\cref{ch04:rem-logprice}: the tree has $\E_\Q S_T=S_0e^{rT}$ (the martingale property is exact), but $\ln S_T$ has mean
-$(r-\tfrac12\sigma^2)T$ because $\E e^{X}=e^{\E X+\Var X/2}$ for a normal variable.
+\cref{ch04:rem-logprice}: the tree has $\E_\Q[S_T]=S_0e^{rT}$ (the martingale property is exact), but $\ln S_T$ has mean
+$(r-\tfrac12\sigma^2)T$ because $\E[e^{X}]=e^{\E[X]+\Var X/2}$ for a normal variable.
 \end{intuition}
 
 % ==================================================================
@@ -341,14 +341,14 @@ The lecture models the stock by the \emph{lognormal} (geometric Brownian motion,
   \dd S_t=\mu S_t\dd t+\sigma S_t\dd W_t,
 \end{equation}
 where $\mu$ is the (real-world) drift, $\sigma$ the \emph{volatility}, and $\dd W$ the increment of a Brownian motion: normal, with
-$\E\,\dd W=0$ and $\operatorname{sd}(\dd W)=\sqrt{\dd t}$, independent for disjoint time intervals \ts{13}{19}{23:04}. The proportional change $\dd S/S$
+$\E[\dd] W=0$ and $\operatorname{sd}(\dd W)=\sqrt{\dd t}$, independent for disjoint time intervals \ts{13}{19}{23:04}. The proportional change $\dd S/S$
 has a deterministic part and a noise part. The lecture says clearly that the choice is an \emph{example}: the method needs only that the stock
 has some dynamics, and other choices (stochastic volatility, jumps) lead to other equations of the same type
 \ts{24}{21}{33:56}\ts{24}{21}{1:00:39}.
 
 \subsection{Why the standard deviation is $\sqrt{\dd t}$}
 In the 2024 lecture Strela stops to answer a question that ``always bothers'' him \ts{24}{21}{36:07}. Take a random walk $W_n=\sum_{i=1}^n\xi_i$ with steps $\xi_i=\pm1$ with
-probability $\frac12$, uncorrelated: $\E W_n=0$ (a martingale) and $\Var W_n=\sum_i\E\xi_i^2=n$
+probability $\frac12$, uncorrelated: $\E[W_n]=0$ (a martingale) and $\Var W_n=\sum_i\E[\xi_i^2]=n$
 \ts{24}{21}{37:10}\ts{24}{21}{38:14}\ts{24}{21}{39:21}. Now put the $n$ steps in a finite time $T$, $\dd t=T/n$, and let each step have size $\pm\delta$:
 $\Var W=n\delta^2=T\delta^2/\dd t$. For the limit $\dd t\to0$ to be neither $0$ nor $\infty$ one needs $\delta^2/\dd t$ to stay finite, i.e.\ $\delta\propto\sqrt{\dd t}$
 \ts{24}{21}{40:26}\ts{24}{21}{41:27}\ts{24}{21}{42:31}. That is the content of Donsker's theorem (\cref{ch11:thm-donsker}); the same
@@ -493,8 +493,8 @@ The second route to the price is the one the lecturer wants to stress: ``mostly 
 so that $S_t=e^{-r(T-t)}\E_\Q[S_T\mid S_t]$: under $\Q$ the \emph{discounted} stock price $e^{-rt}S_t$ is a martingale (slides 13, 21).
 
 \paragraph{How to find $\Q$.} The lecturer's argument \ts{24}{21}{1:07:01}\ts{24}{21}{1:08:09}: take the expectation of \eqref{ch15:eq-gbm} (the
-$\dd W$ term has mean zero), $\dd\,\E S_t=\mu\,\E S_t\dd t$, so $\E S_T=S_te^{\mu(T-t)}$ for the real-world dynamics. In the risk-neutral
-world the stock must grow at the risk-free rate, $\E_\Q S_T=S_te^{r(T-t)}$ (this was the property $qS_1+(1-q)S_2=S_0e^{r\dd t}$ of the tree), which forces $\mu\to r$.
+$\dd W$ term has mean zero), $\dd\,\E[S_t]=\mu\,\E[S_t]\dd t$, so $\E[S_T]=S_te^{\mu(T-t)}$ for the real-world dynamics. In the risk-neutral
+world the stock must grow at the risk-free rate, $\E_\Q[S_T]=S_te^{r(T-t)}$ (this was the property $qS_1+(1-q)S_2=S_0e^{r\dd t}$ of the tree), which forces $\mu\to r$.
 The volatility is \emph{unchanged}: the size of the fluctuations is a pathwise property (the quadratic variation, \cref{ch11:thm-qv}), the same under every equivalent measure, whereas the drift
 can be changed at will. Changing only the drift of a Brownian motion is the content of Girsanov's theorem (\cref{ch:sde}): $W^{\Q}_t=W_t+\lambda t$ with
 $\lambda=(\mu-r)/\sigma$, the \emph{market price of risk} (the Sharpe ratio of the stock; this identification is not made in the lecture). In this language
@@ -967,7 +967,7 @@ Design an arbitrage (list the trades and the guaranteed profit) if the call in t
 \begin{exercise}[not from the course: digital options]\label{ch15:ex-digital}
 \leavevmode
 \begin{enumerate}[(a)]
-  \item Prove $D=-\partial C/\partial K$ for any model where $C(K)=e^{-r\tau}\E_\Q(S_T-K)^+$.
+  \item Prove $D=-\partial C/\partial K$ for any model where $C(K)=e^{-r\tau}\E_\Q[(S_T-K)^+]$.
   \item Show that a call spread with strikes $K$ and $K+\varepsilon$, scaled by $1/\varepsilon$, \emph{super-replicates} the digital,
       so that the dealer's ask for the digital is $\le[C(K)-C(K+\varepsilon)]/\varepsilon$, and find the sub-replicating spread giving a bid.
   \item In a model with a smile, $\sigma=\sigma(K)$, show that $D=e^{-r\tau}\Phi(d_2)-\mathcal V\,\sigma'(K)$ and explain the sign

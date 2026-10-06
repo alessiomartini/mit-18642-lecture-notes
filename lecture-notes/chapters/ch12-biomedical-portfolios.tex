@@ -131,7 +131,7 @@ rate, but the numbers are reproduced by $r=10\%$:
 \begin{example}[Reconstruction: mean and volatility of the single project]\label{ch12:ex-single}
 Let $G$ be the gross ten-year return, $G=12.3/0.2=61.5$ with probability $p=0.05$ and $0$ otherwise. Then
 \[
-  \E G=pG_0=3.075,\qquad \Var G=G_0^2\,p(1-p),\qquad \sqrt{\Var G}=61.5\sqrt{0.0475}=13.40,
+  \E[G]=pG_0=3.075,\qquad \Var G=G_0^2\,p(1-p),\qquad \sqrt{\Var G}=61.5\sqrt{0.0475}=13.40,
 \]
 with $G_0=61.5$. The annualised expected return is $3.075^{1/10}-1\approx11.9\%$, the ``about $12\%$'' of the lecture. The
 annualised standard deviation, obtained by scaling the ten-year standard deviation by $\sqrt{10}$, is
@@ -155,7 +155,7 @@ then about $12\%/34.6\%\approx0.35$, ten times the single-project value.
 
 \begin{proposition}[Reconstruction: equal-weight portfolio of $N$ i.i.d.\ projects]\label{ch12:prop-iid}
 Let $R_1,\dots,R_N$ be i.i.d.\ with mean $\mu$ and variance $\sigma^2$ (returns per dollar invested) and let
-$R_P=\frac1N\sum_i R_i$. Then $\E R_P=\mu$, $\Var R_P=\sigma^2/N$ and $\mathrm{SR}_N=\sqrt N\,\mathrm{SR}_1$.
+$R_P=\frac1N\sum_i R_i$. Then $\E[R_P]=\mu$, $\Var R_P=\sigma^2/N$ and $\mathrm{SR}_N=\sqrt N\,\mathrm{SR}_1$.
 \end{proposition}
 \begin{proof}
 Linearity of $\E$ gives the mean. For the variance, independence gives
@@ -308,7 +308,7 @@ $0$. Two standard ways to produce correlated Bernoulli indicators:
         correlation $\rho$ is smaller than the latent correlation $a$ (it is $0.026$ for $a=0.1$ and $0.058$ for $a=0.2$).
   \item \emph{Uncertainty about $p$} (beta-binomial). The lecturer's distinction between risk and uncertainty has an exact
         counterpart. Suppose the projects share an unknown success rate $\Pi\sim\mathrm{Beta}(\alpha,\beta)$ with
-        $\E\Pi=p$ and, given $\Pi$, are independent Bernoulli($\Pi$). Then $\Cov(X_i,X_j)=\Var\Pi$ and
+        $\E[\Pi]=p$ and, given $\Pi$, are independent Bernoulli($\Pi$). Then $\Cov(X_i,X_j)=\Var\Pi$ and
         \begin{equation}\label{ch12:eq-rhobeta}
           \rho=\frac{\Var\Pi}{p(1-p)}=\frac{1}{\alpha+\beta+1}.
         \end{equation}
@@ -466,8 +466,8 @@ zero-sum: ``doing well by doing good'' \ts{24}{18}{1:02:57}.
 % ==================================================================
 \begin{keyformulas}
 \begin{itemize}
-  \item Sharpe ratio: $\mathrm{SR}=(\E R-r_f)/\sqrt{\Var R}$.
-  \item Single project (lecture): cost \$200M, 10 years, $p=5\%$, payoff \$12.3B; $\E G=3.075$ per dollar,
+  \item Sharpe ratio: $\mathrm{SR}=(\E[R]-r_f)/\sqrt{\Var R}$.
+  \item Single project (lecture): cost \$200M, 10 years, $p=5\%$, payoff \$12.3B; $\E[G]=3.075$ per dollar,
         $\sqrt{\Var G}=61.5\sqrt{p(1-p)}=13.4$ over 10 years ($424\%$ per year after dividing by $\sqrt{10}$).
   \item $N$ i.i.d.\ projects: $\Var R_P=\sigma^2/N$, $\mathrm{SR}_N=\sqrt N\,\mathrm{SR}_1$.
   \item Common correlation $\rho$: $\Var R_P=\sigma^2\bigl(\tfrac1N+\tfrac{N-1}{N}\rho\bigr)$,

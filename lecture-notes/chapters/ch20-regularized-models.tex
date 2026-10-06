@@ -410,7 +410,7 @@ Insert \eqref{ch20:eq-inv} into \eqref{ch20:eq-pinv}: $\bm x^\dagger=A^\dagger A
 \ts{13}{10}{1:12:32}:
 \[
   \|\delta\bm x\|^2=\sum_{i=1}^r\frac{(\bm u_i\T\bm\varepsilon)^2}{s_i^2},\qquad
-  \E\|\delta\bm x\|^2=\sigma^2\sum_{i=1}^r\frac1{s_i^2}\quad\text{if }\Cov\bm\varepsilon=\sigma^2I .
+  \E[\|\delta\bm x\|^2]=\sigma^2\sum_{i=1}^r\frac1{s_i^2}\quad\text{if }\Cov\bm\varepsilon=\sigma^2I .
 \]
 Each mode $i$ of the noise is divided by $s_i$: a small singular value turns an innocent perturbation of the data into a large variation of the parameters. A scale-free measure is the
 \emph{condition number} $\kappa=s_1/s_r$ \ts{13}{10}{1:12:32}: for $\bm x$ in the row space of $A$,
@@ -517,9 +517,9 @@ On slide~42 the inverse matrix is called $A$, which is also the model matrix of 
 \end{coursenote}
 
 \subsection{Bias, variance and the meaning of $\lambda$}\label{ch20:sec-biasvar}
-For Tikhonov with $L=I$ the error can be computed exactly. Let $\bm y=A\bm x+\bm\varepsilon$, $\E\bm\varepsilon=\bm 0$, $\Cov\bm\varepsilon=\sigma^2I$, and $\xi_i=\bm v_i\T\bm x$. From \eqref{ch20:eq-filter}, $\bm x_\lambda=\sum_iw_i(\xi_i+\bm u_i\T\bm\varepsilon/s_i)\bm v_i$, hence
+For Tikhonov with $L=I$ the error can be computed exactly. Let $\bm y=A\bm x+\bm\varepsilon$, $\E[\bm\varepsilon]=\bm 0$, $\Cov\bm\varepsilon=\sigma^2I$, and $\xi_i=\bm v_i\T\bm x$. From \eqref{ch20:eq-filter}, $\bm x_\lambda=\sum_iw_i(\xi_i+\bm u_i\T\bm\varepsilon/s_i)\bm v_i$, hence
 \begin{equation}\label{ch20:eq-mse}
-  \E\|\bm x_\lambda-\bm x\|^2=\sum_{i=1}^r\Bigl[\underbrace{(1-w_i)^2\xi_i^2}_{\text{bias}^2}+\underbrace{\sigma^2\frac{w_i^2}{s_i^2}}_{\text{variance}}\Bigr]+\sum_{i>r}\xi_i^2 ,\qquad 1-w_i=\frac{\lambda^2}{s_i^2+\lambda^2},\quad\frac{w_i^2}{s_i^2}=\frac{s_i^2}{(s_i^2+\lambda^2)^2}.
+  \E[\|\bm x_\lambda-\bm x\|^2]=\sum_{i=1}^r\Bigl[\underbrace{(1-w_i)^2\xi_i^2}_{\text{bias}^2}+\underbrace{\sigma^2\frac{w_i^2}{s_i^2}}_{\text{variance}}\Bigr]+\sum_{i>r}\xi_i^2 ,\qquad 1-w_i=\frac{\lambda^2}{s_i^2+\lambda^2},\quad\frac{w_i^2}{s_i^2}=\frac{s_i^2}{(s_i^2+\lambda^2)^2}.
 \end{equation}
 (I checked \eqref{ch20:eq-mse} by Monte Carlo on a random $8\times6$ matrix: $0.7747$ against $0.7750$ from $4\times10^4$ samples.) The last sum is the part of $\bm x$ in the kernel of $A$, which no method can recover.
 Bias grows and variance falls with $\lambda$; at $\lambda=0$ the variance $\sigma^2\sum s_i^{-2}$ is the amplification of \cref{ch20:sec-noise}. Minimising each term over $w_i$: $-2(1-w)\xi^2+2w\sigma^2/s^2=0$ gives

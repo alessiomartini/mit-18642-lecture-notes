@@ -326,7 +326,7 @@ $0.349$, while the $t$ values stay $5.206$ and $2.949$.
 The data $(\bm y,X)$ follow a linear model satisfying the Gauss--Markov assumptions if $\bm y$ is an
 observation of a random vector $\bm Y$ with \ts{24}{8}{1:11:00} \ts{13}{6}{45:22}
 \[
-  \E(\bm Y\mid X,\bm\beta)=X\bm\beta,\qquad \Cov(\bm Y\mid X,\bm\beta)=\sigma^2I_n\quad(\sigma^2>0),
+  \E[\bm Y\mid X,\bm\beta]=X\bm\beta,\qquad \Cov(\bm Y\mid X,\bm\beta)=\sigma^2I_n\quad(\sigma^2>0),
 \]
 equivalently $\bm Y=X\bm\beta+\bm\varepsilon$ with $\E[\bm\varepsilon]=\bm 0$, $\Cov(\bm\varepsilon)=\sigma^2I_n$. Everything is conditional
 on $X$, which is treated as fixed.
@@ -355,7 +355,7 @@ of $\theta$: it is the \emph{best linear unbiased estimator} (BLUE) \ts{24}{8}{1
 \begin{proof}
 (2013 notes) \ts{13}{6}{51:42}. Without loss of generality $c_{p+1}=0$; write $\bm c=(c_1,\dots,c_p)\T$. Then
 $\hat\theta=\bm c\T\hat{\bm\beta}=\bm c\T(X\T X)^{-1}X\T\bm y\equiv\bm d\T\bm y$ with $\bm d=X(X\T X)^{-1}\bm c\in\operatorname{col}(X)$, and
-$\E\hat\theta=\bm c\T\bm\beta$ by \eqref{ch05:eq-covbeta}. Let $\tilde\theta=\bm b\T\bm y$ be any linear unbiased estimator and
+$\E[\hat\theta]=\bm c\T\bm\beta$ by \eqref{ch05:eq-covbeta}. Let $\tilde\theta=\bm b\T\bm y$ be any linear unbiased estimator and
 $\bm f=\bm b-\bm d$, so $\tilde\theta=\hat\theta+\bm f\T\bm y$. Unbiasedness of both gives
 $0=\E[\bm f\T\bm y]=\bm f\T X\bm\beta$ for \emph{all} $\bm\beta\in\R^p$, hence $X\T\bm f=\bm 0$: $\bm f\perp\operatorname{col}(X)$, in particular
 $\bm f\perp\bm d$. Therefore
@@ -367,8 +367,8 @@ with equality iff $\bm f=\bm 0$ \ts{13}{6}{53:43}.
 \end{proof}
 
 \begin{coursenote}[Erratum in the 2013 proof]
-Slide 17 of \file{lecnote6} writes $0=\E(\bm f\T\bm y)=\bm d\T\E(\bm y)=\bm f\T(X\bm\beta)$; the middle term should be
-$\bm f\T\E(\bm y)$. The key point, easy to miss, is that unbiasedness must hold \emph{for every} $\bm\beta$, which is
+Slide 17 of \file{lecnote6} writes $0=\E[\bm f\T\bm y]=\bm d\T\E[\bm y]=\bm f\T(X\bm\beta)$; the middle term should be
+$\bm f\T\E[\bm y]$. The key point, easy to miss, is that unbiasedness must hold \emph{for every} $\bm\beta$, which is
 what forces $\bm f\perp\operatorname{col}(X)$.
 \end{coursenote}
 
@@ -452,7 +452,7 @@ factorises \ts{24}{8}{22:13} \ts{13}{6}{1:02:09}:
 
 \begin{definition}[Multivariate normal]\label{ch05:def-mvn}
 $\bm Y\sim N_n(\bm\mu,\Sigma)$, with $\bm\mu\in\R^n$ and $\Sigma$ symmetric positive semi-definite, if
-$M_{\bm Y}(\bm t)=\exp(\bm t\T\bm\mu+\frac12\bm t\T\Sigma\bm t)$ for all $\bm t$. Then $\E\bm Y=\bm\mu$ and $\Cov\bm Y=\Sigma$; if
+$M_{\bm Y}(\bm t)=\exp(\bm t\T\bm\mu+\frac12\bm t\T\Sigma\bm t)$ for all $\bm t$. Then $\E[\bm Y]=\bm\mu$ and $\Cov\bm Y=\Sigma$; if
 $\Sigma\succ0$ the density is $(2\pi)^{-n/2}(\det\Sigma)^{-1/2}\exp\bigl(-\frac12(\bm y-\bm\mu)\T\Sigma^{-1}(\bm y-\bm\mu)\bigr)$. Since an MGF
 finite around $\bm 0$ determines the distribution, recognising this form is enough to identify a normal vector.
 \end{definition}
@@ -582,7 +582,7 @@ likely'' \ts{24}{11}{10:53} \ts{13}{6}{1:20:05}. For the normal linear model
 \ts{24}{11}{13:02}. Maximise in two steps: $\bm\beta$ enters only through $-Q(\bm\beta)$, so $\hat{\bm\beta}_{\text{ML}}=\hat{\bm\beta}_{\text{OLS}}$
 for every $\sigma^2$; then $\partial\log L/\partial\sigma^2=-\frac{n}{2\sigma^2}+\frac{Q(\hat{\bm\beta})}{2\sigma^4}=0$ gives
 \[
-  \hat\sigma^2_{\text{ML}}=\frac{\text{RSS}}{n},\qquad \E\hat\sigma^2_{\text{ML}}=\frac{n-p}{n}\sigma^2\quad\text{(biased)}
+  \hat\sigma^2_{\text{ML}}=\frac{\text{RSS}}{n},\qquad \E[\hat\sigma^2]_{\text{ML}}=\frac{n-p}{n}\sigma^2\quad\text{(biased)}
 \]
 \ts{24}{11}{14:08}. So least squares is also ``doing something decent'' from the likelihood point of view when the
 errors are Gaussian \ts{13}{6}{1:21:11}. ML estimators are asymptotically optimal (smallest variance as

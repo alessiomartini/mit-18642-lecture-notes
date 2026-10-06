@@ -68,7 +68,7 @@ $\tau$, $m$ and $(t_1,\dots,t_m)$: the joint law is invariant under time transla
 \begin{definition}[Covariance stationarity and ACF]\label{ch09:def-cov}
 $\{X_t\}$ is \emph{covariance (weakly, second-order) stationary} if, for all $t$,
 \[
-  \E X_t=\mu,\qquad \Var X_t=\sigma_X^2<\infty,\qquad \Cov(X_t,X_{t+\tau})=\gamma(\tau)
+  \E[X_t]=\mu,\qquad \Var X_t=\sigma_X^2<\infty,\qquad \Cov(X_t,X_{t+\tau})=\gamma(\tau)
 \]
 depend at most on the lag $\tau$ \ts{24}{12}{5:24}\ts{13}{8}{29:32}. The \emph{autocorrelation function}
 (ACF) is $\rho(\tau)=\gamma(\tau)/\gamma(0)$ \ts{24}{12}{7:27}.
@@ -181,10 +181,10 @@ Every zero-mean covariance-stationary series $\{X_t\}$ can be written
 \begin{equation}\label{ch09:eq-wold}
   X_t=V_t+S_t,\qquad S_t=\sum_{i=0}^{\infty}\psi_i\,\eta_{t-i},
 \end{equation}
-where $\psi_0=1$, $\sum_i\psi_i^2<\infty$; $\{\eta_t\}$ is \emph{white noise}, i.e.\ $\E\eta_t=0$,
-$\E\eta_t^2=\sigma^2$, $\E\eta_t\eta_s=0$ for $t\ne s$; $\{V_t\}$ is \emph{linearly deterministic} (a linear
+where $\psi_0=1$, $\sum_i\psi_i^2<\infty$; $\{\eta_t\}$ is \emph{white noise}, i.e.\ $\E[\eta_t]=0$,
+$\E[\eta_t^2]=\sigma^2$, $\E[\eta_t]\eta_s=0$ for $t\ne s$; $\{V_t\}$ is \emph{linearly deterministic} (a linear
 combination of its own past with constant coefficients predicts it exactly); and
-$\E(\eta_tV_s)=0$ for all $t,s$ \ts{24}{12}{38:24}\ts{13}{8}{31:40}.
+$\E[\eta_tV_s]=0$ for all $t,s$ \ts{24}{12}{38:24}\ts{13}{8}{31:40}.
 \end{theorem}
 
 The theorem says that once the deterministic part is removed, \emph{every} stationary series is a moving
@@ -197,9 +197,9 @@ observations fix it for ever; sums of sinusoids of different frequencies (a Four
 predictable \ts{24}{12}{40:30}\ts{24}{12}{41:32}\ts{24}{12}{42:32}.
 
 \begin{proof}[Sketch of proof]
-Work in the Hilbert space $L^2$ of square-integrable random variables with inner product $\langle U,W\rangle=\E UW$.
+Work in the Hilbert space $L^2$ of square-integrable random variables with inner product $\langle U,W\rangle=\E[UW]$.
 Let $H_t$ be the closed linear span of $\{X_s:s\le t\}$ and $P_{H}$ the orthogonal projection on $H$. Define
-$\eta_t=X_t-P_{H_{t-1}}X_t$. Stationarity makes the time shift a unitary map, so $\sigma^2=\E\eta_t^2$ does not depend on
+$\eta_t=X_t-P_{H_{t-1}}X_t$. Stationarity makes the time shift a unitary map, so $\sigma^2=\E[\eta_t^2]$ does not depend on
 $t$ (we assume $\sigma^2>0$; otherwise $X$ is itself deterministic). Since $\eta_s\in H_s\subset H_{t-1}$ for $s<t$
 and $\eta_t\perp H_{t-1}$, the $\eta_t$ are uncorrelated. Put $\psi_j=\E[X_t\eta_{t-j}]/\sigma^2$, independent of $t$; then
 $\psi_0=\E[X_t\eta_t]/\sigma^2=\E[\eta_t^2]/\sigma^2=1$, because $X_t-\eta_t\in H_{t-1}$. The projection of $X_t$ on
@@ -356,7 +356,7 @@ For $X_t-\mu=\phi(X_{t-1}-\mu)+\eta_t$ the characteristic equation is $1-\phi z=
 the process is covariance stationary iff $|\phi|<1$ \ts{24}{12}{1:08:12}. Iterating,
 $X_t-\mu=\sum_{j\ge0}\phi^j\eta_{t-j}$ (the Wold decomposition, $\psi_j=\phi^j$), and therefore
 \begin{equation}\label{ch09:eq-ar1}
-  \E X_t=\mu,\qquad \gamma(0)=\sigma_X^2=\frac{\sigma^2}{1-\phi^2},\qquad
+  \E[X_t]=\mu,\qquad \gamma(0)=\sigma_X^2=\frac{\sigma^2}{1-\phi^2},\qquad
   \gamma(j)=\phi^{\,j}\,\sigma_X^2,\qquad \rho(j)=\phi^{\,j}
 \end{equation}
 \ts{24}{12}{1:08:12}\ts{13}{8}{56:46}\ts{13}{8}{58:54}. (Multiply $X_t-\mu=\phi(X_{t-1}-\mu)+\eta_t$ by $X_{t-j}-\mu$
@@ -567,7 +567,7 @@ Set $p=0$: $X_t-\mu=\theta(L)\eta_t=\eta_t+\theta_1\eta_{t-1}+\dots+\theta_q\eta
 \ts{24}{12}{1:14:24}\ts{13}{8}{1:06:12}. Because $\eta$ is white noise, only overlapping terms contribute:
 \begin{equation}\label{ch09:eq-ma}
   \begin{gathered}
-  \E X_t=\mu,\qquad \gamma(0)=\sigma^2\bigl(1+\theta_1^2+\dots+\theta_q^2\bigr),\\
+  \E[X_t]=\mu,\qquad \gamma(0)=\sigma^2\bigl(1+\theta_1^2+\dots+\theta_q^2\bigr),\\
   \gamma(j)=\begin{cases}\sigma^2\bigl(\theta_j+\theta_{j+1}\theta_1+\dots+\theta_q\theta_{q-j}\bigr),&1\le j\le q,\\ 0,& j>q,\end{cases}
   \end{gathered}
 \end{equation}
@@ -592,7 +592,7 @@ autocovariances satisfy the Yule--Walker recursion $\gamma(j)=\sum_i\phi_i\gamma
 
 For ARMA(1,1), $X_t-\phi X_{t-1}=\phi_0+\eta_t+\theta\eta_{t-1}$ (2013 PS4 Problem~6 and 2024 PS4 Problem~6,
 exercise \ref{ch09:ex-arma11}), matching the powers in $\psi(L)=(1+\theta L)/(1-\phi L)$ gives
-$\psi_0=1$ and $\psi_j=\phi^{j-1}(\phi+\theta)$ for $j\ge1$. Then $\E X_t=\phi_0/(1-\phi)$ and, summing $\sum_j\psi_j^2$,
+$\psi_0=1$ and $\psi_j=\phi^{j-1}(\phi+\theta)$ for $j\ge1$. Then $\E[X_t]=\phi_0/(1-\phi)$ and, summing $\sum_j\psi_j^2$,
 \begin{equation}\label{ch09:eq-arma11}\begin{gathered}
   \gamma(0)=\sigma^2\,\frac{1+2\phi\theta+\theta^2}{1-\phi^2},\\
   \rho(1)=\frac{(1+\phi\theta)(\phi+\theta)}{1+2\phi\theta+\theta^2}=\phi+\frac{\theta\sigma^2}{\gamma(0)},\\
@@ -626,7 +626,7 @@ means modelling the dynamics of the slope, or of the curvature, of the series, w
 
 \subsection{Two kinds of trend}\label{ch09:sec-trends}
 \paragraph{Trend reversion.} Let $X_t=a+bt+\xi_t$, with $\xi_t=\phi\xi_{t-1}+\eta_t$, $|\phi|<1$
-\ts{13}{8}{1:09:21}. Then $\E X_t=a+bt$ (not constant, hence not stationary), $\Var X_t=\sigma^2/(1-\phi^2)$, and
+\ts{13}{8}{1:09:21}. Then $\E[X_t]=a+bt$ (not constant, hence not stationary), $\Var X_t=\sigma^2/(1-\phi^2)$, and
 \[
   \Delta X_t=b+\xi_t-\xi_{t-1}=b+(1-L)\xi_t=b+(1-L)(1-\phi L)^{-1}\eta_t,
 \]
@@ -753,7 +753,7 @@ macroeconomic variables \ts{13}{11}{30:44}. $\{\bm X_t\}$ is covariance stationa
 \ts{13}{11}{31:47}.
 
 \subsection{Second-order structure}\label{ch09:sec-multi}
-With $\bm\mu=\E\bm X_t$ define the \emph{covariance matrix} $\Gamma_0=\E[(\bm X_t-\bm\mu)(\bm X_t-\bm\mu)\T]$ (symmetric, with the
+With $\bm\mu=\E[\bm X_t]$ define the \emph{covariance matrix} $\Gamma_0=\E[(\bm X_t-\bm\mu)(\bm X_t-\bm\mu)\T]$ (symmetric, with the
 variances of the components on the diagonal), the \emph{lag-$k$ cross-covariance matrix}
 $\Gamma_k=\E[(\bm X_t-\bm\mu)(\bm X_{t-k}-\bm\mu)\T]$, whose $(j,j')$ entry is $\Cov(X_{j,t},X_{j',t-k})$, and the
 \emph{correlation matrices} $R_k=D^{-1/2}\Gamma_kD^{-1/2}$ with $D=\mathrm{diag}(\Gamma_0)$
@@ -766,7 +766,7 @@ predictability, not causation in a philosophical sense.
 
 The \emph{multivariate Wold theorem} holds verbatim with matrices:
 $\bm X_t=\bm V_t+\sum_{k\ge0}\Psi_k\bm\eta_{t-k}$ with $\Psi_0=I_m$, $\sum_k\Psi_k\Psi_k\T$ convergent, $\bm V_t$ linearly
-deterministic, and $\bm\eta_t$ multivariate white noise: $\E\bm\eta_t=\bm 0$, $\Var\bm\eta_t=\Sigma$ (positive semi-definite),
+deterministic, and $\bm\eta_t$ multivariate white noise: $\E[\bm\eta_t]=\bm 0$, $\Var\bm\eta_t=\Sigma$ (positive semi-definite),
 $\Cov(\bm\eta_t,\bm\eta_{t-k})=0$ for $k\ne0$, uncorrelated with $\bm V$ \ts{13}{11}{39:18}\ts{13}{11}{41:24}. The
 innovation is $\bm\eta_t=\bm X_t-\E[\bm X_t\mid\mathcal F_{t-1}]$ in the Gaussian case, where $\mathcal F_{t-1}$ is the information available
 before time $t$: what is new at $t$ \ts{13}{11}{42:25}\ts{13}{11}{43:32}.
@@ -807,7 +807,7 @@ The following are equivalent:
 Under (i)--(ii) the VAR has the unique
 stationary solution $\bm X_t-\bm\mu=\sum_{k\ge0}\Psi_k\bm\eta_{t-k}$, where $\Psi_k$ is the upper-left $m\times m$ block of $A^k$, and
 \begin{equation}\label{ch09:eq-varmean}
-\bm\mu=\E\bm X_t=(I_m-\Phi_1-\dots-\Phi_p)^{-1}\bm C .
+\bm\mu=\E[\bm X_t]=(I_m-\Phi_1-\dots-\Phi_p)^{-1}\bm C .
 \end{equation}
 \end{proposition}
 \begin{proof}
@@ -1214,7 +1214,7 @@ theory (\cref{ch:portfolio}), continuous time (the AR(1) is the Ornstein--Uhlenb
 % ==================================================================
 \begin{keyformulas}
 \begin{align*}
-&\text{Stationarity:} && \E X_t=\mu,\quad \gamma(\tau)=\Cov(X_t,X_{t+\tau}),\quad\rho=\gamma/\gamma(0)\\
+&\text{Stationarity:} && \E[X_t]=\mu,\quad \gamma(\tau)=\Cov(X_t,X_{t+\tau}),\quad\rho=\gamma/\gamma(0)\\
 &\text{White noise test:} && \mathrm{BP}=T\textstyle\sum_{j\le K}\hat r_j^2\sim\chi^2_K,\quad |\hat r_k|>1.96/\sqrt T\\
 &\text{Wold:} && X_t=V_t+\psi(L)\eta_t,\quad \psi_0=1,\ \textstyle\sum\psi_j^2<\infty\\
 &\text{ARMA:} && \phi(L)(X_t-\mu)=\theta(L)\eta_t,\quad \psi(L)=\theta(L)/\phi(L)\\
@@ -1248,7 +1248,7 @@ The 2013 PS4 has six problems on univariate models; 2024 PS4 Problem~5 is 2013 P
 \begin{exercise}[PS4 (2013), Problem 1; PS4 (2024), Problem 5: covariance-stationary AR(2)]\label{ch09:ex-ps4-1}
 Let $X_t=\phi_0+\phi_1X_{t-1}+\phi_2X_{t-2}+\eta_t$, $\eta_t\sim\mathrm{WN}(0,\sigma^2)$, be covariance stationary.
 \begin{enumerate}[(a)]
-  \item Show that $\mu=\E X_t=\phi_0/(1-\phi_1-\phi_2)$.
+  \item Show that $\mu=\E[X_t]=\phi_0/(1-\phi_1-\phi_2)$.
   \item Show that $\gamma(k)=\phi_1\gamma(k-1)+\phi_2\gamma(k-2)$, $k\ge1$.
   \item Show that $\rho_k=\phi_1\rho_{k-1}+\phi_2\rho_{k-2}$.
   \item The Yule--Walker equations for $k=1,2$ are $\rho_1=\phi_1+\phi_2\rho_1$ and $\rho_2=\phi_1\rho_1+\phi_2$ (using $\rho_0=1$, $\rho_{-k}=\rho_k$): solve for $\rho_1,\rho_2$ in terms of $\phi_1,\phi_2$.
@@ -1324,7 +1324,7 @@ For the covariance-stationary $(1-\phi L)X_t=\phi_0+(1+\theta L)\eta_t$:
 Let $\bm X_t=(X_{1,t},X_{2,t})\T$ follow $X_{1,t}=0.3+0.8X_{1,t-1}+\eta_{1,t}$, $X_{2,t}=0.2+0.6X_{1,t-1}+0.4X_{2,t-1}+\eta_{2,t}$, with $(\eta_{1,t},\eta_{2,t})\T$ i.i.d.\ $N(\bm0,\Sigma)$, $\Sigma=\bigl(\begin{smallmatrix}3&-1\\-1&3\end{smallmatrix}\bigr)$.
 Compute
 \begin{enumerate}[(a)]
-  \item $\bm\mu=\E\bm X_t$,
+  \item $\bm\mu=\E[\bm X_t]$,
   \item $\Gamma(0)=\Cov\bm X_t$,
   \item $\Gamma(1)=\Cov(\bm X_t,\bm X_{t-1})$, and
   \item derive a formula for $\Gamma(h)$, $h\ge1$. (See \cref{ch09:ex-var1} for the method.)

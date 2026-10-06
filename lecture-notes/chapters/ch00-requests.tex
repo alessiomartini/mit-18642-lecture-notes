@@ -24,6 +24,36 @@ with what was done about it, so that the chapters read more smoothly. Write new 
 
 \section*{The list}
 
+\request{done}{Chapter 3, moments}{quando scrivi i valori di aspettazione usa sempre le parentesi quadre}
+{Done in the whole book: about 460 expectations written as $\E X$, $\E|X|$, $\E(X)$ or $\E\,X$ became $\E[X]$,
+$\E[|X|]$, \dots\ (with a script, checked by hand where the argument was ambiguous). A few long ones such as
+$\E\int_0^Tf^2\dd s$ are left as they are, where brackets would not make the reading clearer.}
+
+\request{done}{Chapter 3, normal distribution}{in general, whenever it can be useful plot graphs and functions.}
+{Rule adopted for all chapters. In chapter 3: daily-return distributions with the course data, the
+volatility smile, the normal density, call and put payoffs, all the laws of the table.}
+
+\request{done}{Chapter 2, exercises}{allinea i feedback con la soluzione corrispondente. colora di rosso i feedback se la soluzione ha un errore}
+{A feedback now starts level with the top of your solution (it is written just before the solution
+box), and it is red, with the tag ``FEEDBACK: ERROR'', when the solution contains a mistake; indigo
+when it is right or only incomplete. All the feedback of chapter 2 converted.}
+
+\request{noted}{Chapter 3, start}{voglio che le note appaiano a lato di dove le scrivo, non alla fine del paragrafo}
+{Not possible with the two-column layout: the right column can only be filled between paragraphs,
+so a note appears level with the end of its paragraph. (Real margin notes, the old layout, can sit
+at their line, but they overflowed and overlapped as soon as there were many.) What helps: the
+number in the text; and a long paragraph can be split where you write a note.}
+
+\request{noted}{Chapter 3, independence}{avrebbe senso che nella fase di studio (quando leggo, faccio gli esercizio, scrivo annotazioni) il pdf non sia diviso in pagine ma sia una unica pagina lunghissima? e' possibile? me lo consigli?}
+{Not for a whole chapter: a page cannot be taller than about 5.7\,m in \LaTeX\ and 5\,m in a PDF, and a
+chapter is 8--10\,m. Also the right column needs page breaks to restart. I do not recommend it: set the
+viewer to continuous vertical scrolling with no gap between pages, which reads almost the same.}
+
+\request{noted}{Chapter 3, expected call payoff}{stai attento che teoremi e dimostrazioni non sono perfettamente allineati}
+{A proof starts level with its theorem when the right column is free there; if a note or answer from the
+paragraph above is still in that column, the proof starts just below it (e.g.\ \cref{ch03:thm-call}). The
+proof of that theorem also had a formula wider than the column: split on two lines.}
+
 \request{done}{Chapter 2, one-period model}{the professor here intriduced 2 new concepts: contingent claim and replicating portfolios, whenever you introduce new concept, reserve few line or maybe a dedicated box for new concepts to introduce it, remarking that it is a new concept. maybe you should use the definition box}
 {Contingent claim and replicating portfolio now have their own definition box, titled ``New concepts''
 (\cref{def:claim}), announced by a sentence in the text. From now on every new concept gets a blue

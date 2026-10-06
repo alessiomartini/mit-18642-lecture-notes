@@ -138,12 +138,12 @@ mechanism, not the data.
 
 \subsection{The bias--variance decomposition (not discussed in class)}
 Overfitting and underfitting are two faces of one identity. Fix a point $\bm x$ and write $y=f(\bm x)+\varepsilon$ with
-$\E\varepsilon=0$, $\Var\varepsilon=\sigma^2$, $\varepsilon$ independent of the training sample; $\hat h$ is the
-fitted function, a random function through the training sample. Expanding the square around $\E\hat h(\bm x)$ (the cross terms vanish by
-independence and by $\E[\hat h-\E\hat h]=0$),
+$\E[\varepsilon]=0$, $\Var\varepsilon=\sigma^2$, $\varepsilon$ independent of the training sample; $\hat h$ is the
+fitted function, a random function through the training sample. Expanding the square around $\E[\hat h(\bm x)]$ (the cross terms vanish by
+independence and by $\E[\hat h-\E[\hat h]]=0$),
 \begin{equation}\label{ch16:eq-bv}
   \E\bigl[(y-\hat h(\bm x))^2\bigr]=\underbrace{\sigma^2}_{\text{irreducible noise}}
-  +\underbrace{\bigl(f(\bm x)-\E\hat h(\bm x)\bigr)^2}_{\text{bias}^2}
+  +\underbrace{\bigl(f(\bm x)-\E[\hat h(\bm x)]\bigr)^2}_{\text{bias}^2}
   +\underbrace{\Var\hat h(\bm x)}_{\text{variance}} .
 \end{equation}
 For a concrete family the last two terms can be computed exactly. Take the linear-in-parameters case of
@@ -154,17 +154,17 @@ fitted parameters (for a polynomial of degree $d$, $p=d+1$).
 \begin{proposition}[Training and test error of a projection fit]\label{ch16:prop-bv}
 Let $b^2=\frac1n\|(I-H)\bm f\|^2$ be the squared bias averaged over the design points. Then
 \[
-  \underbrace{\frac1n\E\|\bm y-\hat{\bm y}\|^2}_{\text{training error}}=\sigma^2+b^2-\frac{p}{n}\sigma^2,\qquad
-  \underbrace{\frac1n\E\|\bm y^*-\hat{\bm y}\|^2}_{\text{test error at the same }\bm x_i,\ \text{fresh noise}}=\sigma^2+b^2+\frac{p}{n}\sigma^2 ,
+  \underbrace{\frac1n\E[\|\bm y-\hat{\bm y}\|^2]}_{\text{training error}}=\sigma^2+b^2-\frac{p}{n}\sigma^2,\qquad
+  \underbrace{\frac1n\E[\|\bm y^*-\hat{\bm y}\|^2]}_{\text{test error at the same }\bm x_i,\ \text{fresh noise}}=\sigma^2+b^2+\frac{p}{n}\sigma^2 ,
 \]
 and the variance term of \eqref{ch16:eq-bv}, averaged over the design points, is $\frac pn\sigma^2$.
 \end{proposition}
 \begin{proof}
 Since $I-H$ is a projection of trace $n-p$: $\bm y-\hat{\bm y}=(I-H)\bm f+(I-H)\bm\varepsilon$, and the cross term has zero mean, so
-$\E\|\bm y-\hat{\bm y}\|^2=\|(I-H)\bm f\|^2+\sigma^2\tr(I-H)=nb^2+\sigma^2(n-p)$. For the fit error,
-$\hat{\bm y}-\bm f=-(I-H)\bm f+H\bm\varepsilon$ gives $\E\|\hat{\bm y}-\bm f\|^2=nb^2+\sigma^2p$; the variance is
-$\E\|H\bm\varepsilon\|^2=\sigma^2\tr H=p\sigma^2$. Finally $\bm y^*-\hat{\bm y}=\bm\varepsilon^*+(\bm f-\hat{\bm y})$ with
-$\bm\varepsilon^*$ independent of $\hat{\bm y}$, so the test error is $\sigma^2+\frac1n\E\|\hat{\bm y}-\bm f\|^2$.
+$\E[\|\bm y-\hat{\bm y}\|^2]=\|(I-H)\bm f\|^2+\sigma^2\tr(I-H)=nb^2+\sigma^2(n-p)$. For the fit error,
+$\hat{\bm y}-\bm f=-(I-H)\bm f+H\bm\varepsilon$ gives $\E[\|\hat{\bm y}-\bm f\|^2]=nb^2+\sigma^2p$; the variance is
+$\E[\|H\bm\varepsilon\|^2]=\sigma^2\tr H=p\sigma^2$. Finally $\bm y^*-\hat{\bm y}=\bm\varepsilon^*+(\bm f-\hat{\bm y})$ with
+$\bm\varepsilon^*$ independent of $\hat{\bm y}$, so the test error is $\sigma^2+\frac1n\E[\|\hat{\bm y}-\bm f\|^2]$.
 \end{proof}
 The gap test $-$ training $=2\sigma^2p/n$ is the \emph{optimism} of the training error (it is the correction in Mallows' $C_p$).
 More parameters lower the bias and raise the variance linearly in $p$; the training error decreases with $p$
@@ -592,7 +592,7 @@ Toronto website \ts{24}{23}{1:13:20}, and, asked how the objective function is c
 \begin{keyformulas}
 \begin{align*}
 &\text{Empirical risk:} && \hat R(\bm\theta)=\tfrac1n\textstyle\sum_i\ell(y_i,h_{\bm\theta}(\bm x_i))\\
-&\text{Bias--variance:} && \E(y-\hat h)^2=\sigma^2+(f-\E\hat h)^2+\Var\hat h\\
+&\text{Bias--variance:} && \E[(y-\hat h)^2]=\sigma^2+(f-\E[\hat h])^2+\Var\hat h\\
 &\text{Projection fit:} && \text{test}=\sigma^2+b^2+\tfrac pn\sigma^2,\quad\text{train}=\sigma^2+b^2-\tfrac pn\sigma^2\\
 &\text{$k$-means:} && J=\textstyle\sum_i\|\bm x_i-\bm\mu_{c(i)}\|^2\ \text{(Lloyd: monotone decrease)}\\
 &\text{Gradient descent:} && \bm\theta_{k+1}=\bm\theta_k-\eta\nabla\hat R(\bm\theta_k)\\
@@ -629,7 +629,7 @@ A network has one input, one hidden layer with two $\tanh$ neurons, and a linear
 python for random values of the parameters.
 \end{exercise}
 \begin{exercise}[not from the course: optimism of any linear smoother]
-Let $\hat{\bm y}=S\bm y$ for a fixed matrix $S$ (ridge regression, \cref{ch05:sec-shrink}, is an example with $S=X(X\T X+\lambda I)^{-1}X\T$), $\bm y=\bm f+\bm\varepsilon$, $\Cov\bm\varepsilon=\sigma^2I$. Show that $\frac1n\E\|\bm y^*-\hat{\bm y}\|^2-\frac1n\E\|\bm y-\hat{\bm y}\|^2=\frac{2\sigma^2}{n}\tr S$, where
+Let $\hat{\bm y}=S\bm y$ for a fixed matrix $S$ (ridge regression, \cref{ch05:sec-shrink}, is an example with $S=X(X\T X+\lambda I)^{-1}X\T$), $\bm y=\bm f+\bm\varepsilon$, $\Cov\bm\varepsilon=\sigma^2I$. Show that $\frac1n\E[\|\bm y^*-\hat{\bm y}\|^2]-\frac1n\E[\|\bm y-\hat{\bm y}\|^2]=\frac{2\sigma^2}{n}\tr S$, where
 $\bm y^*=\bm f+\bm\varepsilon^*$ is an independent copy, so that $\tr S$ plays the role of the number of parameters in \cref{ch16:prop-bv}. Evaluate $\tr S$ for ridge in terms of the singular values.
 \end{exercise}
 \begin{exercise}[not from the course: $k$-means]

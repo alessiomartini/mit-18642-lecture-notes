@@ -699,8 +699,7 @@ $\bm u_k=A\bm v_k/\sigma_k$ for $k\le r$. These are orthonormal:
 $\bm u_j\T\bm u_k=\bm v_j\T A\T A\bm v_k/(\sigma_j\sigma_k)=\sigma_k^2\bm v_j\T\bm v_k/(\sigma_j\sigma_k)=\delta_{jk}$.
 Complete $\{\bm u_k\}$ and $\{\bm v_k\}$ to orthonormal bases; then $U\T AV=\Sigma$ because $A\bm v_k=\sigma_k\bm u_k$
 ($k\le r$) and $A\bm v_k=0$ ($k>r$) \ts{13}{2}{33:05}.
-\end{proof}\note{allinea i feedback con la soluzione corrispondente. 
-colora di rosso i feedback se la soluzione ha un errore}
+\end{proof}
 
 \begin{intuition}[Rotate, stretch, rotate]
 Read $A\bm x=U\Sigma V\T\bm x$ from the right: $V\T$ rotates the input frame onto the axes
@@ -939,6 +938,9 @@ $\bm u_k=(F_{k+1},F_k)\T$.
       ``technical analysis'' of prices, e.g.\ Fibonacci retracements).
 \end{enumerate}
 \end{exercise}
+\feedback{All correct. Two small points.\par (b) No need to plug in the numbers: the second
+component of $A\bm s$ is $\lambda$, and the first is $\lambda+1=\lambda^2$ by the characteristic equation itself.\par (c) Say what you use in the last step: $\lambda_1+\lambda_2=1$ (trace) and $\lambda_1\lambda_2=-1$ (determinant), so
+$\lambda_1^2-\lambda_2^2=\lambda_1-\lambda_2$. Bonus: since $|\lambda_2|<1$, $F_k$ is the integer nearest to $\lambda_1^k/\sqrt5$.}
 \begin{mysolution}
   a. $\bigl(\begin{smallmatrix} F_{k+2} \\ F_{k+1} \end{smallmatrix}\bigr) = u_{k+1} = A u_k = \bigl(\begin{smallmatrix}1&1\\1&0\end{smallmatrix}\bigr) \bigl(\begin{smallmatrix} F_{k+1} \\ F_{k} \end{smallmatrix}\bigr) = \bigl(\begin{smallmatrix} F_{k+1} + F_{k} \\ F_{k+1} \end{smallmatrix}\bigr)$ and the second is trivial by induction. \\
 
@@ -954,9 +956,7 @@ $\bm u_k=(F_{k+1},F_k)\T$.
 
   d. $\bigl(\begin{smallmatrix} F_{k+1} \\ F_k \end{smallmatrix}\bigr) = u_k = A^k u_0 = S \Lambda^k S^{-1} u_0 = S \Lambda^k c = \bigl(\begin{smallmatrix} \lambda_1 & \lambda_2 \\ 1 & 1 \end{smallmatrix}\bigr) \bigl(\begin{smallmatrix} \lambda_1 & 0 \\ 0 & \lambda_2 \end{smallmatrix}\bigr)^k a \bigl( \begin{smallmatrix} 1 \\ -1 \end{smallmatrix}\bigr) = a \bigl(\begin{smallmatrix} \lambda_1 & \lambda_2 \\ 1 & 1 \end{smallmatrix}\bigr) \bigl(\begin{smallmatrix} \lambda_1^k  \\ -\lambda_2^k \end{smallmatrix}\bigr) = a \bigl(\begin{smallmatrix} \lambda_1 & \lambda_2 \\ 1 & 1 \end{smallmatrix}\bigr) \bigl(\begin{smallmatrix} \lambda_1^k  \\  -\lambda_2^k \end{smallmatrix}\bigr) = \frac{1}{\lambda_1 - \lambda_2} \bigl(\begin{smallmatrix} \lambda_1^{k+1} - \lambda_2^{k+1}  \\  \lambda_1^{k} - \lambda_2^{k} \end{smallmatrix}\bigr) \implies F_k = \frac{\lambda_1^{k} - \lambda_2^{k}}{\sqrt{5}} $ \\
   Golden Ratio: $\lim_{k\to\infty} \frac{F_{k+1}}{F_k} = \lim_{k\to\infty} \frac{\lambda_1^{k+1} - \lambda_2^{k+1}}{\lambda_1^{k} - \lambda_2^{k}} = \lim_{k\to\infty} \frac{\lambda_1^{k+1}(1 - (\lambda_2/\lambda_1)^{k+1})}{\lambda_1^{k}(1 - (\lambda_2/\lambda_1)^{k})} = \lim_{k\to\infty} \lambda_1 \frac{(1 - (\lambda_2/\lambda_1)^{k+1})}{(1 - (\lambda_2/\lambda_1)^{k})} = \lambda_1$ since $|\lambda_2/\lambda_1| < 1$.
-\end{mysolution}\feedback{All correct. Two small points.\par (b) No need to plug in the numbers: the second
-component of $A\bm s$ is $\lambda$, and the first is $\lambda+1=\lambda^2$ by the characteristic equation itself.\par (c) Say what you use in the last step: $\lambda_1+\lambda_2=1$ (trace) and $\lambda_1\lambda_2=-1$ (determinant), so
-$\lambda_1^2-\lambda_2^2=\lambda_1-\lambda_2$. Bonus: since $|\lambda_2|<1$, $F_k$ is the integer nearest to $\lambda_1^k/\sqrt5$.}%
+\end{mysolution}
 \begin{answer}{matrix inverse, adjoint method or gauss-jordan elimination. $A^{-1}=\frac{1}{det(A)} \text{Cofactor}(A)^T$ - i think this works only for 3x3 matrices.}[It works for every $n$]
 $A^{-1}=\operatorname{adj}(A)/\det A$, with $\operatorname{adj}(A)=\operatorname{Cof}(A)\T$ (the \emph{adjugate}), holds for
 every invertible $n\times n$ matrix. Reason: expanding $\det A$ along row $i$ gives
@@ -974,17 +974,18 @@ Let $A=S\Lambda S^{-1}$ be diagonalisable. Under which conditions on the eigenva
   \item exist and be non-zero?
 \end{enumerate}
 \end{exercise}
-\begin{mysolution}
-  a. if an eigenvalue is bigger than 1 in abs value. \\
-  b. if all the eigenvalues are strictly smaller than 1 in abs value. \\
-  c. at least one eigen value is equal to 1, and the others are smaller than 1 in abs value.
-\end{mysolution}\feedback{(b) correct.\par (a) incomplete: the limit also fails to exist when $|\lambda|=1$ but
+\feedback*{(b) correct.\par (a) incomplete: the limit also fails to exist when $|\lambda|=1$ but
 $\lambda\ne1$, e.g.\ $\lambda=-1$ ($(-1)^k$ oscillates) or $\lambda=e^{i\theta}$ (rotates).\par (c) the other
 eigenvalues may also be equal to $1$. Complete answer, since $A^k=S\Lambda^kS^{-1}$ and $\lim\lambda^k$ exists
 iff $|\lambda|<1$ or $\lambda=1$:\par (a) some $|\lambda_i|>1$, or $|\lambda_i|=1$ with $\lambda_i\ne1$;
 (b) all $|\lambda_i|<1$;
 (c) every $\lambda_i$ is $1$ or has $|\lambda_i|<1$, and at least one is $1$. Then $\lim A^k=S\,\diag(1\text{ or }0)\,S^{-1}$
 is the projection onto the eigenvectors of $1$.}
+\begin{mysolution}
+  a. if an eigenvalue is bigger than 1 in abs value. \\
+  b. if all the eigenvalues are strictly smaller than 1 in abs value. \\
+  c. at least one eigen value is equal to 1, and the others are smaller than 1 in abs value.
+\end{mysolution}
 
 \begin{exercise}[PS1 (2024), Problem 3: order-side Markov chain]\label{ex:ps1-3}
 The side of successive market orders is a two-state chain (1 = buy, 2 = sell) with
@@ -997,17 +998,18 @@ $A=\bigl(\begin{smallmatrix}0.8&0.3\\0.2&0.7\end{smallmatrix}\bigr)$, $a_{ij}=\P
       returned by \texttt{eigen(A)} (which is normalised to unit Euclidean length, not to sum 1).
 \end{enumerate}
 \end{exercise}
-\begin{mysolution}
-  a. mi sembra ovvio, non capisco cosa intendi con "prove". \\
-  b. python code: \href{https://colab.research.google.com/drive/12kHBmkZoIjMLEpHWaKvVxB_bXrrVPTuB?usp=sharing}{Google Colab} the first initial condition converges faster. \\
-  c. $\pi = A \pi \implies \pi = (0.6, 0.4)^T$, loot at the link
-\end{mysolution}\feedback{(a) ``Prove'' means: say which rule gives it. By the law of total probability,
+\feedback*{(a) ``Prove'' means: say which rule gives it. By the law of total probability,
 $u_t(i)=\Prob(X_t=i)=\sum_j\Prob(X_t=i\mid X_{t-1}=j)\Prob(X_{t-1}=j)=\sum_ja_{ij}u_{t-1}(j)$, using that the
 transition probabilities depend only on the last state and not on $t$ (Markov, time-homogeneous). Then
 $\bm u_t=A^t\bm u_0$ by induction.\par (b) You did not state the answer to ``is the limit the same?'': yes, $(0.6,0.4)$ from both starts.
 ``Converges faster'' is not quite right: $\bm u_t-\bm\pi^*=0.5^t(\bm u_0-\bm\pi^*)$ and $\bm u_0-\bm\pi^*$ is
 $(0.4,-0.4)$ from state 1 and $(-0.6,0.6)$ from state 2. Same rate $0.5^t$; state 1 just starts closer.\par (c) $\bm\pi^*$ correct. Write the relation in the notes too: \texttt{eigen(A)} returns
 $(0.832,0.555)$, a multiple of $(3,2)$, and dividing by the sum of its entries gives $(0.6,0.4)$.}
+\begin{mysolution}
+  a. mi sembra ovvio, non capisco cosa intendi con "prove". \\
+  b. python code: \href{https://colab.research.google.com/drive/12kHBmkZoIjMLEpHWaKvVxB_bXrrVPTuB?usp=sharing}{Google Colab} the first initial condition converges faster. \\
+  c. $\pi = A \pi \implies \pi = (0.6, 0.4)^T$, loot at the link
+\end{mysolution}
 
 \begin{exercise}[PS1 (2024), Problem 4]
 For the matrix of the previous exercise:
@@ -1019,31 +1021,33 @@ For the matrix of the previous exercise:
       theorem.
 \end{enumerate}
 \end{exercise}
-\begin{mysolution}
-  a. done in the google colab link. \\
-  b. the eigenvalues are 1 and 0.5, so the limit exists and is non-zero, case C. \\
-  c. (i) the eigen value 1 is the biggest, (ii) its eigenvector has all positive entries, then it can be normalized and interpreted as prob distribution, (iii) it is simple, i.e. the probability distribution is unique.
-\end{mysolution}\feedback{(b), (c) correct.\par (a) By hand it takes one line: trace $=1.5$, $\det=0.56-0.06=0.5$,
+\feedback{(b), (c) correct.\par (a) By hand it takes one line: trace $=1.5$, $\det=0.56-0.06=0.5$,
 so $\lambda^2-1.5\lambda+0.5=0$, $\lambda\in\{1,0.5\}$.\par (c) One missing link: why is the P--F eigenvalue equal to
 $1$? Because the columns sum to 1, $\bm 1\T A=\bm 1\T$, so $1$ is an eigenvalue with a positive (left)
 eigenvector; P--F's $\lambda_0$ is the only eigenvalue with a positive eigenvector, so $\lambda_0=1$. And add the
 consequence: the other $|\lambda|<1$, so $\bm u_t\to\bm\pi^*$ from any start (that is your exercise~3(b)).}
+\begin{mysolution}
+  a. done in the google colab link. \\
+  b. the eigenvalues are 1 and 0.5, so the limit exists and is non-zero, case C. \\
+  c. (i) the eigen value 1 is the biggest, (ii) its eigenvector has all positive entries, then it can be normalized and interpreted as prob distribution, (iii) it is simple, i.e. the probability distribution is unique.
+\end{mysolution}
 
 \begin{exercise}[PS1 (2024), Problem 5; lecture note \file{lec02_2}, Exercise 1]\label{ex:ps1-5}
 In the two-asset one-period model prove that no arbitrage requires
 $S_T^d<S_0(1+r_fT)<S_T^u$. \emph{Hint:} if an inequality fails, build an explicit portfolio whose cost is
 lower than its payoff in every state.
 \end{exercise}
-\begin{mysolution}
-  fist fails: $S_0(1+r_fT)\le S_T^d$ then buy the stock and short the bond, the cost is negative and the payoff is positive in both states. this means $\theta = (\theta_B, \theta_S)$ where $V_0 = \theta_B B_0 + \theta_S S_0 = 0$ but $\theta_S > 0$.  \\
-  second fails: then the zero cost portfolio in which you have positive quantity of bond and negative of stock will have positive payoff in both states. \\
-  IDEA: if you invest in the stock with incertainty, you could have invested in the risk-free bond and have a guaranteed return. if the stock is guaranteed to be lower than the bond, then you are better off investing in the bond. vice versa, if if the stock is guaranteed to be higher than the bond, you better sell/short the bond and buy the stock.\\
-\end{mysolution}\feedback{Right idea, and the IDEA paragraph is the intuition. Fix the details. You write ``the
+\feedback*{Right idea, and the IDEA paragraph is the intuition. Fix the details. You write ``the
 cost is negative'' and then $V_0=0$: it is zero. Give the portfolio explicitly: $\theta_S=1$,
 $\theta_B=-S_0/B_0$. Then $V_0=0$ and $V_T=S_T-S_0(1+r_fT)$, which is $\ge0$ in state $d$ (it can be $=0$ if
 equality holds) and $>0$ in state $u$. So the payoff is not ``positive in both states'', but it does not need
 to be: an arbitrage needs $\ge0$ everywhere and $>0$ somewhere.\par Second case: $\theta_S=-1$,
-$\theta_B=S_0/B_0$, same check.} 
+$\theta_B=S_0/B_0$, same check.}
+\begin{mysolution}
+  fist fails: $S_0(1+r_fT)\le S_T^d$ then buy the stock and short the bond, the cost is negative and the payoff is positive in both states. this means $\theta = (\theta_B, \theta_S)$ where $V_0 = \theta_B B_0 + \theta_S S_0 = 0$ but $\theta_S > 0$.  \\
+  second fails: then the zero cost portfolio in which you have positive quantity of bond and negative of stock will have positive payoff in both states. \\
+  IDEA: if you invest in the stock with incertainty, you could have invested in the risk-free bond and have a guaranteed return. if the stock is guaranteed to be lower than the bond, then you are better off investing in the bond. vice versa, if if the stock is guaranteed to be higher than the bond, you better sell/short the bond and buy the stock.\\
+\end{mysolution} 
 
 \subsection*{From the lecture note \emph{One-Period Financial Models}}
 
@@ -1065,15 +1069,7 @@ Yes: the portfolio of bond and stock whose payoff equals the put's payoff in \em
       arbitrage-free? Check put--call parity against \cref{ex:call}.
 \end{enumerate}
 \end{exercise}
-\begin{mysolution}
-  a. we want $C_d^T = min(0,K-S_T)$ and $C_u^T = max(0,K-S_T)$, using the formulas to find the portfolio we want: \\
-  $q_u = \frac{(1+r_fT)S_0 - S^d}{S^u - S^d} = \frac{(1+0.03)100 - 90}{130 - 90} = \frac{103 - 90}{40} = \frac{13}{40}$, $q_d = 1 - q_u = \frac{27}{40}$ [q was not needed, but measures how much hogher from the lowes outcome would the risk free bring the stock value]  \\
-  $\theta_S = \frac{C^u - C^d}{S^u - S^d} = \frac{abs(K-S_T)}{130 - 90} = \frac{abs(K-S_T)}{40}$, $\theta_B = \frac{C^d S^u - C^u S^d}{B_T(S^u - S^d)} = \frac{min(0,K-S_T)\cdot 130 - max(0,K-S_T)\cdot 90}{103\cdot 40}$ \\
-  b. $q_d = 1- q_u = 1 - \frac{13}{40} = \frac{27}{40}$ \\
-  $C_0 = \theta_B B_0 + \theta_S S_0 = \frac{min(0,K-S_T)\cdot 130 - max(0,K-S_T)\cdot 90}{103\cdot 40} \cdot 100 + \frac{abs(K-S_T)}{40} \cdot 100$ \\
-  or equivalently $C_0 = \frac{q_u C^u + q_d C^d}{1+r_fT} = \frac{\frac{13}{40} max(0,K-S_T) + \frac{27}{40} min(0,K-S_T)}{1.03}$ \\
-  c. I DON'T KNOW HOW TO CHECK, we have min and max functions and not values.
-\end{mysolution}\feedback{One misunderstanding blocks everything: $C^u$ and $C^d$ are \emph{numbers}, the payoff
+\feedback*{One misunderstanding blocks everything: $C^u$ and $C^d$ are \emph{numbers}, the payoff
 $\max(0,K-S_T)$ evaluated in each state. It is not $\min$ in one state and $\max$ in the other.
 \begin{itemize}
   \item State $u$: $S_T^u=130$, so $C^u=\max(0,100-130)=0$.
@@ -1082,22 +1078,32 @@ $\max(0,K-S_T)$ evaluated in each state. It is not $\min$ in one state and $\max
 (a) $\theta_S=(0-10)/40=-0.25$ (short a quarter share), $\theta_B=(10\cdot130-0\cdot90)/(103\cdot40)=0.3155$ bonds.\par (b) $C_0=0.3155\cdot100-0.25\cdot100=6.553$; check: $q_dC^d/1.03=0.675\cdot10/1.03=6.553$.\par (c) Put--call parity: call $-$ put $=S_0-K/(1+r_fT)$, i.e.\ $9.466-6.553=2.913=100-100/1.03$. It holds, and
 $0<q_u<1$, so the price is arbitrage-free. Your formulas in (a), (b) are right: only the inputs were wrong.
 Your reading of $q_u$ is nice: it is the position of the forward value $S_0(1+r_fT)$ inside $[S^d,S^u]$, as a fraction.}
+\begin{mysolution}
+  a. we want $C_d^T = min(0,K-S_T)$ and $C_u^T = max(0,K-S_T)$, using the formulas to find the portfolio we want: \\
+  $q_u = \frac{(1+r_fT)S_0 - S^d}{S^u - S^d} = \frac{(1+0.03)100 - 90}{130 - 90} = \frac{103 - 90}{40} = \frac{13}{40}$, $q_d = 1 - q_u = \frac{27}{40}$ [q was not needed, but measures how much hogher from the lowes outcome would the risk free bring the stock value]  \\
+  $\theta_S = \frac{C^u - C^d}{S^u - S^d} = \frac{abs(K-S_T)}{130 - 90} = \frac{abs(K-S_T)}{40}$, $\theta_B = \frac{C^d S^u - C^u S^d}{B_T(S^u - S^d)} = \frac{min(0,K-S_T)\cdot 130 - max(0,K-S_T)\cdot 90}{103\cdot 40}$ \\
+  b. $q_d = 1- q_u = 1 - \frac{13}{40} = \frac{27}{40}$ \\
+  $C_0 = \theta_B B_0 + \theta_S S_0 = \frac{min(0,K-S_T)\cdot 130 - max(0,K-S_T)\cdot 90}{103\cdot 40} \cdot 100 + \frac{abs(K-S_T)}{40} \cdot 100$ \\
+  or equivalently $C_0 = \frac{q_u C^u + q_d C^d}{1+r_fT} = \frac{\frac{13}{40} max(0,K-S_T) + \frac{27}{40} min(0,K-S_T)}{1.03}$ \\
+  c. I DON'T KNOW HOW TO CHECK, we have min and max functions and not values.
+\end{mysolution}
 
 \begin{exercise}[\file{lec02_2}, Exercise 3]
 Starting from $C_0=\theta_BB_0+\theta_SS_0$, derive \eqref{eq:rnbinomial} and interpret
 $(1+r_fT)^{-1}S_T^{u}$, $(1+r_fT)^{-1}S_T^{d}$ and $S_0(1+r_fT)$ (the forward value of the bond position
 obtained by shorting one share). Show that $q_u+q_d=1$ and that $q_u,q_d>0$ under no arbitrage.
 \end{exercise}
-\begin{mysolution}
-  l'interpretazione dei due termini e' il valore attuale dei due possibili putcomes del prezzo del titolo, mentre il terzo e' il valore del titolo alla fine del periodo se fosse risk-free. quello che dici nelle parentesi e': se prendiamo in presisto il titolo ora, lo vendiamo, riinvestiamo il ricavato in un titolo risk-free, poi lo venderemo alla fine del periodo al valore che hai scritto. [ci aspettiamo che il valore del titolo alla fine del periodo oscilli attorno al volere del titolo risk-free] \\
-  SECONDA PARTE NON HO VOGLIA ORA
-\end{mysolution}\feedback{Interpretations correct: $S_T^{u,d}/(1+r_fT)$ are present values of the two outcomes,
+\feedback{Interpretations correct: $S_T^{u,d}/(1+r_fT)$ are present values of the two outcomes,
 and $S_0(1+r_fT)$ is what you hold at $T$ after shorting one share and lending $S_0$. Careful with ``we expect the
 stock to oscillate around it'': true under $Q$ ($\E_Q[S_T]=S_0(1+r_fT)$), not under the real probabilities,
 where the stock earns more on average (risk premium).\par Still to do: the derivation (substitute
 \eqref{eq:delta} into $C_0=\theta_BB_0+\theta_SS_0$, use $B_0/B_T=1/(1+r_fT)$, collect $C^u$ and $C^d$), and the
 second part: $q_u+q_d=1$ holds by definition, $q_u>0\iff S_0(1+r_fT)>S^d$, $q_d=\frac{S^u-S_0(1+r_fT)}{S^u-S^d}>0\iff
 S_0(1+r_fT)<S^u$: together, \cref{prop:binomial-na}.}
+\begin{mysolution}
+  l'interpretazione dei due termini e' il valore attuale dei due possibili putcomes del prezzo del titolo, mentre il terzo e' il valore del titolo alla fine del periodo se fosse risk-free. quello che dici nelle parentesi e': se prendiamo in presisto il titolo ora, lo vendiamo, riinvestiamo il ricavato in un titolo risk-free, poi lo venderemo alla fine del periodo al valore che hai scritto. [ci aspettiamo che il valore del titolo alla fine del periodo oscilli attorno al volere del titolo risk-free] \\
+  SECONDA PARTE NON HO VOGLIA ORA
+\end{mysolution}
 
 \subsection*{From 2013 Problem Set 1}
 
@@ -1114,15 +1120,7 @@ True or false:
   \item diagonalisable iff invertible.
 \end{enumerate}
 \end{exercise}
-\begin{mysolution}
-  a. vero, ma non so perche' \\
-  b. vero, se A proietta un vettore su uno spazio n-dim, allora applicare B non puo enlarge la dimensione dello spazio immagine. \\
-  c. falso, moltiplica per C da destra la prima equazione e ottieni $B=C$ \\
-  d. vero, ho solo intuizione su questa domanda, per me rank e' la dimensione dello spazio immagine \\
-  e. falso, la matrice zero e' simemtrica ma non invertibile. \\
-  f falso, non-zero eigenvalues imply invertible, anche se due sono uguali, significa soltanto che in due direzioni (un piano) [o piu direzioni] la matrice scala della stessa quantita'. \\
-  g. credo sia vera, ma non so perche'
-\end{mysolution}\feedback{(a) True. Why: if the column space has dimension $r$, write $A=CR$ with $C$ ($m\times r$)
+\feedback*{(a) True. Why: if the column space has dimension $r$, write $A=CR$ with $C$ ($m\times r$)
 a basis of it; every row of $A$ is then a combination of the $r$ rows of $R$, so row rank $\le r$; the same on
 $A\T$ gives the reverse.\par (b) True, but the order is inverted: $AB$ applies $B$ \emph{first}. Reason:
 $AB\bm x=A(B\bm x)$, so $\operatorname{col}(AB)\subseteq\operatorname{col}(A)$.\par (c) Correct, and the proof is just
@@ -1131,6 +1129,15 @@ inverse.\par (e) Correct.\par (f) False, but your reason does not prove it: dist
 e.g.\ $\diag(0,1)$. What matters for invertibility is only $0\notin\{\lambda_i\}$.\par (g) \textbf{False}, in both
 directions: $\diag(0,1)$ is diagonalisable and singular; $\bigl(\begin{smallmatrix}1&1\\0&1\end{smallmatrix}\bigr)$ is
 invertible but not diagonalisable (one eigenvector only). The two properties are unrelated.}
+\begin{mysolution}
+  a. vero, ma non so perche' \\
+  b. vero, se A proietta un vettore su uno spazio n-dim, allora applicare B non puo enlarge la dimensione dello spazio immagine. \\
+  c. falso, moltiplica per C da destra la prima equazione e ottieni $B=C$ \\
+  d. vero, ho solo intuizione su questa domanda, per me rank e' la dimensione dello spazio immagine \\
+  e. falso, la matrice zero e' simemtrica ma non invertibile. \\
+  f falso, non-zero eigenvalues imply invertible, anche se due sono uguali, significa soltanto che in due direzioni (un piano) [o piu direzioni] la matrice scala della stessa quantita'. \\
+  g. credo sia vera, ma non so perche'
+\end{mysolution}
 
 \begin{exercise}[PS1 (2013), A-2 to A-4] 
 (A-2) Row and column rank of
@@ -1143,16 +1150,17 @@ $\left(\begin{smallmatrix}-1&-2&3\\1&2&0\\4&6&3\end{smallmatrix}\right)$.
 (A-4) Characteristic polynomial, eigenvalues and eigenvectors of
 $\left(\begin{smallmatrix}-3&3&2\\1&-1&-2\\-1&-3&0\end{smallmatrix}\right)$.
 \end{exercise}
+\feedback*{A-2: both ranks $3$ correct (for the second, row~4 $-2\cdot$row~3 $\propto$ row~2 $-$ row~1).\par A-3: determinants correct, first inverse correct. Second inverse: one entry wrong, the $(1,1)$
+cofactor is $\det\bigl(\begin{smallmatrix}2&0\\6&3\end{smallmatrix}\bigr)=6$, not $4$:
+$A^{-1}=-\frac16\bigl(\begin{smallmatrix}6&24&-6\\-3&-15&3\\-2&-2&0\end{smallmatrix}\bigr)$. Check by computing $AA^{-1}$.\par A-4: polynomial and eigenvalues correct. The eigenvectors are not: $A(1,-1,0)\T=(-6,2,2)\T$ is not a multiple of
+$(1,-1,0)\T$. Correct ones: $\lambda=2$: $(0,-2,3)\T$; $\lambda=-2$: $(2,0,1)\T$; $\lambda=-4$: $(-3,1,0)\T$.
+Always check $A\bm v=\lambda\bm v$, it takes ten seconds.}
 \begin{mysolution}
   A-2. first matrix: $column rank = 3$; $row rank = 3$; second matrix: $column rank = 3$; $row rank = 3$. \\
   A-3. first matrix: $det = -1 - 8 = -9$; inv = $\frac{1}{-9}\left(\begin{smallmatrix}-1&-2\\-4&1\end{smallmatrix}\right)$; second matrix: $det = -1*6 - (-2*3) + 3*(6-8) = -6+6-6=-6$; inv = $\frac{1}{-6}\left(\begin{smallmatrix}4&24&-6\\-3&-15&3\\-2&-2&0\end{smallmatrix}\right)$ \\
   A-4. $det(A-\lambda I) = det \left(\begin{smallmatrix}-3-\lambda&3&2\\1&-1-\lambda&-2\\-1&-3&0-\lambda\end{smallmatrix}\right) = (-3-\lambda)[(-1-\lambda)(-\lambda)-6] -  3[(-\lambda)-2] + 2[(-3)+(-1-\lambda)] = -\lambda^3 - 4\lambda^2 + 4\lambda + 16 = -(\lambda - 2)(\lambda + 2)(\lambda + 4)$; this means that the eigenvalues are $2,-2,-4$. \\
   Solving $(A-\lambda I)x=0$, we find the eigenvectors $\bm v_1 = (1, -1, 0)^T$, $\bm v_2 = (1, 1, 2)^T$, $\bm v_3 = (1, 3, 4)^T$. I DIDN'T DO THIS LAST EIGENVECTOR CALCULATION.
-\end{mysolution}\feedback{A-2: both ranks $3$ correct (for the second, row~4 $-2\cdot$row~3 $\propto$ row~2 $-$ row~1).\par A-3: determinants correct, first inverse correct. Second inverse: one entry wrong, the $(1,1)$
-cofactor is $\det\bigl(\begin{smallmatrix}2&0\\6&3\end{smallmatrix}\bigr)=6$, not $4$:
-$A^{-1}=-\frac16\bigl(\begin{smallmatrix}6&24&-6\\-3&-15&3\\-2&-2&0\end{smallmatrix}\bigr)$. Check by computing $AA^{-1}$.\par A-4: polynomial and eigenvalues correct. The eigenvectors are not: $A(1,-1,0)\T=(-6,2,2)\T$ is not a multiple of
-$(1,-1,0)\T$. Correct ones: $\lambda=2$: $(0,-2,3)\T$; $\lambda=-2$: $(2,0,1)\T$; $\lambda=-4$: $(-3,1,0)\T$.
-Always check $A\bm v=\lambda\bm v$, it takes ten seconds.}
+\end{mysolution}
 
 \begin{exercise}[PS1 (2013), A-5 and A-6]
 (A-5) Gram--Schmidt on $\bm v_1=(1,0,1,0,1)$, $\bm v_2=(1,1,1,0,0)$, $\bm v_3=(0,0,1,1,1)$; complete to an orthonormal basis of
@@ -1160,16 +1168,17 @@ $\R^5$ and find the matrix $U$ mapping it to the standard basis.
 (A-6) SVD of $\left(\begin{smallmatrix}3&1&1\\-1&3&1\end{smallmatrix}\right)$, $\left(\begin{smallmatrix}1&1\\2&2\end{smallmatrix}\right)$ and
 $\left(\begin{smallmatrix}1&0&1\\0&1&0\\1&0&1\end{smallmatrix}\right)$.
 \end{exercise}
-\begin{mysolution}
-  
-  A-5. $u_1 = \frac{v_1}{||v_1||} = \frac{1}{\sqrt{3}}(1,0,1,0,1)$; $u_2 = \frac{v_2 - (v_2 \cdot u_1)u_1}{||v_2 - (v_2 \cdot u_1)u_1||} = \frac{1}{\sqrt{6}}(1, 2, -1, 0, -1)$; $u_3 = \frac{v_3 - (v_3 \cdot u_1)u_1 - (v_3 \cdot u_2)u_2}{||v_3 - (v_3 \cdot u_1)u_1 - (v_3 \cdot u_2)u_2||} = \frac{1}{\sqrt{6}}(-2, 0, 1, 2, 1)$; complete to an orthonormal basis with $u_4 = \frac{1}{\sqrt{2}}(0, 0, 1, 0, -1)$ and $u_5 = (0, 0, 0, 1, 0)$ [U5 E' SBAGLIATO]. The matrix $U$ mapping this basis to the standard basis is $U = [u_1\ u_2\ u_3\ u_4\ u_5]$ [CREDO SIA L'INVERSA DI U].
-\end{mysolution}\feedback{$\bm u_1$ correct; $\bm u_2$ is not. $\bm v_2\cdot\bm u_1=2/\sqrt3$, so
+\feedback*{$\bm u_1$ correct; $\bm u_2$ is not. $\bm v_2\cdot\bm u_1=2/\sqrt3$, so
 $\bm v_2-\frac23(1,0,1,0,1)=\frac13(1,3,1,0,-2)$ and $\bm u_2=\frac1{\sqrt{15}}(1,3,1,0,-2)$; then
 $\bm u_3=\frac1{2\sqrt{10}}(-3,1,2,5,1)$. Your $\bm u_4,\bm u_5$ are not orthogonal to $\bm u_2,\bm u_3$. To complete,
 solve $\bm v_1\cdot\bm x=\bm v_2\cdot\bm x=\bm v_3\cdot\bm x=0$: the solutions are spanned by $(-1,0,1,-1,0)$ and
 $(-1,1,0,-1,1)$; Gram--Schmidt on them gives $\bm u_4=\frac1{\sqrt3}(-1,0,1,-1,0)$,
 $\bm u_5=\frac1{2\sqrt6}(-1,3,-2,-1,3)$. Your doubt is right: $U=[\bm u_1\cdots\bm u_5]$ maps $\bm e_i\mapsto\bm u_i$; the map
 $\bm u_i\mapsto\bm e_i$ is $U^{-1}=U\T$. A-6 still to do (singular values: $2\sqrt3,\sqrt{10}$; $\sqrt{10}$; $2,1,0$).}
+\begin{mysolution}
+  
+  A-5. $u_1 = \frac{v_1}{||v_1||} = \frac{1}{\sqrt{3}}(1,0,1,0,1)$; $u_2 = \frac{v_2 - (v_2 \cdot u_1)u_1}{||v_2 - (v_2 \cdot u_1)u_1||} = \frac{1}{\sqrt{6}}(1, 2, -1, 0, -1)$; $u_3 = \frac{v_3 - (v_3 \cdot u_1)u_1 - (v_3 \cdot u_2)u_2}{||v_3 - (v_3 \cdot u_1)u_1 - (v_3 \cdot u_2)u_2||} = \frac{1}{\sqrt{6}}(-2, 0, 1, 2, 1)$; complete to an orthonormal basis with $u_4 = \frac{1}{\sqrt{2}}(0, 0, 1, 0, -1)$ and $u_5 = (0, 0, 0, 1, 0)$ [U5 E' SBAGLIATO]. The matrix $U$ mapping this basis to the standard basis is $U = [u_1\ u_2\ u_3\ u_4\ u_5]$ [CREDO SIA L'INVERSA DI U].
+\end{mysolution}
 
 \begin{exercise}[PS1 (2013), B-1 and B-2]
 (B-1) For an SVD $A=U\Sigma V\T$, true or false with explanation:
@@ -1182,26 +1191,28 @@ $\bm u_i\mapsto\bm e_i$ is $U^{-1}=U\T$. A-6 still to do (singular values: $2\sq
 \end{enumerate}
 (B-2) Prove that $AA\T$ and $A\T A$ have the same non-zero eigenvalues.
 \end{exercise}
-\begin{mysolution}
-  B-1. a. true; b. true; c. i believe false, but not sure. i think it is true only if A is symmetric; d. true. \\
-  B-2. assume $AA^T v = \lambda v$, then we can construct a vector $v = (A^T)^{-1} u$ such that $A^T u = \lambda (A^T)^{-1} u$; multiply from the left by $A^T$ to get what we want. Notice we assumed $A^T$ is invertible.
-\end{mysolution}\feedback{B-1: (a), (b) correct.\par (c) False, and the condition is stronger than symmetric:
+\feedback*{B-1: (a), (b) correct.\par (c) False, and the condition is stronger than symmetric:
 $U=V$ gives $A=U\Sigma U\T$, symmetric \emph{and} PSD.\par (d) Hence false: $A=-I$ is symmetric with $\Sigma=I$,
 and $U=V$ would give $A=I$. For symmetric $A=Q\Lambda Q\T$ take $U=Q$, $V=Q\,\diag(\operatorname{sign}\lambda_i)$:
 they differ by the signs of the columns with $\lambda_i<0$.\par B-2: $A\T$ is usually not invertible (not even square), so the proof must avoid it. Take $AA\T\bm v=\lambda\bm v$,
 $\lambda\ne0$, and set $\bm w=A\T\bm v$. Then $A\T A\bm w=A\T(AA\T\bm v)=\lambda\bm w$, and $\bm w\ne0$ because
 $\bm w=0$ would give $\lambda\bm v=A\bm w=0$. Same argument in the other direction.}
+\begin{mysolution}
+  B-1. a. true; b. true; c. i believe false, but not sure. i think it is true only if A is symmetric; d. true. \\
+  B-2. assume $AA^T v = \lambda v$, then we can construct a vector $v = (A^T)^{-1} u$ such that $A^T u = \lambda (A^T)^{-1} u$; multiply from the left by $A^T$ to get what we want. Notice we assumed $A^T$ is invertible.
+\end{mysolution}
 
 \begin{exercise}[PS1 (2013), B-3]
 Prove that a symmetric PSD matrix can be written $D=U\T AU$ with $U$ orthogonal and $D$ diagonal with
 non-negative entries.
 \end{exercise}
+\feedback{Your two sentences \emph{are} the proof; add one line for each. By the spectral theorem
+(\cref{thm:spectral}) $A=U\Lambda U\T$ with $U$ orthogonal, so $U\T AU=\Lambda=:D$. For a unit eigenvector $\bm u_i$,
+$\lambda_i=\lambda_i\bm u_i\T\bm u_i=\bm u_i\T A\bm u_i\ge0$ by PSD.}
 \begin{mysolution}
   NON LO FACCIO ESPLICITAMENTE PERCHE NON SO FARLO. \\
   Ma, se A e' sym allora si puo diagonalizzare usando U sia a destra che a sinistra, e se e' PSD allora gli autovalori sono non-negativi.
-\end{mysolution}\feedback{Your two sentences \emph{are} the proof; add one line for each. By the spectral theorem
-(\cref{thm:spectral}) $A=U\Lambda U\T$ with $U$ orthogonal, so $U\T AU=\Lambda=:D$. For a unit eigenvector $\bm u_i$,
-$\lambda_i=\lambda_i\bm u_i\T\bm u_i=\bm u_i\T A\bm u_i\ge0$ by PSD.}
+\end{mysolution}
 
 \begin{exercise}[PS1 (2013), B-4: least squares via SVD]
 Minimise $L=\|A\bm x-\bm w\|$ for $A\in\R^{m\times n}$.
@@ -1215,16 +1226,17 @@ Minimise $L=\|A\bm x-\bm w\|$ for $A\in\R^{m\times n}$.
       (Continued in \cref{ch:regression}.)
 \end{enumerate}
 \end{exercise}
-\begin{mysolution}
-  a. if A is diagonal, then the problem reduces to minimizing each component separately. For each diagonal entry $a_{ii}$, we have $L_i = |a_{ii} x_i - w_i|$. [Taking the derivative and setting it to zero gives the optimal solution for each component. WRONG! IT IS NOT DIFFERENTIABLE!]. it is always positive, and in a point it is equal to zero: $x_i^* = \frac{w_i}{a_{ii}}$ \\
-  b. $V^T_{ij} x^*_j = \frac{U^T_{ij} w_j}{\sigma_i}$, then $x^*_k = \frac{(V^T)^{-1}_{ki} U^T_{ij} w_j}{\sigma_i}$. \\
-  c. NON HO CAPITO COSA FARE. ok ho chiesto a gemini una spiegazione. Dobbiamo scrivere la somma delle distanze assolute tra i punti e la retta, e minimizzare questa somma. $L= \sum_{i} |y_i - (a \cdot x_i + b)|$. NON SO COME ANDARE AVANTI. \\
-  d. same as c, but with a parabola instead of a line. BUT IN C I WAS STUCK.
-
-\end{mysolution}\feedback{Key point: $\|\cdot\|$ is the Euclidean norm, so minimising $L$ = minimising
+\feedback*{Key point: $\|\cdot\|$ is the Euclidean norm, so minimising $L$ = minimising
 $L^2=\sum_i\bigl((A\bm x)_i-w_i\bigr)^2$, a sum of \emph{squares}. Gemini's sum of absolute values is a different
 problem (least absolute deviations), with no closed form: that is why you got stuck.\par (a) $L^2=\sum_{i\le n}(a_{ii}x_i-w_i)^2+\sum_{i>n}w_i^2$: take $x_i=w_i/a_{ii}$ when $a_{ii}\ne0$, anything (say
 $0$) when $a_{ii}=0$; the components $w_i$ with no matching $a_{ii}$ ($i>n$, or $a_{ii}=0$) stay as residual.\par (b) Missing step: $U$ is orthogonal, so $\|U\bm y\|=\|\bm y\|$ and $L=\|\Sigma\bm z-U\T\bm w\|$ with $\bm z=V\T\bm x$. This
 is (a): $z_i=(U\T\bm w)_i/\sigma_i$ for $i\le r$, and $\bm x=V\bm z$, i.e.\ $\bm x=V\Sigma^+U\T\bm w$ (pseudo-inverse). Your
 index formula is this, if the sum runs only over $i\le r$.\par (c) Least squares minimises $\sum_i(y_i-ax_i-b)^2=\|A\bm x-\bm w\|^2$ with rows $(x_i,1)$ of $A$, $\bm x=(a,b)\T$,
 $\bm w=(y_1,\dots,y_N)\T$.\par (d) Same with rows $(x_i^2,x_i,1)$ and $\bm x=(a,b,c)\T$: still linear in the unknowns.}
+\begin{mysolution}
+  a. if A is diagonal, then the problem reduces to minimizing each component separately. For each diagonal entry $a_{ii}$, we have $L_i = |a_{ii} x_i - w_i|$. [Taking the derivative and setting it to zero gives the optimal solution for each component. WRONG! IT IS NOT DIFFERENTIABLE!]. it is always positive, and in a point it is equal to zero: $x_i^* = \frac{w_i}{a_{ii}}$ \\
+  b. $V^T_{ij} x^*_j = \frac{U^T_{ij} w_j}{\sigma_i}$, then $x^*_k = \frac{(V^T)^{-1}_{ki} U^T_{ij} w_j}{\sigma_i}$. \\
+  c. NON HO CAPITO COSA FARE. ok ho chiesto a gemini una spiegazione. Dobbiamo scrivere la somma delle distanze assolute tra i punti e la retta, e minimizzare questa somma. $L= \sum_{i} |y_i - (a \cdot x_i + b)|$. NON SO COME ANDARE AVANTI. \\
+  d. same as c, but with a parabola instead of a line. BUT IN C I WAS STUCK.
+
+\end{mysolution}

@@ -255,7 +255,7 @@ joining the tips of the two vectors.
 % ==================================================================
 \section{Markowitz mean--variance optimisation}\label{ch10:sec-mvo}
 
-Now let there be $m$ risky assets with return vector $\bm R$, $\E\bm R=\bm\mu$, $\Cov\bm R=\Sigma$ (positive
+Now let there be $m$ risky assets with return vector $\bm R$, $\E[\bm R]=\bm\mu$, $\Cov\bm R=\Sigma$ (positive
 definite) in a \emph{single period}. A portfolio is a vector $\bm w$ of fractions of the wealth invested in each
 asset, $\bm w\T\bm 1=1$ (one unit of capital). Its return $R_{\bm w}=\bm w\T\bm R$ has
 \begin{equation}\label{ch10:eq-mv}
@@ -734,29 +734,29 @@ Quadratic utility has \emph{increasing} absolute risk aversion and is not increa
 \begin{proposition}[Three routes to mean--variance analysis]\label{ch10:prop-mv-utility}
 \leavevmode
 \begin{enumerate}[(i)]
-  \item For any smooth $u$, expanding around $w_*=\E W$ gives to second order
-      $\E u(W)\approx u(w_*)+\tfrac12u''(w_*)\Var W$, i.e.\ up to a positive factor and a constant,
-      $\E W-\frac12\lambda_A(w_*)\Var W$ \ts{13}{14}{53:06}\ts{13}{14}{54:08}.
+  \item For any smooth $u$, expanding around $w_*=\E[W]$ gives to second order
+      $\E[u(W)]\approx u(w_*)+\tfrac12u''(w_*)\Var W$, i.e.\ up to a positive factor and a constant,
+      $\E[W]-\frac12\lambda_A(w_*)\Var W$ \ts{13}{14}{53:06}\ts{13}{14}{54:08}.
   \item For quadratic utility the expected utility is exactly $\mu_W-\frac\lambda2(\mu_W^2+\sigma_W^2)$, a function of the mean
       and variance of $W$ alone \ts{13}{14}{55:09}.
-  \item If $W\sim N(\mu_W,\sigma_W^2)$, for \emph{any} increasing concave $u$, $\E u(W)$ is increasing in $\mu_W$ and
+  \item If $W\sim N(\mu_W,\sigma_W^2)$, for \emph{any} increasing concave $u$, $\E[u(W)]$ is increasing in $\mu_W$ and
       decreasing in $\sigma_W^2$, so that only the pair $(\mu_W,\sigma_W)$ matters and the efficient frontier is the set of
-      candidates for the optimum; for exponential utility, $\E u(W)=1-\exp\{-\lambda(\mu_W-\frac\lambda2\sigma_W^2)\}$.
+      candidates for the optimum; for exponential utility, $\E[u(W)]=1-\exp\{-\lambda(\mu_W-\frac\lambda2\sigma_W^2)\}$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(i) Taylor's formula at $w_*$, with $\E(W-w_*)=0$: the first-order term drops, and $u''=-\lambda_Au'$.
+(i) Taylor's formula at $w_*$, with $\E[W-w_*]=0$: the first-order term drops, and $u''=-\lambda_Au'$.
 
 (ii) Compute
 $\E[W-\frac\lambda2W^2]$.
 
-(iii) Write $\E u(W)=\int u(x)\varphi(x;\mu_W,\sigma_W^2)\dd x$; the Gaussian density satisfies the
+(iii) Write $\E[u(W)]=\int u(x)\varphi(x;\mu_W,\sigma_W^2)\dd x$; the Gaussian density satisfies the
 heat equation $\partial_{\sigma^2}\varphi=\frac12\partial_x^2\varphi$ and $\partial_\mu\varphi=-\partial_x\varphi$, so
-integrating by parts, $\partial_{\sigma^2}\E u=\frac12\E u''(W)<0$ and $\partial_\mu\E u=\E u'(W)>0$. For the exponential,
+integrating by parts, $\partial_{\sigma^2}\E[u]=\frac12\E[u''(W)]<0$ and $\partial_\mu\E[u]=\E[u'(W)]>0$. For the exponential,
 use the moment generating function of the normal (\cref{ch03:eq-normalmgf}).
 \end{proof}
 \begin{intuition}[Variance as the heat-equation time]
-For a Gaussian, the variance plays the role of the time in the diffusion equation: $\E u(W)$ is $u$ smoothed by
+For a Gaussian, the variance plays the role of the time in the diffusion equation: $\E[u(W)]$ is $u$ smoothed by
 a Gaussian of width $\sigma_W$, and smoothing a concave function can only lower its value.
 \end{intuition}
 So mean--variance analysis is the right thing to do if the utility is quadratic, \emph{or} if returns are Gaussian
@@ -772,12 +772,12 @@ Tobin's separation.
 When returns are not Gaussian one goes on in the Taylor series (slides 32--33 of \file{lecnote14})
 \ts{13}{14}{56:11}:
 \[
-  \E u(W)=u(w_*)+\tfrac12u''(w_*)\Var W+\tfrac1{3!}u'''(w_*)\,m_3+\tfrac1{4!}u^{(4)}(w_*)\,m_4+\cdots,\qquad m_k=\E(W-w_*)^k,
+  \E[u(W)]=u(w_*)+\tfrac12u''(w_*)\Var W+\tfrac1{3!}u'''(w_*)\,m_3+\tfrac1{4!}u^{(4)}(w_*)\,m_4+\cdots,\qquad m_k=\E[(W-w_*)^k],
 \]
 with $m_3$ and $m_4$ the third and fourth central moments (the slides call them ``Skew'' and ``Kurtosis''). For
 the utilities of \cref{ch10:tab-utility} (exponential, power, log) $u'''>0$ and $u^{(4)}<0$: investors like positive
 skewness and dislike large fourth moments. The corresponding optimisation
-$\max\ \E R_P-\lambda_1\Var R_P+\lambda_2m_3-\lambda_3m_4$ subject to $\bm 1\T\bm w=1$ has no closed form; the slides mention
+$\max\ \E[R_P]-\lambda_1\Var R_P+\lambda_2m_3-\lambda_3m_4$ subject to $\bm 1\T\bm w=1$ has no closed form; the slides mention
 multi-objective methods and \emph{polynomial goal programming}, and warn that skewness and kurtosis are hard
 to estimate (they are sensitive to outliers and need large samples).
 
@@ -811,11 +811,11 @@ inherits the flaw; the Sortino ratio separates the downside but does not tell ho
 \ts{24}{13}{48:30}. He proposes to summarise the distribution of the profit and loss $R$ of an investment
 (per period, or of the terminal outcome) by the \emph{expected gain} and \emph{expected loss}, both positive numbers,
 \[
-  G=\E[R^+],\qquad L=\E[R^-],\qquad \text{so}\qquad G-L=\E R,\quad G+L=\E|R| ,
+  G=\E[R^+],\qquad L=\E[R^-],\qquad \text{so}\qquad G-L=\E[R],\quad G+L=\E[|R|] ,
 \]
 and to rank investments by the ratio
 \begin{equation}\label{ch10:eq-gl}
-  \frac{G-L}{G+L}=1-\frac{2L}{G+L}=\frac{\E R}{\E|R|}\in[-1,1],
+  \frac{G-L}{G+L}=1-\frac{2L}{G+L}=\frac{\E[R]}{\E[|R|]}\in[-1,1],
 \end{equation}
 which he interprets directly as a position size (2024 slide~24) \ts{24}{13}{48:30}\ts{24}{13}{49:33}. In the
 $(L,G)$ plane every investment is a point; the $45^\circ$ line is $G=L$ (zero expected return) and the
@@ -847,7 +847,7 @@ investments of different volatilities on a common scale \ts{24}{13}{51:37}.
 (i) $G=p$, $L=q$, $G+L=1$. For the Kelly value use \eqref{ch10:eq-kelly}.
 
 (ii) For $R=m+sZ$,
-$\E|R|=s\bigl[2\varphi(S)+S(2\Phi(S)-1)\bigr]$ (fold the normal), and $h'(S)=2\Phi(S)-1$, so
+$\E[|R|]=s\bigl[2\varphi(S)+S(2\Phi(S)-1)\bigr]$ (fold the normal), and $h'(S)=2\Phi(S)-1$, so
 $(S/h)'=(h-Sh')/h^2=2\varphi(S)/h^2>0$.
 
 (iii) $G=1$, $L=0$; for $N(1,1)$, $h(1)=1.1666$ and $1/h(1)=0.857$.
@@ -1001,10 +1001,10 @@ mean--variance solution is typically worse than the in-sample frontier suggests 
 Volatility is only one measure of risk, and Kempthorne closes 2013 L14 by showing how the machinery extends
 \ts{13}{14}{1:20:06}\ts{13}{14}{1:21:13} (slides 29--33). Let $R_P=\bm w\T\bm R$.
 \begin{itemize}
-  \item \textbf{Mean absolute deviation}, $\mathrm{MAD}=\E|\bm w\T(\bm R-\bm\mu)|$, leads to a linear programme with linear or
+  \item \textbf{Mean absolute deviation}, $\mathrm{MAD}=\E[|\bm w\T(\bm R-\bm\mu)|]$, leads to a linear programme with linear or
         quadratic constraints. Where the variance is the natural scale for Gaussian returns, MAD is natural for
         heavier-tailed, e.g.\ exponential (Laplace), returns \ts{13}{14}{1:21:13}.
-  \item \textbf{Semi-variance}, $\E[\min(R_P-\E R_P,0)^2]$, the downside variance, introduced by Markowitz himself:
+  \item \textbf{Semi-variance}, $\E[\min(R_P-\E[R_P],0)^2]$, the downside variance, introduced by Markowitz himself:
         it controls downside rather than upside risk \ts{13}{14}{1:21:13}. Its square root, relative to a target,
         is the denominator of the Sortino ratio \ts{24}{13}{48:30}.
   \item \textbf{Value at risk}, $\mathrm{VaR}_{1-\epsilon}(R_P)=\min\{r:\Prob(R_P\le-r)\le\epsilon\}$ with $\epsilon=0.05,0.01,0.001$,
@@ -1333,7 +1333,7 @@ these values, not the printed ones. This chapter uses the values of the plots.
 
 \begin{coursenote}[Slides and lectures: small corrections]
 \begin{itemize}
-  \item \file{lecnote14}, slide~19 writes $\E u(W)\propto\E[W-\frac12\lambda(W-w_*)^2]\approx\E W-\frac12\lambda\Var W$: the
+  \item \file{lecnote14}, slide~19 writes $\E[u(W)]\propto\E[W-\frac12\lambda(W-w_*)^2]\approx\E[W]-\frac12\lambda\Var W$: the
       $\propto$ hides an additive constant and the positive factor $u'(w_*)$; the content is that of \cref{ch10:prop-mv-utility}(i).
   \item Slide~31, translation invariance: see the erratum in \cref{ch10:sec-risk}.
   \item Slide~24 of \file{lec13} asserts the ratio $(G-L)/(G+L)$ is ``the same as
@@ -1371,10 +1371,10 @@ these values, not the printed ones. This chapter uses the values of the plots.
 &\text{Equal weights:} && \Var R_{\rm ew}=\tfrac{\bar\sigma^2}n+(1-\tfrac1n)\bar c\\
 &\text{Constant mix:} && g(\bm w)=\bm w\T\bm\mu-\tfrac12\bm w\T\Sigma\bm w\ \ (\text{log growth})\\
 &\text{Risk contribution:} && \mathrm{RC}_i=\tfrac{w_i(\Sigma\bm w)_i}{\sigma_P},\ \textstyle\sum_i\mathrm{RC}_i=\sigma_P;\ \text{2 assets: }w_i\propto1/\sigma_i\\
-&\text{Utility:} && \lambda_A=-\tfrac{u''}{u'},\ \lambda_R=-\tfrac{Wu''}{u'};\quad \E u\approx u(w_*)+\tfrac12u''\Var W;\\
+&\text{Utility:} && \lambda_A=-\tfrac{u''}{u'},\ \lambda_R=-\tfrac{Wu''}{u'};\quad \E[u]\approx u(w_*)+\tfrac12u''\Var W;\\
 & && \text{CARA+normal: CE}=\mu_W-\tfrac\lambda2\sigma_W^2\\
 &\text{Kelly:} && f^*=\tfrac pl-\tfrac qg;\ \ \text{Gaussian: }f^*=\tfrac{\mu}{\sigma^2}\\
-&\text{Gain--loss ratio:} && \tfrac{G-L}{G+L}=\tfrac{\E R}{\E|R|}\in[-1,1],\ G=\E R^+,\ L=\E R^-\\
+&\text{Gain--loss ratio:} && \tfrac{G-L}{G+L}=\tfrac{\E[R]}{\E[|R|]}\in[-1,1],\ G=\E[R^+],\ L=\E[R^-]\\
 &\text{Constraints:} && \mathrm{TE}^2=(\bm w-\bm w_B)\T\Sigma(\bm w-\bm w_B),\ \ \textstyle\sum_i\beta_{ik}w_i=0\\
 &\text{Estimation:} && \mathrm{se}(\hat\mu)=\tfrac\sigma{\sqrt T},\quad \tfrac{\mathrm{se}(\hat\sigma)}\sigma\approx\tfrac1{\sqrt{2n}}\\
 &\text{Crowd loop:} && \dd O=\tfrac{\sum A_iC_i\dd E+\sum A_i\varepsilon_i}{1-\bar AB}\ \ (\text{mean field})\\

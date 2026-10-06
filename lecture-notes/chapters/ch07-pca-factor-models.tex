@@ -90,7 +90,7 @@ with equality for $\bm c=\bm e_1$ (and only for $\bm c=\pm\bm e_1$ if $\lambda_1
 $\bm w_j=\bm\gamma_j$ for $j<k$, the constraint $\bm w\perp\bm\gamma_1,\dots,\bm\gamma_{k-1}$ forces $c_1=\dots=c_{k-1}=0$, so
 $\bm w\T\Sigma\bm w=\sum_{j\ge k}\lambda_jc_j^2\le\lambda_k$, attained at $\bm\gamma_k$.
 
-(ii) $\E[\bm p]=\Gamma\T(\E\bm x-\bm\mu)=\bm 0$ and $\Cov[\bm p]=\Gamma\T\Sigma\Gamma=\Gamma\T\Gamma\Lambda\Gamma\T\Gamma=\Lambda$
+(ii) $\E[\bm p]=\Gamma\T(\E[\bm x]-\bm\mu)=\bm 0$ and $\Cov[\bm p]=\Gamma\T\Sigma\Gamma=\Gamma\T\Gamma\Lambda\Gamma\T\Gamma=\Lambda$
 \ts{13}{15}{1:01:42}.
 
 (iii) Multiply $\bm p=\Gamma\T(\bm x-\bm\mu)$ by $\Gamma=(\Gamma\T)^{-1}$.
@@ -784,8 +784,8 @@ For $m$ assets observed over $T$ periods \ts{13}{15}{1:06}, \ts{13}{15}{3:13}:
 \end{equation}
 with intercepts $\bm\alpha\in\R^m$, \emph{factor loadings} $B\in\R^{m\times K}$ (row $i$ is $\bm\beta_i\T$), \emph{common factors}
 $\bm f_t\in\R^K$, $K\ll m$, and \emph{specific factors} $\bm\epsilon_t$. Assumptions \ts{13}{15}{5:19}:
-$\{\bm f_t\}$ is covariance stationary with $\E\bm f_t=\bm\mu_f$, $\Cov\bm f_t=\Omega_f$; $\{\bm\epsilon_t\}$ is white noise with
-$\E\bm\epsilon_t=\bm0$, $\Cov\bm\epsilon_t=\Psi=\diag(\sigma_1^2,\dots,\sigma_m^2)$, $\Cov(\bm\epsilon_t,\bm\epsilon_{t'})=0$ for $t\neq t'$; and
+$\{\bm f_t\}$ is covariance stationary with $\E[\bm f_t]=\bm\mu_f$, $\Cov\bm f_t=\Omega_f$; $\{\bm\epsilon_t\}$ is white noise with
+$\E[\bm\epsilon_t]=\bm0$, $\Cov\bm\epsilon_t=\Psi=\diag(\sigma_1^2,\dots,\sigma_m^2)$, $\Cov(\bm\epsilon_t,\bm\epsilon_{t'})=0$ for $t\neq t'$; and
 $\Cov(\bm f_t,\bm\epsilon_{t'})=0$ for all $t,t'$.
 \end{definition}
 
@@ -1071,7 +1071,7 @@ has no lecture on macroeconomic or fundamental factor models; their portfolio-th
 & && \bm x=\bm\mu+\textstyle\sum_kp_k\bm\gamma_k\\
 &\text{Variational:} && \bm\gamma_1=\arg\max_{\|\bm w\|=1}\bm w\T\Sigma\bm w,\\
 & && \text{share}_k=\lambda_k/\tr\Sigma\\
-&\text{Best subspace:} && \min_V\E\|(I-VV\T)(\bm x-\bm\mu)\|^2\\
+&\text{Best subspace:} && \min_V\E[\|(I-VV\T)(\bm x-\bm\mu)\|^2]\\
 & && =\textstyle\sum_{j>K}\lambda_j\ \ (V=\Gamma_K)\\
 &\text{Sample PCA:} && X_c=UD\hat\Gamma\T,\quad
   \hat\lambda_k=d_k^2/(N-1),\quad P=X_c\hat\Gamma=UD\\

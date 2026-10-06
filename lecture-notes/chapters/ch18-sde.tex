@@ -57,17 +57,17 @@ and the \emph{spatial growth condition}
 \begin{equation}\label{ch18:eq-growth}
   |\mu(t,x)|^2+|\sigma(t,x)|^2\le K\bigl(1+|x|^2\bigr).
 \end{equation}
-Then there is a continuous adapted solution $X$ on $[0,T]$ with $\sup_{0\le t\le T}\E X_t^2<\infty$. Moreover if $X$ and $Y$ are two continuous solutions with this $L^2$ bound, then $\Prob\bigl(X_t=Y_t\ \text{for all }t\in[0,T]\bigr)=1$.
+Then there is a continuous adapted solution $X$ on $[0,T]$ with $\sup_{0\le t\le T}\E[X_t^2]<\infty$. Moreover if $X$ and $Y$ are two continuous solutions with this $L^2$ bound, then $\Prob\bigl(X_t=Y_t\ \text{for all }t\in[0,T]\bigr)=1$.
 \end{theorem}
 \ts{24}{25}{1:04:34}\ts{24}{25}{1:05:34}\ts{24}{25}{1:06:36}\ts{13}{21}{2:13}\ts{13}{21}{3:18}\ts{13}{21}{4:27}
 Both lectures state the theorem without proof, refer to the literature (Steele; Oksendal), and comment on the hypotheses. The Lipschitz condition says that $\mu$ and $\sigma$ cannot change too fast when the space variable moves a little: at most linearly in the distance \ts{13}{21}{4:27}. The growth condition says that the coefficients cannot blow up too fast at infinity \ts{24}{25}{1:05:34}\ts{13}{21}{5:31}. ``Essentially unique'' means unique up to a null set: the two solutions have the same paths with probability one \ts{24}{25}{1:06:36}. The 2013 speaker adds the advice that matters in practice: do not worry about the technical conditions; \emph{a solution exists, but do not expect a closed form} \ts{13}{21}{5:31}.
 
 \begin{proof}[Sketch by Picard iteration (not given in class)]
-Put $X^{(0)}_t=x_0$ and $X^{(n+1)}_t=x_0+\int_0^t\mu(s,X^{(n)}_s)\dd s+\int_0^t\sigma(s,X^{(n)}_s)\dd B_s$. Using $(a+b)^2\le2a^2+2b^2$, Cauchy--Schwarz for the $\dd s$ integral, the It\^o isometry (\cref{ch17:thm-ito-int}) for the noise integral, and \eqref{ch18:eq-lip} (which contains the Lipschitz bound of $\mu$ and of $\sigma$ separately), the differences $\varphi_n(t)=\E|X^{(n+1)}_t-X^{(n)}_t|^2$ satisfy
+Put $X^{(0)}_t=x_0$ and $X^{(n+1)}_t=x_0+\int_0^t\mu(s,X^{(n)}_s)\dd s+\int_0^t\sigma(s,X^{(n)}_s)\dd B_s$. Using $(a+b)^2\le2a^2+2b^2$, Cauchy--Schwarz for the $\dd s$ integral, the It\^o isometry (\cref{ch17:thm-ito-int}) for the noise integral, and \eqref{ch18:eq-lip} (which contains the Lipschitz bound of $\mu$ and of $\sigma$ separately), the differences $\varphi_n(t)=\E[|X^{(n+1)}_t-X^{(n)}_t|^2]$ satisfy
 \[
   \varphi_n(t)\le C\int_0^t\varphi_{n-1}(s)\,\dd s,\qquad C=2K(T+1),
 \]
-hence $\varphi_n(t)\le\varphi_0(T)(Ct)^n/n!$ by induction, and $\varphi_0(T)<\infty$ by \eqref{ch18:eq-growth}. The series $\sum_n\sqrt{\varphi_n}$ converges, so $X^{(n)}$ is Cauchy in $L^2$ uniformly in $t$; its limit solves \eqref{ch18:eq-sdeint}. (Continuity of paths needs Doob's maximal inequality; we skip it.) For uniqueness, if $X,Y$ are two $L^2$-bounded solutions then $D(t)=\E|X_t-Y_t|^2$ satisfies $D(t)\le C\int_0^tD(s)\,\dd s$; Gronwall's lemma gives $D\equiv0$, so $X_t=Y_t$ a.s.\ for each $t$, and by continuity for all $t$ simultaneously.
+hence $\varphi_n(t)\le\varphi_0(T)(Ct)^n/n!$ by induction, and $\varphi_0(T)<\infty$ by \eqref{ch18:eq-growth}. The series $\sum_n\sqrt{\varphi_n}$ converges, so $X^{(n)}$ is Cauchy in $L^2$ uniformly in $t$; its limit solves \eqref{ch18:eq-sdeint}. (Continuity of paths needs Doob's maximal inequality; we skip it.) For uniqueness, if $X,Y$ are two $L^2$-bounded solutions then $D(t)=\E[|X_t-Y_t|^2]$ satisfies $D(t)\le C\int_0^tD(s)\,\dd s$; Gronwall's lemma gives $D\equiv0$, so $X_t=Y_t$ a.s.\ for each $t$, and by continuity for all $t$ simultaneously.
 \end{proof}
 The two conditions are \emph{sufficient, not necessary}, and each has its own job: the Lipschitz condition prevents non-uniqueness and the growth condition prevents explosion. Two ordinary differential equations (the case $\sigma=0$) show what goes wrong.
 \begin{example}[Why both conditions matter; not discussed in class]\label{ch18:ex-fail}
@@ -80,7 +80,7 @@ The two conditions are \emph{sufficient, not necessary}, and each has its own jo
 Under only \emph{local} Lipschitz continuity one still has uniqueness and existence up to an explosion time. The solution of \eqref{ch18:eq-sde} under the conditions of \cref{ch18:thm-eu} is a \emph{Markov process} (quoted): given $X_t$, the future depends on the past only through the present, because the future noise is independent of $\mathcal F_t$. This is what makes the generator of \cref{ch18:sec-fk} meaningful.
 
 \begin{coursenote}[Misprints in the 2013 note, Theorem 1.1]
-\file{lecnote21} introduces the equation ``for given functions $a$ and $b$'' although the coefficients are called $\mu,\sigma$; writes the solution as ``$X(T)=\int_0^T\dots$'', omitting the initial value $x_0$ (it is \eqref{ch18:eq-sdeint} with $t=T$); and leaves the placeholder ``such that (L2 bound)'', which the 2024 slide 13 spells out as $\sup_{0\le t\le T}\E X_t^2<\infty$, as in \cref{ch18:thm-eu}.
+\file{lecnote21} introduces the equation ``for given functions $a$ and $b$'' although the coefficients are called $\mu,\sigma$; writes the solution as ``$X(T)=\int_0^T\dots$'', omitting the initial value $x_0$ (it is \eqref{ch18:eq-sdeint} with $t=T$); and leaves the placeholder ``such that (L2 bound)'', which the 2024 slide 13 spells out as $\sup_{0\le t\le T}\E[X_t^2]<\infty$, as in \cref{ch18:thm-eu}.
 \end{coursenote}
 
 % ==================================================================
@@ -110,18 +110,18 @@ the factor $f$ dividing out \ts{24}{25}{1:09:56}\ts{24}{25}{1:11:00}\ts{13}{21}{
 This is the formula \eqref{ch17:eq-gbm} that \cref{ch:stochcalc} obtained from the logarithm; here the same answer comes from a different logic, and by \cref{ch18:thm-eu} it is \emph{the} solution: the coefficients $\mu x,\sigma x$ are Lipschitz and of linear growth. The 2013 lecturer is candid about the status of the method \ts{13}{21}{11:01}\ts{13}{21}{12:01}: we already knew the answer and merely fitted it; the point of the exercise is the algorithm, which works when one cannot guess $f$.
 
 \subsection{The lognormal law and the ``paradox''}
-By \eqref{ch18:eq-gbmsol}, $\ln X_t\sim N\bigl(\ln x_0+\mu_*t,\ \sigma^2t\bigr)$ with $\mu_*=\mu-\tfrac12\sigma^2$: $X_t$ is lognormal with $\E X_t=x_0e^{\mu t}$ (the $e^{-\sigma^2t/2}$ from the drift cancels $\E e^{\sigma B_t}=e^{\sigma^2t/2}$) \ts{24}{25}{1:11:00}. The details, the numerical example of the 2024 lecture ($\mu=0.3$, $\sigma=0.4$, half a year: $\E P_T/P_t=1.1618$, standard deviation $0.335\,P_t$) and the annualised return are in \cref{ch17:sec-gbmdist}.
+By \eqref{ch18:eq-gbmsol}, $\ln X_t\sim N\bigl(\ln x_0+\mu_*t,\ \sigma^2t\bigr)$ with $\mu_*=\mu-\tfrac12\sigma^2$: $X_t$ is lognormal with $\E[X_t]=x_0e^{\mu t}$ (the $e^{-\sigma^2t/2}$ from the drift cancels $\E[e^{\sigma B_t}]=e^{\sigma^2t/2}$) \ts{24}{25}{1:11:00}. The details, the numerical example of the 2024 lecture ($\mu=0.3$, $\sigma=0.4$, half a year: $\E[P_T]/P_t=1.1618$, standard deviation $0.335\,P_t$) and the annualised return are in \cref{ch17:sec-gbmdist}.
 
 The lecture then points to a seeming paradox \ts{24}{25}{1:12:02}\ts{24}{25}{1:13:03}. Write $\ln X_t=\ln x_0+t\bigl(\mu_*+\sigma B_t/t\bigr)$. Since $B_t/t\to0$ almost surely (strong law of large numbers for Brownian motion),
 \begin{equation}\label{ch18:eq-paradox}
-  0<\mu<\tfrac12\sigma^2\ \Longrightarrow\ \E X_t=x_0e^{\mu t}\to\infty\quad\text{while}\quad X_t\to0\ \text{a.s.},\ \text{so }\Prob(X_t<c)\to1\ \ \forall c>0 .
+  0<\mu<\tfrac12\sigma^2\ \Longrightarrow\ \E[X_t]=x_0e^{\mu t}\to\infty\quad\text{while}\quad X_t\to0\ \text{a.s.},\ \text{so }\Prob(X_t<c)\to1\ \ \forall c>0 .
 \end{equation}
 The expected price grows exponentially and yet every path goes to zero. The resolution is that the expectation of a lognormal is dominated by rare, extraordinarily large values. The typical (median) path grows like $x_0e^{\mu_*t}$, which is decreasing here. A numerical illustration ($\mu=5\%$, $\sigma=40\%$, so $\mu_*=-3\%$ per year; own computation):
 \begin{center}
 \small
 \begin{tabular}{@{}rrrr@{}}
 \toprule
-$t$ (years) & $\E X_t/x_0=e^{\mu t}$ & median $e^{\mu_*t}$ & $\Prob(X_t<x_0)$\\
+$t$ (years) & $\E[X_t]/x_0=e^{\mu t}$ & median $e^{\mu_*t}$ & $\Prob(X_t<x_0)$\\
 \midrule
 $10$ & $1.65$ & $0.74$ & $0.59$\\
 $100$ & $148$ & $0.050$ & $0.77$\\
@@ -131,10 +131,10 @@ $1000$ & $5.2\times10^{21}$ & $9\times10^{-14}$ & $0.99$\\
 \end{center}
 The lecturer connects this with markets: some stocks do extraordinarily well and are noticed, others drift towards zero, and on average there is growth \ts{24}{25}{1:13:03}. (The critical case $\mu=\tfrac12\sigma^2$ is different again: $\ln X_t$ then has no drift and oscillates between $\pm\infty$.)
 \begin{intuition}[Ensemble average versus time average]
-A physicist would say that the multiplicative process is \emph{non-ergodic}: the ensemble average $\E X_t\propto e^{\mu t}$ and the growth rate of a single realisation, the time average $\lim\frac1t\ln X_t=\mu-\tfrac12\sigma^2$, differ. The gap $\tfrac12\sigma^2$ is the volatility drag, the It\^o correction of \cref{ch:stochcalc}: an investor who holds the asset for a long time experiences $\mu_*$, not $\mu$. (The same quantity, $\mu-\tfrac12\sigma^2$, is the growth rate the Kelly criterion maximises; not discussed in class.)
+A physicist would say that the multiplicative process is \emph{non-ergodic}: the ensemble average $\E[X_t]\propto e^{\mu t}$ and the growth rate of a single realisation, the time average $\lim\frac1t\ln X_t=\mu-\tfrac12\sigma^2$, differ. The gap $\tfrac12\sigma^2$ is the volatility drag, the It\^o correction of \cref{ch:stochcalc}: an investor who holds the asset for a long time experiences $\mu_*$, not $\mu$. (The same quantity, $\mu-\tfrac12\sigma^2$, is the growth rate the Kelly criterion maximises; not discussed in class.)
 \end{intuition}
 \begin{coursenote}[Erratum: the standard deviation of $\ln X_t$]
-Slide 15 writes the lognormal parameters as $\mu_*=(\mu-\sigma^2/2)t$ and $\sigma_*=\sigma t$, and the lecturer says aloud ``our standard deviation is $\sigma t$'' \ts{24}{25}{1:12:02}. The variance of $\sigma B_t$ is $\sigma^2t$, so the standard deviation is $\sigma_*=\sigma\sqrt t$ (equivalently the variance is $\sigma^2t$, as in the transcript at 7:23). The slide's claim about $\E X_t=x_0e^{\mu t}$ and the paradox are correct. The paradox needs $0<\mu<\sigma^2/2$: for $\mu\le0$ the mean does not grow, and there is nothing surprising in $X_t\to0$.
+Slide 15 writes the lognormal parameters as $\mu_*=(\mu-\sigma^2/2)t$ and $\sigma_*=\sigma t$, and the lecturer says aloud ``our standard deviation is $\sigma t$'' \ts{24}{25}{1:12:02}. The variance of $\sigma B_t$ is $\sigma^2t$, so the standard deviation is $\sigma_*=\sigma\sqrt t$ (equivalently the variance is $\sigma^2t$, as in the transcript at 7:23). The slide's claim about $\E[X_t]=x_0e^{\mu t}$ and the paradox are correct. The paradox needs $0<\mu<\sigma^2/2$: for $\mu\le0$ the mean does not grow, and there is nothing surprising in $X_t\to0$.
 \end{coursenote}
 
 % ==================================================================
@@ -205,7 +205,7 @@ The stochastic integral in \eqref{ch18:eq-ousol} has a deterministic integrand, 
 \begin{proposition}[Moments, law, stationarity]\label{ch18:prop-ouprop}
 Let $X$ solve \eqref{ch18:eq-ou}. Then $X$ is a Gaussian process and
 \begin{align}
-  \E X_t&=m+(x_0-m)e^{-\kappa t}\ \longrightarrow\ m, \label{ch18:eq-oumean}\\
+  \E[X_t]&=m+(x_0-m)e^{-\kappa t}\ \longrightarrow\ m, \label{ch18:eq-oumean}\\
   \Var X_t&=\sigma^2\int_0^te^{-2\kappa(t-s)}\,\dd s=\frac{\sigma^2}{2\kappa}\bigl(1-e^{-2\kappa t}\bigr)\ \longrightarrow\ \frac{\sigma^2}{2\kappa}, \label{ch18:eq-ouvar}\\
   \Cov(X_s,X_t)&=\frac{\sigma^2}{2\kappa}\Bigl(e^{-\kappa(t-s)}-e^{-\kappa(t+s)}\Bigr),\qquad 0\le s\le t. \label{ch18:eq-oucov}
 \end{align}
@@ -353,7 +353,7 @@ the bracket vanishing by \eqref{ch18:eq-fkpde}. Under the integrability assumpti
 \end{proof}
 Read the formula in both directions: a PDE solved \emph{backwards} from the terminal condition $g$ is a conditional expectation of the payoff, discounted along the path; conversely every such expectation solves the PDE (under regularity conditions, quoted). Special cases:
 \begin{itemize}
-  \item $r=0$, $\mu=0$, $\sigma=1$: $u_t+\tfrac12u_{xx}=0$, $u(t,x)=\E\,g(x+B_{T-t})$: the backward heat equation of \cref{ch17:thm-pde}. With $\tau=T-t$ it is the heat equation of \cref{ch18:sec-heat}.
+  \item $r=0$, $\mu=0$, $\sigma=1$: $u_t+\tfrac12u_{xx}=0$, $u(t,x)=\E[g(x+B_{T-t})]$: the backward heat equation of \cref{ch17:thm-pde}. With $\tau=T-t$ it is the heat equation of \cref{ch18:sec-heat}.
   \item \emph{Black--Scholes.} Take for $X$ the price under the risk-neutral measure, $\dd S=rS\,\dd t+\sigma S\,\dd W$ (\cref{ch17:sec-girsanov}), a constant rate $r$ and $g$ the payoff. Then \eqref{ch18:eq-fkpde} is $u_t+rSu_S+\tfrac12\sigma^2S^2u_{SS}-ru=0$, the Black--Scholes equation \eqref{ch17:eq-bs} that slides 2--3 of the lecture derive by hedging \ts{24}{25}{24:16}, and \eqref{ch18:eq-fk} is the price $e^{-r(T-t)}\E_\Q[g(S_T)\mid S_t]$, the risk-neutral valuation of \cref{ch:bs} (\cref{ch15:eq-rnval}). Two proofs, one equation: the hedging argument shows that the price \emph{must} satisfy the PDE; Feynman--Kac shows that the risk-neutral expectation \emph{does}, and the PDE with its terminal condition has one solution. The real-world drift $\mu$ of $S$ disappears because the expectation is taken under $\Q$, where the drift is $r$ (Girsanov's theorem, \cref{ch17:thm-girsanov2}).
 \end{itemize}
 
@@ -383,7 +383,7 @@ If the density $p(t,y)$ of $X_t$ is smooth and decays fast enough,
 \end{equation}
 \end{proposition}
 \begin{proof}
-For a smooth test function $g$ with compact support, taking expectations in \eqref{ch18:eq-dynkin} (the martingale term has mean zero) gives $\frac{\dd}{\dd t}\E\,g(X_t)=\E\,\mathcal L_tg(X_t)=\int\bigl(\mu g'+\tfrac12\sigma^2g''\bigr)p\,\dd y$. Integrating by parts once in the first term and twice in the second (no boundary terms) turns this into $\int g\,\mathcal L_t^*p\,\dd y$, while the left side is $\int g\,\partial_tp\,\dd y$. Since $g$ is arbitrary, \eqref{ch18:eq-fp} follows.
+For a smooth test function $g$ with compact support, taking expectations in \eqref{ch18:eq-dynkin} (the martingale term has mean zero) gives $\frac{\dd}{\dd t}\E[g(X_t)]=\E[\mathcal] L_tg(X_t)=\int\bigl(\mu g'+\tfrac12\sigma^2g''\bigr)p\,\dd y$. Integrating by parts once in the first term and twice in the second (no boundary terms) turns this into $\int g\,\mathcal L_t^*p\,\dd y$, while the left side is $\int g\,\partial_tp\,\dd y$. Since $g$ is arbitrary, \eqref{ch18:eq-fp} follows.
 \end{proof}
 The Fokker--Planck equation is a conservation law, $\partial_tp+\partial_yJ=0$ with probability current $J=\mu p-\tfrac12\partial_y(\sigma^2p)$: the drift transports probability and the noise diffuses it. It is the equation a physicist derives from the Langevin equation (Kramers--Moyal expansion), and it is the equation $u_t=\lambda u_{xx}$ of the two lectures, with $\lambda=\sigma^2/2$, when $\mu=0$ and $\sigma$ is constant. The backward equation is the adjoint of the forward one: it describes how the \emph{payoff} is smoothed, the forward one how the \emph{density} spreads. Examples:
 \begin{itemize}
@@ -485,7 +485,7 @@ For the SDE \eqref{ch18:eq-sde} the analogue of $u'=f(u)$ has a random right-han
 This is the \emph{Euler--Maruyama scheme}. Then repeat with many independent paths (the \emph{Monte Carlo simulation}): each gives one value $X_T^{(k)}$, and the empirical distribution of these values approximates the law of $X_T$ \ts{13}{21}{31:37}\ts{13}{21}{32:42}\ts{13}{21}{33:43}\ts{13}{21}{34:48}. Any intermediate time can be read off the same paths, subject to the accuracy remark above. The steps of the note, \emph{sample a path, solve along it, repeat}, are exactly this. (The obstacle is the underlying randomness of the Brownian motion; once a path is fixed it disappears \ts{13}{21}{33:43}.)
 
 \begin{definition}[Strong and weak convergence; not discussed in class]\label{ch18:def-conv}
-A scheme with step $h=T/n$ and output $X^h_T$ has \emph{strong order} $q$ if $\E|X_T-X^h_T|\le Ch^q$ (paths are close: the two are driven by the same $B$), and \emph{weak order} $w$ if $|\E f(X_T)-\E f(X^h_T)|\le Ch^w$ for smooth $f$ (laws are close).
+A scheme with step $h=T/n$ and output $X^h_T$ has \emph{strong order} $q$ if $\E[|X_T-X^h_T|]\le Ch^q$ (paths are close: the two are driven by the same $B$), and \emph{weak order} $w$ if $|\E[f(X_T)]-\E[f(X^h_T)]|\le Ch^w$ for smooth $f$ (laws are close).
 \end{definition}
 Euler--Maruyama has strong order $\tfrac12$ and weak order $1$ under the conditions of \cref{ch18:thm-eu} and smooth coefficients (quoted). The order $\tfrac12$ is the price of the noise: over one step the increment is of size $\sqrt h$. The \emph{Milstein} scheme adds the next term of the It\^o--Taylor expansion, $X_{i+1}=X_i+\mu h+\sigma\Delta B_i+\tfrac12\sigma\sigma'(\Delta B_i^2-h)$, and has strong order $1$ (the correction is $0$ when $\sigma$ is constant, so for OU Euler--Maruyama already has order $1$ in the strong sense). Finally the Monte Carlo error itself, of order $N^{-1/2}$ in the number $N$ of paths, adds to the discretisation error; the two should be balanced.
 
@@ -506,12 +506,12 @@ for n in (4, 8, 16, 32, 64, 128, 256):
     exact = np.exp((mu - sg**2/2)*T + sg*d.sum(axis=1))
     print(n, abs(X-exact).mean(), abs(M-exact).mean(), (1+mu*h)**n - np.exp(mu*T))
 \end{lstlisting}
-\emph{Result} (columns: steps $n$, strong error of Euler, strong error of Milstein, weak error of $\E X_T$, which is deterministic here: $\E X^h_T=(1+\mu h)^n$):
+\emph{Result} (columns: steps $n$, strong error of Euler, strong error of Milstein, weak error of $\E[X_T]$, which is deterministic here: $\E[X^h_T]=(1+\mu h)^n$):
 \begin{center}
 \small
 \begin{tabular}{@{}rccc@{}}
 \toprule
-$n$ & Euler, $\E|X_T-X_T^h|$ & Milstein & $|\E X_T^h-\E X_T|$\\
+$n$ & Euler, $\E[|X_T-X_T^h|]$ & Milstein & $|\E[X_T^h]-\E[X_T]|$\\
 \midrule
 $4$ & $5.9\times10^{-2}$ & $3.3\times10^{-2}$ & $1.4\times10^{-2}$\\
 $16$ & $3.0\times10^{-2}$ & $8.7\times10^{-3}$ & $3.7\times10^{-3}$\\
@@ -531,10 +531,10 @@ Halving $h$ divides the Euler strong error by $\sqrt2$ (fitted slopes $0.49$--$0
   \addplot+[mark=square*,thick,color=thmcol] coordinates {(0.25,0.0326) (0.125,0.01699) (0.0625,0.00867) (0.03125,0.00438) (0.015625,0.0022) (0.0078125,0.0011) (0.00390625,0.00055)};
   \addplot+[mark=triangle*,thick,color=intcol] coordinates {(0.25,0.01439) (0.125,0.007388) (0.0625,0.003744) (0.03125,0.001885) (0.015625,0.000946) (0.0078125,0.000474) (0.00390625,0.000237)};
   \addplot[dashed,black!60,forget plot] coordinates {(0.004,0.0077) (0.25,0.0077*7.905)};
-  \legend{{Euler, strong},{Milstein, strong},{Euler, weak ($\E X_T$)}}
+  \legend{{Euler, strong},{Milstein, strong},{Euler, weak ($\E[X_T]$)}}
 \end{loglogaxis}
 \end{tikzpicture}
-\caption{Errors of \cref{ch18:cs-em} against the step size: Euler strong error (slope $\tfrac12$, the dashed line is a slope-$\tfrac12$ reference), Milstein strong error and the weak error of $\E X_T$ (both slope $1$).}\label{ch18:fig-em}
+\caption{Errors of \cref{ch18:cs-em} against the step size: Euler strong error (slope $\tfrac12$, the dashed line is a slope-$\tfrac12$ reference), Milstein strong error and the weak error of $\E[X_T]$ (both slope $1$).}\label{ch18:fig-em}
 \end{figure}
 
 \subsection{The tree method}
@@ -560,12 +560,12 @@ Monte Carlo pricing is Feynman--Kac \eqref{ch18:eq-fk} evaluated by simulation: 
 
 The two examples solved in class have linear coefficients, hence Lipschitz. Two extensions show what changes when they are not (an addition of these notes; none of this is in the lectures).
 
-\paragraph{The CIR process.} The Cox--Ingersoll--Ross model $\dd X=\kappa(\theta-X)\,\dd t+\sigma\sqrt X\,\dd B$ is a mean-reverting process whose noise vanishes at $0$, so it stays nonnegative: the natural model of a positive interest rate or a variance (the Heston model of \cref{ch:volatility} uses it for the variance). The coefficient $\sigma\sqrt x$ is not Lipschitz at $0$, so \cref{ch18:thm-eu} does not apply, but $x\mapsto\sqrt x$ is H\"older-$\tfrac12$ and the Yamada--Watanabe theorem (quoted) still gives a unique solution. Boundary behaviour is governed by the \emph{Feller condition}: if $2\kappa\theta\ge\sigma^2$ the process never reaches $0$; otherwise it hits $0$ and is reflected. The linear drift makes the moments tractable: by Dynkin's formula \eqref{ch18:eq-dynkin}, $\dd\E X_t=\kappa(\theta-\E X_t)\dd t$, so
+\paragraph{The CIR process.} The Cox--Ingersoll--Ross model $\dd X=\kappa(\theta-X)\,\dd t+\sigma\sqrt X\,\dd B$ is a mean-reverting process whose noise vanishes at $0$, so it stays nonnegative: the natural model of a positive interest rate or a variance (the Heston model of \cref{ch:volatility} uses it for the variance). The coefficient $\sigma\sqrt x$ is not Lipschitz at $0$, so \cref{ch18:thm-eu} does not apply, but $x\mapsto\sqrt x$ is H\"older-$\tfrac12$ and the Yamada--Watanabe theorem (quoted) still gives a unique solution. Boundary behaviour is governed by the \emph{Feller condition}: if $2\kappa\theta\ge\sigma^2$ the process never reaches $0$; otherwise it hits $0$ and is reflected. The linear drift makes the moments tractable: by Dynkin's formula \eqref{ch18:eq-dynkin}, $\dd\E[X_t]=\kappa(\theta-\E[X_t])\dd t$, so
 \[
-  \E X_t=\theta+(x_0-\theta)e^{-\kappa t},\qquad
+  \E[X_t]=\theta+(x_0-\theta)e^{-\kappa t},\qquad
   \Var X_t=x_0\frac{\sigma^2}{\kappa}\bigl(e^{-\kappa t}-e^{-2\kappa t}\bigr)+\theta\frac{\sigma^2}{2\kappa}\bigl(1-e^{-\kappa t}\bigr)^2
 \]
-(the variance from the second-moment equation $\tfrac{\dd}{\dd t}\E X^2=(2\kappa\theta+\sigma^2)\E X-2\kappa\E X^2$). Unlike OU the law is not normal: $X_t$ is $c$ times a noncentral $\chi^2$ variable with $d=4\kappa\theta/\sigma^2$ degrees of freedom, $c=\sigma^2(1-e^{-\kappa t})/(4\kappa)$ and noncentrality $x_0e^{-\kappa t}/c$, which allows exact sampling. Check ($\kappa=1.5$, $\theta=0.04$, $\sigma=0.2$, $x_0=0.09$, $t=1$; Feller ratio $2\kappa\theta/\sigma^2=3$): the formulas give mean $0.05116$ and variance $7.379\times10^{-4}$; $2\times10^6$ exact samples give $0.05114$ and $7.375\times10^{-4}$ (own computation). The Euler scheme \eqref{ch18:eq-em} may produce negative values, for which $\sqrt X$ is undefined; the standard cure is to truncate ($\sqrt{X^+}$), and the exact sampler above avoids the issue. In the same family, the squared radius $|\bm B|^2$ of an $n$-dimensional Brownian motion (\cref{ch17:sec-multi}) satisfies $\dd Z=n\,\dd t+2\sqrt Z\,\dd W$, a CIR process without mean reversion (the squared Bessel process).
+(the variance from the second-moment equation $\tfrac{\dd}{\dd t}\E[X^2]=(2\kappa\theta+\sigma^2)\E[X]-2\kappa\E[X^2]$). Unlike OU the law is not normal: $X_t$ is $c$ times a noncentral $\chi^2$ variable with $d=4\kappa\theta/\sigma^2$ degrees of freedom, $c=\sigma^2(1-e^{-\kappa t})/(4\kappa)$ and noncentrality $x_0e^{-\kappa t}/c$, which allows exact sampling. Check ($\kappa=1.5$, $\theta=0.04$, $\sigma=0.2$, $x_0=0.09$, $t=1$; Feller ratio $2\kappa\theta/\sigma^2=3$): the formulas give mean $0.05116$ and variance $7.379\times10^{-4}$; $2\times10^6$ exact samples give $0.05114$ and $7.375\times10^{-4}$ (own computation). The Euler scheme \eqref{ch18:eq-em} may produce negative values, for which $\sqrt X$ is undefined; the standard cure is to truncate ($\sqrt{X^+}$), and the exact sampler above avoids the issue. In the same family, the squared radius $|\bm B|^2$ of an $n$-dimensional Brownian motion (\cref{ch17:sec-multi}) satisfies $\dd Z=n\,\dd t+2\sqrt Z\,\dd W$, a CIR process without mean reversion (the squared Bessel process).
 
 \paragraph{Other state-dependent volatilities.} The choice $\sigma(x)=\sigma x^{\beta}$ (CEV) interpolates between a normal model ($\beta=0$, the OU/Bachelier world) and geometric Brownian motion ($\beta=1$); local- and stochastic-volatility models, in which $\sigma$ is a function of the price or itself a diffusion, lead to SDEs that must be treated numerically (\cref{ch:volatility}). The theory of this chapter (existence, generator, Feynman--Kac, Fokker--Planck, Euler--Maruyama) applies to all of them.
 
@@ -579,7 +579,7 @@ The two examples solved in class have linear coefficients, hence Lipschitz. Two 
 \begin{coursenote}[Errata and misprints]
 \begin{itemize}
   \item 2024 slide 15: $\sigma_*=\sigma t$ should be $\sigma\sqrt t$ (\cref{ch18:sec-cm}).
-  \item \file{lecnote21}, Theorem 1.1 and the paragraph before it: ``for given functions $a$ and $b$'' should be $\mu,\sigma$; the integral equation lacks $x_0$; ``(L2 bound)'' is a placeholder for $\sup_t\E X_t^2<\infty$; ``Lipshictz'' is spelled so in both the note and slide 13.
+  \item \file{lecnote21}, Theorem 1.1 and the paragraph before it: ``for given functions $a$ and $b$'' should be $\mu,\sigma$; the integral equation lacks $x_0$; ``(L2 bound)'' is a placeholder for $\sup_t\E[X_t^2]<\infty$; ``Lipshictz'' is spelled so in both the note and slide 13.
   \item \file{lecnote21}, \S2.2 says that for a known path $B_t$ ``the equation now becomes a PDE''; for a fixed path it is a recursion in one variable (an ODE-type finite-difference step), as \eqref{ch18:eq-em} shows; the tree and Monte Carlo descriptions write the equation as $\dd f(t,B_t)=g\,\dd B+h\,\dd t$, which is the form of a function of Brownian motion rather than of a general SDE.
   \item The 2013 transcript's remark that OU has ``a drift term \dots\ minus exponential'' at 13:16 is a slip: the drift is \emph{linear}, $-\kappa X$; the exponentials appear only in the solution.
   \item In the 2024 transcript $\Phi\bigl(y/2\sqrt{2\lambda}\bigr)$ is spoken; the slide has $\Phi(y/\sqrt{2\lambda})$, which is right (\cref{ch18:sec-heat}).
@@ -592,12 +592,12 @@ The two examples solved in class have linear coefficients, hence Lipschitz. Two 
 \begin{align*}
 &\text{SDE:} && \dd X=\mu(t,X)\dd t+\sigma(t,X)\dd B,\quad X_t=x_0+\textstyle\int_0^t\mu\,\dd s+\int_0^t\sigma\,\dd B\\
 &\text{Existence, uniqueness:} && |\mu(x)-\mu(y)|^2+|\sigma(x)-\sigma(y)|^2\le K|x-y|^2,\\
-& && |\mu|^2+|\sigma|^2\le K(1+|x|^2)\ \Rightarrow\ \exists!\ \text{solution},\ \sup_t\E X_t^2<\infty\\
+& && |\mu|^2+|\sigma|^2\le K(1+|x|^2)\ \Rightarrow\ \exists!\ \text{solution},\ \sup_t\E[X_t^2]<\infty\\
 &\text{Coefficient matching:} && X=f(t,B):\ \mu(t,f)=f_t+\tfrac12f_{xx},\quad\sigma(t,f)=f_x\\
-&\text{GBM:} && \dd X=\mu X\dd t+\sigma X\dd B\ \Rightarrow\ X_t=x_0e^{(\mu-\sigma^2/2)t+\sigma B_t},\quad\E X_t=x_0e^{\mu t}\\
+&\text{GBM:} && \dd X=\mu X\dd t+\sigma X\dd B\ \Rightarrow\ X_t=x_0e^{(\mu-\sigma^2/2)t+\sigma B_t},\quad\E[X_t]=x_0e^{\mu t}\\
 & && \mu<\tfrac12\sigma^2:\ X_t\to0\ \text{a.s.};\quad\text{std.\ dev.\ of }\ln X_t=\sigma\sqrt t\\
 &\text{OU:} && \dd X=-\kappa(X-m)\dd t+\sigma\dd B\ \Rightarrow\ X_t=m+(x_0-m)e^{-\kappa t}+\sigma\textstyle\int_0^te^{-\kappa(t-s)}\dd B_s\\
-& && \E X_t=m+(x_0-m)e^{-\kappa t},\quad\Var X_t=\tfrac{\sigma^2}{2\kappa}(1-e^{-2\kappa t}),\quad X_\infty\sim N\bigl(m,\tfrac{\sigma^2}{2\kappa}\bigr)\\
+& && \E[X_t]=m+(x_0-m)e^{-\kappa t},\quad\Var X_t=\tfrac{\sigma^2}{2\kappa}(1-e^{-2\kappa t}),\quad X_\infty\sim N\bigl(m,\tfrac{\sigma^2}{2\kappa}\bigr)\\
 & && \Cov(X_s,X_t)\to\tfrac{\sigma^2}{2\kappa}e^{-\kappa|t-s|}\ (\text{stationary}),\quad\text{half-life }\ln2/\kappa\\
 &\text{Exact AR(1):} && X_{t+h}-m=\phi(X_t-m)+\varepsilon,\quad\phi=e^{-\kappa h},\quad\Var\varepsilon=\tfrac{\sigma^2}{2\kappa}(1-\phi^2)\\
 & && \hat\kappa=-\ln\hat\phi/h,\quad\hat\sigma^2=2\hat\kappa\hat\sigma_\varepsilon^2/(1-\hat\phi^2)\\
@@ -609,7 +609,7 @@ The two examples solved in class have linear coefficients, hence Lipschitz. Two 
 &\text{Vasicek bond:} && P=e^{-br+(b-\tau)(\theta-\sigma^2/2\kappa^2)},\\
 & && \quad{}-\sigma^2b^2/4\kappa,\quad b=\tfrac{1-e^{-\kappa\tau}}\kappa\\
 &\text{Heat equation:} && u_t=\lambda u_{xx}\ \Rightarrow\ u=\textstyle\int\frac{e^{-(x-s)^2/4\lambda t}}{\sqrt{4\pi\lambda t}}u_0(s)\dd s,\\
-& && u=\E\,u_0(x+\sqrt{2\lambda}B_t)\\
+& && u=\E[u_0(x+\sqrt{2\lambda}B_t)]\\
 & && u_0=\ind_{(a,b)}:\ u=\Phi\bigl(\tfrac{b-x}{\sqrt{2\lambda t}}\bigr)\\
 & && \quad{}-\Phi\bigl(\tfrac{a-x}{\sqrt{2\lambda t}}\bigr)\\
 &\text{Euler--Maruyama:} && X_{i+1}=X_i+\mu h+\sigma\sqrt hZ_i;\ \text{strong order }\tfrac12,\ \text{weak order }1\\
@@ -699,5 +699,5 @@ Repeat \cref{ch18:cs-em} for the OU process (where the exact solution is \eqref{
 \end{exercise}
 
 \begin{exercise}[not from the course: CIR moments]\label{ch18:ex-cir}
-Derive the moment equations of the CIR process from Dynkin's formula and solve for $\E X_t$. Verify the stationary mean $\theta$ and variance $\theta\sigma^2/(2\kappa)$, and check the Feller condition for a short-rate CIR model with $\kappa=0.3$, $\theta=3\%$, $\sigma=0.1$.
+Derive the moment equations of the CIR process from Dynkin's formula and solve for $\E[X_t]$. Verify the stationary mean $\theta$ and variance $\theta\sigma^2/(2\kappa)$, and check the Feller condition for a short-rate CIR model with $\kappa=0.3$, $\theta=3\%$, $\sigma=0.1$.
 \end{exercise}

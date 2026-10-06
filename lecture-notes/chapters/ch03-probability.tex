@@ -50,7 +50,7 @@ moment-generating functions, conditional expectation, Stein's lemma and the CAPM
 % ------------------------------------------------------------------
 \section{Random variables and distribution functions}\label{ch03:sec-rv}
 
-Financial random variables come in three kinds \ts{24}{4}{28:47}:\note{voglio che le note appaiano a lato di dove le scrivo, non alla fine del paragrafo}
+Financial random variables come in three kinds \ts{24}{4}{28:47}:
 \begin{itemize}
   \item \emph{discrete}: default (1) or no default (0) of a counterparty, the FOMC decision on the Fed
         funds rate, the side (buy/sell) and the share size of the next market order in AAPL;\begin{answer}{what is FOMC?}[FOMC]
@@ -92,7 +92,7 @@ pmf/pdf factorises, $f_{X,Y}(x,y)=f_X(x)f_Y(y)$ \ts{13}{3}{6:16}. For $n$ variab
 \ts{13}{3}{7:17}: $X_1,\dots,X_n$ are \emph{mutually independent} if
 $\Prob(\bigcap_i\{X_i\in A_i\})=\prod_i\Prob(X_i\in A_i)$ for all $A_1,\dots,A_n$, and \emph{pairwise
 independent} if every pair is independent. Mutual implies pairwise, not conversely
-(\cref{ch03:ex-pairwise}). \note+{interesting new subtelty}``Independent'' always means mutually independent.\note{avrebbe senso che nella fase di studio (quando leggo, faccio gli esercizio, scrivo annotazioni) il pdf non sia diviso in pagine ma sia una unica pagina lunghissima? e' possibile? me lo consigli?}
+(\cref{ch03:ex-pairwise}). \note+{interesting new subtelty}``Independent'' always means mutually independent.
 
 \begin{proposition}[Probability integral transform]\label{ch03:prop-pit}
 Let $X$ have a continuous CDF $F$. Then $U=F(X)$ is uniform on $(0,1)$ \ts{24}{4}{32:57}. Conversely, if
@@ -148,7 +148,7 @@ If $Y=a+bX$ with $b\neq0$, then $\E[Y]=a+b\mu$, $\Var(Y)=b^2\sigma^2$, $\gamma_Y
 and $\kappa_Y=\kappa_X$.
 \end{proposition}
 \begin{proof}
-$(Y-\E Y)/\sigma_Y=b(X-\mu)/(|b|\sigma)=\operatorname{sign}(b)\,Z_X$; take third and fourth powers.
+$(Y-\E[Y])/\sigma_Y=b(X-\mu)/(|b|\sigma)=\operatorname{sign}(b)\,Z_X$; take third and fourth powers.
 \end{proof}
 
 \begin{coursenote}[Erratum (in class) and a caveat on the slides]
@@ -156,7 +156,7 @@ At \ts{24}{4}{1:02:42} it is said that linear transformations do not change the 
 the kurtosis. It is the other way round (\cref{ch03:prop-affine}): kurtosis is invariant, skewness
 changes sign when $b<0$ (a short position has the opposite skew of the long one). Also, slide~6 of
 \file{lec04_1} lists ``$\gamma=0$: $X$ is symmetric about $\mu$''. Symmetry implies $\gamma=0$, but not
-conversely: $X\in\{-3,-1,2\}$ with probabilities $0.1,\,0.5,\,0.4$ has $\E X=\E X^3=0$ and is not symmetric.
+conversely: $X\in\{-3,-1,2\}$ with probabilities $0.1,\,0.5,\,0.4$ has $\E[X]=\E[X^3]=0$ and is not symmetric.
 Software differs on whether ``kurtosis'' means $\kappa$ or $\kappa-3$: check before comparing numbers.
 \end{coursenote}
 
@@ -166,7 +166,55 @@ annualised). Equity-index returns are typically negatively skewed (crashes are s
 gradual) and daily returns of almost all assets are strongly leptokurtic. Both facts matter for risk:
 a model matched only to mean and variance underestimates the probability of large losses
 (\cref{ch03:sec-heavy}), and they are visible in option markets as the volatility smile (\cref{ch:volatility}).
-\end{finance}\note{can you include some graphs of: a typical probability distribution of an equity index, of a daily return of an asset. what is the valatility smile?}
+\end{finance}\begin{answer}{can you include some graphs of: a typical probability distribution of an equity index, of a daily return of an asset. what is the valatility smile?}[Graphs]
+Done in \cref{ch03:fig-returns}, with the course's own data (daily closes of the S\&P~500 stocks,
+2019--2024). The equal-weighted portfolio of all 487 stocks stands in for the index.
+\answerpart{Volatility smile}
+Take the Black--Scholes formula, which has one unknown, $\sigma$. From the market price of each option
+solve for the $\sigma$ that reproduces it: the \emph{implied volatility}. If returns were normal (BS
+true), it would be the same number for every strike. It is not: plotted against the strike it is a
+curve, U-shaped (a ``smile'') or, for equity indices, falling from left to right (a ``skew'', or
+``smirk''), sketched in panel (c). Options far from the money are dearer than BS says, because the
+market knows the tails are fat (and, for indices, that crashes go down). Full story in \cref{ch:volatility}.
+\end{answer}
+
+\begin{figure}[!htb]
+\centering
+\pgfplotsset{retplot/.style={width=5.1cm,height=4.8cm,tick label style={font=\scriptsize},label style={font=\small},title style={font=\small},legend style={font=\scriptsize},xlabel={daily log-return},
+  scaled x ticks=false,xticklabel style={/pgf/number format/fixed},legend style={font=\tiny,fill=white,fill opacity=0.8,text opacity=1}}}
+\begin{tikzpicture}
+\begin{axis}[retplot,title={(a) linear scale},xmin=-0.08,xmax=0.08,ymin=0,ymax=75,xtick={-0.05,0,0.05},legend pos=north west]
+  \addplot[ybar interval,fill=defcol!35,draw=defcol!60] table[x=x,y=ew] {data/fm_dailyret.dat};
+  \addplot[thmcol,thick,domain=-0.08:0.08,samples=120] {exp(-(x-0.00068)^2/(2*0.01386^2))/(0.01386*sqrt(2*pi))};
+  \legend{S\&P~500 (EW),normal fit}
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[retplot,title={(b) log scale: the tails},xmin=-0.14,xmax=0.12,ymode=log,ymin=0.05,ymax=3000,xtick={-0.1,0,0.1},
+  legend pos=north west]
+  \addplot[only marks,mark size=0.9pt,defcol] table[x=x,y=ew] {data/fm_dailyret.dat};
+  \addplot[only marks,mark size=0.9pt,intcol] table[x=x,y=aapl] {data/fm_dailyret.dat};
+  \addplot[thmcol,thick,domain=-0.07:0.07,samples=120] {exp(-(x-0.00068)^2/(2*0.01386^2))/(0.01386*sqrt(2*pi))};
+  \legend{S\&P~500 (EW),AAPL,normal (EW)}
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[width=5.1cm,height=4.8cm,tick label style={font=\scriptsize},label style={font=\small},title style={font=\small},legend style={font=\scriptsize},title={(c) implied volatility (schematic)},
+  xlabel={strike $K/S_0$},ylabel={implied vol},xmin=0.7,xmax=1.3,ymin=0.1,ymax=0.4,ytick=\empty,
+  legend pos=north east]
+  \addplot[thmcol,thick,domain=0.7:1.3,samples=60] {0.18+1.2*(x-1)^2};
+  \addplot[defcol,thick,domain=0.7:1.3,samples=60] {0.2-0.35*(x-1)+0.8*(x-1)^2};
+  \addplot[black!50,dashed,domain=0.7:1.3] {0.15};
+  \legend{smile,index skew,BS (flat)}
+\end{axis}
+\end{tikzpicture}
+\caption{Daily log-returns, 2019-01-02 to 2024-08-30, from \file{SP500_data_subset.RData} (the data of the
+case study in \cref{sec:ewport}). (a) The equal-weighted S\&P~500 portfolio against the normal with the same mean
+and standard deviation (1.39\% a day): a sharper peak and fatter tails; skewness $-0.91$, kurtosis $17$. (b) On a log scale
+the normal is a parabola and the data are not: both the index and Apple (kurtosis $8.5$) have 11 days beyond
+$4\sigma$, where the normal would expect $0.09$. The extreme left points are March 2020. (c) A sketch, not data,
+of the volatility smile and of the skew typical of index options (\cref{ch:volatility}).}\label{ch03:fig-returns}
+\end{figure}
 
 % ------------------------------------------------------------------
 \section{Normal and lognormal distributions}\label{ch03:sec-normal}
@@ -186,7 +234,28 @@ and $F_Z=\Phi$; for $X\sim N(\mu,\sigma^2)$, $F_X(x)=\Phi((x-\mu)/\sigma)$.
 The density is symmetric about $\mu$, maximal at $\mu$, with inflection points at $\mu\pm\sigma$
 \ts{24}{4}{39:29}; the probabilities of lying within $1,2,3$ standard deviations are
 $0.6827$, $0.9545$, $0.9973$ \ts{24}{4}{40:31}. That $f$ integrates to $1$ is the Gaussian integral
-(2013 PS2 B-2, \cref{ch03:ex-b2}).\note{insert a graph of the distribution. in general, whenever it can be useful plot graphs and functions.}
+(2013 PS2 B-2, \cref{ch03:ex-b2}); see \cref{ch03:fig-normal}.\note*{insert a graph of the distribution. in general, whenever it can be useful plot graphs and functions.}
+
+\begin{figure}[!htb]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.8\linewidth,height=5cm,axis lines=left,xmin=-3.6,xmax=3.6,ymin=0,ymax=0.45,
+  xtick={-3,-2,-1,0,1,2,3},xticklabels={$\mu-3\sigma$,$\mu-2\sigma$,$\mu-\sigma$,$\mu$,$\mu+\sigma$,$\mu+2\sigma$,$\mu+3\sigma$},
+  ytick=\empty,tick label style={font=\scriptsize},label style={font=\small},title style={font=\small},legend style={font=\scriptsize}]
+  \addplot[fill=defcol!12,draw=none,domain=-3:3,samples=80] {exp(-x^2/2)/sqrt(2*pi)} \closedcycle;
+  \addplot[fill=defcol!25,draw=none,domain=-2:2,samples=80] {exp(-x^2/2)/sqrt(2*pi)} \closedcycle;
+  \addplot[fill=defcol!45,draw=none,domain=-1:1,samples=80] {exp(-x^2/2)/sqrt(2*pi)} \closedcycle;
+  \addplot[very thick,defcol,domain=-3.6:3.6,samples=120] {exp(-x^2/2)/sqrt(2*pi)};
+  \node[font=\scriptsize] at (axis cs:0,0.12) {68.3\%};
+  \node[font=\scriptsize] at (axis cs:1.5,0.03) {95.4\%};
+  \node[font=\scriptsize] at (axis cs:2.55,0.025) {99.7\%};
+  \fill[thmcol] (axis cs:-1,0.242) circle (1.5pt) (axis cs:1,0.242) circle (1.5pt);
+  \node[font=\scriptsize,thmcol,anchor=west] at (axis cs:1.05,0.26) {inflection points};
+\end{axis}
+\end{tikzpicture}
+\caption{The normal density $N(\mu,\sigma^2)$ with the probability of lying within $1$, $2$, $3$ standard deviations
+of the mean. The inflection points are at $\mu\pm\sigma$.}\label{ch03:fig-normal}
+\end{figure}
 
 \subsection{Why prices are not normal}
 Suppose daily price changes $P_n-P_{n-1}$ were i.i.d.\ normal \ts{13}{3}{10:28}. Two things go wrong
@@ -301,24 +370,45 @@ above it comes from the 2013 lecture, which uses $P_n$ for the price on day $n$ 
 \section{Expected option payoffs}\label{ch03:sec-call}
 
 A European call gives the right to buy the asset at time $T$ at the strike $K$; if $X$ is the price at $T$,
-the payoff is the ``hockey stick'' $C=(X-K)^+=\max(0,X-K)$ \ts{24}{4}{50:01}.\note{plot it}
+the payoff is the ``hockey stick'' $C=(X-K)^+=\max(0,X-K)$ \ts{24}{4}{50:01} (\cref{ch03:fig-hockey}).\note*{plot it}
+
+\begin{figure}[!htb]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=6.6cm,height=4.6cm,axis lines=middle,xmin=0,xmax=2.05,ymin=-0.1,ymax=1.1,
+  xtick={1},xticklabels={$K$},ytick=\empty,xlabel={$X$},tick label style={font=\scriptsize},label style={font=\small},title style={font=\small},legend style={font=\scriptsize},title={call: $(X-K)^+$},
+  xlabel style={at={(1,0)},anchor=north}]
+  \addplot[very thick,intcol] coordinates {(0,0) (1,0) (2,1)};
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[width=6.6cm,height=4.6cm,axis lines=middle,xmin=0,xmax=2.05,ymin=-0.1,ymax=1.1,
+  xtick={1},xticklabels={$K$},ytick={1},yticklabels={$K$},xlabel={$X$},tick label style={font=\scriptsize},label style={font=\small},title style={font=\small},legend style={font=\scriptsize},title={put: $(K-X)^+$},
+  xlabel style={at={(1,0)},anchor=north}]
+  \addplot[very thick,thmcol] coordinates {(0,1) (1,0) (2,0)};
+\end{axis}
+\end{tikzpicture}
+\caption{Payoffs at expiry as functions of the price $X$ of the underlying: the call (the ``hockey stick'': flat
+blade, then slope 1) and the put, which pays at most $K$.}\label{ch03:fig-hockey}
+\end{figure}
 
 \begin{theorem}[Expected call payoff]\label{ch03:thm-call}
-Let $X$ have density $f$, CDF $F$ and $\E|X|<\infty$. For every constant $K$,
+Let $X$ have density $f$, CDF $F$ and $\E[|X|]<\infty$. For every constant $K$,
 \[
   \E\bigl[(X-K)^+\bigr]=\int_K^\infty\!\!\int_x^\infty f(t)\dd t\dd x=\int_K^\infty\bigl[1-F(x)\bigr]\dd x .
 \]
 \end{theorem}
 \begin{proof}
 Following the slides \ts{24}{4}{51:05}, for $M>K$ integrate by parts with $u=x-K$, $v=-[1-F(x)]$:
-\[
-  \int_K^M(x-K)f(x)\dd x=-(M-K)\bigl[1-F(M)\bigr]+\int_K^M\bigl[1-F(x)\bigr]\dd x .
-\]
+\begin{align*}
+  \int_K^M(x-K)f(x)\dd x&=-(M-K)\bigl[1-F(M)\bigr]\\
+  &\quad+\int_K^M\bigl[1-F(x)\bigr]\dd x .
+\end{align*}
 The boundary term vanishes as $M\to\infty$ because $0\le(M-K)[1-F(M)]\le\int_M^\infty(x-K)f(x)\dd x$, the tail
 of a convergent integral. (Alternatively: $(x-K)^+=\int_K^\infty\ind\{x>s\}\dd s$; take expectations and swap
 the integrals.)
 \end{proof}
-This is the familiar fact that for a non-negative variable $\E W=\int_0^\infty\Prob(W>s)\dd s$
+This is the familiar fact that for a non-negative variable $\E[W]=\int_0^\infty\Prob(W>s)\dd s$
 \ts{24}{4}{52:11}, applied to $W=(X-K)^+$. The slides assume finite variance; a finite mean is enough.
 
 \begin{corollary}[Strike derivatives; not discussed in class]\label{ch03:cor-bl}
@@ -331,7 +421,7 @@ corollary gives $C''(K)=f(K)$. So if the market quotes calls at many strikes, th
 curve \emph{is} the density of $S_T$ (under $Q$, \cref{ans:pricingQ}). Intuition: a ``butterfly''
 (buy calls at $K-h$ and $K+h$, sell two at $K$) pays a small triangle around $K$, i.e.\ roughly
 $h$ dollars if $S_T\approx K$; its price $\approx h^2C''(K)$ is the price of ``$S_T$ near $K$''.
-\end{answer}\note{stai attento che teoremi e dimostrazioni non sono perfettamente allineati}
+\end{answer}
 
 \begin{corollary}[Normal and lognormal payoffs, slide 18 of \file{lec04_1}]\label{ch03:cor-normal}
 \leavevmode
@@ -396,11 +486,11 @@ If $M_X$ is finite on $(-\delta,\delta)$, all moments are finite, $\E[X^k]=M_X^{
 $M_X(t)=\sum_{k\ge0}\frac{t^k}{k!}\,m_k$ for $|t|<\delta$ \ts{13}{3}{38:14}\ts{24}{4}{54:18}.
 \end{proposition}
 \begin{proof}
-For $|s|<\delta$, $e^{s|x|}\le e^{sx}+e^{-sx}$, so $\E e^{s|X|}<\infty$; this dominates $\sum_k|tX|^k/k!$ for
+For $|s|<\delta$, $e^{s|x|}\le e^{sx}+e^{-sx}$, so $\E[e^{s|X|}]<\infty$; this dominates $\sum_k|tX|^k/k!$ for
 $|t|\le s$, so expectation and series (and derivatives) can be exchanged.
 \end{proof}
 
-\paragraph{The MGF need not exist} \ts{24}{4}{55:21}. For the Cauchy density $f(x)=1/(\pi(1+x^2))$,\note{plot it} $\E|X|=\infty$
+\paragraph{The MGF need not exist} \ts{24}{4}{55:21}. For the Cauchy density $f(x)=1/(\pi(1+x^2))$ (\cref{ch03:fig-laws}),\note*{plot it} $\E[|X|]=\infty$
 and $M_X(t)=\infty$ for every $t\ne0$; its characteristic function is $e^{-|t|}$. The \emph{lognormal} law has
 all moments but no MGF \ts{13}{3}{37:09}: for $t>0$ and every $k$, $e^{tY}\ge(tY)^k/k!$, hence
 \[
@@ -474,9 +564,9 @@ Consequences:
   \item \emph{Sums}: if $X_1,\dots,X_n$ are independent, $M_{\sum X_i}(t)=\prod_iM_{X_i}(t)$, because the expectation of a
         product of independent variables is the product of expectations. Hence a sum of independent normals
         is $N(\sum\mu_i,\sum\sigma_i^2)$, by \cref{ch03:thm-mgf}(i).
-  \item \emph{Normal moments}: $e^{t^2/2}=\sum_k t^{2k}/(2^kk!)$ gives $\E Z^{2k}=(2k)!/(2^kk!)$, e.g.\ $\E Z^4=3$:
+  \item \emph{Normal moments}: $e^{t^2/2}=\sum_k t^{2k}/(2^kk!)$ gives $\E[Z^{2k}]=(2k)!/(2^kk!)$, e.g.\ $\E[Z^4]=3$:
         the normal kurtosis is $3$.
-\end{itemize}\note{quando scrivi i valori di aspettazione usa sempre le parentesi quadre}
+\end{itemize}
 
 \begin{intuition}[Partition function and cumulants (not discussed in class)]
 $M_X(t)$ is a Laplace transform, like a partition function $Z(\beta)$, and $K_X(t)=\ln M_X(t)$ plays the role of
@@ -536,7 +626,60 @@ Cauchy & $1/(\pi(1+x^2))$ & a law without mean, variance or MGF\\
 \bottomrule
 \end{tabularx}
 \caption{Distributions used in the course.}\label{ch03:tab-laws}
-\end{table}\note{plot all the mentioned distributions}
+\end{table}\note*{plot all the mentioned distributions}
+
+\begin{figure}[!htb]
+\centering
+\pgfplotsset{lawplot/.style={width=5.3cm,height=4.2cm,tick label style={font=\scriptsize},label style={font=\small},title style={font=\small},legend style={font=\scriptsize},legend pos=north east}}
+\begin{tikzpicture}
+\begin{axis}[lawplot,title={Bernoulli$(0.3)$, Poisson$(3)$},ybar=0pt,bar width=4pt,xmin=-0.7,xmax=9.7,ymin=0]
+  \addplot[fill=defcol!60,draw=none] coordinates {(0,0.7) (1,0.3)};
+  \addplot[fill=thmcol!60,draw=none] coordinates {(0,0.0498) (1,0.1494) (2,0.2240) (3,0.2240) (4,0.1680) (5,0.1008) (6,0.0504) (7,0.0216) (8,0.0081) (9,0.0027)};
+  \legend{Bernoulli,Poisson}
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[lawplot,title={exponential, gamma, $\chi^2$},xmin=0,xmax=8,ymin=0,ymax=1.05]
+  \addplot[thick,defcol,domain=0:8,samples=100] {exp(-x)};
+  \addplot[thick,intcol,domain=0.01:8,samples=100] {x*exp(-x)};
+  \addplot[thick,thmcol,domain=0.05:8,samples=100] {x^0.5*exp(-x/2)/(2^1.5*0.886227)};
+  \legend{Exp$(1)$,{Gamma$(2,1)$},$\chi^2_3$}
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[lawplot,title={normal, $t_3$, Cauchy},xmin=-5,xmax=5,ymin=0,ymax=0.42]
+  \addplot[thick,defcol,domain=-5:5,samples=120] {exp(-x^2/2)/sqrt(2*pi)};
+  \addplot[thick,intcol,domain=-5:5,samples=120] {0.367553*(1+x^2/3)^(-2)};
+  \addplot[thick,thmcol,domain=-5:5,samples=120] {1/(pi*(1+x^2))};
+  \legend{{$N(0,1)$},$t_3$,Cauchy}
+\end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis}[lawplot,title={lognormal$(0,\sigma^2)$},xmin=0,xmax=4,ymin=0,ymax=1.7]
+  \addplot[thick,defcol,domain=0.02:4,samples=120] {exp(-ln(x)^2/(2*0.0625))/(x*0.25*sqrt(2*pi))};
+  \addplot[thick,intcol,domain=0.02:4,samples=120] {exp(-ln(x)^2/(2*0.25))/(x*0.5*sqrt(2*pi))};
+  \addplot[thick,thmcol,domain=0.02:4,samples=120] {exp(-ln(x)^2/2)/(x*sqrt(2*pi))};
+  \legend{$\sigma=0.25$,$\sigma=0.5$,$\sigma=1$}
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[lawplot,title={tails, log scale},xmin=0,xmax=8,ymode=log,ymin=1e-6,ymax=1,legend pos=south west]
+  \addplot[thick,defcol,domain=0:5.3,samples=80] {exp(-x^2/2)/sqrt(2*pi)};
+  \addplot[thick,intcol,domain=0:8,samples=80] {0.367553*(1+x^2/3)^(-2)};
+  \addplot[thick,thmcol,domain=0:8,samples=80] {1/(pi*(1+x^2))};
+  \legend{{$N(0,1)$},$t_3$,Cauchy}
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[lawplot,title={$F_{m,n}$},xmin=0,xmax=4,ymin=0,ymax=1]
+  \addplot[thick,defcol,domain=0.01:4,samples=120] {10.368*x^1.5*(1+0.5*x)^(-7.5)};
+  \legend{$F_{5,10}$}
+\end{axis}
+\end{tikzpicture}
+\caption{The laws of \cref{ch03:tab-laws}. The $t_3$ and Cauchy densities look like the normal near $0$ but
+their tails decay like powers ($x^{-4}$, $x^{-2}$), not like $e^{-x^2/2}$: on the log scale the gap at $x=5$ is a
+factor $10^3$--$10^4$.}\label{ch03:fig-laws}
+\end{figure}
 
 % ------------------------------------------------------------------
 \section{Several random variables}\label{ch03:sec-multi}
@@ -545,7 +688,7 @@ Independence of $X$ and $Y$ means that knowing one gives no information about th
 it is the factorisation $f_{X,Y}=f_Xf_Y$ \ts{24}{4}{1:03:47}.
 
 \begin{definition}[Covariance, correlation]
-$\Cov(X,Y)=\E[(X-\E X)(Y-\E Y)]=\E[XY]-\E X\,\E Y$ (so $\Cov(X,X)=\Var X$) and
+$\Cov(X,Y)=\E[(X-\E[X])(Y-\E[Y])]=\E[XY]-\E[X]\,\E[Y]$ (so $\Cov(X,X)=\Var X$) and
 \[
   \Corr(X,Y)=\frac{\Cov(X,Y)}{\sqrt{\Var X\,\Var Y}}=\E\Bigl[\frac{X-\mu_X}{\sigma_X}\cdot\frac{Y-\mu_Y}{\sigma_Y}\Bigr]
 \]
@@ -553,15 +696,15 @@ $\Cov(X,Y)=\E[(X-\E X)(Y-\E Y)]=\E[XY]-\E X\,\E Y$ (so $\Cov(X,X)=\Var X$) and
 \end{definition}
 Covariance is bilinear; by Cauchy--Schwarz $|\Corr(X,Y)|\le1$, with equality iff $Y=a+bX$ almost surely.
 Independent variables are uncorrelated, but not conversely: correlation detects only \emph{linear}
-dependence \ts{24}{4}{1:06:58}. Example: $X\sim N(0,1)$ and $Y=X^2$ have $\Cov(X,Y)=\E X^3=0$, although $Y$ is a
+dependence \ts{24}{4}{1:06:58}. Example: $X\sim N(0,1)$ and $Y=X^2$ have $\Cov(X,Y)=\E[X^3]=0$, although $Y$ is a
 function of $X$.
 
 \begin{proposition}[Mean and variance of a linear combination]\label{ch03:prop-portvar}
-Let $\bm X=(X_1,\dots,X_n)\T$ have mean vector $\bm\mu=\E\bm X$ and covariance matrix
+Let $\bm X=(X_1,\dots,X_n)\T$ have mean vector $\bm\mu=\E[\bm X]$ and covariance matrix
 $\Sigma=\E[(\bm X-\bm\mu)(\bm X-\bm\mu)\T]$, $\sigma_{ij}=\Cov(X_i,X_j)$ \ts{24}{4}{1:07:59}. For a constant $\bm a\in\R^n$ and
 $Y=\bm a\T\bm X$ \ts{24}{4}{1:09:07},
 \[
-  \E Y=\bm a\T\bm\mu,\qquad
+  \E[Y]=\bm a\T\bm\mu,\qquad
   \Var Y=\bm a\T\Sigma\,\bm a=\sum_ia_i^2\Var X_i+2\sum_{i<j}a_ia_j\Cov(X_i,X_j) .
 \]
 More generally $\E[B\bm X+\bm b]=B\bm\mu+\bm b$ and $\Cov(B\bm X+\bm b)=B\Sigma B\T$.
@@ -603,14 +746,14 @@ $\Var(Y\mid X)=\E[(Y-m(X))^2\mid X]$. (Discrete case: replace densities by pmfs.
 \begin{proposition}[Properties]\label{ch03:prop-condexp}
 For integrable $Y$ and functions $g$:
 \begin{enumerate}[(i)]
-  \item tower property (law of iterated expectations): $\E\bigl[\E[Y\mid X]\bigr]=\E Y$;
-  \item taking out what is known: $\E[g(X)Y\mid X]=g(X)\,\E[Y\mid X]$; if $X,Y$ are independent, $\E[Y\mid X]=\E Y$;
+  \item tower property (law of iterated expectations): $\E\bigl[\E[Y\mid X]\bigr]=\E[Y]$;
+  \item taking out what is known: $\E[g(X)Y\mid X]=g(X)\,\E[Y\mid X]$; if $X,Y$ are independent, $\E[Y\mid X]=\E[Y]$;
   \item best prediction: $\E[Y\mid X]$ minimises $\E[(Y-h(X))^2]$ over all functions $h$;
   \item law of total variance: $\Var Y=\E\bigl[\Var(Y\mid X)\bigr]+\Var\bigl(\E[Y\mid X]\bigr)$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(i) $\int m(x)f_X(x)\dd x=\iint y\,f_{X,Y}(x,y)\dd y\dd x=\E Y$.
+(i) $\int m(x)f_X(x)\dd x=\iint y\,f_{X,Y}(x,y)\dd y\dd x=\E[Y]$.
 
 (ii) Given $X=x$, $g(X)=g(x)$ is a constant; under
 independence $f_{Y|X}=f_Y$.
@@ -619,7 +762,7 @@ independence $f_{Y|X}=f_Y$.
 cross term is $2\E\bigl[(m-h)(X)\,\E[Y-m(X)\mid X]\bigr]=0$.
 
 (iv) Apply the same decomposition to
-$Y-\E Y=(Y-m)+(m-\E Y)$: the cross term vanishes, $\E[(Y-m)^2]=\E[\Var(Y\mid X)]$ by (i), and $\E m(X)=\E Y$.
+$Y-\E[Y]=(Y-m)+(m-\E[Y])$: the cross term vanishes, $\E[(Y-m)^2]=\E[\Var(Y\mid X)]$ by (i), and $\E[m(X)]=\E[Y]$.
 \end{proof}
 
 \begin{intuition}[Conditional expectation is a projection]
@@ -636,7 +779,7 @@ bounded $\mathcal G$-measurable $W$: this is the object in the definition of a m
 
 \begin{definition}[Multivariate normal]
 $\bm X\in\R^n$ is \emph{multivariate normal}, $\bm X\sim N_n(\bm\mu,\Sigma)$, if every linear combination $\bm a\T\bm X$ is
-normal (a constant counting as $N(c,0)$); then $\bm\mu=\E\bm X$ and $\Sigma=\Cov\bm X$. Components of such a vector are
+normal (a constant counting as $N(c,0)$); then $\bm\mu=\E[\bm X]$ and $\Sigma=\Cov\bm X$. Components of such a vector are
 called \emph{jointly normal}.
 \end{definition}
 
@@ -654,7 +797,7 @@ called \emph{jointly normal}.
 (i) $\bm t\T\bm X\sim N(\bm t\T\bm\mu,\bm t\T\Sigma\bm t)$; evaluate \eqref{ch03:eq-normalmgf} at $1$. Conversely this MGF restricted to
 $\bm t=s\bm a$ is the MGF of $N(\bm a\T\bm\mu,\bm a\T\Sigma\bm a)$.
 
-(ii) $\E e^{\bm t\T(\bm\mu+A\bm Z)}=e^{\bm t\T\bm\mu}\prod_i\E e^{(A\T\bm t)_iZ_i}
+(ii) $\E[e^{\bm t\T(\bm\mu+A\bm Z)}]=e^{\bm t\T\bm\mu}\prod_i\E[e^{(A\T\bm t)_iZ_i}]
 =e^{\bm t\T\bm\mu+\frac12|A\T\bm t|^2}$, and $|A\T\bm t|^2=\bm t\T\Sigma\bm t$; conclude by the $n$-dimensional version of
 \cref{ch03:thm-mgf}.
 
@@ -701,7 +844,7 @@ $(\bm X-\bm\mu)\T\Sigma^{-1}(\bm X-\bm\mu)=|\bm Z|^2$, this quadratic form has t
 
 \begin{remark}[Normal marginals are not enough; not discussed in class]
 Let $Z\sim N(0,1)$ and $S=\pm1$ with probability $\frac12$ each, independent of $Z$, and $W=SZ$. Then $W\sim N(0,1)$ and
-$\Cov(Z,W)=\E S\,\E Z^2=0$, yet $Z$ and $W$ are dependent ($|W|=|Z|$) and $Z+W=0$ with probability $\frac12$, so
+$\Cov(Z,W)=\E[S]\,\E[Z^2]=0$, yet $Z$ and $W$ are dependent ($|W|=|Z|$) and $Z+W=0$ with probability $\frac12$, so
 $(Z,W)$ is not jointly normal. Joint normality is a strong assumption about \emph{dependence}, and in
 particular it makes simultaneous extreme moves of several assets very unlikely.
 \end{remark}
@@ -715,7 +858,7 @@ This section is the probabilistic part of PCA (slides 26--32 of \file{lec04_1}, 
 S.~Andreev's lecture, are in \cref{ch:pca}.
 \end{coursenote}
 
-Let $\bm x\in\R^m$ have $\E\bm x=\bm\alpha$ and $\Cov\bm x=\Sigma$ \ts{24}{4}{1:14:27}. $\Sigma$ is symmetric and positive
+Let $\bm x\in\R^m$ have $\E[\bm x]=\bm\alpha$ and $\Cov\bm x=\Sigma$ \ts{24}{4}{1:14:27}. $\Sigma$ is symmetric and positive
 semi-definite \ts{24}{4}{1:15:32}, so by \cref{thm:spectral}
 \begin{align*}
   \Sigma&=\Gamma\Lambda\Gamma\T=\sum_{i=1}^m\lambda_i\bm\gamma_i\bm\gamma_i\T,\\
@@ -731,7 +874,7 @@ $\bm p=\Gamma\T(\bm x-\bm\alpha)$, i.e.\ $p_i=\bm\gamma_i\T(\bm x-\bm\alpha)$ \t
 \begin{proposition}\label{ch03:prop-pca}
 \leavevmode
 \begin{enumerate}[(i)]
-  \item $\E\bm p=\bm0$ and $\Cov\bm p=\Gamma\T\Sigma\Gamma=\Lambda$: the PC variables are uncorrelated, with variances
+  \item $\E[\bm p]=\bm0$ and $\Cov\bm p=\Gamma\T\Sigma\Gamma=\Lambda$: the PC variables are uncorrelated, with variances
         $\lambda_1\ge\dots\ge\lambda_m$ \ts{24}{4}{1:18:39}; and $\bm x=\bm\alpha+\Gamma\bm p$.
   \item Total variance: $\sum_i\Var(x_i)=\tr\Sigma=\tr(\Lambda\Gamma\T\Gamma)=\sum_k\lambda_k=\sum_k\Var(p_k)$ \ts{24}{5}{21:04}.
   \item Variational characterisation \ts{24}{5}{17:53}: $\bm\gamma_1$ maximises $\Var(\bm w\T\bm x)=\bm w\T\Sigma\bm w$ over unit vectors
@@ -791,7 +934,7 @@ $\chi^2_1=\mathrm{Gamma}(\frac12,\frac12)$ and $\chi^2_n=\mathrm{Gamma}(\frac n2
   f_U(u)=\frac{u^{-1/2}e^{-u/2}}{\sqrt{2\pi}},\qquad
   f_V(v)=\frac{v^{n/2-1}e^{-v/2}}{2^{n/2}\Gamma(n/2)},\qquad M_V(t)=(1-2t)^{-n/2}\ \ (t<\tfrac12),
 \]
-$\E V=n$, $\Var V=2n$.
+$\E[V]=n$, $\Var V=2n$.
 \end{proposition}
 \begin{proof}
 $F_U(u)=\Prob(-\sqrt u\le Z\le\sqrt u)=2\Phi(\sqrt u)-1$, so $f_U(u)=\phi(\sqrt u)/\sqrt u$ (the map $z\mapsto z^2$ is two-to-one,
@@ -819,7 +962,7 @@ Properties:
         and $t_r\to N(0,1)$ as $r\to\infty$ because $U/r\to1$.
   \item $t_r$ has heavier tails than the normal: $Z$ is divided by a random factor that is only \emph{around} $1$
         \ts{24}{5}{24:13}.
-  \item $\E F=\E[W/m]\,\E[n/V]=n/(n-2)$ for $n>2$ (using $\E[1/V]=1/(n-2)$), and $T^2\sim F_{1,r}$ if $T\sim t_r$.
+  \item $\E[F]=\E[W/m]\,\E[n/V]=n/(n-2)$ for $n>2$ (using $\E[1/V]=1/(n-2)$), and $T^2\sim F_{1,r}$ if $T\sim t_r$.
   \item $F$ statistics compare two independent variance estimates (analysis of variance, regression $F$ tests)
         \ts{24}{5}{25:16}. When the null hypothesis is false, the numerator is a \emph{non-central} $\chi^2$ and the
         statistic has a non-central $F$ law, which governs the power of the test \ts{24}{5}{26:16}.
@@ -853,9 +996,9 @@ For daily returns with 252 trading days a year, a 4-standard-deviation day happe
 63~years under the normal model and about once a year under the $t_5$ model.
 
 \begin{proposition}[Normal variance mixtures; not discussed in class]\label{ch03:prop-mixture}
-Let $X\mid V\sim N(\mu,\sigma^2V)$ with $V>0$ random and $\E V^2<\infty$. Then $\E X=\mu$, $\Var X=\sigma^2\E V$ and
+Let $X\mid V\sim N(\mu,\sigma^2V)$ with $V>0$ random and $\E[V^2]<\infty$. Then $\E[X]=\mu$, $\Var X=\sigma^2\E[V]$ and
 \[
-  \kappa_X=3\,\frac{\E[V^2]}{(\E V)^2}=3\Bigl(1+\frac{\Var V}{(\E V)^2}\Bigr)\ \ge\ 3,
+  \kappa_X=3\,\frac{\E[V^2]}{(\E[V])^2}=3\Bigl(1+\frac{\Var V}{(\E[V])^2}\Bigr)\ \ge\ 3,
 \]
 with equality iff $V$ is constant.
 \end{proposition}
@@ -891,7 +1034,7 @@ convergence implies convergence in probability, which implies convergence in dis
 \end{definition}
 
 \begin{lemma}[Markov and Chebyshev inequalities]\label{ch03:lem-cheb}
-For $a>0$: $\Prob(|X|\ge a)\le\E|X|/a$. If $\Var X=\sigma^2<\infty$ and $\varepsilon>0$:
+For $a>0$: $\Prob(|X|\ge a)\le\E[|X|]/a$. If $\Var X=\sigma^2<\infty$ and $\varepsilon>0$:
 $\Prob(|X-\mu|\ge\varepsilon)\le\sigma^2/\varepsilon^2$.
 \end{lemma}
 \begin{proof}
@@ -917,16 +1060,16 @@ preserves the inequality \ts{24}{5}{29:29}\ts{24}{5}{30:30}.
 \end{axis}
 \end{tikzpicture}
 \caption{The picture behind Chebyshev's inequality, as drawn in class \ts{24}{5}{29:29}: with $d=\bar X_n-\mu$,
-$d^2\ge\varepsilon^2\ind\{|d|\ge\varepsilon\}$, so $\Var\bar X_n=\E d^2\ge\varepsilon^2\Prob(|d|\ge\varepsilon)$.}\label{ch03:fig-cheb}
+$d^2\ge\varepsilon^2\ind\{|d|\ge\varepsilon\}$, so $\Var\bar X_n=\E[d^2]\ge\varepsilon^2\Prob(|d|\ge\varepsilon)$.}\label{ch03:fig-cheb}
 \end{figure}
 
 \begin{theorem}[Weak law of large numbers]\label{ch03:thm-wlln}
-Let $X_1,X_2,\dots$ be i.i.d.\ with $\E X_i=\mu$ and $\Var X_i=\sigma^2<\infty$, and $\bar X_n=\frac1n(X_1+\dots+X_n)$. Then
+Let $X_1,X_2,\dots$ be i.i.d.\ with $\E[X_i]=\mu$ and $\Var X_i=\sigma^2<\infty$, and $\bar X_n=\frac1n(X_1+\dots+X_n)$. Then
 $\bar X_n\to\mu$ in probability \ts{24}{5}{27:20}\ts{13}{3}{49:04}:
 $\Prob(|\bar X_n-\mu|>\varepsilon)\le\dfrac{\sigma^2}{n\varepsilon^2}\to0$.
 \end{theorem}
 \begin{proof}
-$\E\bar X_n=\mu$ by linearity. $\Var\bar X_n=\frac1{n^2}\sum_{i,j}\Cov(X_i,X_j)=\frac{\sigma^2}n$, since the cross terms vanish
+$\E[\bar X_n]=\mu$ by linearity. $\Var\bar X_n=\frac1{n^2}\sum_{i,j}\Cov(X_i,X_j)=\frac{\sigma^2}n$, since the cross terms vanish
 \ts{13}{3}{58:43}. Apply \cref{ch03:lem-cheb} \ts{24}{5}{28:28}.
 \end{proof}
 
@@ -934,7 +1077,7 @@ $\E\bar X_n=\mu$ by linearity. $\Var\bar X_n=\frac1{n^2}\sum_{i,j}\Cov(X_i,X_j)=
 \leavevmode
 \begin{itemize}
   \item The proof only uses that the $X_i$ are pairwise \emph{uncorrelated} with equal means and variances.
-  \item The conclusion holds with only $\E|X_i|<\infty$ (Khinchin's WLLN) \ts{24}{5}{31:38}, and the \emph{strong}
+  \item The conclusion holds with only $\E[|X_i|]<\infty$ (Khinchin's WLLN) \ts{24}{5}{31:38}, and the \emph{strong}
         law gives $\bar X_n\to\mu$ almost surely under the same assumption \ts{13}{3}{1:02:53}.
   \item Without a finite mean it fails: the mean of $n$ i.i.d.\ Cauchy variables is again Cauchy (\cref{ch03:ex-cauchy}).
 \end{itemize}
@@ -978,7 +1121,7 @@ By independence the expectation of the product is the product of expectations \t
 \[
   M_{Z_n}(t)=\E\Bigl[\prod_{i=1}^ne^{tX_i/\sqrt n}\Bigr]=M\Bigl(\frac{t}{\sqrt n}\Bigr)^n .
 \]
-$M$ is smooth near $0$ with $M(0)=1$, $M'(0)=\E X=0$, $M''(0)=\E X^2=\sigma^2$, so by Taylor
+$M$ is smooth near $0$ with $M(0)=1$, $M'(0)=\E[X]=0$, $M''(0)=\E[X^2]=\sigma^2$, so by Taylor
 $M(s)=1+\frac12\sigma^2s^2+o(s^2)$ as $s\to0$ \ts{24}{5}{35:54}. For fixed $t$,
 \[
   \ln M_{Z_n}(t)=n\ln\Bigl(1+\frac{\sigma^2t^2}{2n}+o\bigl(\tfrac1n\bigr)\Bigr)\ \longrightarrow\ \frac{\sigma^2t^2}{2},
@@ -1050,7 +1193,7 @@ The agent buys $X$ shares at $t_0$ ($X<0$: sells), financed with the risk-free a
 \paragraph{Expected utility.} The agent chooses $X$ to maximise $\E[U(\tilde w)]$ for a utility function with
 $U'>0$ \ts{24}{5}{46:37} (more wealth is better) and $U''<0$ \ts{24}{5}{47:37} (decreasing marginal utility). Why not
 simply $U(w)=w$ \ts{24}{5}{48:39}? Because then there is no penalty for risk \ts{24}{5}{49:47}: with $U$ concave,
-Jensen's inequality gives $\E U(\tilde w)\le U(\E\tilde w)$, so the agent prefers a sure amount to a gamble with the
+Jensen's inequality gives $\E[U(\tilde w)]\le U(\E[\tilde w])$, so the agent prefers a sure amount to a gamble with the
 same mean. The ratio $A(w)=-U''(w)/U'(w)$ is the (Arrow--Pratt) coefficient of absolute risk aversion.
 
 \begin{coursenote}[Shannon, Kelly and the log-utility debate]
@@ -1063,7 +1206,7 @@ C.~Shannon, E.~Thorp); see W.~Poundstone, \emph{Fortune's Formula} (2005). Log u
 \subsection{Stein's lemma}
 \begin{lemma}[Stein]\label{ch03:lem-stein}
 Let $Y$ and $Y^*$ be jointly normal with $Y\sim N(\mu,\sigma^2)$, and let $g$ be differentiable with
-$\E|g(Y)(Y-\mu)|<\infty$ and $\E|g'(Y)|<\infty$. Then \ts{24}{5}{50:58}\ts{24}{5}{52:01}
+$\E[|g(Y)(Y-\mu)|]<\infty$ and $\E[|g'(Y)|]<\infty$. Then \ts{24}{5}{50:58}\ts{24}{5}{52:01}
 \[
   \E[g(Y)(Y-\mu)]=\sigma^2\,\E[g'(Y)]\qquad\text{and}\qquad \Cov\bigl(g(Y),Y^*\bigr)=\E[g'(Y)]\,\Cov(Y,Y^*).
 \]
@@ -1073,7 +1216,7 @@ by parts, the second reduces to the first through the decomposition \eqref{ch03:
 
 \begin{intuition}[Gaussian integration by parts]
 For a centred Gaussian, $\E[Y\,g(Y)]=\sigma^2\E[g'(Y)]$ is the identity behind Wick's theorem and the
-Schwinger--Dyson equations: with $g(y)=y^{k-1}$ it gives $\E Y^k=(k-1)\sigma^2\E Y^{k-2}$, hence $\E Y^4=3\sigma^4$. The second
+Schwinger--Dyson equations: with $g(y)=y^{k-1}$ it gives $\E[Y^k]=(k-1)\sigma^2\E[Y^{k-2}]$, hence $\E[Y^4]=3\sigma^4$. The second
 form says that the covariance of a nonlinear function $g(Y)$ with any jointly Gaussian $Y^*$ is that of its
 linearisation, $g'\cdot\Cov(Y,Y^*)$, with the slope $g'$ averaged over the law of $Y$. In the pricing argument
 $g=U'$: it converts ``covariance of marginal utility with the payoff'' into ``covariance of wealth with the
@@ -1092,7 +1235,7 @@ condition is
    &=\Cov\bigl(U'(\tilde w),\tilde F\bigr)
    +\E[U'(\tilde w)]\bigl(\mu-p_a(1+r_f)\bigr),
 \end{align*}
-using $\E[AB]=\Cov(A,B)+\E A\,\E B$ and that a constant shift does not
+using $\E[AB]=\Cov(A,B)+\E[A]\,\E[B]$ and that a constant shift does not
 change a covariance \ts{24}{5}{55:19}. Now $\tilde w$ is normal (affine
 in $\tilde F$), so \cref{ch03:lem-stein} with $g=U'$, $Y=\tilde w$,
 $Y^*=\tilde F$ gives
@@ -1102,7 +1245,7 @@ $Y^*=\tilde F$ gives
 \end{align*}
 \ts{24}{5}{56:22}\ts{24}{5}{57:28}. Solving for $p_a$:
 \begin{equation}\label{ch03:eq-price1}
-  p_a=\frac{1}{1+r_f}\Bigl[\E\tilde F
+  p_a=\frac{1}{1+r_f}\Bigl[\E[\tilde F]
   +\frac{\E[U''(\tilde w)]}{\E[U'(\tilde w)]}\,(Q_a+X)\Var(\tilde F)\Bigr].
 \end{equation}
 Since $U''<0<U'$ the second term is negative: the price is the
@@ -1113,7 +1256,7 @@ discounted expected payoff \emph{minus a risk adjustment}
 $A>0$: $U'(w)=Ae^{-Aw}>0$ and $U''(w)=-A^2e^{-Aw}=-A\,U'(w)$, so the
 ratio in \eqref{ch03:eq-price1} is the constant $-A$ and
 \begin{equation}\label{ch03:eq-cara}
-  p_a=\frac{1}{1+r_f}\Bigl[\E\tilde F-A\,(Q_a+X)\Var(\tilde F)\Bigr].
+  p_a=\frac{1}{1+r_f}\Bigl[\E[\tilde F]-A\,(Q_a+X)\Var(\tilde F)\Bigr].
 \end{equation}
 The risk adjustment is proportional to the risk aversion $A$, to the
 position held $Q_a+X$ and to the variance of the payoff
@@ -1126,16 +1269,16 @@ derivation uses, $U''/U'=-A$, and hence \eqref{ch03:eq-cara}, are correct.
 \end{coursenote}
 
 \begin{remark}[CARA and normal = mean--variance; not discussed in class]\label{ch03:rem-meanvar}
-Since $-A\tilde w$ is normal, \eqref{ch03:eq-normalmgf} at $t=1$ gives $\E[U(\tilde w)]=c-\exp\bigl(-A\,\E\tilde w+\frac{A^2}{2}\Var\tilde w\bigr)$.
+Since $-A\tilde w$ is normal, \eqref{ch03:eq-normalmgf} at $t=1$ gives $\E[U(\tilde w)]=c-\exp\bigl(-A\,\E[\tilde w]+\frac{A^2}{2}\Var\tilde w\bigr)$.
 Maximising expected utility is therefore equivalent to maximising the \emph{certainty equivalent}
-$\E\tilde w-\frac A2\Var\tilde w$, a mean--variance criterion (\cref{ch:portfolio}). Its maximiser is the demand
-$Q_a+X=\bigl(\E\tilde F-(1+r_f)p_a\bigr)/(A\sigma^2)$, and \eqref{ch03:eq-cara} is this demand curve solved for the price:
+$\E[\tilde w]-\frac A2\Var\tilde w$, a mean--variance criterion (\cref{ch:portfolio}). Its maximiser is the demand
+$Q_a+X=\bigl(\E[\tilde F]-(1+r_f)p_a\bigr)/(A\sigma^2)$, and \eqref{ch03:eq-cara} is this demand curve solved for the price:
 the price at which the agent is content to hold $Q_a+X$ shares.
 \end{remark}
 
 \paragraph{Expected return.} With $\tilde r=(\tilde F-p_a)/p_a$, \eqref{ch03:eq-price1} gives
 \[
-  \E\tilde r=r_f-\frac{\E[U''(\tilde w)]}{\E[U'(\tilde w)]}\,\frac{(Q_a+X)\Var(\tilde F)}{p_a}
+  \E[\tilde r]=r_f-\frac{\E[U''(\tilde w)]}{\E[U'(\tilde w)]}\,\frac{(Q_a+X)\Var(\tilde F)}{p_a}
   \ \overset{\text{CARA}}{=}\ r_f+A\,\frac{(Q_a+X)\Var(\tilde F)}{p_a}:
 \]
 the risk-free rate plus a risk premium that grows with risk aversion, position and variance.
@@ -1146,13 +1289,13 @@ $\tilde{\bm F}\sim N_n(\bm\mu_F,\Sigma_F)$ are jointly normal \ts{24}{5}{1:01:39
 $\tilde w=(\bm Q+\bm X)\T\tilde{\bm F}+(Q_f-\bm X\T\bm p)(1+r_f)$, again normal. The $n$ first-order conditions are handled
 exactly as before, with Stein's lemma applied to the jointly normal pair $(\tilde w,\tilde F_i)$:
 \[
-  p_i=\frac{1}{1+r_f}\Bigl[\E\tilde F_i+\frac{\E[U''(\tilde w)]}{\E[U'(\tilde w)]}\Cov(\tilde w,\tilde F_i)\Bigr],\qquad
+  p_i=\frac{1}{1+r_f}\Bigl[\E[\tilde F_i]+\frac{\E[U''(\tilde w)]}{\E[U'(\tilde w)]}\Cov(\tilde w,\tilde F_i)\Bigr],\qquad
   \Cov(\tilde w,\tilde F_i)=\bigl[\Sigma_F(\bm Q+\bm X)\bigr]_i .
 \]
 For CARA, $\bm p=\bigl[\bm\mu_F-A\,\Sigma_F(\bm Q+\bm X)\bigr]/(1+r_f)$. With $\tilde r_i=(\tilde F_i-p_i)/p_i$, so that
 $\Cov(\tilde w,\tilde r_i)=\Cov(\tilde w,\tilde F_i)/p_i$,
 \[
-  \E\tilde r_i=r_f-\frac{\E[U''(\tilde w)]}{\E[U'(\tilde w)]}\Cov(\tilde w,\tilde r_i)\ \overset{\text{CARA}}{=}\ r_f+A\Cov(\tilde w,\tilde r_i)
+  \E[\tilde r_i]=r_f-\frac{\E[U''(\tilde w)]}{\E[U'(\tilde w)]}\Cov(\tilde w,\tilde r_i)\ \overset{\text{CARA}}{=}\ r_f+A\Cov(\tilde w,\tilde r_i)
 \]
 \ts{24}{5}{1:03:48}. The premium of asset $i$ is set by its covariance with the agent's \emph{total} wealth, not by its
 own variance: an asset that hedges wealth ($\Cov<0$) is expected to earn less than $r_f$.
@@ -1172,23 +1315,23 @@ $\tilde w=\tilde F_m+(Q_f-p_m)(1+r_f)=p_m\tilde r_m+\text{const}$, hence $\Cov(\
 \begin{theorem}[CAPM, security market line]\label{ch03:thm-capm}
 In this equilibrium, with $\beta_i=\Cov(\tilde r_i,\tilde r_m)/\Var(\tilde r_m)$,
 \[
-  \E\tilde r_i=r_f+\beta_i\bigl(\E\tilde r_m-r_f\bigr),\qquad
-  p_i=\frac{\E\tilde F_i}{1+r_f+\beta_i\bigl(\E\tilde r_m-r_f\bigr)} .
+  \E[\tilde r_i]=r_f+\beta_i\bigl(\E[\tilde r_m]-r_f\bigr),\qquad
+  p_i=\frac{\E[\tilde F_i]}{1+r_f+\beta_i\bigl(\E[\tilde r_m]-r_f\bigr)} .
 \]
 \end{theorem}
 \begin{proof}
 Let $\theta=-\E[U''(\tilde w)]/\E[U'(\tilde w)]>0$. Averaging the expected returns with weights $\omega_i$
-\ts{24}{5}{1:07:04}: $\E\tilde r_m=r_f+\theta\Cov(\tilde w,\tilde r_m)=r_f+\theta\,p_m\Var(\tilde r_m)$, so
-$\theta=(\E\tilde r_m-r_f)/(p_m\Var\tilde r_m)$. Then for each asset
-$\E\tilde r_i-r_f=\theta\Cov(\tilde w,\tilde r_i)=\theta\,p_m\Cov(\tilde r_m,\tilde r_i)=\beta_i(\E\tilde r_m-r_f)$ \ts{24}{5}{1:08:10}. Finally
-$\E\tilde r_i=\E\tilde F_i/p_i-1$ gives the price \ts{24}{5}{1:10:18}.
+\ts{24}{5}{1:07:04}: $\E[\tilde r_m]=r_f+\theta\Cov(\tilde w,\tilde r_m)=r_f+\theta\,p_m\Var(\tilde r_m)$, so
+$\theta=(\E[\tilde r_m]-r_f)/(p_m\Var\tilde r_m)$. Then for each asset
+$\E[\tilde r_i]-r_f=\theta\Cov(\tilde w,\tilde r_i)=\theta\,p_m\Cov(\tilde r_m,\tilde r_i)=\beta_i(\E[\tilde r_m]-r_f)$ \ts{24}{5}{1:08:10}. Finally
+$\E[\tilde r_i]=\E[\tilde F_i]/p_i-1$ gives the price \ts{24}{5}{1:10:18}.
 \end{proof}
 
 \begin{figure}[ht]
 \centering
 \begin{tikzpicture}
 \begin{axis}[width=0.62\linewidth,height=5cm,axis lines=left,xmin=0,xmax=2.1,ymin=0,ymax=15,
-  xlabel={$\beta_i$},ylabel={$\E\tilde r_i$ (\%)},xtick={0,0.5,1,1.5,2},ytick={2,8,14},
+  xlabel={$\beta_i$},ylabel={$\E[\tilde r_i]$ (\%)},xtick={0,0.5,1,1.5,2},ytick={2,8,14},
   tick label style={font=\small},label style={font=\small}]
   \addplot[very thick,defcol,domain=0:2,samples=2] {2+6*x};
   \addplot[only marks,mark=*,mark size=2pt,thmcol] coordinates {(0,2) (1,8)};
@@ -1199,7 +1342,7 @@ $\E\tilde r_i=\E\tilde F_i/p_i-1$ gives the price \ts{24}{5}{1:10:18}.
   \node[font=\scriptsize,anchor=south,intcol] at (axis cs:0.6,8.3) {$\alpha>0$};
 \end{axis}
 \end{tikzpicture}
-\caption{Security market line with illustrative numbers $r_f=2\%$, $\E\tilde r_m=8\%$. In the CAPM every asset lies
+\caption{Security market line with illustrative numbers $r_f=2\%$, $\E[\tilde r_m]=8\%$. In the CAPM every asset lies
 on the line; an asset above it (open dot) would have a positive ``alpha''.}\label{ch03:fig-sml}
 \end{figure}
 
@@ -1229,18 +1372,18 @@ equivalent. A Lintner paper was distributed on Canvas; the OCW Week~3 page lists
 \begin{align*}
 &\text{PIT:} && F_X(X)\sim U(0,1)\ (F_X\text{ continuous}),\quad F^{-1}(U)\sim F\\
 &\text{Change of variables:} && f_Y(y)=f_X(h(y))\,|h'(y)|,\quad h=g^{-1}\\
-&\text{Lognormal:} && f_Y(y)=\tfrac{1}{y\sigma\sqrt{2\pi}}e^{-(\ln y-\mu)^2/(2\sigma^2)},\quad \E Y^k=e^{k\mu+k^2\sigma^2/2}\\
-&\text{Call payoff:} && \E(X-K)^+=\textstyle\int_K^\infty[1-F(x)]\dd x\\
+&\text{Lognormal:} && f_Y(y)=\tfrac{1}{y\sigma\sqrt{2\pi}}e^{-(\ln y-\mu)^2/(2\sigma^2)},\quad \E[Y^k]=e^{k\mu+k^2\sigma^2/2}\\
+&\text{Call payoff:} && \E[(X-K)^+]=\textstyle\int_K^\infty[1-F(x)]\dd x\\
 &\quad\text{normal:} && (\mu-K)\Phi(d)+\sigma\phi(d),\quad d=(\mu-K)/\sigma\\
 &\quad\text{lognormal:} && e^{\mu+\sigma^2/2}\Phi(d+\sigma)-K\Phi(d),\quad d=(\mu-\ln K)/\sigma\\
 &\text{MGFs:} && M_{a+bX}(t)=e^{at}M_X(bt),\quad N(\mu,\sigma^2)\!:e^{\mu t+\sigma^2t^2/2},\quad \chi^2_n\!:(1-2t)^{-n/2}\\
-&\text{Portfolio:} && \E\,\bm a\T\bm X=\bm a\T\bm\mu,\quad \Var\bm a\T\bm X=\bm a\T\Sigma\bm a\\
+&\text{Portfolio:} && \E[\bm a]\T\bm X=\bm a\T\bm\mu,\quad \Var\bm a\T\bm X=\bm a\T\Sigma\bm a\\
 &\text{Conditional normal:} && \E[Y\mid X]=\mu_Y+\rho\tfrac{\tau}{\sigma}(X-\mu_X),\quad \Var(Y\mid X)=(1-\rho^2)\tau^2\\
 &\text{PCA:} && \bm p=\Gamma\T(\bm x-\bm\alpha),\ \Cov\bm p=\Lambda,\ \tr\Sigma=\textstyle\sum\lambda_k\\
 &\text{Chebyshev, CLT:} && \Prob(|\bar X_n-\mu|>\varepsilon)\le\tfrac{\sigma^2}{n\varepsilon^2},\quad \sqrt n(\bar X_n-\mu)\to N(0,\sigma^2)\\
 &\text{Stein:} && \Cov(g(Y),Y^*)=\E[g'(Y)]\Cov(Y,Y^*)\\
-&\text{CARA price:} && p_a=\bigl[\E\tilde F-A(Q_a+X)\Var\tilde F\bigr]/(1+r_f)\\
-&\text{CAPM:} && \E\tilde r_i=r_f+\beta_i(\E\tilde r_m-r_f),\quad \beta_i=\Cov(\tilde r_i,\tilde r_m)/\Var\tilde r_m
+&\text{CARA price:} && p_a=\bigl[\E[\tilde F]-A(Q_a+X)\Var\tilde F\bigr]/(1+r_f)\\
+&\text{CAPM:} && \E[\tilde r_i]=r_f+\beta_i(\E[\tilde r_m]-r_f),\quad \beta_i=\Cov(\tilde r_i,\tilde r_m)/\Var\tilde r_m
 \end{align*}
 \end{keyformulas}
 
@@ -1253,7 +1396,7 @@ equivalent. A Lintner paper was distributed on Canvas; the OCW Week~3 page lists
 \begin{exercise}[PS2 (2024), Problem 2: lognormal distribution]\label{ch03:ex-ps2}
 Let $X$ be lognormal$(\mu,\sigma^2)$, i.e.\ $Y=\ln X\sim N(\mu,\sigma^2)$.
 \begin{enumerate}[(a)]
-  \item Prove that $\mu_*=\E X=e^{\mu+\sigma^2/2}$.
+  \item Prove that $\mu_*=\E[X]=e^{\mu+\sigma^2/2}$.
   \item Prove that $\sigma_*^2=\Var X=e^{2\mu+2\sigma^2}-e^{2\mu+\sigma^2}=\mu_*^2\,(e^{\sigma^2}-1)$.
       For (a) and (b) use the MGF of the normal law; no integrals are needed.
   \item A stock has price $S_0$ at $t=0$ and $S_0X$ at time $t$ (years), where $X$ is lognormal with $\mu=t\ln1.15$
@@ -1278,26 +1421,26 @@ correlation $\rho$, $Y=a+bX+\varepsilon$ with $a=\mu_Y-b\mu_X$, $b=\rho\tau/\sig
 (From A.~Gron, B.~J{\o}rgensen, N.~Polson, \emph{Optimal portfolio choice and stochastic volatility}, Applied
 Stochastic Models in Business and Industry, 2012; cited as a 2011 working paper in the problem set.)
 $X$ has \emph{stochastic volatility} if $X\mid V\sim N(\mu,\sigma^2V)$ with $V>0$ random with density $p(V)$; the
-law of $X$ is $p(X)=\int_0^\infty p(X\mid V)p(V)\dd V$ and has heavy tails. Assume $0<\E V<\infty$ and define the
-\emph{size-biased} density $q(V)=V\,p(V)/\E V$ and the induced $q(X)=\int_0^\infty p(X\mid V)q(V)\dd V$. The
+law of $X$ is $p(X)=\int_0^\infty p(X\mid V)p(V)\dd V$ and has heavy tails. Assume $0<\E[V]<\infty$ and define the
+\emph{size-biased} density $q(V)=V\,p(V)/\E[V]$ and the induced $q(X)=\int_0^\infty p(X\mid V)q(V)\dd V$. The
 authors' theorem states
 \[
   \Cov\bigl(g(X),X\bigr)=\E^Q[g'(X)]\,\Var X,\qquad(**)
 \]
 with $\E^Q$ the expectation under the measure induced by $q(V)$. Their proof reads
 \begin{align*}
-  \Cov(g(X),X)&\overset{(1)}{=}\E\bigl[g(X)(X-\E X)\bigr]\\
-  &\overset{(2)}{=}\E_V\bigl\{\E_{X|V}[g(X)(X-\E X)]\bigr\}\\
-  &\overset{(3)}{=}\E_V\bigl\{\E_{X|V}[g(X)(X-\E[X\mid V])]\bigr\}.
+  \Cov(g(X),X)&\overset{(1)}{=}\E\bigl[g(X)(X-\E[X])\bigr]\\
+  &\overset{(2)}{=}\E_V\bigl[\E_{X|V}[g(X)(X-\E[X])]\bigr]\\
+  &\overset{(3)}{=}\E_V\bigl[\E_{X|V}[g(X)(X-\E[X\mid V])]\bigr].
 \end{align*}
 \begin{enumerate}[(a)]
   \item Show that $q$ is a probability density on $(0,\infty)$.
   \item Prove (1).
   \item Does (2) follow from the law of
       iterated expectations?
-  \item Prove (3) (compare $\E[X\mid V]$ and $\E X$).
+  \item Prove (3) (compare $\E[X\mid V]$ and $\E[X]$).
   \item Applying Stein's lemma conditionally
-      on $V$ they obtain $\Cov(g(X),X)=\E_V\{\E_{X|V}[g'(X)]\,\sigma^2V\}=\E\bigl\{g'(X)\tfrac{V}{\E V}\bigr\}\sigma^2\E V$ $(*)$. Does $(*)$
+      on $V$ they obtain $\Cov(g(X),X)=\E_V\{\E_{X|V}[g'(X)]\,\sigma^2V\}=\E\bigl[g'(X)\tfrac{V}{\E[V]}\bigr]\sigma^2\E[V]$ $(*)$. Does $(*)$
       imply $(**)$? Explain.
 \end{enumerate}
 \end{exercise}
@@ -1395,7 +1538,7 @@ independent but not mutually independent.
 
 \begin{exercise}[not from the course: puts and parity]
 With the notation of \cref{ch03:thm-call}, show that $\E[(K-X)^+]=\int_{-\infty}^KF(x)\dd x$ and that
-$\E[(X-K)^+]-\E[(K-X)^+]=\E X-K$. Interpret the second identity as put--call parity: a long call plus a short put is a
+$\E[(X-K)^+]-\E[(K-X)^+]=\E[X]-K$. Interpret the second identity as put--call parity: a long call plus a short put is a
 forward contract (\cref{sec:forward}).
 \end{exercise}
 

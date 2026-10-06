@@ -66,7 +66,7 @@ $X(t+\Delta t)-X(t)=\mu\Delta t+\sigma\Delta B$ with $\Delta B=B(t+\Delta t)-B(t
 $\Delta X$ is \emph{exactly} $N(\mu\Delta t,\sigma^2\Delta t)$ and
 \begin{equation}\label{ch17:eq-onestep}
   \E[(\Delta X)^2]=\sigma^2\Delta t+(\mu\Delta t)^2=\sigma^2\Delta t+o(\Delta t),\qquad
-  \E|\Delta X|^c=o(\Delta t)\quad(c>2)
+  \E[|\Delta X|^c]=o(\Delta t)\quad(c>2)
 \end{equation}
 \ts{24}{24}{6:19}\ts{24}{24}{7:24}: only the \emph{second} moment of the increment is of the order of the time step, all higher
 ones are negligible. (The lecture slide writes $\E[(\Delta X)^c]$ without absolute value; for odd $c$ that is a different
@@ -133,11 +133,11 @@ variance.
         $0=t_0<t_1<\dots<t_n=T$:
         \begin{equation}\label{ch17:eq-stepint}
           I(f)=\sum_{i=0}^{n-1}a_i\bigl(B_{t_{i+1}}-B_{t_i}\bigr),\qquad
-          \E I(f)=0,\quad \Var I(f)=\sum_ia_i^2(t_{i+1}-t_i)
+          \E[I(f)]=0,\quad \Var I(f)=\sum_ia_i^2(t_{i+1}-t_i)
         \end{equation}
         \ts{24}{24}{26:33}\ts{24}{24}{27:37}\ts{24}{24}{28:40}. The $a_i$ can be read as the number of shares held during $(t_i,t_{i+1}]$ of an asset
         following Brownian motion, and $I(f)$ as the gain or loss. The slides write the last time as $t_{n+1}=T$; with $n$ intervals it is $t_n=T$.
-  \item \emph{Adapted step process}: the levels $a_i=a_i(\omega)$ are random, \emph{$\mathcal F_{t_i}$-measurable} and with $\E a_i^2<\infty$
+  \item \emph{Adapted step process}: the levels $a_i=a_i(\omega)$ are random, \emph{$\mathcal F_{t_i}$-measurable} and with $\E[a_i^2]<\infty$
         \ts{24}{24}{28:40}\ts{24}{24}{29:47}\ts{24}{24}{30:53}. The integral is again \eqref{ch17:eq-stepint}, now with random $a_i$
         \ts{24}{24}{31:54}\ts{24}{24}{32:55}.
 \end{enumerate}
@@ -148,7 +148,7 @@ end $t_i$ of the interval on which it is used}. We call such an $f=\sum_ia_i\ind
 \begin{proposition}[Simple integrands: mean, martingale, isometry]\label{ch17:prop-simple}
 Let $f$ be a simple process. Then $I_t(f)$ is linear in $f$, and
 \begin{enumerate}[(i)]
-  \item $\{I_t(f)\}_{t\le T}$ is a martingale, in particular $\E I_t(f)=0$;
+  \item $\{I_t(f)\}_{t\le T}$ is a martingale, in particular $\E[I_t(f)]=0$;
   \item (\emph{It\^o isometry}) $\E\bigl[I_T(f)^2\bigr]=\E\int_0^Tf(s)^2\,\dd s=\sum_i\E[a_i^2](t_{i+1}-t_i)$; more generally
         $\E[(I_t-I_s)^2\mid\mathcal F_s]=\E[\int_s^tf^2\,\dd u\mid\mathcal F_s]$.
 \end{enumerate}
@@ -159,7 +159,7 @@ Write $\Delta_iB=B_{t_{i+1}}-B_{t_i}$, independent of $\mathcal F_{t_i}$ with me
 by the tower property, $\E[a_i\Delta_iB\mid\mathcal F_s]=\E\bigl[a_i\,\E[\Delta_iB\mid\mathcal F_{t_i}]\bigm|\mathcal F_s\bigr]=0$, because $a_i$ is
 $\mathcal F_{t_i}$-measurable and $\Delta_iB$ is independent of $\mathcal F_{t_i}$ with mean $0$
 (this is the answer given in the lecture to a student who asked how the mean can vanish when $a_i$ is random
-\ts{24}{24}{35:04}\ts{24}{24}{36:07}\ts{24}{24}{37:10}\ts{24}{24}{38:14}). (The products are integrable since $\E|a_i\Delta_iB|\le(\E a_i^2\Delta t_i)^{1/2}$.)
+\ts{24}{24}{35:04}\ts{24}{24}{36:07}\ts{24}{24}{37:10}\ts{24}{24}{38:14}). (The products are integrable since $\E[|a_i\Delta_iB|]\le(\E[a_i^2]\Delta t_i)^{1/2}$.)
 
 (ii) Expand $I_T^2=\sum_ia_i^2(\Delta_iB)^2+2\sum_{i<j}a_i\Delta_iB\,a_j\Delta_jB$. For $i<j$ the factor $a_i\Delta_iB\,a_j$ is $\mathcal F_{t_j}$-measurable
 and $\Delta_jB$ is independent of it with mean $0$, so the cross terms have mean $0$. For the diagonal terms $a_i$ and $\Delta_iB$ are independent, so
@@ -171,7 +171,7 @@ mean square of the integrand}. It is the quadratic variation $(\dd B)^2=\dd t$ a
 independent, and each squared increment is replaced by its mean $\Delta t_i$.
 
 \begin{example}[The step approximation of $\int B\,\dd B$]\label{ch17:ex-stepBdB}
-Take the grid $t_i=iT/n$ and $a_i=B_{t_i}$ (adapted, with $\E a_i^2=t_i$). Then $I=\sum_{i=0}^{n-1}B_{t_i}(B_{t_{i+1}}-B_{t_i})$ has mean $0$ and, by the isometry,
+Take the grid $t_i=iT/n$ and $a_i=B_{t_i}$ (adapted, with $\E[a_i^2]=t_i$). Then $I=\sum_{i=0}^{n-1}B_{t_i}(B_{t_{i+1}}-B_{t_i})$ has mean $0$ and, by the isometry,
 \[
   \Var I=\sum_i\E[B_{t_i}^2]\,\Delta t_i=\sum_{i=0}^{n-1}\frac{iT}{n}\cdot\frac Tn=\frac{T^2(n-1)}{2n}\ \xrightarrow[n\to\infty]{}\ \frac{T^2}2=\int_0^Ts\,\dd s
 \]
@@ -207,9 +207,9 @@ The integral up to $t<T$ is the integral of the truncated integrand $f\ind(0\le 
 Let $f,g\in\mathcal H^2$ and $X_t=\int_0^tf(\omega,s)\,\dd B_s$.
 \begin{enumerate}[(i)]
   \item \emph{Linearity:} $\int(af+bg)\,\dd B=a\int f\,\dd B+b\int g\,\dd B$.
-  \item \emph{Martingale:} $\{X_t\}$ is a martingale with respect to $\{\mathcal F_t\}$ (it has a continuous version), $\E X_t=0$ and
+  \item \emph{Martingale:} $\{X_t\}$ is a martingale with respect to $\{\mathcal F_t\}$ (it has a continuous version), $\E[X_t]=0$ and
         $\E[X_{t+k}\mid\mathcal F_t]=X_t$ \ts{24}{24}{47:51}\ts{24}{24}{48:57}\ts{13}{18}{52:22}\ts{13}{18}{53:29}\ts{13}{18}{54:35}.
-  \item \emph{Isometry:} $\E X_t^2=\E\int_0^tf^2\,\dd s$ and
+  \item \emph{Isometry:} $\E[X_t^2]=\E\int_0^tf^2\,\dd s$ and
         $\Var[X_{t+k}\mid\mathcal F_t]=\E\bigl[\int_t^{t+k}f^2\,\dd s\bigm|\mathcal F_t\bigr]$ \ts{24}{24}{48:57}\ts{24}{24}{50:00}\ts{24}{24}{53:13}.
   \item \emph{Deterministic integrands are Gaussian:} if $f=f(s)$ is a deterministic (continuous) function, $\{X_t\}$ is a mean-zero \emph{Gaussian}
         process with independent increments and covariance
@@ -224,7 +224,7 @@ Let $f,g\in\mathcal H^2$ and $X_t=\int_0^tf(\omega,s)\,\dd B_s$.
 second moments and conditional expectations ($\E[\,\cdot\mid\mathcal F_s]$ is a contraction on $L^2$). (iv) For a step function
 $X_t=\sum a_i(B_{t\wedge t_{i+1}}-B_{t\wedge t_i})$ is a linear combination of independent Gaussian increments, hence Gaussian, and
 $L^2$-limits of Gaussian variables are Gaussian (characteristic functions converge). The covariance follows from the isometry,
-$\Cov(X_s,X_t)=\E[X_s(X_s+(X_t-X_s))]=\E X_s^2$ for $s\le t$ because the increment $X_t-X_s$ is orthogonal to $X_s$.
+$\Cov(X_s,X_t)=\E[X_s(X_s+(X_t-X_s))]=\E[X_s^2]$ for $s\le t$ because the increment $X_t-X_s$ is orthogonal to $X_s$.
 \end{proof}
 
 The sum $I(f)=\sum a_i\Delta_iB$ of a \emph{deterministic} integrand is a sum of independent normals, and the theorem says that this survives in the limit: the
@@ -384,7 +384,7 @@ Sum over $i$ and treat the three sums.
 continuous function $s\mapsto f''(B_s)$ and tends to $\tfrac12\int_0^tf''(B_s)\,\dd s$. The fluctuation $D_n=\tfrac12\sum f''(B_{t_i})[(\Delta_iB)^2-\Delta t_i]$ is a sum of martingale differences ($\Delta_iB$ is independent of $\mathcal F_{t_i}$ and
 $\E[(\Delta_iB)^2-\Delta t_i]=0$), so for bounded $f''$
 \begin{align*}
-\E D_n^2&=\tfrac14\sum_i\E\bigl[f''(B_{t_i})^2\bigr]\Var\bigl[(\Delta_iB)^2\bigr]=\tfrac12\sum_i\E\bigl[f''(B_{t_i})^2\bigr]\Delta t_i^2\\
+\E[D_n^2]&=\tfrac14\sum_i\E\bigl[f''(B_{t_i})^2\bigr]\Var\bigl[(\Delta_iB)^2\bigr]=\tfrac12\sum_i\E\bigl[f''(B_{t_i})^2\bigr]\Delta t_i^2\\
 &\le\tfrac12\|f''\|_\infty^2\,t\,\max_i\Delta t_i\to0 ,
 \end{align*}
 using $\Var[(\Delta_iB)^2]=2\Delta t_i^2$. This is the point where ``$(\dd B)^2=\dd t$'' enters: \emph{the squared increment can be replaced by its mean because the difference has variance of order $\Delta t^2$, whose sum
@@ -400,7 +400,7 @@ Expand $f(B+\Delta B)-f(B)=f'\Delta B+\tfrac12f''\Delta B^2+\tfrac16f'''\Delta B
 of order $\Delta t^{1/2},\Delta t,\Delta t^{3/2},\dots$: after summing $1/\Delta t$ steps, the first one is a random martingale, the second contributes a finite drift (its fluctuations are
 negligible, as shown above), and all others vanish. This is the 2013 argument: ``$\dd t^2$ and $\dd t\,\dd B$ are insignificant, the only term that matters is $\dd B^2=\dd t$'', with the
 heuristic $\dd B\approx\sqrt{\dd t}$ \ts{13}{18}{4:34}\ts{13}{18}{6:37}\ts{13}{18}{7:37}\ts{13}{18}{8:39}. A physicist recognises it: taking expectations kills the martingale,
-$\dd\E f(B_t)/\dd t=\tfrac12\E f''(B_t)$, i.e.\ $\tfrac12\partial_x^2$ is the \emph{generator} of Brownian motion and the density of $B_t$ solves the diffusion equation
+$\dd\E[f(B_t)]/\dd t=\tfrac12\E[f''(B_t)]$, i.e.\ $\tfrac12\partial_x^2$ is the \emph{generator} of Brownian motion and the density of $B_t$ solves the diffusion equation
 of \cref{ch11:prop-heat}. It\^o's formula is the pathwise version of the heat equation.
 \end{intuition}
 
@@ -480,15 +480,15 @@ in finance the It\^o reading is used because prices must be martingales when the
 \section{Examples: martingales, moments, exponentials}\label{ch17:sec-examples}
 
 \begin{example}[The square]\label{ch17:ex-square}
-$f(x)=x^2$: $\dd(B_t^2)=2B_t\,\dd B_t+\dd t$ \ts{13}{18}{18:49}\ts{13}{18}{19:49}\ts{13}{18}{20:58}\ts{24}{25}{1:03}. Hence $B_t^2-t=2\int_0^tB\,\dd B$ is a martingale and $\E B_t^2=t$, in
+$f(x)=x^2$: $\dd(B_t^2)=2B_t\,\dd B_t+\dd t$ \ts{13}{18}{18:49}\ts{13}{18}{19:49}\ts{13}{18}{20:58}\ts{24}{25}{1:03}. Hence $B_t^2-t=2\int_0^tB\,\dd B$ is a martingale and $\E[B_t^2]=t$, in
 agreement with \cref{ch11:prop-elem}(iii). For $X$ with $\dd X=\mu\,\dd t+\sigma\,\dd B$ the same formula gives $\dd(X^2)=(2\mu X+\sigma^2)\,\dd t+2\sigma X\,\dd B$; the lecture takes $\mu=0$, $\sigma=1$, $G=x^2$ and
 concludes $\int_0^tX\,\dd X=\tfrac12(X_t^2-t)$ \ts{24}{25}{1:03}.
 \end{example}
 
 \begin{example}[Moments of Brownian motion]\label{ch17:ex-moments}
 For $f(x)=x^n$, $\dd(B^n)=nB^{n-1}\dd B+\tfrac12n(n-1)B^{n-2}\dd t$. Taking expectations (the stochastic integral has mean zero because $\E\int B^{2n-2}\dd s<\infty$),
-$m_n(t)=\E B_t^n$ satisfies $m_n(t)=\tfrac12n(n-1)\int_0^tm_{n-2}(s)\,\dd s$. Starting from $m_2(s)=s$ this gives $m_4(t)=\tfrac12\cdot4\cdot3\int_0^ts\,\dd s=3t^2$ and $m_6(t)=\tfrac12\cdot6\cdot5\int_0^t3s^2\,\dd s=15t^3$. In general $\E B_t^{2k}=(2k-1)!!\,t^k$,
-odd moments vanish. A Monte Carlo check with $2\times10^4$ paths of $1000$ steps gave $\E B_1^4\approx2.99$ (theory $3$).
+$m_n(t)=\E[B_t^n]$ satisfies $m_n(t)=\tfrac12n(n-1)\int_0^tm_{n-2}(s)\,\dd s$. Starting from $m_2(s)=s$ this gives $m_4(t)=\tfrac12\cdot4\cdot3\int_0^ts\,\dd s=3t^2$ and $m_6(t)=\tfrac12\cdot6\cdot5\int_0^t3s^2\,\dd s=15t^3$. In general $\E[B_t^{2k}]=(2k-1)!!\,t^k$,
+odd moments vanish. A Monte Carlo check with $2\times10^4$ paths of $1000$ steps gave $\E[B_1^4]\approx2.99$ (theory $3$).
 \end{example}
 
 \begin{example}[Exponentials and geometric Brownian motion without drift]\label{ch17:ex-exp}
@@ -503,7 +503,7 @@ The model question of the 2013 lecture: $S_t=e^{\sigma B_t}$ is \emph{not} the s
 \begin{equation}\label{ch17:eq-expmart}
   S_t=\exp\bigl(\sigma B_t-\tfrac12\sigma^2t\bigr)\quad\text{satisfies}\quad\dd S_t=\sigma S_t\,\dd B_t,\qquad S_0=1,
 \end{equation}
-\ts{13}{18}{26:24}\ts{13}{18}{27:30}\ts{24}{24}{1:12:36}\ts{24}{24}{1:13:39}, and is a martingale with $\E S_t=1$ (both years; the lecture of 2024 obtains it as the case $f(t,x)=e^{\sigma x-\sigma^2t/2}$ with $f_t=-\tfrac12\sigma^2f$, $f_x=\sigma f$, $f_{xx}=\sigma^2f$). Compare
+\ts{13}{18}{26:24}\ts{13}{18}{27:30}\ts{24}{24}{1:12:36}\ts{24}{24}{1:13:39}, and is a martingale with $\E[S_t]=1$ (both years; the lecture of 2024 obtains it as the case $f(t,x)=e^{\sigma x-\sigma^2t/2}$ with $f_t=-\tfrac12\sigma^2f$, $f_x=\sigma f$, $f_{xx}=\sigma^2f$). Compare
 \cref{ch04:ex-m4}: this is its continuous-time limit.
 In discrete form the statement is the exact identity $S_t-1=\sigma\int_0^tS\,\dd B$; we checked it pathwise for $\sigma=1$ with left-point sums: the root-mean-square difference between
 $S_1-1$ and $\sum S_{t_i}\Delta_iB$ over $2000$ paths is $0.295,\ 0.092,\ 0.028,\ 0.009$ for $n=10,10^2,10^3,10^4$ steps, decreasing like $n^{-1/2}$ (the strong order of the Euler scheme, see \cref{ch:sde}).
@@ -528,7 +528,7 @@ Let $f\in C^{1,2}$ satisfy the backward heat equation
 \begin{equation}\label{ch17:eq-pdecond}
   f_t+\tfrac12f_{xx}=0 ,
 \end{equation}
-and suppose $\E\int_0^T\bigl(f_x(s,B_s)\bigr)^2\dd s<\infty$. Then $M_t=f(t,B_t)=f(0,0)+\int_0^tf_x\,\dd B$ is a (square-integrable) martingale with $\E|M_T-M_0|^2=\E\int_0^Tf_x^2\,\dd s$.
+and suppose $\E\int_0^T\bigl(f_x(s,B_s)\bigr)^2\dd s<\infty$. Then $M_t=f(t,B_t)=f(0,0)+\int_0^tf_x\,\dd B$ is a (square-integrable) martingale with $\E[|M_T-M_0|^2]=\E\int_0^Tf_x^2\,\dd s$.
 \end{theorem}
 \ts{24}{24}{1:10:26}\ts{24}{24}{1:11:31}\ts{24}{25}{2:06}\ts{24}{25}{3:07}\ts{24}{25}{4:11}\ts{13}{18}{54:35}\ts{13}{18}{55:42}\ \noindent
 This is the connection ``martingales $\leftrightarrow$ PDEs'' of the lecture: a solution of the PDE gives a martingale, and conversely the
@@ -541,9 +541,9 @@ arbitrage \ts{13}{18}{56:45}\ts{13}{18}{57:55}, made precise in \cref{ch:bs}.
 Examples (checked by direct differentiation): $f=x$; $f=x^2-t$ ($f_t=-1$, $f_{xx}=2$); $f=x^3-3tx$ ($f_t=-3x$, $f_{xx}=6x$); $f=x^4-6tx^2+3t^2$ ($f_t=-6x^2+6t$, $f_{xx}=12x^2-12t$);
 in general $f=t^{n/2}H_n(x/\sqrt t)$ with the Hermite polynomials (own remark). And the exponential martingale, the lecture's Example~4:
 $f(t,x)=e^{\sigma x-\sigma^2t/2}$ has $f_t=-\tfrac12\sigma^2f$ and $\tfrac12f_{xx}=\tfrac12\sigma^2f$, so \eqref{ch17:eq-pdecond} holds; and
-$\E\int_0^t\sigma^2f(s,B_s)^2\,\dd s=\sigma^2\int_0^te^{\sigma^2s}\dd s<\infty$ ($\E e^{2\sigma B_s-\sigma^2s}=e^{\sigma^2s}$), so $f(t,B_t)$ is a martingale with $\E f(t,B_t)=f(0,0)=1$ for all $t$
+$\E\int_0^t\sigma^2f(s,B_s)^2\,\dd s=\sigma^2\int_0^te^{\sigma^2s}\dd s<\infty$ ($\E[e^{2\sigma B_s-\sigma^2s}]=e^{\sigma^2s}$), so $f(t,B_t)$ is a martingale with $\E[f(t,B_t)]=f(0,0)=1$ for all $t$
 \ts{24}{24}{1:12:36}\ts{24}{24}{1:13:39}\ts{24}{24}{1:14:45}. The variable $f(t,B_t)=e^{\sigma B_t}\,e^{-\sigma^2t/2}$ is a scaled lognormal, and
-$\E e^{\sigma B_t}=e^{\sigma^2t/2}$ (moment generating function, \cref{ch03:sec-normal}; it was a problem-set question in the class) \ts{24}{24}{1:14:45}.
+$\E[e^{\sigma B_t}]=e^{\sigma^2t/2}$ (moment generating function, \cref{ch03:sec-normal}; it was a problem-set question in the class) \ts{24}{24}{1:14:45}.
 
 \begin{remark}[The integrability condition matters; not discussed in class]
 A solution of \eqref{ch17:eq-pdecond} with a stochastic integral that is only a \emph{local} martingale, i.e.\ with $\E\int f_x^2=\infty$, need not be a martingale. The condition of the theorem
@@ -553,7 +553,7 @@ is the analogue for continuous time of the bounded-increments condition in optio
 \subsection{Brownian motion with drift and ruin}\label{ch17:sec-ruin}
 Let $X_t=\mu t+\sigma B_t$ and $\tau=\inf\{t:X_t=A\text{ or }X_t=-B'\}$ with $A,B'>0$ (the lecture writes $B$ for the lower barrier; we write $B'$ to avoid a clash with the Brownian motion). We want $\Prob(X_\tau=A)$
 \ts{24}{24}{1:15:46}\ts{24}{24}{1:16:48}. Look for $h$ such that $M_t=h(X_t)$ is a martingale, so that the stopped process $M_{t\wedge\tau}$ is one too, with boundary values $h(A)=1$, $h(-B')=0$. Then
-$\Prob(X_\tau=A)=\E M_\tau=M_0=h(0)$ \ts{24}{24}{1:16:48}\ts{24}{24}{1:17:57}. By \eqref{ch17:eq-ito3}, $\dd h(X_t)=\bigl(\mu h'+\tfrac12\sigma^2h''\bigr)(X_t)\,\dd t+\sigma h'(X_t)\,\dd B_t$, so the condition
+$\Prob(X_\tau=A)=\E[M_\tau]=M_0=h(0)$ \ts{24}{24}{1:16:48}\ts{24}{24}{1:17:57}. By \eqref{ch17:eq-ito3}, $\dd h(X_t)=\bigl(\mu h'+\tfrac12\sigma^2h''\bigr)(X_t)\,\dd t+\sigma h'(X_t)\,\dd B_t$, so the condition
 is $\mu h'+\tfrac12\sigma^2h''=0$; the lecture obtains it through $f(t,x)=h(\mu t+\sigma x)$ and \eqref{ch17:eq-pdecond}, where $f_t=\mu h'$ and $f_{xx}=\sigma^2h''$
 \ts{24}{24}{1:19:04}\ts{24}{24}{1:20:09}. It is a first-order equation for $h'$, $h''=-(2\mu/\sigma^2)h'$, whose solution with the boundary conditions is
 \[
@@ -602,7 +602,7 @@ The continuously compounded annualised rate of return $r=\tfrac1\tau\ln(P_T/P_t)
 \end{equation}
 \ts{24}{25}{11:37}\ts{24}{25}{12:40}. Hence over long horizons the realised rate of return converges (almost surely, by the strong law $B_T/T\to0$) to the constant $\mu-\tfrac12\sigma^2$, and the variance of the average rate goes to zero as $1/\tau$:
 the growth of the price is ``at a constant rate with vanishing variability'' \ts{24}{25}{12:40}. Note that this constant is $\mu-\tfrac12\sigma^2$, \emph{not} $\mu$: if $\mu<\tfrac12\sigma^2$ then $P_t\to0$
-almost surely although $\E P_t=P_0e^{\mu t}$ grows (own remark; for $\mu=0.05$, $\sigma=0.4$ the typical rate is $-3\%$ per year). The mean is carried by rare, enormous outcomes.
+almost surely although $\E[P_t]=P_0e^{\mu t}$ grows (own remark; for $\mu=0.05$, $\sigma=0.4$ the typical rate is $-3\%$ per year). The mean is carried by rare, enormous outcomes.
 
 \begin{figure}[ht]
 \centering
@@ -628,7 +628,7 @@ The band is far above the typical path, as in the lecture's picture.}\label{ch17
 
 \begin{coursenote}[Two conventions for $\mu$ in the lecture]
 Slide~25 of \file{lec19\_1} and \file{lec19\_2} simulate $W$, a Brownian motion with drift $0.30$, volatility $0.40$ and $T=4$ years, and then $X=e^{W}$. In this convention $0.30$ is the drift of the \emph{log} price, and $X$ solves
-\eqref{ch17:eq-gbm-sde} with $\mu=0.30+\tfrac12(0.40)^2=0.38$, so that $\E X_4=e^{1.52}=4.57$ and $\operatorname{median}X_4=e^{1.2}=3.32$. In the numerical example of the previous slides $0.30$ is the $\mu$ of \eqref{ch17:eq-gbm-sde}: then $\E P_T/P_t=e^{0.30\tau}$ and the median is $e^{0.22\tau}$.
+\eqref{ch17:eq-gbm-sde} with $\mu=0.30+\tfrac12(0.40)^2=0.38$, so that $\E[X_4]=e^{1.52}=4.57$ and $\operatorname{median}X_4=e^{1.2}=3.32$. In the numerical example of the previous slides $0.30$ is the $\mu$ of \eqref{ch17:eq-gbm-sde}: then $\E[P_T]/P_t=e^{0.30\tau}$ and the median is $e^{0.22\tau}$.
 Both are right, but they are different processes; the lecture does not remark on it.
 \end{coursenote}
 
@@ -702,9 +702,9 @@ Let $\bm B=(B^{(1)},\dots,B^{(n)})$ be an $n$-dimensional Brownian motion (indep
 \end{equation}
 \begin{itemize}
   \item \emph{Harmonic functions.} If $\Delta f=0$ then $f(\bm B_t)$ is a (local) martingale: the martingales of an $n$-dimensional Brownian motion are the harmonic functions. The generator is $\tfrac12\Delta$, as in the heat kernel of \cref{ch11:sec-2d}.
-  \item \emph{The squared distance.} For $f=|\bm x|^2$, $\dd|\bm B|^2=2\bm B\cdot\dd\bm B+n\,\dd t$, so $|\bm B_t|^2-nt$ is a martingale and $\E|\bm B_t|^2=nt$ (for $n=2$: $2t$; in the physicist's language $\langle r^2\rangle=2dDt$ with diffusion coefficient $D=\tfrac12$ in $d=n$ dimensions).
+  \item \emph{The squared distance.} For $f=|\bm x|^2$, $\dd|\bm B|^2=2\bm B\cdot\dd\bm B+n\,\dd t$, so $|\bm B_t|^2-nt$ is a martingale and $\E[|\bm B_t|^2]=nt$ (for $n=2$: $2t$; in the physicist's language $\langle r^2\rangle=2dDt$ with diffusion coefficient $D=\tfrac12$ in $d=n$ dimensions).
   \item \emph{The radial part} (Bessel process). For $f=|\bm x|$: $\nabla f=\bm x/|\bm x|$, $\Delta f=(n-1)/|\bm x|$, so $R_t=|\bm B_t|$ satisfies $\dd R=\dd W+\dfrac{n-1}{2R}\,\dd t$ with $\dd W=\dfrac{\bm B}{|\bm B|}\cdot\dd\bm B$,
-        and $(\dd W)^2=\sum_iB_i^2/|\bm B|^2\,\dd t=\dd t$; by L\'evy's characterisation (not proved here) $W$ is a Brownian motion. The drift $(n-1)/(2R)$ is the ``centrifugal'' push of a random walk in the plane away from the origin. As a check for $n=2$: $\E R_t=\sqrt{\pi t/2}$ from the Rayleigh law of \cref{ch11:sec-2d}, and $\tfrac{\dd}{\dd t}\E R_t=\E\tfrac1{2R_t}=\tfrac12\sqrt{\pi/(2t)}$, the derivative of $\sqrt{\pi t/2}$ (using $\E 1/R_t=\sqrt{\pi/(2t)}$).
+        and $(\dd W)^2=\sum_iB_i^2/|\bm B|^2\,\dd t=\dd t$; by L\'evy's characterisation (not proved here) $W$ is a Brownian motion. The drift $(n-1)/(2R)$ is the ``centrifugal'' push of a random walk in the plane away from the origin. As a check for $n=2$: $\E[R_t]=\sqrt{\pi t/2}$ from the Rayleigh law of \cref{ch11:sec-2d}, and $\tfrac{\dd}{\dd t}\E[R_t]=\E\tfrac1{2R_t}=\tfrac12\sqrt{\pi/(2t)}$, the derivative of $\sqrt{\pi t/2}$ (using $\E 1/R_t=\sqrt{\pi/(2t)}$).
 \end{itemize}
 
 % ==================================================================
@@ -721,7 +721,7 @@ Two probability measures $\Prob,\widetilde\Prob$ on the same space $\Omega$ are 
 \ts{13}{18}{1:06:22}\ts{13}{18}{1:07:28}. Equivalent measures are related by a positive density:
 
 \begin{theorem}[Radon--Nikod\'ym; quoted]\label{ch17:thm-rn}
-$\widetilde\Prob$ is equivalent to $\Prob$ if and only if there is a random variable $Z>0$ with $\E Z=1$ such that $\widetilde\Prob(A)=\E[Z\,\ind_A]$ for all $A$; then $\widetilde\E[Y]=\E[ZY]$. One writes $Z=\dd\widetilde\Prob/\dd\Prob$, the \emph{Radon--Nikod\'ym derivative}.
+$\widetilde\Prob$ is equivalent to $\Prob$ if and only if there is a random variable $Z>0$ with $\E[Z]=1$ such that $\widetilde\Prob(A)=\E[Z\,\ind_A]$ for all $A$; then $\widetilde\E[Y]=\E[ZY]$. One writes $Z=\dd\widetilde\Prob/\dd\Prob$, the \emph{Radon--Nikod\'ym derivative}.
 \end{theorem}
 \ts{13}{18}{1:04:17}\ts{13}{18}{1:07:28}\ts{13}{18}{1:08:32}\ \noindent
 In the finite example $Z=(2,\tfrac12,\tfrac12)$. A mapping of paths in general destroys equivalence: the law of the \emph{square} $B(t)^2$ is not equivalent to that of $B(t)$, because $B^2$ never takes negative values and $B$ does \file{lecnote18}, \S3 (this is essentially PS8 Problem~A-5).
@@ -740,13 +740,13 @@ the density of the increments under $\widetilde\Prob$, i.e.\ of $Z\,\dd\Prob$, i
 \[
   (2\pi\Delta_i)^{-1/2}\exp\Bigl[-\frac{(x_i-\mu\Delta_i)^2}{2\Delta_i}-\mu x_i+\frac{\mu^2\Delta_i}2\Bigr]=(2\pi\Delta_i)^{-1/2}\exp\Bigl[-\frac{x_i^2}{2\Delta_i}\Bigr],
 \]
-because $-\tfrac{(x-\mu\Delta)^2}{2\Delta}=-\tfrac{x^2}{2\Delta}+\mu x-\tfrac12\mu^2\Delta$. This is a probability density (so $\E Z=1$) and says that the increments are independent $N(0,\Delta_i)$ under $\widetilde\Prob$. The finite-dimensional distributions of $X$ are those of Brownian motion, and the paths are continuous.
+because $-\tfrac{(x-\mu\Delta)^2}{2\Delta}=-\tfrac{x^2}{2\Delta}+\mu x-\tfrac12\mu^2\Delta$. This is a probability density (so $\E[Z]=1$) and says that the increments are independent $N(0,\Delta_i)$ under $\widetilde\Prob$. The finite-dimensional distributions of $X$ are those of Brownian motion, and the paths are continuous.
 \end{proof}
 The path picture of a physicist: with $\Prob[x(\cdot)]\propto e^{-\frac12\int(\dot x-\mu)^2}$ and $\widetilde\Prob[x(\cdot)]\propto e^{-\frac12\int\dot x^2}$, the ratio is $e^{\mu(x_T-x_0)-\mu^2T/2}=1/Z$: reweighting paths by an exponential in the endpoint (an exponential tilting, or Cameron--Martin) shifts the drift.
 
 \begin{coursenote}[Erratum: the sign in the note's Theorem 3.2]
 \file{lecnote18} (Theorem~3.2) states $\dd\widetilde\Prob/\dd\Prob=e^{-\mu\omega(T)-\mu^2T/2}$ for $X$ a Brownian motion with drift $\mu$ under $\Prob$. The correct exponent is $-\mu X_T\,\mathbf{+}\,\tfrac12\mu^2T$, as in \eqref{ch17:eq-Z}. With the sign of the note,
-$\E Z=\E e^{-\mu X_T-\mu^2T/2}=e^{-\mu^2T/2}e^{-\mu^2T/2}=e^{-\mu^2T}\neq1$ (as $\E e^{-\mu X_T}=e^{-\mu^2T+\mu^2T/2}$), so $Z$ would not be a density (Monte Carlo, $\mu=0.5$, $T=1$: $0.7788=e^{-0.25}$ against $1.0000$ for the correct sign; with the correct sign $\E[Z\,\ind_{X_T>1}]=0.1586=1-\Phi(1)$ and $\E[ZX_T^2]=1.00$, the values of a standard normal).
+$\E[Z]=\E[e^{-\mu X_T-\mu^2T/2}]=e^{-\mu^2T/2}e^{-\mu^2T/2}=e^{-\mu^2T}\neq1$ (as $\E[e^{-\mu X_T}]=e^{-\mu^2T+\mu^2T/2}$), so $Z$ would not be a density (Monte Carlo, $\mu=0.5$, $T=1$: $0.7788=e^{-0.25}$ against $1.0000$ for the correct sign; with the correct sign $\E[Z\,\ind_{X_T>1}]=0.1586=1-\Phi(1)$ and $\E[ZX_T^2]=1.00$, the values of a standard normal).
 The general theorem (\cref{ch17:thm-girsanov2}) below, which the note states correctly, is consistent with it (take $\theta=\mu$ and start from $X-\mu t$).
 \end{coursenote}
 
@@ -759,7 +759,7 @@ Then $Y_t=B_t+\int_0^t\theta_u\,\dd u$ is a Brownian motion under $\widetilde\Pr
 \end{theorem}
 \ts{13}{18}{1:10:39}\ts{13}{18}{1:13:48}\ts{13}{18}{1:14:50}
 \begin{proof}[Proof sketch (not given in class)]
-By \eqref{ch17:eq-ito3}, $\dd Z_t=-\theta_tZ_t\,\dd B_t$, so $Z$ is a positive martingale with $Z_0=1$, $\E Z_T=1$ (the integrand is square-integrable since $\theta$ is bounded), and by Bayes $\widetilde\E[G\mid\mathcal F_s]=\E[Z_tG\mid\mathcal F_s]/Z_s$.
+By \eqref{ch17:eq-ito3}, $\dd Z_t=-\theta_tZ_t\,\dd B_t$, so $Z$ is a positive martingale with $Z_0=1$, $\E[Z_T]=1$ (the integrand is square-integrable since $\theta$ is bounded), and by Bayes $\widetilde\E[G\mid\mathcal F_s]=\E[Z_tG\mid\mathcal F_s]/Z_s$.
 For real $\lambda$ put $N_t=Z_t\exp(\lambda Y_t-\tfrac12\lambda^2t)$. Then
 $\ln N_t=\int_0^t(\lambda-\theta)\,\dd B-\tfrac12\int_0^t(\lambda-\theta)^2\dd u$ (the terms $\lambda\int\theta$ and $-\tfrac12\lambda^2t$ complete the square), so $N$ is again a martingale of the form \eqref{ch17:eq-Zt}. Then for $s<t$
 \[
@@ -823,7 +823,7 @@ links the PDE condition of \cref{ch17:thm-pde} to expectations. \Cref{ch:bs} use
 &\text{Product rule:} && \dd(XY)=X\,\dd Y+Y\,\dd X+\dd X\,\dd Y\\
 &\text{Martingale test:} && f_t+\tfrac12f_{xx}=0\ \Rightarrow\ f(t,B_t)\text{ martingale}\quad(\text{e.g.\ }e^{\sigma B-\sigma^2t/2},\ B^2-t)\\
 &\text{GBM:} && \dd P=\mu P\,\dd t+\sigma P\,\dd B\ \Longrightarrow\ P_t=P_0e^{(\mu-\sigma^2/2)t+\sigma B_t}\\
-& && \E P_t=P_0e^{\mu t},\qquad r=\tfrac1\tau\ln\tfrac{P_T}{P_t}\sim N\bigl(\mu-\tfrac12\sigma^2,\sigma^2/\tau\bigr)\\
+& && \E[P_t]=P_0e^{\mu t},\qquad r=\tfrac1\tau\ln\tfrac{P_T}{P_t}\sim N\bigl(\mu-\tfrac12\sigma^2,\sigma^2/\tau\bigr)\\
 &\text{Girsanov:} && Z=e^{-\mu X_T+\mu^2T/2}\ (X\text{ has drift }\mu\text{ under }\Prob)\\
 & && \Rightarrow\ X\text{ is driftless under }Z\cdot\Prob
 \end{align*}
@@ -884,7 +884,7 @@ Let $Y(t)=(X_1(t),X_2(t))$ where $X_1,X_2$ are independent Brownian motions (a $
 \end{exercise}
 
 \begin{exercise}[PS8 (2013), Problem B-2: It\^o isometry]\label{ch17:ex-b2}
-Use the It\^o isometry to calculate $\E X_t^2$, where $X_t=\int_0^tB_s\,\dd B_s$.
+Use the It\^o isometry to calculate $\E[X_t^2]$, where $X_t=\int_0^tB_s\,\dd B_s$.
 \end{exercise}
 
 \begin{exercise}[PS8 (2013), Problem B-3: integration by parts]\label{ch17:ex-b3}
@@ -908,5 +908,5 @@ For $\mu=0.5$, $T=1$ let $X_T\sim N(\mu,1)$ under $\Prob$ and $Z=e^{-\mu X_T+\mu
 \end{exercise}
 
 \begin{exercise}[not from the course: exit from a disc]\label{ch17:ex-x4}
-For a $2$-dimensional Brownian motion started at the origin, let $\tau=\inf\{t:|\bm B_t|=\rho\}$. Use $|\bm B_t|^2-2t$ (\cref{ch17:sec-multi}) and optional stopping (\cref{ch04:sec-stopping}) to find $\E\tau$.
+For a $2$-dimensional Brownian motion started at the origin, let $\tau=\inf\{t:|\bm B_t|=\rho\}$. Use $|\bm B_t|^2-2t$ (\cref{ch17:sec-multi}) and optional stopping (\cref{ch04:sec-stopping}) to find $\E[\tau]$.
 \end{exercise}

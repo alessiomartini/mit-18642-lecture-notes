@@ -114,7 +114,7 @@ overlap, $\Corr(B(s),B(t))=\sqrt{s/t}$ for $s<t$ \ts{24}{14}{8:34}.
 \begin{proposition}[Elementary properties]\label{ch11:prop-elem}
 Let $B$ be a standard Brownian motion and $\mathcal F_t=\sigma(B(u),u\le t)$.
 \begin{enumerate}[(i)]
-  \item \emph{Mean and variance.} $\E B(t)=0$, $\Var B(t)=t$: the standard deviation grows like $\sqrt t$
+  \item \emph{Mean and variance.} $\E[B(t)]=0$, $\Var B(t)=t$: the standard deviation grows like $\sqrt t$
         \ts{24}{14}{6:28}\ts{24}{14}{7:33}.
   \item \emph{Markov property.} For $h>0$, $B(t+h)=B(t)+[B(t+h)-B(t)]$ where the bracket is $N(0,h)$ and independent of
         $\mathcal F_t$; hence the law of $B(t+h)$ given $\mathcal F_t$ is $N(B(t),h)$, which depends on the past only through $B(t)$
@@ -220,7 +220,7 @@ changes sign, so that $\partial_tp<0$ inside and $>0$ outside \ts{24}{14}{14:08}
 % ==================================================================
 \section{Brownian motion as the limit of random walks}\label{ch11:sec-donsker}
 
-Let $X_1,X_2,\dots$ be i.i.d.\ with $\E X_i=0$, $\Var X_i=1$, and $S_n=X_1+\dots+X_n$
+Let $X_1,X_2,\dots$ be i.i.d.\ with $\E[X_i]=0$, $\Var X_i=1$, and $S_n=X_1+\dots+X_n$
 (\cref{ch04:sec-rw}). By the central limit theorem (\cref{ch03:thm-clt}), $\Prob[S_n/\sqrt n\le c]\to\Phi(c)$, i.e.\ $\Prob[S_n\le x]\approx\Phi(x/\sqrt n)$
 \ts{24}{14}{17:22}\ts{24}{14}{18:27}. To speak about a \emph{path} rather than one time, rescale space by $\sqrt n$ and time by $n$.
 
@@ -246,7 +246,7 @@ the value at time $1$), $F(B_n)\xrightarrow{d}F(B)$.
 \emph{Finite-dimensional convergence.} For $0\le t_1<\dots<t_m$ the increments $B_n(t_j)-B_n(t_{j-1})$ are sums of
 $\lfloor nt_j\rfloor-\lfloor nt_{j-1}\rfloor\sim n(t_j-t_{j-1})$ i.i.d.\ steps divided by $\sqrt n$, over disjoint blocks, hence independent; by the central limit
 theorem each converges to $N(0,t_j-t_{j-1})$, and by independence jointly, which is exactly the joint law of the increments of $B$
-\ts{13}{17}{17:19}. This gives $\Var B(t)=\lim_n\Var B_n(t)=t$ and $\E B(t)=0$, the mean and variance of the slides
+\ts{13}{17}{17:19}. This gives $\Var B(t)=\lim_n\Var B_n(t)=t$ and $\E[B(t)]=0$, the mean and variance of the slides
 \ts{24}{14}{19:29}. \emph{Tightness}, that no path of $B_n$ oscillates wildly between grid times so that the limit is a
 continuous process, requires a maximal inequality (Kolmogorov or Doob) and is not proved in the course; it is what turns
 convergence of the finite-dimensional laws into convergence of laws on path space \ts{13}{17}{6:20}.
@@ -351,9 +351,9 @@ $\sum_k|\Pi_k|<\infty$, for instance the dyadic partitions \ts{24}{14}{1:06:57}\
 \end{theorem}
 \begin{proof}
 Write $\Delta_j=t_j-t_{j-1}$ and $\Delta_jB=B(t_j)-B(t_{j-1})\sim N(0,\Delta_j)$, independent over $j$. Then
-$\E(\Delta_jB)^2=\Delta_j$, $\Var[(\Delta_jB)^2]=3\Delta_j^2-\Delta_j^2=2\Delta_j^2$ (the fourth moment of $N(0,\Delta_j)$ is $3\Delta_j^2$), so
+$\E[(\Delta_jB)^2]=\Delta_j$, $\Var[(\Delta_jB)^2]=3\Delta_j^2-\Delta_j^2=2\Delta_j^2$ (the fourth moment of $N(0,\Delta_j)$ is $3\Delta_j^2$), so
 \[
-  \E\,QV_\Pi=\sum_j\Delta_j=T,\qquad
+  \E[Q]V_\Pi=\sum_j\Delta_j=T,\qquad
   \Var\,QV_\Pi=2\sum_j\Delta_j^2\le2|\Pi|\sum_j\Delta_j=2|\Pi|\,T\xrightarrow[|\Pi|\to0]{}0 .
 \]
 For equally spaced points $QV_\Pi\eqd(T/n)\,\chi^2_n$ \ts{24}{14}{1:08:03}, mean $T$ and variance $2T^2/n$. Chebyshev's inequality gives
@@ -486,7 +486,7 @@ For $t>0$ and $a>0$,
 \begin{equation}\label{ch11:eq-max}
   \Prob[M(t)\ge a]=2\,\Prob[B(t)>a]=2\Bigl[1-\Phi\Bigl(\frac a{\sqrt t}\Bigr)\Bigr].
 \end{equation}
-Equivalently $M(t)\eqd|B(t)|$, with density $\sqrt{2/(\pi t)}\,e^{-m^2/(2t)}$ on $m>0$, and $\E M(t)=\sqrt{2t/\pi}$.
+Equivalently $M(t)\eqd|B(t)|$, with density $\sqrt{2/(\pi t)}\,e^{-m^2/(2t)}$ on $m>0$, and $\E[M(t)]=\sqrt{2t/\pi}$.
 \end{proposition}
 \begin{proof}
 Two views, both used in the lectures.
@@ -500,7 +500,7 @@ arises this way. Hence $\Prob[A_{\mathrm{MAX}}]=\Prob[A_{\mathrm{MAX}}\cap A_{\m
 is symmetric, so $\Prob[B(t)>a\mid\tau_a<t]=\Prob[B(t)<a\mid\tau_a<t]=\tfrac12$. Therefore
 $\Prob[M(t)\ge a]=\Prob[\tau_a<t]=2\Prob[B(t)>a,\ \tau_a<t]=2\Prob[B(t)>a]$, the last step because $B(t)>a$ already
 implies $\tau_a<t$.
-The rest follows from $\Prob[B(t)>a]=1-\Phi(a/\sqrt t)$, by differentiating in $a$, and by $\E M=\int_0^\infty\Prob[M>a]\dd a$.
+The rest follows from $\Prob[B(t)>a]=1-\Phi(a/\sqrt t)$, by differentiating in $a$, and by $\E[M]=\int_0^\infty\Prob[M>a]\dd a$.
 \end{proof}
 
 \begin{remark}[Joint law of maximum and endpoint; not discussed in class]\label{ch11:rem-joint}
@@ -518,7 +518,7 @@ barrier option, or a stop-loss, the touching probability is what matters, and ``
 the first-order rule; a drift or discrete (say daily) monitoring changes the number, the latter by lowering it
 (a path can cross between two observations without being seen) \ts{13}{17}{31:00}. Range-based volatility estimators
 combine the maximum and the minimum of the log price over a day: with the range $R=\max-\min$ of a driftless Brownian path one has
-$\E R^2=4\ln2\cdot\sigma^2t$ (Parkinson 1980, derived from the joint law of \cref{ch11:rem-joint}; it is the subject of 2024 PS5 Problem~3 and
+$\E[R^2]=4\ln2\cdot\sigma^2t$ (Parkinson 1980, derived from the joint law of \cref{ch11:rem-joint}; it is the subject of 2024 PS5 Problem~3 and
 of \cref{ch:volatility}); in the 2013 lecture Kempthorne, from the audience, remarks that he uses the range of the process as a more precise measure of volatility than close-to-close prices
 \ts{13}{17}{39:05}\ts{13}{17}{40:08}.
 \end{finance}
@@ -536,7 +536,7 @@ By \eqref{ch11:eq-tauM} and \cref{ch11:prop-max},
 \leavevmode
 \begin{enumerate}[(i)]
   \item $\tau_a<\infty$ almost surely: a Brownian path reaches every level.
-  \item $\E\tau_a=\infty$: the tail is $\Prob[\tau_a>t]=2\Phi(a/\sqrt t)-1\sim a\sqrt{2/(\pi t)}$ and $\int^\infty t^{-1/2}\dd t=\infty$.
+  \item $\E[\tau_a]=\infty$: the tail is $\Prob[\tau_a>t]=2\Phi(a/\sqrt t)-1\sim a\sqrt{2/(\pi t)}$ and $\int^\infty t^{-1/2}\dd t=\infty$.
   \item The density is unimodal with mode at $t=a^2/3$, and its median is $a^2/\bigl(\Phi^{-1}(3/4)\bigr)^2\approx2.198\,a^2$.
   \item Scaling: $\tau_a\eqd a^2\tau_1$.
 \end{enumerate}
@@ -584,7 +584,7 @@ $0.463$, and levels farther away are reached later, with a much more spread-out 
 Recurrence and infinite mean go together: Brownian motion in one dimension reaches every level with probability one,
 but the waiting time has the heavy tail $t^{-1/2}$. It is the continuous version of the simple random walk, which returns
 to $0$ a.s.\ while the expected return time is infinite (\cref{ch04:sec-ruin}, \cref{ch04:thm-ost}: optional stopping fails for $\tau_a$ because
-$B(\tau_a)=a\ne0=\E B(0)$ and the stopped process is not uniformly bounded).
+$B(\tau_a)=a\ne0=\E[B(0)]$ and the stopped process is not uniformly bounded).
 The scaling $\tau_a\eqd a^2\tau_1$ is diffusion again: time to travel $a$ grows like $a^2$.
 \end{intuition}
 
@@ -600,7 +600,7 @@ the first hitting time of $0$.
 \begin{proposition}[Moments of $R$ and law of $A$]\label{ch11:prop-refabs}
 \leavevmode
 \begin{enumerate}[(i)]
-  \item $\E R(t)=\sqrt{2t/\pi}$ and $\Var R(t)=(1-2/\pi)\,t$.
+  \item $\E[R(t)]=\sqrt{2t/\pi}$ and $\Var R(t)=(1-2/\pi)\,t$.
   \item The law of $A(t)$ has an atom at $0$ of mass $2[1-\Phi(x/\sqrt t)]$ (the probability of having been absorbed), and on $y>0$ the
       density
       \begin{equation}\label{ch11:eq-absorbed}
@@ -609,7 +609,7 @@ the first hitting time of $0$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(i) $R(t)\eqd M(t)$ by \cref{ch11:prop-max}, so $\E R=\sqrt{2t/\pi}$; $\E R^2=\E B^2=t$ gives the variance.
+(i) $R(t)\eqd M(t)$ by \cref{ch11:prop-max}, so $\E[R]=\sqrt{2t/\pi}$; $\E[R^2]=\E[B^2]=t$ gives the variance.
 
 (ii) Absorption at $0$ from $x$ is the hitting of the level $-x$ by $B$ from $0$, so $\Prob[\tau\le t]=2[1-\Phi(x/\sqrt t)]$
 by \eqref{ch11:eq-hitcdf}. For $y>0$, $\Prob[x+B(t)\in\dd y,\ \tau\le t]$ is, by reflection in $0$, the density of a path ending at $-y$, that is
@@ -617,7 +617,7 @@ $p(-y,t\mid x)$; subtracting this from the free density gives \eqref{ch11:eq-abs
 charge of opposite sign at $-x$).
 \end{proof}
 Check: $\int_0^\infty p_A\dd y=\Phi(x/\sqrt t)-[1-\Phi(x/\sqrt t)]=1-2[1-\Phi(x/\sqrt t)]$, so density plus atom sum to $1$; and
-$\E A(t)=x$ for all $t$ (absorbed Brownian motion is the martingale $B(t\wedge\tau)$, the loss of mass to $0$ being
+$\E[A(t)]=x$ for all $t$ (absorbed Brownian motion is the martingale $B(t\wedge\tau)$, the loss of mass to $0$ being
 compensated by the surviving paths). \emph{Not to be confused:} the slides use the word ``reflected'' both for the folded process $|B|$ and, in the section
 on the reflection principle, for the path reflected \emph{in a level after the hitting time}; only the second is used in \cref{ch11:lem-reflection}.
 
@@ -635,7 +635,7 @@ is $2\Phi(x/(\sigma\sqrt t))-1$, a straightforward application of \eqref{ch11:eq
 \begin{definition}[Brownian motion with drift]\label{ch11:def-drift}
 $X(t)=\mu t+\sigma B(t)$ for a standard Brownian motion $B$, a \emph{drift} $\mu\in\R$ and a \emph{volatility} $\sigma>0$
 \ts{24}{14}{43:19}\ts{13}{17}{47:24}. $X$ has continuous paths, independent increments and
-$X(t)-X(s)\sim N(\mu(t-s),\sigma^2(t-s))$, so $\E X(t)=\mu t$ and $\Var X(t)=\sigma^2t$; it reduces to $B$ for $\mu=0,\sigma=1$.
+$X(t)-X(s)\sim N(\mu(t-s),\sigma^2(t-s))$, so $\E[X(t)]=\mu t$ and $\Var X(t)=\sigma^2t$; it reduces to $B$ for $\mu=0,\sigma=1$.
 \end{definition}
 
 \begin{proposition}[Drift wins in the long run]\label{ch11:prop-drift}
@@ -652,8 +652,8 @@ scale is $(\sigma/\mu)^2=9$ years, and for it the estimate $\hat\mu=X(T)/T$ has 
 \paragraph{One-step analysis.} Look at the increment $\Delta X=X(t+\Delta t)-X(t)=\mu\Delta t+\sigma\Delta B$ with
 $\Delta B\sim N(0,\Delta t)$ independent of the past. Then
 \begin{equation}\label{ch11:eq-onestep}
-  \E\Delta X=\mu\,\Delta t,\qquad \E(\Delta X)^2=\sigma^2\Delta t+(\mu\Delta t)^2=\sigma^2\Delta t+o(\Delta t),\qquad
-  \E|\Delta X|^c=o(\Delta t)\ \ (c>2)
+  \E[\Delta] X=\mu\,\Delta t,\qquad \E[(\Delta X)^2]=\sigma^2\Delta t+(\mu\Delta t)^2=\sigma^2\Delta t+o(\Delta t),\qquad
+  \E[|\Delta X|^c]=o(\Delta t)\ \ (c>2)
 \end{equation}
 \ts{24}{14}{44:20}\ts{24}{14}{45:27}\ts{24}{14}{46:33}\ts{24}{14}{47:36}: to order $\Delta t$, only the mean and the variance of the
 increment matter. If $f$ is twice differentiable, Taylor's formula and \eqref{ch11:eq-onestep} give
@@ -674,7 +674,7 @@ the probability of reaching the upper level first. This generalises the random w
 time and continuous state \ts{24}{14}{48:45}\ts{24}{14}{49:47}\ts{24}{14}{50:51}.
 
 \paragraph{Infinitesimal derivation (the lecture).} Wait a short time $\Delta t$ so small that hitting a level in
-the meantime is negligible. By the Markov property, $u(x)=\E\,u(x+\Delta X)$; expanding with \eqref{ch11:eq-generator},
+the meantime is negligible. By the Markov property, $u(x)=\E[u(x+\Delta X)]$; expanding with \eqref{ch11:eq-generator},
 \begin{gather*}
   u(x)=u(x)+\bigl(\mu u'(x)+\tfrac12\sigma^2u''(x)\bigr)\Delta t+o(\Delta t)\\
   \Longrightarrow\ \mu\,u'(x)+\tfrac12\sigma^2u''(x)=0,\qquad u(a)=0,\ u(b)=1
@@ -693,7 +693,7 @@ one does not want to take for granted. The proof by optional stopping needs noth
 \cref{ch11:prop-elem}(iii) with $\lambda=\theta\sigma$, the process $e^{\theta X(t)}=e^{\theta\mu t+\theta\sigma B(t)}$ is a martingale iff $\theta\mu=-\theta^2\sigma^2/2$, i.e.
 $\theta=-2\mu/\sigma^2$. Hence $M(t)=g(X(t))=e^{-2\mu X(t)/\sigma^2}$ is a martingale, exactly the continuous analogue of
 $r^{S_n}$ with $r=q/p$ of \cref{ch04:ex-m4}. The stopped martingale $M(t\wedge\tau)$ is bounded, and $\tau<\infty$ a.s., so
-optional stopping (\cref{ch04:thm-ost}(ii)) gives $g(x)=\E g(X(\tau))=u\,g(b)+(1-u)\,g(a)$, which is \eqref{ch11:eq-ruin}. It is also the exact limit
+optional stopping (\cref{ch04:thm-ost}(ii)) gives $g(x)=\E[g(X(\tau))]=u\,g(b)+(1-u)\,g(a)$, which is \eqref{ch11:eq-ruin}. It is also the exact limit
 of the discrete formula \cref{ch04:prop-biased}: for steps $\pm\sigma\sqrt h$ with $p=\tfrac12(1+\mu\sqrt h/\sigma)$, one has
 $r=q/p\approx e^{-2\mu\sqrt h/\sigma}$, and $r^{S_n}\to e^{-2\mu X/\sigma^2}$. A numerical check (not in the course): for
 $\mu=0.5$, $\sigma=1$, $a=0$, $b=3$, $x=1$ formula \eqref{ch11:eq-ruin} gives $u=0.66524$, and the exact ruin probability
@@ -725,7 +725,7 @@ $x$; a positive drift bends the curve above it (the barrier $b$ is reached first
   \item If $\mu>0$, the probability that $X$ ever falls to a level $d$ below its start is $e^{-2\mu d/\sigma^2}$,
       so the running minimum of $X$ is exponentially distributed with rate $2\mu/\sigma^2$; if $\mu\le0$ every level below is
       reached with probability one.
-  \item If $\mu=0$, $\E\tau=(x-a)(b-x)/\sigma^2$.
+  \item If $\mu=0$, $\E[\tau]=(x-a)(b-x)/\sigma^2$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -734,7 +734,7 @@ $x$; a positive drift bends the curve above it (the barrier $b$ is reached first
 (ii) Let $b\to\infty$ in
 $1-u=(g(b)-g(x))/(g(b)-g(a))$: for $\mu>0$, $g(b)\to0$ and the limit is $g(x)/g(a)=e^{-2\mu(x-a)/\sigma^2}$; for $\mu<0$, $g(b)\to\infty$ and the limit is $1$.
 
-(iii) $X(t)^2-\sigma^2t$ is a martingale (\cref{ch11:prop-elem}(iii)); optional stopping gives $\sigma^2\E\tau=\E X(\tau)^2-x^2
+(iii) $X(t)^2-\sigma^2t$ is a martingale (\cref{ch11:prop-elem}(iii)); optional stopping gives $\sigma^2\E[\tau]=\E[X(\tau)^2]-x^2
 =\frac{(b-x)a^2+(x-a)b^2}{b-a}-x^2=(x-a)(b-x)$.
 \end{proof}
 
@@ -766,7 +766,7 @@ $f(B_{t+x})-f(B_t)=f'(B_t)\,\Delta B+\tfrac12f''(B_t)\,\Delta B^2+\dots$ with $\
 \ts{13}{17}{1:14:05}. Proofs and generalisations (functions of $t$ and $X$, stochastic integrals) are in \cref{ch:stochcalc}.
 
 \paragraph{Application to the exponential.} With $f(x)=e^{x}$, \eqref{ch11:eq-ito} gives $\dd e^{B_t}=e^{B_t}\dd B_t+\tfrac12e^{B_t}\dd t$: the
-process $e^{B}$ has a \emph{drift} $\tfrac12S\dd t$ that $\dd S=S\dd B$ does not have. Indeed $\E e^{B_t}=e^{t/2}$ (moment generating function of the normal), whereas
+process $e^{B}$ has a \emph{drift} $\tfrac12S\dd t$ that $\dd S=S\dd B$ does not have. Indeed $\E[e^{B_t}]=e^{t/2}$ (moment generating function of the normal), whereas
 $\dd S=S\dd B$ means that $S$ is a martingale with constant mean $S_0$; the same computation is the exponential martingale of
 \cref{ch11:prop-elem}(iii), and the correction $-\tfrac12\sigma^2t$ in the exponent is the same lognormal correction as in \cref{ch04:rem-logprice}.
 The solution of $\dd S=S(\mu\dd t+\sigma\dd B)$ is therefore
@@ -776,7 +776,7 @@ The solution of $\dd S=S(\mu\dd t+\sigma\dd B)$ is therefore
 \emph{geometric Brownian motion} (GBM): $\log S_t$ is a Brownian motion with drift $\mu-\tfrac12\sigma^2$ and volatility $\sigma$, so $S_t$ is lognormal
 (\cref{ch03:sec-normal}) with
 \[
-  \E S_t=S_0e^{\mu t},\qquad \operatorname{median}(S_t)=S_0e^{(\mu-\sigma^2/2)t},\qquad \Var S_t=S_0^2e^{2\mu t}\bigl(e^{\sigma^2t}-1\bigr).
+  \E[S_t]=S_0e^{\mu t},\qquad \operatorname{median}(S_t)=S_0e^{(\mu-\sigma^2/2)t},\qquad \Var S_t=S_0^2e^{2\mu t}\bigl(e^{\sigma^2t}-1\bigr).
 \]
 
 \paragraph{The mechanism in discrete time (our check).} The discrete product of one-step relative changes,
@@ -811,7 +811,7 @@ consequently $X$ has the law of Brownian motion \emph{conditioned} to return to 
 irrelevant for the shape of the fluctuations). The variance is largest in the middle, $\tfrac14$ at $t=\tfrac12$.
 
 \paragraph{Where it comes from: the empirical distribution function.} Let $U_1,\dots,U_n$ be i.i.d.\ uniform on $(0,1)$ and
-$\hat F_n(t)=\#\{U_i\le t\}/n$. Each indicator $\ind\{U_i\le t\}$ is Bernoulli with mean $t$ and variance $t(1-t)$, so $\E\hat F_n(t)=t$ and
+$\hat F_n(t)=\#\{U_i\le t\}/n$. Each indicator $\ind\{U_i\le t\}$ is Bernoulli with mean $t$ and variance $t(1-t)$, so $\E[\hat F_n(t)]=t$ and
 $\Var\hat F_n(t)=t(1-t)/n$; by the central limit theorem
 $\sqrt n[\hat F_n(t)-t]\to N(0,t(1-t))$ \ts{24}{14}{38:05}\ts{24}{14}{39:08}\ts{24}{14}{40:09}. The whole process $\sqrt n[\hat F_n(t)-t]$ converges to
 the Brownian bridge (Donsker, 1952): variance $t(1-t)$ and covariance $\min(s,t)-st$ are those of \eqref{ch11:eq-bridge}, checked directly
@@ -834,7 +834,7 @@ independent of $B$ \ts{24}{14}{1:14:35}. Then the increment $B(T)$ has density
   f(x)=\int_0^\infty\lambda e^{-\lambda t}\frac{e^{-x^2/2t}}{\sqrt{2\pi t}}\dd t=\sqrt{\tfrac\lambda2}\;e^{-\sqrt{2\lambda}\,|x|},
 \end{equation}
 the \emph{Laplace} (two-sided exponential) density, instead of a bell curve: a \emph{normal variance mixture} in
-the sense of \cref{ch03:prop-mixture}, $B(T)=\sqrt T\,Z$, with variance $\E T=1/\lambda$ and excess kurtosis $3\E T^2/(\E T)^2-3=3$ (checked by numerical integration of \eqref{ch11:eq-laplace} at two points). Its tails are heavier than the normal ones, and the
+the sense of \cref{ch03:prop-mixture}, $B(T)=\sqrt T\,Z$, with variance $\E[T]=1/\lambda$ and excess kurtosis $3\E[T^2]/(\E[T])^2-3=3$ (checked by numerical integration of \eqref{ch11:eq-laplace} at two points). Its tails are heavier than the normal ones, and the
 lecture reports that a Laplace model fits S\&P~500 returns much better \ts{24}{14}{1:15:44}. The economic reading: the useful clock for prices
 is not calendar time but a random \emph{business time} (trades, information arrivals), and the process is a Brownian motion \emph{subordinated} to a
 random clock. Time-changed and stochastic-volatility models take this idea further (\cref{ch:volatility}).
@@ -843,7 +843,7 @@ random clock. Time-changed and stochastic-volatility models take this idea furth
 The lecture opens with the animation of a particle moving in the plane, where each coordinate takes independent Gaussian steps,
 no direction being preferred \ts{24}{14}{1:04}\ts{24}{14}{2:04}\ts{24}{14}{3:08}. Formally $\bm B(t)=(B_1(t),B_2(t))$ with independent standard Brownian motions has density
 $(2\pi t)^{-1}e^{-|\bm y|^2/2t}$, invariant under rotations; the distance $|\bm B(t)|$ has the Rayleigh law
-$\Prob[|\bm B(t)|<\varepsilon]=1-e^{-\varepsilon^2/(2t)}$ (for $t=\varepsilon=1$: $39.3\%$) and $\E|\bm B(t)|=\sqrt{\pi t/2}$.
+$\Prob[|\bm B(t)|<\varepsilon]=1-e^{-\varepsilon^2/(2t)}$ (for $t=\varepsilon=1$: $39.3\%$) and $\E[|\bm B(t)|]=\sqrt{\pi t/2}$.
 The path in the plane is fractal-looking and its two projections are the one-dimensional processes of the rest of the chapter (file \file{lec14\_2}, $2000$ steps).
 Correlated Brownian motions, obtained from independent ones by a matrix (\cref{ch:linalg}), are the basis of models with several risk factors.
 
@@ -935,12 +935,12 @@ PS8; \cref{ch11:sec-2d} gives the results it needs. 2024 PS4 Problems~3--4 (MLE 
 &\text{Martingales:} && B(t),\quad B(t)^2-t,\quad e^{\lambda B(t)-\lambda^2t/2}\\
 &\text{Density:} && p(y,\tau\mid x)=\tfrac{1}{\sqrt{2\pi\sigma^2\tau}}e^{-(y-x)^2/(2\sigma^2\tau)}\\
 & && \partial_\tau p=\tfrac{\sigma^2}{2}\partial_y^2p\\
-&\text{Donsker:} && B_n(t)=S_{\lfloor nt\rfloor}/\sqrt n\ \Rightarrow\ B(t)\quad(\E X=0,\ \Var X=1)\\
+&\text{Donsker:} && B_n(t)=S_{\lfloor nt\rfloor}/\sqrt n\ \Rightarrow\ B(t)\quad(\E[X]=0,\ \Var X=1)\\
 &\text{Scaling:} && \{B(ct)\}\eqd\{\sqrt c\,B(t)\}\\
 &\text{Paths:} && \text{continuous, nowhere differentiable; }\ \sum(\Delta B)^2\to T,\ \ (\dd B)^2=\dd t\\
 &\text{Maximum:} && \Prob[M(t)\ge a]=2\Prob[B(t)>a]=2[1-\Phi(a/\sqrt t)]\\
-&\text{Hitting time:} && f_{\tau_a}(t)=\tfrac{a}{\sqrt{2\pi}}t^{-3/2}e^{-a^2/(2t)},\quad \E\tau_a=\infty\\
-&\text{Reflected:} && \E|B(t)|=\sqrt{2t/\pi},\quad \Var|B(t)|=(1-\tfrac2\pi)t\\
+&\text{Hitting time:} && f_{\tau_a}(t)=\tfrac{a}{\sqrt{2\pi}}t^{-3/2}e^{-a^2/(2t)},\quad \E[\tau_a]=\infty\\
+&\text{Reflected:} && \E[|B(t)|]=\sqrt{2t/\pi},\quad \Var|B(t)|=(1-\tfrac2\pi)t\\
 &\text{Absorbed at 0:} && p_A(y)=p(y,t\mid x)-p(-y,t\mid x)\\
 & && \Prob[A(t)=0]=2[1-\Phi(x/\sqrt t)]\\
 &\text{Bridge:} && X(t)=B(t)-tB(1),\quad \Cov(X(s),X(t))=\min(s,t)-st\\
@@ -948,7 +948,7 @@ PS8; \cref{ch11:sec-2d} gives the results it needs. 2024 PS4 Problems~3--4 (MLE 
 &\text{Ruin:} && \Prob[X(\tau)=b\mid X(0)=x]=\tfrac{e^{-2\mu x/\sigma^2}-e^{-2\mu a/\sigma^2}}{e^{-2\mu b/\sigma^2}-e^{-2\mu a/\sigma^2}}\\
 & && \bigl(=\tfrac{x-a}{b-a}\text{ if }\mu=0\bigr)\\
 &\text{It\^o (heuristic):} && \dd f(B)=f'(B)\dd B+\tfrac12f''(B)\dd t\\
-&\text{GBM:} && S_t=S_0e^{(\mu-\sigma^2/2)t+\sigma B_t},\quad \E S_t=S_0e^{\mu t}\\
+&\text{GBM:} && S_t=S_0e^{(\mu-\sigma^2/2)t+\sigma B_t},\quad \E[S_t]=S_0e^{\mu t}\\
 &\text{Laplace:} && B(T),\ T\sim\mathrm{Exp}(\lambda):\ f(x)=\sqrt{\lambda/2}\,e^{-\sqrt{2\lambda}|x|}
 \end{align*}
 \end{keyformulas}
@@ -1005,22 +1005,22 @@ time-reversed path $B(t-u)-B(t)$). What is the probability that a driftless log 
 \end{exercise}
 
 \begin{exercise}[not from the course: a hitting time with infinite mean]\label{ch11:ex-tau}
-Show $\Prob[\tau_a<\infty]=1$ and $\E\tau_a=\infty$ from \eqref{ch11:eq-hitcdf}. Why does optional stopping ($\E B(\tau_a)=0$)
+Show $\Prob[\tau_a<\infty]=1$ and $\E[\tau_a]=\infty$ from \eqref{ch11:eq-hitcdf}. Why does optional stopping ($\E[B(\tau_a)]=0$)
 fail? Use $\tau_a\eqd a^2\tau_1$ to show that the median of $\tau_a$ scales like $a^2$; compute the median of $\tau_1$.
 \end{exercise}
 
 \begin{exercise}[not from the course: absorbed Brownian motion]\label{ch11:ex-abs}
-For absorbed Brownian motion $A$ started at $x>0$ (\cref{ch11:def-refabs}) show that \eqref{ch11:eq-absorbed} and the mass $2[1-\Phi(x/\sqrt t)]$ at $0$ sum to $1$, and that $\E A(t)=x$.
+For absorbed Brownian motion $A$ started at $x>0$ (\cref{ch11:def-refabs}) show that \eqref{ch11:eq-absorbed} and the mass $2[1-\Phi(x/\sqrt t)]$ at $0$ sum to $1$, and that $\E[A(t)]=x$.
 Is $A(t)^2-t\wedge\tau$ a martingale?
 \end{exercise}
 
 \begin{exercise}[not from the course: exit time and ruin]\label{ch11:ex-exit}
-For $X=\mu t+\sigma B$ with $\mu\ne0$ compute $\E\tau$ for the exit time of $(a,b)$ (hint: the martingale $X(t)-\mu t$ and \eqref{ch11:eq-ruin}). Check that the limit $\mu\to0$ is $(x-a)(b-x)/\sigma^2$.
+For $X=\mu t+\sigma B$ with $\mu\ne0$ compute $\E[\tau]$ for the exit time of $(a,b)$ (hint: the martingale $X(t)-\mu t$ and \eqref{ch11:eq-ruin}). Check that the limit $\mu\to0$ is $(x-a)(b-x)/\sigma^2$.
 \end{exercise}
 
 \begin{exercise}[not from the course: geometric Brownian motion]\label{ch11:ex-gbm}
-For $S_t$ in \eqref{ch11:eq-gbm} compute $\E S_t$, $\Var S_t$, and $\Prob[S_t<S_0]$. With $\mu=0.08$, $\sigma=0.2$ find the horizon at which the probability of a loss falls below $5\%$.
-Show that $\E e^{\lambda B(t)}=e^{\lambda^2t/2}$ and use it to explain why $e^{B}$ is not a martingale.
+For $S_t$ in \eqref{ch11:eq-gbm} compute $\E[S_t]$, $\Var S_t$, and $\Prob[S_t<S_0]$. With $\mu=0.08$, $\sigma=0.2$ find the horizon at which the probability of a loss falls below $5\%$.
+Show that $\E[e^{\lambda B(t)}]=e^{\lambda^2t/2}$ and use it to explain why $e^{B}$ is not a martingale.
 \end{exercise}
 
 \begin{exercise}[not from the course: the Laplace mixture]\label{ch11:ex-laplace}

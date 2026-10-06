@@ -164,6 +164,8 @@
 %                 bar "ANSWER n: topic" and the answer; \answerpart{topic} starts a further
 %                 answer in the same box (one per question); \label{ans:...} makes it citable
 %  \feedback{...} a comment on one of the reader's own solutions (indigo)
+%  \feedback*{...} the same when the solution contains an error (red); write it just before
+%                 \begin{mysolution}, so that it starts level with the solution
 %  \begin{history}[topic], \begin{aside}[topic], \begin{coursenote}[topic]
 %  example and proof environments are also printed here (sideexample = example)
 %  Inside a coloured box of the main text, margin items appear right after the box.
@@ -184,7 +186,7 @@
 \newcommand{\side@numtag}{{\bfseries\color{anscol!75!black}\side@num}\enspace}
 \NewDocumentCommand{\note}{s t+ +m}{\side@numput{\begin{tcolorbox}[sidebox=notecol]%
   \IfBooleanT{#1}{\side@tag{okcol}{DONE}}\IfBooleanT{#2}{\side@tag{defcol}{SEEN}}\side@numtag#3\end{tcolorbox}}}
-\newcommand{\feedback}[1]{\side@put{\begin{tcolorbox}[sidebox=exercol]\side@tag{exercol}{FEEDBACK}#1\end{tcolorbox}}}
+\NewDocumentCommand{\feedback}{s +m}{\IfBooleanTF{#1}{\side@put{\begin{tcolorbox}[sidebox=thmcol]\side@tag{thmcol}{FEEDBACK: ERROR}#2\end{tcolorbox}}}{\side@put{\begin{tcolorbox}[sidebox=exercol]\side@tag{exercol}{FEEDBACK}#2\end{tcolorbox}}}}
 \newcounter{answer}[chapter]
 \renewcommand{\theanswer}{\thechapter.\arabic{answer}}
 \crefname{answer}{answer}{answers}

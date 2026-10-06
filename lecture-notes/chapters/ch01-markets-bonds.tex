@@ -1196,7 +1196,7 @@ pricing function $\hat f(x)$ is only known up to statistical noise of standard d
 $\operatorname{sd}(x)$. Delta is computed by a centred difference
 $\hat\Delta_\varepsilon = [\hat f(x+\varepsilon)-\hat f(x-\varepsilon)]/(2\varepsilon)$. A small shift
 $\varepsilon$ amplifies the noise, a large one introduces discretisation bias. The project chose
-$\varepsilon$ to minimise the mean squared error $\E\bigl|f'(x)-\hat\Delta_\varepsilon\bigr|^2$ and found
+$\varepsilon$ to minimise the mean squared error $\E\bigl[|f'(x)-\hat\Delta_\varepsilon|^2\bigr]$ and found
 a rule of the form $\varepsilon_{\text{opt}} \propto \bigl(\operatorname{sd}(x)/(d+|\Gamma(x)|)\bigr)^{1/3}$,
 with $\Gamma$ the option's gamma and $c,d$ tuning constants (slide 19 of \file{lecnote1}); the resulting
 delta is visibly smoother than with a constant shift.
