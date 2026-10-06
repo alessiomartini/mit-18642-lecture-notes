@@ -253,6 +253,15 @@ the one in which all the distribution theory below becomes transparent: the resi
 $(n-p)$-dimensional space, which is why ``$n-p$ degrees of freedom'' appear everywhere.
 \end{intuition}
 
+\begin{exercise}[PS3 (2013), Problem 1(a)--(c): the hat matrix]\label{ch05:ex-ps3-1ac}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Prove that $H$ is a projection matrix: $H\T=H$ and $H^2=H$.
+  \item The diagonal element $H_{ii}$ is the \emph{leverage} of case $i$. Show that $\partial\hat y_i/\partial y_i=H_{ii}$.
+  \item Show that the average of the $H_{ii}$ is $p/n$. \emph{Hint:} $\tr(AB)=\tr(BA)$.
+\end{enumerate}
+\end{exercise}
+
 \subsection{\texorpdfstring{$R^2$}{R-squared}}
 Assume from now on that $X$ contains a column of ones (an intercept). Then $\bm 1\T\hat{\bm\varepsilon}=0$ by
 \eqref{ch05:eq-normal}: residuals sum to zero and $\bar{\hat y}=\bar y$. Subtracting $\bar y\bm 1$ (which lies in
@@ -280,6 +289,17 @@ For simple regression ($p=2$, one slope) this is the familiar squared correlatio
 $\hat\beta_1=\sum_i(x_i-\bar x)(y_i-\bar y)/\sum_i(x_i-\bar x)^2=\widehat{\Cov}(x,y)/\widehat{\Var}(x)$, the beta
 of \cref{def:alphabeta}. It is worth calibrating the eye: the daily CAPM regression of GE on the market in
 \cref{ch05:capm} has $R^2=0.30$, a clearly visible but very noisy linear cloud \ts{24}{11}{59:45}.
+
+\begin{exercise}[not from the course: $R^2$ with orthogonal regressors]\label{ch05:ex-r2orth}
+Let $\bm z_1,\dots,\bm z_m$ be centred and mutually orthogonal, and regress $\bm y$ on $\bm 1,\bm z_1,\dots,\bm z_m$.
+\begin{enumerate}[(a)]
+  \item Show that the multiple
+      $R^2$ equals the sum of the $R^2$'s of the $m$ simple regressions of $\bm y$ on $\bm 1,\bm z_j$, and that each slope is the same in the
+      simple and in the multiple regression.
+  \item Check this on the ETF numbers ($0.545+0.006+0.079+0.012$ vs $0.642$) and
+      explain why the order of the principal components by variance says nothing about their $R^2$.
+\end{enumerate}
+\end{exercise}
 
 \subsection{The QR decomposition}\label{ch05:sec-qr}
 Numerically one never inverts $X\T X$. The 2013 lecture \ts{13}{6}{1:08:26} uses the QR decomposition
@@ -400,6 +420,18 @@ $\delta y$ at a point at distance $d$ from the centroid tilts the line by $\delt
 reappear as the \emph{leverage} $H_{ii}$ of a case (\cref{ch05:sec-diag}): the points that pin the line down are
 also the ones that can pull it away.
 \end{intuition}
+
+\begin{exercise}[not from the course: optimal design of a line fit]
+For $y=\beta_0+\beta_1x+\varepsilon$ under Gauss--Markov with $n$ even and $x_i\in[-1,1]$ at your choice:
+\begin{enumerate}[(a)]
+  \item derive
+      $\hat\beta_1=S_{xy}/S_{xx}$ and $\Var(\hat\beta_1)=\sigma^2/S_{xx}$ with $S_{xx}=\sum_i(x_i-\bar x)^2$;
+  \item find the design minimising
+      $\Var(\hat\beta_1)$ and compute the leverages $H_{ii}$ for it;
+  \item explain why this design cannot detect curvature, and how the
+      curvature test of \texttt{residualPlots()} would behave.
+\end{enumerate}
+\end{exercise}
 
 % ------------------------------------------------------------------
 \section{Generalised least squares}\label{ch05:sec-gls}
@@ -662,6 +694,12 @@ $0.5$, with the robust scale they are uniform except in the extreme 1\% on each 
 \ts{24}{11}{1:05:11}. Quantile regression is the natural tool for Value-at-Risk (\cref{ch:var}).
 \end{finance}
 
+\begin{exercise}[not from the course: quantile regression as maximum likelihood]
+Show that minimising $\sum_i\rho_\tau(y_i-\bm x_i\T\bm\beta)$ is maximum likelihood for errors with the \emph{asymmetric Laplace} density
+$f(u)=\frac{\tau(1-\tau)}{s}\exp\bigl(-\rho_\tau(u)/s\bigr)$, and check that $f$ is a density whose $\tau$-quantile is $0$. Which estimator of
+\cref{ch05:def-mest} is ML for Laplace errors?
+\end{exercise}
+
 % ------------------------------------------------------------------
 \section{Hypothesis testing}\label{ch05:sec-tests}
 
@@ -767,6 +805,16 @@ same test is run on hundreds of stocks (is $\alpha=0$ for each S\&P~500 stock?),
 significant at the 5\% level even if every null is true \ts{24}{11}{1:16:47}. A handful of significant alphas is
 therefore no evidence against the CAPM, and ``the best of 500 back-tests'' is not a strategy.
 \end{finance}
+
+\begin{exercise}[not from the course: $t^2=F$ on real numbers]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item From \cref{ch05:prop-wald}, show directly that for $H_0:\beta_j=b$ the $F$ statistic equals $\hat t^{\,2}$.
+  \item Using only the
+      GE output of \cref{ch05:ex-gebeta} (estimate, standard error, $n-p=1674$, RSS $=0.71819$), reproduce the RSS $0.72003$ of the
+      model constrained by $\beta=1$ printed by \texttt{linearHypothesis}.
+\end{enumerate}
+\end{exercise}
 
 % ------------------------------------------------------------------
 \section{Testing for a change of regime}\label{ch05:sec-chow}
@@ -884,6 +932,18 @@ regime changes; the structural break of July 2005 is visible at a glance. \file{
 package \texttt{fxregime}, which implements this regression together with formal tests for changes of regime.
 \end{casestudy}
 
+\begin{exercise}[not from the course: the Chow test]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Show that the residual sum of squares of the block-diagonal design $\bigl(\begin{smallmatrix}X_A&0\\0&X_B\end{smallmatrix}\bigr)$ is
+      $\text{RSS}_A+\text{RSS}_B$.
+  \item Show that $\bigl(\begin{smallmatrix}X_A&0\\X_B&X_B\end{smallmatrix}\bigr)$ has the same column space, and relate the two
+      parameter vectors.
+  \item For GE, compute $\hat\alpha_B$, $\hat\beta_B$ and the $F$ statistic from the numbers in the case study of
+      \cref{ch05:sec-chow}. Why can you not obtain the standard error of $\hat\beta_B$ from that table alone?
+\end{enumerate}
+\end{exercise}
+
 % ------------------------------------------------------------------
 \section{Regression diagnostics}\label{ch05:sec-diag}
 Step 4 of the modelling loop. By \cref{ch05:thm-normal}(ii) the residuals are correlated and have unequal variances,
@@ -975,6 +1035,20 @@ distances of the flagged cases are only $0.07$--$0.13$. Curvature tests: none si
 non-constancy of the variance.
 \end{casestudy}
 
+\begin{exercise}[PS3 (2013), Problem 1(d)--(e): invariance and leverage]\label{ch05:ex-ps3-1de}
+(d) Prove that $H$ is unchanged if $X$ is replaced by $X'=XG$ for any invertible $p\times p$ matrix $G$.
+(e) Let $X$ be $n\times(p+1)$ with a first column of ones and $p$ covariates, and let $G$ be the identity except for the first
+row, which is $(1,-\bar x_1,\dots,-\bar x_p)$, with $\bar x_j=\frac1n\sum_ix_{i,j}$. By (d) the models with $X$ and $X'=XG$ have the
+same fitted values and residuals.
+\begin{itemize}
+  \item If $\bm\beta=(\beta_0,\dots,\beta_p)\T$ is the parameter for $X$, show that $\bm\beta'=G^{-1}\bm\beta$ is the parameter for $X'$; find
+        $G^{-1}$ and the elements of $\bm\beta'$ explicitly.
+  \item Show that $X'^{\mathsf T}X'=\bigl(\begin{smallmatrix}n&\bm 0_p\T\\ \bm 0_p&\mathcal X\T\mathcal X\end{smallmatrix}\bigr)$, where $\mathcal X$ has entries $x_{i,j}-\bar x_j$.
+  \item Prove $H_{ij}=\frac1n+(\bm x_i-\bar{\bm x})\T[\mathcal X\T\mathcal X]^{-1}(\bm x_j-\bar{\bm x})$, where $\bm x_i=(x_{i,1},\dots,x_{i,p})\T$. Hence the
+        leverage $H_{ii}$ increases with the (squared) Mahalanobis distance between $\bm x_i$ and $\bar{\bm x}$.
+\end{itemize}
+\end{exercise}
+
 % ------------------------------------------------------------------
 \section{Shrinkage and principal-components regression}\label{ch05:sec-shrink}
 When regressors are many or strongly correlated (the four index ETFs below have pairwise correlations
@@ -1024,6 +1098,18 @@ maximising it means minimising $\|\bm y-X\bm\beta\|^2+(\sigma^2/\tau^2)\|\bm\bet
 \end{proof}
 The isotropic prior says that a priori no direction of $\R^p$ is preferred \ts{24}{11}{26:58}; a strong prior (small
 $\tau$, large $\lambda$) pulls all coefficients towards zero.
+
+\begin{exercise}[not from the course: ridge as augmented least squares]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Show that $\hat{\bm\beta}^{\text{ridge}}$ is the OLS estimate for the augmented data $\tilde{\bm y}=(\bm y,\bm 0_p)$,
+      $\tilde X=\bigl(\begin{smallmatrix}X\\ \sqrt\lambda I_p\end{smallmatrix}\bigr)$.
+  \item Using the SVD, show that $\|\hat{\bm\beta}^{\text{ridge}}\|$ decreases in $\lambda$ and compute
+      $\Cov(\hat{\bm\beta}^{\text{ridge}})$ under Gauss--Markov.
+  \item Show that ridge has smaller variance than OLS in every direction:
+      $\Cov(\hat{\bm\beta})-\Cov(\hat{\bm\beta}^{\text{ridge}})\succeq0$.
+\end{enumerate}
+\end{exercise}
 
 \subsection{Principal-components regression}
 The principal components of the (centred) regressors are $\bm z_j=X\bm v_j$, where $\bm v_j$ are the eigenvectors of the
@@ -1281,33 +1367,11 @@ regression, the ETF case study and the S\&P~500 CAPM study. The 2013 lecture ran
 % ------------------------------------------------------------------
 \section*{Exercises}
 \addcontentsline{toc}{section}{Exercises}
+Standalone exercises follow the section they practise; the connected series (2013 PS3, Problems~2 and~3, which build on one another) are kept together here.
 
 \subsection*{From 2013 Problem Set 3}
 Throughout, $\bm y=X\bm\beta+\bm\varepsilon$ with $X\in\R^{n\times p}$ of full rank $p\le n$, $\hat{\bm\beta}=(X\T X)^{-1}X\T\bm y$, $H=X(X\T X)^{-1}X\T$,
 $\hat{\bm\varepsilon}=(I_n-H)\bm y$.
-
-\begin{exercise}[PS3 (2013), Problem 1(a)--(c): the hat matrix]\label{ch05:ex-ps3-1ac}
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Prove that $H$ is a projection matrix: $H\T=H$ and $H^2=H$.
-  \item The diagonal element $H_{ii}$ is the \emph{leverage} of case $i$. Show that $\partial\hat y_i/\partial y_i=H_{ii}$.
-  \item Show that the average of the $H_{ii}$ is $p/n$. \emph{Hint:} $\tr(AB)=\tr(BA)$.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS3 (2013), Problem 1(d)--(e): invariance and leverage]\label{ch05:ex-ps3-1de}
-(d) Prove that $H$ is unchanged if $X$ is replaced by $X'=XG$ for any invertible $p\times p$ matrix $G$.
-(e) Let $X$ be $n\times(p+1)$ with a first column of ones and $p$ covariates, and let $G$ be the identity except for the first
-row, which is $(1,-\bar x_1,\dots,-\bar x_p)$, with $\bar x_j=\frac1n\sum_ix_{i,j}$. By (d) the models with $X$ and $X'=XG$ have the
-same fitted values and residuals.
-\begin{itemize}
-  \item If $\bm\beta=(\beta_0,\dots,\beta_p)\T$ is the parameter for $X$, show that $\bm\beta'=G^{-1}\bm\beta$ is the parameter for $X'$; find
-        $G^{-1}$ and the elements of $\bm\beta'$ explicitly.
-  \item Show that $X'^{\mathsf T}X'=\bigl(\begin{smallmatrix}n&\bm 0_p\T\\ \bm 0_p&\mathcal X\T\mathcal X\end{smallmatrix}\bigr)$, where $\mathcal X$ has entries $x_{i,j}-\bar x_j$.
-  \item Prove $H_{ij}=\frac1n+(\bm x_i-\bar{\bm x})\T[\mathcal X\T\mathcal X]^{-1}(\bm x_j-\bar{\bm x})$, where $\bm x_i=(x_{i,1},\dots,x_{i,p})\T$. Hence the
-        leverage $H_{ii}$ increases with the (squared) Mahalanobis distance between $\bm x_i$ and $\bar{\bm x}$.
-\end{itemize}
-\end{exercise}
 
 \begin{exercise}[PS3 (2013), Problem 2(a): Sherman--Morrison--Woodbury]\label{ch05:ex-ps3-2a}
 Let $A$ be a $p\times p$ symmetric matrix of rank $p$ and $a,b$ two $q\times p$ matrices of rank $q<p$. Prove that, whenever the
@@ -1347,69 +1411,4 @@ $SS_{\text{ERROR}}$; and that $\hat F=\dfrac{SS_{\text{REG}}/(p-k)}{SS_{\text{ER
 table with rows ``regression on $1,\dots,k$'' ($\hat{\bm y}_I\T\hat{\bm y}_I$, $k$ d.f.), ``regression on $k+1,\dots,p$ adjusting for
 $1,\dots,k$'' ($p-k$ d.f., mean square $MS_0$, $\hat F=MS_0/MS_{\text{Error}}$), ``error'' ($n-p$ d.f.) and ``total'' ($\bm y\T\bm y$,
 $n$ d.f.).
-\end{exercise}
-
-\subsection*{Additional exercises}
-
-\begin{exercise}[not from the course: $t^2=F$ on real numbers]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item From \cref{ch05:prop-wald}, show directly that for $H_0:\beta_j=b$ the $F$ statistic equals $\hat t^{\,2}$.
-  \item Using only the
-      GE output of \cref{ch05:ex-gebeta} (estimate, standard error, $n-p=1674$, RSS $=0.71819$), reproduce the RSS $0.72003$ of the
-      model constrained by $\beta=1$ printed by \texttt{linearHypothesis}.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: $R^2$ with orthogonal regressors]\label{ch05:ex-r2orth}
-Let $\bm z_1,\dots,\bm z_m$ be centred and mutually orthogonal, and regress $\bm y$ on $\bm 1,\bm z_1,\dots,\bm z_m$.
-\begin{enumerate}[(a)]
-  \item Show that the multiple
-      $R^2$ equals the sum of the $R^2$'s of the $m$ simple regressions of $\bm y$ on $\bm 1,\bm z_j$, and that each slope is the same in the
-      simple and in the multiple regression.
-  \item Check this on the ETF numbers ($0.545+0.006+0.079+0.012$ vs $0.642$) and
-      explain why the order of the principal components by variance says nothing about their $R^2$.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: the Chow test]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Show that the residual sum of squares of the block-diagonal design $\bigl(\begin{smallmatrix}X_A&0\\0&X_B\end{smallmatrix}\bigr)$ is
-      $\text{RSS}_A+\text{RSS}_B$.
-  \item Show that $\bigl(\begin{smallmatrix}X_A&0\\X_B&X_B\end{smallmatrix}\bigr)$ has the same column space, and relate the two
-      parameter vectors.
-  \item For GE, compute $\hat\alpha_B$, $\hat\beta_B$ and the $F$ statistic from the numbers in the case study of
-      \cref{ch05:sec-chow}. Why can you not obtain the standard error of $\hat\beta_B$ from that table alone?
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: quantile regression as maximum likelihood]
-Show that minimising $\sum_i\rho_\tau(y_i-\bm x_i\T\bm\beta)$ is maximum likelihood for errors with the \emph{asymmetric Laplace} density
-$f(u)=\frac{\tau(1-\tau)}{s}\exp\bigl(-\rho_\tau(u)/s\bigr)$, and check that $f$ is a density whose $\tau$-quantile is $0$. Which estimator of
-\cref{ch05:def-mest} is ML for Laplace errors?
-\end{exercise}
-
-\begin{exercise}[not from the course: ridge as augmented least squares]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Show that $\hat{\bm\beta}^{\text{ridge}}$ is the OLS estimate for the augmented data $\tilde{\bm y}=(\bm y,\bm 0_p)$,
-      $\tilde X=\bigl(\begin{smallmatrix}X\\ \sqrt\lambda I_p\end{smallmatrix}\bigr)$.
-  \item Using the SVD, show that $\|\hat{\bm\beta}^{\text{ridge}}\|$ decreases in $\lambda$ and compute
-      $\Cov(\hat{\bm\beta}^{\text{ridge}})$ under Gauss--Markov.
-  \item Show that ridge has smaller variance than OLS in every direction:
-      $\Cov(\hat{\bm\beta})-\Cov(\hat{\bm\beta}^{\text{ridge}})\succeq0$.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: optimal design of a line fit]
-For $y=\beta_0+\beta_1x+\varepsilon$ under Gauss--Markov with $n$ even and $x_i\in[-1,1]$ at your choice:
-\begin{enumerate}[(a)]
-  \item derive
-      $\hat\beta_1=S_{xy}/S_{xx}$ and $\Var(\hat\beta_1)=\sigma^2/S_{xx}$ with $S_{xx}=\sum_i(x_i-\bar x)^2$;
-  \item find the design minimising
-      $\Var(\hat\beta_1)$ and compute the leverages $H_{ii}$ for it;
-  \item explain why this design cannot detect curvature, and how the
-      curvature test of \texttt{residualPlots()} would behave.
-\end{enumerate}
 \end{exercise}

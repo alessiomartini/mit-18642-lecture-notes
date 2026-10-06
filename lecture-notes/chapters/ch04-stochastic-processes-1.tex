@@ -180,6 +180,25 @@ positive and makes returns, not price changes, i.i.d. Time-varying volatility co
 (\cref{ch:volatility}).
 \end{finance}
 
+\begin{exercise}[PS2 (2024), Problem 1: random walk with bias]\label{ch04:ex-ps2-1}
+Let $X_n$ be i.i.d.\ steps with $\Prob(X_n=+1)=p$, $\Prob(X_n=0)=1-(p+q)$, $\Prob(X_n=-1)=q$, where $p,q>0$ and $p+q<1$
+(symmetric if $p=q$, biased upwards if $p>q$), and $S_n=\sum_{i=1}^nX_i$, $S_0=0$.
+\begin{enumerate}[(a)]
+  \item Derive the moment generating function $M_{X_i}(t)$ of a step and the mean and variance of $X_i$.
+  \item Derive the moment generating function $M_{S_n}(t)$ and the mean and variance of $S_n$.
+  \item With $\mu$, $\sigma^2$ the mean and variance of a step, prove that $Z_n=(S_n-n\mu)/\sqrt{n\sigma^2}$ converges in
+      distribution to $N(0,1)$.
+  \item Model the intraday price of a stock as such a walk with 78 five-minute steps (the six and a half hours of NYSE
+      trading), with $p=0.52$ and $q=0.47$. Which step size gives an expected daily price change of $+\$0.50$? With that
+      step size, what is the standard deviation of the daily price change?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[\file{lecnote5}, Proposition 2.1]
+Prove the independent- and stationary-increment properties of the random walk (\cref{ch04:prop-rw}) directly from
+the definition, and check which of them survive if the steps are independent but not identically distributed.
+\end{exercise}
+
 % ------------------------------------------------------------------
 \section{Markov chains}\label{ch04:sec-mc}
 
@@ -206,6 +225,20 @@ $\Prob(S_{n+1}\in\cdot\mid S_0,\dots,S_n)$ is the law of $S_n+X$, a function of 
 $\Prob(S_{n+1}=s\mid S_0,\dots,S_n)=\tfrac12$ if $s=S_n\pm1$ and $0$ otherwise \ts{13}{5}{37:45}. The
 state space $\mathbb Z$ is infinite, so there is no finite transition matrix \ts{13}{5}{43:12}.
 \end{example}
+
+\begin{exercise}[PS2 (2013), A-3: identify Markov processes]
+Which of the following are Markov processes?
+\begin{enumerate}[(a)]
+  \item The simple random walk $S_t$.
+  \item $X_t=|S_t|$.
+  \item $X_0=0$,
+      $X_{t+1}=X_t+(Y_t-\tfrac1\lambda)$ with $Y_t$ i.i.d.\ exponential with parameter $\lambda$.
+  \item $X_0=0$,
+      $X_{t+1}=X_t+Z_tZ_{t-1}\cdots Z_0$ with $Z_t$ i.i.d.\ log-normal.
+  \item $X_0=0$, $X_{t+1}=X_t+W_t+W_{t-1}+\dots+W_0$ with
+      $W_t$ i.i.d.\ normal.
+\end{enumerate}
+\end{exercise}
 
 \subsection{Transition matrices}
 The one-step transition probabilities $\Prob(X_{n+1}=j\mid X_n=i)$ together with the initial
@@ -369,6 +402,26 @@ $p_{i_0}$). Maximising $\sum_{ij}n_{ij}\log P_{ij}$ subject to $\sum_jP_{ij}=1$ 
 the empirical frequencies $\hat P_{ij}=n_{ij}/\sum_kn_{ik}$; this is what the R package \texttt{markovchain}
 uses in the case study below.
 
+\begin{exercise}[PS2 (2013), A-4]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Construct a finite Markov chain whose stationary distribution is not unique.
+  \item A chain is \emph{doubly stochastic} if, in addition to $\sum_jp_{ij}=1$, also $\sum_ip_{ij}=1$ for every $j$ (the
+      problem phrases this as ``each row sums to one'' for the transposed matrix $A$ of the 2013 notes). Prove that the uniform
+      distribution $\pi_j=1/m$ is stationary for a doubly stochastic chain on $m$ states.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS2 (2013), B-5: walk with reflecting barriers]
+A person walks on the line, stepping right with probability $b$ and left with probability $1-b$ at each period. He
+starts in one of the positions $1,\dots,m$; a step to $0$ (or to $m+1$) is instantly reflected back to $1$ (or to $m$).
+Equivalently, in position $1$ (position $m$) he stays put with probability $1-b$ (probability $b$).
+\begin{enumerate}[(a)]
+  \item Model this as a Markov chain and write its transition matrix.
+  \item Find the stationary distribution.
+\end{enumerate}
+\end{exercise}
+
 \subsection{Markov chains in finance}
 
 \paragraph{Credit ratings.} Rating agencies (S\&P, Moody's, Fitch) grade corporate and sovereign borrowers
@@ -464,6 +517,12 @@ states of the AAPL case study: the second letter of today's state is the first l
 arrows are followed by an up day, red ones by a down day. The estimated probabilities were shown in class
 \ts{24}{6}{1:00:56}.}\label{ch04:fig-mc}
 \end{figure}
+
+\begin{exercise}[Time to default (not from the course)]
+For the rating chain of \cref{ch04:ex-credit}, let $Q$ be the $2\times2$ block of transitions among the non-default
+states. Show that the expected number of years before default, starting from IG or HY, is the vector
+$(I-Q)^{-1}\bm 1$ (condition on the first step), and compute it.
+\end{exercise}
 
 % ------------------------------------------------------------------
 \section{Martingales}\label{ch04:sec-mart}
@@ -693,6 +752,12 @@ which is a martingale by \cref{ch04:thm-transform} \ts{24}{6}{20:29}. Then apply
 \end{itemize}
 \end{coursenote}
 
+\begin{exercise}[Stopping times (not from the course)]
+Let $\sigma,\tau$ be stopping times. Show that $\sigma\wedge\tau$, $\sigma\vee\tau$ and $\tau+1$ are stopping times, but that
+$\tau-1$ in general is not. Deduce that ``one step after the first peak'' is a stopping time and ``the first peak'' is
+not (\cref{ch04:ex-stop}).
+\end{exercise}
+
 \subsection{The optional stopping theorem}
 \cref{ch04:thm-stopped} gives $\E[M_{n\wedge\tau}]=M_0$ at every fixed $n$. The \emph{optional stopping theorem}
 passes to the limit $n\to\infty$, where $M_{n\wedge\tau}\to M_\tau$ on $\{\tau<\infty\}$.
@@ -734,6 +799,29 @@ $2^n-1$, and the mean is $0$. This doubling scheme is the historical meaning of 
 lecturer recalls the other meaning, a horse's bridle \ts{24}{5}{1:18:49}). Its trading version, doubling a losing
 position to win it back, needs unlimited capital and is a classic route to ruin.
 \end{finance}
+
+\begin{exercise}[PS3 (2024), Problem 3: random walk for the log price]\label{ch04:ex-ps3-3}
+Let $P_t$ be an asset price, $S_t=\log P_t$ and $X_t=S_t-S_{t-1}=\log(P_t/P_{t-1})$, with the $X_t$ i.i.d., $\E[X_t]=\mu$
+and $\Var X_t=\sigma^2>0$.
+\begin{enumerate}[(a)]
+  \item For which $(\mu,\sigma^2)$ is $\{S_t\}$ a Markov process? Explain.
+  \item For which $(\mu,\sigma^2)$ is $\{S_t\}$ a martingale? Explain.
+  \item Let $S_0=0$ and $\tau=\min\{t:\ S_t>0.20\ \text{or}\ S_t<-0.20\}$, the first time the log price rises above
+      $0.20$ or falls below $-0.20$. If the steps are i.i.d.\ $N(\mu,\sigma^2)$, which conditions on $\mu$ and $\sigma^2$ make
+      $\Prob(S_\tau>0.20)>\tfrac12$? (The problem statement says ``$S_t$ are i.i.d.\ Normal''; the steps $X_t$ are meant.)
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[A martingale that is not Markov (not from the course)]
+For the process $M_n=\xi_1+c(\xi_1)\sum_{k=2}^n\xi_k$ of \cref{ch04:sec-mart-ex}, write $M_n$ as a martingale
+transform, and compute $\Prob(M_4=-3\mid M_3=-1)$ and $\Prob(M_4=-3\mid M_3=-1,\ M_1=-1)$ to show that $\{M_n\}$ is not
+Markov.
+\end{exercise}
+
+\begin{exercise}[\file{lecnote5}, Exercise 5.4]\label{ch04:ex-note54}
+In the coin-toss game the gambler stops the first time her balance reaches \$100. By construction $\E[S_\tau]=100$. Does
+this contradict the optional stopping theorem? Which hypothesis of \cref{ch04:thm-ost} fails?
+\end{exercise}
 
 % ------------------------------------------------------------------
 \section{Gambler's ruin}\label{ch04:sec-ruin}
@@ -903,6 +991,19 @@ computes the ruin probability, the expected duration and the biased case, all by
 the link between stationary distributions and Perron--Frobenius, which 2024 does not discuss.
 \end{coursenote}
 
+\begin{exercise}[\file{lecnote5}, Exercise 5.5]
+For positive integers $a,b$ the player stops the first time the balance equals $a$ or $-b$. Find the distribution of
+$S_\tau$. (This is \cref{ch04:prop-ruin}; redo it without looking. The notes write ``$X_\tau=b$'' for the second
+outcome; $-b$ is meant.)
+\end{exercise}
+
+\begin{exercise}[Biased ruin by first-step analysis (not from the course)]
+For the biased walk let $f(k)=\Prob(\text{hit }A\text{ before }-B\mid S_0=k)$. Show that
+$f(k)=pf(k+1)+qf(k-1)$, solve this linear recursion (characteristic roots $1$ and $q/p$) with $f(A)=1$, $f(-B)=0$, and
+recover \cref{ch04:prop-biased}. Then use Wald's identity to show that the expected duration tends to $AB$ as
+$p\to\frac12$.
+\end{exercise}
+
 % ------------------------------------------------------------------
 \section{Looking ahead}\label{ch04:sec-ahead}
 \begin{itemize}
@@ -943,116 +1044,3 @@ the link between stationary distributions and Perron--Frobenius, which 2024 does
 & && \E[\tau]=\tfrac{\E[S_\tau]}{p-q}
 \end{align*}
 \end{keyformulas}
-
-% ------------------------------------------------------------------
-\section*{Exercises}
-\addcontentsline{toc}{section}{Exercises}
-
-\subsection*{From the 2024 problem sets}
-
-\begin{exercise}[PS2 (2024), Problem 1: random walk with bias]\label{ch04:ex-ps2-1}
-Let $X_n$ be i.i.d.\ steps with $\Prob(X_n=+1)=p$, $\Prob(X_n=0)=1-(p+q)$, $\Prob(X_n=-1)=q$, where $p,q>0$ and $p+q<1$
-(symmetric if $p=q$, biased upwards if $p>q$), and $S_n=\sum_{i=1}^nX_i$, $S_0=0$.
-\begin{enumerate}[(a)]
-  \item Derive the moment generating function $M_{X_i}(t)$ of a step and the mean and variance of $X_i$.
-  \item Derive the moment generating function $M_{S_n}(t)$ and the mean and variance of $S_n$.
-  \item With $\mu$, $\sigma^2$ the mean and variance of a step, prove that $Z_n=(S_n-n\mu)/\sqrt{n\sigma^2}$ converges in
-      distribution to $N(0,1)$.
-  \item Model the intraday price of a stock as such a walk with 78 five-minute steps (the six and a half hours of NYSE
-      trading), with $p=0.52$ and $q=0.47$. Which step size gives an expected daily price change of $+\$0.50$? With that
-      step size, what is the standard deviation of the daily price change?
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS3 (2024), Problem 3: random walk for the log price]\label{ch04:ex-ps3-3}
-Let $P_t$ be an asset price, $S_t=\log P_t$ and $X_t=S_t-S_{t-1}=\log(P_t/P_{t-1})$, with the $X_t$ i.i.d., $\E[X_t]=\mu$
-and $\Var X_t=\sigma^2>0$.
-\begin{enumerate}[(a)]
-  \item For which $(\mu,\sigma^2)$ is $\{S_t\}$ a Markov process? Explain.
-  \item For which $(\mu,\sigma^2)$ is $\{S_t\}$ a martingale? Explain.
-  \item Let $S_0=0$ and $\tau=\min\{t:\ S_t>0.20\ \text{or}\ S_t<-0.20\}$, the first time the log price rises above
-      $0.20$ or falls below $-0.20$. If the steps are i.i.d.\ $N(\mu,\sigma^2)$, which conditions on $\mu$ and $\sigma^2$ make
-      $\Prob(S_\tau>0.20)>\tfrac12$? (The problem statement says ``$S_t$ are i.i.d.\ Normal''; the steps $X_t$ are meant.)
-\end{enumerate}
-\end{exercise}
-
-\subsection*{From 2013 Problem Set 2}
-
-\begin{exercise}[PS2 (2013), A-3: identify Markov processes]
-Which of the following are Markov processes?
-\begin{enumerate}[(a)]
-  \item The simple random walk $S_t$.
-  \item $X_t=|S_t|$.
-  \item $X_0=0$,
-      $X_{t+1}=X_t+(Y_t-\tfrac1\lambda)$ with $Y_t$ i.i.d.\ exponential with parameter $\lambda$.
-  \item $X_0=0$,
-      $X_{t+1}=X_t+Z_tZ_{t-1}\cdots Z_0$ with $Z_t$ i.i.d.\ log-normal.
-  \item $X_0=0$, $X_{t+1}=X_t+W_t+W_{t-1}+\dots+W_0$ with
-      $W_t$ i.i.d.\ normal.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS2 (2013), A-4]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Construct a finite Markov chain whose stationary distribution is not unique.
-  \item A chain is \emph{doubly stochastic} if, in addition to $\sum_jp_{ij}=1$, also $\sum_ip_{ij}=1$ for every $j$ (the
-      problem phrases this as ``each row sums to one'' for the transposed matrix $A$ of the 2013 notes). Prove that the uniform
-      distribution $\pi_j=1/m$ is stationary for a doubly stochastic chain on $m$ states.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS2 (2013), B-5: walk with reflecting barriers]
-A person walks on the line, stepping right with probability $b$ and left with probability $1-b$ at each period. He
-starts in one of the positions $1,\dots,m$; a step to $0$ (or to $m+1$) is instantly reflected back to $1$ (or to $m$).
-Equivalently, in position $1$ (position $m$) he stays put with probability $1-b$ (probability $b$).
-\begin{enumerate}[(a)]
-  \item Model this as a Markov chain and write its transition matrix.
-  \item Find the stationary distribution.
-\end{enumerate}
-\end{exercise}
-
-\subsection*{From the 2013 lecture notes}
-
-\begin{exercise}[\file{lecnote5}, Proposition 2.1]
-Prove the independent- and stationary-increment properties of the random walk (\cref{ch04:prop-rw}) directly from
-the definition, and check which of them survive if the steps are independent but not identically distributed.
-\end{exercise}
-
-\begin{exercise}[\file{lecnote5}, Exercise 5.4]\label{ch04:ex-note54}
-In the coin-toss game the gambler stops the first time her balance reaches \$100. By construction $\E[S_\tau]=100$. Does
-this contradict the optional stopping theorem? Which hypothesis of \cref{ch04:thm-ost} fails?
-\end{exercise}
-
-\begin{exercise}[\file{lecnote5}, Exercise 5.5]
-For positive integers $a,b$ the player stops the first time the balance equals $a$ or $-b$. Find the distribution of
-$S_\tau$. (This is \cref{ch04:prop-ruin}; redo it without looking. The notes write ``$X_\tau=b$'' for the second
-outcome; $-b$ is meant.)
-\end{exercise}
-
-\subsection*{Additional exercises}
-
-\begin{exercise}[Stopping times (not from the course)]
-Let $\sigma,\tau$ be stopping times. Show that $\sigma\wedge\tau$, $\sigma\vee\tau$ and $\tau+1$ are stopping times, but that
-$\tau-1$ in general is not. Deduce that ``one step after the first peak'' is a stopping time and ``the first peak'' is
-not (\cref{ch04:ex-stop}).
-\end{exercise}
-
-\begin{exercise}[Biased ruin by first-step analysis (not from the course)]
-For the biased walk let $f(k)=\Prob(\text{hit }A\text{ before }-B\mid S_0=k)$. Show that
-$f(k)=pf(k+1)+qf(k-1)$, solve this linear recursion (characteristic roots $1$ and $q/p$) with $f(A)=1$, $f(-B)=0$, and
-recover \cref{ch04:prop-biased}. Then use Wald's identity to show that the expected duration tends to $AB$ as
-$p\to\frac12$.
-\end{exercise}
-
-\begin{exercise}[A martingale that is not Markov (not from the course)]
-For the process $M_n=\xi_1+c(\xi_1)\sum_{k=2}^n\xi_k$ of \cref{ch04:sec-mart-ex}, write $M_n$ as a martingale
-transform, and compute $\Prob(M_4=-3\mid M_3=-1)$ and $\Prob(M_4=-3\mid M_3=-1,\ M_1=-1)$ to show that $\{M_n\}$ is not
-Markov.
-\end{exercise}
-
-\begin{exercise}[Time to default (not from the course)]
-For the rating chain of \cref{ch04:ex-credit}, let $Q$ be the $2\times2$ block of transitions among the non-default
-states. Show that the expected number of years before default, starting from IG or HY, is the vector
-$(I-Q)^{-1}\bm 1$ (condition on the first step), and compute it.
-\end{exercise}

@@ -205,6 +205,18 @@ a large, slowly growing exposure by a small, constantly renewed one. The price i
 paid in cash or high-quality securities, often at short notice.
 \end{intuition}
 
+\begin{exercise}[Netting and correlation (not from the course)]
+Two trades with the same counterparty have values $V_1,V_2\sim N(0,\sigma^2)$ at time $t$, with correlation $\rho$, and
+there is no collateral.
+\begin{enumerate}[(a)]
+  \item Compute $\mathrm{EE}$ with and without netting and show that the ratio is
+      $\sqrt{(1+\rho)/2}$.
+  \item What happens for $\rho=-1$ and $\rho=1$?
+  \item Explain why the CVA of a new trade depends on the
+      existing portfolio (the ``incremental CVA'').
+\end{enumerate}
+\end{exercise}
+
 % ==================================================================
 \section{CVA, DVA and funding: pricing counterparty risk}\label{ch08:sec-cva}
 
@@ -286,6 +298,18 @@ Basel~III added a CVA capital charge, so trades with large CVA consume more capi
 equity \ts{13}{26}{5:17}. In 2008, CVA mark-to-market losses were larger than the losses from actual defaults
 \ts{13}{26}{6:22}.
 \end{finance}
+
+\begin{exercise}[CVA from exposure (not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Derive \cref{ch08:prop-cvaee} and the approximation \eqref{ch08:eq-cvabote}.
+  \item For the exposure profile
+      $\mathrm{EE}(t)=\sigma\sqrt t(1-t/T)/\sqrt{2\pi}$ of \cref{ch08:fig-exposure}, with $r=0$ and constant hazard rate $h$,
+      compute CVA to first order in $h$ and compare with $\mathrm{EPE}\cdot s\cdot T$.
+  \item Explain qualitatively how wrong-way
+      risk changes the result.
+\end{enumerate}
+\end{exercise}
 
 \subsection{DVA and first-to-default}
 The same logic applied to \emph{our own} default gives a \emph{liability} CVA \ts{13}{26}{21:23}. With $\bar\tau$
@@ -529,6 +553,16 @@ same role convexity of the free energy plays for thermodynamic stability); a ris
 many local minima in portfolio space.
 \end{intuition}
 
+\begin{exercise}[VaR is not subadditive (not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Verify all the numbers of the A, B, A+B example (VaR and ES at $95\%$).
+  \item Replace the $4\%$ loss probability by
+      $p$ and find the range of $p$ for which $\mathrm{VaR}_{0.95}(A+B)>\mathrm{VaR}_{0.95}(A)+\mathrm{VaR}_{0.95}(B)$.
+  \item Show that for jointly normal losses VaR is subadditive at any $\beta\ge\frac12$.
+\end{enumerate}
+\end{exercise}
+
 \subsection{Normal model and time scaling}
 \begin{proposition}[Normal VaR and ES]\label{ch08:prop-normal}
 If $L\sim N(\mu,\sigma^2)$ and $z_\beta=N^{-1}(\beta)$, with $\varphi$ the standard normal density, then
@@ -579,6 +613,19 @@ autocorrelation is about $0.1$ (between $0.05$ and $0.15$ for other indices) \ts
 10-day rule $\sqrt{10}=3.16$ underestimates the true factor $3.46$ by about $10\%$; yet almost everybody uses
 $\sqrt T$ \ts{24}{10}{21:59}. (The observed higher-lag autocorrelations on the slide are close to $0$ rather than
 $\rho^k$; with only a lag-one correlation the factor is $\sqrt{10+2\cdot9\cdot0.1}=3.44$, practically the same.)
+
+\begin{exercise}[Normal model and FRTB (not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Prove \cref{ch08:prop-normal}.
+  \item Find the confidence level $\beta'$ at which the normal ES equals the normal
+      $99\%$ VaR, and compare it with the $97.5\%$ used by FRTB.
+  \item With $\bm\delta=(3000,4000,2000,1000)$ and the covariance
+      matrix of slide~16 (rows $(1.02,0.97,0.80,0.94)$, $(0.97,1.08,0.82,0.96)$, $(0.80,0.82,0.89,0.76)$,
+      $(0.94,0.96,0.76,0.96)$, all $\times10^{-4}$), reproduce $\sigma_P=96.6$, $\mathrm{VaR}=225$, $\mathrm{ES}=257$, and
+      compute the 10-day values with and without the autocorrelation correction for $\rho=0.1$.
+\end{enumerate}
+\end{exercise}
 
 \subsection{Estimating VaR and ES}\label{ch08:sec-estimation}
 
@@ -663,6 +710,19 @@ back-test the VaR: they build one distributional model, compute capital from its
 the same model back-tests well \ts{24}{10}{1:16:23}. The ``model'' is the distributional assumption; VaR and ES are
 two numbers read off it \ts{24}{10}{1:18:28}.
 
+\begin{exercise}[Back-testing (not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Compute $\Prob(N\ge12)$ for $N\sim\mathrm{Bin}(500,0.01)$ exactly and with the Poisson approximation.
+  \item Find the
+      largest number of exceptions accepted at the $5\%$ level.
+  \item Why is the in-sample back-test of the example biased in
+      favour of the model?
+  \item Explain why a single observed loss cannot ``test'' an ES forecast, and propose a test that
+      uses the ES forecasts and realised losses of many days.
+\end{enumerate}
+\end{exercise}
+
 \subsection{Expected shortfall as an optimisation problem}
 Let $x\in X\subset\R^n$ be a portfolio, $y\in\R^m$ the random market change with density $p(y)$, and $f(x,y)$ the
 loss. Write $\psi(x,\alpha)=\Prob(f(x,y)\le\alpha)$, so $\mathrm{VaR}_\beta(x)=\min\{\alpha:\psi(x,\alpha)\ge\beta\}$.
@@ -703,6 +763,17 @@ becomes a \emph{linear program}:
 ``basically a linear problem'' \ts{24}{10}{34:27}. No such representation exists for VaR. So ES is harder to
 back-test but much easier to optimise, and for margin optimisation the latter matters more.
 
+\begin{exercise}[ES as a linear program (not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Complete the proof of \cref{ch08:thm-ru} for a discrete distribution with $S$ equally likely scenarios, taking
+      $\beta S$ to be an integer, and check that $\min_\alpha F$ is the average of the $(1-\beta)S$ largest losses.
+  \item Write the LP that minimises the $97.5\%$ ES of a long-only fully invested portfolio of the four indices over the
+      500 historical scenarios of 2022--2023.
+  \item Why can the same trick not be used for VaR?
+\end{enumerate}
+\end{exercise}
+
 % ==================================================================
 \section{Margin: variation margin, initial margin and ISDA SIMM}\label{ch08:sec-margin}
 
@@ -737,6 +808,13 @@ IM is held in segregated accounts and cannot be used for trading, so it is a rea
 There are two kinds of IM \ts{24}{10}{38:39}. \emph{Cleared} IM is set by each CCP's own model and has existed for
 decades. \emph{Bilateral} IM on uncleared trades was introduced by the post-crisis rules (Basel~III/BCBS--IOSCO) and
 phased in from 2016; the industry standard model is ISDA's \emph{Standard Initial Margin Model} (SIMM).
+
+\begin{exercise}[Tang's puzzle with collateral (not from the course)]
+Redo the puzzle of \cref{ch08:sec-cva} (value $0\to+100$, default with $R=50\%$) when the trade is under a CSA with
+daily VM and zero threshold, the counterparty stops paying VM at default, and the value moves from $100$ to $104$
+during a 10-day MPOR. What is the loss with and without an initial margin of $5$? What part of the original $\$50$M
+loss does VM remove, and what part does IM remove?
+\end{exercise}
 
 \subsection{The SIMM as a delta--gamma VaR}
 SIMM is an exposure-based proxy for a 10-business-day ($\delta t=14/365$ in calendar time), $99\%$ VaR
@@ -784,6 +862,18 @@ The slide gives $\mathrm{IM}\approx2.326\sqrt{10}\sqrt{\bm\delta\T C\bm\delta}+\
       like $T$.
 \end{itemize}
 \end{coursenote}
+
+\begin{exercise}[Delta--gamma margin (not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Prove $\Var(X\T\gamma X)=2\tr((\gamma C)^2)$ for $X\sim N(0,C)$ and symmetric $\gamma$.
+  \item One risk factor with
+      daily variance $c$, delta $\delta$ and gamma $\gamma$: write mean and variance of the 10-day $\Delta P$ and check how each
+      term scales with the horizon.
+  \item For a short option position ($\gamma<0$ in the value to the surviving party) discuss
+      whether the normal approximation over- or underestimates the $99\%$ quantile.
+\end{enumerate}
+\end{exercise}
 
 \subsection{SIMM in practice}
 The formulation above has too many risk factors (so $C$, $\bm\delta$, $\gamma$ are huge) and $\gamma$ is hard to
@@ -909,6 +999,19 @@ this is $\binom n2-n+1=\binom{n-1}{2}$, spanned by triangles. For a triangle it 
 optimisation moves risk around loops without creating or destroying it at any node.
 \end{intuition}
 
+\begin{exercise}[Toy margin optimisation (not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Four parties on a cycle $A\to B\to C\to D\to A$ with oriented positions $a=(3,-5,8,-1)$: find the optimal
+      circulation $t$ and the margin saving.
+  \item Now add the chord A--C with position $2$: parametrise all hedges satisfying
+      symmetry and flatness (the cycle space has dimension $2$) and minimise the total $\sum|x|$.
+  \item For the fairness table
+      of \cref{ch08:sec-opt}, check the least-squares criterion and propose a different fairness criterion (e.g.\ max--min
+      of relative savings) that gives a different answer on some example.
+\end{enumerate}
+\end{exercise}
+
 \subsection{Solving it in practice}
 In reality one writes down the problem and hands it to a numerical solver \ts{24}{10}{50:07}. Some lessons:
 \begin{itemize}
@@ -958,6 +1061,24 @@ of one large bank, which do not exchange margin with each other \ts{24}{10}{1:01
 (slide~44) is interest-rate margin: 15 parties, USD/EUR/GBP, swaptions and cleared swaps, about $5000$ variables
 and $10{,}000$ constraints, where each trade loads on several risk factors (a swap expiring in 12 years is exposed to
 the 10Y and 20Y swap rates).
+
+\begin{exercise}[Rounding and integrality (not from the course)]
+For the Gurobi example, $\max 5x_1+8x_2$ subject to $x_1+x_2\le5$, $3x_1+7x_2\le25$, $x_1,x_2\ge0$:
+\begin{enumerate}[(a)]
+  \item solve the LP
+      relaxation (optimum $32.5$ at $(2.5,2.5)$);
+  \item show that rounding the LP solution gives either an infeasible point or a
+      poor one;
+  \item find the integer optimum $31$ by enumeration. Relate this to the rounding of notionals in
+      \cref{ch08:sec-opt}.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Nearly parallel risks (not from the course)]
+For $A_\varepsilon=\bigl(\begin{smallmatrix}1&1\\ 1/3+\varepsilon&1/3\end{smallmatrix}\bigr)$ solve $A_\varepsilon(x,y)\T=(1,b)\T$
+and show that $x=(b-1/3)/\varepsilon$. Compute the condition number of $A_\varepsilon$ for small $\varepsilon$ and explain the
+three solutions of slide~39. How would you regularise the problem (e.g.\ a small penalty $\eta\|x\|^2$)?
+\end{exercise}
 
 \subsection{Nice and fair solutions}
 A solution must be \emph{feasible} (all constraints hold) and \emph{optimal} (a good IM saving); in practice it
@@ -1077,6 +1198,18 @@ with respect to $\Q$ but \emph{not equivalent} (it gives zero mass to default be
 for another, but the second is easier, provided what happens at default is modelled separately
 \ts{13}{26}{1:01:49}.
 
+\begin{exercise}[Change of numeraire (not from the course)]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Prove \cref{ch08:prop-numeraire} and deduce that $L_i(t)$ is a $\Prob_{T_{i+1}}$-martingale.
+  \item Show that the swap
+      rate $S_{i,N}(t)$ is a martingale under the annuity measure and that it is a weighted average of forward LIBORs with
+      weights $\delta_jP(t,T_{j+1})/A_{i,N}(t)$.
+  \item Verify \cref{ch08:prop-mginterp} and show by an example that ordinary
+      linear interpolation in maturity $T$ is not a martingale in general.
+\end{enumerate}
+\end{exercise}
+
 \subsection{Martingale testing, resampling and interpolation}
 \begin{itemize}
   \item \textbf{Martingale testing}: check in the numerical implementation that known martingale relations such as
@@ -1187,140 +1320,3 @@ credit risk''.
   \E_t^{N_2}\bigl[Y_TN_1(T)/N_2(T)\bigr]
 \end{align*}
 \end{keyformulas}
-
-% ==================================================================
-\section*{Exercises}
-\addcontentsline{toc}{section}{Exercises}
-
-\begin{exercise}[Tang's puzzle with collateral (not from the course)]
-Redo the puzzle of \cref{ch08:sec-cva} (value $0\to+100$, default with $R=50\%$) when the trade is under a CSA with
-daily VM and zero threshold, the counterparty stops paying VM at default, and the value moves from $100$ to $104$
-during a 10-day MPOR. What is the loss with and without an initial margin of $5$? What part of the original $\$50$M
-loss does VM remove, and what part does IM remove?
-\end{exercise}
-
-\begin{exercise}[Netting and correlation (not from the course)]
-Two trades with the same counterparty have values $V_1,V_2\sim N(0,\sigma^2)$ at time $t$, with correlation $\rho$, and
-there is no collateral.
-\begin{enumerate}[(a)]
-  \item Compute $\mathrm{EE}$ with and without netting and show that the ratio is
-      $\sqrt{(1+\rho)/2}$.
-  \item What happens for $\rho=-1$ and $\rho=1$?
-  \item Explain why the CVA of a new trade depends on the
-      existing portfolio (the ``incremental CVA'').
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[CVA from exposure (not from the course)]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Derive \cref{ch08:prop-cvaee} and the approximation \eqref{ch08:eq-cvabote}.
-  \item For the exposure profile
-      $\mathrm{EE}(t)=\sigma\sqrt t(1-t/T)/\sqrt{2\pi}$ of \cref{ch08:fig-exposure}, with $r=0$ and constant hazard rate $h$,
-      compute CVA to first order in $h$ and compare with $\mathrm{EPE}\cdot s\cdot T$.
-  \item Explain qualitatively how wrong-way
-      risk changes the result.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[VaR is not subadditive (not from the course)]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Verify all the numbers of the A, B, A+B example (VaR and ES at $95\%$).
-  \item Replace the $4\%$ loss probability by
-      $p$ and find the range of $p$ for which $\mathrm{VaR}_{0.95}(A+B)>\mathrm{VaR}_{0.95}(A)+\mathrm{VaR}_{0.95}(B)$.
-  \item Show that for jointly normal losses VaR is subadditive at any $\beta\ge\frac12$.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[Normal model and FRTB (not from the course)]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Prove \cref{ch08:prop-normal}.
-  \item Find the confidence level $\beta'$ at which the normal ES equals the normal
-      $99\%$ VaR, and compare it with the $97.5\%$ used by FRTB.
-  \item With $\bm\delta=(3000,4000,2000,1000)$ and the covariance
-      matrix of slide~16 (rows $(1.02,0.97,0.80,0.94)$, $(0.97,1.08,0.82,0.96)$, $(0.80,0.82,0.89,0.76)$,
-      $(0.94,0.96,0.76,0.96)$, all $\times10^{-4}$), reproduce $\sigma_P=96.6$, $\mathrm{VaR}=225$, $\mathrm{ES}=257$, and
-      compute the 10-day values with and without the autocorrelation correction for $\rho=0.1$.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[Back-testing (not from the course)]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Compute $\Prob(N\ge12)$ for $N\sim\mathrm{Bin}(500,0.01)$ exactly and with the Poisson approximation.
-  \item Find the
-      largest number of exceptions accepted at the $5\%$ level.
-  \item Why is the in-sample back-test of the example biased in
-      favour of the model?
-  \item Explain why a single observed loss cannot ``test'' an ES forecast, and propose a test that
-      uses the ES forecasts and realised losses of many days.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[ES as a linear program (not from the course)]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Complete the proof of \cref{ch08:thm-ru} for a discrete distribution with $S$ equally likely scenarios, taking
-      $\beta S$ to be an integer, and check that $\min_\alpha F$ is the average of the $(1-\beta)S$ largest losses.
-  \item Write the LP that minimises the $97.5\%$ ES of a long-only fully invested portfolio of the four indices over the
-      500 historical scenarios of 2022--2023.
-  \item Why can the same trick not be used for VaR?
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[Delta--gamma margin (not from the course)]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Prove $\Var(X\T\gamma X)=2\tr((\gamma C)^2)$ for $X\sim N(0,C)$ and symmetric $\gamma$.
-  \item One risk factor with
-      daily variance $c$, delta $\delta$ and gamma $\gamma$: write mean and variance of the 10-day $\Delta P$ and check how each
-      term scales with the horizon.
-  \item For a short option position ($\gamma<0$ in the value to the surviving party) discuss
-      whether the normal approximation over- or underestimates the $99\%$ quantile.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[Toy margin optimisation (not from the course)]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Four parties on a cycle $A\to B\to C\to D\to A$ with oriented positions $a=(3,-5,8,-1)$: find the optimal
-      circulation $t$ and the margin saving.
-  \item Now add the chord A--C with position $2$: parametrise all hedges satisfying
-      symmetry and flatness (the cycle space has dimension $2$) and minimise the total $\sum|x|$.
-  \item For the fairness table
-      of \cref{ch08:sec-opt}, check the least-squares criterion and propose a different fairness criterion (e.g.\ max--min
-      of relative savings) that gives a different answer on some example.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[Rounding and integrality (not from the course)]
-For the Gurobi example, $\max 5x_1+8x_2$ subject to $x_1+x_2\le5$, $3x_1+7x_2\le25$, $x_1,x_2\ge0$:
-\begin{enumerate}[(a)]
-  \item solve the LP
-      relaxation (optimum $32.5$ at $(2.5,2.5)$);
-  \item show that rounding the LP solution gives either an infeasible point or a
-      poor one;
-  \item find the integer optimum $31$ by enumeration. Relate this to the rounding of notionals in
-      \cref{ch08:sec-opt}.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[Nearly parallel risks (not from the course)]
-For $A_\varepsilon=\bigl(\begin{smallmatrix}1&1\\ 1/3+\varepsilon&1/3\end{smallmatrix}\bigr)$ solve $A_\varepsilon(x,y)\T=(1,b)\T$
-and show that $x=(b-1/3)/\varepsilon$. Compute the condition number of $A_\varepsilon$ for small $\varepsilon$ and explain the
-three solutions of slide~39. How would you regularise the problem (e.g.\ a small penalty $\eta\|x\|^2$)?
-\end{exercise}
-
-\begin{exercise}[Change of numeraire (not from the course)]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Prove \cref{ch08:prop-numeraire} and deduce that $L_i(t)$ is a $\Prob_{T_{i+1}}$-martingale.
-  \item Show that the swap
-      rate $S_{i,N}(t)$ is a martingale under the annuity measure and that it is a weighted average of forward LIBORs with
-      weights $\delta_jP(t,T_{j+1})/A_{i,N}(t)$.
-  \item Verify \cref{ch08:prop-mginterp} and show by an example that ordinary
-      linear interpolation in maturity $T$ is not a martingale in general.
-\end{enumerate}
-\end{exercise}

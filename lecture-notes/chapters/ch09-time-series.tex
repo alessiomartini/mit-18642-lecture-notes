@@ -21,7 +21,7 @@
 \file{CaseStudy5.pdf} (VAR models of macroeconomic series, in R).
 \textbf{Problem sets.} 2024 PS4 Problems~5--6 (Problems~1--4 are on Brownian motion, \cref{ch:sp2});
 2013 PS4 (all six problems); 2013 PS6 Problems~1--2 (Problems~3--5 are portfolio theory,
-\cref{ch:portfolio}). The exercises are at the end of the chapter.
+\cref{ch:portfolio}). Standalone exercises follow the section they practise; the connected ones are at the end of the chapter.
 \textbf{Not published or not covered.} Slide~5 of the 2024 lecture points to
 \file{TimeSeries4plots.pdf} and \file{TimeSeries4acfplots.pdf}, which are not in the download, so the
 exploratory plots of \cref{ch09:sec-logret} are described from the spoken commentary. The
@@ -172,6 +172,16 @@ significant autocorrelation ``is not done yet'' \ts{24}{12}{38:24}. The flip sid
 \cref{ch:volatility}, is that uncorrelated does not mean independent: returns can be white noise while
 their squares are strongly autocorrelated.
 \end{finance}
+
+\begin{exercise}[Box--Pierce by hand (not from the course)]\label{ch09:ex-x-bp}
+A daily return series with $T=500$ has $\hat r_1=0.09$, $\hat r_2=-0.05$, $\hat r_3=0.04$, $\hat r_4=0.02$, $\hat r_5=-0.06$.
+\begin{enumerate}[(a)]
+  \item Which lags are individually significant at $5\%$?
+  \item Compute BP for $K=5$ and compare with $\chi^2_5$ (critical value $11.07$).
+  \item Explain how the two answers can disagree and which you would report.
+  \item If the numbers came from the residuals of an ARMA(1,1) fit, what would the degrees of freedom be?
+\end{enumerate}
+\end{exercise}
 
 % ==================================================================
 \section{The Wold representation theorem}\label{ch09:sec-wold}
@@ -562,6 +572,16 @@ of the AR(7) fit (\texttt{influence.measures}) flag two high-leverage months, Oc
 financial crisis'' (\cref{ch05:sec-diag}).
 \end{casestudy}
 
+\begin{exercise}[PS6 (2013), Problem 2: an AR(2) as a difference of two MA processes]\label{ch09:ex-ps6-2}
+With $\{\eta_t\}$ i.i.d.\ $\mathrm{WN}(0,\sigma^2)$ let $w_t=5(1-0.5L)^{-1}\eta_t$, $v_t=4(1-0.4L)^{-1}\eta_t$ and $x_t=w_t-v_t$.
+\begin{enumerate}[(a)]
+  \item Solve for the coefficients $\psi_i$ in $x_t=\eta_t+\sum_{i\ge1}\psi_i\eta_{t-i}$.
+  \item Prove $\{x_t\}$ is an AR(2) process.
+  \item Solve for $\phi_1,\phi_2$ in $x_t=\phi_1x_{t-1}+\phi_2x_{t-2}+\eta_t$.
+  \item Prove that any stationary AR(2) process can be written as the difference of two (possibly infinite-order) moving-average processes driven by the same $\{\eta_t\}$.
+\end{enumerate}
+\end{exercise}
+
 \subsection{Moving-average models MA($q$)}\label{ch09:sec-ma}
 Set $p=0$: $X_t-\mu=\theta(L)\eta_t=\eta_t+\theta_1\eta_{t-1}+\dots+\theta_q\eta_{t-q}$
 \ts{24}{12}{1:14:24}\ts{13}{8}{1:06:12}. Because $\eta$ is white noise, only overlapping terms contribute:
@@ -583,6 +603,16 @@ $\gamma(0)=\sigma^2(1+\theta^2)$ is also unchanged: two different parameter sets
 indistinguishable from the ACF. Interpretation: only the invertible
 representation has $\eta_t$ equal to the one-step forecast error of $X_t$ given its past, which is the Wold innovation; one
 therefore always fits the invertible member of the pair.
+
+\begin{exercise}[PS4 (2013), Problem 5: the MA(1) process]\label{ch09:ex-ps4-5}
+$X_t=\eta_t+\theta\eta_{t-1}$.
+\begin{enumerate}[(a)]
+  \item Derive the ACF.
+  \item Compute the first-order autocorrelation for $\theta=0.5$ and $\theta=2.0$.
+  \item Solve the formula for $\rho_1$ for $\theta$ in terms of $\rho_1$; is the solution unique?
+  \item For each of the two models decide whether the process is invertible and, if so, write it as an infinite-order autoregression.
+\end{enumerate}
+\end{exercise}
 
 \subsection{ARMA($p,q$) and the ARMA(1,1) model}\label{ch09:sec-arma11}
 A general ARMA($p,q$) is covariance stationary when $\phi(z)$ has all roots outside the unit disc and is invertible when
@@ -608,6 +638,20 @@ decay. This structure arises for the \emph{squared} residuals of a GARCH(1,1) mo
 $\phi=\alpha_1+\beta_1$ and $\theta=-\beta_1$ (\cref{ch:volatility}, \ts{13}{11}{5:15}).
 The comparison with MA(1) is the reverse: an MA(1) has a single non-zero correlation and then nothing
 (2024 PS4 Problem~6(e)).
+
+\begin{exercise}[PS4 (2013), Problem 6; PS4 (2024), Problem 6: ARMA(1,1)]\label{ch09:ex-arma11}
+For the covariance-stationary $(1-\phi L)X_t=\phi_0+(1+\theta L)\eta_t$:
+\begin{enumerate}[(a)]
+  \item Prove $\mu=\phi_0/(1-\phi)$.
+  \item Prove $\Var X_t=\gamma(0)=\sigma^2\bigl[1+\frac{(\phi+\theta)^2}{1-\phi^2}\bigr]$
+      (equivalently $\sigma^2(1+2\phi\theta+\theta^2)/(1-\phi^2)$).
+  \item Prove that $\rho_1=\phi+\theta\sigma^2/\gamma(0)$ and $\rho_k=\phi\rho_{k-1}$ for $k>1$.
+  \item Compare the ACF with that of the AR(1) with the same $\phi_0,\phi$: which pattern of the ACF is impossible for an AR(1)?
+      What behaviour would an economic index following such a process show?
+  \item (2024 only) Compare with the ACF of an MA(1) with the same parameters; what is the pattern of an MA(1) and how does it change for MA($q$), $q>1$?
+      Try to obtain (b)--(c) directly from the covariance recursion rather than via the Wold weights used in \cref{ch09:sec-arma11}.
+\end{enumerate}
+\end{exercise}
 
 % ==================================================================
 \section{Non-stationarity: differencing, ARIMA and unit-root tests}\label{ch09:sec-nonstat}
@@ -692,6 +736,16 @@ Phillips--Perron (PP) and Elliott--Rothenberg--Stock (ERS) for a unit-root null,
 \ts{13}{8}{1:12:26}. The 10-year Treasury yield is the standard illustration (\cref{ch09:cs-3a}): the ADF test does not reject a
 unit root for the daily, weekly or monthly \emph{levels} and rejects it for the \emph{differences}. The same test was used in the crack-spread example
 (\cref{ch09:sec-crack}).
+
+\begin{exercise}[Dickey--Fuller by simulation (not from the course)]\label{ch09:ex-x-df}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Simulate $10^4$ random walks of length $500$ and compute $t_{\phi=1}$ from the regression of $X_t$ on $X_{t-1}$ with and without intercept; check the $5\%$ quantiles $-1.95$ and $-2.89$.
+  \item Repeat with an AR(1) with $\phi=0.95$ and estimate the power of the test at the $5\%$ level; explain why
+      non-rejection on a persistent yield series is weak evidence for a unit root.
+  \item Verify the identity $\sum_{t=1}^TX_{t-1}\eta_t=\frac12(X_T^2-\sum\eta_t^2)$ and show that its expectation is zero; then estimate $\E[T(\hat\phi-1)]$ by simulation and explain why the ratio in \eqref{ch09:eq-df} is nevertheless biased downwards (the denominator is positively correlated with the numerator's negative part).
+\end{enumerate}
+\end{exercise}
 
 \subsection{Estimation of ARMA models}\label{ch09:sec-est}
 For Gaussian innovations $\eta_t\sim N(0,\sigma^2)$ i.i.d., the parameters are estimated by maximum likelihood
@@ -834,6 +888,26 @@ $\Gamma_0=\bigl(\begin{smallmatrix}1.443&0.244\\0.244&0.847\end{smallmatrix}\big
 $\Gamma_1=A\Gamma_0=\bigl(\begin{smallmatrix}0.770&0.291\\-0.287&0.435\end{smallmatrix}\bigr)$, which is not symmetric (checked against the
 iteration $\Gamma\leftarrow A\Gamma A\T+\Sigma$). This is the pattern that 2013 PS6 Problem~1 asks for with different numbers.
 \end{example}
+
+\begin{exercise}[PS6 (2013), Problem 1: moments of a VAR(1)]\label{ch09:ex-ps6-1}
+Let $\bm X_t=(X_{1,t},X_{2,t})\T$ follow $X_{1,t}=0.3+0.8X_{1,t-1}+\eta_{1,t}$, $X_{2,t}=0.2+0.6X_{1,t-1}+0.4X_{2,t-1}+\eta_{2,t}$, with $(\eta_{1,t},\eta_{2,t})\T$ i.i.d.\ $N(\bm0,\Sigma)$, $\Sigma=\bigl(\begin{smallmatrix}3&-1\\-1&3\end{smallmatrix}\bigr)$.
+Compute
+\begin{enumerate}[(a)]
+  \item $\bm\mu=\E[\bm X_t]$,
+  \item $\Gamma(0)=\Cov\bm X_t$,
+  \item $\Gamma(1)=\Cov(\bm X_t,\bm X_{t-1})$, and
+  \item derive a formula for $\Gamma(h)$, $h\ge1$. (See \cref{ch09:ex-var1} for the method.)
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Stationarity of a VAR (not from the course)]\label{ch09:ex-x-companion}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Write the companion matrix of the univariate AR(2) $X_t=0.5X_{t-1}+0.3X_{t-2}+\eta_t$, find its eigenvalues ($0.852,-0.352$) and the roots of $\phi(z)$; verify $\lambda=1/z$.
+  \item For the VAR(1) with $A=\bigl(\begin{smallmatrix}0.9&0.4\\0&0.5\end{smallmatrix}\bigr)$ compute $\Gamma_0$ from $\mathrm{vec}\,\Gamma_0=(I-A\otimes A)^{-1}\mathrm{vec}\,\Sigma$ for $\Sigma=I$ and the impulse responses $\Psi_k$;
+      which shock has the longest-lasting effect on which variable?
+\end{enumerate}
+\end{exercise}
 
 \subsection{VAR as a multivariate regression: estimation}\label{ch09:sec-varest}
 Given $n$ observations $\bm x_1,\dots,\bm x_n$ and $p$ pre-sample values, define for each component $j$ the regression
@@ -1014,6 +1088,16 @@ Only $y$ reacts to a disequilibrium: $x$ is ``weakly exogenous'' (the row of $\a
 \caption{A simulated cointegrated pair (seed~7). Each of $x$ and $y$ wanders like a random walk, but $y-2x$ stays around zero.}\label{ch09:fig-coint}
 \end{figure}
 
+\begin{exercise}[Cointegration and the VECM (not from the course)]\label{ch09:ex-x-coint}
+For the pair of \cref{ch09:ex-coint}
+\begin{enumerate}[(a)]
+  \item rewrite the system as a VAR(1) in levels and verify that $I+\Pi$ has eigenvalues $1$ and $0.7$.
+  \item Show that $\Pi$ is not invertible and identify $\alpha$ and $\beta$; check that another factorisation $(\alpha G)(\beta G^{-\mathsf T})\T$ gives the same $\Pi$.
+  \item Simulate the system, regress $y_t$ on $x_t$ and apply an ADF test to the residuals (Engle--Granger); do the same for two independent random walks and comment on ``spurious regression''.
+  \item What changes in the VECM if both $\varepsilon_{1t}$ and $u_{t-1}$ enter the equation of $x_t$?
+\end{enumerate}
+\end{exercise}
+
 \subsection{Estimation and tests for the cointegration rank}\label{ch09:sec-cointest}
 Sims, Stock and Watson (1990) and Park and Phillips (1989) prove that least squares applied to the original VAR in \emph{levels}
 gives consistent estimates with the same asymptotic distributions as maximum likelihood, and the reduced-rank constraints on $\Pi$ hold
@@ -1178,6 +1262,27 @@ brokers quote at random and a Kalman filter estimates the underlying price \ts{1
 (\cref{ch09:sec-est}). The filter is cheap: each step costs a few matrix products, and it delivers the likelihood as well as the forecast.
 \end{finance}
 
+\begin{exercise}[Kalman filter by hand (not from the course)]\label{ch09:ex-x-kf}
+Take the local-level model with $Q=1$, $H=4$ and initial state $N(0,10)$.
+\begin{enumerate}[(a)]
+  \item Run the filter for the observations $y_1=1.5$, $y_2=0.8$, $y_3=2.2$: compute $G_t$, $\mu_{t|t}$, $P_{t|t}$.
+  \item Compute the two-step forecast of $y_5$ and its variance.
+  \item Show that $P_{t|t-1}$ converges monotonically to
+      $(Q+\sqrt{Q^2+4QH})/2$.
+  \item Show that $G_t\to0$ as $Q\to0$ and interpret it (the level is constant and the filter reduces to the sample mean).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Time-varying beta (not from the course)]\label{ch09:ex-x-beta}
+In the state-space model of the time-varying CAPM, write out the Kalman recursions for $\bm s_t=(\alpha_t,\beta_t)\T$.
+\begin{enumerate}[(a)]
+  \item Show that if $\sigma_\xi=\sigma_\zeta=0$ the recursion reproduces recursive least squares for the simple regression.
+  \item Explain how the ratio
+      $\sigma_\zeta^2/\sigma_\varepsilon^2$ sets the effective window length of the estimate, and relate it to the local-level example.
+  \item With daily data for one stock and the S\&P~500, estimate $\sigma_\zeta^2$ by maximising \eqref{ch09:eq-kfll}.
+\end{enumerate}
+\end{exercise}
+
 % ==================================================================
 \section{Notes on the sources}\label{ch09:sec-notes}
 
@@ -1241,6 +1346,7 @@ theory (\cref{ch:portfolio}), continuous time (the AR(1) is the Ornstein--Uhlenb
 % ==================================================================
 \section*{Exercises}
 \addcontentsline{toc}{section}{Exercises}
+Standalone exercises follow the section they practise. 2013 PS4 Problems~1--4 form a connected series (Problem~1(f) uses Problem~4, and Problems~2--4 build on one another), so they stay together here.
 
 \subsection*{From 2013 Problem Set 4 (and 2024 Problem Set 4, Problems 5--6)}
 The 2013 PS4 has six problems on univariate models; 2024 PS4 Problem~5 is 2013 Problem~1(a)--(e), and 2024 Problem~6 is 2013 Problem~6 plus a part (e).
@@ -1292,112 +1398,5 @@ Consider $\phi(L)g(t)=0$, $t=0,1,2,\dots$
   \item Under what conditions on $\phi_1$ is it always positive, and when does it alternate in sign?
   \item \emph{Optional.} For complex roots write $G_{1,2}=de^{\pm\mathrm i2\pi f_0}$ and show
       $\rho_k=[\mathrm{sgn}(\phi_1)]^k|d|^k\sin(2\pi f_0k+F)/\sin F$ with $|d|=\sqrt{-\phi_2}$, $2\pi f_0=\arccos\bigl(|\phi_1|/(2\sqrt{-\phi_2})\bigr)$ and $\tan F=\frac{1+d^2}{1-d^2}\tan(2\pi f_0)$.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS4 (2013), Problem 5: the MA(1) process]\label{ch09:ex-ps4-5}
-$X_t=\eta_t+\theta\eta_{t-1}$.
-\begin{enumerate}[(a)]
-  \item Derive the ACF.
-  \item Compute the first-order autocorrelation for $\theta=0.5$ and $\theta=2.0$.
-  \item Solve the formula for $\rho_1$ for $\theta$ in terms of $\rho_1$; is the solution unique?
-  \item For each of the two models decide whether the process is invertible and, if so, write it as an infinite-order autoregression.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS4 (2013), Problem 6; PS4 (2024), Problem 6: ARMA(1,1)]\label{ch09:ex-arma11}
-For the covariance-stationary $(1-\phi L)X_t=\phi_0+(1+\theta L)\eta_t$:
-\begin{enumerate}[(a)]
-  \item Prove $\mu=\phi_0/(1-\phi)$.
-  \item Prove $\Var X_t=\gamma(0)=\sigma^2\bigl[1+\frac{(\phi+\theta)^2}{1-\phi^2}\bigr]$
-      (equivalently $\sigma^2(1+2\phi\theta+\theta^2)/(1-\phi^2)$).
-  \item Prove that $\rho_1=\phi+\theta\sigma^2/\gamma(0)$ and $\rho_k=\phi\rho_{k-1}$ for $k>1$.
-  \item Compare the ACF with that of the AR(1) with the same $\phi_0,\phi$: which pattern of the ACF is impossible for an AR(1)?
-      What behaviour would an economic index following such a process show?
-  \item (2024 only) Compare with the ACF of an MA(1) with the same parameters; what is the pattern of an MA(1) and how does it change for MA($q$), $q>1$?
-      Try to obtain (b)--(c) directly from the covariance recursion rather than via the Wold weights used in \cref{ch09:sec-arma11}.
-\end{enumerate}
-\end{exercise}
-
-\subsection*{From 2013 Problem Set 6 (Problems 1--2)}
-\begin{exercise}[PS6 (2013), Problem 1: moments of a VAR(1)]\label{ch09:ex-ps6-1}
-Let $\bm X_t=(X_{1,t},X_{2,t})\T$ follow $X_{1,t}=0.3+0.8X_{1,t-1}+\eta_{1,t}$, $X_{2,t}=0.2+0.6X_{1,t-1}+0.4X_{2,t-1}+\eta_{2,t}$, with $(\eta_{1,t},\eta_{2,t})\T$ i.i.d.\ $N(\bm0,\Sigma)$, $\Sigma=\bigl(\begin{smallmatrix}3&-1\\-1&3\end{smallmatrix}\bigr)$.
-Compute
-\begin{enumerate}[(a)]
-  \item $\bm\mu=\E[\bm X_t]$,
-  \item $\Gamma(0)=\Cov\bm X_t$,
-  \item $\Gamma(1)=\Cov(\bm X_t,\bm X_{t-1})$, and
-  \item derive a formula for $\Gamma(h)$, $h\ge1$. (See \cref{ch09:ex-var1} for the method.)
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS6 (2013), Problem 2: an AR(2) as a difference of two MA processes]\label{ch09:ex-ps6-2}
-With $\{\eta_t\}$ i.i.d.\ $\mathrm{WN}(0,\sigma^2)$ let $w_t=5(1-0.5L)^{-1}\eta_t$, $v_t=4(1-0.4L)^{-1}\eta_t$ and $x_t=w_t-v_t$.
-\begin{enumerate}[(a)]
-  \item Solve for the coefficients $\psi_i$ in $x_t=\eta_t+\sum_{i\ge1}\psi_i\eta_{t-i}$.
-  \item Prove $\{x_t\}$ is an AR(2) process.
-  \item Solve for $\phi_1,\phi_2$ in $x_t=\phi_1x_{t-1}+\phi_2x_{t-2}+\eta_t$.
-  \item Prove that any stationary AR(2) process can be written as the difference of two (possibly infinite-order) moving-average processes driven by the same $\{\eta_t\}$.
-\end{enumerate}
-\end{exercise}
-
-\subsection*{Extra exercises}
-\begin{exercise}[Box--Pierce by hand (not from the course)]\label{ch09:ex-x-bp}
-A daily return series with $T=500$ has $\hat r_1=0.09$, $\hat r_2=-0.05$, $\hat r_3=0.04$, $\hat r_4=0.02$, $\hat r_5=-0.06$.
-\begin{enumerate}[(a)]
-  \item Which lags are individually significant at $5\%$?
-  \item Compute BP for $K=5$ and compare with $\chi^2_5$ (critical value $11.07$).
-  \item Explain how the two answers can disagree and which you would report.
-  \item If the numbers came from the residuals of an ARMA(1,1) fit, what would the degrees of freedom be?
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[Stationarity of a VAR (not from the course)]\label{ch09:ex-x-companion}
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Write the companion matrix of the univariate AR(2) $X_t=0.5X_{t-1}+0.3X_{t-2}+\eta_t$, find its eigenvalues ($0.852,-0.352$) and the roots of $\phi(z)$; verify $\lambda=1/z$.
-  \item For the VAR(1) with $A=\bigl(\begin{smallmatrix}0.9&0.4\\0&0.5\end{smallmatrix}\bigr)$ compute $\Gamma_0$ from $\mathrm{vec}\,\Gamma_0=(I-A\otimes A)^{-1}\mathrm{vec}\,\Sigma$ for $\Sigma=I$ and the impulse responses $\Psi_k$;
-      which shock has the longest-lasting effect on which variable?
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[Dickey--Fuller by simulation (not from the course)]\label{ch09:ex-x-df}
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Simulate $10^4$ random walks of length $500$ and compute $t_{\phi=1}$ from the regression of $X_t$ on $X_{t-1}$ with and without intercept; check the $5\%$ quantiles $-1.95$ and $-2.89$.
-  \item Repeat with an AR(1) with $\phi=0.95$ and estimate the power of the test at the $5\%$ level; explain why
-      non-rejection on a persistent yield series is weak evidence for a unit root.
-  \item Verify the identity $\sum_{t=1}^TX_{t-1}\eta_t=\frac12(X_T^2-\sum\eta_t^2)$ and show that its expectation is zero; then estimate $\E[T(\hat\phi-1)]$ by simulation and explain why the ratio in \eqref{ch09:eq-df} is nevertheless biased downwards (the denominator is positively correlated with the numerator's negative part).
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[Cointegration and the VECM (not from the course)]\label{ch09:ex-x-coint}
-For the pair of \cref{ch09:ex-coint}
-\begin{enumerate}[(a)]
-  \item rewrite the system as a VAR(1) in levels and verify that $I+\Pi$ has eigenvalues $1$ and $0.7$.
-  \item Show that $\Pi$ is not invertible and identify $\alpha$ and $\beta$; check that another factorisation $(\alpha G)(\beta G^{-\mathsf T})\T$ gives the same $\Pi$.
-  \item Simulate the system, regress $y_t$ on $x_t$ and apply an ADF test to the residuals (Engle--Granger); do the same for two independent random walks and comment on ``spurious regression''.
-  \item What changes in the VECM if both $\varepsilon_{1t}$ and $u_{t-1}$ enter the equation of $x_t$?
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[Kalman filter by hand (not from the course)]\label{ch09:ex-x-kf}
-Take the local-level model with $Q=1$, $H=4$ and initial state $N(0,10)$.
-\begin{enumerate}[(a)]
-  \item Run the filter for the observations $y_1=1.5$, $y_2=0.8$, $y_3=2.2$: compute $G_t$, $\mu_{t|t}$, $P_{t|t}$.
-  \item Compute the two-step forecast of $y_5$ and its variance.
-  \item Show that $P_{t|t-1}$ converges monotonically to
-      $(Q+\sqrt{Q^2+4QH})/2$.
-  \item Show that $G_t\to0$ as $Q\to0$ and interpret it (the level is constant and the filter reduces to the sample mean).
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[Time-varying beta (not from the course)]\label{ch09:ex-x-beta}
-In the state-space model of the time-varying CAPM, write out the Kalman recursions for $\bm s_t=(\alpha_t,\beta_t)\T$.
-\begin{enumerate}[(a)]
-  \item Show that if $\sigma_\xi=\sigma_\zeta=0$ the recursion reproduces recursive least squares for the simple regression.
-  \item Explain how the ratio
-      $\sigma_\zeta^2/\sigma_\varepsilon^2$ sets the effective window length of the estimate, and relate it to the local-level example.
-  \item With daily data for one stock and the S\&P~500, estimate $\sigma_\zeta^2$ by maximising \eqref{ch09:eq-kfll}.
 \end{enumerate}
 \end{exercise}

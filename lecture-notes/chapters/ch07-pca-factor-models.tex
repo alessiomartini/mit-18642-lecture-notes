@@ -206,6 +206,26 @@ component in a large universe, while the remaining $p-1$ eigenvalues are degener
 higher PCs are not identified (\cref{ch07:rem-sign}).
 \end{example}
 
+\begin{exercise}[PS2 (2024), Problem 3: principal components, special case]\label{ch07:ex-ps2}
+A portfolio holds $n$ assets with fixed weights $\bm w=(w_1,\dots,w_n)\T$; over a given horizon the assets have
+rates of return $\bm X=(X_1,\dots,X_n)\T$ with mean $\bm\mu$ and covariance $\Sigma=(\sigma_{ij})$, and the portfolio return
+is $Y=\bm w\T\bm X$.
+\begin{enumerate}[(a)]
+  \item Show that $\E[Y]=\bm w\T\bm\mu$ and $\Var[Y]=\bm w\T\Sigma\bm w$.
+  \item Prove that $\Sigma$ is positive semi-definite, for any random variables $X_1,\dots,X_n$.
+  \item Suppose all entries of $\Sigma$ are positive. Prove that the largest eigenvalue $\lambda_{\max}$ has multiplicity one and
+      an eigenvector $\bm v$ that can be chosen with all components positive.
+  \item Write the first principal component variable $PC1$ in terms of $\bm X$, $\bm\mu$ and $\bm v$. What are its mean and
+      variance?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[not from the course]\label{ch07:ex-equi-proof}
+Prove the claims of \cref{ch07:ex-equi}: for $\Sigma=\sigma^2[(1-\rho)I+\rho\bm1\bm1\T]$ find all eigenvalues and eigenvectors, and
+the fraction of variance explained by PC1. For which $\rho$ is $\Sigma$ positive semi-definite? Relate the result to
+\cref{thm:pf} when $\rho>0$.
+\end{exercise}
+
 % ------------------------------------------------------------------
 \section{Sample PCA, SVD and practical choices}\label{ch07:sec-sample}
 
@@ -258,6 +278,12 @@ routes are $O(Np^2)$ (plus $O(p^3)$ for the eigen-decomposition).
       $\Sigma=W\Lambda W\T$ the ``SVD decomposition'': it is the spectral decomposition (for a PSD matrix it coincides with the SVD).
 \end{itemize}
 \end{coursenote}
+
+\begin{exercise}[\file{lecnote15}, slide 32: PCA via the SVD]\label{ch07:ex-lecsvd}
+Let $X^*$ be the $m\times T$ row-centred data matrix, $\hat\Sigma_x=\frac1TX^*X^{*\prime}$, and $X^*=VDU'$ its SVD with $V$ ($m\times m$)
+orthogonal, $U$ ($T\times m$) with orthonormal columns and $D=\diag(d_1\ge\dots\ge d_m\ge0)$. Show that
+$\hat\Lambda=\frac1TD^2$, $\hat\Gamma=V$, and that the matrix of sample principal components is $P=\hat\Gamma'X^*=DU'$.
+\end{exercise}
 
 \subsection{A worked example: six days of Treasury yields}\label{ch07:sec-sixdays}
 The 2016 reading (\file{pset_analysis}) runs PCA on the smallest possible data set: FRED constant-maturity
@@ -425,6 +451,11 @@ At \ts{24}{9}{19:07} the speaker says that the ``product of eigenvalues'' is the
 slide (and \cref{ch07:thm-pca}(iv)) has the correct statement: total variance $=\tr\Sigma=$ \emph{sum} of the
 eigenvalues. (The product is $\det\Sigma$, the ``generalised variance''.)
 \end{coursenote}
+
+\begin{exercise}[not from the course]\label{ch07:ex-oos}
+In \eqref{ch07:eq-oos} show that $\sum_k(D\T\Lambda^YD)_{kk}=\tr\Lambda^Y$ and that, for every $K$,
+$\sum_{k\le K}(W\T\Sigma^YW)_{kk}\le\sum_{k\le K}\lambda^Y_k$. When does equality hold for $K=1$?
+\end{exercise}
 
 \subsection{PCA on financial time series}\label{ch07:sec-ts}
 What is special about finance is that the data are \emph{time series} \ts{24}{9}{27:32}: each day is one
@@ -1092,25 +1123,24 @@ has no lecture on macroeconomic or fundamental factor models; their portfolio-th
 \end{align*}
 \end{keyformulas}
 
+\begin{exercise}[not from the course]\label{ch07:ex-fa}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Count the free parameters of the $K$-factor model $\Sigma_x=BB\T+\Psi$ and derive the degrees of freedom $\nu$ of the
+      likelihood-ratio test.
+  \item Check the values of $\nu$ reported in 2013 Case Study~7 and explain why a 6-factor model
+      cannot be fitted to 9 yields.
+  \item For the single-index model with $\Psi=\psi I$, show that PCA recovers $\bm\beta/\|\bm\beta\|$ as
+      PC1; what happens if the $\sigma_i^2$ differ?
+\end{enumerate}
+\end{exercise}
+
 % ------------------------------------------------------------------
 \section*{Exercises}
 \addcontentsline{toc}{section}{Exercises}
+Standalone exercises follow the section they practise. The exercises that build on one another stay together here: PS3 Problem~4 with the exercises that reuse its data (PS7 Problem~4 and the PC-neutral hedges), and PS7 Problems~1--2.
 
-\subsection*{From 2024 Problem Sets 2 and 3}
-
-\begin{exercise}[PS2 (2024), Problem 3: principal components, special case]\label{ch07:ex-ps2}
-A portfolio holds $n$ assets with fixed weights $\bm w=(w_1,\dots,w_n)\T$; over a given horizon the assets have
-rates of return $\bm X=(X_1,\dots,X_n)\T$ with mean $\bm\mu$ and covariance $\Sigma=(\sigma_{ij})$, and the portfolio return
-is $Y=\bm w\T\bm X$.
-\begin{enumerate}[(a)]
-  \item Show that $\E[Y]=\bm w\T\bm\mu$ and $\Var[Y]=\bm w\T\Sigma\bm w$.
-  \item Prove that $\Sigma$ is positive semi-definite, for any random variables $X_1,\dots,X_n$.
-  \item Suppose all entries of $\Sigma$ are positive. Prove that the largest eigenvalue $\lambda_{\max}$ has multiplicity one and
-      an eigenvector $\bm v$ that can be chosen with all components positive.
-  \item Write the first principal component variable $PC1$ in terms of $\bm X$, $\bm\mu$ and $\bm v$. What are its mean and
-      variance?
-\end{enumerate}
-\end{exercise}
+\subsection*{From 2024 Problem Set 3}
 
 \begin{exercise}[PS3 (2024), Problem 4; also PS7 (2013), Problem 3: PCA of yield changes]\label{ch07:ex-ps3}
 Daily changes of the 9 FRED constant-maturity Treasury yields over 2001--2005 are analysed twice, with the sample
@@ -1166,7 +1196,7 @@ $9$, a factor $(N-1)/N$ with $N\approx1247$ days, presumably a different divisor
 to signs.
 \end{coursenote}
 
-\subsection*{From 2013 Problem Set 7 and the 2013 slides}
+\subsection*{From 2013 Problem Set 7}
 
 \begin{exercise}[PS7 (2013), Problem 1: PCA of a bivariate vector]\label{ch07:ex-ps7-1}
 Let $\bm X=(X_1,X_2)\T$ have mean $\bm\alpha=(\alpha_1,\alpha_2)\T$ and covariance
@@ -1223,24 +1253,7 @@ largest root of the characteristic polynomial has modulus 0.438.
 (d) For each equation, is there evidence of mean reversion or of momentum in the PC variable? Explain.
 \end{exercise}
 
-\begin{exercise}[\file{lecnote15}, slide 32: PCA via the SVD]\label{ch07:ex-lecsvd}
-Let $X^*$ be the $m\times T$ row-centred data matrix, $\hat\Sigma_x=\frac1TX^*X^{*\prime}$, and $X^*=VDU'$ its SVD with $V$ ($m\times m$)
-orthogonal, $U$ ($T\times m$) with orthonormal columns and $D=\diag(d_1\ge\dots\ge d_m\ge0)$. Show that
-$\hat\Lambda=\frac1TD^2$, $\hat\Gamma=V$, and that the matrix of sample principal components is $P=\hat\Gamma'X^*=DU'$.
-\end{exercise}
-
 \subsection*{Additional exercises}
-
-\begin{exercise}[not from the course]\label{ch07:ex-equi-proof}
-Prove the claims of \cref{ch07:ex-equi}: for $\Sigma=\sigma^2[(1-\rho)I+\rho\bm1\bm1\T]$ find all eigenvalues and eigenvectors, and
-the fraction of variance explained by PC1. For which $\rho$ is $\Sigma$ positive semi-definite? Relate the result to
-\cref{thm:pf} when $\rho>0$.
-\end{exercise}
-
-\begin{exercise}[not from the course]\label{ch07:ex-oos}
-In \eqref{ch07:eq-oos} show that $\sum_k(D\T\Lambda^YD)_{kk}=\tr\Lambda^Y$ and that, for every $K$,
-$\sum_{k\le K}(W\T\Sigma^YW)_{kk}\le\sum_{k\le K}\lambda^Y_k$. When does equality hold for $K=1$?
-\end{exercise}
 
 \begin{exercise}[not from the course]\label{ch07:ex-fly}
 Using the covariance-PCA loadings of \cref{ch07:ex-ps3}:
@@ -1251,17 +1264,5 @@ Using the covariance-PCA loadings of \cref{ch07:ex-ps3}:
       exposure to PC3;
   \item prove the variance formula for the PC1-hedged portfolio $\bm V'=\bm V-(\bm V\T\bm\gamma_1)\bm\gamma_1$ and show
       that it never exceeds $\Var(\bm V\T\bm r)$.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course]\label{ch07:ex-fa}
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Count the free parameters of the $K$-factor model $\Sigma_x=BB\T+\Psi$ and derive the degrees of freedom $\nu$ of the
-      likelihood-ratio test.
-  \item Check the values of $\nu$ reported in 2013 Case Study~7 and explain why a 6-factor model
-      cannot be fitted to 9 yields.
-  \item For the single-index model with $\Psi=\psi I$, show that PCA recovers $\bm\beta/\|\bm\beta\|$ as
-      PC1; what happens if the $\sigma_i^2$ differ?
 \end{enumerate}
 \end{exercise}

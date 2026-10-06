@@ -564,6 +564,30 @@ should give you the money'' \ts{24}{1-II}{32:10}. Typical sources:
 If you cannot say who is on the other side and why they lose, you probably have no edge.
 \end{answer}
 
+
+\begin{exercise}[2024 Investment Game (ungraded)]\label{ex:game}
+With a hypothetical \$10{,}000, buy a single publicly traded stock, ETF, currency or bond (to be short,
+buy an inverse ETF) at the close of Friday 13 September 2024 and sell at the close of Friday
+15 November 2024, with one optional switch of the whole balance at the close of 11 October
+\ts{24}{1-II}{32:28}. Track in a spreadsheet the number of shares, the daily P\&L in \$ and \%, the
+total P\&L, the sum $G$ of the daily gains and the sum $L$ of the daily losses (in absolute value), and
+the ratio $(G-L)/(G+L)$. Repeat the game on any two-month window of your choice.
+\begin{enumerate}[(a)]
+  \item Show that $G-L$ is the total P\&L and that $(G-L)/(G+L)\in[-1,1]$.
+  \item Interpret the ratio: which values correspond to a ``clean'' trend, which to a noisy
+        path with the same final P\&L?
+\end{enumerate}
+\end{exercise}
+
+\begin{mysolution}
+(a) Easy to see: imposta le due disuguaglianze, sono rispettate trivialmente.
+
+(b) Il rateo è il profitto totale diviso per il valore assoluto di tutte le variazioni, quindi grandi
+variazioni implicano piccolo rateo e piccole variazioni grande rateo. Inoltre, grande profitto implica
+grande rateo, piccolo profitto piccolo rateo. Quindi questa è una metrica di quanto profittevole e con
+bassa volatilità l'investimento è stato.
+\end{mysolution}
+
 % ------------------------------------------------------------------
 \section{Time value of money}\label{sec:tvm}
 
@@ -1095,6 +1119,40 @@ Black--Scholes formula in \cref{ch:bs}. A conceptual map of this chapter is at t
 \end{answer}
 
 
+
+\begin{exercise}[not from the course]
+A 5-year bond pays annual coupons of 6\% on $N=100$.
+\begin{enumerate}[(a)]
+  \item Price it at $y=5\%$ and $y=7\%$.
+  \item Compute its
+      Macaulay and modified duration at $y=5\%$ and check them against the price change for $\Delta y=\pm 1$\,bp.
+\end{enumerate}
+\end{exercise}\note+{bp stands for basis point and it is 0.01\%}
+\begin{mysolution}
+(a)
+\begin{align*}
+P_{y=0.05} &= 6\,\frac{1-(1+0.05)^{-5}}{0.05} + \frac{100}{(1+0.05)^{5}} = 104.33,\\
+P_{y=0.07} &= 6\,\frac{1-(1+0.07)^{-5}}{0.07} + \frac{100}{(1+0.07)^{5}} = 95.90.
+\end{align*}
+(b)
+\begin{align*}
+D_{\mathrm{Mac}} &= \frac{1}{104.33}\left(1\cdot 6\cdot 1.05^{-1} + 2\cdot6\cdot 1.05^{-2} + 3\cdot6\cdot 1.05^{-3} + 4\cdot6\cdot 1.05^{-4} + 5\cdot (6+100)\cdot 1.05^{-5} \right) = 4.48\ \text{years},\\
+D_{\mathrm{mod}} &= 4.48/1.05 = 4.27\ \text{years},\\
+P_{\text{Taylor}} &= P - P\,D\,\Delta y = P \cdot (1-D \Delta y),\\
+P^{\pm 0.01\%} &= 104.33\,\bigl(1-4.27\cdot(\pm 0.0001)\bigr) = 104.285 \ (+1\,\mathrm{bp}) \ \&\ 104.375 \ (-1\,\mathrm{bp}),\\
+P_{\text{exact}} &\approx 104.285 \ (+1\,\mathrm{bp}) \ \&\ 104.375 \ (-1\,\mathrm{bp}).
+\end{align*}
+\feedback{All correct. Exact $-1$\,bp price: $104.374$; at $1$\,bp convexity is negligible ($\sim10^{-7}P$).}
+\end{mysolution}
+
+
+\begin{exercise}[not from the course]
+Compute the convexity of the continuous par bond of \cref{prop:duration}(iii) and its limit as $T\to\infty$.
+\end{exercise}
+\begin{mysolution}
+      \[C = \frac{1}{P}\frac{d^2 P}{dy^2} = -\frac{dD}{dy} = \frac{e^{-yT}(Ty+1)-1}{y^2} \to_{T \to \infty} -\frac{1}{y^2}\]
+\feedback{$C<0$ is impossible here. $C=D^2-dD/dy$, not $-dD/dy$; and differentiate $P=c(1-e^{-yT})/y+e^{-yT}$ at \emph{fixed} $c$, then set $c=y$. Result: $C=2[1-e^{-yT}(1+yT)]/y^2\to2/y^2$.}
+\end{mysolution}
 \subsection{Forward rates}\label{sec:forward}
 \begin{definition}[Forward rate agreement]
 A \emph{forward rate agreement} (FRA) fixes today the interest $F_{tT}$ to be paid at time $T$ on a
@@ -1125,6 +1183,40 @@ $\Lambda_T$ is the \emph{inverse} of the compounding factor: $1/\Lambda_T=\exp\b
 what \$1 grows to by $T$ if you lock in all the forward rates today (continuous compounding at a
 time-varying rate).
 \end{answer}
+
+
+\begin{exercise}[not from the course]
+Three bonds with maturities $1,2,3$ years all trade at par (price $1$ per unit of nominal). The bond of
+maturity $n$ pays the \emph{same} annual coupon $c_n$ every year (not a coupon that changes over time), with
+$c_1 = 4\%$, $c_2 = 4.5\%$, $c_3 = 5\%$; these $c_n$ are the par yields. At par $P/N=1$ for each bond, and the
+discount factors $\Lambda_k$ are common to all three bonds. Bootstrap $\Lambda_1,\Lambda_2,\Lambda_3$,
+the zero yields and the one-year forward rates $F_{1,2}$, $F_{2,3}$. Why is the zero curve above the par curve
+when the curve slopes upward?
+\end{exercise}\note*{non capisco se il coupon e' variabile nel tempo, nel senso che il primo anno riceviamo 4\% di N il nominal, il secondo 4.5, il terzo 5.}
+\begin{mysolution}\begin{answer}{come faccio a calcoalre lo zero yield per i tre bonds senza il rapporto P/N ? se la premessa e' che sono par bond non capisco. L'esercizio e' scritto male, non e' chiaro.}[P/N is known]
+You are right that the statement was unclear; it now says so explicitly. ``At par'' \emph{means} $P=N$,
+so $P/N=1$ for all three bonds. The only other data are the coupons $c_n$, and the discount factors
+$\Lambda_k$ are common to the three bonds. The zero yield of maturity $n$ is then $y_n=\Lambda_n^{-1/n}-1$
+(see the feedback below).
+\end{answer}
+      Recursively, 
+      \[ 1.  \Lambda_{c_1} = \frac{1}{1+c_1} = 0.9615\]
+      \[ 2. \Lambda_{c_2}^1 = \frac{1}{1+c_2} = 0.9569 ; \Lambda_{c_2}^2 = \frac{1  -c_2 \cdot \Lambda_{c_2}^1}{1+c_2} = 0,9157\]
+      \[ 3. \Lambda_{c_3}^1 = \frac{1}{1+c_3} = 0.9524 ; \Lambda_{c_3}^2 = \frac{1  - c_3 \cdot \Lambda_{c_3}^1}{1+c_3} = 0.9070 ; \Lambda_{c_3}^3 = \frac{1 - c_3 \cdot (\Lambda_{c_3}^1 + \Lambda_{c_3}^2)}{1+c_3} = 0.8638 \]
+      
+      Forward rate: \[F_{12}^{c_2} = \frac{\Lambda_{c_2}^1}{\Lambda_{c_2}^2} - 1 = ... ; \]
+\feedback{Recursion right, but $\Lambda_k$ is shared by all bonds: reuse $\Lambda_1=0.9615$, don't recompute it per bond. $\Lambda_2=0.9155$, $\Lambda_3=0.8630$; zero yields $4.00$, $4.51$, $5.03\%$; $F_{12}=5.03\%$, $F_{23}=6.09\%$.}
+\end{mysolution}
+
+
+\begin{exercise}[not from the course]\label{ex:fra}
+Complete the proof of \cref{prop:forward}: if the market quotes an FRA rate $F > \Lambda_t/\Lambda_T - 1$, write
+down an explicit zero-cost strategy with zero-coupon bonds and the FRA that has a positive payoff at $T$.
+\end{exercise}
+\begin{mysolution}
+      I borrow N from a commercial bank, given to me at a r interest rate, i land N with the F bigger that it should, when i am payied back i repay N plus interests to the back and i am left with money.
+\feedback{Right idea, but a future bank rate is unknown: lock funding today. Buy 1 zero to $t$, sell $\Lambda_t/\Lambda_T$ zeros to $T$ (cost $0$); lend the \$1 at $t$ via the FRA. Profit at $T$: $1+F-\Lambda_t/\Lambda_T>0$.}
+\end{mysolution}
 
 % ------------------------------------------------------------------
 \section{Working with data: R and RStudio}\label{sec:R}
@@ -1268,29 +1360,7 @@ time-series analysis (\cref{ch:timeseries}).
 \addcontentsline{toc}{section}{Exercises}
 No problem set covers this chapter; \cref{ex:game,ex:glossary} are the course's own activities,
 the others are added for practice (marked \emph{not from the course}).
-
-\begin{exercise}[2024 Investment Game (ungraded)]\label{ex:game}
-With a hypothetical \$10{,}000, buy a single publicly traded stock, ETF, currency or bond (to be short,
-buy an inverse ETF) at the close of Friday 13 September 2024 and sell at the close of Friday
-15 November 2024, with one optional switch of the whole balance at the close of 11 October
-\ts{24}{1-II}{32:28}. Track in a spreadsheet the number of shares, the daily P\&L in \$ and \%, the
-total P\&L, the sum $G$ of the daily gains and the sum $L$ of the daily losses (in absolute value), and
-the ratio $(G-L)/(G+L)$. Repeat the game on any two-month window of your choice.
-\begin{enumerate}[(a)]
-  \item Show that $G-L$ is the total P\&L and that $(G-L)/(G+L)\in[-1,1]$.
-  \item Interpret the ratio: which values correspond to a ``clean'' trend, which to a noisy
-        path with the same final P\&L?
-\end{enumerate}
-\end{exercise}
-
-\begin{mysolution}
-(a) Easy to see: imposta le due disuguaglianze, sono rispettate trivialmente.
-
-(b) Il rateo è il profitto totale diviso per il valore assoluto di tutte le variazioni, quindi grandi
-variazioni implicano piccolo rateo e piccole variazioni grande rateo. Inoltre, grande profitto implica
-grande rateo, piccolo profitto piccolo rateo. Quindi questa è una metrica di quanto profittevole e con
-bassa volatilità l'investimento è stato.
-\end{mysolution}
+Standalone exercises follow the section they practise; the exercise below is the integrative one.
 
 \begin{exercise}[2013, optional homework]\label{ex:glossary}
 Build your own financial glossary: list every term of this chapter you could not define precisely and
@@ -1298,67 +1368,3 @@ look it up \ts{13}{1}{53:27}.
 \end{exercise}\note+{did it using the notes}
 
 
-\begin{exercise}[not from the course]
-A 5-year bond pays annual coupons of 6\% on $N=100$.
-\begin{enumerate}[(a)]
-  \item Price it at $y=5\%$ and $y=7\%$.
-  \item Compute its
-      Macaulay and modified duration at $y=5\%$ and check them against the price change for $\Delta y=\pm 1$\,bp.
-\end{enumerate}
-\end{exercise}\note+{bp stands for basis point and it is 0.01\%}
-\begin{mysolution}
-(a)
-\begin{align*}
-P_{y=0.05} &= 6\,\frac{1-(1+0.05)^{-5}}{0.05} + \frac{100}{(1+0.05)^{5}} = 104.33,\\
-P_{y=0.07} &= 6\,\frac{1-(1+0.07)^{-5}}{0.07} + \frac{100}{(1+0.07)^{5}} = 95.90.
-\end{align*}
-(b)
-\begin{align*}
-D_{\mathrm{Mac}} &= \frac{1}{104.33}\left(1\cdot 6\cdot 1.05^{-1} + 2\cdot6\cdot 1.05^{-2} + 3\cdot6\cdot 1.05^{-3} + 4\cdot6\cdot 1.05^{-4} + 5\cdot (6+100)\cdot 1.05^{-5} \right) = 4.48\ \text{years},\\
-D_{\mathrm{mod}} &= 4.48/1.05 = 4.27\ \text{years},\\
-P_{\text{Taylor}} &= P - P\,D\,\Delta y = P \cdot (1-D \Delta y),\\
-P^{\pm 0.01\%} &= 104.33\,\bigl(1-4.27\cdot(\pm 0.0001)\bigr) = 104.285 \ (+1\,\mathrm{bp}) \ \&\ 104.375 \ (-1\,\mathrm{bp}),\\
-P_{\text{exact}} &\approx 104.285 \ (+1\,\mathrm{bp}) \ \&\ 104.375 \ (-1\,\mathrm{bp}).
-\end{align*}
-\feedback{All correct. Exact $-1$\,bp price: $104.374$; at $1$\,bp convexity is negligible ($\sim10^{-7}P$).}
-\end{mysolution}
-
-\begin{exercise}[not from the course]
-Three bonds with maturities $1,2,3$ years all trade at par (price $1$ per unit of nominal). The bond of
-maturity $n$ pays the \emph{same} annual coupon $c_n$ every year (not a coupon that changes over time), with
-$c_1 = 4\%$, $c_2 = 4.5\%$, $c_3 = 5\%$; these $c_n$ are the par yields. At par $P/N=1$ for each bond, and the
-discount factors $\Lambda_k$ are common to all three bonds. Bootstrap $\Lambda_1,\Lambda_2,\Lambda_3$,
-the zero yields and the one-year forward rates $F_{1,2}$, $F_{2,3}$. Why is the zero curve above the par curve
-when the curve slopes upward?
-\end{exercise}\note*{non capisco se il coupon e' variabile nel tempo, nel senso che il primo anno riceviamo 4\% di N il nominal, il secondo 4.5, il terzo 5.}
-\begin{mysolution}\begin{answer}{come faccio a calcoalre lo zero yield per i tre bonds senza il rapporto P/N ? se la premessa e' che sono par bond non capisco. L'esercizio e' scritto male, non e' chiaro.}[P/N is known]
-You are right that the statement was unclear; it now says so explicitly. ``At par'' \emph{means} $P=N$,
-so $P/N=1$ for all three bonds. The only other data are the coupons $c_n$, and the discount factors
-$\Lambda_k$ are common to the three bonds. The zero yield of maturity $n$ is then $y_n=\Lambda_n^{-1/n}-1$
-(see the feedback below).
-\end{answer}
-      Recursively, 
-      \[ 1.  \Lambda_{c_1} = \frac{1}{1+c_1} = 0.9615\]
-      \[ 2. \Lambda_{c_2}^1 = \frac{1}{1+c_2} = 0.9569 ; \Lambda_{c_2}^2 = \frac{1  -c_2 \cdot \Lambda_{c_2}^1}{1+c_2} = 0,9157\]
-      \[ 3. \Lambda_{c_3}^1 = \frac{1}{1+c_3} = 0.9524 ; \Lambda_{c_3}^2 = \frac{1  - c_3 \cdot \Lambda_{c_3}^1}{1+c_3} = 0.9070 ; \Lambda_{c_3}^3 = \frac{1 - c_3 \cdot (\Lambda_{c_3}^1 + \Lambda_{c_3}^2)}{1+c_3} = 0.8638 \]
-      
-      Forward rate: \[F_{12}^{c_2} = \frac{\Lambda_{c_2}^1}{\Lambda_{c_2}^2} - 1 = ... ; \]
-\feedback{Recursion right, but $\Lambda_k$ is shared by all bonds: reuse $\Lambda_1=0.9615$, don't recompute it per bond. $\Lambda_2=0.9155$, $\Lambda_3=0.8630$; zero yields $4.00$, $4.51$, $5.03\%$; $F_{12}=5.03\%$, $F_{23}=6.09\%$.}
-\end{mysolution}
-
-\begin{exercise}[not from the course]\label{ex:fra}
-Complete the proof of \cref{prop:forward}: if the market quotes an FRA rate $F > \Lambda_t/\Lambda_T - 1$, write
-down an explicit zero-cost strategy with zero-coupon bonds and the FRA that has a positive payoff at $T$.
-\end{exercise}
-\begin{mysolution}
-      I borrow N from a commercial bank, given to me at a r interest rate, i land N with the F bigger that it should, when i am payied back i repay N plus interests to the back and i am left with money.
-\feedback{Right idea, but a future bank rate is unknown: lock funding today. Buy 1 zero to $t$, sell $\Lambda_t/\Lambda_T$ zeros to $T$ (cost $0$); lend the \$1 at $t$ via the FRA. Profit at $T$: $1+F-\Lambda_t/\Lambda_T>0$.}
-\end{mysolution}
-
-\begin{exercise}[not from the course]
-Compute the convexity of the continuous par bond of \cref{prop:duration}(iii) and its limit as $T\to\infty$.
-\end{exercise}
-\begin{mysolution}
-      \[C = \frac{1}{P}\frac{d^2 P}{dy^2} = -\frac{dD}{dy} = \frac{e^{-yT}(Ty+1)-1}{y^2} \to_{T \to \infty} -\frac{1}{y^2}\]
-\feedback{$C<0$ is impossible here. $C=D^2-dD/dy$, not $-dD/dy$; and differentiate $P=c(1-e^{-yT})/y+e^{-yT}$ at \emph{fixed} $c$, then set $c=y$. Result: $C=2[1-e^{-yT}(1+yT)]/y^2\to2/y^2$.}
-\end{mysolution}

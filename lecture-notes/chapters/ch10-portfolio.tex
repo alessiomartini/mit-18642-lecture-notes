@@ -22,8 +22,8 @@
 \file{ETF_pridB_15.pdf}, \file{ETF_pridB_30.pdf} (2003--2006); the names ``periodA'' and ``periodB'' are those of
 the case study text.
 \textbf{Problem sets.} 2013 PS6 Problems~3--5 (two-asset and $m$-asset minimum-variance portfolios,
-equicorrelation); Problems~1--2 of the same set are time series (\cref{ch:timeseries}). The exercises are at the
-end of the chapter.
+equicorrelation); Problems~1--2 of the same set are time series (\cref{ch:timeseries}). Standalone exercises follow the section they practise;
+the connected ones (Problems~3--5) are at the end of the chapter.
 \textbf{Not covered or not available.} The R code that produced the case-study output is not in the download (only
 its printed output), so the numbers of \cref{ch10:sec-case} are quoted, and checked by an independent computation
 from the printed input tables. The video shown by the speaker in both years and the 2013 blackboard are not in the
@@ -354,6 +354,18 @@ with $94\%$ in consumer staples and a $27\%$ short position in industrials: an u
 what an investor would hold. This is the reason for the constraints of \cref{ch10:sec-constr}.
 \end{example}
 
+\begin{exercise}[not from the course: the frontier]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Verify that $\bm w_g$ of \cref{ch10:cor-gmv} minimises $\bm w\T\Sigma\bm w$ under $\bm w\T\bm 1=1$ and that the frontier
+      \eqref{ch10:eq-frontier} has asymptotes $\mu=b/c\pm\sqrt{\Delta/c}\,\sigma$.
+  \item Show that the difference of two efficient portfolios is proportional to $\bm v$ of
+      \eqref{ch10:eq-twofund} and deduce the two-fund theorem.
+  \item Show that, if $r_0<\mu_g$, the tangency portfolio maximises the
+      Sharpe ratio over the fully invested portfolios, and find the tangency point of the line through $(0,r_0)$ with the hyperbola.
+\end{enumerate}
+\end{exercise}
+
 % ==================================================================
 \section{A riskless asset: tangency portfolio and capital market line}\label{ch10:sec-rf}
 
@@ -603,6 +615,12 @@ and the same $\mu$, kept at $50/50$, grow at $\mu-1\%$ per year, while each alon
 rebalanced portfolio gains $\sigma^2/4=1\%$ per year over the average of its components. The example above is the
 extreme case: $\rho=-1$, growth rates of $0\%$ for each asset, $25\%$ for the mix.
 
+\begin{exercise}[not from the course: rebalancing]
+Two independent assets have geometric Brownian motions with $\sigma_1=30\%$, $\sigma_2=10\%$ and the same $\mu$. Using
+\cref{ch10:prop-growth}, find the constant-mix weight that maximises the log growth rate and the value of the ``excess growth'' at
+that weight. Compare with equal weights.
+\end{exercise}
+
 % ==================================================================
 \section{Leverage, the 60/40 portfolio and risk parity}\label{ch10:sec-rp}
 
@@ -698,6 +716,17 @@ For $\sigma_P=w_2\sigma_2$ in the two-asset special case, $\beta=\sigma_P/\sigma
 \ts{13}{16}{1:03:38}: ``a higher volatility of the portfolio means a higher beta to the risky asset''.
 \end{intuition}
 
+\begin{exercise}[not from the course: risk parity]
+Two assets have volatilities $16\%$ and $6\%$ and correlation $0.3$.
+\begin{enumerate}[(a)]
+  \item Find the risk-parity weights and check that the risk
+      contributions of \cref{ch10:def-rc} are equal.
+  \item What fraction of the risk of the $60/40$ portfolio comes from the first asset?
+  \item By what factor must the
+      risk-parity portfolio be levered to have the volatility of the $60/40$ portfolio?
+\end{enumerate}
+\end{exercise}
+
 % ==================================================================
 \section{Utility theory: why mean and variance?}\label{ch10:sec-utility}
 
@@ -768,6 +797,12 @@ $\bm w=\lambda^{-1}\Sigma^{-1}\bm\eta$, i.e.\ the fraction $m_{\bm w}=(\mu_M-r_0
 market portfolio (from \cref{ch10:thm-tobin}): the risk aversion fixes only \emph{how much}, in accord with
 Tobin's separation.
 
+\begin{exercise}[not from the course: CARA utility]
+An investor with $u(W)=1-e^{-AW}$ and initial wealth $W_0$ can invest in $m$ assets with normal returns and in a riskless asset. Show that the
+optimal amounts invested in the risky assets are $A^{-1}\Sigma^{-1}\bm\eta$ (in dollars) and identify the fraction of the wealth held in the
+tangency portfolio.
+\end{exercise}
+
 \subsection{Higher moments}
 When returns are not Gaussian one goes on in the Taylor series (slides 32--33 of \file{lecnote14})
 \ts{13}{14}{56:11}:
@@ -803,6 +838,17 @@ stresses that, unlike the single-period theory of this chapter, it deals with \e
 $\sigma^2$ per period the growth rate of a fraction $f$ is $r_0+f\mu-\frac12f^2\sigma^2$
 (\cref{ch10:prop-growth}), maximised at $f^*=\mu/\sigma^2$, the Sharpe ratio divided by the volatility
 (not discussed in class); Kelly is problem III with $\lambda=1$.
+
+\begin{exercise}[not from the course: Kelly]
+A bet wins $g=2$ per unit staked with probability $p=0.6$ and loses $l=1$ otherwise.
+\begin{enumerate}[(a)]
+  \item Compute the Kelly fraction and the
+      optimal growth rate $G(f^*)$.
+  \item What growth rate does the half-Kelly fraction $f^*/2$ give, as a percentage of $G(f^*)$?
+  \item Show that for small edges
+      half-Kelly gives $3/4$ of the optimal growth rate.
+\end{enumerate}
+\end{exercise}
 
 \subsection{Xia's gain--loss ratio}
 Xia argues that volatility is a poor risk measure because it is symmetric; a long out-of-the-money call
@@ -852,6 +898,19 @@ $(S/h)'=(h-Sh')/h^2=2\varphi(S)/h^2>0$.
 
 (iii) $G=1$, $L=0$; for $N(1,1)$, $h(1)=1.1666$ and $1/h(1)=0.857$.
 \end{proof}
+
+\begin{exercise}[2024 Investment Game and the gain--loss ratio (ungraded)]\label{ch10:ex-game}
+The 2024 lecture (slide~36) repeats the game of \cref{ex:game}: $\$10{,}000$ in one stock or ETF from the close of 13~September to the
+close of 15~November, one optional switch on 11~October, and the final calculation of $G$, $L$ and $(G-L)/(G+L)$ from the daily
+profits and losses. Carry it out on a two-month window of your choice (for example for the sector ETFs of \cref{ch10:tab-etf}), compute the
+Sharpe ratio of the same daily P\&L, and compare the ranking of two investments by the two measures; see \cref{ch10:prop-gl}.
+\end{exercise}
+
+\begin{exercise}[not from the course: gain--loss ratio]
+Investment~A pays $+3$ with probability $0.4$ and $-1$ with probability $0.6$. Investment~B pays $+1$ or $-1$
+with probability $0.5$ each plus a fixed $0.3$. Compute for each the mean, the standard deviation, the Sharpe ratio, and
+$(G-L)/(G+L)$; comment on the difference in rankings and on the Kelly fractions.
+\end{exercise}
 
 % ==================================================================
 
@@ -1046,6 +1105,11 @@ who take a share of profits but not of the losses, hold ``a free call option'' o
 the portfolio value $V$ (not defined in class; see the drawdowns of the concentrated portfolio in \cref{sec:ewport}).
 \end{finance}
 
+\begin{exercise}[not from the course: VaR and CVaR]
+Modify \cref{ch10:prop-var} to three independent positions with default probability $3\%$ and loss $100$: compute the
+$95\%$ VaR and expected shortfall of one position and of the portfolio of three, and check subadditivity of ES.
+\end{exercise}
+
 % ==================================================================
 \section{Beyond Markowitz: crowds and power laws (2024)}\label{ch10:sec-crowd}
 
@@ -1139,6 +1203,16 @@ a lot to do with it, but that the markets have no clearly defined rules \ts{13}{
 computer can beat a human in investment, he ``cannot confidently say it will not happen''; a colleague added that
 managers also manage people \ts{13}{16}{1:18:37}.
 \end{finance}
+
+\begin{exercise}[not from the course: crowd model and power laws]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item In \cref{ch10:prop-tipping}, take $N$ agents with $A_i=A/N$ and $B_i\in\{B_L,B_H\}$, a fraction $x$ in the reactive state; write the loop
+      gain and find the critical $x$ for the tipping point.
+  \item For a Pareto tail $\Prob[X>x]=(x_m/x)^k$, $k>1$, prove that the top fraction $q$
+      holds $q^{1-1/k}$ of the total, and compute $k$ for a ``$90$--$10$'' rule.
+\end{enumerate}
+\end{exercise}
 
 
 % ==================================================================
@@ -1385,6 +1459,7 @@ these values, not the printed ones. This chapter uses the values of the plots.
 % ==================================================================
 \section*{Exercises}
 \addcontentsline{toc}{section}{Exercises}
+Standalone exercises follow the section they practise. PS6 Problems~3--5 are a connected series (Problem~4 starts ``Now $m>2$ assets'' and extends Problem~3, Problem~5 continues them), so they stay together here.
 
 \subsection*{From 2013 Problem Set 6 (Problems 3--5; Problems 1--2 are in \cref{ch:timeseries})}
 In all three problems the portfolio $\bm w$ is fully invested, $\sum_jw_j=1$, with no short sales, $w_j\ge0$.
@@ -1421,81 +1496,5 @@ Now $m>2$ assets with covariance matrix $\Sigma=(\rho_{ij}\sigma_i\sigma_j)$.
   \item For $m>2$ and $\Sigma=\diag(\sigma_1^2,\dots,\sigma_m^2)$ (arbitrary variances, zero correlations) find the minimum-variance
       portfolio and its variance, and express the variance in terms of $m$ and $\tilde\sigma^2=\bigl(\frac1m\sum_j\sigma_j^{-2}\bigr)^{-1}$.
   \item For $m>2$ and an arbitrary positive definite $\Sigma$, find the minimum-variance portfolio and its variance.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[2024 Investment Game and the gain--loss ratio (ungraded)]\label{ch10:ex-game}
-The 2024 lecture (slide~36) repeats the game of \cref{ex:game}: $\$10{,}000$ in one stock or ETF from the close of 13~September to the
-close of 15~November, one optional switch on 11~October, and the final calculation of $G$, $L$ and $(G-L)/(G+L)$ from the daily
-profits and losses. Carry it out on a two-month window of your choice (for example for the sector ETFs of \cref{ch10:tab-etf}), compute the
-Sharpe ratio of the same daily P\&L, and compare the ranking of two investments by the two measures; see \cref{ch10:prop-gl}.
-\end{exercise}
-
-\subsection*{Extra exercises (not from the course)}
-
-\begin{exercise}[not from the course: risk parity]
-Two assets have volatilities $16\%$ and $6\%$ and correlation $0.3$.
-\begin{enumerate}[(a)]
-  \item Find the risk-parity weights and check that the risk
-      contributions of \cref{ch10:def-rc} are equal.
-  \item What fraction of the risk of the $60/40$ portfolio comes from the first asset?
-  \item By what factor must the
-      risk-parity portfolio be levered to have the volatility of the $60/40$ portfolio?
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: the frontier]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Verify that $\bm w_g$ of \cref{ch10:cor-gmv} minimises $\bm w\T\Sigma\bm w$ under $\bm w\T\bm 1=1$ and that the frontier
-      \eqref{ch10:eq-frontier} has asymptotes $\mu=b/c\pm\sqrt{\Delta/c}\,\sigma$.
-  \item Show that the difference of two efficient portfolios is proportional to $\bm v$ of
-      \eqref{ch10:eq-twofund} and deduce the two-fund theorem.
-  \item Show that, if $r_0<\mu_g$, the tangency portfolio maximises the
-      Sharpe ratio over the fully invested portfolios, and find the tangency point of the line through $(0,r_0)$ with the hyperbola.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: CARA utility]
-An investor with $u(W)=1-e^{-AW}$ and initial wealth $W_0$ can invest in $m$ assets with normal returns and in a riskless asset. Show that the
-optimal amounts invested in the risky assets are $A^{-1}\Sigma^{-1}\bm\eta$ (in dollars) and identify the fraction of the wealth held in the
-tangency portfolio.
-\end{exercise}
-
-\begin{exercise}[not from the course: Kelly]
-A bet wins $g=2$ per unit staked with probability $p=0.6$ and loses $l=1$ otherwise.
-\begin{enumerate}[(a)]
-  \item Compute the Kelly fraction and the
-      optimal growth rate $G(f^*)$.
-  \item What growth rate does the half-Kelly fraction $f^*/2$ give, as a percentage of $G(f^*)$?
-  \item Show that for small edges
-      half-Kelly gives $3/4$ of the optimal growth rate.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course: gain--loss ratio]
-Investment~A pays $+3$ with probability $0.4$ and $-1$ with probability $0.6$. Investment~B pays $+1$ or $-1$
-with probability $0.5$ each plus a fixed $0.3$. Compute for each the mean, the standard deviation, the Sharpe ratio, and
-$(G-L)/(G+L)$; comment on the difference in rankings and on the Kelly fractions.
-\end{exercise}
-
-\begin{exercise}[not from the course: VaR and CVaR]
-Modify \cref{ch10:prop-var} to three independent positions with default probability $3\%$ and loss $100$: compute the
-$95\%$ VaR and expected shortfall of one position and of the portfolio of three, and check subadditivity of ES.
-\end{exercise}
-
-\begin{exercise}[not from the course: rebalancing]
-Two independent assets have geometric Brownian motions with $\sigma_1=30\%$, $\sigma_2=10\%$ and the same $\mu$. Using
-\cref{ch10:prop-growth}, find the constant-mix weight that maximises the log growth rate and the value of the ``excess growth'' at
-that weight. Compare with equal weights.
-\end{exercise}
-
-\begin{exercise}[not from the course: crowd model and power laws]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item In \cref{ch10:prop-tipping}, take $N$ agents with $A_i=A/N$ and $B_i\in\{B_L,B_H\}$, a fraction $x$ in the reactive state; write the loop
-      gain and find the critical $x$ for the tipping point.
-  \item For a Pareto tail $\Prob[X>x]=(x_m/x)^k$, $k>1$, prove that the top fraction $q$
-      holds $q^{1-1/k}$ of the total, and compute $k$ for a ``$90$--$10$'' rule.
 \end{enumerate}
 \end{exercise}

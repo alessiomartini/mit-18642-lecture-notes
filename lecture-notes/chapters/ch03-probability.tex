@@ -366,6 +366,41 @@ above it comes from the 2013 lecture, which uses $P_n$ for the price on day $n$ 
 (as $P^j$ in \cref{def:onepmodel}). Here $P_n$ and $S_n$ are the same thing.
 \end{answer}
 
+\begin{exercise}[PS2 (2013), B-2]\label{ch03:ex-b2}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Verify that $\phi(x)=\frac1{\sigma\sqrt{2\pi}}e^{-(x-\mu)^2/(2\sigma^2)}$ is a probability density (compute
+      $\bigl(\int\phi\bigr)^2$ in polar coordinates).
+  \item Compute the mean and variance of the lognormal law (it suffices to
+      treat $\mu=0$; use (a) to simplify). (This is also Exercise~1.5(i) of \file{lecnote3}; Exercise~1.2 there asks
+      to verify that the mean of $N(\mu,\sigma^2)$ is $\mu$.)
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS2 (2013), B-4: does time diversify risk?]
+(From M.~Kritzman, \emph{Puzzles of Finance}, ch.~3; see also Kritzman and Rich, \emph{Beware of dogma: the truth
+about time diversification}.) A stock has independent annual returns, each lognormal with $\mu=\ln1.1$ and
+$\sigma=\ln1.2$. According to the author, the fraction of wealth lost with 0.1\% probability over $T$ years is
+40.5\%, 58.43\%, 61.48\% and 73.92\% for $T=1,5,10,20$, and he concludes that if risk is measured by the
+magnitude of potential loss, it \emph{increases} with the horizon.
+\begin{enumerate}[(a)]
+  \item Compute the fraction $h(T)$ of wealth
+      lost with probability 0.1\% over $T$ years (in terms of $\Phi$).
+  \item Find the $T$ that maximises $h(T)$. Is $h$
+      increasing in $T$?
+  \item Criticise the argument using (a) and (b).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[\file{lec04_1}, slide 21]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Find the skewness of a lognormal$(\mu,\sigma^2)$ variable (use the lognormal moments).
+  \item Show directly
+      from the density that the kurtosis of $N(\mu,\sigma^2)$ is 3.
+\end{enumerate}
+\end{exercise}
+
 % ------------------------------------------------------------------
 \section{Expected option payoffs}\label{ch03:sec-call}
 
@@ -465,6 +500,12 @@ is about $100\cdot0.2\cdot\sqrt{0.25}=\$10$, so the option is worth about $0.4\c
 ($r=0$) gives \$3.99.
 \end{answer}
 \end{finance}
+
+\begin{exercise}[not from the course: puts and parity]
+With the notation of \cref{ch03:thm-call}, show that $\E[(K-X)^+]=\int_{-\infty}^KF(x)\dd x$ and that
+$\E[(X-K)^+]-\E[(K-X)^+]=\E[X]-K$. Interpret the second identity as put--call parity: a long call plus a short put is a
+forward contract (\cref{sec:forward}).
+\end{exercise}
 
 % ------------------------------------------------------------------
 \section{Moment-generating functions}\label{ch03:sec-mgf}
@@ -681,6 +722,61 @@ their tails decay like powers ($x^{-4}$, $x^{-2}$), not like $e^{-x^2/2}$: on th
 factor $10^3$--$10^4$.}\label{ch03:fig-laws}
 \end{figure}
 
+\begin{exercise}[PS2 (2024), Problem 2: lognormal distribution]\label{ch03:ex-ps2}
+Let $X$ be lognormal$(\mu,\sigma^2)$, i.e.\ $Y=\ln X\sim N(\mu,\sigma^2)$.
+\begin{enumerate}[(a)]
+  \item Prove that $\mu_*=\E[X]=e^{\mu+\sigma^2/2}$.
+  \item Prove that $\sigma_*^2=\Var X=e^{2\mu+2\sigma^2}-e^{2\mu+\sigma^2}=\mu_*^2\,(e^{\sigma^2}-1)$.
+      For (a) and (b) use the MGF of the normal law; no integrals are needed.
+  \item A stock has price $S_0$ at $t=0$ and $S_0X$ at time $t$ (years), where $X$ is lognormal with $\mu=t\ln1.15$
+      and $\sigma=\sqrt t\,\ln1.3$. Find the mean and standard deviation of the total return $X$ for $t=1/12,\,3/12,\,1$.
+  \item Show that for a call with strike $K$ on a lognormal$(\mu,\sigma^2)$ price,
+      $\E[(X-K)^+]=e^{\mu+\sigma^2/2}\Phi\bigl(\frac{\mu-\ln K}{\sigma}+\sigma\bigr)-K\Phi\bigl(\frac{\mu-\ln K}{\sigma}\bigr)$.
+  \item For the stock of (c) with $S_0=\$100$, compute the expected payoff of the call for $T=1/12,\,3/12,\,1$ and
+      strikes $K=\$100$ (at the money) and $K=\$120$ (out of the money). Comment on the effect of a longer time to
+      expiration.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS2 (2013), A-1: exponential distribution]
+$X$ has density $f_X(x)=\lambda e^{-\lambda x}$, $x\ge0$.
+\begin{enumerate}[(a)]
+  \item Compute its MGF.
+  \item Deduce mean and variance from the MGF.
+  \item Compute $\Prob(X>t)$ for $t>0$.
+  \item Prove the memoryless property $\Prob(X>s+t\mid X>s)=\Prob(X>t)$ for all $s,t>0$.
+  \item If $X_1,\dots,X_n$ are i.i.d.\ exponential$(\lambda)$, prove that $\min\{X_1,\dots,X_n\}$ is exponential.
+  \item Entering a bank you find all three tellers busy and nobody waiting. Service times of the three customers and
+      yours are i.i.d.\ exponential. What is the probability that you are the last of the four to leave?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS2 (2013), A-2: Poisson distribution]
+$X$ has pmf $f_X(k)=\lambda^ke^{-\lambda}/k!$, $k=0,1,2,\dots$
+\begin{enumerate}[(a)]
+  \item Compute its MGF.
+  \item Deduce mean and variance.
+  \item Prove, with MGFs, that a sum of independent Poisson
+      variables is Poisson.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS2 (2013), B-1: from exponential waiting times to Poisson counts]
+Let $X_1,X_2,\dots$ be i.i.d.\ exponential$(\lambda)$ and $\tau=\max\{t\ge0:X_1+\dots+X_t\le1\}$, the number of events with
+exponential waiting times in an interval of length 1.
+\begin{enumerate}[(a)]
+  \item Compute $\Prob(\tau=0)$.
+  \item Compute $\Prob(\tau=n)$ using
+      that $S_n=X_1+\dots+X_n$ has CDF $F_{S_n}(x)=1-\sum_{k=0}^{n-1}\frac1{k!}e^{-\lambda x}(\lambda x)^k$ ($x>0$), and conclude that
+      $\tau$ is Poisson.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[PS2 (2013), B-3: exponential families]
+Prove that the lognormal, Poisson and exponential distributions are exponential families, i.e.\ that their
+densities or pmfs can be written as $h(x)c(\theta)\exp\bigl(\sum_iw_i(\theta)t_i(x)\bigr)$ with $c\ge0$, $h\ge0$.
+\end{exercise}
+
 % ------------------------------------------------------------------
 \section{Several random variables}\label{ch03:sec-multi}
 
@@ -773,6 +869,11 @@ projections coincide (\cref{ch03:sec-mvn}). For a general information set $\math
 to time $t$) $\E[Y\mid\mathcal G]$ is defined by the same orthogonality, $\E[(Y-\E[Y\mid\mathcal G])\,W]=0$ for every
 bounded $\mathcal G$-measurable $W$: this is the object in the definition of a martingale.
 \end{intuition}
+
+\begin{exercise}[not from the course]\label{ch03:ex-pairwise}
+Let $X_1,X_2$ be independent with $\Prob(X_i=1)=\Prob(X_i=-1)=\frac12$, and $X_3=X_1X_2$. Show that $X_1,X_2,X_3$ are pairwise
+independent but not mutually independent.
+\end{exercise}
 
 % ------------------------------------------------------------------
 \section{The multivariate normal distribution}\label{ch03:sec-mvn}
@@ -918,6 +1019,12 @@ orthonormal rows); $UV'$ is not even defined unless $T=m$. The formulas $\hat\La
 correct (for $T\ge m$).
 \end{coursenote}
 
+\begin{exercise}[\file{lec04_1}, slide 30: PCA through the SVD]\label{ch03:ex-pcasvd}
+Let $X^*$ be the de-meaned $m\times T$ data matrix and $X^*=VDU\T$ its reduced SVD ($V$ orthogonal $m\times m$, $D$ diagonal
+with $d_1\ge\dots\ge d_m\ge0$, $U$ of size $T\times m$ with $U\T U=I_m$). Show that $\hat\Lambda=\frac1TD^2$, $\hat\Gamma=V$ and
+$P=\hat\Gamma\T X^*=DU\T$.
+\end{exercise}
+
 % ------------------------------------------------------------------
 \section{Sampling distributions: \texorpdfstring{$\chi^2$}{chi-square}, \texorpdfstring{$t$}{t} and \texorpdfstring{$F$}{F}}\label{ch03:sec-chisq}
 
@@ -1023,6 +1130,11 @@ normal-based value-at-risk understates extreme losses (\cref{ch:var}); sample mo
 unstable or meaningless; averages converge more slowly than Gaussian intuition suggests, and not at all for a
 Cauchy-like law (\cref{ch03:ex-cauchy}).
 \end{finance}
+
+\begin{exercise}[not from the course: a heavy-tailed mixture]
+Let $X\mid V\sim N(0,V)$ with $V$ exponential with rate 1. Show that $M_X(t)=1/(1-t^2/2)$ for $|t|<\sqrt2$, identify the law of
+$X$ (Laplace, density $\frac1{\sqrt2}e^{-\sqrt2|x|}$), and check \cref{ch03:prop-mixture}: $\Var X=1$, $\kappa=6$.
+\end{exercise}
 
 % ------------------------------------------------------------------
 \section{Limit theorems}\label{ch03:sec-limits}
@@ -1171,6 +1283,12 @@ same theorem makes the binomial tree converge to the lognormal model (\cref{ch:b
 Brownian motion (\cref{ch:sp1}).
 \end{finance}
 
+\begin{exercise}[not from the course: no LLN for Cauchy]\label{ch03:ex-cauchy}
+Assume that the standard Cauchy law has characteristic function $e^{-|t|}$. Show that if $X_1,\dots,X_n$ are i.i.d.\
+standard Cauchy, $\bar X_n$ is again standard Cauchy. Why does this not contradict \cref{ch03:thm-wlln}? What does it
+suggest about averaging returns with very heavy tails?
+\end{exercise}
+
 % ------------------------------------------------------------------
 \section{Probability theory for asset pricing: from expected utility to the CAPM}\label{ch03:sec-capm}
 
@@ -1222,6 +1340,42 @@ linearisation, $g'\cdot\Cov(Y,Y^*)$, with the slope $g'$ averaged over the law o
 $g=U'$: it converts ``covariance of marginal utility with the payoff'' into ``covariance of wealth with the
 payoff''.
 \end{intuition}
+
+\begin{exercise}[PS3 (2024), Problem 1: Stein's lemma]\label{ch03:ex-stein}
+Prove \cref{ch03:lem-stein} (with $X$ in place of $Y$ and $Y$ in place of $Y^*$): if $X,Y$ are jointly normal with
+$X\sim N(\mu,\sigma^2)$ and $g$ is differentiable with $\E[g(X)(X-\mu)]$ and $\E[g'(X)]$ finite, then
+$\E[g(X)(X-\mu)]=\sigma^2\E[g'(X)]$ and $\Cov(g(X),Y)=\E[g'(X)]\Cov(X,Y)$.
+\emph{Hint:} integrate by parts; you may use that for jointly normal $(X,Y)$ with standard deviations $\sigma,\tau$ and
+correlation $\rho$, $Y=a+bX+\varepsilon$ with $a=\mu_Y-b\mu_X$, $b=\rho\tau/\sigma$ and $\varepsilon\sim N(0,(1-\rho^2)\tau^2)$ independent of $X$.
+\end{exercise}
+
+\begin{exercise}[PS3 (2024), Problem 2: Stein's lemma for stochastic volatility]\label{ch03:ex-sv}
+(From A.~Gron, B.~J{\o}rgensen, N.~Polson, \emph{Optimal portfolio choice and stochastic volatility}, Applied
+Stochastic Models in Business and Industry, 2012; cited as a 2011 working paper in the problem set.)
+$X$ has \emph{stochastic volatility} if $X\mid V\sim N(\mu,\sigma^2V)$ with $V>0$ random with density $p(V)$; the
+law of $X$ is $p(X)=\int_0^\infty p(X\mid V)p(V)\dd V$ and has heavy tails. Assume $0<\E[V]<\infty$ and define the
+\emph{size-biased} density $q(V)=V\,p(V)/\E[V]$ and the induced $q(X)=\int_0^\infty p(X\mid V)q(V)\dd V$. The
+authors' theorem states
+\[
+  \Cov\bigl(g(X),X\bigr)=\E^Q[g'(X)]\,\Var X,\qquad(**)
+\]
+with $\E^Q$ the expectation under the measure induced by $q(V)$. Their proof reads
+\begin{align*}
+  \Cov(g(X),X)&\overset{(1)}{=}\E\bigl[g(X)(X-\E[X])\bigr]\\
+  &\overset{(2)}{=}\E_V\bigl[\E_{X|V}[g(X)(X-\E[X])]\bigr]\\
+  &\overset{(3)}{=}\E_V\bigl[\E_{X|V}[g(X)(X-\E[X\mid V])]\bigr].
+\end{align*}
+\begin{enumerate}[(a)]
+  \item Show that $q$ is a probability density on $(0,\infty)$.
+  \item Prove (1).
+  \item Does (2) follow from the law of
+      iterated expectations?
+  \item Prove (3) (compare $\E[X\mid V]$ and $\E[X]$).
+  \item Applying Stein's lemma conditionally
+      on $V$ they obtain $\Cov(g(X),X)=\E_V\{\E_{X|V}[g'(X)]\,\sigma^2V\}=\E\bigl[g'(X)\tfrac{V}{\E[V]}\bigr]\sigma^2\E[V]$ $(*)$. Does $(*)$
+      imply $(**)$? Explain.
+\end{enumerate}
+\end{exercise}
 
 \subsection{First-order condition and the equilibrium price}
 Assume one may differentiate under the expectation, which holds by
@@ -1386,169 +1540,3 @@ equivalent. A Lintner paper was distributed on Canvas; the OCW Week~3 page lists
 &\text{CAPM:} && \E[\tilde r_i]=r_f+\beta_i(\E[\tilde r_m]-r_f),\quad \beta_i=\Cov(\tilde r_i,\tilde r_m)/\Var\tilde r_m
 \end{align*}
 \end{keyformulas}
-
-% ------------------------------------------------------------------
-\section*{Exercises}
-\addcontentsline{toc}{section}{Exercises}
-
-\subsection*{From the 2024 problem sets}
-
-\begin{exercise}[PS2 (2024), Problem 2: lognormal distribution]\label{ch03:ex-ps2}
-Let $X$ be lognormal$(\mu,\sigma^2)$, i.e.\ $Y=\ln X\sim N(\mu,\sigma^2)$.
-\begin{enumerate}[(a)]
-  \item Prove that $\mu_*=\E[X]=e^{\mu+\sigma^2/2}$.
-  \item Prove that $\sigma_*^2=\Var X=e^{2\mu+2\sigma^2}-e^{2\mu+\sigma^2}=\mu_*^2\,(e^{\sigma^2}-1)$.
-      For (a) and (b) use the MGF of the normal law; no integrals are needed.
-  \item A stock has price $S_0$ at $t=0$ and $S_0X$ at time $t$ (years), where $X$ is lognormal with $\mu=t\ln1.15$
-      and $\sigma=\sqrt t\,\ln1.3$. Find the mean and standard deviation of the total return $X$ for $t=1/12,\,3/12,\,1$.
-  \item Show that for a call with strike $K$ on a lognormal$(\mu,\sigma^2)$ price,
-      $\E[(X-K)^+]=e^{\mu+\sigma^2/2}\Phi\bigl(\frac{\mu-\ln K}{\sigma}+\sigma\bigr)-K\Phi\bigl(\frac{\mu-\ln K}{\sigma}\bigr)$.
-  \item For the stock of (c) with $S_0=\$100$, compute the expected payoff of the call for $T=1/12,\,3/12,\,1$ and
-      strikes $K=\$100$ (at the money) and $K=\$120$ (out of the money). Comment on the effect of a longer time to
-      expiration.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS3 (2024), Problem 1: Stein's lemma]\label{ch03:ex-stein}
-Prove \cref{ch03:lem-stein} (with $X$ in place of $Y$ and $Y$ in place of $Y^*$): if $X,Y$ are jointly normal with
-$X\sim N(\mu,\sigma^2)$ and $g$ is differentiable with $\E[g(X)(X-\mu)]$ and $\E[g'(X)]$ finite, then
-$\E[g(X)(X-\mu)]=\sigma^2\E[g'(X)]$ and $\Cov(g(X),Y)=\E[g'(X)]\Cov(X,Y)$.
-\emph{Hint:} integrate by parts; you may use that for jointly normal $(X,Y)$ with standard deviations $\sigma,\tau$ and
-correlation $\rho$, $Y=a+bX+\varepsilon$ with $a=\mu_Y-b\mu_X$, $b=\rho\tau/\sigma$ and $\varepsilon\sim N(0,(1-\rho^2)\tau^2)$ independent of $X$.
-\end{exercise}
-
-\begin{exercise}[PS3 (2024), Problem 2: Stein's lemma for stochastic volatility]\label{ch03:ex-sv}
-(From A.~Gron, B.~J{\o}rgensen, N.~Polson, \emph{Optimal portfolio choice and stochastic volatility}, Applied
-Stochastic Models in Business and Industry, 2012; cited as a 2011 working paper in the problem set.)
-$X$ has \emph{stochastic volatility} if $X\mid V\sim N(\mu,\sigma^2V)$ with $V>0$ random with density $p(V)$; the
-law of $X$ is $p(X)=\int_0^\infty p(X\mid V)p(V)\dd V$ and has heavy tails. Assume $0<\E[V]<\infty$ and define the
-\emph{size-biased} density $q(V)=V\,p(V)/\E[V]$ and the induced $q(X)=\int_0^\infty p(X\mid V)q(V)\dd V$. The
-authors' theorem states
-\[
-  \Cov\bigl(g(X),X\bigr)=\E^Q[g'(X)]\,\Var X,\qquad(**)
-\]
-with $\E^Q$ the expectation under the measure induced by $q(V)$. Their proof reads
-\begin{align*}
-  \Cov(g(X),X)&\overset{(1)}{=}\E\bigl[g(X)(X-\E[X])\bigr]\\
-  &\overset{(2)}{=}\E_V\bigl[\E_{X|V}[g(X)(X-\E[X])]\bigr]\\
-  &\overset{(3)}{=}\E_V\bigl[\E_{X|V}[g(X)(X-\E[X\mid V])]\bigr].
-\end{align*}
-\begin{enumerate}[(a)]
-  \item Show that $q$ is a probability density on $(0,\infty)$.
-  \item Prove (1).
-  \item Does (2) follow from the law of
-      iterated expectations?
-  \item Prove (3) (compare $\E[X\mid V]$ and $\E[X]$).
-  \item Applying Stein's lemma conditionally
-      on $V$ they obtain $\Cov(g(X),X)=\E_V\{\E_{X|V}[g'(X)]\,\sigma^2V\}=\E\bigl[g'(X)\tfrac{V}{\E[V]}\bigr]\sigma^2\E[V]$ $(*)$. Does $(*)$
-      imply $(**)$? Explain.
-\end{enumerate}
-\end{exercise}
-
-\subsection*{From the 2013 problem set 2}
-
-\begin{exercise}[PS2 (2013), A-1: exponential distribution]
-$X$ has density $f_X(x)=\lambda e^{-\lambda x}$, $x\ge0$.
-\begin{enumerate}[(a)]
-  \item Compute its MGF.
-  \item Deduce mean and variance from the MGF.
-  \item Compute $\Prob(X>t)$ for $t>0$.
-  \item Prove the memoryless property $\Prob(X>s+t\mid X>s)=\Prob(X>t)$ for all $s,t>0$.
-  \item If $X_1,\dots,X_n$ are i.i.d.\ exponential$(\lambda)$, prove that $\min\{X_1,\dots,X_n\}$ is exponential.
-  \item Entering a bank you find all three tellers busy and nobody waiting. Service times of the three customers and
-      yours are i.i.d.\ exponential. What is the probability that you are the last of the four to leave?
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS2 (2013), A-2: Poisson distribution]
-$X$ has pmf $f_X(k)=\lambda^ke^{-\lambda}/k!$, $k=0,1,2,\dots$
-\begin{enumerate}[(a)]
-  \item Compute its MGF.
-  \item Deduce mean and variance.
-  \item Prove, with MGFs, that a sum of independent Poisson
-      variables is Poisson.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS2 (2013), B-1: from exponential waiting times to Poisson counts]
-Let $X_1,X_2,\dots$ be i.i.d.\ exponential$(\lambda)$ and $\tau=\max\{t\ge0:X_1+\dots+X_t\le1\}$, the number of events with
-exponential waiting times in an interval of length 1.
-\begin{enumerate}[(a)]
-  \item Compute $\Prob(\tau=0)$.
-  \item Compute $\Prob(\tau=n)$ using
-      that $S_n=X_1+\dots+X_n$ has CDF $F_{S_n}(x)=1-\sum_{k=0}^{n-1}\frac1{k!}e^{-\lambda x}(\lambda x)^k$ ($x>0$), and conclude that
-      $\tau$ is Poisson.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS2 (2013), B-2]\label{ch03:ex-b2}
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Verify that $\phi(x)=\frac1{\sigma\sqrt{2\pi}}e^{-(x-\mu)^2/(2\sigma^2)}$ is a probability density (compute
-      $\bigl(\int\phi\bigr)^2$ in polar coordinates).
-  \item Compute the mean and variance of the lognormal law (it suffices to
-      treat $\mu=0$; use (a) to simplify). (This is also Exercise~1.5(i) of \file{lecnote3}; Exercise~1.2 there asks
-      to verify that the mean of $N(\mu,\sigma^2)$ is $\mu$.)
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[PS2 (2013), B-3: exponential families]
-Prove that the lognormal, Poisson and exponential distributions are exponential families, i.e.\ that their
-densities or pmfs can be written as $h(x)c(\theta)\exp\bigl(\sum_iw_i(\theta)t_i(x)\bigr)$ with $c\ge0$, $h\ge0$.
-\end{exercise}
-
-\begin{exercise}[PS2 (2013), B-4: does time diversify risk?]
-(From M.~Kritzman, \emph{Puzzles of Finance}, ch.~3; see also Kritzman and Rich, \emph{Beware of dogma: the truth
-about time diversification}.) A stock has independent annual returns, each lognormal with $\mu=\ln1.1$ and
-$\sigma=\ln1.2$. According to the author, the fraction of wealth lost with 0.1\% probability over $T$ years is
-40.5\%, 58.43\%, 61.48\% and 73.92\% for $T=1,5,10,20$, and he concludes that if risk is measured by the
-magnitude of potential loss, it \emph{increases} with the horizon.
-\begin{enumerate}[(a)]
-  \item Compute the fraction $h(T)$ of wealth
-      lost with probability 0.1\% over $T$ years (in terms of $\Phi$).
-  \item Find the $T$ that maximises $h(T)$. Is $h$
-      increasing in $T$?
-  \item Criticise the argument using (a) and (b).
-\end{enumerate}
-\end{exercise}
-
-\subsection*{From the slides}
-
-\begin{exercise}[\file{lec04_1}, slide 21]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Find the skewness of a lognormal$(\mu,\sigma^2)$ variable (use the lognormal moments).
-  \item Show directly
-      from the density that the kurtosis of $N(\mu,\sigma^2)$ is 3.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[\file{lec04_1}, slide 30: PCA through the SVD]\label{ch03:ex-pcasvd}
-Let $X^*$ be the de-meaned $m\times T$ data matrix and $X^*=VDU\T$ its reduced SVD ($V$ orthogonal $m\times m$, $D$ diagonal
-with $d_1\ge\dots\ge d_m\ge0$, $U$ of size $T\times m$ with $U\T U=I_m$). Show that $\hat\Lambda=\frac1TD^2$, $\hat\Gamma=V$ and
-$P=\hat\Gamma\T X^*=DU\T$.
-\end{exercise}
-
-\subsection*{Additional exercises}
-
-\begin{exercise}[not from the course]\label{ch03:ex-pairwise}
-Let $X_1,X_2$ be independent with $\Prob(X_i=1)=\Prob(X_i=-1)=\frac12$, and $X_3=X_1X_2$. Show that $X_1,X_2,X_3$ are pairwise
-independent but not mutually independent.
-\end{exercise}
-
-\begin{exercise}[not from the course: puts and parity]
-With the notation of \cref{ch03:thm-call}, show that $\E[(K-X)^+]=\int_{-\infty}^KF(x)\dd x$ and that
-$\E[(X-K)^+]-\E[(K-X)^+]=\E[X]-K$. Interpret the second identity as put--call parity: a long call plus a short put is a
-forward contract (\cref{sec:forward}).
-\end{exercise}
-
-\begin{exercise}[not from the course: no LLN for Cauchy]\label{ch03:ex-cauchy}
-Assume that the standard Cauchy law has characteristic function $e^{-|t|}$. Show that if $X_1,\dots,X_n$ are i.i.d.\
-standard Cauchy, $\bar X_n$ is again standard Cauchy. Why does this not contradict \cref{ch03:thm-wlln}? What does it
-suggest about averaging returns with very heavy tails?
-\end{exercise}
-
-\begin{exercise}[not from the course: a heavy-tailed mixture]
-Let $X\mid V\sim N(0,V)$ with $V$ exponential with rate 1. Show that $M_X(t)=1/(1-t^2/2)$ for $|t|<\sqrt2$, identify the law of
-$X$ (Laplace, density $\frac1{\sqrt2}e^{-\sqrt2|x|}$), and check \cref{ch03:prop-mixture}: $\Var X=1$, $\kappa=6$.
-\end{exercise}

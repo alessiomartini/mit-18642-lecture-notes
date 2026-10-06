@@ -17,7 +17,7 @@ model pricing) and slides 40--44 (bonds) were skipped in class for lack of time 
 covered in \cref{ch06:sec-etrading,ch06:sec-bonds}. The data file \file{fedbondyielddata_20230911.csv} and the
 notebook \file{feddataanalysis.ipynb} are listed on OCW together with Lecture~9 (PCA of Treasury yield changes)
 and are treated in \cref{ch:pca}.
-\textbf{Problem sets.} None; all exercises at the end are \emph{not from the course}.
+\textbf{Problem sets.} None; all exercises (each after the section it practises) are \emph{not from the course}.
 \textbf{2013.} No counterpart: the 2013 course has no lecture on linear rates products. The dynamics of the
 whole curve are the subject of the 2013 HJM lecture (\cref{ch:hjm}).
 \end{sources}
@@ -175,6 +175,16 @@ points running'', irrelevant for a retail borrower but twenty times the bid--off
         others \ts{24}{7}{26:16}.
 \end{itemize}
 
+\begin{exercise}[not from the course]\label{ch06:ex-sofr}
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Show that $R^{\mathrm{comp}}\ge R^{\mathrm{avg}}$ in \eqref{ch06:eq-sofr} whenever all $r_i\ge0$.
+  \item For a constant rate $r$ fixed every day for $n$ days ($d_i=1$), show that
+      $R^{\mathrm{comp}}-r=\frac{(n-1)r^2}{720}+O(r^3)$. Evaluate for $r=5.2\%$, $n=91$ and compare with the example of
+      \cref{ch06:sec-rates}.
+\end{enumerate}
+\end{exercise}
+
 % ------------------------------------------------------------------
 \section{Discounting equals funding}\label{ch06:sec-funding}
 
@@ -315,6 +325,21 @@ out, 13\,bp at five years, 51\,bp at ten years. It is negligible at the front an
 is why long-dated curves use swaps rather than futures.
 \end{remark}
 
+\begin{exercise}[not from the course]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Explain, without formulas, why the convexity adjustment makes
+      the futures rate \emph{higher} than the forward rate, and what
+      would change if margin balances earned a fixed rate instead of the
+      overnight rate.
+  \item With $\sigma=0.8\%$ per year, evaluate
+      $\frac12\sigma^2t_1t_2$ for 3-month contracts expiring in 2, 5 and
+      10 years. From which maturity does it exceed a bid--offer of
+      0.25\,bp?
+\end{enumerate}
+\end{exercise}
+\par\medskip
+
 \subsection{Interest-rate swaps}
 \begin{definition}[Vanilla interest-rate swap]
 An agreement between two counterparties to exchange periodic cash flows on a notional $N$ until maturity
@@ -442,6 +467,34 @@ With LIBOR the index (unsecured, bank credit) and the discount rate (collateral,
 from a LIBOR curve and discount factors from an OIS curve, and the telescoping \eqref{ch06:eq-float} failed
 (``multi-curve'' pricing). The SOFR transition has largely brought vanilla USD swaps back to a single curve.
 \end{remark}
+
+\begin{exercise}[not from the course]
+(a) Show that a note paying compounded SOFR in arrears on $N$,
+plus $N$ at maturity, is worth $N$ at every reset date when
+discounting is on the SOFR curve.
+
+(b) Deduce \eqref{ch06:eq-float} again.
+
+(c) USD SOFR swaps pay two business days after the end of each
+period. Write the value of one floating period with this payment
+lag and explain why the telescoping is no longer exact.
+\end{exercise}
+
+\bigskip
+
+\begin{exercise}[not from the course]
+A company has a 5-year \$50M floating-rate loan at
+SOFR$+150$\,bp and wants to fix its cost.
+\begin{enumerate}[(a)]
+  \item Should it pay or receive fixed on a swap?
+  \item With the 5-year par rate at 3.40\%, what all-in fixed
+      rate does it lock in (ignore day-count and payment-date
+      differences)?
+  \item One year later the 4-year par rate is 3.90\% and
+      $A_4=3.60$. What is the swap's value to the company,
+      and where does the offsetting loss appear?
+\end{enumerate}
+\end{exercise}
 
 % ------------------------------------------------------------------
 \section{Building the yield curve}\label{ch06:sec-curve}
@@ -592,6 +645,24 @@ rates; the 1-year zero rate is $\ln1.04=3.922\%$.}
 \label{ch06:fig-fwd}
 \end{figure}
 
+\begin{exercise}[not from the course]
+Using the quotes of \cref{ch06:ex-boot}:
+
+(a) bootstrap $Z_1,Z_2,Z_3$ by hand;
+
+(b) show that CDF gives $Z_4=\sqrt{Z_3Z_5}$, write the scalar
+equation for $Z_5$ and solve it numerically;
+
+(c) compute the one-year forward rates $f(k-1,k)$,
+$k=1,\dots,5$, and the 4-year par rate;
+
+(d) prove \cref{ch06:prop-cdf} directly from the daily compounding
+definition, and show that the forward curve jumps at a knot unless
+the two adjacent segments have equal slopes of $\ln Z$.
+\end{exercise}
+
+\bigskip
+
 \subsection{Central-bank meeting curves, turns and data-driven curves}\label{ch06:sec-fomc}
 \paragraph{FOMC curves.} The history of daily SOFR (slide 26) is not smooth at all: it looks like a staircase
 \ts{24}{7}{49:28}. It is flat between FOMC meetings and jumps when the Fed changes its policy rate: near zero
@@ -714,6 +785,21 @@ gamma, or scenario analysis instead \ts{24}{7}{55:47}.
         endless arguments \ts{24}{7}{56:49}.
 \end{itemize}
 
+\begin{exercise}[not from the course]
+\leavevmode
+\begin{enumerate}[(a)]
+  \item Show that the gamma of slide 31 equals
+      $\epsilon\,\partial^2\mathrm{PV}/\partial r^2+O(\epsilon^3)$.
+  \item For a 10-year zero-coupon bond with continuously compounded
+      rate 4\% and notional \$100M, compute the PV01 and this gamma for
+      $\epsilon=1$\,bp.
+  \item How many revaluations does a full central-difference
+      cross-gamma matrix need for $N$ curve inputs?
+  \item Why does a Monte Carlo pricer need a larger $\epsilon$
+      (\cref{ch:markets})?
+\end{enumerate}
+\end{exercise}
+
 % ------------------------------------------------------------------
 \section{P\&L attribution}\label{ch06:sec-pnl}
 Every morning a desk starts with positions and a market, and every evening it has made or lost money: why
@@ -751,6 +837,18 @@ In class the market term is illustrated with a long position of \$1B of bonds, a
 gains of \$50M for a 5\,bp move \ts{24}{7}{58:59}. The numbers were improvised: \$1B of 10-year bonds has a PV01
 of roughly \$0.8--0.9M, so 5\,bp is worth about \$4M, and a long bond position gains when rates \emph{fall}.
 \end{coursenote}
+
+\begin{exercise}[not from the course]\label{ch06:ex-theta}
+Annual-compounding zero rates are 3\% (1 year) and 4\% (2 years).
+\begin{enumerate}[(a)]
+  \item Price a 2-year zero-coupon bond.
+  \item Value it one year later if the forwards are realised, and if
+      the curve by tenor is unchanged.
+  \item Split the one-year return in (b) into carry and roll-down,
+      and relate each to the two theta conventions of
+      \cref{ch06:sec-pnl}.
+\end{enumerate}
+\end{exercise}
 
 % ------------------------------------------------------------------
 \section{Clearing, margin and the CCP basis}\label{ch06:sec-clearing}
@@ -790,6 +888,20 @@ be arbitraged. To price correctly one must include how the trade is margined, ho
 every other cost that used to be ignored. Estimating these costs and pushing them into the upfront price has been
 one of the largest quant efforts of the last 15 years, made harder by the fact that many are portfolio effects
 that must be allocated to individual trades \ts{24}{7}{1:06:21} (see \cref{ch:counterparty}).
+
+\begin{exercise}[not from the course]\label{ch06:ex-compadv}
+Firm A can borrow fixed at 4.00\% or floating at SOFR$+0.30\%$;
+firm B at 5.20\% fixed or SOFR$+1.00\%$. A wants floating, B fixed.
+\begin{enumerate}[(a)]
+  \item Show that A has an absolute advantage in both markets but a
+      comparative advantage in fixed.
+  \item Design a swap through a bank earning 0.10\% that splits the
+      remaining gain equally between A and B.
+  \item Which risk does each firm take on in exchange (think of
+      \cref{ch06:sec-clearing})?
+\end{enumerate}
+\end{exercise}
+\par\medskip
 
 % ------------------------------------------------------------------
 \section{Electronic trading and price making}\label{ch06:sec-etrading}
@@ -928,123 +1040,6 @@ which is why munis are still voice-driven \ts{24}{7}{1:18:43}.
 &\text{Munis:} && y_m=(1-\tau)\,y_T
 \end{align*}
 \end{keyformulas}
-
-% ------------------------------------------------------------------
-\section*{Exercises}
-\addcontentsline{toc}{section}{Exercises}
-No problem set covers this lecture; all exercises are \emph{not from the course}.
-
-\begin{exercise}[not from the course]\label{ch06:ex-sofr}
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Show that $R^{\mathrm{comp}}\ge R^{\mathrm{avg}}$ in \eqref{ch06:eq-sofr} whenever all $r_i\ge0$.
-  \item For a constant rate $r$ fixed every day for $n$ days ($d_i=1$), show that
-      $R^{\mathrm{comp}}-r=\frac{(n-1)r^2}{720}+O(r^3)$. Evaluate for $r=5.2\%$, $n=91$ and compare with the example of
-      \cref{ch06:sec-rates}.
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course]
-(a) Show that a note paying compounded SOFR in arrears on $N$,
-plus $N$ at maturity, is worth $N$ at every reset date when
-discounting is on the SOFR curve.
-
-(b) Deduce \eqref{ch06:eq-float} again.
-
-(c) USD SOFR swaps pay two business days after the end of each
-period. Write the value of one floating period with this payment
-lag and explain why the telescoping is no longer exact.
-\end{exercise}
-
-\bigskip
-
-\begin{exercise}[not from the course]
-Using the quotes of \cref{ch06:ex-boot}:
-
-(a) bootstrap $Z_1,Z_2,Z_3$ by hand;
-
-(b) show that CDF gives $Z_4=\sqrt{Z_3Z_5}$, write the scalar
-equation for $Z_5$ and solve it numerically;
-
-(c) compute the one-year forward rates $f(k-1,k)$,
-$k=1,\dots,5$, and the 4-year par rate;
-
-(d) prove \cref{ch06:prop-cdf} directly from the daily compounding
-definition, and show that the forward curve jumps at a knot unless
-the two adjacent segments have equal slopes of $\ln Z$.
-\end{exercise}
-
-\bigskip
-
-\begin{exercise}[not from the course]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Explain, without formulas, why the convexity adjustment makes
-      the futures rate \emph{higher} than the forward rate, and what
-      would change if margin balances earned a fixed rate instead of the
-      overnight rate.
-  \item With $\sigma=0.8\%$ per year, evaluate
-      $\frac12\sigma^2t_1t_2$ for 3-month contracts expiring in 2, 5 and
-      10 years. From which maturity does it exceed a bid--offer of
-      0.25\,bp?
-\end{enumerate}
-\end{exercise}
-\par\medskip
-
-\begin{exercise}[not from the course]
-A company has a 5-year \$50M floating-rate loan at
-SOFR$+150$\,bp and wants to fix its cost.
-\begin{enumerate}[(a)]
-  \item Should it pay or receive fixed on a swap?
-  \item With the 5-year par rate at 3.40\%, what all-in fixed
-      rate does it lock in (ignore day-count and payment-date
-      differences)?
-  \item One year later the 4-year par rate is 3.90\% and
-      $A_4=3.60$. What is the swap's value to the company,
-      and where does the offsetting loss appear?
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course]\label{ch06:ex-compadv}
-Firm A can borrow fixed at 4.00\% or floating at SOFR$+0.30\%$;
-firm B at 5.20\% fixed or SOFR$+1.00\%$. A wants floating, B fixed.
-\begin{enumerate}[(a)]
-  \item Show that A has an absolute advantage in both markets but a
-      comparative advantage in fixed.
-  \item Design a swap through a bank earning 0.10\% that splits the
-      remaining gain equally between A and B.
-  \item Which risk does each firm take on in exchange (think of
-      \cref{ch06:sec-clearing})?
-\end{enumerate}
-\end{exercise}
-\par\medskip
-
-\begin{exercise}[not from the course]
-\leavevmode
-\begin{enumerate}[(a)]
-  \item Show that the gamma of slide 31 equals
-      $\epsilon\,\partial^2\mathrm{PV}/\partial r^2+O(\epsilon^3)$.
-  \item For a 10-year zero-coupon bond with continuously compounded
-      rate 4\% and notional \$100M, compute the PV01 and this gamma for
-      $\epsilon=1$\,bp.
-  \item How many revaluations does a full central-difference
-      cross-gamma matrix need for $N$ curve inputs?
-  \item Why does a Monte Carlo pricer need a larger $\epsilon$
-      (\cref{ch:markets})?
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}[not from the course]\label{ch06:ex-theta}
-Annual-compounding zero rates are 3\% (1 year) and 4\% (2 years).
-\begin{enumerate}[(a)]
-  \item Price a 2-year zero-coupon bond.
-  \item Value it one year later if the forwards are realised, and if
-      the curve by tenor is unchanged.
-  \item Split the one-year return in (b) into carry and roll-down,
-      and relate each to the two theta conventions of
-      \cref{ch06:sec-pnl}.
-\end{enumerate}
-\end{exercise}
 
 \begin{exercise}[not from the course]
 Using the bond of the example in \cref{ch06:sec-bonds} (DV01

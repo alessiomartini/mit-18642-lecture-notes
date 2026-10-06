@@ -248,30 +248,6 @@ of this chapter; the order-flow chain is \cref{ex:ps1-3}. In these notes ``PS$n$
 each chapter lists which ones it covers.
 \end{answer}
 
-\begin{exercise}[PS1 (2024), Problem 3: order-side Markov chain]\label{ex:ps1-3}
-The side of successive market orders is a two-state chain (1 = buy, 2 = sell) with
-$A=\bigl(\begin{smallmatrix}0.8&0.3\\0.2&0.7\end{smallmatrix}\bigr)$, $a_{ij}=\Prob(X_t=i\mid X_{t-1}=j)$. \note+{imagine every market order is an event, and each one can be buy or sell}
-\begin{enumerate}[(a)]
-  \item Prove $\bm u_t=A\bm u_{t-1}$ and $\bm u_t=A^t\bm u_0$ for the distribution $\bm u_t$ of $X_t$.
-  \item Starting from $X_0=1$, compute $\bm u_1,\dots,\bm u_5$ in R (\texttt{A \%*\% ut} in a loop) and increase $t$
-      until convergence; repeat from $X_0=2$. Is the limit the same?
-  \item What is the stationary distribution of the order side? Relate it to the eigenvector of eigenvalue 1
-      returned by \texttt{eigen(A)} (which is normalised to unit Euclidean length, not to sum 1).
-\end{enumerate}
-\end{exercise}
-\feedback*{(a) ``Prove'' means: say which rule gives it. By the law of total probability,
-$u_t(i)=\Prob(X_t=i)=\sum_j\Prob(X_t=i\mid X_{t-1}=j)\Prob(X_{t-1}=j)=\sum_ja_{ij}u_{t-1}(j)$, using that the
-transition probabilities depend only on the last state and not on $t$ (Markov, time-homogeneous). Then
-$\bm u_t=A^t\bm u_0$ by induction.\par (b) You did not state the answer to ``is the limit the same?'': yes, $(0.6,0.4)$ from both starts.
-``Converges faster'' is not quite right: $\bm u_t-\bm\pi^*=0.5^t(\bm u_0-\bm\pi^*)$ and $\bm u_0-\bm\pi^*$ is
-$(0.4,-0.4)$ from state 1 and $(-0.6,0.6)$ from state 2. Same rate $0.5^t$; state 1 just starts closer.\par (c) $\bm\pi^*$ correct. Write the relation in the notes too: \texttt{eigen(A)} returns
-$(0.832,0.555)$, a multiple of $(3,2)$, and dividing by the sum of its entries gives $(0.6,0.4)$.}
-\begin{mysolution}
-  a. mi sembra ovvio, non capisco cosa intendi con "prove". \\
-  b. python code: \href{https://colab.research.google.com/drive/12kHBmkZoIjMLEpHWaKvVxB_bXrrVPTuB?usp=sharing}{Google Colab} the first initial condition converges faster. \\
-  c. $\pi = A \pi \implies \pi = (0.6, 0.4)^T$, loot at the link
-\end{mysolution}
-
 % ------------------------------------------------------------------
 \section{The one-period market model}\label{sec:oneperiod}
 This section follows the lecture note \emph{One-Period Financial Models} (\file{lec02_2}) and
@@ -782,6 +758,29 @@ is the projection onto the eigenvectors of $1$.}
   c. at least one eigen value is equal to 1, and the others are smaller than 1 in abs value.
 \end{mysolution}
 
+\begin{exercise}[PS1 (2013), A-2 to A-4] 
+(A-2) Row and column rank of
+$\left(\begin{smallmatrix}1&0&1&0&1\\1&1&1&0&0\\0&0&1&1&1\end{smallmatrix}\right)$ and
+$\left(\begin{smallmatrix}1&1&0&0&0&0\\1&1&0&3&0&0\\0&0&2&1&-1&0\\0&0&4&0&-2&0\end{smallmatrix}\right)$.
+\\
+(A-3) Determinant and inverse of $\left(\begin{smallmatrix}1&2\\4&-1\end{smallmatrix}\right)$ and
+$\left(\begin{smallmatrix}-1&-2&3\\1&2&0\\4&6&3\end{smallmatrix}\right)$.
+\\
+(A-4) Characteristic polynomial, eigenvalues and eigenvectors of
+$\left(\begin{smallmatrix}-3&3&2\\1&-1&-2\\-1&-3&0\end{smallmatrix}\right)$.
+\end{exercise}
+\feedback*{A-2: both ranks $3$ correct (for the second, row~4 $-2\cdot$row~3 $\propto$ row~2 $-$ row~1).\par A-3: determinants correct, first inverse correct. Second inverse: one entry wrong, the $(1,1)$
+cofactor is $\det\bigl(\begin{smallmatrix}2&0\\6&3\end{smallmatrix}\bigr)=6$, not $4$:
+$A^{-1}=-\frac16\bigl(\begin{smallmatrix}6&24&-6\\-3&-15&3\\-2&-2&0\end{smallmatrix}\bigr)$. Check by computing $AA^{-1}$.\par A-4: polynomial and eigenvalues correct. The eigenvectors are not: $A(1,-1,0)\T=(-6,2,2)\T$ is not a multiple of
+$(1,-1,0)\T$. Correct ones: $\lambda=2$: $(0,-2,3)\T$; $\lambda=-2$: $(2,0,1)\T$; $\lambda=-4$: $(-3,1,0)\T$.
+Always check $A\bm v=\lambda\bm v$, it takes ten seconds.}
+\begin{mysolution}
+  A-2. first matrix: $column rank = 3$; $row rank = 3$; second matrix: $column rank = 3$; $row rank = 3$. \\
+  A-3. first matrix: $det = -1 - 8 = -9$; inv = $\frac{1}{-9}\left(\begin{smallmatrix}-1&-2\\-4&1\end{smallmatrix}\right)$; second matrix: $det = -1*6 - (-2*3) + 3*(6-8) = -6+6-6=-6$; inv = $\frac{1}{-6}\left(\begin{smallmatrix}4&24&-6\\-3&-15&3\\-2&-2&0\end{smallmatrix}\right)$ \\
+  A-4. $det(A-\lambda I) = det \left(\begin{smallmatrix}-3-\lambda&3&2\\1&-1-\lambda&-2\\-1&-3&0-\lambda\end{smallmatrix}\right) = (-3-\lambda)[(-1-\lambda)(-\lambda)-6] -  3[(-\lambda)-2] + 2[(-3)+(-1-\lambda)] = -\lambda^3 - 4\lambda^2 + 4\lambda + 16 = -(\lambda - 2)(\lambda + 2)(\lambda + 4)$; this means that the eigenvalues are $2,-2,-4$. \\
+  Solving $(A-\lambda I)x=0$, we find the eigenvectors $\bm v_1 = (1, -1, 0)^T$, $\bm v_2 = (1, 1, 2)^T$, $\bm v_3 = (1, 3, 4)^T$. I DIDN'T DO THIS LAST EIGENVECTOR CALCULATION.
+\end{mysolution}
+
 % ------------------------------------------------------------------
 \section{Symmetric matrices}\label{sec:symmetric}
 Most matrices in this course (covariance and correlation matrices, $A\T A$, Hessians) are symmetric,
@@ -1161,6 +1160,30 @@ material (notes, slides, problem sets, videos), started in 2002. Both courses of
 
 \subsection*{From 2024 Problem Set 1}
 
+\begin{exercise}[PS1 (2024), Problem 3: order-side Markov chain]\label{ex:ps1-3}
+The side of successive market orders is a two-state chain (1 = buy, 2 = sell) with
+$A=\bigl(\begin{smallmatrix}0.8&0.3\\0.2&0.7\end{smallmatrix}\bigr)$, $a_{ij}=\Prob(X_t=i\mid X_{t-1}=j)$. \note+{imagine every market order is an event, and each one can be buy or sell}
+\begin{enumerate}[(a)]
+  \item Prove $\bm u_t=A\bm u_{t-1}$ and $\bm u_t=A^t\bm u_0$ for the distribution $\bm u_t$ of $X_t$.
+  \item Starting from $X_0=1$, compute $\bm u_1,\dots,\bm u_5$ in R (\texttt{A \%*\% ut} in a loop) and increase $t$
+      until convergence; repeat from $X_0=2$. Is the limit the same?
+  \item What is the stationary distribution of the order side? Relate it to the eigenvector of eigenvalue 1
+      returned by \texttt{eigen(A)} (which is normalised to unit Euclidean length, not to sum 1).
+\end{enumerate}
+\end{exercise}
+\feedback*{(a) ``Prove'' means: say which rule gives it. By the law of total probability,
+$u_t(i)=\Prob(X_t=i)=\sum_j\Prob(X_t=i\mid X_{t-1}=j)\Prob(X_{t-1}=j)=\sum_ja_{ij}u_{t-1}(j)$, using that the
+transition probabilities depend only on the last state and not on $t$ (Markov, time-homogeneous). Then
+$\bm u_t=A^t\bm u_0$ by induction.\par (b) You did not state the answer to ``is the limit the same?'': yes, $(0.6,0.4)$ from both starts.
+``Converges faster'' is not quite right: $\bm u_t-\bm\pi^*=0.5^t(\bm u_0-\bm\pi^*)$ and $\bm u_0-\bm\pi^*$ is
+$(0.4,-0.4)$ from state 1 and $(-0.6,0.6)$ from state 2. Same rate $0.5^t$; state 1 just starts closer.\par (c) $\bm\pi^*$ correct. Write the relation in the notes too: \texttt{eigen(A)} returns
+$(0.832,0.555)$, a multiple of $(3,2)$, and dividing by the sum of its entries gives $(0.6,0.4)$.}
+\begin{mysolution}
+  a. mi sembra ovvio, non capisco cosa intendi con "prove". \\
+  b. python code: \href{https://colab.research.google.com/drive/12kHBmkZoIjMLEpHWaKvVxB_bXrrVPTuB?usp=sharing}{Google Colab} the first initial condition converges faster. \\
+  c. $\pi = A \pi \implies \pi = (0.6, 0.4)^T$, loot at the link
+\end{mysolution}
+
 \begin{exercise}[PS1 (2024), Problem 4]
 For the matrix of the previous exercise:
 \begin{enumerate}[(a)]
@@ -1214,27 +1237,4 @@ invertible but not diagonalisable (one eigenvector only). The two properties are
   e. falso, la matrice zero e' simemtrica ma non invertibile. \\
   f falso, non-zero eigenvalues imply invertible, anche se due sono uguali, significa soltanto che in due direzioni (un piano) [o piu direzioni] la matrice scala della stessa quantita'. \\
   g. credo sia vera, ma non so perche'
-\end{mysolution}
-
-\begin{exercise}[PS1 (2013), A-2 to A-4] 
-(A-2) Row and column rank of
-$\left(\begin{smallmatrix}1&0&1&0&1\\1&1&1&0&0\\0&0&1&1&1\end{smallmatrix}\right)$ and
-$\left(\begin{smallmatrix}1&1&0&0&0&0\\1&1&0&3&0&0\\0&0&2&1&-1&0\\0&0&4&0&-2&0\end{smallmatrix}\right)$.
-\\
-(A-3) Determinant and inverse of $\left(\begin{smallmatrix}1&2\\4&-1\end{smallmatrix}\right)$ and
-$\left(\begin{smallmatrix}-1&-2&3\\1&2&0\\4&6&3\end{smallmatrix}\right)$.
-\\
-(A-4) Characteristic polynomial, eigenvalues and eigenvectors of
-$\left(\begin{smallmatrix}-3&3&2\\1&-1&-2\\-1&-3&0\end{smallmatrix}\right)$.
-\end{exercise}
-\feedback*{A-2: both ranks $3$ correct (for the second, row~4 $-2\cdot$row~3 $\propto$ row~2 $-$ row~1).\par A-3: determinants correct, first inverse correct. Second inverse: one entry wrong, the $(1,1)$
-cofactor is $\det\bigl(\begin{smallmatrix}2&0\\6&3\end{smallmatrix}\bigr)=6$, not $4$:
-$A^{-1}=-\frac16\bigl(\begin{smallmatrix}6&24&-6\\-3&-15&3\\-2&-2&0\end{smallmatrix}\bigr)$. Check by computing $AA^{-1}$.\par A-4: polynomial and eigenvalues correct. The eigenvectors are not: $A(1,-1,0)\T=(-6,2,2)\T$ is not a multiple of
-$(1,-1,0)\T$. Correct ones: $\lambda=2$: $(0,-2,3)\T$; $\lambda=-2$: $(2,0,1)\T$; $\lambda=-4$: $(-3,1,0)\T$.
-Always check $A\bm v=\lambda\bm v$, it takes ten seconds.}
-\begin{mysolution}
-  A-2. first matrix: $column rank = 3$; $row rank = 3$; second matrix: $column rank = 3$; $row rank = 3$. \\
-  A-3. first matrix: $det = -1 - 8 = -9$; inv = $\frac{1}{-9}\left(\begin{smallmatrix}-1&-2\\-4&1\end{smallmatrix}\right)$; second matrix: $det = -1*6 - (-2*3) + 3*(6-8) = -6+6-6=-6$; inv = $\frac{1}{-6}\left(\begin{smallmatrix}4&24&-6\\-3&-15&3\\-2&-2&0\end{smallmatrix}\right)$ \\
-  A-4. $det(A-\lambda I) = det \left(\begin{smallmatrix}-3-\lambda&3&2\\1&-1-\lambda&-2\\-1&-3&0-\lambda\end{smallmatrix}\right) = (-3-\lambda)[(-1-\lambda)(-\lambda)-6] -  3[(-\lambda)-2] + 2[(-3)+(-1-\lambda)] = -\lambda^3 - 4\lambda^2 + 4\lambda + 16 = -(\lambda - 2)(\lambda + 2)(\lambda + 4)$; this means that the eigenvalues are $2,-2,-4$. \\
-  Solving $(A-\lambda I)x=0$, we find the eigenvectors $\bm v_1 = (1, -1, 0)^T$, $\bm v_2 = (1, 1, 2)^T$, $\bm v_3 = (1, 3, 4)^T$. I DIDN'T DO THIS LAST EIGENVECTOR CALCULATION.
 \end{mysolution}
