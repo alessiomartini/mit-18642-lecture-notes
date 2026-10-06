@@ -5,3 +5,8 @@ __pycache__/
 *.pyc
 Thumbs.db
 .DS_Store
+
+# Study HTML (generated pages and the local notes database)
+study/out/
+study/notes.db
+study/notes.db-journal

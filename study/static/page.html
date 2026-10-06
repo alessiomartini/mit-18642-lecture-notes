@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>%TITLE%</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="study.css?v=%VER%">
+</head>
+<body>
+<div id="bar">
+  <div id="player-wrap"><div id="player"></div></div>
+  <div id="ctl">
+    <select id="lecture" title="Lecture video"></select>
+    <label><input type="checkbox" id="follow" checked> follow video</label>
+    <span id="clock">0:00</span>
+    <span id="msg"></span>
+  </div>
+</div>
+<main id="page">
+%BODY%
+</main>
+<script>window.STUDY = {chapter: "%CHAPTER%", videos: %VIDEOS%};</script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script src="study.js?v=%VER%"></script>
+<script src="https://www.youtube.com/iframe_api" async></script>
+</body>
+</html>

@@ -110,6 +110,12 @@ second PDF from a link (tried and removed). Every full build keeps a copy of the
 - **Python 3** (for some R case study scripts)
 - **R** (optional, for running case study notebooks)
 
+## Study HTML
+
+A generated, local HTML version of a chapter (video player synced with the text, notes and exercise
+solutions saved to a local database) lives in `../study/`: see `study/README.md` (run) and
+`study/IMPORT.md` (how Claude imports those notes back into the LaTeX). The LaTeX remains the only source.
+
 ## License
 
 Notes are shared under **CC BY-NC-SA 4.0** (same as MIT OCW source material).
