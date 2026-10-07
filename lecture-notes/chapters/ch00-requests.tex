@@ -194,10 +194,16 @@ reference script in \file{labs/} that you can open after trying. Pilot: the high
 (\cref{ch05:lab-hyspread}, data from FRED, script \file{labs/ch05_hyspread.py}, which reproduces the $R^2=0.995$ of the
 autoregression shown in class). About 30 case studies remain; they are converted one chapter at a time.}
 
-\request{noted}{Chapter 3, kinds of random variables}{questa nota non appare afianco di dove e' stata scritta}
-{It was written inside a bulleted list, and a whole list counts as one paragraph for the right column: the
-items queued in it are printed when the list ends, so the box starts level with the end of the list, not with
-the item. Splitting the list would break its layout; the number in the text still marks the exact point.}
+\request{done}{Chapter 3, kinds of random variables}{questa nota non appare afianco di dove e' stata scritta}
+{A whole list counts as one paragraph for the right column; with the general rule below its boxes now start
+level with the start of the list.}
+
+\request{done}{General rule (in chat, 7 Oct 2026)}{le cose-box che appaiono nella colonna di destra hanno un riferimento al testo principale sulla sinistra; ora vengono inserite alla fine del paragrafo al quale fanno riferimento, voglio che invece appaiano in corrispondenza dell'inizio del paragrafo a cui fanno riferimento}
+{Done for the whole book: every right-column box (note, answer, course note, example, proof, history, aside,
+feedback) starts level with the \emph{beginning} of the paragraph, box or list it belongs to. Two limits: if the
+right column is still occupied there (a long proof above), the box starts right below it; and \LaTeX\ learns that a
+paragraph has boxes only after typesetting it, so the position is fixed on the next build (the full build does it
+by itself; after a save, a box in a paragraph you just edited may sit at its end until the following save).}
 
 \request{noted}{Chapter 3, estimating a mean; the CAPM}{qua c'e' un problema di impagniazione, e spazi vuoti. inoltre, questo box non lo chiamarei esercizio/esempio, e' qualcos'altro \textbar{} qua c'e' un problema con l'impaginazione}
 {Fixed. ``Estimating a mean'' is now a paragraph of the text, not an example: it was an example box broken across two

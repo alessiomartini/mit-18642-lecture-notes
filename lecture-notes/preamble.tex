@@ -101,20 +101,38 @@
 
 % Right-column items are queued and written into the right column at the next point where the
 % text column is between paragraphs at top level (end of the paragraph, end of a box, end of a
-% list): there the columns are synchronised, the queued items are typeset in the right column,
-% and the text continues from where it was.
+% list), but they START level with the BEGINNING of that paragraph (box, list). TeX only knows
+% a paragraph has items once it has typeset it, so this takes two runs: each point between
+% paragraphs ("boundary") is named by its source file and line (stable whatever the layout); a
+% paragraph that queues items writes the name of the boundary where it starts to the .aux file;
+% on the next run the two columns are synchronised at
+% that boundary (\switchcolumn* and back), and at the end of the paragraph the items go into the
+% right column from that point (\switchcolumn without *), while the text goes on from where it
+% was. On the first run (or after an edit, until the next build) they start at the end instead.
 \makeatletter
 \newif\ifnote@inbox
 \newif\ifside@inright
+\newif\ifside@pre      % the columns were synchronised at the start of the current unit
+\newif\ifside@rec      % the current unit has already written its boundary to the .aux
+\def\side@here{}
 \def\note@queue{}
 \def\side@pcname{paracol}
+\def\side@syncat#1{\expandafter\gdef\csname side@sync@#1\endcsname{}}
 \newcommand{\side@emit}{\ifx\note@queue\@empty\else
   \let\note@tmp\note@queue\gdef\note@queue{}%
   \synccounter{chapter}\synccounter{section}\synccounter{subsection}\synccounter{subsubsection}%
-  \switchcolumn*\side@inrighttrue\note@tmp\par\side@inrightfalse\switchcolumn\fi}
+  \ifside@pre\switchcolumn\else\switchcolumn*\fi
+  \side@inrighttrue\note@tmp\par\switchcolumn\side@inrightfalse\fi}
+\newcommand{\side@boundary}{\side@emit\global\side@prefalse\global\side@recfalse
+  \xdef\side@here{\CurrentFile:\the\inputlineno}%
+  \ifcsname side@sync@\side@here\endcsname
+    \side@inrighttrue\switchcolumn*\switchcolumn\side@inrightfalse\global\side@pretrue\fi}
 \newcommand{\note@flush}{\ifvmode\ifnote@inbox\else\ifside@inright\else
-  \ifx\@currenvir\side@pcname\side@emit\fi\fi\fi\fi}
-\newcommand{\side@put}[1]{\gappto\note@queue{#1}\note@flush}
+  \ifx\@currenvir\side@pcname\side@boundary\fi\fi\fi\fi}
+\newcommand{\side@record}{\ifside@inright\else\ifside@rec\else\global\side@rectrue
+  \immediate\write\@auxout{\string\side@syncat{\side@here}}\fi\fi}
+\newcommand{\side@put}[1]{\gappto\note@queue{#1}\note@flush
+  \ifx\note@queue\@empty\else\side@record\fi}
 \AddToHook{para/after}{\note@flush}
 \tcbset{note queue/.code={\appto\kvtcb@afterbox{\note@flush}}}
 % every chapter/appendix file is one paracol environment: it starts right after the \chapter

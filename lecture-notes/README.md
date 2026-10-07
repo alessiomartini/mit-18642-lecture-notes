@@ -69,7 +69,9 @@ Screen layout, not print: 25 cm wide pages, two parallel columns (`paracol`; eve
 one `paracol` environment, opened and closed by `include` hooks in `preamble.tex`). Left: the text,
 15 cm (the old A4 text width). Right, 6.5 cm: proofs, examples, course notes, history, asides
 (`\scriptsize`) and the reader's notes, answers and feedback (`\tiny`). Right-column items are queued
-and written at the end of the paragraph (or box, or list) they belong to, level with it; when the
+and written at the end of the paragraph (or box, or list) they belong to, but start level with its
+beginning: the source file:line of the paragraph start is written to the `.aux` and on the next run
+the columns are synchronised there (needs two runs; see the comment in `preamble.tex`); when the
 right column is still busy the text waits, leaving a gap. With the 2026 kernel `\globalcounter` breaks
 for `chapter`/`section`/`table`: sectioning counters are copied to the right column with
 `\synccounter` instead. The old A4 two-sided geometry is in a comment in `preamble.tex`. Links between chapters work only in the full build: the fast one-chapter
