@@ -379,8 +379,17 @@ above it comes from the 2013 lecture, which uses $P_n$ for the price on day $n$ 
       to verify that the mean of $N(\mu,\sigma^2)$ is $\mu$.)
 \end{enumerate}
 \end{exercise}
+\begin{solution}[ch03:ex-b2]
+\begin{enumerate}[(a)]
+  \item With $z=(x-\mu)/\sigma$, $\bigl(\int\phi\bigr)^2=\frac1{2\pi}\iint e^{-(u^2+v^2)/2}\dd u\dd v=\frac1{2\pi}\int_0^{2\pi}\!\!\int_0^\infty
+        e^{-r^2/2}r\dd r\dd\theta=1$, and $\phi>0$.
+  \item For $\mu=0$, $\E[Y^k]=\int e^{kx}\phi(x)\dd x$; completing the square, $kx-\frac{x^2}{2\sigma^2}=-\frac{(x-k\sigma^2)^2}{2\sigma^2}+\frac{k^2\sigma^2}2$,
+        and by (a) the shifted Gaussian integrates to 1: $\E[Y^k]=e^{k^2\sigma^2/2}$. So $\E[Y]=e^{\sigma^2/2}$,
+        $\Var Y=e^{2\sigma^2}-e^{\sigma^2}$; for general $\mu$ multiply by $e^{\mu}$ and $e^{2\mu}$.
+\end{enumerate}
+\end{solution}
 
-\begin{exercise}[\file{lec04_1}, slide 21]
+\begin{exercise}[\file{lec04_1}, slide 21]\label{ch03:ex-skewkurt}
 \leavevmode
 \begin{enumerate}[(a)]
   \item Find the skewness of a lognormal$(\mu,\sigma^2)$ variable (use the lognormal moments).
@@ -388,6 +397,13 @@ above it comes from the 2013 lecture, which uses $P_n$ for the price on day $n$ 
       from the density that the kurtosis of $N(\mu,\sigma^2)$ is 3.
 \end{enumerate}
 \end{exercise}
+\begin{solution}[ch03:ex-skewkurt]
+\begin{enumerate}[(a)]
+  \item With $m_k=\E[Y^k]=e^{k\mu+k^2\sigma^2/2}$ and $w=e^{\sigma^2}$: $\E[(Y-m_1)^3]=m_3-3m_1m_2+2m_1^3=m_1^3(w^3-3w+2)
+        =m_1^3(w-1)^2(w+2)$ and $\Var Y=m_1^2(w-1)$, so $\gamma=(w+2)\sqrt{w-1}>0$, independent of $\mu$.
+  \item For $Z=(X-\mu)/\sigma$, integrate by parts with $z\phi(z)=-\phi'(z)$: $\E[Z^4]=\int z^3\,z\phi\dd z=3\int z^2\phi\dd z=3\,\E[Z^2]=3$.
+\end{enumerate}
+\end{solution}
 
 % ------------------------------------------------------------------
 \section{Expected option payoffs}\label{ch03:sec-call}
@@ -489,11 +505,16 @@ is about $100\cdot0.2\cdot\sqrt{0.25}=\$10$, so the option is worth about $0.4\c
 \end{answer}
 \end{finance}
 
-\begin{exercise}[not from the course: puts and parity]
+\begin{exercise}[not from the course: puts and parity]\label{ch03:ex-parity}
 With the notation of \cref{ch03:thm-call}, show that $\E[(K-X)^+]=\int_{-\infty}^KF(x)\dd x$ and that
 $\E[(X-K)^+]-\E[(K-X)^+]=\E[X]-K$. Interpret the second identity as put--call parity: a long call plus a short put is a
 forward contract (\cref{sec:forward}).
 \end{exercise}
+\begin{solution}[ch03:ex-parity]
+$(K-x)^+=\int_{-\infty}^K\mathbf 1\{x\le y\}\dd y$; take expectations and exchange (Tonelli): $\E[(K-X)^+]=\int_{-\infty}^K F(y)\dd y$.
+Pointwise $(x-K)^+-(K-x)^+=x-K$, so the expectations differ by $\E[X]-K$. Long call plus short put pays $X-K$ in
+every state: a forward bought at price $K$.
+\end{solution}
 
 % ------------------------------------------------------------------
 \section{Moment-generating functions}\label{ch03:sec-mgf}
@@ -594,7 +615,7 @@ Consequences:
         the normal kurtosis is $3$.
 \end{itemize}
 
-\begin{exercise}[PS2 (2013), A-2: Poisson distribution]
+\begin{exercise}[PS2 (2013), A-2: Poisson distribution]\label{ch03:ex-poisson}
 $X$ has pmf $f_X(k)=\lambda^ke^{-\lambda}/k!$, $k=0,1,2,\dots$
 \begin{enumerate}[(a)]
   \item Compute its MGF.
@@ -603,6 +624,13 @@ $X$ has pmf $f_X(k)=\lambda^ke^{-\lambda}/k!$, $k=0,1,2,\dots$
       variables is Poisson.
 \end{enumerate}
 \end{exercise}
+\begin{solution}[ch03:ex-poisson]
+\begin{enumerate}[(a)]
+  \item $M(t)=\sum_k e^{tk}\lambda^ke^{-\lambda}/k!=e^{-\lambda}e^{\lambda e^t}=e^{\lambda(e^t-1)}$, for every $t$.
+  \item $K(t)=\ln M=\lambda(e^t-1)$: $K'(0)=\lambda$ (mean), $K''(0)=\lambda$ (variance).
+  \item $\prod_iM_i(t)=e^{(\sum_i\lambda_i)(e^t-1)}$, the MGF of Poisson$(\sum\lambda_i)$; conclude by \cref{ch03:thm-mgf}(i).
+\end{enumerate}
+\end{solution}
 
 \begin{intuition}[Partition function and cumulants (not discussed in class)]
 $M_X(t)$ is a Laplace transform, like a partition function $Z(\beta)$, and $K_X(t)=\ln M_X(t)$ plays the role of
@@ -643,10 +671,15 @@ same form and depends on the data only through the \emph{sufficient statistics} 
 lognormal, exponential, Poisson and gamma laws are exponential families (2013 PS2 B-3); Cauchy and Student $t$
 are not.
 
-\begin{exercise}[PS2 (2013), B-3: exponential families]
+\begin{exercise}[PS2 (2013), B-3: exponential families]\label{ch03:ex-expfam}
 Prove that the lognormal, Poisson and exponential distributions are exponential families, i.e.\ that their
 densities or pmfs can be written as $h(x)c(\theta)\exp\bigl(\sum_iw_i(\theta)t_i(x)\bigr)$ with $c\ge0$, $h\ge0$.
 \end{exercise}
+\begin{solution}[ch03:ex-expfam]
+Lognormal: in the text (\cref{ch03:sec-mgf}, $h=1/x$, $t_1=(\ln x)^2$, $t_2=\ln x$). Poisson: $\frac{\lambda^ke^{-\lambda}}{k!}=\frac1{k!}\,e^{-\lambda}
+\exp(k\ln\lambda)$: $h=1/k!$, $c=e^{-\lambda}$, $w=\ln\lambda$, $t=k$. Exponential: $\lambda e^{-\lambda x}\mathbf 1\{x\ge0\}$: $h=\mathbf 1\{x\ge0\}$,
+$c=\lambda$, $w=-\lambda$, $t=x$. (The support must not depend on $\theta$: true in all three.)
+\end{solution}
 
 \begin{table}[ht]
 \centering\small
@@ -817,6 +850,10 @@ bounded $\mathcal G$-measurable $W$: this is the object in the definition of a m
 Let $X_1,X_2$ be independent with $\Prob(X_i=1)=\Prob(X_i=-1)=\frac12$, and $X_3=X_1X_2$. Show that $X_1,X_2,X_3$ are pairwise
 independent but not mutually independent.
 \end{exercise}
+\begin{solution}[ch03:ex-pairwise]
+$X_3=\pm1$ with probability $\frac12$ each, and for $a,c\in\{\pm1\}$: $\Prob(X_1=a,X_3=c)=\Prob(X_1=a,X_2=c/a)=\frac14=\Prob(X_1=a)\Prob(X_3=c)$;
+the same for $(X_2,X_3)$. But $\Prob(X_1=1,X_2=1,X_3=-1)=0\ne\frac18$: $X_3$ is a function of the other two.
+\end{solution}
 
 % ------------------------------------------------------------------
 \section{The multivariate normal distribution}\label{ch03:sec-mvn}
@@ -965,6 +1002,10 @@ Let $X^*$ be the de-meaned $m\times T$ data matrix and $X^*=VDU\T$ its reduced S
 with $d_1\ge\dots\ge d_m\ge0$, $U$ of size $T\times m$ with $U\T U=I_m$). Show that $\hat\Lambda=\frac1TD^2$, $\hat\Gamma=V$ and
 $P=\hat\Gamma\T X^*=DU\T$.
 \end{exercise}
+\begin{solution}[ch03:ex-pcasvd]
+$\hat\Sigma=\frac1TX^*X^{*\mathsf T}=\frac1TVDU\T UDV\T=V\,\frac{D^2}T\,V\T$ with $V$ orthogonal and $D^2/T$ diagonal and decreasing: this is the
+spectral decomposition, so $\hat\Gamma=V$, $\hat\Lambda=D^2/T$ (unique up to signs and ties). Then $P=\hat\Gamma\T X^*=V\T VDU\T=DU\T$.
+\end{solution}
 
 % ------------------------------------------------------------------
 \section{Sampling distributions: \texorpdfstring{$\chi^2$}{chi-square}, \texorpdfstring{$t$}{t} and \texorpdfstring{$F$}{F}}\label{ch03:sec-chisq}
@@ -1070,10 +1111,15 @@ unstable or meaningless; averages converge more slowly than Gaussian intuition s
 Cauchy-like law (\cref{ch03:ex-cauchy}).
 \end{finance}
 
-\begin{exercise}[not from the course: a heavy-tailed mixture]
+\begin{exercise}[not from the course: a heavy-tailed mixture]\label{ch03:ex-laplace}
 Let $X\mid V\sim N(0,V)$ with $V$ exponential with rate 1. Show that $M_X(t)=1/(1-t^2/2)$ for $|t|<\sqrt2$, identify the law of
 $X$ (Laplace, density $\frac1{\sqrt2}e^{-\sqrt2|x|}$), and check \cref{ch03:prop-mixture}: $\Var X=1$, $\kappa=6$.
 \end{exercise}
+\begin{solution}[ch03:ex-laplace]
+Conditionally $\E[e^{tX}\mid V]=e^{t^2V/2}$, so $M_X(t)=\E[e^{t^2V/2}]=\frac1{1-t^2/2}$ for $t^2/2<1$. The Laplace density
+$\frac{1}{2b}e^{-|x|/b}$ has MGF $1/(1-b^2t^2)$: here $b=1/\sqrt2$. $\Var X=2b^2=1=\E[V]$; $\E[X^4]=24b^4=6$, so $\kappa=6$, and
+\cref{ch03:prop-mixture} gives $3\,\E[V^2]/(\E[V])^2=3\cdot2=6$.
+\end{solution}
 
 % ------------------------------------------------------------------
 \section{Limit theorems}\label{ch03:sec-limits}
@@ -1207,17 +1253,15 @@ high-dimensional vector on a random direction, and the residuals of a
 regression, are such sums and are often close to Gaussian
 \ts{24}{5}{39:09}.
 
-\begin{example}[Estimating a mean, 2013 notes Example 4.2]
-To estimate an unknown mean from i.i.d.\ observations one uses
+\paragraph{Estimating a mean} (2013 notes, Example 4.2). To estimate an unknown mean from i.i.d.\ observations one uses
 $\bar X_n$ \ts{13}{3}{1:16:15}\begin{coursenote}[Is the sample mean the best estimator?]
 In the 2013 lecture the sample mean is called the maximum likelihood estimator \ts{13}{3}{1:18:23}. It is the MLE
 for normal (and Poisson, exponential) data but not in general, and the notes rightly add that for some
-distributions it is not the best choice: for Cauchy data it does not converge at all, while the sample
+distributions it is not the best choice: for Cauchy data it does not converge at all,\note+{insane!} while the sample
 median does; for heavy-tailed data robust estimators are preferable (\cref{ch:regression}).
 \end{coursenote}: by the LLN it converges to $\mu$, and by
 the CLT its error is approximately $N(0,\sigma^2/n)$ \ts{13}{3}{1:17:21},
 which gives the usual interval $\bar X_n\pm1.96\,s/\sqrt n$.
-\end{example}
 
 \begin{finance}[Aggregation of returns]
 A $T$-day log-return is a sum of $T$ daily log-returns, so by the CLT it is approximately normal for long
@@ -1232,6 +1276,11 @@ Assume that the standard Cauchy law has characteristic function $e^{-|t|}$. Show
 standard Cauchy, $\bar X_n$ is again standard Cauchy. Why does this not contradict \cref{ch03:thm-wlln}? What does it
 suggest about averaging returns with very heavy tails?
 \end{exercise}
+\begin{solution}[ch03:ex-cauchy]
+$\varphi_{\bar X_n}(t)=\varphi(t/n)^n=e^{-n|t|/n}=e^{-|t|}$: the average has exactly the law of one observation. No contradiction:
+the law of large numbers needs $\E[|X|]<\infty$, and the Cauchy law has no mean. With very heavy tails averaging
+does not reduce dispersion: one extreme observation dominates the sum; use medians or other robust statistics.
+\end{solution}
 
 % ------------------------------------------------------------------
 \section{Probability theory for asset pricing: from expected utility to the CAPM}\label{ch03:sec-capm}
@@ -1290,6 +1339,12 @@ $\E[g(X)(X-\mu)]=\sigma^2\E[g'(X)]$ and $\Cov(g(X),Y)=\E[g'(X)]\Cov(X,Y)$.
 \emph{Hint:} integrate by parts; you may use that for jointly normal $(X,Y)$ with standard deviations $\sigma,\tau$ and
 correlation $\rho$, $Y=a+bX+\varepsilon$ with $a=\mu_Y-b\mu_X$, $b=\rho\tau/\sigma$ and $\varepsilon\sim N(0,(1-\rho^2)\tau^2)$ independent of $X$.
 \end{exercise}
+\begin{solution}[ch03:ex-stein]
+With $\phi$ the $N(\mu,\sigma^2)$ density, $(x-\mu)\phi(x)=-\sigma^2\phi'(x)$, so integrating by parts (the boundary term vanishes
+under the integrability assumptions) $\E[g(X)(X-\mu)]=-\sigma^2\int g\phi'=\sigma^2\int g'\phi=\sigma^2\E[g'(X)]$.
+Then $\Cov(g(X),Y)=\Cov(g(X),a+bX+\varepsilon)=b\Cov(g(X),X)=b\,\E[g(X)(X-\mu)]=b\sigma^2\E[g'(X)]$, since $\varepsilon$ is independent of
+$X$; and $b\sigma^2=\rho\tau\sigma=\Cov(X,Y)$.
+\end{solution}
 
 \subsection{First-order condition and the equilibrium price}
 Assume one may differentiate under the expectation, which holds by
@@ -1381,7 +1436,9 @@ The slides denote the market weights by $\mu_i$, which clashes with the means; h
 stated on slide~12 as an assumption. The CAPM was formulated by W.~Sharpe (1964) and J.~Lintner (1965) from
 mean--variance portfolio choice \ts{24}{5}{1:11:22}; by \cref{ch03:rem-meanvar} the CARA-normal route taken here is
 equivalent. A Lintner paper was distributed on Canvas; the OCW Week~3 page lists both Lintner (1965) papers.
-\end{coursenote}. The key identity is
+\end{coursenote}.
+
+The key identity is
 $\tilde w=\tilde F_m+(Q_f-p_m)(1+r_f)=p_m\tilde r_m+\text{const}$, hence $\Cov(\tilde w,\cdot)=p_m\Cov(\tilde r_m,\cdot)$.
 
 \begin{theorem}[CAPM, security market line]\label{ch03:thm-capm}
@@ -1454,8 +1511,21 @@ Let $X$ be lognormal$(\mu,\sigma^2)$, i.e.\ $Y=\ln X\sim N(\mu,\sigma^2)$.
       expiration.
 \end{enumerate}
 \end{exercise}
+\begin{solution}[ch03:ex-ps2]
+\begin{enumerate}[(a)]
+  \item $\E[X]=\E[e^Y]=M_Y(1)=e^{\mu+\sigma^2/2}$ by \eqref{ch03:eq-normalmgf}.
+  \item $\E[X^2]=M_Y(2)=e^{2\mu+2\sigma^2}$, so $\Var X=e^{2\mu+2\sigma^2}-e^{2\mu+\sigma^2}=\mu_*^2(e^{\sigma^2}-1)$.
+  \item Mean and standard deviation of $X$: $t=1/12$: $1.0146$, $0.0770$; $t=3/12$: $1.0445$, $0.1376$; $t=1$: $1.1903$, $0.3177$.
+  \item $\E[(X-K)^+]=\E[X\mathbf 1\{X>K\}]-K\Prob(X>K)$, $\Prob(X>K)=\Prob(Y>\ln K)=\Phi(d)$ with $d=(\mu-\ln K)/\sigma$; and
+        $\E[e^Y\mathbf 1\{Y>\ln K\}]=e^{\mu+\sigma^2/2}\Prob(Y'>\ln K)$ with $Y'\sim N(\mu+\sigma^2,\sigma^2)$ (complete the square), which
+        is $e^{\mu+\sigma^2/2}\Phi(d+\sigma)$ (also \cref{ch03:cor-bl}).
+  \item Expected payoffs in dollars, $K=100$: $3.83$, $7.86$, $23.35$; $K=120$: $0.04$, $1.09$, $11.99$ for $T=1/12,3/12,1$. A longer
+        expiry raises both the drift and the dispersion of $X$, so the expected payoff grows; the out-of-the-money call grows
+        much faster in relative terms, since it needs a large move to pay anything.
+\end{enumerate}
+\end{solution}
 
-\begin{exercise}[PS2 (2013), B-4: does time diversify risk?]
+\begin{exercise}[PS2 (2013), B-4: does time diversify risk?]\label{ch03:ex-timediv}
 (From M.~Kritzman, \emph{Puzzles of Finance}, ch.~3; see also Kritzman and Rich, \emph{Beware of dogma: the truth
 about time diversification}.) A stock has independent annual returns, each lognormal with $\mu=\ln1.1$ and
 $\sigma=\ln1.2$. According to the author, the fraction of wealth lost with 0.1\% probability over $T$ years is
@@ -1469,8 +1539,20 @@ magnitude of potential loss, it \emph{increases} with the horizon.
   \item Criticise the argument using (a) and (b).
 \end{enumerate}
 \end{exercise}
+\begin{solution}[ch03:ex-timediv]
+\begin{enumerate}[(a)]
+  \item Wealth after $T$ years is $e^{Y}$ with $Y\sim N(T\mu,T\sigma^2)$; its 0.1\% quantile is $e^{T\mu+z\sigma\sqrt T}$ with $z=\Phi^{-1}(0.001)=-3.090$,
+        so $h(T)=1-e^{T\mu+z\sigma\sqrt T}$. With $\mu=\ln1.1$, $\sigma=\ln1.2$: $h=37.4\%$, $54.3\%$, $56.3\%$, $45.9\%$ for $T=1,5,10,20$.
+        (These are not the author's numbers, which must use another parametrisation; the conclusion below does not depend on it.)
+  \item $T\mu+z\sigma\sqrt T$ is minimal at $\sqrt T=-z\sigma/(2\mu)$, $T^*=(z\sigma/2\mu)^2\approx8.7$ years, where $h\approx56.5\%$. $h$ increases up to
+        $T^*$ and then decreases, to 0 as $T\to\infty$, because the drift $T\mu$ beats the spread $\sigma\sqrt T$.
+  \item The argument picks horizons on the increasing branch of $h$, and a 0.1\% quantile ignores everything else: the
+        probability of losing at all, $\Phi(-\mu\sqrt T/\sigma)$, falls with $T$, while the size of the worst outcomes grows. Whether time
+        ``diversifies'' depends on the risk measure (and, for an investor, on utility: Samuelson's point), not on a single quantile.
+\end{enumerate}
+\end{solution}
 
-\begin{exercise}[PS2 (2013), A-1: exponential distribution]
+\begin{exercise}[PS2 (2013), A-1: exponential distribution]\label{ch03:ex-expo}
 $X$ has density $f_X(x)=\lambda e^{-\lambda x}$, $x\ge0$.
 \begin{enumerate}[(a)]
   \item Compute its MGF.
@@ -1482,8 +1564,20 @@ $X$ has density $f_X(x)=\lambda e^{-\lambda x}$, $x\ge0$.
       yours are i.i.d.\ exponential. What is the probability that you are the last of the four to leave?
 \end{enumerate}
 \end{exercise}
+\begin{solution}[ch03:ex-expo]
+\begin{enumerate}[(a)]
+  \item $M(t)=\int_0^\infty\lambda e^{-(\lambda-t)x}\dd x=\frac{\lambda}{\lambda-t}$ for $t<\lambda$.
+  \item $M'(0)=1/\lambda$, $M''(0)=2/\lambda^2$: mean $1/\lambda$, variance $1/\lambda^2$.
+  \item $\Prob(X>t)=e^{-\lambda t}$.
+  \item $\Prob(X>s+t\mid X>s)=e^{-\lambda(s+t)}/e^{-\lambda s}=e^{-\lambda t}$.
+  \item $\Prob(\min_iX_i>t)=\prod_i\Prob(X_i>t)=e^{-n\lambda t}$: exponential with rate $n\lambda$.
+  \item When the first of the three leaves you start, and by memorylessness you and the two others have fresh i.i.d.\ exponential
+        times. You are last if you are not the first of three to finish (probability $\frac23$) and then not the first of two
+        ($\frac12$): $\frac13$.
+\end{enumerate}
+\end{solution}
 
-\begin{exercise}[PS2 (2013), B-1: from exponential waiting times to Poisson counts]
+\begin{exercise}[PS2 (2013), B-1: from exponential waiting times to Poisson counts]\label{ch03:ex-poissoncount}
 Let $X_1,X_2,\dots$ be i.i.d.\ exponential$(\lambda)$ and $\tau=\max\{t\ge0:X_1+\dots+X_t\le1\}$, the number of events with
 exponential waiting times in an interval of length 1.
 \begin{enumerate}[(a)]
@@ -1493,6 +1587,12 @@ exponential waiting times in an interval of length 1.
       $\tau$ is Poisson.
 \end{enumerate}
 \end{exercise}
+\begin{solution}[ch03:ex-poissoncount]
+\begin{enumerate}[(a)]
+  \item $\Prob(\tau=0)=\Prob(X_1>1)=e^{-\lambda}$.
+  \item $\{\tau\ge n\}=\{S_n\le1\}$, so $\Prob(\tau=n)=F_{S_n}(1)-F_{S_{n+1}}(1)=e^{-\lambda}\lambda^n/n!$: $\tau$ is Poisson$(\lambda)$.
+\end{enumerate}
+\end{solution}
 
 \begin{exercise}[PS3 (2024), Problem 2: Stein's lemma for stochastic volatility]\label{ch03:ex-sv}
 (From A.~Gron, B.~J{\o}rgensen, N.~Polson, \emph{Optimal portfolio choice and stochastic volatility}, Applied
@@ -1521,6 +1621,16 @@ with $\E^Q$ the expectation under the measure induced by $q(V)$. Their proof rea
       imply $(**)$? Explain.
 \end{enumerate}
 \end{exercise}
+\begin{solution}[ch03:ex-sv]
+\begin{enumerate}[(a)]
+  \item $q\ge0$ and $\int_0^\infty Vp(V)\dd V/\E[V]=1$.
+  \item $\Cov(g(X),X)=\E[g(X)X]-\E[g(X)]\E[X]=\E[g(X)(X-\E[X])]$.
+  \item Yes: it is $\E[Z]=\E\bigl[\E[Z\mid V]\bigr]$ for $Z=g(X)(X-\E[X])$.
+  \item $\E[X\mid V]=\mu$ for every $V$, so $\E[X\mid V]=\E[X]$ and (3) is the same expression as (2).
+  \item Yes. Under $Q$ the pair $(V,X)$ has density $q(V)p(X\mid V)=\frac{V}{\E[V]}p(V)p(X\mid V)$, so $\E\bigl[g'(X)\frac{V}{\E[V]}\bigr]=\E^Q[g'(X)]$;
+        and $\Var X=\E[\Var(X\mid V)]=\sigma^2\E[V]$. Then $(*)$ is exactly $(**)$.
+\end{enumerate}
+\end{solution}
 
 % ------------------------------------------------------------------
 \begin{keyconcepts}

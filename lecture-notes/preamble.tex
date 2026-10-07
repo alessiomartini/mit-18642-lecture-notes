@@ -297,12 +297,14 @@
 \NewDocumentEnvironment{lab}{O{} m +b}{\begin{tcolorbox}[notebox=cscol,title={\boxtitle{Lab}{#1}}]%
   \phantomsection\label{#2}\gdef\sol@cur{#2}\gdef\sol@name{Lab: #1}#3\sol@link{sol:#2}{Course results $\rightarrow$}\end{tcolorbox}}{}
 \newtoks\sol@toks
-\NewDocumentEnvironment{solution}{+b}{\begingroup
-  \edef\x{\endgroup\global\sol@toks{\the\sol@toks\noexpand\sol@print{\sol@cur}{\unexpanded\expandafter{\sol@name}}{\unexpanded{#1}}}}\x}{}
+% after an ordinary exercise: \begin{solution}[its label] (prints a "Solution" link under it)
+\NewDocumentEnvironment{solution}{o +b}{\IfValueT{#1}{\gdef\sol@cur{#1}\gdef\sol@name{\cref{#1}}%
+  \vspace{-6pt}\sol@link{sol:#1}{Solution $\rightarrow$}\par}\begingroup
+  \edef\x{\endgroup\global\sol@toks{\the\sol@toks\noexpand\sol@print{\sol@cur}{\unexpanded\expandafter{\sol@name}}{\unexpanded{#2}}}}\x}{}
 \newcommand{\sol@print}[3]{\begin{tcolorbox}[notebox=exercol,colback=exercol!5,coltitle=black,fontupper=\small,
   title={\boxtitle{Solution}{#2}}]\phantomsection\label{sol:#1}#3\sol@link{#1}{$\leftarrow$ back}\end{tcolorbox}}
 \newcommand{\printsolutions}{\section*{Solutions}\addcontentsline{toc}{section}{Solutions}%
-  Solutions of the \emph{Try first} exercises and labs of this chapter.\par\the\sol@toks\global\sol@toks{}}
+  Solutions of the exercises and labs of this chapter.\par\the\sol@toks\global\sol@toks{}}
 \makeatother
 % A request about the notes themselves (collected in the "Requests" chapter)
 %   \request{done|open|noted}{where it was written}{the request}{what was done}
