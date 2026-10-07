@@ -94,25 +94,51 @@ underlying variables \ts{24}{6}{1:10:32} \ts{13}{6}{6:19}:
 What matters is that $\hat y_i$ is linear in the parameters; this is what makes the estimation a problem
 of linear algebra.
 
-\begin{casestudy}[High-yield spread: polynomial, Fourier and autoregressive fits (\file{lec06_2}, \file{lec06_3})]
-\textbf{Data.} Daily \emph{high-yield spread} 2010--2017: Moody's Baa corporate yield minus the 10-year US
-Treasury yield \ts{24}{6}{1:11:33}. It is always positive (about 2--3.6 percentage points): lower-rated
-borrowers pay more than the Treasury.
+\begin{lab}[high-yield spread, functions of time against persistence]{ch05:lab-hyspread}
+\textbf{Question.} Can the \emph{high-yield spread} be described by a function of calendar time, and what is
+actually predictable in it? (Case study of \file{lec06_2} and \file{lec06_3}.)
 
-\textbf{Method.} Regress the spread on powers of time (constant, linear, \dots, 8th-order polynomial;
-\file{lec06_2}) and on Fourier terms with 1 to 4 cycles over the sample (\file{lec06_3}).
+\textbf{Data.} \file{data/fm_hyspread.dat}: daily spread 2010--2017, Moody's Baa corporate yield minus the 10-year US
+Treasury yield, in percentage points \ts{24}{6}{1:11:33} (FRED series BAA10Y; 2001 days). Lower-rated borrowers pay
+more than the Treasury, so it is always positive.
 
-\textbf{Results.} Higher orders follow the two big waves (peaks around 2012 and early 2016) better and
+\textbf{In Python} (numpy, least squares with \texttt{np.linalg.lstsq}):
+\begin{enumerate}[1.]
+  \item Plot the spread. Regress it on powers of time, from the constant to an 8th-order polynomial, and record
+        $R^2$ (rescale time to $[-1,1]$ first: why?).
+  \item Regress it on Fourier terms $\sin(ju),\cos(ju)$, $j=1,\dots,J$, with $u$ running from 0 to $2\pi$ over the
+        sample, for $J=1,\dots,4$.
+  \item Regress today's spread on yesterday's, $y_t=a+by_{t-1}+\varepsilon_t$. Compare the three $R^2$, look at the
+        fitted curves at the ends of the sample, and say which model you would use to forecast tomorrow.
+\end{enumerate}
+Reference script: \file{labs/ch05_hyspread.py} (\texttt{--plot} draws the fits).
+\end{lab}
+\begin{solution}
+\textbf{Course results.} Higher orders follow the two big waves (peaks around 2012 and early 2016) better and
 better, but the polynomials swing wildly at the ends of the sample, and nobody believes the spread
 \emph{is} an 8th-order polynomial in calendar time \ts{24}{6}{1:12:37}. In class a third model was shown
 (not in the files): the \emph{autoregression} of today's spread on yesterday's, whose fit is almost
-indistinguishable from the data, with $R^2=0.995$ \ts{24}{6}{1:13:44} \ts{24}{6}{1:14:47}.
+indistinguishable from the data, with $R^2=0.995$ \ts{24}{6}{1:13:44}. (In \file{lec06_3} the legend colours do not
+match the curves: the 1-cycle fit is drawn in blue, not green.)
+
+\textbf{With the FRED data} (the course's exact window is not given, so the numbers differ a little):
+\begin{center}\small
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+model & poly 1 & poly 4 & poly 8 & Fourier 2 & Fourier 4 & AR(1)\\
+\midrule
+$R^2$ & 0.18 & 0.51 & 0.81 & 0.59 & 0.82 & 0.997\\
+\bottomrule
+\end{tabular}
+\end{center}
+Rescaling time avoids powers of numbers like 2017, whose columns are almost collinear (an ill-conditioned
+$X\T X$). The AR(1) slope is $b=0.9997$: the spread is close to a random walk.
 
 \textbf{Lesson.} A good in-sample fit is not a model. Deterministic functions of time only describe the
 past; the autoregression exploits \emph{persistence} (tomorrow's spread is close to today's), which is
-what is actually predictable. (In \file{lec06_3} the legend colours do not match the curves: the
-1-cycle fit is drawn in blue, not green.)
-\end{casestudy}
+what is actually predictable. But with $b\approx1$ its $R^2$ says little: ``tomorrow = today'' already has
+$R^2\approx0.997$; the honest comparison is on the daily \emph{changes} (\cref{ch:timeseries}).
+\end{solution}
 
 \paragraph{Steps for fitting a model} \ts{24}{6}{1:14:47} \ts{13}{6}{8:24}.
 \begin{enumerate}[1.]
@@ -160,7 +186,7 @@ the same data.
 \section{Ordinary least squares and its geometry}\label{ch05:sec-ols}
 
 \subsection{Normal equations}
-The \emph{least-squares criterion} is \ts{24}{8}{1:06} \ts{24}{8}{3:07}
+The \emph{least-squares criterion} is \ts{24}{8}{1:06}
 \[
   Q(\bm\beta)=\sum_{i=1}^n\bigl(y_i-\bm x_i\T\bm\beta\bigr)^2=(\bm y-X\bm\beta)\T(\bm y-X\bm\beta)=\|\bm y-X\bm\beta\|^2,
 \]
@@ -278,7 +304,7 @@ $R^2_{\text{adj}}=1-\dfrac{\text{RSS}/(n-p)}{\text{TSS}/(n-1)}$, which penalises
 
 \begin{proposition}\label{ch05:prop-r2corr}
 With an intercept, $R^2=\Corr(\bm y,\hat{\bm y})^2$, the squared sample correlation between observed and fitted
-values \ts{24}{8}{59:31} \ts{24}{8}{1:00:31}.
+values \ts{24}{8}{59:31}.
 \end{proposition}
 \begin{proof}
 Let $\tilde{\bm y}=\bm y-\bar y\bm 1$ and $\tilde{\hat{\bm y}}=\hat{\bm y}-\bar y\bm 1$. Since $\hat{\bm\varepsilon}\perp\hat{\bm y}$ and
@@ -313,7 +339,7 @@ $X_{[1]}=Q_{[1]}r_{11}$, $X_{[2]}=Q_{[1]}r_{12}+Q_{[2]}r_{22}$, \dots, so
   r_{12}=Q_{[1]}\T X_{[2]},\quad r_{22}=\|X_{[2]}-r_{12}Q_{[1]}\|,\quad Q_{[2]}=\frac{X_{[2]}-r_{12}Q_{[1]}}{r_{22}};\ \dots
   \end{gathered}\]
 (each column is orthogonalised against the previous ones) \ts{13}{6}{1:10:32}. Plugging $X=QR$ into the OLS
-formulas \ts{13}{6}{1:11:35} \ts{13}{6}{1:13:41}:
+formulas \ts{13}{6}{1:11:35}:
 \[
   \hat{\bm\beta}=R^{-1}Q\T\bm y,\qquad \Cov(\hat{\bm\beta})=\sigma^2(X\T X)^{-1}=\sigma^2R^{-1}(R^{-1})\T,\qquad H=QQ\T .
 \]
@@ -585,7 +611,7 @@ In $\hat t_j$ the unknown $\sigma$ is replaced by the random $\hat\sigma$. When 
 large; the denominator fluctuates around $1$ (in units of $\sigma$) and this mixing over scales fattens the tails
 \ts{24}{8}{40:28}. W.~S.~Gosset, a statistician at the Guinness brewery, noticed that standardised means of
 quality samples of size four were far more variable than $N(0,1)$ predicted; the brewery did not let him
-publish under his name, hence ``Student'' \ts{24}{8}{41:29} \ts{24}{8}{42:29}. For $n-p\gtrsim30$ the
+publish under his name, hence ``Student'' \ts{24}{8}{41:29}. For $n-p\gtrsim30$ the
 difference from the normal is small; with $n-p=63$ (prostate example) the two-sided 5\% critical value is
 $2.00$ instead of $1.96$.
 \end{intuition}
@@ -681,7 +707,7 @@ function is minimised exactly where $f'_-(c)\le0\le f'_+(c)$.
 With $c$ replaced by $\bm x_i\T\bm\beta$, the minimiser estimates the conditional $\tau$-quantile of $y$ given $\bm x$
 (quantile regression): for $\tau=0.9$, the upper decile of outcomes \ts{24}{11}{19:41}. The objective is convex
 (``a bowl with straight edges'') but not differentiable, so there are no normal equations to solve; one moves
-downhill using one-sided derivatives, or solves a linear programme \ts{24}{11}{20:41} \ts{24}{11}{21:42}.
+downhill using one-sided derivatives, or solves a linear programme \ts{24}{11}{20:41}.
 
 \begin{finance}[Heavy tails in practice]
 In the GE CAPM regression of \cref{ch05:capm} the histogram of residuals is compared with two normal fits
@@ -986,7 +1012,7 @@ from one fit. The last form of $CD_i$ says \emph{influence = outlyingness $\time
 low-leverage point, or a high-leverage point on the line, is harmless; both together move the fit. Since
 $\|\hat{\bm y}-\hat{\bm y}_{(i)}\|^2=(\hat{\bm\beta}-\hat{\bm\beta}_{(i)})\T X\T X(\hat{\bm\beta}-\hat{\bm\beta}_{(i)})$, $CD_i$ measures how far $\hat{\bm\beta}$ moves in the metric of
 its own confidence ellipsoid: values comparable with the median of $F_{p,n-p}$ (about $1$) are large
-\ts{24}{8}{1:06:44} \ts{24}{8}{1:07:46}.
+\ts{24}{8}{1:06:44}.
 
 \paragraph{Graphical tools} \ts{24}{8}{1:08:51}. In R (\texttt{stats} and
 \texttt{car}):
@@ -1236,7 +1262,7 @@ $0.079$ and $0.012$. Their sum is $0.642$, the $R^2$ of the full regression, bec
 (\cref{ch05:ex-r2orth}). The third component, with only 2.3\% of the regressor variance, explains 13 times more of
 XLP than the second: dropping it (PC123 would keep it, but a ``first two'' rule would not) changes the answer. Using PCs 1--3
 gives coefficients very different from OLS; using the PCs with $|t|>\sqrt2$ (all four here) reproduces OLS exactly
-\ts{24}{11}{51:03} \ts{24}{11}{52:04}.
+\ts{24}{11}{51:03}.
 
 \textbf{Ridge and lasso} (\texttt{glmnet}, $\lambda$ by 10-fold cross-validation over $10^{-5}$--$10^{3}$)
 \ts{24}{11}{47:55}: coefficient traces shrink to zero, not monotonically for ridge; along the lasso path the third
@@ -1310,7 +1336,7 @@ expected by chance: the CAPM is not rejected stock by stock \ts{24}{11}{1:16:47}
 alphas \ts{24}{11}{1:17:53}. Betas are strongly sector-dependent: consumer staples lowest (the ten lowest betas, $0.37$
 down to $0.18$, are mostly staples), technology and consumer discretionary highest \ts{24}{11}{1:18:59}. The largest
 significant alpha, ENPH (energy), is $0.003$ per day, i.e.\ $(1.003)^{252}-1\approx113\%$ per year
-\ts{24}{11}{1:20:01} \ts{24}{11}{1:21:10}.
+\ts{24}{11}{1:20:01}.
 
 \textbf{Next step.} Multi-factor models with the Fama--French factors, already downloaded with the data
 \ts{24}{11}{1:22:11} (\cref{ch:pca}).
@@ -1412,3 +1438,5 @@ table with rows ``regression on $1,\dots,k$'' ($\hat{\bm y}_I\T\hat{\bm y}_I$, $
 $1,\dots,k$'' ($p-k$ d.f., mean square $MS_0$, $\hat F=MS_0/MS_{\text{Error}}$), ``error'' ($n-p$ d.f.) and ``total'' ($\bm y\T\bm y$,
 $n$ d.f.).
 \end{exercise}
+
+\printsolutions

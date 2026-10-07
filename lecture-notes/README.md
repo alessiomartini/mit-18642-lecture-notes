@@ -86,7 +86,7 @@ second PDF from a link (tried and removed). Every full build keeps a copy of the
 | `\begin{answer}{question}[topic] ... \end{answer}` | A note and its answer in one box; `\answerpart{topic}` for each further question; `\label{ans:...}` to link a repeated question | Right column |
 | `\feedback{...}` | Comment on one of your own `mysolution`s | Right column |
 | `\begin{history}`, `\begin{aside}` | History fact (fact-checked, References), curiosity or anecdote | Right column |
-| `example`, `proof`, `coursenote` (`sideexample` = `example`) | Examples, proofs, course notes: same syntax as before | Right column (`\scriptsize`) |
+| `example`, `proof`, `coursenote` (`sideexample` = `example`) | Examples, proofs, course notes: same syntax as before. A `coursenote` written inside a paragraph, right after the words it is about, prints a grey-blue number there (same counter as the notes) | Right column (`\scriptsize`) |
 | `\begin{secondary}[topic] ... \end{secondary}` | "Beyond the core": can be skipped on a first reading | Text column, grey bar |
 | `\request{done/open/noted}{where}{request}{what was done}` | A request about the notes themselves | Chapter "Requests about these notes" (`chapters/ch00-requests.tex`) |
 | `\ts{24}{L}{time}` | 2024 lecture timestamp | Inline (▶ 2024 L12 @ 23:10) |
@@ -102,12 +102,30 @@ second PDF from a link (tried and removed). Every full build keeps a copy of the
 \begin{keyformulas} ... \end{keyformulas}                  % Blue bar - chapter summary formulas
 ```
 
+Newer ones (piloted on ch03 and ch05, Oct 2026; the old ones stay until each chapter is converted):
+
+```latex
+\begin{tryfirst}[topic]{label} ... \end{tryfirst}  % worked example turned into an exercise (lime)
+\begin{solution} ... \end{solution}               % right after it in the source; printed at the
+\printsolutions                                    %   chapter end by \printsolutions, links both ways
+\begin{lab}[topic]{label} ... \end{lab}            % case study to redo in Python (teal); its
+                                                   %   \begin{solution} holds the course's results
+\begin{keyconcepts} \keyquestions \begin{enumerate}...\end{enumerate}
+  \keylist \begin{description} \keyconcept{name} text ... \end{description} \end{keyconcepts}
+```
+
+Labs: data in `data/fm_*.dat` (official sources, header says which), reference scripts in `labs/`
+(numpy; `python labs/ch05_hyspread.py [--plot]`, each ends with an `assert` on the course's key result).
+Exercises (`exercol`) are lime `7CB342`; text in that colour uses `exerdark`. Figures and tables never
+float (`[H]` forced in `preamble.tex`): a float moved to a page top used to sit beside right-column
+items synchronised there.
+
 
 ## Requirements
 
 - **TeX distribution**: TeX Live (Linux/macOS) or MikTeX (Windows)
 - **Perl** (required by `latexmk`) — included with TeX Live/MikTeX
-- **Python 3** (for some R case study scripts)
+- **Python 3** with numpy (labs; matplotlib for `--plot`)
 - **R** (optional, for running case study notebooks)
 
 ## Study HTML

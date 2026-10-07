@@ -64,7 +64,7 @@ cash flows \ts{13}{10}{10:34}. Differentiating,
   \mathcal C=\frac1P\frac{\dd^2P}{\dd y^2}=\sum_it_i^2\pi_i>0 .
 \]
 The \emph{duration} $D$ is the present-value-weighted average time of the cash flows (``weighted time'')
-\ts{13}{10}{11:40}\ts{13}{10}{12:41}; normalising by $P$ makes it independent of how many bonds are held. A zero-coupon
+\ts{13}{10}{11:40}; normalising by $P$ makes it independent of how many bonds are held. A zero-coupon
 bond has one weight, so $D=T$; a coupon bond has $D<t_N$, because every $t_i\le t_N$ and at least one is strictly smaller
 \ts{13}{10}{13:47}. Convexity is a weighted mean of $t_i^2$, hence positive. These are the definitions of
 \cref{sec:duration} in the continuous-compounding convention (\cref{prop:duration}), and \cref{eq:durconv} is the Taylor expansion
@@ -117,7 +117,7 @@ A liquid market gives swap rates for a few maturities, whereas a book of hundred
       (piecewise-constant, linear, tension spline, cubic spline) with its \emph{knots};
   \item \emph{calibrate}: solve for the
       spline parameters so that every input instrument is repriced at par (PV of the swap equal to zero)
-      \ts{13}{10}{24:42}\ts{13}{10}{28:58}. The lecture's example uses 15 swaps from 1 to 30 years with quotes from $0.33\%$ to $2.67\%$
+      \ts{13}{10}{24:42}. The lecture's example uses 15 swaps from 1 to 30 years with quotes from $0.33\%$ to $2.67\%$
       (the market of a year earlier; \cref{ch20:tab-risk}); the resulting curve of three-month forwards is far from flat, steep in the first five years
       and with a hump in the 20-year region \ts{13}{10}{30:01}.
 \end{enumerate}
@@ -126,7 +126,7 @@ A liquid market gives swap rates for a few maturities, whereas a book of hundred
 A \emph{cubic spline} is a function that is a cubic polynomial on each interval between knots and has two continuous derivatives at every knot \ts{13}{10}{25:48}.
 The knots in the lecture's picture are $1,10,20,40,80,160,240$ (quarters), denser where instruments are dense
 \ts{13}{10}{1:22:09}. All splines with given knots form a vector space, which has a convenient basis of bell-shaped,
-locally supported functions \ts{13}{10}{26:49}\ts{13}{10}{27:51}.
+locally supported functions \ts{13}{10}{26:49}.
 
 \begin{definition}[B-splines, Cox--de Boor recursion]\label{ch20:def-bspline}
 For a non-decreasing knot sequence $\tau_0\le\tau_1\le\cdots$ let $B_{i,0}(t)=1$ if $\tau_i\le t<\tau_{i+1}$ and $0$ otherwise, and
@@ -163,10 +163,10 @@ Compared with $y$ the correction is small: a curve level of $3\%$ and a spread o
 the single ``parallel'' mode of duration. The spread contains credit or liquidity components of the bond, and even a
 swap-versus-Treasury spread is traded; for a 10-year maturity the most liquid instrument is the bond, then, surprisingly, the spread, and only then the swap
 itself, so the curve is built from bond yield plus spread rather than from the raw 10-year swap quote
-\ts{13}{10}{33:10}\ts{13}{10}{34:11}\ts{13}{10}{35:12}.
+\ts{13}{10}{33:10}.
 
 \begin{finance}[Why the curve is built on swaps and not on bonds]
-Asked why one does not invert the bond curve instead, the speaker gave two reasons \ts{13}{10}{1:27:24}\ts{13}{10}{1:28:29}. A swap
+Asked why one does not invert the bond curve instead, the speaker gave two reasons \ts{13}{10}{1:27:24}. A swap
 starting today always exists, and tomorrow's swap starts tomorrow, whereas bonds have a fixed maturity: the newest issue (\emph{on-the-run}) is by far the most liquid
 and older ones (\emph{off-the-run}) trade at different levels, so there is no continuous family of maturities and a bond curve can only be a least-squares fit, not an exact one.
 The switch of liquidity from one issue to the next creates ``roll effects'' that make the curve unstable. So the swap desk builds the swap curve and \emph{projects} bonds onto it, by the spread
@@ -178,7 +178,7 @@ The switch of liquidity from one issue to the next creates ``roll effects'' that
 
 The lecture shifts one input of the calibrated curve, the 9-year swap rate, by $1$~bp, keeping all the other 14 quotes fixed, and plots the response of the
 three-month forward rates: it is a ripple, zero before about 5 years and after about 20 years, with a swing of about $\pm14$~bp around the 9-year point
-\ts{13}{10}{36:16}\ts{13}{10}{37:22}. The curve is exact at every input, so it \emph{must} move in the neighbourhood of the shifted input (the 8- and 10-year par
+\ts{13}{10}{36:16}. The curve is exact at every input, so it \emph{must} move in the neighbourhood of the shifted input (the 8- and 10-year par
 rates are pinned), and it does so by an oscillation much larger than the shift. The speaker's comment: this is an ill-posed problem, where a
 small change of the input causes a large change of the output.
 
@@ -235,7 +235,7 @@ to first order the P\&L for a shift $\bm u$ of the inputs is $\bm r\T\bm u$. \Cr
 net risk is tiny ($2{,}266$ in total), but the risk in each bucket is large and of both signs. To be insensitive to \emph{every} bucket the trader must trade
 $\pm r_i$ swaps in each of them, paying half the bid--offer of each instrument; the liquid maturities (yellow in the slide: 1, 2, 5, 10, 30 years) cost $0.10$~bp, the
 others $0.25$~bp. The charge of a bucket is $|r_i|\times$ bid--offer, and the total is $\sum_i|r_i|b_i=3{,}617{,}629$
-\ts{13}{10}{38:25}\ts{13}{10}{39:27}. The gross exposure, not the net one, is what costs money, so traders never hedge every bucket: they hedge a seven-year risk
+\ts{13}{10}{38:25}. The gross exposure, not the net one, is what costs money, so traders never hedge every bucket: they hedge a seven-year risk
 with the cheaper liquid points around it \ts{13}{10}{40:30}. The question is how to do this systematically.
 
 \begin{table}[ht]
@@ -285,7 +285,7 @@ Slide~16 writes the objective as $\|F\T(\bm r+H\bm x)\|^2$ and slides 19--23 use
 Take for $F$ the first principal components of historical daily changes of the inputs. If $D=USP\T$ is the SVD of the data matrix of changes (rows are days),
 $P$ has as columns the principal components, which are eigenvectors of $D\T D$ (\cref{ch:pca}, \cref{thm:svd}) \ts{13}{10}{42:50}; keeping $k$ of them, one for each hedging instrument, is a low-rank
 approximation of the market. In the lecture's data the first component is the ``rates do not move now but move in the future'' mode (steep up to 10 years,
-flat afterwards, because the Fed is holding), the second is a tilt, the third more complex \ts{13}{10}{43:57}\ts{13}{10}{45:02}.
+flat afterwards, because the Fed is holding), the second is a tilt, the third more complex \ts{13}{10}{43:57}.
 
 With $F=P\in\R^{n\times k}$ the objective \eqref{ch20:eq-hedgeopt} can be made \emph{exactly} zero, since $P\T H\in\R^{k\times k}$ is (generically) invertible \ts{13}{10}{45:02}:
 \begin{equation}\label{ch20:eq-pcarisk}
@@ -302,7 +302,7 @@ The speaker says that the charge becomes ``orders of magnitude smaller'', ``some
 (and $446{,}717$ for the regularised one below), i.e. about $12\%$ of the raw charge: a very large saving, but one order of magnitude, not several.
 \end{coursenote}
 
-\paragraph{Weaknesses of PCA hedging} \ts{13}{10}{48:14}\ts{13}{10}{49:19}.
+\paragraph{Weaknesses of PCA hedging} \ts{13}{10}{48:14}.
 \begin{itemize}
   \item The components are tuned to a historical window, and the coefficients of $R$ are not
       stable, in particular for a short window that reflects the current regime; when they change the hedge must be rebalanced, which costs money.
@@ -437,7 +437,7 @@ Each mode $i$ of the noise is divided by $s_i$: a small singular value turns an 
 because $\|\delta\bm x\|\le\|\bm\varepsilon\|/s_r$ and $\|A\bm x\|\le s_1\|\bm x\|$; the bound is attained for $\bm\varepsilon\parallel\bm u_r$, $\bm x\parallel\bm v_1$. A problem is \emph{well posed}
 (Hadamard) if a solution exists, is unique and depends continuously on the data; it is \emph{ill-posed} if one of the three fails, and \emph{ill-conditioned} if the discretised problem has a large $\kappa$. The
 lecture's calibration problems are underdetermined (uniqueness fails: fewer instruments than parameters, hence $\ker A\ne\{0\}$) \emph{and} unstable (small $s_i$)
-\ts{13}{10}{59:53}\ts{13}{10}{1:00:55}.
+\ts{13}{10}{59:53}.
 
 \begin{intuition}[A physicist's reading: the deconvolution analogue]
 The typical forward map averages (the price of a swaption is an integral of the volatility surface over a region), and averaging damps the fine details of the parameters: their contribution to $\bm y$ is $s_i\xi_i$ with $s_i$ small. Inverting means amplifying
@@ -544,7 +544,7 @@ $\begin{psmallmatrix}WA\\ \lambda L\end{psmallmatrix}\bm x\approx\begin{psmallma
   \item \emph{Smoothness instead of amplitude.} With $L=I$ the penalty pulls $\bm x$ towards $\bm 0$, which for a volatility surface means a volatility of zero. The speaker's point \ts{13}{10}{1:19:00}: ask first what one does \emph{not} like. A perfectly flat
         surface is acceptable, so the penalty should vanish on it, i.e. $L$ should have the constants in its kernel: the first-difference matrix with rows $(\dots,1,-1,\dots)$ of slide~41 penalises $\sum_i(x_i-x_{i+1})^2$, a discrete $\int|\nabla x|^2$ (in two dimensions the differences of neighbouring nodes along both axes).
   \item \emph{No bias on the kernel of $L$.} If $A\bm x=\bm y$ exactly and $L\bm x=\bm 0$, then $\bm x_\lambda=\bm x$: indeed $\bm x_\lambda=(A\T W^2A+\lambda^2L\T L)^{-1}A\T W^2A\bm x=\bm x-\lambda^2(A\T W^2A+\lambda^2L\T L)^{-1}L\T L\bm x=\bm x$.
-        Regularisation biases the solution only in the directions it penalises, so the bias is small when the penalty encodes true prior knowledge \ts{13}{10}{1:17:52}\ts{13}{10}{1:19:00}.
+        Regularisation biases the solution only in the directions it penalises, so the bias is small when the penalty encodes true prior knowledge \ts{13}{10}{1:17:52}.
 \end{itemize}
 Slide~42 combines two penalties, one on the \emph{change} of the surface with respect to a prior $\bm v_0$ (matrix $L_1$ acting on $\bm v-\bm v_0=B\bm x$) and one of Tikhonov type on the coefficients (matrix $L_2$), with parameters $\lambda_1,\lambda_2$ (\cref{ch20:sec-volsolve}); this is \eqref{ch20:eq-gen} with
 $\lambda^2L\T L\to\lambda_1^2(L_1B)\T L_1B+\lambda_2^2L_2\T L_2$. The Bayesian reading is the same as for ridge: a Gaussian prior with precision $(\lambda^2/\sigma^2)L\T L$, a random-walk prior for a difference penalty.
@@ -679,11 +679,11 @@ The iteration converges quickly because for at-the-money instruments the price i
 increments (my derivation of the speaker's remark; the calibrated instruments are swaptions in an HJM Monte Carlo, for which the proportionality is heuristic).
 
 The outcome is an exact fit and a meaningless surface: ``Manhattan skyline, with the Hudson river'' \ts{13}{10}{1:04:01} (slide~33, ``Exact, but \dots\ meaningless''). Smoothing the piecewise-constant basis functions gives a better-looking surface but not a good one, and the instability
-remains: a $1\%$ change in the price of the $5\text{y}\times10\text{y}$ swaption changes the adjustment of the surface by $4\%$ (slide~35: one tall isolated ``building with an antenna'') \ts{13}{10}{1:05:04}\ts{13}{10}{1:06:08}. This is what \cref{ch20:sec-noise} predicts: $J$ is square, so
+remains: a $1\%$ change in the price of the $5\text{y}\times10\text{y}$ swaption changes the adjustment of the surface by $4\%$ (slide~35: one tall isolated ``building with an antenna'') \ts{13}{10}{1:05:04}. This is what \cref{ch20:sec-noise} predicts: $J$ is square, so
 $J^\dagger=J^{-1}$ and errors are amplified by up to $\kappa(J)$; the toy of \cref{ch20:cs-toy} shows the same phenomenon (1\% of noise, a factor $16$ on the surface).
 
 \subsection{The regularised design}\label{ch20:sec-volsolve}
-The lecture turns ill-posedness to advantage with four changes \ts{13}{10}{1:06:08}\ts{13}{10}{1:07:09} (slide~36).
+The lecture turns ill-posedness to advantage with four changes \ts{13}{10}{1:06:08} (slide~36).
 \begin{itemize}
   \item \emph{Tolerance.} Each input has a bid--offer, so there is no point in calibrating exactly. The fit becomes a weighted least-squares term $\|W(\bm q-\bm q^{\rm in})\|^2$, $W$ diagonal with small weights on instruments of large bid--offer and large ones on important instruments. A
         small loss of accuracy buys a large gain of smoothness.
@@ -716,7 +716,7 @@ Formula \eqref{ch20:eq-volsol} is one object seen three ways. As \emph{statistic
 the singular values of $WJ$ in the metric of the penalty. As \emph{engineering}: what a trader looks at is the residual: the surface is a smooth fit through the market, and what is left over is information.
 \end{intuition}
 
-Slide~43 shows the calibrated surface: smooth, with a few gentle peaks and a sharper one at short forward times. Asked about a peak, the speaker explains \ts{13}{10}{1:22:09}\ts{13}{10}{1:23:16} that the grid is uniform in quarters whereas the instruments are at
+Slide~43 shows the calibrated surface: smooth, with a few gentle peaks and a sharper one at short forward times. Asked about a peak, the speaker explains \ts{13}{10}{1:22:09} that the grid is uniform in quarters whereas the instruments are at
 3~months, 6~months, 1, 2, 5, 10 years, so on a logarithmic axis the feature would not look sharp; the surface has more detail where there are more instruments, and no sharper features can be supported elsewhere.
 
 \begin{finance}[Relative value: the calibrated surface as a benchmark]
@@ -726,7 +726,7 @@ principle (smoothness) is more likely to be stable in the future than one estima
 \end{finance}
 
 \begin{finance}[Interpolation, splines and their limits]
-To a question on other fitting techniques the speaker answers that ``spline'' and ``interpolation'' are the same thing for him: one has limited inputs and wants the curve in between \ts{13}{10}{1:20:07}\ts{13}{10}{1:21:07}. The regularised fit goes beyond interpolation: it
+To a question on other fitting techniques the speaker answers that ``spline'' and ``interpolation'' are the same thing for him: one has limited inputs and wants the curve in between \ts{13}{10}{1:20:07}. The regularised fit goes beyond interpolation: it
 does not pass through the data, which is the essential difference between \cref{ch20:sec-build} and \cref{ch20:sec-volsolve}.
 \end{finance}
 

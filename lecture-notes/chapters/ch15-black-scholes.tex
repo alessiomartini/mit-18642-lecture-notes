@@ -53,7 +53,7 @@ Slide~2 overlays the curve of 3 September 2024 (just before the course began) on
 25~bp in November, a detail not spoken in class), and the short end of the curve moved down by about that
 amount while the long end moved by only about 50~bp \ts{24}{21}{1:07}: not a parallel shift but a steepening.
 
-The lecturer then puts the current shape next to three historical snapshots \ts{24}{21}{2:14}\ts{24}{21}{3:18}: the
+The lecturer then puts the current shape next to three historical snapshots \ts{24}{21}{2:14}: the
 curves of 2007 (just before the crisis) and 2019 were both \emph{inverted} and a recession followed, while by
 September 2021 the curve had a normal shape and the recession had been short. He calls this ``non-scientific
 prediction'': a serious analysis would decompose the curves with principal components (\cref{ch:pca}), and the
@@ -73,7 +73,7 @@ $s+ks$.
 
 \paragraph{Odds from the ``true'' probabilities: $4$ to $1$.} Odds $4:1$ equal the true ratio $0.8:0.2$. If horse~1
 wins, the bookie collects \$60\,000 and pays $10\,000+4\cdot10\,000=\$50\,000$: profit \$10\,000. If horse~2 wins, he pays
-$50\,000+\tfrac14\cdot50\,000=\$62\,500$: loss \$2\,500 \ts{24}{21}{6:28}\ts{24}{21}{7:28}. The expected profit is
+$50\,000+\tfrac14\cdot50\,000=\$62\,500$: loss \$2\,500 \ts{24}{21}{6:28}. The expected profit is
 $0.2\cdot10\,000+0.8\cdot(-2\,500)=0$, but only on average: the bookie carries the risk of the one race that is run.
 
 \paragraph{Odds from the pool: $5$ to $1$.} Now ignore the true probabilities and set the odds by the money
@@ -105,7 +105,7 @@ In the 2013 transcript the bookie's payout on the second horse is given as ``\$1
 it is \$12\,500 (so the total payout is \$62\,500 and the loss \$2\,500, as on the slide). Also in 2013,
 to the quiz ``which interest rate does the forward strike imply?'' a student answers ``2.5'', which the lecturer first
 repeats and then corrects on the fly: $80\to88.41$ is about $10\%$ over the two years of \cref{ch15:sec-payoffs}, i.e.\ $5\%$ per year
-continuously compounded, $80\,e^{0.05\cdot2}=88.41$ \ts{13}{19}{16:42}\ts{13}{19}{17:43}.
+continuously compounded, $80\,e^{0.05\cdot2}=88.41$ \ts{13}{19}{16:42}.
 \end{coursenote}
 
 \begin{exercise}[not from the course: the bookie]\label{ch15:ex-bookie}
@@ -122,7 +122,7 @@ Throughout, $S_t$ is the price at time $t$ of a stock (no dividends), $T$ the \e
 \]
 with $x^+=\max(x,0)$. A \emph{forward contract} is an obligation to buy at $T$ at the price $K$ fixed today; $K$ is chosen so that
 the contract costs nothing to enter \ts{24}{21}{11:54}\ts{13}{19}{5:07}. A \emph{call option} is the right, not the obligation, to
-buy at $K$, and a \emph{put option} the right to sell at $K$ \ts{24}{21}{12:55}\ts{24}{21}{13:55}. The call is insurance against
+buy at $K$, and a \emph{put option} the right to sell at $K$ \ts{24}{21}{12:55}. The call is insurance against
 the stock going up if one is short, and the put is insurance against a fall: its owner is protected below $K$. Unlike a forward,
 an option costs a premium today, because it can only win. A call (put) is \emph{in the money} if $S>K$ ($S<K$), \emph{at the money} if $S=K$, and
 \emph{out of the money} otherwise; the lecture always means \emph{European} options, exercisable only at $T$
@@ -156,7 +156,7 @@ The price curves are the Black--Scholes formula derived below; the forward price
 
 \Cref{ch15:fig-payoffs} anticipates the goal of the lecture \ts{24}{21}{13:55}: to compute the curved lines, the prices today
 of the options, and the straight line for the forward. It also states the three messages of the lecture, which are exactly
-the content of the box below \ts{24}{21}{15:01}\ts{13}{19}{9:22}\ts{13}{19}{10:27}.
+the content of the box below \ts{24}{21}{15:01}\ts{13}{19}{9:22}.
 
 \begin{keyformulas}
 \textbf{Three messages of the lecture} (slide~7).
@@ -178,7 +178,7 @@ probability $p$) or $S_2<S_1$ (\emph{down}), a riskless account grows from $B$ t
 A forward on the stock pays $S-K_0$ at $\dd t$ and costs nothing today. \emph{The naive approach} sets the price
 equal to the expected payoff with the real-world $p$,
 $p(S_1-K_0)+(1-p)(S_2-K_0)=0$, i.e.\ $K_0=pS_1+(1-p)S_2$ (equal to $\frac12(S_1+S_2)$ if $p=\frac12$)
-\ts{24}{21}{17:05}\ts{24}{21}{18:08}\ts{13}{19}{13:31}. It is wrong, because nobody knows $p$, and it is exploitable, as follows
+\ts{24}{21}{17:05}\ts{13}{19}{13:31}. It is wrong, because nobody knows $p$, and it is exploitable, as follows
 \ts{24}{21}{19:08}\ts{13}{19}{14:33}.
 
 \begin{proposition}[Forward price]\label{ch15:prop-fwd}
@@ -189,7 +189,7 @@ risk-free rate, whatever the real-world dynamics.
 At time~$0$, borrow $S_0$ from the bank, buy the stock and sell the forward with strike $K_0$: the net cost is zero. At $\dd t$ deliver
 the stock in exchange for $K_0$ and repay $S_0e^{r\dd t}$: the payoff is $K_0-S_0e^{r\dd t}$ in both states, a certain
 amount that cost nothing. If it were positive this would be an arbitrage; if negative, the opposite position would
-be \ts{24}{21}{20:11}\ts{24}{21}{21:14}\ts{24}{21}{22:20}\ts{13}{19}{15:35}. Hence $K_0=S_0e^{r\dd t}$.
+be \ts{24}{21}{20:11}\ts{13}{19}{15:35}. Hence $K_0=S_0e^{r\dd t}$.
 \end{proof}
 So the stock itself (financed with a loan) \emph{replicates} the forward: it has exactly the same payoff, and no assumption on $p$, $S_1$, $S_2$
 or on how the stock ``really'' behaves was used. In the lecture's example, $S_0=80$, $T=2$ years and $K=88.41$: $88.41/80=e^{0.1}$, so $r=5\%$
@@ -200,7 +200,7 @@ same price as the expectation: the number $q$ with $K_0=qS_1+(1-q)S_2$ satisfies
   qS_1+(1-q)S_2=S_0e^{r\dd t}.
 \end{equation}
 This $q$ (called $p_n$ or $p_{rn}$ on the slides, $q$ in 2013) is the \emph{risk-neutral probability}: under it the stock earns exactly the
-risk-free rate on average \ts{24}{21}{23:25}\ts{24}{21}{24:27}. The condition $0<q<1$ is the no-arbitrage condition of \cref{prop:binomial-na}
+risk-free rate on average \ts{24}{21}{23:25}. The condition $0<q<1$ is the no-arbitrage condition of \cref{prop:binomial-na}
 with $1+r_fT$ replaced by $e^{r\dd t}$.
 
 \subsection{A general claim}\label{ch15:sec-claim1}
@@ -210,7 +210,7 @@ and a cash amount $B$ (in the riskless account, growing to $Be^{r\dd t}$) with \
   f_1=aS_1+Be^{r\dd t},\qquad f_2=aS_2+Be^{r\dd t}.
 \end{equation}
 Subtracting, $a=\dfrac{f_1-f_2}{S_1-S_2}$, and then $B=e^{-r\dd t}\dfrac{S_1f_2-S_2f_1}{S_1-S_2}$. By no arbitrage $f_0=aS_0+B$
-\ts{24}{21}{29:42}\ts{24}{21}{30:47}\ts{13}{19}{20:55}, and substituting one finds
+\ts{24}{21}{29:42}\ts{13}{19}{20:55}, and substituting one finds
 \begin{equation}\label{ch15:eq-f0}
   f_0=e^{-r\dd t}\bigl[q\,f_1+(1-q)\,f_2\bigr],\qquad q=\frac{S_0e^{r\dd t}-S_2}{S_1-S_2},
 \end{equation}
@@ -236,7 +236,7 @@ $B=-0.75\cdot90/1.03=-65.53$, $q=(103-90)/40=0.325$, and $f_0=0.75\cdot100-65.53
 
 \begin{intuition}[Replicating portfolio versus riskless portfolio]\label{ch15:int-riskless}
 Equation~\eqref{ch15:eq-repl} says that the cash-plus-stock portfolio $aS+B$ has the same value as $f$ in both states. Turn it around
-\ts{24}{21}{32:52}\ts{24}{21}{33:56}: the portfolio ``one unit of the derivative, minus $a$ units of stock'' pays $f_i-aS_i=Be^{r\dd t}$ in both
+\ts{24}{21}{32:52}: the portfolio ``one unit of the derivative, minus $a$ units of stock'' pays $f_i-aS_i=Be^{r\dd t}$ in both
 states: it is \emph{riskless}, and must therefore grow at the risk-free rate. For a physicist this is a statement that the hedged
 combination has zero ``noise'', i.e.\ $a=\Delta f/\Delta S$ is a discrete derivative that cancels the fluctuation. In continuous time the same argument is
 used in the form ``riskless portfolio'' (\cref{ch15:sec-pde}). Which of the two forms is more convenient depends on the problem \ts{24}{21}{32:52}.
@@ -360,7 +360,7 @@ $(r-\tfrac12\sigma^2)T$ because $\E[e^{X}]=e^{\E[X]+\Var X/2}$ for a normal vari
 
 \subsection{The model}
 The lecture models the stock by the \emph{lognormal} (geometric Brownian motion, \cref{ch11:eq-gbm}) dynamics
-\ts{24}{21}{33:56}\ts{24}{21}{35:01}\ts{13}{19}{22:04}
+\ts{24}{21}{33:56}\ts{13}{19}{22:04}
 \begin{equation}\label{ch15:eq-gbm}
   \dd S_t=\mu S_t\dd t+\sigma S_t\dd W_t,
 \end{equation}
@@ -368,14 +368,14 @@ where $\mu$ is the (real-world) drift, $\sigma$ the \emph{volatility}, and $\dd 
 $\E[\dd] W=0$ and $\operatorname{sd}(\dd W)=\sqrt{\dd t}$, independent for disjoint time intervals \ts{13}{19}{23:04}. The proportional change $\dd S/S$
 has a deterministic part and a noise part. The lecture says clearly that the choice is an \emph{example}: the method needs only that the stock
 has some dynamics, and other choices (stochastic volatility, jumps) lead to other equations of the same type
-\ts{24}{21}{33:56}\ts{24}{21}{1:00:39}.
+\ts{24}{21}{33:56}.
 
 \subsection{Why the standard deviation is $\sqrt{\dd t}$}
 In the 2024 lecture Strela stops to answer a question that ``always bothers'' him \ts{24}{21}{36:07}. Take a random walk $W_n=\sum_{i=1}^n\xi_i$ with steps $\xi_i=\pm1$ with
 probability $\frac12$, uncorrelated: $\E[W_n]=0$ (a martingale) and $\Var W_n=\sum_i\E[\xi_i^2]=n$
-\ts{24}{21}{37:10}\ts{24}{21}{38:14}\ts{24}{21}{39:21}. Now put the $n$ steps in a finite time $T$, $\dd t=T/n$, and let each step have size $\pm\delta$:
+\ts{24}{21}{37:10}. Now put the $n$ steps in a finite time $T$, $\dd t=T/n$, and let each step have size $\pm\delta$:
 $\Var W=n\delta^2=T\delta^2/\dd t$. For the limit $\dd t\to0$ to be neither $0$ nor $\infty$ one needs $\delta^2/\dd t$ to stay finite, i.e.\ $\delta\propto\sqrt{\dd t}$
-\ts{24}{21}{40:26}\ts{24}{21}{41:27}\ts{24}{21}{42:31}. That is the content of Donsker's theorem (\cref{ch11:thm-donsker}); the same
+\ts{24}{21}{40:26}. That is the content of Donsker's theorem (\cref{ch11:thm-donsker}); the same
 argument fixed the size of the steps of the tree \eqref{ch15:eq-crr}.
 
 \subsection{Taylor expansion with a $\sqrt{\dd t}$ noise}
@@ -386,7 +386,7 @@ different sizes \ts{24}{21}{44:45}: $\dd t\dd S\sim\dd t^{3/2}$ and $\dd t^2$ ar
   (\dd S)^2=\sigma^2S^2(\dd W)^2+O(\dd t^{3/2}),\qquad(\dd W)^2\sim\dd t,
 \]
 is of the \emph{same} order as $\dd t$ and must be kept. One writes $(\dd W)^2=\dd t$ (\cref{ch11:eq-dB2}) and obtains, to order $\dd t$,
-\ts{24}{21}{45:45}\ts{24}{21}{46:46}\ts{24}{21}{47:46}
+\ts{24}{21}{45:45}
 \begin{equation}\label{ch15:eq-ito}
   \dd f=\Bigl(f_t+\mu Sf_S+\tfrac12\sigma^2S^2f_{SS}\Bigr)\dd t+\sigma Sf_S\dd W,
 \end{equation}
@@ -412,19 +412,19 @@ $S_T=S_t\exp\bigl[(\mu-\tfrac12\sigma^2)\tau+\sigma(W_T-W_t)\bigr]$.
 
 % ==================================================================
 \section{The Black--Scholes equation}\label{ch15:sec-pde}
-We now do in continuous time what \cref{ch15:sec-claim1} did in one step \ts{24}{21}{47:46}\ts{13}{19}{23:04}\ts{13}{19}{24:06}. \textbf{Assumptions} (implicit in the lecture): the
+We now do in continuous time what \cref{ch15:sec-claim1} did in one step \ts{24}{21}{47:46}\ts{13}{19}{23:04}. \textbf{Assumptions} (implicit in the lecture): the
 stock follows \eqref{ch15:eq-gbm} with \emph{constant} $\mu$, $\sigma$; the interest rate $r$ is constant and the same for borrowing and lending; the stock
 pays no dividend; trading is continuous, without transaction costs, with unrestricted short selling and fractional positions; the claim is European.
 
 \subsection{Derivation by replication}
 Let a portfolio hold $a_t=a(S_t,t)$ shares of the stock and a cash amount $B_t$ in the money-market account, which grows as
-$\dd B$ (due to interest) $=rB\dd t$ \ts{24}{21}{49:52}\ts{24}{21}{50:56}. Its value is $V=aS+B$. The portfolio is \emph{self-financing}: no money is added or withdrawn,
+$\dd B$ (due to interest) $=rB\dd t$ \ts{24}{21}{49:52}. Its value is $V=aS+B$. The portfolio is \emph{self-financing}: no money is added or withdrawn,
 so the change of value is only due to price moves and interest,
 \begin{equation}\label{ch15:eq-selffin}
   \dd V=a\,\dd S+rB\dd t=(a\mu S+rB)\dd t+a\sigma S\dd W .
 \end{equation}
 (On the slides: $\dd f=a\,\dd S+\dd B$; the lecture writes $\dd B=rB\dd t$ and $B=f-aS$, the same thing.) We want the portfolio to \emph{replicate} the claim:
-$V_t=f(S_t,t)$ at all times, with $f(S,T)$ the payoff. Equate \eqref{ch15:eq-ito} and \eqref{ch15:eq-selffin} \ts{24}{21}{51:59}\ts{24}{21}{53:10}\ts{24}{21}{54:11}\ts{13}{19}{25:12}.
+$V_t=f(S_t,t)$ at all times, with $f(S,T)$ the payoff. Equate \eqref{ch15:eq-ito} and \eqref{ch15:eq-selffin} \ts{24}{21}{51:59}\ts{13}{19}{25:12}.
 
 \emph{Noise terms} (coefficients of $\dd W$): $\sigma Sf_S=a\sigma S$, so
 \begin{equation}\label{ch15:eq-hedge}
@@ -435,21 +435,21 @@ $f_t+\mu Sf_S+\tfrac12\sigma^2S^2f_{SS}=\mu Sf_S+r(f-Sf_S)$. The real-world drif
 \begin{equation}\label{ch15:eq-bs}
   \boxed{\ \frac{\partial f}{\partial t}+\frac12\sigma^2S^2\frac{\partial^2f}{\partial S^2}+rS\frac{\partial f}{\partial S}-rf=0\ }
 \end{equation}
-\ts{24}{21}{58:33}\ts{24}{21}{59:39}\ts{13}{19}{26:20}\ts{13}{19}{27:24}, the \emph{Black--Scholes equation} (slide~17), a backward parabolic PDE with final condition $f(S,T)=\text{payoff}(S)$. It is the result of Black and Scholes (1973); Scholes and Merton received the 1997 Nobel prize in economics (Black had died in 1995), and all three were associated with MIT \ts{24}{21}{1:01:47}.
+\ts{24}{21}{58:33}\ts{13}{19}{26:20}, the \emph{Black--Scholes equation} (slide~17), a backward parabolic PDE with final condition $f(S,T)=\text{payoff}(S)$. It is the result of Black and Scholes (1973); Scholes and Merton received the 1997 Nobel prize in economics (Black had died in 1995), and all three were associated with MIT \ts{24}{21}{1:01:47}.
 If the claim traded at any price other than $V_t$, buying the cheaper and selling the dearer of $f$ and $V$ would be an arbitrage, which is why $f=V$.
 
-The lecture derives the same equation in the ``riskless portfolio'' form \ts{24}{21}{49:52}\ts{24}{21}{57:27}. Let $\Pi=f-aS$ with $a$ held fixed over the interval
+The lecture derives the same equation in the ``riskless portfolio'' form \ts{24}{21}{49:52}. Let $\Pi=f-aS$ with $a$ held fixed over the interval
 $[t,t+\dd t]$. By \eqref{ch15:eq-ito}, $\dd\Pi=\dd f-a\dd S=(f_t+\tfrac12\sigma^2S^2f_{SS}+(f_S-a)\mu S)\dd t+(f_S-a)\sigma S\dd W$.
 Choosing $a=f_S$ kills \emph{both} $\mu$ and the noise: $\dd\Pi=(f_t+\tfrac12\sigma^2S^2f_{SS})\dd t$ is deterministic, hence must equal $r\Pi\dd t=r(f-Sf_S)\dd t$ by no arbitrage,
 which is \eqref{ch15:eq-bs} again. The delta-hedged position (long the option, short $f_S$ shares) earns the risk-free rate.
 
 \begin{keyformulas}
-\textbf{What the equation says} (slide~18; \ts{24}{21}{1:00:39}\ts{24}{21}{1:02:51}).
+\textbf{What the equation says} (slide~18; \ts{24}{21}{1:00:39}).
 \begin{itemize}[nosep]
   \item Every tradable claim on $S$, whatever its payoff, satisfies \eqref{ch15:eq-bs}; the payoff enters only through the final (and boundary) conditions.
   \item The real-world drift $\mu$ does not appear: only $\sigma$ and $r$ do. (Compare \cref{sec:binomial}: the probability of ``up'' does not appear.)
   \item The replicating portfolio is also a \emph{hedging strategy}: to hedge a short position in the claim, hold $a=\partial f/\partial S$ shares and put the rest, $f-Sf_S$, in the bank.
-        For a traded, liquid stock this is what a derivatives desk does all day \ts{13}{19}{28:31}\ts{13}{19}{29:37}.
+        For a traded, liquid stock this is what a derivatives desk does all day \ts{13}{19}{28:31}.
   \item With another model for $S$ the equation changes (different coefficients, possibly more state variables), but the derivation is identical.
 \end{itemize}
 \end{keyformulas}
@@ -525,7 +525,7 @@ The second route to the price is the one the lecturer wants to stress: ``mostly 
 \end{equation}
 so that $S_t=e^{-r(T-t)}\E_\Q[S_T\mid S_t]$: under $\Q$ the \emph{discounted} stock price $e^{-rt}S_t$ is a martingale (slides 13, 21).
 
-\paragraph{How to find $\Q$.} The lecturer's argument \ts{24}{21}{1:07:01}\ts{24}{21}{1:08:09}: take the expectation of \eqref{ch15:eq-gbm} (the
+\paragraph{How to find $\Q$.} The lecturer's argument \ts{24}{21}{1:07:01}: take the expectation of \eqref{ch15:eq-gbm} (the
 $\dd W$ term has mean zero), $\dd\,\E[S_t]=\mu\,\E[S_t]\dd t$, so $\E[S_T]=S_te^{\mu(T-t)}$ for the real-world dynamics. In the risk-neutral
 world the stock must grow at the risk-free rate, $\E_\Q[S_T]=S_te^{r(T-t)}$ (this was the property $qS_1+(1-q)S_2=S_0e^{r\dd t}$ of the tree), which forces $\mu\to r$.
 The volatility is \emph{unchanged}: the size of the fluctuations is a pathwise property (the quadratic variation, \cref{ch11:thm-qv}), the same under every equivalent measure, whereas the drift
@@ -640,7 +640,7 @@ $\E_{\Prob}[C_T]$ and $\E_{\Q}[C_T]$ for the call of \cref{ch15:ex-atm} with $\m
 
 % ==================================================================
 \section{Put--call parity: a model-free replication}\label{ch15:sec-parity}
-The lecture illustrates replication with a relation that requires \emph{no} assumption on the stock dynamics \ts{24}{21}{1:10:22}\ts{13}{19}{38:07}\ts{13}{19}{39:11}.
+The lecture illustrates replication with a relation that requires \emph{no} assumption on the stock dynamics \ts{24}{21}{1:10:22}\ts{13}{19}{38:07}.
 
 \begin{theorem}[Put--call parity]\label{ch15:thm-parity}
 For European options on a non-dividend-paying asset with the same strike $K$ and expiry $T$, in the absence of arbitrage,
@@ -691,12 +691,12 @@ $K$ & call mid & put mid & $C-P$ & $S-PV(D)-Ke^{-r\tau}$ & difference\\
 subtracted from $S$: parity for a dividend-paying stock is $C-P=S-PV(D)-Ke^{-r\tau}$, ``not discussed'' in class).}\label{ch15:tab-aapl}
 \end{table}
 On slide~24 the lecturer plots the call, the put and their difference against strike: the difference is a straight line of slope $-e^{-r\tau}\approx-1$, while the implied volatility
-of the same options is a U-shaped curve (see \cref{ch15:sec-smile}). A straight line is what parity requires, and ``if it wouldn't be, people would jump on it immediately'' \ts{24}{21}{1:13:36}\ts{24}{21}{1:14:40}.
+of the same options is a U-shaped curve (see \cref{ch15:sec-smile}). A straight line is what parity requires, and ``if it wouldn't be, people would jump on it immediately'' \ts{24}{21}{1:13:36}.
 In 2013 the same idea is shown on the IBM screen of 2006 (slide~23), at the end of the lecture: far from the strike a call is worth $S-K$ ($S-K=81.14-55=26.14$, against a quoted mid of $26.50$), and between
-strikes the prices change by 5 when the strike changes by 5 \ts{13}{19}{36:03}\ts{13}{19}{37:04}.
+strikes the prices change by 5 when the strike changes by 5 \ts{13}{19}{36:03}.
 
 \begin{finance}[Replication as a way of thinking]
-The lecturer's closing message \ts{24}{21}{1:14:40}\ts{24}{21}{1:15:43}\ts{13}{19}{48:38}: ``what you try to do is look at the payout of a portfolio and replicate it with the instruments at hand, or at least approximate it,
+The lecturer's closing message \ts{24}{21}{1:14:40}\ts{13}{19}{48:38}: ``what you try to do is look at the payout of a portfolio and replicate it with the instruments at hand, or at least approximate it,
 because if you did, you know the price now, or you know an arbitrage''. Conversely one builds a complicated portfolio of listed options and looks for a mispricing with respect to a replicating one: nowadays this
 is ``practically impossible'' for vanilla options, but was done ``25 years ago'' with more complex options in FX (a story he leaves to J.~Xia). The hedge of a book of exotics is usually dynamic and needs rebalancing
 \ts{13}{19}{49:42}; static replications like parity and the call spread below are the exceptions, and the most robust.
@@ -709,19 +709,19 @@ Design an arbitrage (list the trades and the guaranteed profit) if the call in t
 
 % ==================================================================
 \section{Digital options and call spreads}\label{ch15:sec-digital}
-The lecture ends with a challenge \ts{24}{21}{1:15:43}\ts{24}{21}{1:16:44}, which in 2013 was posed as an interview question \ts{13}{19}{43:24}: \emph{price and hedge a digital (all-or-nothing) option}, which pays $1$
+The lecture ends with a challenge \ts{24}{21}{1:15:43}, which in 2013 was posed as an interview question \ts{13}{19}{43:24}: \emph{price and hedge a digital (all-or-nothing) option}, which pays $1$
 if $S_T>K$ and $0$ otherwise, given that the prices of calls of \emph{all strikes} are known. Slide~26 of 2024 compares the Black--Scholes digital with a ``call spread'' built from the same
 AAPL data.
 
 \paragraph{Replication.} A call spread that is long a call with strike $K-\varepsilon$ and short a call with strike $K+\varepsilon$ pays
 $(S_T-K+\varepsilon)^+-(S_T-K-\varepsilon)^+$, a ramp from $0$ (for $S_T\le K-\varepsilon$) to $2\varepsilon$ (for $S_T\ge K+\varepsilon$). A student proposes it and the lecturer confirms:
 $\pm\tfrac12$ around $K$ gives a ramp up to $1$, $\pm\tfrac14$ needs two spreads, and in general the payoff of $\frac1{2\varepsilon}$ spreads is a ramp of unit height and width $2\varepsilon$
-\ts{13}{19}{44:31}\ts{13}{19}{45:31}. Letting $\varepsilon\to0$, the digital price is
+\ts{13}{19}{44:31}. Letting $\varepsilon\to0$, the digital price is
 \begin{equation}\label{ch15:eq-digital-limit}
   D(K)=\lim_{\varepsilon\to0}\frac{C(K-\varepsilon)-C(K+\varepsilon)}{2\varepsilon}=-\frac{\partial C}{\partial K}
 \end{equation}
 \emph{whatever the model} \ts{13}{19}{46:37}, since $C(K)=e^{-r\tau}\E_\Q[(S_T-K)^+]$ and $\partial_K(S_T-K)^+=-\ind\{S_T>K\}$; this is the Breeden--Litzenberger relation of \cref{ch03:cor-bl} ($D=e^{-r\tau}\Q(S_T>K)$, while $\partial^2_KC=e^{-r\tau}p_\Q(K)$). The lecturer notes that the answer is a
-derivative of the call price with respect to $K$, and that it should not be surprising: the derivative of a ramp is a step \ts{13}{19}{46:37}\ts{13}{19}{47:37}; the same idea works for any payoff, e.g.\ a box. In practice the dealer
+derivative of the call price with respect to $K$, and that it should not be surprising: the derivative of a ramp is a step \ts{13}{19}{46:37}; the same idea works for any payoff, e.g.\ a box. In practice the dealer
 sells the digital to a client and hedges with two liquid calls on the exchange, and digitals are less liquid than calls \ts{13}{19}{47:37}.
 
 In Black--Scholes the digital costs
@@ -856,7 +856,7 @@ terminal value of the hedge portfolio minus the payoff, $2\cdot10^4$ simulated p
 
 \paragraph{What discrete rebalancing costs.} The derivation \eqref{ch15:eq-selffin} assumed that the hedge is adjusted \emph{continuously}. \Cref{ch15:tab-hedge} shows what happens with $n$ rebalancings: the hedge error
 has a small mean (below $0.21$ here, and shrinking with $n$) and standard deviation proportional to $n^{-1/2}$ (the last column is roughly constant), i.e.\ proportional to $\sqrt{\dd t}$: the risk is
-not eliminated for a finite $n$, only made small, and every rebalancing has a transaction cost, so the desk chooses a finite frequency \ts{13}{19}{28:31}\ts{13}{19}{29:37}\ (``every time $\dd t$ we will have to rebalance'').
+not eliminated for a finite $n$, only made small, and every rebalancing has a transaction cost, so the desk chooses a finite frequency \ts{13}{19}{28:31}\ (``every time $\dd t$ we will have to rebalance'').
 
 \begin{finance}[What breaks the assumptions]
 Discrete hedging and transaction costs (above); jumps and gaps, for which no hedge in the stock alone is perfect and the market is incomplete (\cref{sec:oneperiod}: a non-replicable claim has an interval of arbitrage-free prices)
@@ -880,7 +880,7 @@ bijection from $(0,\infty)$ onto $\bigl((S-Ke^{-r\tau})^+,S\bigr)$; hence every 
 of the same strike and expiry have the same $\sigma_{\mathrm{imp}}$.
 
 In Black--Scholes $\sigma$ is one constant for the stock, so the implied volatility should be the \emph{same for all strikes and expiries}. The lecture points out that it is not
-\ts{24}{21}{1:13:36}\ts{24}{21}{1:14:40}\ts{13}{19}{37:04}\ts{13}{19}{38:07}: plotted against strike it is a curve, a ``smile'' (in 2013 the word is ``skewed, or rather smiled''), shown in the lower right graph of slide~24. \Cref{ch15:tab-smile} and
+\ts{24}{21}{1:13:36}\ts{13}{19}{37:04}: plotted against strike it is a curve, a ``smile'' (in 2013 the word is ``skewed, or rather smiled''), shown in the lower right graph of slide~24. \Cref{ch15:tab-smile} and
 \cref{ch15:fig-smile} report the numbers of that screen.
 
 \begin{table}[ht]
@@ -936,7 +936,7 @@ The core slides are the same: the 2024 deck is the 2013 deck (V.~Strela was the 
   \item \emph{Examples.} 2024 replaces the March 2006 IBM screen (2013 slide~23) with two recent Bloomberg screens (AAPL 2016 with the implied-volatility smile, and IBM 2015), adds the put--call parity plot and the real-data
         call spread (slide~26); 2013 discusses parity and the smile only orally, at the end, and treats the digital as an interview question with the audience answering.
   \item \emph{Suggestions.} 2013 explicitly proposes as final-paper topics the reduction to the heat equation and the derivation of the formula as a lognormal expectation
-        \ts{13}{19}{30:40}\ts{13}{19}{34:59}, both carried out above; 2024 announces the next two (guest) lectures, one of them by J.~Hull on machine learning (\cref{ch:ml}).
+        \ts{13}{19}{30:40}, both carried out above; 2024 announces the next two (guest) lectures, one of them by J.~Hull on machine learning (\cref{ch:ml}).
 \end{itemize}
 In 2013 the lecturer also remarks that the two-year rate was then about $32.5$ basis points, so that the $5\%$ of the example is illustrative and not realistic \ts{13}{19}{17:43}.
 \end{coursenote}

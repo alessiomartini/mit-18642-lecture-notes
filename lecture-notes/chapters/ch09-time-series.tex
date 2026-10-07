@@ -99,7 +99,7 @@ standard remedy is to model the \emph{log return}. Let $Y_t$ be a positive price
   Y_t=Y_0\exp\bigl(X_1+\dots+X_t\bigr),
 \end{equation}
 so $Y_t$ is an exponential of a random walk with steps $X_t$, and the modelling assumption is that
-$\{X_t\}$ is covariance stationary \ts{24}{12}{9:33}\ts{24}{12}{10:33}. For small returns
+$\{X_t\}$ is covariance stationary \ts{24}{12}{9:33}. For small returns
 $X_t\approx R_t-\tfrac12R_t^2$. Taking logs turns exponential growth into linear growth and stabilises
 the variance, and differencing removes the linear trend; $X_t$ is then a candidate stationary series.
 
@@ -109,23 +109,23 @@ The lecture illustrated this on four series (the plots themselves are not in the
   \item \emph{S\&P~500}, roughly 2011--2024. The index trends up with sharp COVID drops, so it is not
         stationary in any window; the monthly log returns fluctuate around a level close to zero with
         constant spread. Weekly and daily returns keep a stable mean, but the volatility is clearly not
-        constant (extreme in 2020) \ts{24}{12}{11:42}\ts{24}{12}{13:48}. A fitted normal density
+        constant (extreme in 2020) \ts{24}{12}{11:42}. A fitted normal density
         underestimates both the mass near the mean and the tails: the returns are
         \emph{leptokurtic} (``slender''), as in \cref{ch03:sec-heavy}. Volatility clustering is the subject of
         \cref{ch:volatility}.
   \item \emph{Amazon}. The price shows strong exponential growth; on the log scale the variability is more
         homogeneous, and the monthly and weekly log returns look stationary with a better normal fit than the
         index. Daily returns show a few spikes that no Gaussian model would produce
-        \ts{24}{12}{15:56}\ts{24}{12}{16:56}.
+        \ts{24}{12}{15:56}.
   \item \emph{Crude oil futures}. In April 2020 the front-month contract went \emph{negative}; a holder of
         100 contracts woke up owing the broker 100 times a negative price, and some brokers could not
         even report positions because their systems did not allow negative prices. The logarithm is
-        undefined there, so the lecture's plots exclude those days \ts{24}{12}{18:00}\ts{24}{12}{19:03}.
+        undefined there, so the lecture's plots exclude those days \ts{24}{12}{18:00}.
         Log returns require positive prices (spreads and rates can be modelled directly).
   \item \emph{10-year US Treasury yield}, from above $3\%$ to below $1\%$ after COVID and rising again.
         Strictly, ``log return'' is the wrong name for a percentage change of a yield, but the same
         transformation gives unimodal, roughly symmetric increments, and the normal model fits better than
-        for equity returns \ts{24}{12}{20:05}\ts{24}{12}{21:12}\ts{24}{12}{22:16}.
+        for equity returns \ts{24}{12}{20:05}.
 \end{itemize}
 Modelling $Y_t$ as an exponential random walk means that $S_t=X_1+\dots+X_t$ is a sum of steps. In the
 simplest model the steps are i.i.d.\ (\cref{ch04:sec-rw}); the models of this chapter let them depend
@@ -149,7 +149,7 @@ S\&P~500 and, on weekly data, significant negative correlations around lag~5, wh
 a student read as \emph{mean reversion} (price changes that are too high tend to be reversed)
 \ts{24}{12}{27:42}. Amazon showed no significant autocorrelation at any frequency, crude oil a negative
 lag-2 and positive lag-3 weekly pattern, and Treasury yields strong low-lag dependence
-\ts{24}{12}{29:50}\ts{24}{12}{30:58}.
+\ts{24}{12}{29:50}.
 
 \paragraph{Testing many lags at once.} If $\rho(1)=\dots=\rho(K)=0$ the $\sqrt T\hat r_j$ are
 asymptotically independent $N(0,1)$, so
@@ -157,7 +157,7 @@ asymptotically independent $N(0,1)$, so
   \mathrm{BP}=T\sum_{j=1}^{K}\hat r_j^{\,2}\ \approx\ \chi^2_K ,
 \end{equation}
 the \emph{Box--Pierce} statistic; reject the joint null when $\mathrm{BP}$ exceeds the $\chi^2_K$
-quantile ($18.31$ for $K=10$ at $5\%$) \ts{24}{12}{36:10}\ts{24}{12}{37:18}. Two refinements, not
+quantile ($18.31$ for $K=10$ at $5\%$) \ts{24}{12}{36:10}. Two refinements, not
 discussed in class: the Ljung--Box variant $T(T+2)\sum_j\hat r_j^2/(T-j)$ has a better small-sample
 $\chi^2$ approximation; and when the test is applied to the residuals of a fitted ARMA$(p,q)$ model the
 degrees of freedom drop to $K-p-q$.
@@ -165,7 +165,7 @@ degrees of freedom drop to $K-p-q$.
 \begin{finance}[Residual whiteness as a model check]
 A time-series model writes $Y_t=\hat Y_t+e_t$. It is \emph{adequate} when the residuals have mean zero,
 constant variance and no autocorrelation, i.e.\ they are white noise: nothing predictable is left
-\ts{24}{12}{31:59}\ts{24}{12}{33:03}. If in addition they are Gaussian, the model delivers not only point
+\ts{24}{12}{31:59}. If in addition they are Gaussian, the model delivers not only point
 forecasts but valid \emph{prediction intervals} \ts{24}{12}{34:03}. The ACF of the residuals, and the
 Box--Pierce test on it, are therefore the standard diagnostic: a model whose residuals still show
 significant autocorrelation ``is not done yet'' \ts{24}{12}{38:24}. The flip side, developed in
@@ -200,11 +200,11 @@ $\E[\eta_tV_s]=0$ for all $t,s$ \ts{24}{12}{38:24}\ts{13}{8}{31:40}.
 The theorem says that once the deterministic part is removed, \emph{every} stationary series is a moving
 average of white noise, possibly of infinite order. The white noise $\eta_t=X_t-P(X_t\mid X_{t-1},X_{t-2},\dots)$
 is the \emph{innovation}: the part of $X_t$ that cannot be predicted linearly from the past, the ``news'' arriving
-at $t$ \ts{13}{11}{43:32}\ts{13}{11}{44:38}. An example of a linearly deterministic process is a
+at $t$ \ts{13}{11}{43:32}. An example of a linearly deterministic process is a
 sinusoid, $V_t=A_1\cos\omega t+A_2\sin\omega t$ with random $A_1,A_2$: it obeys the exact recursion
 $V_t=2\cos\omega\,V_{t-1}-V_{t-2}$ (from $\cos\omega t=2\cos\omega\cos\omega(t-1)-\cos\omega(t-2)$), so two
 observations fix it for ever; sums of sinusoids of different frequencies (a Fourier series) are also linearly
-predictable \ts{24}{12}{40:30}\ts{24}{12}{41:32}\ts{24}{12}{42:32}.
+predictable \ts{24}{12}{40:30}.
 
 \begin{proof}[Sketch of proof]
 Work in the Hilbert space $L^2$ of square-integrable random variables with inner product $\langle U,W\rangle=\E[UW]$.
@@ -245,7 +245,7 @@ so the first $p$ rows reach back before the start of the response. The linear pr
 \]
 the hat matrix of \cref{ch05:prop-hat}. The residual series is then modelled as a moving average
 $\varepsilon_t^{(p)}=\sum_i\psi_i\eta_{t-i}$, giving estimates of the $\psi_i$ and of the innovations $\eta_t$
-\ts{24}{12}{45:41}\ts{24}{12}{46:45}. Two diagnostics decide whether to stop:
+\ts{24}{12}{45:41}. Two diagnostics decide whether to stop:
 \begin{itemize}
   \item the residual should be orthogonal to lags of $Y$ beyond $p$; if it is not, increase $p$;
   \item the estimated innovations should look like white noise (\cref{ch09:sec-sacf}); if not, change the
@@ -266,7 +266,7 @@ and factorise like ordinary polynomials in a complex variable $z$, and the Wold 
 The \emph{impulse response function} is $\mathrm{IR}(j)=\partial X_t/\partial\eta_{t-j}=\psi_j$, the effect of a
 shock $j$ periods ago on the process today \ts{24}{12}{54:20}; graphed against $j$ it displays delayed
 responses. If the Federal Reserve chairman changes interest rates and the variable of interest is GNP,
-$\psi_j$ is the effect $j$ quarters later \ts{13}{8}{43:11}\ts{13}{8}{44:11}. The \emph{long-run cumulative response} is
+$\psi_j$ is the effect $j$ quarters later \ts{13}{8}{43:11}. The \emph{long-run cumulative response} is
 $\sum_j\psi_j=\psi(1)$, the level to which the process eventually moves after one unit innovation
 \ts{24}{12}{56:28}\ts{13}{8}{45:11}.
 
@@ -275,7 +275,7 @@ $\psi^{-1}(L)\psi(L)=L^0$, then for $V_t=0$
 \begin{equation}\label{ch09:eq-arinf}
   \psi^{-1}(L)X_t=\eta_t\quad\Longleftrightarrow\quad X_t=\sum_{i\ge1}\pi_iX_{t-i}+\eta_t,\qquad \pi_i=-\psi^*_i,
 \end{equation}
-an infinite-order autoregression \ts{24}{12}{57:31}\ts{24}{12}{58:35}\ts{13}{8}{46:17}. The coefficients of the
+an infinite-order autoregression \ts{24}{12}{57:31}\ts{13}{8}{46:17}. The coefficients of the
 least-squares projection on $p$ lags in \cref{ch09:sec-wold-recipe} converge to these $\pi_i$
 \ts{13}{8}{47:20}. The basic tool for inverting is the geometric series: for a complex number $\lambda$ with
 $|\lambda|>1$,
@@ -298,7 +298,7 @@ $\phi(L)=1-\phi_1L-\dots-\phi_pL^p$ and $\theta(L)=1+\theta_1L+\dots+\theta_qL^q
 \[
   \phi(L)(X_t-\mu)=\theta(L)\eta_t,\qquad\text{and}\qquad X_t=\mu+\psi(L)\eta_t,\quad \psi(L)=\frac{\theta(L)}{\phi(L)}
 \]
-is the Wold decomposition, when $\phi(L)$ is invertible \ts{24}{12}{59:35}\ts{13}{8}{46:17}\ts{13}{8}{48:22}.
+is the Wold decomposition, when $\phi(L)$ is invertible \ts{24}{12}{59:35}\ts{13}{8}{46:17}.
 \end{definition}
 
 The sign convention of the moving-average part is ``$+\theta_j$'' (as in R); some texts use ``$-\theta_j$''.
@@ -311,7 +311,7 @@ Set $q=0$: $\phi(L)(X_t-\mu)=\eta_t$, that is,
   X_t=c+\sum_{j=1}^p\phi_jX_{t-j}+\eta_t,\qquad c=\mu\,\phi(1)=\mu\Bigl(1-\sum_j\phi_j\Bigr),
 \end{equation}
 a \emph{linear regression of the series on its own lags}, with white-noise errors
-\ts{24}{12}{1:01:47}\ts{24}{12}{1:02:49}\ts{13}{8}{50:34}. (Taking expectations of \eqref{ch09:eq-arp} gives $\mu=c+\mu\sum\phi_j$,
+\ts{24}{12}{1:01:47}\ts{13}{8}{50:34}. (Taking expectations of \eqref{ch09:eq-arp} gives $\mu=c+\mu\sum\phi_j$,
 whence $c=\mu\phi(1)$.)
 
 \begin{theorem}[Stationarity of AR($p$)]\label{ch09:thm-ar-stat}
@@ -325,7 +325,7 @@ Factorise $\phi(z)=\prod_{j=1}^p(1-z/\lambda_j)$ (the constant term is~1). If al
 each factor is inverted by the geometric series \eqref{ch09:eq-geom}, whose coefficients $\lambda_j^{-i}$ decay
 geometrically, and the product $\phi^{-1}(L)=\prod_j(1-L/\lambda_j)^{-1}$ of absolutely summable series is
 absolutely summable. Thus $\psi(L)=\phi^{-1}(L)$ has $\sum|\psi_i|<\infty$ and $X_t=\mu+\psi(L)\eta_t$ is
-covariance stationary \ts{24}{12}{1:05:00}\ts{24}{12}{1:07:09}. Conversely, a root with $|\lambda|<1$ makes
+covariance stationary \ts{24}{12}{1:05:00}. Conversely, a root with $|\lambda|<1$ makes
 the coefficients $\lambda^{-i}$ grow, so the expansion diverges (the process is explosive), and a root on
 the circle $|\lambda|=1$ gives a unit root (the random walk is the case $p=1$, $\lambda=1$), whose variance
 grows with $t$; in neither case is there a stationary solution driven by the past.
@@ -369,7 +369,7 @@ $X_t-\mu=\sum_{j\ge0}\phi^j\eta_{t-j}$ (the Wold decomposition, $\psi_j=\phi^j$)
   \E[X_t]=\mu,\qquad \gamma(0)=\sigma_X^2=\frac{\sigma^2}{1-\phi^2},\qquad
   \gamma(j)=\phi^{\,j}\,\sigma_X^2,\qquad \rho(j)=\phi^{\,j}
 \end{equation}
-\ts{24}{12}{1:08:12}\ts{13}{8}{56:46}\ts{13}{8}{58:54}. (Multiply $X_t-\mu=\phi(X_{t-1}-\mu)+\eta_t$ by $X_{t-j}-\mu$
+\ts{24}{12}{1:08:12}\ts{13}{8}{56:46}. (Multiply $X_t-\mu=\phi(X_{t-1}-\mu)+\eta_t$ by $X_{t-j}-\mu$
 and take expectations, or sum the geometric series.) The variance exceeds the innovation variance $\sigma^2$ for every
 $\phi\neq0$, and depends on $\phi$ only through $\phi^2$: positive and negative autocorrelation inflate it equally
 \ts{13}{8}{57:50}. The regimes:
@@ -420,7 +420,7 @@ transition is an AR(1) with $\phi=e^{-\kappa h}$ and noise variance $\sigma_0^2(
 $\gamma(0)=\sigma_0^2/(2\kappa)$ in \eqref{ch09:eq-ar1}. The half-life of a shock is
 $h\ln2/(-\ln\phi)$. Candidates for such a model are variables that should not wander too far: interest
 rates, interest-rate spreads, real exchange rates and valuation ratios (dividend-to-price, earnings-to-price)
-\ts{24}{12}{1:10:15}\ts{24}{12}{1:11:16}\ts{13}{8}{58:54}. The caveat of the 2013 lecture: this is usually true over short
+\ts{24}{12}{1:10:15}\ts{13}{8}{58:54}. The caveat of the 2013 lecture: this is usually true over short
 periods; over long ones the level $\mu$ to which the series reverts drifts, so the model must be re-estimated
 \ts{13}{8}{59:59}.
 \end{finance}
@@ -431,7 +431,7 @@ $\E[\eta_t(X_{t-j}-\mu)]=0$ for $j\ge1$ and $=\sigma^2$ for $j=0$ (the noise is 
 \begin{equation}\label{ch09:eq-yw}
   \gamma(j)=\sum_{i=1}^p\phi_i\,\gamma(j-i)+\sigma^2\,\delta_{j0},\qquad j=0,1,2,\dots
 \end{equation}
-\ts{24}{12}{1:11:16}\ts{24}{12}{1:12:16}\ts{13}{8}{1:02:01} (the slide misprints the second lag as $X_{t-1}$; the
+\ts{24}{12}{1:11:16}\ts{13}{8}{1:02:01} (the slide misprints the second lag as $X_{t-1}$; the
 lecturer corrected it aloud). Dividing by $\gamma(0)$, $\rho(j)=\sum_i\phi_i\rho(j-i)$ for $j\ge1$. The equations
 $j=1,\dots,p$ form the \emph{Yule--Walker system}
 \begin{equation}\label{ch09:eq-ywsys}
@@ -755,7 +755,7 @@ For Gaussian innovations $\eta_t\sim N(0,\sigma^2)$ i.i.d., the parameters are e
         $\ell=-\frac n2\log(2\pi\sigma^2)-\frac1{2\sigma^2}\sum_{t=p+1}^{T}\bigl(x_t-c-\sum_j\phi_jx_{t-j}\bigr)^2$ with $n=T-p$:
         conditional maximum likelihood \emph{is} least squares of $x_t$ on its $p$ lags (\cref{ch09:sec-wold-recipe}). This is
         the \emph{limited-information} (LIML) method, and the resulting $\hat\sigma^2=\mathrm{RSS}/n$ is
-        biased downwards by the same degrees-of-freedom argument as in regression \ts{13}{8}{6:10}\ts{13}{8}{7:11}. The
+        biased downwards by the same degrees-of-freedom argument as in regression \ts{13}{8}{6:10}. The
         \emph{full-information} (FIML) method adds the log-density of the first $p$ values under their stationary distribution,
         which matters when $T$ is small or the roots are close to the unit circle.
   \item \emph{MA and ARMA.} The likelihood is not a regression, because the past innovations are not observed. LIML sets the
@@ -811,19 +811,19 @@ With $\bm\mu=\E[\bm X_t]$ define the \emph{covariance matrix} $\Gamma_0=\E[(\bm 
 variances of the components on the diagonal), the \emph{lag-$k$ cross-covariance matrix}
 $\Gamma_k=\E[(\bm X_t-\bm\mu)(\bm X_{t-k}-\bm\mu)\T]$, whose $(j,j')$ entry is $\Cov(X_{j,t},X_{j',t-k})$, and the
 \emph{correlation matrices} $R_k=D^{-1/2}\Gamma_kD^{-1/2}$ with $D=\mathrm{diag}(\Gamma_0)$
-\ts{13}{11}{31:47}\ts{13}{11}{33:03}\ts{13}{11}{35:02}. The matrix $\Gamma_0$ is symmetric, but $\Gamma_k$ for $k\ne0$ is
+\ts{13}{11}{31:47}. The matrix $\Gamma_0$ is symmetric, but $\Gamma_k$ for $k\ne0$ is
 \emph{not}, and $\Gamma_{-k}=\Gamma_k\T$: the lags of series $j'$ may be correlated with series $j$ without the converse
 \ts{13}{11}{36:04}. If $[\Gamma_k]_{jj'}\ne0$ for some $k>0$ one says that $X_{j'}$ \emph{leads} $X_j$ (its past carries information
-about $X_j$); if each leads the other there is \emph{feedback} \ts{13}{11}{37:08}\ts{13}{11}{38:13}. This is the idea of
+about $X_j$); if each leads the other there is \emph{feedback} \ts{13}{11}{37:08}. This is the idea of
 \emph{Granger causality} (Granger and Engle received the Nobel prize for it): lags of one variable help predict another. It is
 predictability, not causation in a philosophical sense.
 
 The \emph{multivariate Wold theorem} holds verbatim with matrices:
 $\bm X_t=\bm V_t+\sum_{k\ge0}\Psi_k\bm\eta_{t-k}$ with $\Psi_0=I_m$, $\sum_k\Psi_k\Psi_k\T$ convergent, $\bm V_t$ linearly
 deterministic, and $\bm\eta_t$ multivariate white noise: $\E[\bm\eta_t]=\bm 0$, $\Var\bm\eta_t=\Sigma$ (positive semi-definite),
-$\Cov(\bm\eta_t,\bm\eta_{t-k})=0$ for $k\ne0$, uncorrelated with $\bm V$ \ts{13}{11}{39:18}\ts{13}{11}{41:24}. The
+$\Cov(\bm\eta_t,\bm\eta_{t-k})=0$ for $k\ne0$, uncorrelated with $\bm V$ \ts{13}{11}{39:18}. The
 innovation is $\bm\eta_t=\bm X_t-\E[\bm X_t\mid\mathcal F_{t-1}]$ in the Gaussian case, where $\mathcal F_{t-1}$ is the information available
-before time $t$: what is new at $t$ \ts{13}{11}{42:25}\ts{13}{11}{43:32}.
+before time $t$: what is new at $t$ \ts{13}{11}{42:25}.
 
 \subsection{VAR($p$) models and their stationarity}\label{ch09:sec-var-def}
 \begin{definition}[VAR($p$)]\label{ch09:def-var}
@@ -836,7 +836,7 @@ $N(\bm 0,\Sigma)$ \ts{13}{11}{45:39}.
 \end{definition}
 Component $j$ is an AR($p$) of its own lags \emph{plus} lag regressors on all the other series:
 $X_{j,t}=c_j+\sum_{k=1}^p[\Phi_k]_{jj}X_{j,t-k}+\sum_{j'\ne j}\sum_{k=1}^p[\Phi_k]_{jj'}X_{j',t-k}+\eta_{j,t}$: exchange rates
-that co-move, macro variables that respond to each other \ts{13}{11}{46:43}\ts{13}{11}{47:43}.
+that co-move, macro variables that respond to each other \ts{13}{11}{46:43}.
 
 \paragraph{VAR(1) form.} Any VAR($p$) is a VAR(1) in higher dimension \ts{13}{11}{48:51}. Stack
 \[
@@ -849,7 +849,7 @@ Then
   \bm D=\begin{pmatrix}\bm C\\ \bm 0\\ \vdots\\ \bm 0\end{pmatrix},\
   \bm F_t=\begin{pmatrix}\bm\eta_t\\ \bm 0\\ \vdots\\ \bm 0\end{pmatrix},
 \end{equation}
-with $A$ the ($mp\times mp$) \emph{companion matrix} \ts{13}{11}{50:56}\ts{13}{11}{52:00}.
+with $A$ the ($mp\times mp$) \emph{companion matrix} \ts{13}{11}{50:56}.
 
 \begin{proposition}[Stationarity of a VAR]\label{ch09:prop-companion}
 The following are equivalent:
@@ -873,8 +873,8 @@ If (i) holds, $\bm Z_t-\bm\mu_Z=\sum_{k\ge0}A^k\bm F_{t-k}$ converges because th
 geometrically), and reading off the first block gives the expansion. Taking expectations in \eqref{ch09:eq-var} gives $\bm\mu=\bm C+\sum\Phi_j\bm\mu$.
 \end{proof}
 The characteristic polynomial $\det(I_m-\Phi_1z-\dots-\Phi_pz^p)$ has degree $mp$, hence $mp$ roots
-\ts{13}{11}{53:06}\ts{13}{11}{54:08}; the mean-adjusted series satisfies $\bm X_t-\bm\mu=\sum_j\Phi_j(\bm X_{t-j}-\bm\mu)+\bm\eta_t$
-\ts{13}{11}{55:13}\ts{13}{11}{56:18}. The scalar case $m=1$ is \cref{ch09:thm-ar-stat}, and its proof-by-eigenvalue is
+\ts{13}{11}{53:06}; the mean-adjusted series satisfies $\bm X_t-\bm\mu=\sum_j\Phi_j(\bm X_{t-j}-\bm\mu)+\bm\eta_t$
+\ts{13}{11}{55:13}. The scalar case $m=1$ is \cref{ch09:thm-ar-stat}, and its proof-by-eigenvalue is
 \cref{ch09:rem-companion}.
 
 \begin{example}[Moments of a VAR(1)]\label{ch09:ex-var1}
@@ -912,13 +912,13 @@ Compute
 \subsection{VAR as a multivariate regression: estimation}\label{ch09:sec-varest}
 Given $n$ observations $\bm x_1,\dots,\bm x_n$ and $p$ pre-sample values, define for each component $j$ the regression
 $\bm y^{(j)}=Z\bm\beta^{(j)}+\bm\varepsilon^{(j)}$, where $\bm y^{(j)}=(x_{j,1},\dots,x_{j,n})\T$ and the \emph{same}
-$n\times(mp+1)$ design matrix $Z$ has rows $(1,\bm x_{t-1}\T,\dots,\bm x_{t-p}\T)$ \ts{13}{11}{57:18}\ts{13}{11}{58:32}. The $\bm\beta^{(j)}$ contain the
+$n\times(mp+1)$ design matrix $Z$ has rows $(1,\bm x_{t-1}\T,\dots,\bm x_{t-p}\T)$ \ts{13}{11}{57:18}. The $\bm\beta^{(j)}$ contain the
 $j$th rows of $\bm C,\Phi_1,\dots,\Phi_p$. Stacking columns,
 \begin{equation}\label{ch09:eq-mvreg}
   Y=ZB+E,\qquad Y=[\bm y^{(1)}\cdots\bm y^{(m)}],\ B=[\bm\beta^{(1)}\cdots\bm\beta^{(m)}],
 \end{equation}
 a multivariate regression, called \emph{seemingly unrelated regressions} (SUR) in econometrics because the $m$ equations are
-linked only through the correlation $\Sigma$ of their errors \ts{13}{11}{59:41}\ts{13}{11}{1:01:51}\ts{13}{11}{1:03:53}.
+linked only through the correlation $\Sigma$ of their errors \ts{13}{11}{59:41}.
 
 \paragraph{Component-wise least squares.} Fit each equation separately,
 $\hat{\bm\beta}^{(j)}=(Z\T Z)^{-1}Z\T\bm y^{(j)}$, that is $\hat B=(Z\T Z)^{-1}Z\T Y$, take the residual matrix
@@ -933,13 +933,13 @@ For a VAR($p$) with unrestricted coefficient matrices,
       whole system with any innovation covariance $\Sigma$, hence is BLUE (Gauss--Markov, \cref{ch05:thm-gm}, and \cref{ch05:sec-gls});
   \item with Gaussian
       innovations it is the maximum-likelihood estimator of $B$, and the MLE of $\Sigma$ is $\tilde\Sigma=\hat E\T\hat E/n$
-      \ts{13}{11}{1:06:58}\ts{13}{11}{1:08:00}.
+      \ts{13}{11}{1:06:58}.
 \end{enumerate}
 \end{theorem}
 \begin{proof}
 Let $\otimes$ be the Kronecker product ($A\otimes B$ is the block matrix with blocks $a_{ij}B$; $(A\otimes B)\T=A\T\otimes B\T$ and
 $(A\otimes B)(C\otimes D)=AC\otimes BD$) and $\mathrm{vec}$ the operator that stacks the columns of a matrix into one vector
-\ts{13}{11}{1:09:04}\ts{13}{11}{1:10:04}. Put $\bm y=\mathrm{vec}\,Y$, $\mathcal X=I_m\otimes Z$, $\bm\beta^*=\mathrm{vec}\,B$,
+\ts{13}{11}{1:09:04}. Put $\bm y=\mathrm{vec}\,Y$, $\mathcal X=I_m\otimes Z$, $\bm\beta^*=\mathrm{vec}\,B$,
 $\bm\varepsilon=\mathrm{vec}\,E$. Then $\bm y=\mathcal X\bm\beta^*+\bm\varepsilon$ with $\Cov\bm\varepsilon=\Sigma\otimes I_n$, and
 $(\Sigma\otimes I_n)^{-1}=\Sigma^{-1}\otimes I_n$. The GLS estimator is
 $[\mathcal X\T(\Sigma^{-1}\otimes I_n)\mathcal X]^{-1}\mathcal X\T(\Sigma^{-1}\otimes I_n)\bm y$ with
@@ -948,15 +948,15 @@ $[\mathcal X\T(\Sigma^{-1}\otimes I_n)\mathcal X]^{-1}\mathcal X\T(\Sigma^{-1}\o
   \mathcal X\T(\Sigma^{-1}\otimes I_n)=\Sigma^{-1}\otimes Z\T ,
 \]
 so it equals $[\Sigma\otimes(Z\T Z)^{-1}](\Sigma^{-1}\otimes Z\T)\bm y=[I_m\otimes(Z\T Z)^{-1}Z\T]\bm y=\mathrm{vec}\bigl((Z\T Z)^{-1}Z\T Y\bigr)$:
-$\Sigma$ cancels and one recovers component-wise OLS \ts{13}{11}{1:11:06}\ts{13}{11}{1:12:08}. This proves (i).
+$\Sigma$ cancels and one recovers component-wise OLS \ts{13}{11}{1:11:06}. This proves (i).
 For (ii), the Gaussian log-likelihood is
 \[
   \ell(B,\Sigma)=-\tfrac{nm}2\log2\pi-\tfrac n2\log|\Sigma|-\tfrac12\mathrm{tr}\bigl[\Sigma^{-1}(Y-ZB)\T(Y-ZB)\bigr]
 \]
-\ts{13}{11}{1:13:12}\ts{13}{11}{1:14:12}. Writing $Y-ZB=\hat E+Z(\hat B-B)$ and using $Z\T\hat E=0$, the trace equals
+\ts{13}{11}{1:13:12}. Writing $Y-ZB=\hat E+Z(\hat B-B)$ and using $Z\T\hat E=0$, the trace equals
 $\mathrm{tr}[\Sigma^{-1}\hat E\T\hat E]+\mathrm{tr}[\Sigma^{-1}(\hat B-B)\T Z\T Z(\hat B-B)]$, and the second term is $\ge0$; so for \emph{every}
 $\Sigma$ the maximum over $B$ is at $\hat B$ (a \emph{concentrated} likelihood, because $\hat B$ does not depend on $\Sigma$
-\ts{13}{11}{1:15:16}\ts{13}{11}{1:16:19}). The remaining function is $-\frac n2[\log|\Sigma|+\mathrm{tr}(\Sigma^{-1}S)]$ with
+\ts{13}{11}{1:15:16}). The remaining function is $-\frac n2[\log|\Sigma|+\mathrm{tr}(\Sigma^{-1}S)]$ with
 $S=\hat E\T\hat E/n$. Let $u_1,\dots,u_m>0$ be the eigenvalues of $\Sigma^{-1/2}S\Sigma^{-1/2}$; then
 $\log|\Sigma|+\mathrm{tr}(\Sigma^{-1}S)=\log|S|+\sum_i(u_i-\log u_i)\ge\log|S|+m$, since $u-\log u\ge1$, with equality iff all $u_i=1$,
 i.e.\ $\Sigma=S$. (This is the Anderson--Olkin result quoted in the lecture \ts{13}{11}{1:16:19}.)
@@ -978,7 +978,7 @@ identical (2013 notes, last slide).
 
 \subsection{Impulse responses and a macroeconomic VAR}\label{ch09:sec-irf}
 The matrices $\Psi_k$ of the Wold expansion are the \emph{impulse response functions}: $[\Psi_k]_{jj'}$ is the effect on variable $j$, $k$ periods
-later, of a unit innovation in variable $j'$ \ts{13}{11}{1:21:42}\ts{13}{11}{1:22:42}\ts{13}{11}{1:23:43}. Because $\Sigma$ is not
+later, of a unit innovation in variable $j'$ \ts{13}{11}{1:21:42}. Because $\Sigma$ is not
 diagonal the innovations are correlated, and R's \texttt{irf} plots the \emph{orthogonalised} responses (shocks made uncorrelated through a Cholesky
 factor of $\Sigma$, which depends on the ordering of the variables; a point the course does not discuss).
 
@@ -988,22 +988,22 @@ business fixed investment, unemployment, trade-weighted dollar, S\&P~500, commod
 the effect of policy variables such as the Federal Funds rate. The case study downloads monthly series from FRED with
 \texttt{quantmod} (UNRATE, FEDFUNDS, TB3MS, CPIAUCSL, M1SL, GDPDEF, GDP, GPDI, TWEXBMTH, and the S\&P~500 from Yahoo) and fits VAR models with the
 \texttt{vars} package to three of them: the unemployment rate, the Federal Funds rate and the CPI, over 1960--2000 (492 months)
-\ts{13}{11}{1:18:29}\ts{13}{11}{1:19:33}\ts{13}{11}{1:20:38}.
+\ts{13}{11}{1:18:29}.
 \begin{itemize}
   \item \emph{Levels.} \texttt{VARselect} (up to 12 lags) returns $p=12,5,2,12$ for AIC, HQ, SC (=BIC), FPE. The VAR(2) chosen by SC has
         characteristic-root moduli $1.002,\,0.986,\,0.952,\,0.468,\,0.331,\,0.084$: the largest exceeds 1, so the fitted model is
-        \emph{non-stationary} \ts{13}{12}{0:00}\ts{13}{12}{1:08}. (Here ``roots'' are eigenvalues of the companion matrix, stationary when $<1$;
+        \emph{non-stationary} \ts{13}{12}{0:00}. (Here ``roots'' are eigenvalues of the companion matrix, stationary when $<1$;
         \cref{ch09:rem-companion}.)
   \item \emph{Differences.} Removing the random-walk component by first differences, the ACF and PACF show strong self-correlation and some cross-correlation between
-        unemployment and Fed funds \ts{13}{12}{2:11}\ts{13}{12}{3:11}\ts{13}{12}{4:11}. \texttt{VARselect} gives $p=12,3,3,12$; the VAR(3) has
+        unemployment and Fed funds \ts{13}{12}{2:11}. \texttt{VARselect} gives $p=12,3,3,12$; the VAR(3) has
         all root moduli $<0.84$ (stationary). The dependent variable is the monthly change; the lecture's reading of the Fed funds equation
-        \ts{13}{12}{6:15}\ts{13}{12}{7:21}:
+        \ts{13}{12}{6:15}:
         \[
           \Delta\mathrm{FF}_t=-0.71\,\Delta\mathrm{UN}_{t-1}+0.37\,\Delta\mathrm{FF}_{t-1}-0.18\,\Delta\mathrm{FF}_{t-2}+\dots\quad(t=-4.9,\ 8.0,\ -3.7).
         \]
         If unemployment rises, the Fed lowers rates the next period; a rate change tends to be followed by another in the same direction
         (the Fed does not want to shock the economy), and since $0.37\,x_{t-1}-0.18\,x_{t-2}=0.19\,x_{t-1}+0.18\,(x_{t-1}-x_{t-2})$ the
-        negative second lag is an \emph{acceleration} term \ts{13}{12}{8:21}\ts{13}{12}{9:24}\ts{13}{12}{10:30}. The CPI equation is dominated by its own lags
+        negative second lag is an \emph{acceleration} term \ts{13}{12}{8:21}. The CPI equation is dominated by its own lags
         ($0.42$, $t=9.5$, and $0.29$ at lag~3, $t=6.7$), the unemployment equation by lags 2 and 3 of itself; $R^2$ are $0.12$ (unemployment),
         $0.23$ (Fed funds), $0.49$ (CPI); the residual correlation between unemployment and Fed funds is $-0.20$.
   \item \emph{Impulse responses} (bootstrap $95\%$ bands, 100 runs) \ts{13}{11}{1:22:42}. Levels VAR: after a rise in unemployment the Fed funds rate
@@ -1020,12 +1020,12 @@ Three variables are far too few for a structural model of the economy: the lectu
 \section{Cointegration}\label{ch09:sec-coint}
 
 Differencing removes non-stationarity but discards information about the \emph{levels}. Cointegration is the framework that keeps it
-\ts{13}{12}{10:30}\ts{13}{12}{11:36}.
+\ts{13}{12}{10:30}.
 
 \subsection{Definition and examples}
 A process $\{\bm X_t\}$ is \emph{integrated of order $d$}, $I(d)$, if $(1-L)^d\bm X_t$ is stationary. If it has a VAR representation
 $\Phi(L)\bm X_t=\bm\eta_t$ then $\Phi(L)=(1-L)^d\Phi^*(L)$ with $\Phi^*$ describing the stationary VAR($p-d$) of $\Delta^d\bm X_t$
-\ts{13}{12}{12:43}\ts{13}{12}{13:43}. The point is that all the components may be $I(1)$ without the vector being ``jointly'' $I(1)$: linear
+\ts{13}{12}{12:43}. The point is that all the components may be $I(1)$ without the vector being ``jointly'' $I(1)$: linear
 combinations of the levels may be stationary \ts{13}{12}{14:47}.
 
 \begin{definition}[Cointegration]\label{ch09:def-coint}
@@ -1036,7 +1036,7 @@ $x_1=-(\beta_2x_2+\dots)$ with a stationary \emph{disequilibrium error} (cointeg
 \end{definition}
 
 \begin{finance}[Where cointegration appears]\label{ch09:fin-coint}
-Examples listed in the lecture \ts{13}{12}{16:49}\ts{13}{12}{17:50}: the term structure of interest rates (the level of rates is non-stationary, the
+Examples listed in the lecture \ts{13}{12}{16:49}: the term structure of interest rates (the level of rates is non-stationary, the
 \emph{spreads} between maturities are stationary: expectations hypothesis); purchasing-power parity (exchange rate and price levels of two countries: otherwise there would be arbitrage);
 money demand (money, income, prices, interest rates); covered interest-rate parity (spot and forward rates); the law of one price (identical or equivalent
 assets that must be valued alike: spot and futures, the same asset on two venues). In trading, a cointegrated pair is the basis of
@@ -1045,17 +1045,17 @@ assets that must be valued alike: spot and futures, the same asset on two venues
 
 \subsection{The error-correction (VECM) representation}\label{ch09:sec-vecm}
 Let $\bm X_t$ follow a VAR($p$) \eqref{ch09:eq-var} and be $I(1)$. Subtract $\bm X_{t-1}$ from both sides, then add and subtract
-$(\Phi_1-I)\bm X_{t-2}$, then $(\Phi_2+\Phi_1-I)\bm X_{t-3}$, and so on \ts{13}{12}{27:08}\ts{13}{12}{28:12}\ts{13}{12}{29:13}. The result is
+$(\Phi_1-I)\bm X_{t-2}$, then $(\Phi_2+\Phi_1-I)\bm X_{t-3}$, and so on \ts{13}{12}{27:08}. The result is
 \begin{equation}\label{ch09:eq-vecm}
   \begin{gathered}
   \Delta\bm X_t=\bm C+\Pi\,\bm X_{t-1}+\Gamma_1\Delta\bm X_{t-1}+\dots+\Gamma_{p-1}\Delta\bm X_{t-p+1}+\bm\eta_t,\\
   \Pi=\Phi_1+\dots+\Phi_p-I_m,\qquad \Gamma_k=-\sum_{j=k+1}^p\Phi_j,
   \end{gathered}
 \end{equation}
-the \emph{vector error-correction model} (VECM) \ts{13}{12}{30:14}\ts{13}{12}{31:14}. (Proof: for $p=2$, $\bm X_t=\bm C+\Phi_1\bm X_{t-1}+\Phi_2\bm X_{t-2}+\bm\eta_t$ is written
+the \emph{vector error-correction model} (VECM) \ts{13}{12}{30:14}. (Proof: for $p=2$, $\bm X_t=\bm C+\Phi_1\bm X_{t-1}+\Phi_2\bm X_{t-2}+\bm\eta_t$ is written
 $\bm X_{t-2}=\bm X_{t-1}-\Delta\bm X_{t-1}$ in the last term, giving $\Delta\bm X_t=\bm C+(\Phi_1+\Phi_2-I)\bm X_{t-1}-\Phi_2\Delta\bm X_{t-1}+\bm\eta_t$; the general case
 follows by induction.) Everything in \eqref{ch09:eq-vecm} is $I(0)$ except possibly $\Pi\bm X_{t-1}$, which must therefore be stationary too: it contains the
-cointegrating combinations. Since $\bm X$ has unit roots, $\Pi$ is singular. Three cases \ts{13}{12}{32:19}\ts{13}{12}{33:19}:
+cointegrating combinations. Since $\bm X$ has unit roots, $\Pi$ is singular. Three cases \ts{13}{12}{32:19}:
 \begin{itemize}
   \item $\mathrm{rank}\,\Pi=0$, $\Pi=0$: no cointegration; model the differences by a stationary VAR($p-1$);
   \item $\mathrm{rank}\,\Pi=m$: $\bm X$ is itself stationary (no unit roots);
@@ -1101,7 +1101,7 @@ For the pair of \cref{ch09:ex-coint}
 \subsection{Estimation and tests for the cointegration rank}\label{ch09:sec-cointest}
 Sims, Stock and Watson (1990) and Park and Phillips (1989) prove that least squares applied to the original VAR in \emph{levels}
 gives consistent estimates with the same asymptotic distributions as maximum likelihood, and the reduced-rank constraints on $\Pi$ hold
-asymptotically: no new tool is needed for estimation \ts{13}{12}{34:22}\ts{13}{12}{35:33}\ts{13}{12}{36:40}. For inference on the \emph{rank}
+asymptotically: no new tool is needed for estimation \ts{13}{12}{34:22}. For inference on the \emph{rank}
 $r$, Johansen (1991) developed maximum likelihood by reduced-rank regression for Gaussian innovations, following Banerjee and Hendry's use of the
 concentrated likelihood \ts{13}{12}{37:43}. It gives likelihood-ratio tests of the number of cointegrating vectors: Johansen's \emph{trace} statistic
 $-T\sum_{i>r}\log(1-\hat\lambda_i)$ (a sum over the smallest eigenvalues, testing rank $\le r$) and his \emph{maximum-eigenvalue} statistic
@@ -1114,12 +1114,12 @@ to the residual (with different critical values).
 The lecture's example of cointegration uses futures on the CME from the Energy Information Administration: WTI crude oil (CL, quoted in dollars per barrel), RBOB
 gasoline and heating oil (both in cents per gallon), from 2006 to 2013, first-month contracts. A refinery ``cracks'' crude oil into gasoline, heating oil, jet fuel;
 multiplying the product prices by $42$ gallons per barrel puts inputs and outputs in the same units, and the products stay above crude, so the
-\emph{crack spreads} (product minus crude) represent the value added of refining \ts{13}{12}{18:54}\ts{13}{12}{19:55}\ts{13}{12}{20:56}\ts{13}{12}{22:01}. The class
+\emph{crack spreads} (product minus crude) represent the value added of refining \ts{13}{12}{18:54}. The class
 listed what drives the spread: cost of refining, supply and demand, seasonality (heating oil dearer in winter), and the refiner's profit
-\ts{13}{12}{23:02}\ts{13}{12}{24:05}; the spreads look stationary \ts{13}{12}{25:05}. The case note (not in the download) tests the levels with the Augmented Dickey--Fuller test:
-p-values $0.164$ for the first crude contract and $0.327$ for heating oil, so a unit root cannot be rejected \ts{13}{12}{38:47}\ts{13}{12}{39:49}. In the Johansen
+\ts{13}{12}{23:02}; the spreads look stationary \ts{13}{12}{25:05}. The case note (not in the download) tests the levels with the Augmented Dickey--Fuller test:
+p-values $0.164$ for the first crude contract and $0.327$ for heating oil, so a unit root cannot be rejected \ts{13}{12}{38:47}. In the Johansen
 procedure the test of rank $0$ is almost significant at the $10\%$ level and the test of rank $\le1$ is not, so the rank is at most one, with cointegrating vector $(1,\,1.3,\,-1.7)$ on crude, RBOB and heating oil, so that
-``crude plus gasoline minus heating oil'' is the stationary combination (ignoring seasonality) \ts{13}{12}{41:55}\ts{13}{12}{43:00}. The first-month contract was chosen because
+``crude plus gasoline minus heating oil'' is the stationary combination (ignoring seasonality) \ts{13}{12}{41:55}. The first-month contract was chosen because
 refiners hedge on the futures market, so the analysis addresses hedging refinery risk; longer maturities would be used depending on what one hedges \ts{13}{12}{44:07}.
 The video jumps here between explanations, so the numbers are reported as spoken; commodity models are the subject of \cref{ch:commodities}.
 
@@ -1127,7 +1127,7 @@ The video jumps here between explanations, so the numbers are reported as spoken
 \section{Linear state-space models and the Kalman filter}\label{ch09:sec-ss}
 
 Many models of economics and finance, including ARMA models, regressions with time-varying coefficients and models with hidden factors, can be written in
-one common form that has an exact and cheap recursive solution, the Kalman filter \ts{13}{12}{45:11}\ts{13}{12}{46:12}.
+one common form that has an exact and cheap recursive solution, the Kalman filter \ts{13}{12}{45:11}.
 
 \subsection{The model}\label{ch09:sec-ss-model}
 Let $\bm y_t\in\R^k$ be the observation at time $t$, $\bm s_t\in\R^m$ the (hidden) \emph{state}, $\bm\varepsilon_t\in\R^k$ the observation error and
@@ -1138,9 +1138,9 @@ $\bm\eta_t\in\R^n$ the state innovation. The \emph{linear Gaussian state-space m
 \end{equation}
 the \emph{state} (transition) equation and the \emph{observation} (measurement) equation, with i.i.d.\ noises independent of one another;
 $T_t$ ($m\times m$) is the transition matrix, $R_t$ ($m\times n$, often columns of the identity) selects which components are shocked, $Z_t$ ($k\times m$) the observation
-matrix, $Q_t,H_t$ positive definite \ts{13}{12}{47:18}\ts{13}{12}{48:22}. Jointly,
+matrix, $Q_t,H_t$ positive definite \ts{13}{12}{47:18}. Jointly,
 $\bigl(\bm s_{t+1};\bm y_t\bigr)=\bigl(\begin{smallmatrix}T_t\\ Z_t\end{smallmatrix}\bigr)\bm s_t+\bm u_t$ with
-$\bm u_t=(R_t\bm\eta_t;\bm\varepsilon_t)\sim N(\bm0,\Omega_t)$, $\Omega_t=\mathrm{blockdiag}(R_tQ_tR_t\T,\,H_t)$ \ts{13}{12}{49:25}\ts{13}{12}{50:28}. Often the
+$\bm u_t=(R_t\bm\eta_t;\bm\varepsilon_t)\sim N(\bm0,\Omega_t)$, $\Omega_t=\mathrm{blockdiag}(R_tQ_tR_t\T,\,H_t)$ \ts{13}{12}{49:25}. Often the
 model is time-invariant. The state is not unique: replacing $\bm s_t$ by $M\bm s_t$ ($M$ invertible) and $T_t$ by $MT_tM^{-1}$, $Z_t$ by $Z_tM^{-1}$ gives an equivalent model
 \ts{13}{12}{1:02:59}.
 
@@ -1151,8 +1151,8 @@ model is time-invariant. The state is not unique: replacing $\bm s_t$ by $M\bm s
   \alpha_{t+1}=\alpha_t+\xi_t,\quad\beta_{t+1}=\beta_t+\zeta_t,
 \]
 with $\xi_t\sim N(0,\sigma_\xi^2)$, $\zeta_t\sim N(0,\sigma_\zeta^2)$ and $\varepsilon,\xi,\zeta$ mutually independent, $r_t$ the excess return of the asset and $r_{m,t}$ that of the market
-\ts{13}{12}{48:22}\ts{13}{12}{51:33}. In state-space form $\bm s_t=(\alpha_t,\beta_t)\T$, $T_t=R_t=I_2$, $Q=\mathrm{diag}(\sigma_\xi^2,\sigma_\zeta^2)$,
-$Z_t=(1,\ r_{m,t})$ (a known $1\times2$ row), $H=\sigma_\varepsilon^2$ \ts{13}{12}{52:35}\ts{13}{12}{53:36}.
+\ts{13}{12}{48:22}. In state-space form $\bm s_t=(\alpha_t,\beta_t)\T$, $T_t=R_t=I_2$, $Q=\mathrm{diag}(\sigma_\xi^2,\sigma_\zeta^2)$,
+$Z_t=(1,\ r_{m,t})$ (a known $1\times2$ row), $H=\sigma_\varepsilon^2$ \ts{13}{12}{52:35}.
 
 \paragraph{Regression with time-varying coefficients.} $y_t=\bm x_t\T\bm\beta_t+\varepsilon_t$ with $\beta_{j,t+1}=\beta_{j,t}+\eta_{j,t}$, $\eta_{j,t}\sim N(0,\sigma_j^2)$, is
 $\bm s_t=\bm\beta_t$, $T_t=R_t=I_p$, $Z_t=\bm x_t\T$, $Q=\mathrm{diag}(\sigma_1^2,\dots,\sigma_p^2)$, $H=\sigma^2$ \ts{13}{12}{54:37}. If all $\sigma_j^2=0$ the coefficients are constant
@@ -1161,10 +1161,10 @@ data arrive \ts{13}{12}{55:37}.
 
 \paragraph{AR($p$).} With $\bm s_t=(y_t,y_{t-1},\dots,y_{t-p+1})\T$,
 $\bm s_{t+1}=F\bm s_t+\bm e_1\eta_t$, where $F$ is the companion matrix of \cref{ch09:rem-companion}, $\bm e_1=(1,0,\dots,0)\T$, and $y_t=\bm e_1\T\bm s_t$ (no measurement
-error, $\varepsilon_t=0$) \ts{13}{12}{56:43}\ts{13}{12}{57:46}\ts{13}{12}{58:46}.
+error, $\varepsilon_t=0$) \ts{13}{12}{56:43}.
 
 \paragraph{ARMA($p,q$) (Harvey's representation).} Older estimation methods for moving-average models were hard to implement; the state-space form made exact maximum likelihood routine
-\ts{13}{12}{59:48}\ts{13}{12}{1:00:55}. Put $m=\max(p,q+1)$, $\phi_j=0$ for $j>p$, $\theta_j=0$ for $j>q$, $\theta_0=1$; then $\{y_t\}$ is ARMA($m,m-1$). Define the state by $s_{1,t}=y_t$ and
+\ts{13}{12}{59:48}. Put $m=\max(p,q+1)$, $\phi_j=0$ for $j>p$, $\theta_j=0$ for $j>q$, $\theta_0=1$; then $\{y_t\}$ is ARMA($m,m-1$). Define the state by $s_{1,t}=y_t$ and
 \[
   s_{k,t}=\sum_{i=k}^{m}\phi_i\,y_{t+k-1-i}+\sum_{j=k-1}^{m-1}\theta_j\,\eta_{t+k-1-j},\qquad k=2,\dots,m .
 \]
@@ -1174,7 +1174,7 @@ Rewriting the model equation in terms of $s_{1,t}$ and $s_{2,t}$ and repeating g
   T=\begin{pmatrix}\phi_1&1&0&\cdots&0\\ \phi_2&0&1&&\vdots\\ \vdots&&&\ddots&0\\ \phi_{m-1}&0&\cdots&0&1\\ \phi_m&0&\cdots&0&0\end{pmatrix},\quad
   \bm R=\begin{pmatrix}1\\ \theta_1\\ \vdots\\ \theta_{m-1}\end{pmatrix}
 \end{equation}
-\ts{13}{12}{1:01:55}\ts{13}{12}{1:06:01}. \emph{Check for ARMA(1,1)} ($m=2$): the first row of $\bm s_{t+1}=T\bm s_t+\bm R\eta_{t+1}$ is
+\ts{13}{12}{1:01:55}. \emph{Check for ARMA(1,1)} ($m=2$): the first row of $\bm s_{t+1}=T\bm s_t+\bm R\eta_{t+1}$ is
 $y_{t+1}=\phi y_t+s_{2,t}+\eta_{t+1}$ and the second is $s_{2,t+1}=\theta\eta_{t+1}$, so $s_{2,t}=\theta\eta_t$ and $y_{t+1}=\phi y_t+\eta_{t+1}+\theta\eta_t$, as required. I also
 verified numerically that for ARMA(2,1) with $\phi=(0.5,-0.3)$, $\theta=0.4$ the state-space variances ($\gamma(0)=1.893$, $\gamma(1)=1.036$ in units of $\sigma^2$, from the discrete Lyapunov equation
 $P=TPT\T+\bm R\bm R\T$) agree with the Wold-weight sums. The MA($q$) is the case $p=0$. (The lecture notes give a different MA($q$) form, with the state $(\eta_{t-1},\dots,\eta_{t-q})$ and
@@ -1182,7 +1182,7 @@ $y_t=\sum_j\theta_j s_j+\eta_t$; there the measurement error and the state innov
 
 \subsection{The Kalman filter}\label{ch09:sec-kalman}
 Let $\mathcal F_t=\{\bm y_1,\dots,\bm y_t\}$. The \emph{Kalman filter} is the recursive computation of the conditional laws of the state and of the next observation given the information so far
-\ts{13}{12}{1:07:03}\ts{13}{12}{1:08:10}. Because everything is Gaussian these are determined by means and covariances:
+\ts{13}{12}{1:07:03}. Because everything is Gaussian these are determined by means and covariances:
 \begin{align*}
   \bm s_{t|t}&=\E[\bm s_t\mid\mathcal F_t], & \bm s_{t|t-1}&=\E[\bm s_t\mid\mathcal F_{t-1}], & \bm y_{t|t-1}&=\E[\bm y_t\mid\mathcal F_{t-1}],\\
   P_{t|t}&=\Cov(\bm s_t\mid\mathcal F_t), & P_{t|t-1}&=\Cov(\bm s_t\mid\mathcal F_{t-1}), & F_t&=\Cov(\bm y_t\mid\mathcal F_{t-1}),

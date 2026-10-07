@@ -35,7 +35,7 @@ carried by a \emph{continuous-time} model. Its basic building block is \emph{Bro
 It was found three times, in three unrelated places: by the botanist Robert Brown (1827), watching pollen grains jitter in
 water; by Louis Bachelier (1900), as a model of prices on the Paris exchange; by Albert Einstein (1905), who explained
 Brown's observation by the bombardment of the grain by water molecules and obtained the diffusion law
-$\langle x^2\rangle=2Dt$ \ts{24}{14}{0:00}\ts{13}{17}{18:21}\ts{13}{17}{20:29}. Norbert Wiener, an MIT mathematician,
+$\langle x^2\rangle=2Dt$ \ts{24}{14}{0:00}\ts{13}{17}{18:21}. Norbert Wiener, an MIT mathematician,
 gave it its rigorous foundation in 1923, which is why it is also called the \emph{Wiener process}
 \ts{24}{14}{1:04}\ts{13}{17}{13:43}.
 
@@ -64,7 +64,7 @@ drift and a volatility. This chapter develops the calculus of \emph{sample paths
 \subsection{Brownian motion}
 In discrete time the law of a random walk is specified through its increments: ``each step is $\pm1$ with probability
 $\tfrac12$''. In continuous time there is no next step to describe, so one lists \emph{properties} of increments over all
-intervals and asserts that a process with these properties exists \ts{13}{17}{4:10}\ts{13}{17}{5:18}\ts{13}{17}{9:28}.
+intervals and asserts that a process with these properties exists \ts{13}{17}{4:10}.
 
 \begin{definition}[Standard Brownian motion]\label{ch11:def-bm}
 A stochastic process $\{B(t),\,t\ge0\}$ is a \emph{standard Brownian motion} (Wiener process) if
@@ -73,7 +73,7 @@ A stochastic process $\{B(t),\,t\ge0\}$ is a \emph{standard Brownian motion} (Wi
   \item (stationary Gaussian increments) for $0\le s<t$, $B(t)-B(s)\sim N(0,\,t-s)$;
   \item (independent increments) for $t_1\le t_2\le t_3\le t_4$ the increments $B(t_2)-B(t_1)$ and $B(t_4)-B(t_3)$ are
         independent; more generally the increments over non-overlapping intervals are mutually independent
-        \ts{24}{14}{3:08}\ts{24}{14}{4:13}\ts{24}{14}{5:17}\ts{13}{17}{7:21}.
+        \ts{24}{14}{3:08}\ts{13}{17}{7:21}.
 \end{enumerate}
 \end{definition}
 
@@ -86,7 +86,7 @@ $\sqrt h$ \ts{13}{17}{12:40}.
 
 \begin{coursenote}[Existence, and why the definition is indirect]
 Both lecturers stress that (i)--(iii) are a \emph{list of demands} on a probability law on the space of continuous
-paths, and that the theorem ``such a law exists'' is hard and not proved in the course \ts{13}{17}{6:20}\ts{13}{17}{10:36}\ts{13}{17}{11:37}.
+paths, and that the theorem ``such a law exists'' is hard and not proved in the course \ts{13}{17}{6:20}.
 The sample space is the space of paths $\omega:[0,\infty)\to\R$ itself, with $\Prob$ a measure on it (Wiener measure); a
 path is an outcome, and there is no ``density at $\omega$'' \ts{13}{17}{5:18}. One standard route (Wiener 1923; L\'evy 1948)
 builds $B$ as a uniform limit of random piecewise-linear functions obtained by refining a dyadic grid; another is
@@ -102,7 +102,7 @@ with covariance function $\Cov(B(s),B(t))=\min(s,t)$.
 \end{proposition}
 \begin{proof}
 ($\Rightarrow$) Take $s\le t$. Then $B(t)=B(s)+[B(t)-B(s)]$ with independent summands, so
-$\E[B(s)B(t)]=\E[B(s)^2]+\E[B(s)]\,\E[B(t)-B(s)]=s+0$ \ts{24}{14}{7:33}\ts{24}{14}{8:34}. Any vector $(B(t_1),\dots,B(t_m))$ is a linear
+$\E[B(s)B(t)]=\E[B(s)^2]+\E[B(s)]\,\E[B(t)-B(s)]=s+0$ \ts{24}{14}{7:33}. Any vector $(B(t_1),\dots,B(t_m))$ is a linear
 image of independent normal increments, hence jointly Gaussian.
 ($\Leftarrow$) For $s<t$ the variable $B(t)-B(s)$ is centred normal with variance $t-2s+s=t-s$. For
 $s_1<t_1\le s_2<t_2$, $\Cov(B(t_1)-B(s_1),B(t_2)-B(s_2))=t_1-t_1-s_1+s_1=0$ (write out the four
@@ -115,10 +115,10 @@ overlap, $\Corr(B(s),B(t))=\sqrt{s/t}$ for $s<t$ \ts{24}{14}{8:34}.
 Let $B$ be a standard Brownian motion and $\mathcal F_t=\sigma(B(u),u\le t)$.
 \begin{enumerate}[(i)]
   \item \emph{Mean and variance.} $\E[B(t)]=0$, $\Var B(t)=t$: the standard deviation grows like $\sqrt t$
-        \ts{24}{14}{6:28}\ts{24}{14}{7:33}.
+        \ts{24}{14}{6:28}.
   \item \emph{Markov property.} For $h>0$, $B(t+h)=B(t)+[B(t+h)-B(t)]$ where the bracket is $N(0,h)$ and independent of
         $\mathcal F_t$; hence the law of $B(t+h)$ given $\mathcal F_t$ is $N(B(t),h)$, which depends on the past only through $B(t)$
-        \ts{24}{14}{5:17}\ts{24}{14}{6:28}\ts{24}{14}{11:54}.
+        \ts{24}{14}{5:17}.
   \item \emph{Martingales.} $B(t)$, $B(t)^2-t$ and, for every real $\lambda$, $\exp(\lambda B(t)-\tfrac12\lambda^2t)$ are
         martingales with respect to $\{\mathcal F_t\}$.
   \item \emph{Symmetries.} $-B$; the shifted process $B(t_0+t)-B(t_0)$; the rescaled process $c^{-1/2}B(ct)$ for $c>0$; and the
@@ -173,7 +173,7 @@ $B^x(s+\tau)$ given $B^x(s)=x$ is the Gaussian
   p(y,\tau\mid x)=\frac1{\sqrt{2\pi\sigma^2\tau}}\exp\Bigl(-\frac{(y-x)^2}{2\sigma^2\tau}\Bigr),
 \end{equation}
 that is, $\Prob[B(t)\le c\mid B(s)=x]=\Phi\bigl((c-x)/(\sigma\sqrt{t-s})\bigr)$ in terms of the standard normal cdf $\Phi$ and pdf
-$\varphi$ \ts{24}{14}{9:36}\ts{24}{14}{10:42}\ts{24}{14}{11:54}\ts{24}{14}{13:03}.
+$\varphi$ \ts{24}{14}{9:36}.
 
 \begin{proposition}[Diffusion equation]\label{ch11:prop-heat}
 The kernel \eqref{ch11:eq-kernel} satisfies
@@ -213,7 +213,7 @@ with added variances. In other disciplines \eqref{ch11:eq-heat} is the \emph{hea
 \end{tikzpicture}
 \caption{Diffusion of the density of $B(t)$ (the panels of \file{lec14_3}, which shows $t=1,1.5,\dots,10$). The
 density drops at the centre and rises in the tails; the dots mark the inflection points $y=\pm\sqrt t$, where the curvature
-changes sign, so that $\partial_tp<0$ inside and $>0$ outside \ts{24}{14}{14:08}\ts{24}{14}{15:14}.}\label{ch11:fig-heat}
+changes sign, so that $\partial_tp<0$ inside and $>0$ outside \ts{24}{14}{14:08}.}\label{ch11:fig-heat}
 \end{figure}
 
 \begin{exercise}[PS4 (2024), Problem 2: Brownian scaling]\label{ch11:ex-scaling}
@@ -236,13 +236,13 @@ $B(u)/u\to0$ as $u\to\infty$). Deduce that $B(t)/t\to0$ as $t\to\infty$ from the
 
 Let $X_1,X_2,\dots$ be i.i.d.\ with $\E[X_i]=0$, $\Var X_i=1$, and $S_n=X_1+\dots+X_n$
 (\cref{ch04:sec-rw}). By the central limit theorem (\cref{ch03:thm-clt}), $\Prob[S_n/\sqrt n\le c]\to\Phi(c)$, i.e.\ $\Prob[S_n\le x]\approx\Phi(x/\sqrt n)$
-\ts{24}{14}{17:22}\ts{24}{14}{18:27}. To speak about a \emph{path} rather than one time, rescale space by $\sqrt n$ and time by $n$.
+\ts{24}{14}{17:22}. To speak about a \emph{path} rather than one time, rescale space by $\sqrt n$ and time by $n$.
 
 \begin{definition}[Normalised random walk]\label{ch11:def-bn}
 $B_n(t)=S_{\lfloor nt\rfloor}/\sqrt n$ for $t\ge0$, where $\lfloor nt\rfloor$ is the largest integer $\le nt$; the process jumps at
 $t=k/n$ by $X_k/\sqrt n$ and is constant in between \ts{24}{14}{19:29}. The piecewise-linear version, which joins the points
 $(k/n,S_k/\sqrt n)$ (the version of the 2013 note, ``connect the dots''), is continuous and differs from it by at most
-$\max_{k\le nT}|X_k|/\sqrt n$ on $[0,T]$ \ts{13}{17}{14:56}\ts{13}{17}{16:01}.
+$\max_{k\le nT}|X_k|/\sqrt n$ on $[0,T]$ \ts{13}{17}{14:56}.
 \end{definition}
 
 \begin{coursenote}[Erratum in the 2013 note]
@@ -283,7 +283,7 @@ convergence of the finite-dimensional laws into convergence of laws on path spac
 \end{tikzpicture}
 \caption{Normalised random walks $B_n(t)=S_{\lfloor nt\rfloor}/\sqrt n$ (two independent simulations, seeds fixed). Already at
 $n=150$ the Bernoulli and the Gaussian walk are visually indistinguishable, the point of the animation \file{lec14_4}
-(there up to $n=2000$) \ts{24}{14}{21:46}\ts{24}{14}{22:47}.}\label{ch11:fig-donsker}
+(there up to $n=2000$) \ts{24}{14}{21:46}.}\label{ch11:fig-donsker}
 \end{figure}
 
 \begin{intuition}[Universality: the CLT as a fixed point]
@@ -291,10 +291,10 @@ Only the first two moments of the steps survive in the limit; all the rest (skew
 washed out at rate $1/\sqrt n$. This is the renormalisation-group picture: $S_n/\sqrt n$ is the coarse-graining of
 $S_n$ by a factor $n$, and the Gaussian is the fixed point of this flow, with $\sigma^2$ the only relevant coupling. The
 consequence for modelling is what the lecture emphasised: one may use Brownian motion when the microscopic steps are
-non-Gaussian, provided they have finite variance and are not too dependent \ts{24}{14}{22:47}\ts{24}{14}{23:52}. The 2013
+non-Gaussian, provided they have finite variance and are not too dependent \ts{24}{14}{22:47}. The 2013
 lecture gives the two physical examples: the pollen grain receives a huge number of tiny left/right pushes from
 water molecules (Einstein), and a stock price is pushed up or down by a huge number of tiny buy and sell orders
-\ts{13}{17}{17:19}\ts{13}{17}{18:21}\ts{13}{17}{21:30}\ts{13}{17}{23:45}. The limit fails when the variance is infinite (stable L\'evy
+\ts{13}{17}{17:19}. The limit fails when the variance is infinite (stable L\'evy
 processes with jumps) or when the steps are strongly dependent (long memory, fractional Brownian motion).
 \end{intuition}
 
@@ -321,25 +321,25 @@ of \cref{ch11:sec-bridge} is another example.
 Almost every Brownian path has the following features (2013 lecture): it \emph{crosses the $t$-axis infinitely often}, in
 fact it has zeros accumulating at $t=0$ and at every later zero, and it neither drifts off nor stays near zero; at time $t_0$
 it is $N(0,t_0)$, so it stays ``around'' the curves $\pm\sqrt t$ (typical size $\sqrt{t_0}$, never $100$ times that in
-practice) \ts{13}{17}{25:48}\ts{13}{17}{26:48}. The precise version of ``it does not deviate too much'' is the law of the
+practice) \ts{13}{17}{25:48}. The precise version of ``it does not deviate too much'' is the law of the
 iterated logarithm (not proved in the course): $\limsup_{t\to\infty}B(t)/\sqrt{2t\ln\ln t}=1$ almost surely, so the
 $\sqrt t$ envelope is exceeded infinitely often, but only by slowly growing factors (compare \cref{ch04:sec-rw}).
 
 \subsection{Non-differentiability}
 The path is continuous by definition, but it is nowhere differentiable, which was ``really surprising'' in the words of the 2013 lecture,
-and matters because the whole of classical calculus is built on derivatives \ts{13}{17}{27:48}\ts{13}{17}{28:53}.
+and matters because the whole of classical calculus is built on derivatives \ts{13}{17}{27:48}.
 
 \begin{proposition}[No derivative]\label{ch11:prop-nodiff}
 Fix $t_0\ge0$. With probability one, $B$ is not differentiable at $t_0$. In fact, with probability one there is no
 $t_0$ at which $B$ is differentiable (Paley--Wiener--Zygmund, 1933).
 \end{proposition}
 \begin{proof}[Proof of the first statement]
-The heuristic of the slides \ts{24}{14}{1:02:33}\ts{24}{14}{1:03:39}: the difference quotient $D(\Delta t)=[B(t_0+\Delta t)-B(t_0)]/\Delta t$
+The heuristic of the slides \ts{24}{14}{1:02:33}: the difference quotient $D(\Delta t)=[B(t_0+\Delta t)-B(t_0)]/\Delta t$
 is $N(0,1/\Delta t)$, so for every fixed $M<\infty$, $\Prob(|D|\le M)=\Prob(|N(0,1)|\le M\sqrt{\Delta t})\le M\sqrt{2\Delta t/\pi}\to0$:
 the slope does not settle down; it is of order $(\Delta t)^{-1/2}$ (equivalently $\Delta B=O_P(\sqrt{\Delta t})\gg\Delta t$).
 To make this a proof, note that a finite derivative at $t_0$ forces, for some integers $K,m$, $|B(t_0+s)-B(t_0)|\le Ks$ for all
 $0<s<1/m$; the event $E_{K,m}$ so defined satisfies $\Prob(E_{K,m})\le\Prob(|B(t_0+\delta)-B(t_0)|\le K\delta)\le K\sqrt{2\delta/\pi}$
-for every $\delta<1/m$, hence $\Prob(E_{K,m})=0$; take the countable union over $K,m$ \ts{13}{17}{43:15}\ts{13}{17}{44:19}\ts{13}{17}{45:23}.
+for every $\delta<1/m$, hence $\Prob(E_{K,m})=0$; take the countable union over $K,m$ \ts{13}{17}{43:15}.
 The statement for all $t_0$ simultaneously needs a covering argument and is quoted.
 \end{proof}
 
@@ -354,7 +354,7 @@ The argument above avoids the maximum altogether.
 \subsection{Quadratic variation}
 Let $\Pi=\{0=t_0<t_1<\dots<t_n=T\}$ be a partition of $[0,T]$ with mesh $|\Pi|=\max_j(t_j-t_{j-1})$ and define the
 $\Pi$-quadratic variation
-\ts{24}{14}{1:03:39}\ts{24}{14}{1:04:44}\ts{24}{14}{1:05:45}
+\ts{24}{14}{1:03:39}
 \[
   QV_\Pi([0,T])=\sum_{j=1}^{n}\bigl[B(t_j)-B(t_{j-1})\bigr]^2 .
 \]
@@ -393,9 +393,9 @@ Borel--Cantelli gives almost sure convergence.
 \end{coursenote}
 
 The theorem says that the \emph{sum of squared increments is not random and does not depend on the path}: $[B]_T=T$ for
-almost every path \ts{24}{14}{1:06:57}\ts{24}{14}{1:09:17}. Compare a continuously differentiable function $f$: by the mean value theorem
+almost every path \ts{24}{14}{1:06:57}. Compare a continuously differentiable function $f$: by the mean value theorem
 $\sum_j(f(t_j)-f(t_{j-1}))^2=\sum_jf'(s_j)^2\Delta_j^2\le\max|f'|^2\,|\Pi|\,T\to0$, so its quadratic variation is zero
-\ts{13}{17}{48:29}\ts{13}{17}{49:39}\ts{13}{17}{50:42}\ts{13}{17}{52:44}. Brownian paths ``bounce back and forth too much'': the squared moves
+\ts{13}{17}{48:29}. Brownian paths ``bounce back and forth too much'': the squared moves
 do not vanish as the grid is refined. Two corollaries.
 
 \begin{corollary}[Infinite total variation]\label{ch11:cor-tv}
@@ -429,7 +429,7 @@ is $O(\Delta t^{3/2})$ and vanishes on summation \ts{13}{17}{53:49}. This is the
 \caption{Cumulative quadratic variation $QV_n(t)=\sum_{k\le nt}(\Delta B_k)^2$ of a Gaussian random walk
 $\Delta B_k=X_k/\sqrt n$, at two resolutions. At $t=1$ the values are $1.19$ and $1.03$ (theory: standard deviation
 $\sqrt{2/n}$, i.e.\ $0.20$ and $0.045$); the path converges to the straight line $t$, as in \file{lec14\_9}
-(there $n$ up to $2000$) \ts{24}{14}{1:08:03}\ts{24}{14}{1:09:17}.}\label{ch11:fig-qv}
+(there $n$ up to $2000$) \ts{24}{14}{1:08:03}.}\label{ch11:fig-qv}
 \end{figure}
 
 \begin{finance}[Realised variance and stochastic volatility]
@@ -439,7 +439,7 @@ $n$ returns its relative standard deviation is $\sqrt{2/n}$ (about $8.9\%$ for $
 $8.9\%/2\approx4.5\%$ in volatility terms). This is the theoretical basis for measuring volatility by high-frequency data
 (\cref{ch:volatility}). The lecture proposes plotting the cumulative squared returns of an asset against time: for a Brownian model the
 graph is a straight line of slope $\sigma^2$; slope changes and curvature reveal periods of low and high volatility and
-suggest a model of dynamic volatility \ts{24}{14}{1:10:21}\ts{24}{14}{1:11:22}\ts{24}{14}{1:12:22}. Drift, by contrast, cannot be
+suggest a model of dynamic volatility \ts{24}{14}{1:10:21}. Drift, by contrast, cannot be
 learned by refining the sampling: $\hat\mu$ has standard error $\sigma/\sqrt T$ whatever $n$ is (2024 PS4 Problem~3,
 \cref{ch:volatility}).
 \end{finance}
@@ -466,7 +466,7 @@ $\tau_a$ is a \emph{stopping time} (\cref{ch04:def-stop}): whether $\tau_a\le t$
 \begin{lemma}[Reflection principle]\label{ch11:lem-reflection}
 Let $\widetilde B(u)=B(u)$ for $u\le\tau_a$ and $\widetilde B(u)=a-\bigl(B(u)-a\bigr)=2a-B(u)$ for $u>\tau_a$: the path is
 reflected in the level $a$ from the first hitting time on. Then $\widetilde B$ is again a standard Brownian motion
-\ts{24}{14}{24:53}\ts{24}{14}{25:57}.
+\ts{24}{14}{24:53}.
 \end{lemma}
 The proof uses the \emph{strong Markov property}: at the stopping time $\tau_a$ the process $B(\tau_a+u)-B(\tau_a)$ is a new
 Brownian motion independent of the past $\mathcal F_{\tau_a}$; the Markov property of \cref{ch11:prop-elem}(ii) still holds when the fixed time $s$ is replaced by a
@@ -474,7 +474,7 @@ stopping time, because $\tau_a$ can be approximated by discrete stopping times (
 distribution of $B(t)-B(\tau_a)$ is not affected by the fact that we conditioned on $\tau_a<t$'') \ts{13}{17}{35:54}. Since $-B$ is
 also a Brownian motion, gluing the old path up to $\tau_a$ to the reflected new increment $-(B(\tau_a+u)-a)$ gives
 a process with the same law. The lemma is the statement that after touching the level the path is equally likely to go
-up or down \ts{24}{14}{24:53}\ts{24}{14}{25:57}\ts{24}{14}{26:57}; \cref{ch11:fig-refl} shows one path and its reflection (the deck
+up or down \ts{24}{14}{24:53}; \cref{ch11:fig-refl} shows one path and its reflection (the deck
 \file{lec14\_5} shows it for $x=50$ and $10\,000$ steps).
 
 \begin{figure}[ht]
@@ -504,13 +504,13 @@ Equivalently $M(t)\eqd|B(t)|$, with density $\sqrt{2/(\pi t)}\,e^{-m^2/(2t)}$ on
 \end{proposition}
 \begin{proof}
 Two views, both used in the lectures.
-\emph{Path pairing} \ts{24}{14}{28:05}\ts{24}{14}{29:20}\ts{24}{14}{30:27}. Let $A_{\mathrm{END}}=\{B(t)>a\}$ and $A_{\mathrm{MAX}}=\{M(t)\ge a\}$.
+\emph{Path pairing} \ts{24}{14}{28:05}. Let $A_{\mathrm{END}}=\{B(t)>a\}$ and $A_{\mathrm{MAX}}=\{M(t)\ge a\}$.
 By continuity $A_{\mathrm{END}}\subset A_{\mathrm{MAX}}$ (a path ending above $a$ has crossed it, so $\tau_a<t$). Every
 $\omega_0\in A_{\mathrm{END}}$ is paired with its reflection $\omega_1$ (\cref{ch11:lem-reflection}), which
 ends below $a$ but has still maximum $\ge a$, and has the same probability; conversely every path in $A_{\mathrm{MAX}}\setminus A_{\mathrm{END}}$
 arises this way. Hence $\Prob[A_{\mathrm{MAX}}]=\Prob[A_{\mathrm{MAX}}\cap A_{\mathrm{END}}]+\Prob[A_{\mathrm{MAX}}\cap A_{\mathrm{END}}^c]
 =\Prob[A_{\mathrm{END}}]+\Prob[A_{\mathrm{END}}]$ (the event $B(t)=a$ has probability $0$).
-\emph{Conditioning on $\tau_a$} \ts{13}{17}{34:09}\ts{13}{17}{36:56}\ts{13}{17}{40:08}. Given $\tau_a<t$, the strong Markov property says $B(t)-B(\tau_a)=B(t)-a$
+\emph{Conditioning on $\tau_a$} \ts{13}{17}{34:09}. Given $\tau_a<t$, the strong Markov property says $B(t)-B(\tau_a)=B(t)-a$
 is symmetric, so $\Prob[B(t)>a\mid\tau_a<t]=\Prob[B(t)<a\mid\tau_a<t]=\tfrac12$. Therefore
 $\Prob[M(t)\ge a]=\Prob[\tau_a<t]=2\Prob[B(t)>a,\ \tau_a<t]=2\Prob[B(t)>a]$, the last step because $B(t)>a$ already
 implies $\tau_a<t$.
@@ -534,7 +534,7 @@ the first-order rule; a drift or discrete (say daily) monitoring changes the num
 combine the maximum and the minimum of the log price over a day: with the range $R=\max-\min$ of a driftless Brownian path one has
 $\E[R^2]=4\ln2\cdot\sigma^2t$ (Parkinson 1980, derived from the joint law of \cref{ch11:rem-joint}; it is the subject of 2024 PS5 Problem~3 and
 of \cref{ch:volatility}); in the 2013 lecture Kempthorne, from the audience, remarks that he uses the range of the process as a more precise measure of volatility than close-to-close prices
-\ts{13}{17}{39:05}\ts{13}{17}{40:08}.
+\ts{13}{17}{39:05}.
 \end{finance}
 
 \begin{exercise}[not from the course: reflection and the minimum]\label{ch11:ex-refl}
@@ -549,7 +549,7 @@ By \eqref{ch11:eq-tauM} and \cref{ch11:prop-max},
   f_{\tau_a}(t)=\frac{a}{\sqrt{2\pi}}\,t^{-3/2}\,e^{-a^2/(2t)},\quad0<t<\infty,
 \end{equation}
 \sloppy the density being the derivative in $t$ (using $\frac{\dd}{\dd t}\Phi(a t^{-1/2})=-\tfrac12 a t^{-3/2}\varphi(a t^{-1/2})$)
-\ts{24}{14}{31:35}\ts{24}{14}{32:37}\ts{24}{14}{33:44}. This is the L\'evy distribution.
+\ts{24}{14}{31:35}. This is the L\'evy distribution.
 
 \begin{proposition}[Properties of $\tau_a$]\label{ch11:prop-tau}
 \leavevmode
@@ -596,7 +596,7 @@ the median solves $2[1-\Phi(a/\sqrt t)]=\tfrac12$, i.e.\ $a/\sqrt t=\Phi^{-1}(3/
 \caption{Left: $\Prob[M(t)>x]=2[1-\Phi(x/\sqrt t)]$ (file \file{lec14\_6}); at $t=5$ the values are $0.655$, $0.371$, $0.180$.
 Right: the hitting-time density \eqref{ch11:eq-hitcdf} (file \file{lec14\_7}); the peak of $x=1$ is at $t=1/3$ with height
 $0.463$, and levels farther away are reached later, with a much more spread-out distribution
-\ts{24}{14}{31:35}\ts{24}{14}{33:44}.}\label{ch11:fig-max}
+\ts{24}{14}{31:35}.}\label{ch11:fig-max}
 \end{figure}
 
 \begin{intuition}[A path reaches everything, but takes an infinite mean time]
@@ -613,7 +613,7 @@ fail? Use $\tau_a\eqd a^2\tau_1$ to show that the median of $\tau_a$ scales like
 \end{exercise}
 
 \subsection{Reflected and absorbed Brownian motion}\label{ch11:sec-absorbed}
-Two modifications of $B$ appear in the lecture \ts{24}{14}{33:44}\ts{24}{14}{34:50}.
+Two modifications of $B$ appear in the lecture \ts{24}{14}{33:44}.
 
 \begin{definition}[Reflected and absorbed Brownian motion]\label{ch11:def-refabs}
 \emph{Reflected Brownian motion} at zero is $R(t)=|B(t)|$ (the path is folded onto the positive half line).
@@ -684,14 +684,14 @@ $\Delta B\sim N(0,\Delta t)$ independent of the past. Then
   \E[\Delta] X=\mu\,\Delta t,\qquad \E[(\Delta X)^2]=\sigma^2\Delta t+(\mu\Delta t)^2=\sigma^2\Delta t+o(\Delta t),\qquad
   \E[|\Delta X|^c]=o(\Delta t)\ \ (c>2)
 \end{equation}
-\ts{24}{14}{44:20}\ts{24}{14}{45:27}\ts{24}{14}{46:33}\ts{24}{14}{47:36}: to order $\Delta t$, only the mean and the variance of the
+\ts{24}{14}{44:20}: to order $\Delta t$, only the mean and the variance of the
 increment matter. If $f$ is twice differentiable, Taylor's formula and \eqref{ch11:eq-onestep} give
 \begin{equation}\label{ch11:eq-generator}
   \E\bigl[f(x+\Delta X)\bigr]=f(x)+\Bigl(\mu f'(x)+\tfrac12\sigma^2f''(x)\Bigr)\Delta t+o(\Delta t),
 \end{equation}
 so $\mathcal Lf=\mu f'+\tfrac12\sigma^2f''$ is the \emph{generator} of the process. This expansion is why the lecture cares about
 the powers of the increment: the value of a derivative on an underlying $X$ is a function $f(X)$, and its dynamics are read
-from the Taylor series \ts{24}{14}{47:36}\ts{24}{14}{48:45}. It is the seed of It\^o's lemma (\cref{ch11:sec-gbm}).
+from the Taylor series \ts{24}{14}{47:36}. It is the seed of It\^o's lemma (\cref{ch11:sec-gbm}).
 
 \subsection{Gambler's ruin for Brownian motion}\label{ch11:sec-ruin}
 Let $X$ be a Brownian motion with drift $\mu$ and volatility $\sigma$, started at $x\in(a,b)$, and let
@@ -700,7 +700,7 @@ $\tau=\min\{u:X(u)=a\text{ or }b\}$. Find
   u(x)=\Prob\bigl[X(\tau)=b\mid X(0)=x\bigr],
 \]
 the probability of reaching the upper level first. This generalises the random walk of \cref{ch04:sec-ruin} to continuous
-time and continuous state \ts{24}{14}{48:45}\ts{24}{14}{49:47}\ts{24}{14}{50:51}.
+time and continuous state \ts{24}{14}{48:45}.
 
 \paragraph{Infinitesimal derivation (the lecture).} Wait a short time $\Delta t$ so small that hitting a level in
 the meantime is negligible. By the Markov property, $u(x)=\E[u(x+\Delta X)]$; expanding with \eqref{ch11:eq-generator},
@@ -708,12 +708,12 @@ the meantime is negligible. By the Markov property, $u(x)=\E[u(x+\Delta X)]$; ex
   u(x)=u(x)+\bigl(\mu u'(x)+\tfrac12\sigma^2u''(x)\bigr)\Delta t+o(\Delta t)\\
   \Longrightarrow\ \mu\,u'(x)+\tfrac12\sigma^2u''(x)=0,\qquad u(a)=0,\ u(b)=1
 \end{gather*}
-\ts{24}{14}{51:55}\ts{24}{14}{52:59}\ts{24}{14}{54:04}\ts{24}{14}{55:16}. This is a first-order equation in $v=u'$: $v'/v=-2\mu/\sigma^2$, so $u'(x)=C\,e^{-2\mu x/\sigma^2}$ and
+\ts{24}{14}{51:55}. This is a first-order equation in $v=u'$: $v'/v=-2\mu/\sigma^2$, so $u'(x)=C\,e^{-2\mu x/\sigma^2}$ and
 \begin{equation}\label{ch11:eq-ruin}
   u(x)=\frac{g(x)-g(a)}{g(b)-g(a)},\quad g(x)=e^{-2\mu x/\sigma^2}\ \ (\mu\ne0);\qquad
   u(x)=\frac{x-a}{b-a}\ \ (\mu=0)
 \end{equation}
-\ts{24}{14}{56:16}\ts{24}{14}{57:18}\ts{24}{14}{58:18}\ts{24}{14}{59:20}. For $\mu=0$, $g(x)=x$ is the other solution of the equation
+\ts{24}{14}{56:16}. For $\mu=0$, $g(x)=x$ is the other solution of the equation
 (the general solution is $Ax+B$); with no drift, the probability of success is linear in the distance travelled, exactly as for the fair gambler
 (\cref{ch04:prop-ruin}).
 
@@ -744,7 +744,7 @@ of the biased walk with $h=10^{-4}$ is $0.66524$.
 \caption{Probability of hitting $b=1$ before $a=0$ as a function of the starting point, for several drifts (the four panels of
 \file{lec14\_8} show $b=3$ and $b=1$ with $\mu=\pm(10^{-4},0.5,\dots,3)$). With no drift the probability is the straight line
 $x$; a positive drift bends the curve above it (the barrier $b$ is reached first from almost everywhere), a negative drift below it
-\ts{24}{14}{1:00:20}\ts{24}{14}{1:01:30}\ts{24}{14}{1:02:33}.}\label{ch11:fig-ruin}
+\ts{24}{14}{1:00:20}.}\label{ch11:fig-ruin}
 \end{figure}
 
 \begin{proposition}[Consequences of \eqref{ch11:eq-ruin}; not discussed in class]\label{ch11:prop-ruincons}
@@ -792,19 +792,19 @@ For $X=\mu t+\sigma B$ with $\mu\ne0$ compute $\E[\tau]$ for the exit time of $(
 
 The price of a stock cannot be $S_0+\sigma B_t$: it would become negative. What is reasonable, the lecture argues, is that the
 \emph{percentage} change is normal, $\Delta S/S=\mu\Delta t+\sigma\Delta B$, written $\dd S_t=S_t(\mu\dd t+\sigma\dd B_t)$
-\ts{13}{17}{1:00:19}\ts{13}{17}{1:01:24}. The natural question, asked in the 2013 lecture, is whether the solution of $\dd S=S\dd B$ is $S_t=e^{B_t}$, as in classical calculus; the answer is no
-\ts{13}{17}{1:01:24}\ts{13}{17}{1:02:28}. Here is why.
+\ts{13}{17}{1:00:19}. The natural question, asked in the 2013 lecture, is whether the solution of $\dd S=S\dd B$ is $S_t=e^{B_t}$, as in classical calculus; the answer is no
+\ts{13}{17}{1:01:24}. Here is why.
 
 \paragraph{The Taylor argument.} Let $f$ be a smooth function (in the 2013 lecture a call payoff, $f(B_T)=(B_T-s_0)^+$, or the price of any derivative on the underlying)
-and $B$ a Brownian motion \ts{13}{17}{1:03:29}\ts{13}{17}{1:04:29}\ts{13}{17}{1:05:33}. If $B$ were differentiable, $\dd f(B_t)=f'(B_t)\frac{\dd B}{\dd t}\dd t$; it is not
+and $B$ a Brownian motion \ts{13}{17}{1:03:29}. If $B$ were differentiable, $\dd f(B_t)=f'(B_t)\frac{\dd B}{\dd t}\dd t$; it is not
 \ts{13}{17}{1:06:36}, so one keeps the increment $\dd B$ and writes Taylor's formula
 $f(B_{t+x})-f(B_t)=f'(B_t)\,\Delta B+\tfrac12f''(B_t)\,\Delta B^2+\dots$ with $\Delta B=B_{t+x}-B_t$
-\ts{13}{17}{1:07:39}\ts{13}{17}{1:08:44}\ts{13}{17}{1:09:46}\ts{13}{17}{1:10:48}. In calculus the term $\Delta B^2$ is negligible; here, by
+\ts{13}{17}{1:07:39}. In calculus the term $\Delta B^2$ is negligible; here, by
 \eqref{ch11:eq-dB2}, $\Delta B^2\approx\Delta t$ is of the same order as the time step, so it cannot be dropped:
 \begin{equation}\label{ch11:eq-ito}
   \dd f(B_t)=f'(B_t)\dd B_t+\tfrac12f''(B_t)\dd t\qquad\text{(It\^o's lemma, heuristic form)}
 \end{equation}
-\ts{13}{17}{1:11:55}\ts{13}{17}{1:13:01}\ts{13}{17}{1:15:12}. The lecturer's summary: if one thing is to be remembered it is \eqref{ch11:eq-ito}, if two, that $(\dd B)^2=\dd t$
+\ts{13}{17}{1:11:55}. The lecturer's summary: if one thing is to be remembered it is \eqref{ch11:eq-ito}, if two, that $(\dd B)^2=\dd t$
 \ts{13}{17}{1:14:05}. Proofs and generalisations (functions of $t$ and $X$, stochastic integrals) are in \cref{ch:stochcalc}.
 
 \paragraph{Application to the exponential.} With $f(x)=e^{x}$, \eqref{ch11:eq-ito} gives $\dd e^{B_t}=e^{B_t}\dd B_t+\tfrac12e^{B_t}\dd t$: the
@@ -846,7 +846,7 @@ Show that $\E[e^{\lambda B(t)}]=e^{\lambda^2t/2}$ and use it to explain why $e^{
 
 \subsection{The Brownian bridge and the empirical distribution function}\label{ch11:sec-bridge}
 \begin{definition}[Brownian bridge]\label{ch11:def-bridge}
-$X(t)=B(t)-tB(1)$, $0\le t\le1$ \ts{24}{14}{35:57}\ts{24}{14}{37:05}.
+$X(t)=B(t)-tB(1)$, $0\le t\le1$ \ts{24}{14}{35:57}.
 \end{definition}
 The path is pinned at both ends: $X(0)=0=X(1)$, since it is $B$ minus the straight line from $0$ to $B(1)$ that it would have followed on average. It is a centred Gaussian
 process with
@@ -860,7 +860,7 @@ irrelevant for the shape of the fluctuations). The variance is largest in the mi
 \paragraph{Where it comes from: the empirical distribution function.} Let $U_1,\dots,U_n$ be i.i.d.\ uniform on $(0,1)$ and
 $\hat F_n(t)=\#\{U_i\le t\}/n$. Each indicator $\ind\{U_i\le t\}$ is Bernoulli with mean $t$ and variance $t(1-t)$, so $\E[\hat F_n(t)]=t$ and
 $\Var\hat F_n(t)=t(1-t)/n$; by the central limit theorem
-$\sqrt n[\hat F_n(t)-t]\to N(0,t(1-t))$ \ts{24}{14}{38:05}\ts{24}{14}{39:08}\ts{24}{14}{40:09}. The whole process $\sqrt n[\hat F_n(t)-t]$ converges to
+$\sqrt n[\hat F_n(t)-t]\to N(0,t(1-t))$ \ts{24}{14}{38:05}. The whole process $\sqrt n[\hat F_n(t)-t]$ converges to
 the Brownian bridge (Donsker, 1952): variance $t(1-t)$ and covariance $\min(s,t)-st$ are those of \eqref{ch11:eq-bridge}, checked directly
 on the multinomial counts.
 
@@ -869,7 +869,7 @@ If $Y_1,\dots,Y_n$ are i.i.d.\ with a \emph{continuous} cdf $F$, then $U_i=F(Y_i
 the statistic $D_n=\sup_y|\hat F_n(y)-F(y)|=\sup_t|\hat F_n^U(t)-t|$ has a distribution that does not depend on $F$: $\sqrt nD_n\to\sup_{t}|X(t)|$, whose law is
 $\Prob[\sup|X|\le x]=1-2\sum_{k\ge1}(-1)^{k-1}e^{-2k^2x^2}$ (Kolmogorov); the $5\%$ critical value is $1.358$.
 To test whether a set of returns is compatible with an assumed model, transform the data by the model's cdf and test uniformity
-\ts{24}{14}{41:10}\ts{24}{14}{42:14}\ts{24}{14}{43:19}. (If the parameters of $F$ are estimated from the same data, the critical values are smaller, as in the Lilliefors
+\ts{24}{14}{41:10}. (If the parameters of $F$ are estimated from the same data, the critical values are smaller, as in the Lilliefors
 correction.) This is a model-selection tool; residual diagnostics of \cref{ch:timeseries} play the same role for time series.
 \end{finance}
 
@@ -892,7 +892,7 @@ Derive \eqref{ch11:eq-laplace} (hint: $\int_0^\infty t^{-1/2}e^{-\lambda t-x^2/2
 
 \subsection{Two-dimensional Brownian motion}\label{ch11:sec-2d}
 The lecture opens with the animation of a particle moving in the plane, where each coordinate takes independent Gaussian steps,
-no direction being preferred \ts{24}{14}{1:04}\ts{24}{14}{2:04}\ts{24}{14}{3:08}. Formally $\bm B(t)=(B_1(t),B_2(t))$ with independent standard Brownian motions has density
+no direction being preferred \ts{24}{14}{1:04}. Formally $\bm B(t)=(B_1(t),B_2(t))$ with independent standard Brownian motions has density
 $(2\pi t)^{-1}e^{-|\bm y|^2/2t}$, invariant under rotations; the distance $|\bm B(t)|$ has the Rayleigh law
 $\Prob[|\bm B(t)|<\varepsilon]=1-e^{-\varepsilon^2/(2t)}$ (for $t=\varepsilon=1$: $39.3\%$) and $\E[|\bm B(t)|]=\sqrt{\pi t/2}$.
 The path in the plane is fractal-looking and its two projections are the one-dimensional processes of the rest of the chapter (file \file{lec14\_2}, $2000$ steps).
@@ -901,12 +901,12 @@ Correlated Brownian motions, obtained from independent ones by a matrix (\cref{c
 \subsection{Filtrations and adapted processes}\label{ch11:sec-adapted}
 Let $X$ be a stochastic process, for instance a price. The \emph{filtration} $\{\mathcal F_t\}$ generated by $X$ is the increasing family of $\sigma$-fields of
 events determined by $\{X(u),\,0\le u\le t\}$: $\mathcal F_t\subset\mathcal F_{t'}$ for $t<t'$; it is the information available at time $t$
-\ts{24}{14}{1:16:44}\ts{24}{14}{1:17:48}. A process $Y$ is \emph{adapted} to $X$ if $Y(t)$ depends only on $\{X(u),u\le t\}$, equivalently
+\ts{24}{14}{1:16:44}. A process $Y$ is \emph{adapted} to $X$ if $Y(t)$ depends only on $\{X(u),u\le t\}$, equivalently
 $\mathcal G_t\subset\mathcal F_t$ for the filtration $\mathcal G$ of $Y$: the transformation is not forward-looking. For example if $Y(t)$
 is the cash flow of a strategy that trades the security $X$, adaptedness says that one cannot trade on tomorrow's price
-\ts{24}{14}{1:17:48}\ts{24}{14}{1:18:55}. Adaptedness is what makes the gains from trading a martingale when $X$ is one: the continuous-time
+\ts{24}{14}{1:17:48}. Adaptedness is what makes the gains from trading a martingale when $X$ is one: the continuous-time
 analogue of the martingale transform of \cref{ch04:thm-transform} (with constant-mean processes, martingales, ``applied again and again'' in the
-lecture \ts{24}{14}{1:18:55}\ts{24}{14}{1:19:59}) is the stochastic integral $\int Y\dd X$ of \cref{ch:stochcalc}, and the price of an option is a conditional
+lecture \ts{24}{14}{1:18:55}) is the stochastic integral $\int Y\dd X$ of \cref{ch:stochcalc}, and the price of an option is a conditional
 expectation with respect to $\mathcal F_t$ (\cref{ch:bs}). All the martingale statements of \cref{ch11:prop-elem} hold with respect to the filtration of $B$.
 
 \subsection{L\'evy processes: Brownian motion and the Poisson process}\label{ch11:sec-levy}

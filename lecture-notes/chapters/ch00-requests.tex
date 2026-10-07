@@ -132,3 +132,64 @@ comments on them are \textbf{Feedback} boxes in the right column.}
 
 \request{done}{All chapters, exercises}{Gli esercizi brevi vanno lungo il testo, subito dopo la sezione che esercitano; alla fine del capitolo restano solo quelli complessi (che richiedono tutto il capitolo).}
 {Done in all chapters (1--25), with your refinement: standalone exercises (self-contained, practising one section) moved as whole blocks, with your solutions, notes and feedback, to the end of the section they practise; exercises that form a connected series (consecutive problems referring to each other, such as ``the matrix of the previous exercise'') stay together, in their original order, at the end of the chapter, with the integrative ones. In total 212 of the 236 exercises are now in the text; 24 stay in a final Exercises section (chapters 1, 2, 5, 7, 9, 10, 13, 25). Chapters whose exercises were all standalone no longer have an Exercises section. Chapter~2 was corrected: PS1 (2024) Problem~3 is back next to Problem~4, and PS1 (2013) A-2 to A-4 follow the eigenvalue section.}
+
+\request{done}{Chapter 3, the CAPM}{non ha senso mettere due link a due citazioni consecutive, in questi casi tieni solo il link che punta all'inizo del discorso}
+{Done in the whole book: wherever two or more video tags of the \emph{same} lecture followed each other, only the
+first (the start of the explanation) is kept; 611 tags removed in 16 chapters. Consecutive tags of
+\emph{different} lectures (a 2024 and a 2013 lecture on the same point) are kept: they lead to two different videos.}
+
+\request{done}{Chapter 3, put--call parity exercise}{voglio che il colore degli esercizi sia piu diverso dal colore delle definizioni (non cambiare il colore definizioni)}
+{Exercises, your solutions and feedback are now lime (\texttt{7CB342}) instead of indigo. Lime is too light for
+text on white, so titles and tags use a darker shade of it (\textcolor{exerdark}{\textbf{like this}}); the
+bars, frames and backgrounds are lime. Same colour in the study HTML page.}
+
+\request{done}{Chapter 3, heavy tails}{questa proof non e' allineata}
+{Cause: the figure just before the proposition was a \emph{float}. \LaTeX\ moved it to the top of the next page
+after the right column had already been lined up there, so the proof was printed beside the figure. Figures
+and tables now stay exactly where they are written (in the whole book), so they can no longer slide above
+the right column; the price is some white space at the bottom of a page when a figure does not fit.}
+
+\request{done}{Chapter 3, principal components}{spesso le course notes si riferiscono a qualcosa di preciso nel testo. direi di numerarle in stile footnotes come abbiamo fatto con le note, con l'indicazione nel testo. poi le posizionerei non bloccate al testo, ma di lato a destra in alto.}
+{Course notes are numbered with the notes (one sequence per chapter): a grey-blue number in the text marks the
+words the course note is about, and the same number starts its box in the right column. In chapter~3 every
+course note was moved right after the words it refers to (the one on the scope of the PCA section is about
+the whole section and has no number in the text). As for the notes, the box starts level with the end of the
+paragraph that contains the number, not with the line: the right column is filled paragraph by paragraph.
+Other chapters: their course notes already have a number in the box; the number in the text is added when
+each chapter is revised.}
+
+\request{done}{Chapter 3, lognormal example}{dalla ricerca su efficacia studio, mi sembra di aver capito che al mio livello e' meglio non avere esercizi svolti, ma provare a farli da zero. quindi pensavo di trasformare gli esempi in esercizi, magari con la soluzione nascosta, e una volta che ho provato a risolverli, mostri/compari con la soluzione.}
+{Right, with one qualification from the research. For beginners, studying worked examples beats solving problems
+(the \emph{worked-example effect}; meta-analysis in mathematics: Barbieri, Clerjuste and Chawla 2023, $g\approx0.5$),
+but the advantage reverses as prior knowledge grows (the \emph{expertise reversal effect}, Kalyuga 2007), and trying
+a problem before being shown the solution helps conceptual understanding (\emph{productive failure}, meta-analysis
+Sinha and Kapur 2021, $d\approx0.36$). So: examples of computations on material you already master become
+\textbf{Try first} exercises; examples that introduce a new idea stay worked examples. The solution is printed in a
+\emph{Solutions} section at the end of the chapter, with a link from the exercise and one back (in the PDF it cannot
+be truly hidden; on the study HTML page it will be folded). Chapter~3: the lognormal$(0.2,0.4^2)$ example and
+``How many observations?'' converted (\cref{ch03:ex-ln,ch03:ex-samplesize}); ``Estimating a mean'' stays an example.
+Other chapters next, after you have tried these two.}
+
+\request{done}{Chapter 3, exercises on MGFs}{qua hai messo una lista di molti esercizi. penso che sarebbe piu efficace avere esercizi brevi, molto selezionati, e mirati lungo il testo, e solo alla fine esercizi piu lunghi e struttirati, comunque mirati a verificare la comprensione.}
+{Agreed (it is the evidence on adjunct questions and interpolated testing quoted for the previous exercise request).
+Chapter~3 now has short exercises right after the \emph{paragraph} they practise (e.g.\ the Poisson MGF after the
+normal MGF, exponential families right after their definition), and a final \emph{Exercises} section
+(\cref{ch03:sec-exercises}) with the five long structured problems: 2024 PS2 Problem~2, 2013 PS2 B-4, A-1 and B-1
+(B-1 uses A-1), and 2024 PS3 Problem~2. No exercise was dropped. Other chapters next.}
+
+\request{done}{Introduction, boxes}{non so se la cosa delle key formulas e' utile. non mi piace particolarmente. forse apprezzerei di piu key concepts, magari presentati lungo il testo in risalto o riportati alla fine o entrambi}
+{The Key formulas box becomes \textbf{Key concepts}: first a few questions to answer without looking (retrieval
+practice is one of the best-supported study techniques: Dunlosky et al.\ 2013; meta-analysis Adesope, Trevisan and
+Sundararajan 2017, $g\approx0.6$), then each concept in one or two sentences with its formula and a link to where it is
+stated. Along the text the concepts are already highlighted by the blue \emph{New concepts} definition boxes
+(highlighting by the author helps a little: signalling meta-analysis, Schneider et al.\ 2018). Every formula of the
+old box is kept. Chapter~3 done; the other chapters next.}
+
+\request{done}{Introduction, boxes}{quesi box non so quanto abbiano senso. dobbiamo ragionarci.}
+{Agreed with you: read passively, a summary of someone else's R analysis teaches little; redoing it does more
+(learning by doing beats reading: the ICAP framework, Chi and Wylie 2014; active learning in STEM, meta-analysis
+Freeman et al.\ 2014). So each case study becomes a \textbf{Lab}: a question, the data (official source, in
+\file{data/}), the steps to redo in Python, and the course's results as its solution at the end of the chapter, with a
+reference script in \file{labs/} that you can open after trying. Pilot: the high-yield spread of chapter~5
+(\cref{ch05:lab-hyspread}, data from FRED, script \file{labs/ch05_hyspread.py}, which reproduces the $R^2=0.995$ of the
+autoregression shown in class). About 30 case studies remain; they are converted one chapter at a time.}

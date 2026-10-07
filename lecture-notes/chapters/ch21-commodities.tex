@@ -89,7 +89,7 @@ On a given day $S_t=\$70$, $r=3\%$, and the one-year futures trades at $\$66$.
 \end{exercise}
 
 \subsection{The Trafigura trade}
-Suppose one owns storage. Then on 15 January 2009 one can, at no risk \ts{13}{13}{5:11}\ts{13}{13}{6:16}:
+Suppose one owns storage. Then on 15 January 2009 one can, at no risk \ts{13}{13}{5:11}:
 \begin{enumerate}[1.]
   \item borrow \$35 and buy one barrel (the nearby price);
   \item store it for a year;
@@ -141,12 +141,12 @@ the slope from exceeding $r+u$ when storage is plentiful.
 \section{The value of storage: a calendar-spread option}\label{ch21:sec-spread}
 
 \subsection{The bid for a tank}
-The lecturer inverts the question \ts{13}{13}{7:21}\ts{13}{13}{8:21}. Your boss hands you a credit card and asks you to obtain storage from August to December in an auction, with the same
+The lecturer inverts the question \ts{13}{13}{7:21}. Your boss hands you a credit card and asks you to obtain storage from August to December in an auction, with the same
 curve: $F_{\mathrm{Aug}}=55$, $F_{\mathrm{Dec}}=58$. Bid too little and you lose; bid too much and you suffer the winner's curse. The maximal bid is the amount that one can be \emph{sure to recover},
 so a bidder needs, before bidding, a strategy that recovers the price paid \ts{13}{13}{9:23}.
 
 \paragraph{The trader's answer.} Buy the August contract and sell the December contract on 1 January; on 1 August take delivery of the barrel and store it; in December deliver against the
-December contract. This locks $58-55=3$ dollars per barrel: one can pay up to \$3 (say \$2.99, to keep a penny of profit) \ts{13}{13}{10:25}\ts{13}{13}{11:31}\ts{13}{13}{12:35}. Interest is ignored
+December contract. This locks $58-55=3$ dollars per barrel: one can pay up to \$3 (say \$2.99, to keep a penny of profit) \ts{13}{13}{10:25}. Interest is ignored
 ``for simplicity'' (slide~9 adds: it should not be) \ts{13}{13}{11:31}. With interest at rate $r$ the locked amount, in December dollars, is $F_{\mathrm{Dec}}-F_{\mathrm{Aug}}e^{r(T_{\mathrm{Dec}}-T_{\mathrm{Aug}})}$, since the \$55 paid in August must be financed until the sale: at $r=10\%$ and four months the financing costs about
 $55(e^{0.10/3}-1)\approx1.9$, more than half of the locked \$3, which is why the lecturer says that one must not really forget it.
 
@@ -154,7 +154,7 @@ $55(e^{0.10/3}-1)\approx1.9$, more than half of the locked \$3, which is why the
 \begin{equation}\label{ch21:eq-payoff}
   \bigl[F_{\mathrm{Dec}}(T)-F_{\mathrm{Aug}}(T)\bigr]^+,\qquad T=\text{31 July},
 \end{equation}
-the futures prices being those quoted on the exercise date \ts{13}{13}{12:35}\ts{13}{13}{13:38}. There is no strike: the ``strike'' is the other futures price, so the option is a function of two random
+the futures prices being those quoted on the exercise date \ts{13}{13}{12:35}. There is no strike: the ``strike'' is the other futures price, so the option is a function of two random
 variables and is more difficult than an option on a single stock \ts{13}{13}{14:39}. Using the formula of \cref{ch21:thm-margrabe} below, the lecture quotes $V=4.4677$ dollars per barrel
 \ts{13}{13}{15:39}. So one can bid, for instance, \$4.20 \ts{13}{13}{15:39}: the bid beats the trader's ceiling of \$3, and the margin ($4.4677-4.20=0.27$) is much larger than a penny.
 
@@ -163,7 +163,7 @@ intrinsic value when the volatility is positive; energy volatilities are far lar
 
 \paragraph{Where is the risk?} Selling the option exposes one to an unbounded payment. Suppose on 31 July $F_{\mathrm{Aug}}=55$ and $F_{\mathrm{Dec}}=80$ (slide~11 uses $65$ and $80$): the seller owes \$25 (slide: \$15)
 \ts{13}{13}{17:47}. But he owns the tank: he buys August and sells December \emph{at the same moment} using futures, and later moves the physical barrel, collecting exactly $F_{\mathrm{Dec}}-F_{\mathrm{Aug}}$
-\ts{13}{13}{18:48}\ts{13}{13}{19:54}. If instead December falls below August the option pays nothing and the tank is left unused \ts{13}{13}{20:55}. So the tank \emph{is} the option: a full hedge, whatever happens.
+\ts{13}{13}{18:48}. If instead December falls below August the option pays nothing and the tank is left unused \ts{13}{13}{20:55}. So the tank \emph{is} the option: a full hedge, whatever happens.
 
 \subsection{The spread-option formula}
 The value quoted on slide~10 is the formula for an option to exchange one lognormal asset for another (Margrabe, 1978), applied to two futures prices. The natural setting is that of \cref{ch15:sec-rn}:
@@ -285,7 +285,7 @@ Two futures $F_1=60$ (near), $F_2=63$ (far), $\sigma_1=\sigma_2=45\%$, $T=0.5$, 
 
 \subsection{There is no market: replicate}\label{ch21:sec-hedge}
 The lecture makes a confession \ts{13}{13}{37:39}: there is no market for spread options, nobody will buy the option that the quant ``sold'' for 4.4677. What survives is the
-\emph{method} behind Black--Scholes: the value is also the cost of a dynamic strategy that reproduces the payoff \ts{13}{13}{38:43}\ts{13}{13}{39:49}. The quant therefore does not sell anything; he owns the tank,
+\emph{method} behind Black--Scholes: the value is also the cost of a dynamic strategy that reproduces the payoff \ts{13}{13}{38:43}. The quant therefore does not sell anything; he owns the tank,
 whose payoff is that of the option, and delta-hedges it, and he tells the trader what to do every day, and the tank operator when to inject and withdraw \ts{13}{13}{40:49}.
 
 To make this precise (the lecture does not write it down) let $V(F_1,F_2)$ be the value~\eqref{ch21:eq-margrabe}. \emph{Owning} the option (the tank) and hedging means holding $-\Phi(d_1)$ Dec futures and $+\Phi(d_2)$
@@ -322,22 +322,22 @@ paragraph reaches the same result without a counterparty. A subtlety: the option
 
 \subsection{A portfolio of options under physical constraints}\label{ch21:sec-portfolio}
 A real tank is available for two years, not for four months, and one may sell many spread options against it: injection in any month $T_i$ and withdrawal in any later month $T_j$, and also the opposite (withdraw first, refill later), which pays when the curve is
-in backwardation \ts{13}{13}{21:58}\ts{13}{13}{27:11}. The first problem is to choose \emph{which portfolio of options} is the most valuable one that the tank can support, and this is an optimisation \ts{13}{13}{23:00}. The constraints are
-technical, contractual and legal: injection and withdrawal rates, tank capacity, and above all the requirement that \emph{under no circumstances} the tank is asked to do something impossible \ts{13}{13}{24:02}\ts{13}{13}{25:05}. Slides 13--17 write the problem
+in backwardation \ts{13}{13}{21:58}. The first problem is to choose \emph{which portfolio of options} is the most valuable one that the tank can support, and this is an optimisation \ts{13}{13}{23:00}. The constraints are
+technical, contractual and legal: injection and withdrawal rates, tank capacity, and above all the requirement that \emph{under no circumstances} the tank is asked to do something impossible \ts{13}{13}{24:02}. Slides 13--17 write the problem
 as follows. With dates $T_1<\dots<T_N$ and today's futures prices $F_i$ (slide~13):
 \begin{itemize}
   \item $S_{i,j}$ ($i<j$) is the value of the option to inject at $T_i$ and withdraw at $T_j$, with payoff $\max\{F_j-F_i-\mathrm{Cost},0\}$ at exercise; $U_{i,j}$ the value of the option to withdraw at $T_i$ and inject at the later
-        $T_j$, with payoff $\max\{F_i-F_j-\mathrm{Cost},0\}$ (slide~14) \ts{13}{13}{27:11}\ts{13}{13}{28:16}. The volumes sold against the tank are $x_{i,j}\ge0$ and $\nu_{i,j}\ge0$;
+        $T_j$, with payoff $\max\{F_i-F_j-\mathrm{Cost},0\}$ (slide~14) \ts{13}{13}{27:11}. The volumes sold against the tank are $x_{i,j}\ge0$ and $\nu_{i,j}\ge0$;
   \item $y_i\ge0$ and $z_j\ge0$ are the volumes committed today by \emph{futures} for injection at $T_i$ and withdrawal at $T_j$ (the trader's static strategy);
   \item the objective is the cash collected now:
 \begin{equation}\label{ch21:eq-storage-obj}
 \begin{gathered}
   V=\max_{x,\nu,y,z}\Bigl\{\sum_{i<j}x_{i,j}S_{i,j}+\sum_{i<j}\nu_{i,j}U_{i,j}-\sum_iy_iF_i+\sum_jz_jF_j\Bigr\}\\
-  \ts{13}{13}{25:05}\ts{13}{13}{26:11}
+  \ts{13}{13}{25:05}
 \end{gathered}
 \end{equation}
         (the first two sums are premia received, the last two are the cost of the futures bought to inject and the revenue of the futures sold to withdraw);
-  \item Boolean variables record the exercise: $\Omega^S_{i,j}=1$ if $S_{i,j}$ expires in the money (then the tank \emph{must} act), $0$ otherwise, and the same for $\Omega^U_{i,j}$ \ts{13}{13}{28:16}\ts{13}{13}{29:18}.
+  \item Boolean variables record the exercise: $\Omega^S_{i,j}=1$ if $S_{i,j}$ expires in the money (then the tank \emph{must} act), $0$ otherwise, and the same for $\Omega^U_{i,j}$ \ts{13}{13}{28:16}.
 \end{itemize}
 Define the net injection at date $T_i$ (positive means into the tank)
 \begin{equation}\label{ch21:eq-qi}
@@ -389,15 +389,15 @@ $F=(20,24,19,26,21,18,25,30,22,19,23,27)$ (a stylised seasonal curve)
 \end{exercise}
 
 \subsection{Methods, robustness and calibration}\label{ch21:sec-methods}
-The lecture lists three ways to attack the full problem \ts{13}{13}{32:24}\ts{13}{13}{33:31}: approximate it by a linear or quadratic programme; Monte Carlo simulation of the prices; or \emph{stochastic control}, for which the reference is Carmona and Ludkovski (2010),
+The lecture lists three ways to attack the full problem \ts{13}{13}{32:24}: approximate it by a linear or quadratic programme; Monte Carlo simulation of the prices; or \emph{stochastic control}, for which the reference is Carmona and Ludkovski (2010),
 ``Valuation of energy storage: an optimal switching approach'', \emph{Quantitative Finance} 10(4) (slide~18): the decision inject/withdraw/hold is a control chosen as a function of the current prices and inventory, and the value is the solution of a dynamic-programming equation. None of the methods is ``better'': the
-inputs (volatilities, correlations) are known only to a rough accuracy, and an exact method fed with parameters that are 50\% off is still wrong \ts{13}{13}{33:31}\ts{13}{13}{34:35}.
+inputs (volatilities, correlations) are known only to a rough accuracy, and an exact method fed with parameters that are 50\% off is still wrong \ts{13}{13}{33:31}.
 
 \begin{finance}[Robust, calibration-free models]
 Eydeland's desk, in his words, does not use the stochastic-control solution (``we do something different'') and deliberately chooses a method that is \emph{robust}: little changes in the parameters must not change the value much, and each ingredient must be
-something that can be traded in the market and verified by outside controllers and regulators, ``in this day and age extremely important'' \ts{13}{13}{34:35}\ts{13}{13}{35:35}. He warns against over-parametrised models (stochastic volatility, regime switching, several jump processes),
+something that can be traded in the market and verified by outside controllers and regulators, ``in this day and age extremely important'' \ts{13}{13}{34:35}. He warns against over-parametrised models (stochastic volatility, regime switching, several jump processes),
 which capture the richness of price behaviour at the cost of stability \ts{13}{13}{35:35}. \emph{Calibration}, the fitting of unobservable parameters by least squares to market data, is fragile: the objective is non-convex, the solution set can be very flat, one may stop early
-\ts{13}{13}{36:35}\ts{13}{13}{37:39}. Compare the regularisation of ill-posed calibration problems in \cref{ch:regularized} and the least-squares theory of \cref{ch:regression}.
+\ts{13}{13}{36:35}. Compare the regularisation of ill-posed calibration problems in \cref{ch:regularized} and the least-squares theory of \cref{ch:regression}.
 \end{finance}
 
 % ==================================================================
@@ -406,15 +406,15 @@ which capture the richness of price behaviour at the cost of stability \ts{13}{1
 \subsection{A plant is a strip of daily options}
 The same reasoning applies to any physical asset: tankers, refineries, pipelines, power lines \ts{13}{13}{41:53}; only the constraints change (a tanker needs the routes and port limits) \ts{13}{13}{42:59}. The second half of the lecture works out the power plant.
 
-A \emph{merchant} plant decides itself, every morning, whether to run \ts{13}{13}{42:59}\ts{13}{13}{44:00}. The price of power for the day is known; to produce one megawatt-hour it burns fuel. The efficiency is measured by the \emph{heat rate} $h$:
-the number of MMBtu of fuel per MWh (typically 7 for a modern gas plant, up to 20 for an inefficient one that runs rarely) \ts{13}{13}{45:05}\ts{13}{13}{46:09}. With the fuel price $G$ (dollars per MMBtu) and the other variable costs $K$ (dollars per MWh: labour, cooling, \dots)
+A \emph{merchant} plant decides itself, every morning, whether to run \ts{13}{13}{42:59}. The price of power for the day is known; to produce one megawatt-hour it burns fuel. The efficiency is measured by the \emph{heat rate} $h$:
+the number of MMBtu of fuel per MWh (typically 7 for a modern gas plant, up to 20 for an inefficient one that runs rarely) \ts{13}{13}{45:05}. With the fuel price $G$ (dollars per MMBtu) and the other variable costs $K$ (dollars per MWh: labour, cooling, \dots)
 the profit of the day is (slide~20, where the heat rate is written in Btu/kWh, hence the division by 1000)
 \begin{equation}\label{ch21:eq-spark}
   \Pi=\max\bigl\{P-hG-K,\ 0\bigr\},\qquad P=\text{power price (\$/MWh)},
 \end{equation}
-and the plant is run when the argument is positive \ts{13}{13}{47:13}\ts{13}{13}{48:18}. With $h=8$, $G=4$, $K=3$ the plant costs $8\cdot4+3=35$ per MWh: at $P=50$ the profit is 15 and the plant runs; at $P=30$ the owner ``goes back to sleep'' and earns zero
-\ts{13}{13}{47:13}\ts{13}{13}{48:18}. So operating a merchant plant is financially equivalent to owning a portfolio of \emph{daily options on the spread} between electricity and fuel, the \emph{spark spread options} (slide~20).
-The price the buyer should be willing to pay is the expectation of the sum of these payoffs, taken under the pricing measure, over the remaining life: a two-dimensional distribution of $(P,G)$, with its correlation \ts{13}{13}{50:21}\ts{13}{13}{51:25}.
+and the plant is run when the argument is positive \ts{13}{13}{47:13}. With $h=8$, $G=4$, $K=3$ the plant costs $8\cdot4+3=35$ per MWh: at $P=50$ the profit is 15 and the plant runs; at $P=30$ the owner ``goes back to sleep'' and earns zero
+\ts{13}{13}{47:13}. So operating a merchant plant is financially equivalent to owning a portfolio of \emph{daily options on the spread} between electricity and fuel, the \emph{spark spread options} (slide~20).
+The price the buyer should be willing to pay is the expectation of the sum of these payoffs, taken under the pricing measure, over the remaining life: a two-dimensional distribution of $(P,G)$, with its correlation \ts{13}{13}{50:21}.
 
 \subsection{Pricing one daily option}
 For $K=0$ the option \eqref{ch21:eq-spark} is a Margrabe option (exchange power for $h$ units of gas): \cref{ch21:thm-margrabe} with $F_2=P$ and $F_1=hG$ prices it. For $K>0$ there is no closed form; a classic approximation (Kirk, 1995; not in the lecture) treats
@@ -471,7 +471,7 @@ two ways. First, cointegration says that the crack spread is mean reverting, so 
 % ==================================================================
 \section{What power prices look like}\label{ch21:sec-stats}
 
-To value the plant one needs the distribution of $P$ and $G$, and the lecture now turns to the data \ts{13}{13}{49:21}\ts{13}{13}{50:21}. The first idea is Brownian motion (or its exponential): the terminal distribution is then normal
+To value the plant one needs the distribution of $P$ and $G$, and the lecture now turns to the data \ts{13}{13}{49:21}. The first idea is Brownian motion (or its exponential): the terminal distribution is then normal
 (lognormal for the price) \ts{13}{13}{50:21}. The S\&P~500 is often said to have fat tails; the lecturer's point is that by commodity standards it looks normal \ts{13}{13}{51:25}.
 
 \begin{table}[ht]
@@ -488,7 +488,7 @@ DAX (equity index) & $23\%$ & $0.004$ & $3.33$\\
 \caption{Distribution parameters of returns (slide 23, from A.~Werner, \emph{Risk Management in the Electricity Market}, 2003). Kurtosis is $\E[(X-\mu)^4]/\sigma^4$, equal to $3$ for a normal law.}\label{ch21:tab-kurt}
 \end{table}
 
-The kurtosis of a normal variable is exactly~3; for the DAX it is $3.33$, for power $26$ to $77$ \ts{13}{13}{51:25}\ts{13}{13}{52:27}. And annual volatilities are in the hundreds of percent, against about 10\% for the S\&P at the time of the lecture
+The kurtosis of a normal variable is exactly~3; for the DAX it is $3.33$, for power $26$ to $77$ \ts{13}{13}{51:25}. And annual volatilities are in the hundreds of percent, against about 10\% for the S\&P at the time of the lecture
 \ts{13}{13}{53:35}: intuition built on volatilities of 10--20\% fails at 100--300\% \ts{13}{13}{53:35}. The time series of Texas (ERCOT), New England (NEPOOL) and PJM prices on slides 24--26 show the feature that jumps out: \emph{spikes} \ts{13}{13}{52:27}. The slide-27 list of
 what a model must capture is: mean reversion, spikes, high kurtosis, regime switching, lack of data and non-stationarity \ts{13}{13}{54:42}.
 
@@ -518,9 +518,9 @@ Using \Cref{ch21:prop-jumpkurt}'s formula for the excess kurtosis of a jump-diff
 \end{exercise}
 
 \subsection{Mean reversion and the objections to spot models}
-The lecturer's step-by-step argument against the standard toolbox \ts{13}{13}{56:47}\ts{13}{13}{57:52}\ts{13}{13}{58:56}:
+The lecturer's step-by-step argument against the standard toolbox \ts{13}{13}{56:47}:
 geometric Brownian motion has no spikes, no correlation structure, nothing; a spike is a rise followed by a return, so add mean reversion; a rise from \$30 to \$1000 needs a \emph{jump}; the return from \$1000 to \$30 in three or four days needs a very strong reversion speed, but a reversion so strong
-would freeze the price at the \$30 level in normal times; so one lets the parameters depend on the level, i.e.\ introduces regime switching, and one ends with 10--12 parameters ``impossible to manage'' \ts{13}{13}{58:56}\ts{13}{13}{1:00:02}. Stochastic volatility, regime switching and multiple jump processes are all used in the industry but
+would freeze the price at the \$30 level in normal times; so one lets the parameters depend on the level, i.e.\ introduces regime switching, and one ends with 10--12 parameters ``impossible to manage'' \ts{13}{13}{58:56}. Stochastic volatility, regime switching and multiple jump processes are all used in the industry but
 come from other markets and are not what the lecturer recommends \ts{13}{13}{1:00:02}.
 
 A comment (ours): the scale of the reversion is easy to compute. For $\dd X=-\kappa X\dd t+\sigma\dd W$ (\cref{ch:sde}) one has $\mathrm{Corr}(X_t,X_{t+\Delta})=e^{-\kappa\Delta}$, half-life $\ln2/\kappa$ and stationary standard deviation $\sigma/\sqrt{2\kappa}$; a half-life of 1 day is $\kappa=365\ln2=253$ per year (calendar days) and of 4 days

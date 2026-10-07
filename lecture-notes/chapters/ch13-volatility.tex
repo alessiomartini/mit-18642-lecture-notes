@@ -54,7 +54,7 @@ covariance stationary \ts{24}{19}{5:16}, the \emph{period volatility} is $\sigma
 \begin{equation}\label{ch13:eq-annual}
   \mathrm{vol}=\sqrt N\,\sigma,\qquad N=252\ (\text{daily}),\ 52\ (\text{weekly}),\ 12\ (\text{monthly}),
 \end{equation}
-where $252$ is the number of business days in a year \ts{24}{19}{2:00}\ts{24}{19}{6:23}\ts{13}{9}{25:10}. The justification is
+where $252$ is the number of business days in a year \ts{24}{19}{2:00}\ts{13}{9}{25:10}. The justification is
 the variance of a sum: the return over a year is the sum of $N$ period returns, and if these are
 \emph{uncorrelated} with a common variance, $\Var\bigl(\sum_{t=1}^NR_t\bigr)=N\sigma^2$. A daily standard deviation of
 $1\%$ is thus a volatility of $1\%\times\sqrt{252}=15.9\%$. Scaling all horizons to one year makes assets and
@@ -74,7 +74,7 @@ Given $R_1,\dots,R_T$ the sample estimate is
 \begin{equation}\label{ch13:eq-samplevol}
   \hat\sigma=\sqrt{\frac1{T-1}\sum_{t=1}^T(R_t-\bar R)^2},\qquad \bar R=\frac1T\sum_{t=1}^TR_t,
 \end{equation}
-which uses the unbiased estimator of the variance, hence the divisor $T-1$ \ts{24}{19}{5:16}\ts{24}{19}{6:23}. How precise is it?
+which uses the unbiased estimator of the variance, hence the divisor $T-1$ \ts{24}{19}{5:16}. How precise is it?
 
 \begin{proposition}[Precision of the sample volatility]\label{ch13:prop-precision}
 Let $R_t$ be i.i.d.\ with kurtosis $\kappa$ (\cref{ch03:def-moments}). Then $\hat\sigma^2$ is asymptotically normal with
@@ -114,7 +114,7 @@ To \emph{predict} volatility one needs a single-period sample estimate $\hat\sig
 $t$. If $t$ indexes months and the data are daily, it is the sample variance of the daily returns of month $t$; if $t$
 indexes days and the data are daily, it is simply $R_t^2$ (the mean is negligible); with intraday data the daily value is the sum of
 squared intraday returns (the \emph{realised variance}) \ts{24}{19}{7:28}\ts{13}{9}{24:06}. Four predictors
-of $\sigma^2_{t+1}$ are then defined \ts{24}{19}{6:23}\ts{24}{19}{7:28}\ts{24}{19}{8:33}\ts{13}{9}{27:15}:
+of $\sigma^2_{t+1}$ are then defined \ts{24}{19}{6:23}\ts{13}{9}{27:15}:
 \begin{align}
   \text{historical average:}&\quad \tilde\sigma^2_{t+1}=\frac1t\sum_{j=1}^t\hat\sigma_j^2 &&\text{(all data)},\notag\\
   \text{simple moving average:}&\quad \tilde\sigma^2_{t+1}=\frac1m\sum_{j=0}^{m-1}\hat\sigma^2_{t-j} &&\text{(last $m$)},\notag\\
@@ -178,7 +178,7 @@ Kempthorne was in the Sloan School's sponsoring research centre at the time.
 tabulates decay factors for foreign exchange, zero-coupon yields, equity indices and other assets, chosen by comparing the
 mean squared error of the resulting volatility forecasts: they are generally well above $0.9$, more like $0.95$,
 which says that volatility changes slowly \ts{24}{19}{11:41}; the 2013 lecture translates this into an averaging
-period of roughly 45 to 90 days \ts{13}{9}{26:12}\ts{13}{9}{30:20}. (The published values are $\beta=0.94$ for daily and
+period of roughly 45 to 90 days \ts{13}{9}{26:12}. (The published values are $\beta=0.94$ for daily and
 $0.97$ for monthly data; this is not stated in class.) The point of a benchmark is not optimality but agreement:
 everybody knows what is measured \ts{24}{19}{12:44}. The methodology is adopted without a long-run mean of
 volatility, which is why it corresponds to $\alpha_0=0$, $\alpha_1+\beta_1=1$ in a GARCH$(1,1)$ (\cref{ch13:sec-igarch}).
@@ -203,7 +203,7 @@ with error measures such as the mean squared error, the mean absolute error and 
   \mathrm{MSE}=\frac1n\sum e_t^2,\qquad \mathrm{MAE}=\frac1n\sum|e_t|,\qquad
   \mathrm{MAPE}=\frac{100}n\sum\Bigl|\frac{e_t}{y_t}\Bigr|,\qquad e_t=y_t-\hat y_t,
 \end{equation}
-\ts{24}{19}{9:36}\ts{24}{19}{57:58}\ts{13}{9}{29:17}. (MAPE requires a target that never comes close to zero.)
+\ts{24}{19}{9:36}\ts{13}{9}{29:17}. (MAPE requires a target that never comes close to zero.)
 
 
 % ==================================================================
@@ -216,7 +216,7 @@ In continuous time the standard model of a price is the \emph{geometric Brownian
 \end{equation}
 with $\sigma$ the volatility and $\mu$ the mean return per unit time, $W$ a standard Brownian motion: its increments over
 an interval are $N(0,\text{length})$ and increments over disjoint intervals are independent
-\ts{24}{19}{12:44}\ts{24}{19}{13:55}\ts{13}{9}{31:23}. Dividing by $S$ shows that the relative increment is a
+\ts{24}{19}{12:44}\ts{13}{9}{31:23}. Dividing by $S$ shows that the relative increment is a
 drift plus a random walk with Gaussian steps. The theory is the subject of \cref{ch:sp2,ch:stochcalc}; what is needed here is its consequence for sampled data. If the price is observed at
 $t_0<t_1<\dots<t_n$ with $\Delta_j=t_j-t_{j-1}$, the log returns $R_j=\log(S(t_j)/S(t_{j-1}))$ are \emph{independent} with
 \begin{equation}\label{ch13:eq-gbmret}
@@ -224,7 +224,7 @@ $t_0<t_1<\dots<t_n$ with $\Delta_j=t_j-t_{j-1}$, the log returns $R_j=\log(S(t_j
 \end{equation}
 that is, $\log S(t)$ is a Brownian motion with drift $\mu_*$ and volatility $\sigma$ \ts{24}{19}{14:00}\ts{13}{9}{33:36}. The
 drift of the \emph{log} price differs from the drift of the price by $-\sigma^2/2$: expanding $\log S$ to second order,
-$\dd\log S=\dd S/S-\tfrac12(\dd S/S)^2$, and $(\dd W)^2=\dd t$ gives the extra term \ts{24}{19}{15:05}\ts{24}{19}{16:13}
+$\dd\log S=\dd S/S-\tfrac12(\dd S/S)^2$, and $(\dd W)^2=\dd t$ gives the extra term \ts{24}{19}{15:05}
 (the same lognormal correction as in \cref{ch04:rem-logprice}; the derivation is \cref{ch:stochcalc}). In working
 with stochastic differential equations one must not stop at first order.
 
@@ -271,7 +271,7 @@ The volatility depends on the model of time: $10.25\%$ against $12.2\%$ for the 
 The
 diagnostic used to decide is the \emph{normal Q--Q plot} (sorted returns against the expected order statistics
 $x_j=\E[X_{[j]}]$ of a standard normal sample; a straight line means Gaussian) and the histogram of the \emph{fitted percentiles}
-$\hat F(R_j)$, which is uniform on $(0,1)$ if the model is right \ts{13}{9}{42:08}\ts{13}{9}{44:12}. Both show
+$\hat F(R_j)$, which is uniform on $(0,1)$ if the model is right \ts{13}{9}{42:08}. Both show
 \emph{leptokurtic} returns (slender centre, fat tails): the extreme fitted percentile bins are over-populated, the middle
 under-populated \ts{13}{9}{45:14}. In calendar time the $1\%$ percentile is exceeded about as often as it should, so the
 tail fit is slightly better, but not the centre \ts{13}{9}{46:20}.
@@ -292,7 +292,7 @@ cumulative volume or number of trades, a proxy for the flow of information reach
 A daily \emph{bar} reports four prices: open $O$, high $H$, low $L$ and close $C$. Close-to-close volatility uses one number per day and
 ignores the rest \ts{24}{19}{18:22}\ts{13}{9}{47:20}. Garman and Klass (1980) asked how much precision the other three
 prices buy. Work with $X(t)=\log S(t)$, a Brownian motion \emph{without drift} ($\mu_*=0$) with variance $\sigma^2$ per day, and
-let $f\in(0,1)$ be the fraction of the day during which the market is closed \ts{24}{19}{19:27}\ts{24}{19}{20:29}. Day~0 closes at
+let $f\in(0,1)$ be the fraction of the day during which the market is closed \ts{24}{19}{19:27}. Day~0 closes at
 $t=0$ (price $C_0$), day~1 opens at $t=f$ ($O_1$) and closes at $t=1$ ($C_1$), and
 \[
   H_1=\max_{f\le t\le1}X(t),\qquad L_1=\min_{f\le t\le1}X(t),
@@ -314,7 +314,7 @@ the two normalised gap and session estimators,
   \hat\sigma_1^2=\frac{(O_1-C_0)^2}{f},\qquad \hat\sigma_2^2=\frac{(C_1-O_1)^2}{1-f},\qquad
   \E[\hat\sigma_i^2]=\sigma^2,\quad\Var\hat\sigma_i^2=2\sigma^4\quad(i=0,1,2),
 \end{equation}
-because $(O_1-C_0)/\sqrt f$ and $(C_1-O_1)/\sqrt{1-f}$ are again $\sigma Z$ \ts{24}{19}{22:41}\ts{24}{19}{23:44}\ts{13}{9}{51:33}.
+because $(O_1-C_0)/\sqrt f$ and $(C_1-O_1)/\sqrt{1-f}$ are again $\sigma Z$ \ts{24}{19}{22:41}\ts{13}{9}{51:33}.
 
 \begin{lemma}[Combining independent unbiased estimators]\label{ch13:lem-comb}
 Let $V_1,V_2$ be independent unbiased estimators of the same parameter with variances $v_1,v_2$. Among the estimators
@@ -325,10 +325,10 @@ efficiencies \emph{add}: $\mathrm{eff}=\mathrm{eff}_1+\mathrm{eff}_2$.
 $\Var=a^2v_1+(1-a)^2v_2$ is a parabola with minimum at $a=v_2/(v_1+v_2)$, where it equals $v_1v_2/(v_1+v_2)$. Hence $1/\Var=1/v_1+1/v_2$,
 and efficiency is $2\sigma^4$ times $1/\Var$.
 \end{proof}
-Since $\hat\sigma^2_1$ and $\hat\sigma^2_2$ are independent \ts{24}{19}{23:44}\ts{24}{19}{24:50}, the average
+Since $\hat\sigma^2_1$ and $\hat\sigma^2_2$ are independent \ts{24}{19}{23:44}, the average
 $\hat\sigma^2_*=\tfrac12\hat\sigma^2_1+\tfrac12\hat\sigma^2_2$ has $\Var=\sigma^4$ and efficiency $2$: the opening price alone
 doubles the information of the close. In 2013 the lecturer stressed the reading of this number: the opening price buys as much as a
-second day of data \ts{13}{9}{52:40}\ts{13}{9}{54:46}. Weighting the gap and the session equally is right because both are
+second day of data \ts{13}{9}{52:40}. Weighting the gap and the session equally is right because both are
 $\sigma Z$ in law, whatever the value of $f$ (which drops out of \eqref{ch13:eq-gk1}).
 
 \subsection{Parkinson's high--low estimator}\label{ch13:sec-parkinson}
@@ -361,7 +361,7 @@ explain why the improvement obtained with $D_l$ as an estimate of the variance $
 \subsection{Garman--Klass, and the ``best analytic'' estimator}\label{ch13:sec-gk}
 Garman and Klass (1980) found the estimator of minimal variance among those that are \emph{scale invariant}, i.e.\ that
 scale as $\lambda^2$ when the price is multiplied by $\lambda$, hence expressible in the normalised prices
-$u=H-O$, $d=L-O$, $c=C-O$ (logarithms) \ts{24}{19}{27:57}\ts{24}{19}{28:59}\ts{13}{9}{56:47}\ts{13}{9}{57:52}:
+$u=H-O$, $d=L-O$, $c=C-O$ (logarithms) \ts{24}{19}{27:57}\ts{13}{9}{56:47}:
 \begin{equation}\label{ch13:eq-gkbest}
   \hat\sigma_{**}^2=0.511\,(u-d)^2-0.019\,\bigl\{c(u+d)-2ud\bigr\}-0.383\,c^2,\qquad \mathrm{eff}(\hat\sigma^2_{**})\approx7.4 .
 \end{equation}
@@ -375,7 +375,7 @@ It is unbiased because $\E\bigl[\tfrac12(H-L)^2\bigr]=2\ln2\,\sigma^2$ (from $\E
 $(2\ln2)-(2\ln2-1)=1$ times $\sigma^2$. This explains where the mysterious constant $2\ln2-1$ comes from: it is the coefficient that cancels the
 bias of the range term. Simulation: efficiency $7.40$ for both \eqref{ch13:eq-gkbest} and \eqref{ch13:eq-gk}.
 Why does one bother with efficiency? With an efficient estimator one can use a shorter window and still be precise, which allows
-tracking changes of volatility with less lag \ts{24}{19}{30:03}\ts{24}{19}{31:13}\ts{13}{9}{58:56}.
+tracking changes of volatility with less lag \ts{24}{19}{30:03}\ts{13}{9}{58:56}.
 
 For $0<f<1$ the opening price may differ from the previous close, and the \emph{composite} estimator combines the overnight gap with the
 best analytic estimator of the session, normalised by its length $1-f$:
@@ -454,7 +454,7 @@ not discussed in the course.
 \subsection{Case study: volatility of the S\&P~500 and of ARKK (2024)}\label{ch13:sec-gkcs}
 \begin{casestudy}[Historical volatility with R: S\&P~500 (lecture) and ARKK (problem set)]\label{ch13:cs-ohlc}
 \textbf{Goal.} Compare the six estimators on real bars and ask which is more \emph{predictable}
-\ts{24}{19}{32:16}\ts{24}{19}{33:25}.
+\ts{24}{19}{32:16}.
 \textbf{Lesson.} The efficient estimator (Yang--Zhang) is also the more predictable, the estimates of the same asset differ noticeably with the
 estimator, and volatility levels differ across assets by an order of magnitude; the conclusions above are only descriptive.
 \end{casestudy}
@@ -471,10 +471,10 @@ the S\&P~500 index from 2014-01-02 to 2024-11-04 (2\,729 days) and the ARKK exch
 plus \texttt{gk.yz} and Yang--Zhang \eqref{ch13:eq-yz}; \emph{close-to-close} uses the unbiased variance of the $n-1$ returns in a window of $n$ prices.
 \textbf{Results (S\&P~500).} All estimators show the same pattern: annualised volatility mostly between $5\%$ and $25\%$, around $12\%$--$15\%$ in
 calm periods, with spikes and a huge one in the COVID crash of spring 2020 (peak close-to-close $0.98$, Parkinson $0.53$, GK $0.52$, Yang--Zhang $0.70$)
-\ts{24}{19}{34:26}\ts{24}{19}{35:31}. The range estimators are smoother and different in level: over 2023--24 the Yang--Zhang volatility
-is generally below the close-to-close one, though sometimes far above it (scatter plot of the pairs) \ts{24}{19}{36:32}\ts{24}{19}{37:36}. A close-to-close
+\ts{24}{19}{34:26}. The range estimators are smoother and different in level: over 2023--24 the Yang--Zhang volatility
+is generally below the close-to-close one, though sometimes far above it (scatter plot of the pairs) \ts{24}{19}{36:32}. A close-to-close
 window keeps a spike until it drops out $21$ days later, so it stays elevated longer than the others; estimators that fall faster after a spike
-are probably better for predicting realised volatility \ts{24}{19}{38:43}\ts{24}{19}{39:47}.
+are probably better for predicting realised volatility \ts{24}{19}{38:43}.
 
 \medskip
 \textbf{Modelling the rolling volatility, $\approx450$ days of 2023--24} (\texttt{forecast}/\texttt{fpp2} package of Hyndman and Athanasopoulos, \emph{Forecasting: Principles and Practice}; Chapter~3 for the naive method and residual diagnostics, Chapter~8 for automatic ARIMA and seasonal ARIMA) \ts{24}{19}{40:47}:
@@ -493,14 +493,14 @@ Yang--Zhang & naive & $88.1$ (10, $10^{-14}$) & $2.31$\\
 \end{tabular}
 \end{center}
 The \emph{naive} model $\hat y_t=y_{t-1}$ is a random walk (efficient-market flavour: the best forecast is where things are now); its residuals are the first
-differences and the Ljung--Box test (\cref{ch09:eq-bp}) rejects whiteness \ts{24}{19}{41:49}\ts{24}{19}{42:55}\ts{24}{19}{44:02}. \texttt{auto.arima}
+differences and the Ljung--Box test (\cref{ch09:eq-bp}) rejects whiteness \ts{24}{19}{41:49}. \texttt{auto.arima}
 picks a model by the corrected AIC, $\mathrm{AICc}=\mathrm{AIC}+2k(k+1)/(n-k-1)$ with $k$ parameters (for ARIMA$(3,1,0)$: $-3303.73$ against $-3303.64$, $n\approx450$)
-\ts{24}{19}{45:02}\ts{24}{19}{46:11}; the coefficients are judged by their ratio to the standard error: for
+\ts{24}{19}{45:02}; the coefficients are judged by their ratio to the standard error: for
 close-to-close ARIMA$(3,1,0)$ the AR(3) coefficient has $0.126/0.047\approx2.7$ (``almost 3''), the AR(2) $1.4$
 \ts{24}{19}{47:12}. For Yang--Zhang the fit is an ARIMA$(1,1,1)$ with $\hat\phi=0.696$ and $\hat\theta=-0.446$, many standard errors from zero, and the
 residuals are close to white noise, except for a large autocorrelation at \emph{lag $21$}, the length of the window
-\ts{24}{19}{48:14}\ts{24}{19}{49:15} (explained in \cref{ch13:prop-lag21}). A \emph{seasonal} ARIMA with period $21$ removes it
-\ts{24}{19}{50:17}\ts{24}{19}{52:30}: with a seasonal MA coefficient of $-0.78$ ($13$ standard errors) the Ljung--Box test no longer rejects, and the training MAPE falls to $1.92$
+\ts{24}{19}{48:14} (explained in \cref{ch13:prop-lag21}). A \emph{seasonal} ARIMA with period $21$ removes it
+\ts{24}{19}{50:17}: with a seasonal MA coefficient of $-0.78$ ($13$ standard errors) the Ljung--Box test no longer rejects, and the training MAPE falls to $1.92$
 \ts{24}{19}{57:58}. The forecast plot shows a point forecast (solid line) and Gaussian prediction intervals that widen with the horizon, with the volatility
 reverting to a mean level after a low period \ts{24}{19}{59:01}.
 
@@ -594,7 +594,7 @@ and the central limit theorem restores normality, in accordance with the empiric
 \begin{secondary}[Estimation by the EM algorithm]
 Estimation by maximum likelihood is hard because the likelihood is a product of infinite series, but the model has a natural latent variable, the number of jumps in each period; the
 \emph{EM algorithm} of Dempster, Laird and Rubin then has closed-form steps and returns, as a by-product, the posterior number of jumps per period
-\ts{24}{19}{1:01:19}\ts{13}{9}{1:04:18}\ts{13}{9}{1:05:24} (Pickard, Kempthorne and Zakaria, 1987).
+\ts{24}{19}{1:01:19}\ts{13}{9}{1:04:18} (Pickard, Kempthorne and Zakaria, 1987).
 \end{secondary}
 A finding reported in class: when fitted to stock returns, the jump rate came out very high, a jump every
 couple of days, so the model was not detecting rare crashes but mimicking a fat-tailed distribution by a mixture of a plain normal, a normal with one jump, with two jumps, and so on
@@ -602,7 +602,7 @@ couple of days, so the model was not detecting rare crashes but mimicking a fat-
 
 \subsection{Brownian motion observed at random times: the Laplace law}\label{ch13:sec-laplace}
 If a Brownian motion is observed not at equally spaced times but after random, \emph{exponentially distributed} increments of time, the increments of the process follow the
-\emph{Laplace} (two-sided exponential) law \ts{24}{19}{1:03:32}\ts{24}{19}{1:04:32}
+\emph{Laplace} (two-sided exponential) law \ts{24}{19}{1:03:32}
 \begin{equation}\label{ch13:eq-laplace}
   f(x\mid\mu,b)=\frac1{2b}\,e^{-|x-\mu|/b},\qquad \E[X]=\mu,\quad \Var X=2b^2,\quad \kappa=6 .
 \end{equation}
@@ -627,7 +627,7 @@ $P(|X-\mu|>4\sqrt{\Var X})=e^{-4\sqrt2}=0.35\%$ against $6.3\times10^{-5}$ for t
 The lecture fits both laws to $n=1000$ daily S\&P~500 returns, 2014-10-10 to 2018-10-02 \ts{24}{19}{1:05:34}. Method of moments for the Laplace law:
 $\hat\mu=\bar R=0.000427$, $\hat b=\sqrt{\hat\Var/2}=0.005652$; the implied annualised volatility is $\sqrt{252}\sqrt2\,\hat b=12.69\%$ (a check: $\sqrt2\times0.005652\times\sqrt{252}=0.1269$). The
 histogram is peaked with exponentially decaying tails and the Laplace curve follows it much better than the Gaussian (drawn in red for comparison). The \emph{Q--Q plot} (sorted observations against theoretical quantiles) is
-close to a straight line for the Laplace law and clearly curved for the normal \ts{24}{19}{1:06:37}\ts{24}{19}{1:07:45}. So the Laplace law is a better model of independent daily returns;
+close to a straight line for the Laplace law and clearly curved for the normal \ts{24}{19}{1:06:37}. So the Laplace law is a better model of independent daily returns;
 what neither can explain is that returns are not independent.
 \end{casestudy}
 
@@ -635,7 +635,7 @@ what neither can explain is that returns are not independent.
 \section{ARCH models}\label{ch13:sec-arch}
 The models so far have independent returns and hence a volatility that is the same in every period. The data say otherwise (\cref{ch13:sec-facts}): large
 returns tend to follow large returns. Engle (1982) proposed to let the volatility of period $t$ depend on the returns of the
-preceding periods \ts{24}{19}{1:07:45}\ts{13}{9}{1:05:24}\ts{13}{9}{1:06:27}.
+preceding periods \ts{24}{19}{1:07:45}\ts{13}{9}{1:05:24}.
 
 \begin{definition}[ARCH$(p)$]\label{ch13:def-arch}
 Let $y_t=\log(S_t/S_{t-1})$ and $\mathcal F_t$ the information available at time $t$. The \emph{autoregressive conditionally heteroskedastic} model of order $p$ is
@@ -696,13 +696,13 @@ $\hat\varepsilon_t^2$ on a constant and $\hat\varepsilon^2_{t-1},\dots,\hat\vare
 \begin{equation}\label{ch13:eq-lm}
   \mathrm{LM}=nR^2\ \overset{H_0}{\approx}\ \chi^2_p ,
 \end{equation}
-{\emergencystretch=3em with $R^2$ the coefficient of determination of that regression \ts{24}{19}{1:09:55}\ts{13}{9}{1:10:34}\ts{13}{9}{1:11:40}. Under $H_0$ the squares $\hat\varepsilon_t^2$ have
+{\emergencystretch=3em with $R^2$ the coefficient of determination of that regression \ts{24}{19}{1:09:55}\ts{13}{9}{1:10:34}. Under $H_0$ the squares $\hat\varepsilon_t^2$ have
 no linear dependence on the past and $R^2$ is small; for $p=1$, $R^2$ is the squared sample correlation between $\hat\varepsilon_t^2$ and $\hat\varepsilon^2_{t-1}$, so
 $nR^2\approx n\hat r_1^2$ with $\sqrt n\hat r_1\to N(0,1)$, as in \cref{ch09:eq-bp}.
 \begin{secondary}[McLeod--Li and quasi-maximum likelihood]
 For general $p$ the statistic is asymptotically equivalent to the
 Box--Pierce statistic of the squared residuals (the McLeod--Li test; this remark is not from the class). The regression uses least squares, whose assumptions are not those of a Gaussian likelihood; its estimates are
-\emph{quasi-maximum-likelihood} estimates, consistent but not efficient \ts{13}{9}{1:11:40}\ts{13}{9}{1:12:42}.
+\emph{quasi-maximum-likelihood} estimates, consistent but not efficient \ts{13}{9}{1:11:40}.
 \end{secondary}\par}
 
 \begin{finance}[Volatility clustering and prediction]
@@ -729,7 +729,7 @@ Let $y_t=\mu_t+\varepsilon_t$, $\varepsilon_t=z_t\sigma_t$, $\sigma_t^2=\alpha_0
 
 \subsection{Definition and parsimony}\label{ch13:sec-garch-def}
 Data often need a large ARCH order to reproduce the persistence of volatility (a hint of the infinite-order autoregression of Wold's theorem, \cref{ch09:sec-wold}). Bollerslev (1986)
-added lagged \emph{variances} to the right-hand side \ts{24}{19}{1:12:05}\ts{13}{9}{1:14:50}\ts{13}{9}{1:15:55}\ts{13}{11}{1:07}.
+added lagged \emph{variances} to the right-hand side \ts{24}{19}{1:12:05}\ts{13}{9}{1:14:50}\ts{13}{11}{1:07}.
 
 \begin{definition}[GARCH$(p,q)$]\label{ch13:def-garch}
 With $y_t=\mu_t+\varepsilon_t$ and $\varepsilon_t=\sigma_tz_t$ as in \cref{ch13:def-arch},
@@ -789,7 +789,7 @@ $\varepsilon_t^2=\alpha_0+(\alpha_1+\beta_1)\varepsilon_{t-1}^2+u_t-\beta_1u_{t-
 \begin{proof}
 From $\sigma_{t-j}^2=\varepsilon_{t-j}^2-u_{t-j}$ substitute in \eqref{ch13:eq-garch}: $\varepsilon_t^2-u_t=\alpha_0+\sum_i\alpha_i\varepsilon^2_{t-i}+\sum_j\beta_j(\varepsilon_{t-j}^2-u_{t-j})$; collect terms.
 \end{proof}
-{\emergencystretch=3em This is the statement announced in \cref{ch09:sec-arma11} \ts{24}{19}{1:13:09}\ts{13}{11}{4:15}\ts{13}{11}{5:15}.
+{\emergencystretch=3em This is the statement announced in \cref{ch09:sec-arma11} \ts{24}{19}{1:13:09}\ts{13}{11}{4:15}.
 \begin{secondary}[A slip in the 2013 transcript]
 (the transcript of 2013 writes $-\beta_1u_t$ for $-\beta_1u_{t-1}$).
 \end{secondary}
@@ -838,7 +838,7 @@ Put $a_t=\alpha_1z_t^2+\beta_1$, an i.i.d.\ sequence with $\E[a_t]=\phi$; then \
 $\sigma_t^2=\alpha_0\bigl(1+a_{t-1}+a_{t-1}a_{t-2}+\dots+a_{t-1}\cdots a_{t-n+1}\bigr)+a_{t-1}\cdots a_{t-n}\,\sigma^2_{t-n}$. If $\phi<1$ the series with $n=\infty$
 has non-negative terms and expectation $\alpha_0\sum_k\phi^k=\alpha_0/(1-\phi)<\infty$, hence converges almost surely and in $L^1$, and it defines a stationary solution (a function of
 $z_{t-1},z_{t-2},\dots$); the remainder term has expectation $\phi^n\E[\sigma^2_{t-n}]\to0$, so this is the only solution with finite mean. For the general $(p,q)$ case take expectations in
-\eqref{ch13:eq-garch} (with $\E[\varepsilon^2]=\E[\sigma^2]$) and use \cref{ch13:lem-roots} for the equivalence with the ARMA polynomial \ts{13}{11}{7:23}\ts{13}{11}{8:26}.
+\eqref{ch13:eq-garch} (with $\E[\varepsilon^2]=\E[\sigma^2]$) and use \cref{ch13:lem-roots} for the equivalence with the ARMA polynomial \ts{13}{11}{7:23}.
 \end{proof}
 Taking expectations of \eqref{ch13:eq-garch11} is how the lecture obtains the \emph{long-run variance} $\sigma_*^2=\alpha_0+(\alpha_1+\beta_1)\sigma_*^2$ \ts{24}{19}{1:14:13}. Conversely
 $\alpha_0=(1-\alpha_1-\beta_1)\sigma_*^2$: one can parametrise the model by $(\sigma_*^2,\alpha_1,\beta_1)$, and $\sigma_*^2$ is then simply the unconditional variance of the returns (which the
@@ -1022,7 +1022,7 @@ model of its evolution.
 \subsection{The likelihood}\label{ch13:sec-lik}
 A GARCH model specifies the law of $y_t$ \emph{given the past}, and this is exactly what the likelihood needs.
 Write $\theta=(c,\alpha_0,\alpha_1,\dots,\alpha_p,\beta_1,\dots,\beta_q)$ for the parameters, $y_t=c+\varepsilon_t$ (a constant mean; \cref{ch13:sec-fxcs} uses an AR mean),
-and $\varepsilon_t=\sigma_tz_t$. The joint density factorises into conditional densities (the chain rule of probability) \ts{24}{19}{1:14:13}\ts{13}{11}{8:26}\ts{13}{11}{9:30}.
+and $\varepsilon_t=\sigma_tz_t$. The joint density factorises into conditional densities (the chain rule of probability) \ts{24}{19}{1:14:13}\ts{13}{11}{8:26}.
 \begin{proposition}[Gaussian log-likelihood of a GARCH model]\label{ch13:prop-lik}
 If $z_t$ is $N(0,1)$ then $y_t\mid\mathcal F_{t-1}\sim N(c,\sigma_t^2)$, where $\sigma_t^2=\sigma_t^2(\theta)$ is computed recursively from
 \eqref{ch13:eq-garch} and the data, and
@@ -1045,7 +1045,7 @@ $\varepsilon_t^2/\sigma_t^2$ penalises a variance too small for the return that 
 
 \paragraph{Constraints and reparametrisation.} The parameters are constrained: $\alpha_0>0$, $\alpha_i,\beta_j\ge0$ and $\sum_i\alpha_i+\sum_j\beta_j<1$ (\cref{ch13:thm-stat}) \ts{13}{11}{9:30}. The lecturer's
 remark is practical: optimisation algorithms behave well on \emph{unconstrained} parameters, so one transforms them, the logarithm for a positive parameter, the logit
-$\log\frac x{1-x}$ for a parameter in $(0,1)$ \ts{13}{11}{10:39}\ts{13}{11}{11:39}. For the GARCH$(1,1)$ one can write
+$\log\frac x{1-x}$ for a parameter in $(0,1)$ \ts{13}{11}{10:39}. For the GARCH$(1,1)$ one can write
 \[
   \alpha_0=e^{a},\qquad \alpha_1=\phi\,s,\quad\beta_1=\phi\,(1-s),\quad \phi=\frac1{1+e^{-u}},\quad s=\frac1{1+e^{-v}},
 \]
@@ -1068,7 +1068,7 @@ Simulate $2000$ returns of a Gaussian GARCH$(1,1)$ with $(\alpha_0,\alpha_1,\bet
 
 \subsection{Innovations with the Student $t$ distribution}\label{ch13:sec-t}
 The Gaussian assumption leaves two symptoms in the residuals of the case study: standardised residuals with values six standard deviations from the mean, and a bend of the Q--Q plot at the extremes
-\ts{13}{11}{14:47}\ts{13}{11}{15:54}. A natural heavier-tailed alternative is the Student $t$ law. Because $\Var z_t$ must be $1$, one takes the \emph{standardised} $t$ with $\nu>2$ degrees of freedom:
+\ts{13}{11}{14:47}. A natural heavier-tailed alternative is the Student $t$ law. Because $\Var z_t$ must be $1$, one takes the \emph{standardised} $t$ with $\nu>2$ degrees of freedom:
 \begin{equation}\label{ch13:eq-tstd}
   z=\sqrt{\frac{\nu-2}{\nu}}\,T_\nu,\qquad
   f_\nu(z)=\frac{\Gamma\bigl(\tfrac{\nu+1}2\bigr)}{\Gamma\bigl(\tfrac\nu2\bigr)\sqrt{\pi(\nu-2)}}\Bigl(1+\frac{z^2}{\nu-2}\Bigr)^{-\frac{\nu+1}2},
@@ -1088,7 +1088,7 @@ Conditionally on $V$, $T_\nu\sim N(0,\nu/V)$, so $T_\nu$ is a normal variance mi
 $\kappa_t=\E[T^4]/(\Var T)^2=3(\nu-2)/(\nu-4)=3+6/(\nu-4)$. The tail follows from the density \eqref{ch13:eq-tstd}, which decays like $|z|^{-(\nu+1)}$.
 \end{proof}
 So $\nu=10$ has $\kappa_t=4$, $\nu=5$ has $9$, $\nu=30$ has $3.23$; as $\nu\to\infty$ the law tends to the normal. The value $\nu=30$ (or $25$--$40$, the answers of the students in class) is when the density and the distribution function are
-visually indistinguishable from the normal \ts{13}{11}{19:08}\ts{13}{11}{20:13}. What differs is the \emph{far tail}, best seen on a logarithmic scale \ts{13}{11}{20:13}\ts{13}{11}{21:15}, \cref{ch13:fig-tails}.
+visually indistinguishable from the normal \ts{13}{11}{19:08}. What differs is the \emph{far tail}, best seen on a logarithmic scale \ts{13}{11}{20:13}, \cref{ch13:fig-tails}.
 
 \begin{figure}[ht]
 \centering
@@ -1130,7 +1130,7 @@ For which $(\alpha_1,\beta_1)$ is the kurtosis of a GARCH$(1,1)$ with $t_6$ inno
 \end{exercise}
 
 \subsection{Diagnostics and model choice}\label{ch13:sec-diag}
-After fitting, the standardised residuals $\hat z_t=\hat\varepsilon_t/\hat\sigma_t$ should behave like i.i.d.\ draws of the assumed law with unit variance. Hence \ts{24}{19}{1:14:13}\ts{13}{11}{11:39}\ts{13}{11}{12:40}:
+After fitting, the standardised residuals $\hat z_t=\hat\varepsilon_t/\hat\sigma_t$ should behave like i.i.d.\ draws of the assumed law with unit variance. Hence \ts{24}{19}{1:14:13}\ts{13}{11}{11:39}:
 \begin{itemize}
   \item $\hat z_t$ should be uncorrelated (Ljung--Box/Box--Pierce test of \cref{ch09:eq-bp}) and, the point of the exercise, \emph{$\hat z_t^2$ should be uncorrelated}: the GARCH structure should have absorbed the dependence of the squares.
   \item Normality (or fit of the assumed $t$): normal Q--Q plot, the Jarque--Bera test $\mathrm{JB}=T\bigl[\hat S^2/6+(\hat K-3)^2/24\bigr]\approx\chi^2_2$ (skewness $\hat S$, kurtosis $\hat K$), the Shapiro--Wilk test, the test based on the uniformity of the fitted percentiles $\hat F(y_t)$
@@ -1165,14 +1165,14 @@ GARCH$(1,1)$ & $1.31\times10^{-7}$ & $0.0278$ & $\hat\beta_1=0.9692$ & $77.1$ & 
 \end{tabular}
 \end{center}
 (JB is the Jarque--Bera statistic of the residuals, LB $p$ the Ljung--Box $p$-value for $\hat z^2$; the last column is the annualised lower bound of the fitted volatility, $\sqrt{252\hat\alpha_0}$ for ARCH, $\sqrt{252\hat\alpha_0/(1-\hat\beta_1)}$ for GARCH; the estimated
-$\alpha_i$ of ARCH$(10)$ are all significant except the first and the last, and the sum $0.504$ is the persistence.) The volatility paths of the four fits \ts{13}{11}{2:09}\ts{13}{11}{3:10}\ts{13}{9}{1:19:09}
+$\alpha_i$ of ARCH$(10)$ are all significant except the first and the last, and the sum $0.504$ is the persistence.) The volatility paths of the four fits \ts{13}{11}{2:09}\ts{13}{9}{1:19:09}
 show the following. (i) Every ARCH model has a \emph{hard lower bound} $\sqrt{\hat\alpha_0}$, lower for higher orders, which is fixed by the sample; (ii) the GARCH$(1,1)$ with three parameters is smoother and explores a much wider range of levels than
-the ten-parameter ARCH$(10)$ \ts{13}{9}{1:17:21}\ts{13}{9}{1:20:10}\ts{24}{19}{1:17:21}; (iii) its persistence is $\hat\alpha_1+\hat\beta_1=0.9970$: it is ``very close to being non-stationary'', with the long-run variance
+the ten-parameter ARCH$(10)$ \ts{13}{9}{1:17:21}\ts{24}{19}{1:17:21}; (iii) its persistence is $\hat\alpha_1+\hat\beta_1=0.9970$: it is ``very close to being non-stationary'', with the long-run variance
 $\hat\alpha_0/(1-\hat\phi)=4.34\times10^{-5}$ (daily volatility $0.66\%$, $10.5\%$ annual). Residual checks: the Jarque--Bera test rejects normality for all fits, less strongly for GARCH$(1,1)$; the Ljung--Box tests of the squared residuals no longer reject for the ARCH fits
 and marginally still reject ($p=0.004$) for the GARCH$(1,1)$.
 
 \textbf{Step 3: AR mean, $t$ innovations.} A mean model is fitted first: an AR$(7)$ is chosen by AIC, with only the seventh lag significant ($t=2.0$, $R^2=0.004$), and residual standard error $0.00645$. In the AR$(7)$--GARCH$(1,1)$ fit of the
-package \texttt{rugarch} \ts{13}{11}{13:44}\ts{13}{11}{15:54}:
+package \texttt{rugarch} \ts{13}{11}{13:44}:
 \begin{center}\small
 \begin{tabular}{@{}lcccc@{}}
 \toprule
@@ -1184,7 +1184,7 @@ $t_{10}$ (fixed) & $1.285\times10^{-7}$ & $0.02920$ & $0.96810$ & $0.99730$\\
 \end{tabular}
 \end{center}
 The Q--Q plot of the AR$(7)$ residuals (constant variance) bends strongly at both ends, with values up to $6$ standard deviations \ts{13}{11}{14:47}; those of the Gaussian GARCH residuals bend much less but still bend beyond $\pm2.5$ \ts{13}{11}{15:54}, and those of the $t_{10}$ fit are along the line.
-The two fitted volatility paths are practically identical (differences at most $0.0002$ in the daily $\sigma_t$, about $0.3$ percentage points in annualised volatility), and the persistence is the same to four digits \ts{13}{11}{16:59}\ts{13}{11}{18:05}.
+The two fitted volatility paths are practically identical (differences at most $0.0002$ in the daily $\sigma_t$, about $0.3$ percentage points in annualised volatility), and the persistence is the same to four digits \ts{13}{11}{16:59}.
 \textbf{Step 4: choosing $\nu$.} Fitting for $\nu=4,\dots,30$ with the parameters of the mean and of $\sigma_t^2$ re-estimated each time gives the profile log-likelihood below (the note prints it with the sign of a negative log-likelihood, and plots ``Minus Log Likelihood'');
 its maximum is at $\nu=10$ \ts{13}{11}{23:17} (the 2024 lecture reads $9$ from the same plot \ts{24}{19}{1:19:31}: the difference is $0.16$ log-likelihood units).
 \begin{center}\small

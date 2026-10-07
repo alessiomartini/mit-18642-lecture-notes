@@ -177,6 +177,13 @@ def inline(s, sides=None):
                     else:
                         out.append(math_html("\\begin{aligned}" + body + "\\end{aligned}", True))
                     i = e1; continue
+                if en in ("coursenote", "answer"):  # written inside a paragraph: number here, box in the side column
+                    e0, e1 = env_end(s, j2, en)
+                    if en == "coursenote":
+                        topic, k0 = grab_opt(s, j2); sides += box("coursenote", topic, s[k0:e0], False)
+                    else:
+                        q, k0 = grab(s, j2); topic, k0 = grab_opt(s, k0); sides += answer_html(q, topic or "", s[k0:e0])
+                    out.append(f'<sup class="sn{" cn" if en == "coursenote" else ""}">{S.sidenote}</sup>'); i = e1; continue
                 S.leftovers.append("\\begin{%s}" % en); out.append(f'<span class="lx">\\begin{{{esc(en)}}}</span>'); i = j2; continue
             i = j
             if name in ("emph", "textit"): g, i = grab(s, i); out.append(f"<em>{sub(g)}</em>")
@@ -234,6 +241,8 @@ NUMBERED = {  # name: (css class, shown name, counter, goes to side column)
 PLAIN = {  # name: (css class, title, goes to side column)
     "intuition": ("intu", "Intuition", False), "finance": ("fin", "In finance", False),
     "casestudy": ("cs", "Case study", False), "keyformulas": ("key", "Key formulas", False),
+    "lab": ("cs", "Lab", False), "keyconcepts": ("key", "Key concepts", False),
+    "solution": ("exer hdr", "Solution", False),
     "sources": ("rem hdr", "Sources for this chapter", False), "secondary": ("sec", "Beyond the core", False),
     "mysolution": ("exer hdr", "My solution", False), "coursenote": ("rem hdr", "Course note", True),
     "history": ("hist hdr", "History", True), "aside": ("hist hdr", "Aside", True),
@@ -309,11 +318,15 @@ def box(name, opt, body, units):
             title = f'<span class="ty">{topic or "PROOF"}</span>' if topic else '<span class="ty">PROOF</span>'
         else:
             title = f'<span class="ty">{shown.upper()}</span>' + (f": {topic}" if topic else "")
+            if name == "coursenote":  # numbered with the notes, as in the PDF
+                S.sidenote += 1; title = f"{S.sidenote}&ensp;" + title
     inner = blocks(body, units if not side else False)
     inner_m = "".join(h for k, h in inner if k == "m"); sides += [x for x in inner if x[0] == "s"]
     bid = lab or uid("bx", (opt or "") + body)
     if name == "secondary":
         h = f'<details class="u bx {cls}" id="{bid}" open><summary class="bt">&#9671; {title}</summary>{inner_m}</details>'
+    elif name == "solution":  # folded: try the exercise first
+        h = f'<details class="u bx {cls}" id="{bid}"><summary class="bt">{title} (try first, then open)</summary><div class="bb">{inner_m}</div></details>'
     else:
         extra = ""
         if name == "exercise":
@@ -411,11 +424,34 @@ def figure_svgs():
         stamp.write_text(h); print("  figure", name, "built")
 
 # ---------------------------------------------------------------- page
+def newer_envs(src):
+    """Rewrite the newer macros (Try first, Lab, Key concepts) into ones the converter knows.
+    The solution stays right after its exercise, folded (in the PDF it goes to the end of the chapter)."""
+    src = re.sub(r"\\begin\{tryfirst\}(?:\[([^\]]*)\])?\{([^}]*)\}",
+                 lambda m: f"\\begin{{exercise}}[Try first{': ' + m.group(1) if m.group(1) else ''}]\\label{{{m.group(2)}}}", src)
+    src = re.sub(r"\\begin\{lab\}(?:\[([^\]]*)\])?\{([^}]*)\}",
+                 lambda m: f"\\begin{{lab}}[{m.group(1) or ''}]\\label{{{m.group(2)}}}", src)
+    src = src.replace("\\end{tryfirst}", "\\end{exercise}").replace("\\printsolutions", "")
+    src = re.sub(r"\\begin\{description\}(\[[^\]]*\])?", r"\\begin{itemize}", src).replace("\\end{description}", "\\end{itemize}")
+    src = re.sub(r"\\addcontentsline\{[^}]*\}\{[^}]*\}\{[^}]*\}", "", src)
+    # inside solutions figures and tables cannot float: a tikzpicture in a center becomes a figure (text after
+    # it its caption), a tabular a tabularx
+    src = re.sub(r"\\begin\{center\}\s*(\\begin\{tikzpicture\}.*?\\end\{tikzpicture\})(.*?)\\end\{center\}",
+                 lambda m: f"\\begin{{figure}}{m.group(1)}\\caption{{{m.group(2).strip()}}}\\end{{figure}}", src, flags=re.S)
+    src = re.sub(r"\\(begin|end)\{center\}", "", src)
+    while (m := re.search(r"\\begin\{tabular\}", src)):
+        spec, j = grab(src, m.end())
+        src = src[:m.start()] + f"\\begin{{tabularx}}{{\\linewidth}}{{{spec}}}" + src[j:]
+    src = src.replace("\\end{tabular}", "\\end{tabularx}")
+    src = src.replace("\\keyquestions", "\\textbf{Can you answer these without looking?}\n\n")
+    src = src.replace("\\keylist", "\n\n\\textbf{The concepts}\n\n")
+    return re.sub(r"\\keyconcept\{([^}]*)\}", r"\\item \\textbf{\1.}", src)
+
 def build(tex_path):
     S.labels = load_labels(); S.videos = load_videos()
     S.anchors = set(re.findall(r"\\label\{([^}]*)\}", strip_comments(tex_path.read_text(encoding="utf8"))))
     S.chapname = tex_path.name[:4]; chap = int(S.chapname[2:]); reset(chap)
-    src = strip_comments(tex_path.read_text(encoding="utf8"))
+    src = newer_envs(strip_comments(tex_path.read_text(encoding="utf8")))
     items = blocks(src)
     rows = []  # each row: [main html, [side html]]
     for k, h in items:

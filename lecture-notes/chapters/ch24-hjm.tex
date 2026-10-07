@@ -40,7 +40,7 @@ For each $t\ge0$, $f(t,\cdot):[t,\infty)\to\R$ is the instantaneous forward curv
 \end{equation}
 The short rate is the forward curve evaluated at its own running end, $r_t:=f(t,t)$.
 \end{definition}
-\ts{13}{24}{46:04}\ts{13}{24}{1:02:41} This is exactly \eqref{ch06:eq-fwd} of \cref{ch:rates} taken to the continuous-time, instantaneous limit, now allowed to be random and re-observed at every $t$; $Z(0,T)$ recovers today's discount curve, and $Z(t,t)=1$ for every $t$ (a bond is worth its notional at its own maturity).
+\ts{13}{24}{46:04} This is exactly \eqref{ch06:eq-fwd} of \cref{ch:rates} taken to the continuous-time, instantaneous limit, now allowed to be random and re-observed at every $t$; $Z(0,T)$ recovers today's discount curve, and $Z(t,t)=1$ for every $t$ (a bond is worth its notional at its own maturity).
 
 \subsection{The HJM stochastic differential equation}
 The starting postulate of the model, parallel to $\dd S_t=\mu S_t\dd t+\sigma S_t\dd B_t$ for a stock, is that for every fixed $T$ the process $t\mapsto f(t,T)$ ($t\le T$) is an Ito process
@@ -109,7 +109,7 @@ Both sides vanish at $T=t$ (empty integral, and the square of an empty integral)
 \]
 which is \eqref{ch24:eq-hjmdrift}.
 \end{proof}
-This matches the slide's result exactly \ts{13}{24}{1:04:40}\ts{13}{24}{1:05:15}: ``$\alpha^{\Q}_{tT}=\sigma_{tT}\int_t^T\sigma_{ts}\dd s$''. The logic is identical to Black--Scholes: the model started from an \emph{arbitrary} drift $\alpha$ for the forward curve (there was no reason to guess it), and the requirement that hedged, tradable instruments earn the risk-free rate on average removed that freedom entirely. Only $\sigma(t,\cdot)$, the part that can in principle be read off derivative prices (\cref{ch24:rem-calib}), survives as a free input.
+This matches the slide's result exactly \ts{13}{24}{1:04:40}: ``$\alpha^{\Q}_{tT}=\sigma_{tT}\int_t^T\sigma_{ts}\dd s$''. The logic is identical to Black--Scholes: the model started from an \emph{arbitrary} drift $\alpha$ for the forward curve (there was no reason to guess it), and the requirement that hedged, tradable instruments earn the risk-free rate on average removed that freedom entirely. Only $\sigma(t,\cdot)$, the part that can in principle be read off derivative prices (\cref{ch24:rem-calib}), survives as a free input.
 
 \begin{intuition}[Why the drift is an integral of the volatility]
 \eqref{ch24:eq-hjmdrift} says the risk-neutral drift at $T$ equals the covariance between the shock at $T$ and the shock to \emph{every rate between $t$ and $T$}, summed up: $\alpha^{\Q}(t,T)=\Cov\bigl(\dd f(t,T),\,\dd X_t^T\bigr)/\dd t$ up to the sign convention. A bond price is a (negative) exponential of the accumulated curve, so its convexity (the $\tfrac12(\cdot)^2$ term from Ito's lemma, exactly the second-order term of \cref{ch18:ex-fail}'s microscope) must be compensated by a corresponding upward push in the curve's own drift for the bond's growth rate to stay pinned at $r_t$. This is the same mechanism as the $-\tfrac12\sigma^2$ correction between the drift of $\ln S_t$ and the drift of $S_t$ in \cref{ch18:ex-gbm}.
@@ -232,7 +232,7 @@ Reproduce the Monte Carlo check of \cref{ch24:ex-mc} in your own code: simulate 
 \section{Extension to credit: hazard rates}\label{ch24:sec-credit}
 
 \subsection{Survival probabilities as a second discount curve}
-\Cref{ch08:prop-numeraire} priced default-free cash flows with $Z(t,T)$. A defaultable bond needs a second curve: the market-implied \emph{survival probability} $p(t,T)$, the risk-neutral probability, seen at $t$, that a reference entity has not defaulted by $T$ \ts{13}{24}{1:12:45}\ts{13}{24}{1:13:49}. Exactly as $Z(t,T)$ was parametrised by instantaneous forward rates, $p(t,T)$ is parametrised by instantaneous \emph{forward hazard rates} $h(t,T)$:
+\Cref{ch08:prop-numeraire} priced default-free cash flows with $Z(t,T)$. A defaultable bond needs a second curve: the market-implied \emph{survival probability} $p(t,T)$, the risk-neutral probability, seen at $t$, that a reference entity has not defaulted by $T$ \ts{13}{24}{1:12:45}. Exactly as $Z(t,T)$ was parametrised by instantaneous forward rates, $p(t,T)$ is parametrised by instantaneous \emph{forward hazard rates} $h(t,T)$:
 \begin{equation}\label{ch24:eq-survival}
   p(t,T)=\exp\Bigl(-\int_t^Th(t,s)\,\dd s\Bigr),\qquad p(t,t)=1,
 \end{equation}
@@ -247,7 +247,7 @@ Postulate, exactly as in \eqref{ch24:eq-hjmsde}, an Ito process for the hazard c
 \begin{equation}\label{ch24:eq-hjmcredit}
   \dd h(t,T)=\alpha^h(t,T)\,\dd t+\sigma^h(t,T)\,\dd B^h_t ,
 \end{equation}
-\ts{13}{24}{1:19:01} where $B^h$ may be correlated with the rates driver $B$ of \eqref{ch24:eq-hjmsde}, $\dd B_t\,\dd B^h_t=\rho\,\dd t$ for a constant correlation $\rho$ (the general case; the slide's exercise asks only for $\rho=0$ \ts{13}{24}{1:19:26}\ts{13}{24}{1:19:46}). The slide poses, but does not answer, the derivation of the drift condition in this case \ts{13}{24}{1:19:26}: ``\emph{Exercise 3: Derive a drift expression for the credit HJM model.}'' The derivation is done in full here, for general $\rho$, and specialises to the slide's hinted answer when $\rho=0$.
+\ts{13}{24}{1:19:01} where $B^h$ may be correlated with the rates driver $B$ of \eqref{ch24:eq-hjmsde}, $\dd B_t\,\dd B^h_t=\rho\,\dd t$ for a constant correlation $\rho$ (the general case; the slide's exercise asks only for $\rho=0$ \ts{13}{24}{1:19:26}). The slide poses, but does not answer, the derivation of the drift condition in this case \ts{13}{24}{1:19:26}: ``\emph{Exercise 3: Derive a drift expression for the credit HJM model.}'' The derivation is done in full here, for general $\rho$, and specialises to the slide's hinted answer when $\rho=0$.
 
 \begin{theorem}[HJM drift condition with credit]\label{ch24:thm-hjmcredit}
 Under $\Q$, requiring that the pre-default, zero-recovery defaultable bond price $\tilde Z_t^T=\ind_{\{\tau>t\}}\,e^{-Y_t^T}$, $Y_t^T=\int_t^T[f(t,s)+h(t,s)]\dd s$, grows on average at the risk-free rate $r_t$ \emph{plus} the hazard rate ($\ind_{\{\tau>t\}}$ jumps to $0$ at rate $h_t=h(t,t)$, so its compensated growth rate on the event $\{\tau>t\}$ must be $r_t+h_t$ for the discounted, default-compensated price to be a $\Q$-martingale) forces
@@ -287,12 +287,12 @@ Redo \cref{ch24:ex-mc} with a second, correlated curve $h(t,T)=\sigma_0^he^{-b(T
 \end{exercise}
 
 \subsection{Why this matters: callable and structured credit}
-The slide motivates the credit HJM model with corporate \emph{callable bonds} \ts{13}{24}{1:14:51}\ts{13}{24}{1:16:56}: an issuer who can refinance at a lower all-in rate (risk-free plus credit spread) saves money by calling old, expensive debt, and pricing that option requires simulating \emph{both} $f(t,\cdot)$ and $h(t,\cdot)$ jointly, exactly the setting \eqref{ch24:eq-hjmcredit}--\eqref{ch24:eq-hjmcreditdrift} was built for.
+The slide motivates the credit HJM model with corporate \emph{callable bonds} \ts{13}{24}{1:14:51}: an issuer who can refinance at a lower all-in rate (risk-free plus credit spread) saves money by calling old, expensive debt, and pricing that option requires simulating \emph{both} $f(t,\cdot)$ and $h(t,\cdot)$ jointly, exactly the setting \eqref{ch24:eq-hjmcredit}--\eqref{ch24:eq-hjmcreditdrift} was built for.
 \begin{example}[Refinancing savings; slide numbers \ts{13}{24}{1:14:51}]
 A corporation issues a 10-year \$100M bond at an effective (risk-free $+$ credit) rate of $2.00\%+3.00\%=5.00\%$. Three years later, market rates have fallen to $1.50\%+1.50\%=3.00\%$ with $7$ years remaining. Calling and reissuing saves $(5.00\%-3.00\%)\times\$100\text{M}\times7\text{ years}=\$14\text{M}$ (undiscounted; a real valuation discounts each year's saving and nets the reissuance cost, not shown on the slide).
 \end{example}
 \begin{casestudy}[Structured notes: coupon enhancement via joint simulation]
-The slide's other running example \ts{13}{24}{1:20:05}\ts{13}{24}{1:23:15} is a 10-year, \$100M structured note paying a $10\%$ coupon only while \emph{both} the 30-year swap rate exceeds the 2-year swap rate \emph{and} the S\&P 500 stays above $880$: a joint condition on the rates curve and an equity index (credit enters through the issuer's own default risk on the note, priced with $h(t,\cdot)$ as above). Historically the 30y--2y spread was negative on only a few days in 2005--2006, and the S\&P 500 was above $880$ on $94\%$ of trading days over the prior decade, yet the market-implied (risk-neutral) probabilities were only about $80\%$ and $75\%$ respectively \ts{13}{24}{1:28:28}\ts{13}{24}{1:30:30}: investors are compensated (a higher coupon) for bearing tail risk that is more richly priced than its historical frequency, and the bank prices and hedges the note with exactly the Monte Carlo machinery of \cref{ch24:fin-recipe}, extended to simulate equity, rates and credit together.
+The slide's other running example \ts{13}{24}{1:20:05} is a 10-year, \$100M structured note paying a $10\%$ coupon only while \emph{both} the 30-year swap rate exceeds the 2-year swap rate \emph{and} the S\&P 500 stays above $880$: a joint condition on the rates curve and an equity index (credit enters through the issuer's own default risk on the note, priced with $h(t,\cdot)$ as above). Historically the 30y--2y spread was negative on only a few days in 2005--2006, and the S\&P 500 was above $880$ on $94\%$ of trading days over the prior decade, yet the market-implied (risk-neutral) probabilities were only about $80\%$ and $75\%$ respectively \ts{13}{24}{1:28:28}: investors are compensated (a higher coupon) for bearing tail risk that is more richly priced than its historical frequency, and the bank prices and hedges the note with exactly the Monte Carlo machinery of \cref{ch24:fin-recipe}, extended to simulate equity, rates and credit together.
 \end{casestudy}
 
 % ==================================================================

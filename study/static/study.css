@@ -1,6 +1,6 @@
 :root {
   --def:#1565C0; --thm:#D32F2F; --ex:#2E7D32; --note:#FBC02D; --intu:#8E24AA; --fin:#EF6C00;
-  --cs:#00897B; --key:#C2185B; --exer:#3949AB; --rem:#546E7A; --hist:#B8860B; --done:#388E3C;
+  --cs:#00897B; --key:#C2185B; --exer:#7CB342; --exer-dark:#4A6B28; --rem:#546E7A; --hist:#B8860B; --done:#388E3C;
   --ink:#1b1f23; --bg:#fff; --side:23rem;
 }
 * { box-sizing: border-box; }
@@ -55,6 +55,7 @@ th { border-bottom: 2px solid var(--ink); }
 .bt .ty { letter-spacing: .02em; }
 .bx.intu, .bx.fin, .bx.cs, .bx.key, .bx.hdr { border: 1px solid var(--c); border-radius: 3px; padding: 0; }
 .bx.intu > .bt, .bx.fin > .bt, .bx.cs > .bt, .bx.key > .bt, .bx.hdr > .bt { background: var(--c); color: #fff; padding: .2rem .8rem; margin: 0; }
+.bx.exer > .bt { color: var(--exer-dark); } .bx.exer.hdr > .bt { color: #000; }
 .bx.intu > .bb, .bx.fin > .bb, .bx.cs > .bb, .bx.key > .bb, .bx.hdr > .bb { padding: .1rem .8rem .4rem; }
 .bx.sec > summary { cursor: pointer; }
 .side .bx { margin: 0 0 .7rem; font-size: 13.5px; line-height: 1.4; }
@@ -76,6 +77,7 @@ th { border-bottom: 2px solid var(--ink); }
 .ansbar { background: color-mix(in srgb, var(--note) 85%, black); font-weight: 700; padding: 0 .3rem; margin: .3rem 0; }
 .sn { font: 700 .7em system-ui, sans-serif; color: #7a5c00; margin: 0 .1em; }
 .sn-n { color: #7a5c00; }
+.sn.cn { color: var(--rem); }
 
 /* timestamps */
 a.ts, .ts.nov { font: 600 .72em system-ui, sans-serif; color: var(--rem); white-space: nowrap; border: 1px solid #cfd8dc; border-radius: 3px; padding: 0 .3em; }
@@ -90,9 +92,9 @@ button.add { opacity: 0; margin-left: .3rem; border: 1px solid #b0bec5; backgrou
 .u.now { box-shadow: -6px 0 0 0 #ffb300; background-color: #fff8e1; transition: background-color .3s; }
 .bx.u.now { background-color: color-mix(in srgb, var(--c) 7%, #fff3c4); }
 .mysol { margin-top: .4rem; }
-.solbtn { font: 600 13px system-ui; border: 1px solid var(--exer); color: var(--exer); background: #fff; border-radius: 3px; padding: .15rem .6rem; cursor: pointer; }
+.solbtn { font: 600 13px system-ui; border: 1px solid var(--exer); color: var(--exer-dark); background: #fff; border-radius: 3px; padding: .15rem .6rem; cursor: pointer; }
 .editor { margin: .4rem 0; padding: .5rem; background: #fffdf2; border: 1px solid var(--note); border-radius: 3px; font: 14px/1.4 system-ui, sans-serif; }
-.editor.sol { background: #f4f5fc; border-color: var(--exer); }
+.editor.sol { background: #f5f9ef; border-color: var(--exer); }
 .editor textarea { width: 100%; min-height: 5.5rem; font: 14px/1.4 ui-monospace, Consolas, monospace; padding: .4rem; resize: vertical; }
 .editor .preview { margin: .4rem 0; padding: .3rem .5rem; background: #fff; border: 1px dashed #cfd8dc; min-height: 1.5rem; }
 .editor .preview:empty::before { content: "live preview (Markdown + $math$)"; color: #9aa7af; }

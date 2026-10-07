@@ -21,6 +21,14 @@
 % \synccounter before each switch, see \side@emit)
 \globalcounter{equation}\globalcounter{footnote}\globalcounter{figure}
 \usepackage{booktabs,array,tabularx,longtable}
+% Figures and tables stay where they are written ([H] whatever the source says): a float moved to
+% the top of a page lands above right-column items already synchronised there (a proof beside a
+% figure instead of beside its theorem). On a screen a little white space costs nothing.
+\usepackage{float}
+\let\origfigure\figure \let\endorigfigure\endfigure
+\renewenvironment{figure}[1][]{\origfigure[H]}{\endorigfigure}
+\let\origtable\table \let\endorigtable\endtable
+\renewenvironment{table}[1][]{\origtable[H]}{\endorigtable}
 \usepackage[dvipsnames]{xcolor}
 \usepackage[shortlabels,inline]{enumitem}
 \usepackage{tikz}
@@ -55,7 +63,8 @@
 \definecolor{fincol}{HTML}{EF6C00}  % orange: finance
 \definecolor{cscol}{HTML}{00897B}   % teal: case studies
 \definecolor{keycol}{HTML}{C2185B}  % magenta: key formulas
-\definecolor{exercol}{HTML}{3949AB} % indigo: exercises
+\definecolor{exercol}{HTML}{7CB342} % lime: exercises, your solutions, feedback (far from the blue of definitions)
+\colorlet{exerdark}{exercol!60!black} % lime is too light for text: headings and tags use this
 \definecolor{srccol}{HTML}{546E7A}  % grey-blue: sources, course notes, remarks
 \definecolor{histcol}{HTML}{B8860B} % bronze: history boxes (classical columns)
 \definecolor{doubtcol}{HTML}{C62828}
@@ -71,7 +80,7 @@
 % ---------- theorem-like environments (numbered by chapter), coloured headings ----------
 \newtheoremstyle{coldef}{}{}{\normalfont}{}{\bfseries\color{defcol}}{.}{ }{}
 \newtheoremstyle{colex}{}{}{\normalfont}{}{\bfseries\color{intcol}}{.}{ }{}
-\newtheoremstyle{colexer}{}{}{\normalfont}{}{\bfseries\color{exercol}}{.}{ }{}
+\newtheoremstyle{colexer}{}{}{\normalfont}{}{\bfseries\color{exerdark}}{.}{ }{}
 \newtheoremstyle{colthm}{}{}{\itshape}{}{\bfseries\color{thmcol}}{.}{ }{}
 \newtheoremstyle{colrem}{}{}{\normalfont}{}{\itshape\color{srccol}}{.}{ }{}
 \theoremstyle{coldef}
@@ -139,8 +148,14 @@
 \newtcolorbox{finance}[1][]{notebox=fincol,title={\boxtitle{In finance}{#1}}}
 % Case study: summary of an R case study / notebook
 \newtcolorbox{casestudy}[1][]{notebox=cscol,title={\boxtitle{Case study}{#1}}}
-% Summary / key formulas
+% Summary / key formulas (old chapters; being replaced by keyconcepts)
 \newtcolorbox{keyformulas}{notebox=keycol,fontupper=\small,title={\boxtitle{Key formulas}{}}}
+% End of chapter: \keyquestions (retrieval: try to answer before reading on), then \keyconcept items,
+% each a concept in a sentence or two with its formula and a link to where it is defined
+\newtcolorbox{keyconcepts}{notebox=keycol,fontupper=\small,title={\boxtitle{Key concepts}{}}}
+\newcommand{\keyquestions}{\textbf{\color{keycol}Can you answer these without looking?}\par}
+\newcommand{\keylist}{\par\medskip\textbf{\color{keycol}The concepts}\par}
+\newcommand{\keyconcept}[1]{\item[\textbf{\color{keycol}#1.}]}
 % Sources: which lectures, videos and files a chapter is built on
 \newtcolorbox{sources}{notebox=srccol,fontupper=\footnotesize,title={\boxtitle{Sources for this chapter}{}},before upper=\raggedright}
 \newcolumntype{L}{>{\raggedright\arraybackslash}X}
@@ -179,14 +194,15 @@
 % the text marks the point where the note was written, the same number starts its box.
 \newcounter{sidenote}[chapter]
 \globalcounter{sidenote}
-\newcommand{\side@numput}[1]{\stepcounter{sidenote}%
+% Course notes share the counter (one sequence of numbers per chapter), with grey-blue numbers.
+\newcommand{\side@numput}[2][anscol!75!black]{\stepcounter{sidenote}%
   \ifhmode\ifdim\lastkern=0.01pt\textsuperscript{\sffamily\bfseries\color{anscol!75!black},}\fi
-    \textsuperscript{\sffamily\bfseries\color{anscol!75!black}\thesidenote}\kern0.01pt\fi
-  \begingroup\edef\x{\endgroup\noexpand\side@put{\def\noexpand\side@num{\thesidenote}\unexpanded{#1}}}\x}
+    \textsuperscript{\sffamily\bfseries\color{#1}\thesidenote}\kern0.01pt\fi
+  \begingroup\edef\x{\endgroup\noexpand\side@put{\def\noexpand\side@num{\thesidenote}\unexpanded{#2}}}\x}
 \newcommand{\side@numtag}{{\bfseries\color{anscol!75!black}\side@num}\enspace}
 \NewDocumentCommand{\note}{s t+ +m}{\side@numput{\begin{tcolorbox}[sidebox=notecol]%
   \IfBooleanT{#1}{\side@tag{okcol}{DONE}}\IfBooleanT{#2}{\side@tag{defcol}{SEEN}}\side@numtag#3\end{tcolorbox}}}
-\NewDocumentCommand{\feedback}{s +m}{\IfBooleanTF{#1}{\side@put{\begin{tcolorbox}[sidebox=thmcol]\side@tag{thmcol}{FEEDBACK: ERROR}#2\end{tcolorbox}}}{\side@put{\begin{tcolorbox}[sidebox=exercol]\side@tag{exercol}{FEEDBACK}#2\end{tcolorbox}}}}
+\NewDocumentCommand{\feedback}{s +m}{\IfBooleanTF{#1}{\side@put{\begin{tcolorbox}[sidebox=thmcol]\side@tag{thmcol}{FEEDBACK: ERROR}#2\end{tcolorbox}}}{\side@put{\begin{tcolorbox}[sidebox=exercol]\side@tag{exerdark}{FEEDBACK}#2\end{tcolorbox}}}}
 \newcounter{answer}[chapter]
 \renewcommand{\theanswer}{\thechapter.\arabic{answer}}
 \crefname{answer}{answer}{answers}
@@ -202,8 +218,10 @@
     fontupper=\scriptsize\mdseries\upshape\raggedright,fonttitle=\scriptsize\sffamily\bfseries,coltitle=white,colbacktitle=#1}}
 \NewDocumentEnvironment{aside}{O{} +b}{\side@put{\begin{tcolorbox}[sidecontent=histcol,
   title={\boxtitle{Aside}{#1}}]#2\end{tcolorbox}}}{}
-\NewDocumentEnvironment{coursenote}{O{} +b}{\side@put{\begin{tcolorbox}[sidecontent=srccol,
-  title={\boxtitle{Course note}{#1}}]#2\end{tcolorbox}}}{}
+% A course note is numbered like a note: written inside a paragraph, right after the words it is
+% about, it prints the number there; written between paragraphs, only its box has the number.
+\NewDocumentEnvironment{coursenote}{O{} +b}{\side@numput[srccol]{\begin{tcolorbox}[sidecontent=srccol,
+  title={\side@num\enspace\boxtitle{Course note}{#1}}]#2\end{tcolorbox}}}{}
 % Examples and proofs keep their theorem-like look (numbering, labels, QED) but go to the right column
 \let\origexample\example \let\endorigexample\endexample
 \RenewDocumentEnvironment{example}{o +b}{\side@put{\begin{tcolorbox}[thmbox=intcol,
@@ -262,8 +280,30 @@
     \histcolumn{hfL}{htL}\histcolumn{hfR}{htR}}}}
 % The reader's own solution to an exercise, placed right below the exercise
 %   \begin{mysolution}[optional topic] ... \end{mysolution}
-\newtcolorbox{mysolution}[1][]{notebox=exercol,colback=exercol!5,fontupper=\small,
+\newtcolorbox{mysolution}[1][]{notebox=exercol,colback=exercol!5,coltitle=black,fontupper=\small,
   title={\boxtitle{My solution}{#1}}}
+% "Try first": a computation that used to be a worked example, to be tried before reading the
+% solution. The solution is written right after it in the source and printed at the end of the
+% chapter by \printsolutions, with links both ways.
+%   \begin{tryfirst}[topic]{label} ... \end{tryfirst}
+%   \begin{solution} ... \end{solution}
+\makeatletter
+\newcommand{\sol@link}[2]{\par\hfill\hyperref[#1]{\sffamily\bfseries\footnotesize\color{exerdark}#2}}
+\NewDocumentEnvironment{tryfirst}{O{} m +b}{\begin{exercise}[Try first\ifx&#1&\else: #1\fi]\label{#2}%
+  \gdef\sol@cur{#2}\gdef\sol@name{\cref{#2}}#3\sol@link{sol:#2}{Solution $\rightarrow$}\end{exercise}}{}
+% Lab: a course case study to redo in Python (data in data/, reference script in labs/); the
+% course's results are its solution, printed by \printsolutions like those of the Try first exercises
+%   \begin{lab}[topic]{label} ... \end{lab}  \begin{solution} ... \end{solution}
+\NewDocumentEnvironment{lab}{O{} m +b}{\begin{tcolorbox}[notebox=cscol,title={\boxtitle{Lab}{#1}}]%
+  \phantomsection\label{#2}\gdef\sol@cur{#2}\gdef\sol@name{Lab: #1}#3\sol@link{sol:#2}{Course results $\rightarrow$}\end{tcolorbox}}{}
+\newtoks\sol@toks
+\NewDocumentEnvironment{solution}{+b}{\begingroup
+  \edef\x{\endgroup\global\sol@toks{\the\sol@toks\noexpand\sol@print{\sol@cur}{\unexpanded\expandafter{\sol@name}}{\unexpanded{#1}}}}\x}{}
+\newcommand{\sol@print}[3]{\begin{tcolorbox}[notebox=exercol,colback=exercol!5,coltitle=black,fontupper=\small,
+  title={\boxtitle{Solution}{#2}}]\phantomsection\label{sol:#1}#3\sol@link{#1}{$\leftarrow$ back}\end{tcolorbox}}
+\newcommand{\printsolutions}{\section*{Solutions}\addcontentsline{toc}{section}{Solutions}%
+  Solutions of the \emph{Try first} exercises and labs of this chapter.\par\the\sol@toks\global\sol@toks{}}
+\makeatother
 % A request about the notes themselves (collected in the "Requests" chapter)
 %   \request{done|open|noted}{where it was written}{the request}{what was done}
 \makeatletter
