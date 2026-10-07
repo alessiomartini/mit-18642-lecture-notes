@@ -10,3 +10,9 @@ Thumbs.db
 study/out/
 study/notes.db
 study/notes.db-journal
+
+# Third-party course material (MIT OCW downloads, transcripts): kept only locally
+18.642-fall-2024/
+18.s096-fall-2013/
+Lectures 2013 transcript/
+Lectures 2024 transcript/
